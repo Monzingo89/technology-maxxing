@@ -108,6 +108,24 @@ body.open #sheet{transform:none}
 .lvlbtn small{color:var(--ink-dim)}
 .challenge{background:var(--paper);border:1px dashed var(--line);border-radius:11px;
   padding:12px 13px;font-size:14px;color:var(--ink-dim);margin-top:12px}
+.assess-panel{margin-top:14px;background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:12px}
+.assess-panel h4{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-dim);margin:0 0 8px}
+.rule-list{padding-left:18px;margin:0 0 10px}
+.rule-list li{margin:0 0 6px;font-size:13px;color:var(--ink-dim)}
+.mcq{margin:10px 0 0}
+.mcq q{display:block;font-weight:600;font-size:14px;line-height:1.4;margin-bottom:8px}
+.mcq label{display:block;margin:6px 0;font-size:14px}
+.mcq input{margin-right:7px}
+.code-assess{margin-top:10px}
+.code-assess .hint{font-size:13px;color:var(--ink-dim);margin:0 0 8px}
+.code-assess pre{margin:0;padding:10px;border-radius:10px;background:#141a26;color:#ecf2ff;font:12px/1.6 var(--mono);overflow:auto}
+.code-select{font:12px var(--mono);border:1px solid var(--line);border-radius:8px;padding:3px 5px;background:#fff;max-width:165px}
+.assess-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.assess-actions button{background:var(--ink);color:#fff;border-radius:9px;padding:8px 11px;font-size:13px}
+.assess-actions button.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.assess-result{margin-top:10px;padding:9px 10px;border-radius:9px;font-size:13px}
+.assess-result.ok{background:#E8F7EF;color:#0E7A5F}
+.assess-result.warn{background:#FFF6E6;color:#A96500}
 
 /* ---- agent guide view ---- */
 #guideBtn{position:fixed;right:14px;bottom:16px;z-index:35;font-family:var(--mono);
@@ -343,6 +361,155 @@ const DATA = {
 
 /* ---------- persistence (single responsibility: store/load scores) ---------- */
 const scores = {};
+let TECH_EXTENSIONS = {};
+let GENERATED_TECHS = [];
+const ASSESSMENT_STATE = {};
+
+function escHtml(v=""){
+  return String(v)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
+
+function ensureAssessmentState(id){
+  if(!ASSESSMENT_STATE[id]){
+    ASSESSMENT_STATE[id]={
+      startedAt:Date.now(),
+      visibilityViolations:0,
+      mcqAnswers:{},
+      codeAnswers:{},
+      lastScore:null
+    };
+  }
+  return ASSESSMENT_STATE[id];
+}
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState!="hidden") return;
+  if(!current || curTab!=="assess") return;
+  const st=ensureAssessmentState(current);
+  st.visibilityViolations++;
+  if(document.body.classList.contains("open")) renderSheet();
+});
+
+function setMcqAnswer(qi,val){
+  if(!current) return;
+  const st=ensureAssessmentState(current);
+  st.mcqAnswers[qi]=Number(val);
+}
+
+function setCodeAnswer(blankId,val){
+  if(!current) return;
+  const st=ensureAssessmentState(current);
+  st.codeAnswers[blankId]=String(val);
+}
+
+function resetAssessment(){
+  if(!current) return;
+  ASSESSMENT_STATE[current]={
+    startedAt:Date.now(),
+    visibilityViolations:0,
+    mcqAnswers:{},
+    codeAnswers:{},
+    lastScore:null
+  };
+  renderSheet();
+}
+
+function evaluateAssessment(){
+  if(!current) return;
+  const t=DATA.tech[current];
+  const assess=t.assessment;
+  if(!assess) return;
+  const st=ensureAssessmentState(current);
+  let total=0, correct=0;
+
+  (assess.multipleChoice||[]).forEach((q,qi)=>{
+    total++;
+    if(Number(st.mcqAnswers[qi])===Number(q.answerIndex)) correct++;
+  });
+
+  const codeQ=(assess.codeDropdown||[])[0];
+  if(codeQ){
+    (codeQ.blanks||[]).forEach((b)=>{
+      total++;
+      if((st.codeAnswers[b.id]||"")===b.answer) correct++;
+    });
+  }
+
+  const pct=total?Math.round((correct/total)*100):0;
+  const elapsed=Math.round((Date.now()-st.startedAt)/1000);
+  st.lastScore={pct,elapsed,correct,total,violations:st.visibilityViolations};
+  renderSheet();
+}
+
+function renderCodeTemplate(codeQ, st){
+  if(!codeQ || !codeQ.template) return "";
+  let rendered=escHtml(codeQ.template);
+  for(const blank of (codeQ.blanks||[])){
+    const control=`<select class="code-select" onchange="setCodeAnswer('${escHtml(blank.id)}',this.value)"><option value="">choose…</option>${(blank.options||[]).map(o=>`<option value="${escHtml(o)}" ${st.codeAnswers?.[blank.id]===o?"selected":""}>${escHtml(o)}</option>`).join("")}</select>`;
+    rendered=rendered.replaceAll(`{{${blank.id}}}`,control);
+  }
+  return rendered;
+}
+
+async function loadAgentData(){
+  async function maybeJson(url, fallback){
+    try{
+      const res=await fetch(url,{cache:"no-store"});
+      if(!res.ok) return fallback;
+      return await res.json();
+    }catch(e){
+      return fallback;
+    }
+  }
+
+  TECH_EXTENSIONS = await maybeJson("data/technology-extensions.json",{});
+  GENERATED_TECHS = await maybeJson("data/generated-technologies.json",[]);
+
+  for(const [id,ext] of Object.entries(TECH_EXTENSIONS||{})){
+    if(!DATA.tech[id]) continue;
+    const t=DATA.tech[id];
+    if(ext.tag) t.tag=ext.tag;
+    if(ext.latestChanges) t.latestChanges=ext.latestChanges;
+    if(ext.problemItSolves) t.problemItSolves=ext.problemItSolves;
+    if(ext.historyNotes) t.historyNotes=ext.historyNotes;
+    if(ext.docs) t.docs=ext.docs;
+    if(ext.practiceChallenges) t.practiceChallenges=ext.practiceChallenges;
+    if(ext.assessment) t.assessment=ext.assessment;
+    if(Array.isArray(ext.relatedTechnologies)){
+      t.rel=t.rel||{};
+      const relatedIds=ext.relatedTechnologies
+        .map(x=>String(x||"").toLowerCase().replace(/[^a-z0-9]/g,""))
+        .filter(x=>DATA.tech[x]);
+      t.rel.seeAlso=Array.from(new Set([...(t.rel.seeAlso||[]), ...relatedIds]));
+    }
+  }
+
+  for(const item of (GENERATED_TECHS||[])){
+    if(!item?.id || DATA.tech[item.id]) continue;
+    DATA.tech[item.id]={
+      name:item.name||item.id,
+      cat:DATA.cats[item.cat]?item.cat:"lang",
+      tag:item.tag||"daily generated technology",
+      born:item.born||"unknown",
+      history:item.history||"Generated by daily agent.",
+      why:item.why||"",
+      rel:item.rel||{seeAlso:[]},
+      challenges:item.challenges||[],
+      latestChanges:item.extension?.latestChanges||[],
+      problemItSolves:item.extension?.problemItSolves||"",
+      historyNotes:item.extension?.historyNotes||[],
+      docs:item.extension?.docs||[],
+      practiceChallenges:item.extension?.practiceChallenges||[],
+      assessment:item.extension?.assessment||null
+    };
+  }
+}
+
 async function loadScores(){
   for(const id of Object.keys(DATA.tech)){
     try{const r=await window.storage.get("score:"+id); if(r) scores[id]=+r.value;}catch(e){}
@@ -418,7 +585,10 @@ function renderSheet(){
 
   if(curTab==="learn"){
     body.innerHTML=`<h3>History</h3><p>${t.history}</p>
-      <h3>Why it matters (or doesn't)</h3><p>${t.why}</p>`;
+      <h3>Why it matters (or doesn't)</h3><p>${t.why}</p>`+
+      ((t.problemItSolves||"")?`<h3>Problem it solves</h3><p>${t.problemItSolves}</p>`:"")+
+      ((t.latestChanges?.length)?`<h3>Latest changes</h3><p>${t.latestChanges.map(escHtml).join("<br>")}</p>`:"")+
+      ((t.docs?.length)?`<h3>Documentation</h3><div class="chiprow">${t.docs.map(d=>`<a class="chip" style="--cc:${cc}" href="${escHtml(d.url)}" target="_blank" rel="noopener noreferrer">${escHtml(d.label||d.url)}</a>`).join("")}</div>`:"");
   }
   else if(curTab==="connect"){
     let html="";
@@ -431,12 +601,28 @@ function renderSheet(){
     body.innerHTML=html||`<p class="empty">no wired connections yet — agents: add rel edges.</p>`;
   }
   else{
+    const st=ensureAssessmentState(current);
     const v=scores[current]||0;
     const labels=["Heard of it — can define it","Used it once — tutorial level","Comfortable — built something small","Proficient — daily-driver ready","Expert — could teach & architect"];
+    const mcq=(t.assessment?.multipleChoice||[]);
+    const codeQ=(t.assessment?.codeDropdown||[])[0];
     body.innerHTML=`<h3>Self-assessment</h3><div class="lvls">`+
       labels.map((l,i)=>`<button class="lvlbtn ${v===i+1?"on":""}" style="--cc:${cc}" onclick="saveScore('${current}',${v===i+1?0:i+1})">
         <span class="num">${i+1}</span><span>${l}<br><small>${t.challenges?.[i]||"challenge coming soon"}</small></span></button>`).join("")+
-      `</div><div class="challenge">Rate honestly. Tap your current level again to clear. Complete the challenge at your level, then bump yourself up. Overall score updates in the header.</div>`;
+      `</div><div class="challenge">Rate honestly. Tap your current level again to clear. Complete the challenge at your level, then bump yourself up. Overall score updates in the header.</div>`+
+      ((t.practiceChallenges?.length)?`<div class="assess-panel"><h4>Practice queue</h4><ul class="rule-list">${t.practiceChallenges.map(c=>`<li><b>L${c.level||"-"}</b> · ${escHtml(c.title||"Challenge")}: ${escHtml(c.prompt||"")}</li>`).join("")}</ul></div>`:"")+
+      (t.assessment?`<div class="assess-panel">
+        <h4>Anti-cheat browser skill assessment</h4>
+        <ul class="rule-list">${(t.assessment.antiCheatRules||[]).map(r=>`<li>${escHtml(r)}</li>`).join("")}</ul>
+        <p class="hint">Focus switches detected this session: <b>${st.visibilityViolations}</b></p>
+        ${(mcq.length?`<div class="mcq"><q>${escHtml(mcq[0].question)}</q>${mcq[0].options.map((opt,oi)=>`<label><input type="radio" name="mcq-0" value="${oi}" ${st.mcqAnswers?.[0]===oi?"checked":""} onchange="setMcqAnswer(0,this.value)">${escHtml(opt)}</label>`).join("")}</div>`:"")}
+        ${(codeQ?`<div class="code-assess"><p class="hint">${escHtml(codeQ.instructions||"Fill every blank correctly.")}</p><pre>${renderCodeTemplate(codeQ, st)}</pre></div>`:"")}
+        <div class="assess-actions">
+          <button onclick="evaluateAssessment()">Grade assessment</button>
+          <button class="secondary" onclick="resetAssessment()">Reset run</button>
+        </div>
+        ${st.lastScore?`<div class="assess-result ${(st.lastScore.pct>=80 && st.lastScore.violations===0)?"ok":"warn"}">Score: <b>${st.lastScore.correct}/${st.lastScore.total}</b> (${st.lastScore.pct}%). Time: ${st.lastScore.elapsed}s. Focus switches: ${st.lastScore.violations}.</div>`:""}
+      </div>`:"");
   }
   body.scrollTop=0;
 }
@@ -477,7 +663,7 @@ function openGuide(){
 
 /* ---------- boot ---------- */
 document.getElementById("search").addEventListener("input",e=>renderMap(e.target.value));
-(async()=>{await loadScores(); renderOverall(); renderMap(); renderTrail();})();
+(async()=>{await loadAgentData(); await loadScores(); renderOverall(); renderMap(); renderTrail();})();
 </script>
 </body>
 </html>
