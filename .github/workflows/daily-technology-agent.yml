@@ -10,6 +10,16 @@ on:
         description: "Optional technology id to force for this run (example: angular)"
         required: false
         type: string
+      dryRun:
+        description: "Run without model/API call (safe test mode)"
+        required: false
+        default: true
+        type: boolean
+      model:
+        description: "Override model name for this run"
+        required: false
+        default: "gpt-5.3-codex"
+        type: string
 
 permissions:
   contents: write
@@ -32,7 +42,8 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets['OPENAI_API_KEY'] }}
           FORCE_TECH_ID: ${{ github.event.inputs.forceTechnologyId || '' }}
-          DAILY_AGENT_MODEL: gpt-5.3-codex
+          DAILY_AGENT_DRY_RUN: ${{ github.event.inputs.dryRun || 'false' }}
+          DAILY_AGENT_MODEL: ${{ github.event.inputs.model || 'gpt-5.3-codex' }}
         run: node scripts/daily-agent.mjs
 
       - name: Commit generated updates
