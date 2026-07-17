@@ -75,7 +75,9 @@ function pickTarget({ baseTechs, extensions, generated, seeds, forceTechId }) {
     const fromSeed = seeds.find((s) => s.id === forceTechId);
     if (fromSeed) return { mode: "new", target: fromSeed };
 
-    throw new Error(`FORCE_TECH_ID '${forceTechId}' was not found in base technologies or seed list.`);
+    throw new Error(
+      `FORCE_TECH_ID '${forceTechId}' was not found in base technologies or seed list.`,
+    );
   }
 
   const extendedIds = new Set(Object.keys(extensions));
@@ -110,8 +112,7 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
         content: [
           {
             type: "input_text",
-            text:
-              "You are a senior curriculum architect. Output valid JSON only. Prioritize mobile usability, anti-cheat assessment quality, and practical coding growth.",
+            text: "You are a senior curriculum architect. Output valid JSON only. Prioritize mobile usability, anti-cheat assessment quality, and practical coding growth.",
           },
         ],
       },
@@ -174,7 +175,10 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
                   level: { type: "integer", minimum: 1, maximum: 5 },
                   title: { type: "string" },
                   prompt: { type: "string" },
-                  format: { type: "string", enum: ["coding", "multiple-choice", "mixed"] },
+                  format: {
+                    type: "string",
+                    enum: ["coding", "multiple-choice", "mixed"],
+                  },
                 },
                 required: ["level", "title", "prompt", "format"],
               },
@@ -207,7 +211,12 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
                       answerIndex: { type: "integer", minimum: 0, maximum: 4 },
                       explanation: { type: "string" },
                     },
-                    required: ["question", "options", "answerIndex", "explanation"],
+                    required: [
+                      "question",
+                      "options",
+                      "answerIndex",
+                      "explanation",
+                    ],
                   },
                 },
                 codeDropdown: {
@@ -242,7 +251,12 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
                         },
                       },
                     },
-                    required: ["instructions", "language", "template", "blanks"],
+                    required: [
+                      "instructions",
+                      "language",
+                      "template",
+                      "blanks",
+                    ],
                   },
                 },
               },
@@ -295,8 +309,13 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
 
 function normalizeDocs(docs = []) {
   return docs
-    .filter((d) => d && typeof d.url === "string" && /^https?:\/\//i.test(d.url))
-    .map((d) => ({ label: d.label?.trim() || "Official resource", url: d.url.trim() }));
+    .filter(
+      (d) => d && typeof d.url === "string" && /^https?:\/\//i.test(d.url),
+    )
+    .map((d) => ({
+      label: d.label?.trim() || "Official resource",
+      url: d.url.trim(),
+    }));
 }
 
 function extensionFromResult(result) {
@@ -322,13 +341,13 @@ async function main() {
   parseDotEnv(path.join(ROOT, ".env"));
 
   const dryRun = ["1", "true", "yes"].includes(
-    String(process.env.DAILY_AGENT_DRY_RUN || "").toLowerCase()
+    String(process.env.DAILY_AGENT_DRY_RUN || "").toLowerCase(),
   );
 
   const apiKey = getApiKey();
   if (!dryRun && !apiKey) {
     throw new Error(
-      "Missing API key. Set OPENAI_API_KEY (recommended) or OPENAI-TECH-MAXXING-API-KEY."
+      "Missing API key. Set OPENAI_API_KEY (recommended) or OPENAI-TECH-MAXXING-API-KEY.",
     );
   }
 
@@ -387,14 +406,42 @@ async function main() {
         docs: [
           { label: `${name} Official Docs`, url: "https://example.com/docs" },
           { label: `${name} Changelog`, url: "https://example.com/changelog" },
-          { label: `${name} Best Practices`, url: "https://example.com/best-practices" },
+          {
+            label: `${name} Best Practices`,
+            url: "https://example.com/best-practices",
+          },
         ],
         practiceChallenges: [
-          { level: 1, title: "Basics", prompt: `Build a tiny ${name} hello-world and explain each part.`, format: "coding" },
-          { level: 2, title: "Core patterns", prompt: `Implement one core ${name} pattern and justify your choices.`, format: "mixed" },
-          { level: 3, title: "Architecture", prompt: `Design a maintainable ${name} module split for a medium feature.`, format: "multiple-choice" },
-          { level: 4, title: "Performance", prompt: `Profile and optimize one measurable bottleneck in a ${name} workflow.`, format: "coding" },
-          { level: 5, title: "Production readiness", prompt: `Create a production checklist for ${name} and validate it against a sample project.`, format: "mixed" },
+          {
+            level: 1,
+            title: "Basics",
+            prompt: `Build a tiny ${name} hello-world and explain each part.`,
+            format: "coding",
+          },
+          {
+            level: 2,
+            title: "Core patterns",
+            prompt: `Implement one core ${name} pattern and justify your choices.`,
+            format: "mixed",
+          },
+          {
+            level: 3,
+            title: "Architecture",
+            prompt: `Design a maintainable ${name} module split for a medium feature.`,
+            format: "multiple-choice",
+          },
+          {
+            level: 4,
+            title: "Performance",
+            prompt: `Profile and optimize one measurable bottleneck in a ${name} workflow.`,
+            format: "coding",
+          },
+          {
+            level: 5,
+            title: "Production readiness",
+            prompt: `Create a production checklist for ${name} and validate it against a sample project.`,
+            format: "mixed",
+          },
         ],
         assessment: {
           antiCheatRules: [
@@ -412,7 +459,8 @@ async function main() {
                 "It removes the need for testing",
               ],
               answerIndex: 1,
-              explanation: "Strong technologies usually win by narrowing complexity in a clear domain.",
+              explanation:
+                "Strong technologies usually win by narrowing complexity in a clear domain.",
             },
             {
               question: `What is the best next step after learning ${name} fundamentals?`,
@@ -423,10 +471,12 @@ async function main() {
                 "Ignore testing and debugging",
               ],
               answerIndex: 1,
-              explanation: "Application through projects cements concepts and exposes trade-offs.",
+              explanation:
+                "Application through projects cements concepts and exposes trade-offs.",
             },
             {
-              question: "Which practice best supports mobile-first learning UX?",
+              question:
+                "Which practice best supports mobile-first learning UX?",
               options: [
                 "Very long text-only assignments",
                 "Small interactive tasks with immediate feedback",
@@ -434,18 +484,36 @@ async function main() {
                 "Hidden instructions",
               ],
               answerIndex: 1,
-              explanation: "Short, interactive loops are more usable on mobile devices.",
+              explanation:
+                "Short, interactive loops are more usable on mobile devices.",
             },
           ],
           codeDropdown: [
             {
               instructions: `Fill all blanks to complete this ${name} pseudocode flow.`,
               language: "javascript",
-              template: "function runTask(input) {\\n  const normalized = {{blank1}};\\n  if (!normalized) return {{blank2}};\\n  return {{blank3}};\\n}",
+              template:
+                "function runTask(input) {\\n  const normalized = {{blank1}};\\n  if (!normalized) return {{blank2}};\\n  return {{blank3}};\\n}",
               blanks: [
-                { id: "blank1", options: ["input.trim()", "JSON.parse(input)", "Number(input)"], answer: "input.trim()" },
+                {
+                  id: "blank1",
+                  options: [
+                    "input.trim()",
+                    "JSON.parse(input)",
+                    "Number(input)",
+                  ],
+                  answer: "input.trim()",
+                },
                 { id: "blank2", options: ["null", "0", "[]"], answer: "null" },
-                { id: "blank3", options: ["normalized.toUpperCase()", "normalized.push('x')", "delete normalized"], answer: "normalized.toUpperCase()" },
+                {
+                  id: "blank3",
+                  options: [
+                    "normalized.toUpperCase()",
+                    "normalized.push('x')",
+                    "delete normalized",
+                  ],
+                  answer: "normalized.toUpperCase()",
+                },
               ],
             },
           ],
@@ -455,7 +523,9 @@ async function main() {
         apiKey,
         model,
         prompt,
-        schemaName: isNew ? "new_technology_dossier" : "technology_extension_dossier",
+        schemaName: isNew
+          ? "new_technology_dossier"
+          : "technology_extension_dossier",
       });
 
   const extension = extensionFromResult(result);
@@ -470,7 +540,9 @@ async function main() {
       history: (extension.historyNotes || []).join(" "),
       why: extension.problemItSolves,
       rel: {
-        seeAlso: extension.relatedTechnologies.slice(0, 5).map((x) => x.toLowerCase().replace(/\s+/g, "")),
+        seeAlso: extension.relatedTechnologies
+          .slice(0, 5)
+          .map((x) => x.toLowerCase().replace(/\s+/g, "")),
       },
       challenges: extension.practiceChallenges.slice(0, 5).map((c) => c.prompt),
       extension,
@@ -489,7 +561,7 @@ async function main() {
   writeJson(STATE_PATH, state);
 
   console.log(
-    `Daily technology agent completed: ${isNew ? "created" : "extended"} '${id}' (${name})`
+    `Daily technology agent completed: ${isNew ? "created" : "extended"} '${id}' (${name})`,
   );
 }
 
