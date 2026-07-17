@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TECHWEB — the browsable web of technologies</title>
+<style>
+/* ============================================================
+   TECHWEB — schematic-paper design system
+   Tokens first (single source of truth for future agents)
+   ============================================================ */
+:root{
+  --paper:#EDF0F4; --card:#FFFFFF; --ink:#182130; --ink-dim:#5A6678;
+  --wire:#2456E6; --line:#D6DCE5;
+  --c-lang:#B26A00; --c-front:#C43A63; --c-back:#0E7A5F; --c-data:#0E7490;
+  --c-cloud:#1D63D8; --c-os:#3F7A1F; --c-devops:#B24A17; --c-legacy:#6D5AC0;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --sans:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --r:14px; --sheet-h:78dvh;
+}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+  font-size:16px;line-height:1.55;padding-bottom:90px}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;
+  -webkit-tap-highlight-color:transparent}
+
+/* ---- top bar ---- */
+header{position:sticky;top:0;z-index:30;background:var(--paper);
+  border-bottom:1px solid var(--line);padding:10px 14px 8px}
+.brand{font-family:var(--mono);font-weight:700;font-size:15px;
+  letter-spacing:.22em;display:flex;align-items:center;gap:8px}
+.brand b{color:var(--wire)}
+.brand .dot{width:8px;height:8px;border-radius:50%;background:var(--wire);
+  box-shadow:0 0 0 3px rgba(36,86,230,.18)}
+.score-pill{margin-left:auto;font-family:var(--mono);font-size:12px;
+  background:var(--ink);color:#fff;border-radius:999px;padding:5px 11px}
+#search{width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line);
+  border-radius:11px;font:15px var(--sans);background:var(--card);color:var(--ink)}
+#search:focus{outline:2px solid var(--wire);outline-offset:1px}
+
+/* ---- hop trail (signature): your path through the web ---- */
+#trail{display:flex;gap:6px;overflow-x:auto;padding:8px 14px;font-family:var(--mono);
+  font-size:12px;white-space:nowrap;scrollbar-width:none;min-height:34px}
+#trail::-webkit-scrollbar{display:none}
+#trail .hop{color:var(--wire);text-decoration:underline dotted;padding:2px 2px}
+#trail .sep{color:var(--ink-dim)}
+#trail .hint{color:var(--ink-dim)}
+
+/* ---- main map ---- */
+main{padding:4px 14px 20px;max-width:900px;margin:0 auto}
+.cat{margin:18px 0}
+.cat-h{display:flex;align-items:center;gap:9px;font-family:var(--mono);
+  font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-dim);margin-bottom:9px}
+.cat-h .sw{width:22px;height:4px;border-radius:2px;background:var(--cc)}
+.cat-h .n{margin-left:auto;font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
+.node{--cc:var(--wire);display:flex;flex-direction:column;gap:3px;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-left:5px solid var(--cc);
+  border-radius:var(--r);padding:12px 12px 10px;min-height:64px;
+  transition:transform .12s,box-shadow .12s}
+.node:active{transform:scale(.97)}
+.node b{font-size:15px}
+.node small{color:var(--ink-dim);font-size:12px;line-height:1.35}
+.node .lvl{font-family:var(--mono);font-size:10px;color:var(--cc);margin-top:2px}
+.empty{color:var(--ink-dim);padding:30px 0;text-align:center;font-family:var(--mono);font-size:13px}
+
+/* ---- bottom sheet / detail panel ---- */
+#scrim{position:fixed;inset:0;background:rgba(20,26,38,.45);opacity:0;
+  pointer-events:none;transition:opacity .2s;z-index:40}
+#sheet{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card);
+  border-radius:20px 20px 0 0;box-shadow:0 -12px 40px rgba(20,26,38,.25);
+  max-height:var(--sheet-h);transform:translateY(105%);transition:transform .25s ease;
+  display:flex;flex-direction:column;overscroll-behavior:contain}
+body.open #scrim{opacity:1;pointer-events:auto}
+body.open #sheet{transform:none}
+.sheet-grab{align-self:center;width:44px;height:5px;border-radius:3px;
+  background:var(--line);margin:9px 0 2px}
+.sheet-head{padding:6px 18px 10px;border-bottom:1px solid var(--line)}
+.sheet-head .kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--cc,var(--wire))}
+.sheet-head h2{font-size:24px;line-height:1.2}
+.sheet-head .meta{font-family:var(--mono);font-size:12px;color:var(--ink-dim);margin-top:2px}
+.tabs{display:flex;gap:4px;padding:8px 12px 0;border-bottom:1px solid var(--line)}
+.tab{flex:1;padding:9px 4px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+  color:var(--ink-dim);border-bottom:2px solid transparent}
+.tab[aria-selected=true]{color:var(--ink);border-color:var(--cc,var(--wire));font-weight:700}
+.sheet-body{overflow-y:auto;padding:16px 18px 26px;-webkit-overflow-scrolling:touch}
+.sheet-body h3{font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-dim);margin:16px 0 6px}
+.sheet-body h3:first-child{margin-top:0}
+.sheet-body p{margin:0 0 10px;font-size:15px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.chip{--cc:var(--wire);font:13px var(--sans);font-weight:600;background:var(--paper);
+  border:1px solid var(--line);border-left:4px solid var(--cc);border-radius:999px;
+  padding:8px 13px}
+.chip:active{transform:scale(.95)}
+.rel-verb{font-family:var(--mono);font-size:11px;color:var(--ink-dim)}
+
+/* ---- assess tab ---- */
+.lvls{display:flex;flex-direction:column;gap:8px}
+.lvlbtn{display:flex;gap:10px;align-items:baseline;text-align:left;background:var(--paper);
+  border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+.lvlbtn.on{border-color:var(--cc,var(--wire));background:#fff;
+  box-shadow:inset 0 0 0 1px var(--cc,var(--wire))}
+.lvlbtn .num{font-family:var(--mono);font-weight:700;color:var(--cc,var(--wire))}
+.lvlbtn small{color:var(--ink-dim)}
+.challenge{background:var(--paper);border:1px dashed var(--line);border-radius:11px;
+  padding:12px 13px;font-size:14px;color:var(--ink-dim);margin-top:12px}
+
+/* ---- agent guide view ---- */
+#guideBtn{position:fixed;right:14px;bottom:16px;z-index:35;font-family:var(--mono);
+  font-size:12px;font-weight:700;letter-spacing:.08em;background:var(--ink);color:#fff;
+  border-radius:999px;padding:12px 16px;box-shadow:0 6px 18px rgba(20,26,38,.3)}
+.guide pre{font:12px/1.6 var(--mono);background:var(--paper);border:1px solid var(--line);
+  border-radius:11px;padding:12px;overflow-x:auto;white-space:pre-wrap}
+@media(min-width:760px){
+  #sheet{left:auto;right:0;top:0;bottom:0;width:440px;max-height:none;
+    border-radius:20px 0 0 20px;transform:translateX(105%)}
+  .sheet-grab{display:none}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand"><span class="dot"></span>TECH<b>WEB</b>
+    <button class="score-pill" id="overall" onclick="openGuide()" aria-label="Overall score">— / —</button>
+  </div>
+  <input id="search" type="search" placeholder="Search the web… (php, fortran, snowflake)" autocomplete="off">
+</header>
+
+<nav id="trail" aria-label="Your hop trail"><span class="hint">◦ your hop trail appears here — tap any node to start</span></nav>
+
+<main id="map"></main>
+
+<button id="guideBtn" onclick="openGuide()">AGENT GUIDE</button>
+
+<div id="scrim" onclick="closeSheet()"></div>
+<section id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-grab"></div>
+  <div class="sheet-head" id="shead"></div>
+  <div class="tabs" id="stabs" role="tablist"></div>
+  <div class="sheet-body" id="sbody"></div>
+</section>
+
+<script>
+/* ============================================================================
+   TECHWEB CORE — read this block before touching anything (humans & agents)
+
+   ARCHITECTURE (SOLID + KISS):
+   • Single Responsibility — DATA holds content; render*() functions only draw;
+     store() only persists. No function does two jobs.
+   • Open/Closed — to grow the site you ADD entries to DATA.tech and DATA.cats.
+     You never modify render code to add a technology.
+   • KISS — zero deps, one file, vanilla JS. The "graph" is browsed as lists of
+     tappable connection chips (works great on phones; no canvas physics).
+
+   ADD A TECHNOLOGY (the only thing daily agents normally do):
+     DATA.tech["myid"] = {
+       name:"Display Name", cat:"lang",            // cat must exist in DATA.cats
+       tag:"one-line what it is",
+       born:"1995 · Creator/Org",
+       history:"2–4 sentences: origin story.",
+       why:"2–4 sentences: why it matters TODAY, or why it's fading. Be honest.",
+       rel:{ needs:["otherid"], powers:[], rivals:[], evolvedFrom:[], seeAlso:[] },
+       challenges:["Do X…","Build Y…","Explain Z…"]   // one per level 1..5 ideally
+     };
+   Unknown ids in rel are ignored safely. Links are rendered one-way; add the
+   reverse edge on the other tech if you want it visible both ways.
+
+   ADD A CATEGORY: DATA.cats["key"]={name:"…",color:"var(--c-…)"} + a CSS var.
+
+   SCORING: user self-rates each tech 0–5 (0 = unrated). Stored per-tech in
+   window.storage key "score:<id>". Overall = average of rated techs ×20 → /100.
+
+   AGENT DAILY LOOP (suggested):
+   1. Pick 2–3 techs from the "seeAlso frontier" (ids referenced but missing).
+   2. Write history + why (neutral, honest, incl. "why it isn't necessary" when true).
+   3. Wire rel edges both directions where meaningful.
+   4. Write 5 challenges, easy→hard, concrete and doable in <1 hour each.
+   5. Never rename existing ids (they're storage keys for user scores).
+   ============================================================================ */
+
+const DATA = {
+  cats: {
+    lang:  {name:"Languages",        color:"var(--c-lang)"},
+    front: {name:"Frontend",         color:"var(--c-front)"},
+    back:  {name:"Backend & Runtime",color:"var(--c-back)"},
+    data:  {name:"Data",             color:"var(--c-data)"},
+    cloud: {name:"Cloud",            color:"var(--c-cloud)"},
+    os:    {name:"Operating Systems",color:"var(--c-os)"},
+    devops:{name:"DevOps & Tooling", color:"var(--c-devops)"},
+    legacy:{name:"Legacy & Roots",   color:"var(--c-legacy)"}
+  },
+  relVerbs: {needs:"needs / built on", powers:"powers / enables", rivals:"alternatives",
+             evolvedFrom:"evolved from", seeAlso:"see also"},
+  tech: {
+    html:{name:"HTML",cat:"front",tag:"the document skeleton of the web",born:"1993 · Tim Berners-Lee / W3C·WHATWG",
+      history:"Created at CERN as a simple markup for sharing physics documents. Standardized through browser wars, nearly replaced by XHTML, then reborn as the living HTML5 standard.",
+      why:"Every page on the web is HTML at the end of the pipeline. Frameworks come and go; HTML is the contract they all compile to. Non-negotiable knowledge.",
+      rel:{powers:["css","js"],seeAlso:["http"]},
+      challenges:["Build a page using only semantic tags (no divs).","Make an accessible form with labels & fieldsets.","Explain the difference between <section>, <article>, <aside>.","Hand-write a valid document with meta tags for SEO/social.","Audit a real site's markup with a11y devtools and fix 5 issues."]},
+    css:{name:"CSS",cat:"front",tag:"style & layout language of the web",born:"1996 · Håkon Wium Lie / W3C",
+      history:"Proposed to separate presentation from HTML structure. Survived years of browser inconsistency, then flexbox, grid, and custom properties turned it into a real layout system.",
+      why:"Still the only way to style the web. Modern CSS replaces piles of JS layout code — knowing it deeply is a superpower, not a chore.",
+      rel:{needs:["html"],seeAlso:["js"]},
+      challenges:["Center a div 3 different ways and explain each.","Rebuild a card layout with grid, then flexbox.","Build a responsive nav with no media queries (clamp/flex-wrap).","Theme a page with custom properties + prefers-color-scheme.","Recreate a complex magazine layout from a screenshot."]},
+    js:{name:"JavaScript",cat:"lang",tag:"the language of the browser (and beyond)",born:"1995 · Brendan Eich / Netscape",
+      history:"Written in 10 days to add interactivity to Netscape. Standardized as ECMAScript; ES6 (2015) modernized it, and Node.js took it to the server.",
+      why:"The only language browsers natively run. Whether you love it or not, the entire frontend ecosystem and half the backend world sits on it.",
+      rel:{needs:["html"],powers:["jquery","react","angular","node","ts"],seeAlso:["css"]},
+      challenges:["Explain var vs let vs const with examples.","Implement debounce from scratch.","Use fetch + async/await to render an API's data.","Explain the event loop; predict output of a setTimeout/promise quiz.","Build a small SPA router with history API, no framework."]},
+    ts:{name:"TypeScript",cat:"lang",tag:"JavaScript with static types",born:"2012 · Anders Hejlsberg / Microsoft",
+      history:"Microsoft's answer to large JS codebases becoming unmaintainable. A superset that compiles to JS, it won by meeting developers where they were.",
+      why:"De-facto standard for serious JS projects — Angular requires it, React teams default to it. Catches bugs before runtime; large refactors become safe.",
+      rel:{needs:["js"],powers:["angular"],seeAlso:["csharp","react"]},
+      challenges:["Convert a small JS file to TS with zero any.","Type a fetch wrapper with generics.","Explain interface vs type alias.","Model a discriminated union for API responses.","Write a mapped/conditional utility type and explain it."]},
+    jquery:{name:"jQuery",cat:"front",tag:"the DOM helper that unified the old web",born:"2006 · John Resig",
+      history:"Smoothed over brutal browser incompatibilities with a tiny, chainable API. At its peak it ran on ~80% of the top websites.",
+      why:"Mostly unnecessary today — querySelector and fetch absorbed its best ideas into the platform. Still worth recognizing: legacy enterprise code is full of it, and its API design influenced everything after.",
+      rel:{needs:["js"],rivals:["react","angular"],seeAlso:["html"]},
+      challenges:["Rewrite a jQuery snippet in vanilla JS.","Explain what $(document).ready solved and why it's obsolete.","Chain 3 jQuery operations, then match them natively.","Migrate a small jQuery plugin to a plain function.","Argue when jQuery is STILL the right call (yes, there are cases)."]},
+    react:{name:"React",cat:"front",tag:"component UI library, one-way data flow",born:"2013 · Meta",
+      history:"Born from Facebook's news-feed complexity. The virtual DOM and 'UI as a function of state' idea reshaped frontend thinking; hooks (2019) reshaped it again.",
+      why:"Largest frontend ecosystem and job market. Even if you use something else, its component model is the industry's shared mental model.",
+      rel:{needs:["js"],rivals:["angular","jquery"],seeAlso:["ts","node"]},
+      challenges:["Build a counter with useState; explain re-renders.","Lift state up between two components.","Fetch & display data with useEffect correctly (deps array!).","Build a custom hook (useLocalStorage).","Explain reconciliation and when to use memo/useMemo."]},
+    angular:{name:"Angular",cat:"front",tag:"batteries-included enterprise SPA framework",born:"2016 · Google (AngularJS 2010)",
+      history:"AngularJS pioneered SPAs; the 2016 rewrite (Angular 2+) bet on TypeScript, DI, and RxJS. Recent versions added signals and standalone components.",
+      why:"The structured choice for large enterprise teams — opinionated, complete, long-term supported by Google. Its DI and module discipline mirror backend architecture.",
+      rel:{needs:["ts","js"],rivals:["react"],seeAlso:["dotnet"]},
+      challenges:["Scaffold an app; explain what the CLI generated.","Build a component with @Input/@Output.","Add a service via dependency injection.","Use signals for reactive state.","Explain zone-less change detection vs zones."]},
+    node:{name:"Node.js",cat:"back",tag:"JavaScript runtime on the server",born:"2009 · Ryan Dahl",
+      history:"Wrapped Chrome's V8 engine with an event-driven, non-blocking I/O model. npm grew into the largest package registry in history.",
+      why:"One language across the stack, unbeatable for I/O-heavy APIs and tooling. Nearly every frontend build tool runs on it, so you're using it even when you're not.",
+      rel:{needs:["js"],rivals:["php","dotnet","python"],powers:["react","angular"],seeAlso:["docker"]},
+      challenges:["Write an HTTP server with zero dependencies.","Read/write files with promises.","Build a tiny REST API (Express or native).","Explain the event loop phases.","Stream a large file and explain backpressure."]},
+    php:{name:"PHP",cat:"back",tag:"the language that built the everyday web",born:"1995 · Rasmus Lerdorf",
+      history:"Started as 'Personal Home Page' CGI scripts. Powered the LAMP era — WordPress, Facebook, Wikipedia. PHP 7/8 made it fast and genuinely modern.",
+      why:"Still serves a massive share of all websites via WordPress alone. Mocked, but it ships. Modern PHP (Laravel) is productive and pleasant — a lesson in judging tools by today's version, not 2004's.",
+      rel:{needs:["linux","sql"],rivals:["node","python"],seeAlso:["mysqlpg"]},
+      challenges:["Write a form handler with validation.","Query a DB with PDO + prepared statements.","Explain how PHP's request lifecycle differs from Node's.","Build a tiny routed app (or explore Laravel).","Harden a legacy snippet against SQLi/XSS."]},
+    python:{name:"Python",cat:"lang",tag:"readable general-purpose language; king of data & AI",born:"1991 · Guido van Rossum",
+      history:"Designed for readability ('executable pseudocode'). Grew from scripting into web (Django/Flask), then conquered data science and machine learning.",
+      why:"The default language of AI, automation, and data pipelines. If a task touches ML or glue-code, Python is probably the shortest path.",
+      rel:{rivals:["php","node","java"],seeAlso:["snowflake","linux"]},
+      challenges:["Solve 5 problems with list comprehensions.","Parse a CSV and summarize it (no pandas, then pandas).","Write a decorator and explain closures.","Call a REST API and cache responses.","Explain the GIL and when it matters."]},
+    java:{name:"Java",cat:"lang",tag:"write once, run anywhere — enterprise workhorse",born:"1995 · Sun Microsystems",
+      history:"The JVM promised portability in a fragmented OS world. Became the backbone of banks, Android, and big-data tooling (Hadoop, Kafka are JVM).",
+      why:"Enormous enterprise footprint and still evolving fast (records, virtual threads). Understanding the JVM explains half of enterprise architecture.",
+      rel:{rivals:["csharp","python"],powers:["snowflake"],seeAlso:["linux"]},
+      challenges:["Write a class with proper equals/hashCode.","Use streams to transform a collection.","Explain JVM vs JRE vs JDK.","Build a small Spring Boot endpoint.","Explain garbage collection generations."]},
+    csharp:{name:"C#",cat:"lang",tag:"Microsoft's flagship language",born:"2000 · Anders Hejlsberg / Microsoft",
+      history:"Born in the .NET push as a modern Java rival, it out-evolved its inspiration — LINQ, async/await (which JS later copied), and records all debuted here.",
+      why:"The door into the entire Microsoft area: web (ASP.NET), games (Unity), desktop, cloud (Azure). One of the best-designed mainstream languages.",
+      rel:{needs:["dotnet"],rivals:["java"],seeAlso:["ts","azure"]},
+      challenges:["Write a class with properties & records.","Use LINQ to query a list 3 ways.","Explain async/await vs threads.","Build a minimal ASP.NET API.","Explain value vs reference types + boxing."]},
+    dotnet:{name:".NET",cat:"back",tag:"Microsoft's cross-platform app framework",born:"2002 · Microsoft (open-sourced 2016)",
+      history:"Started Windows-only; the .NET Core rewrite went open-source and cross-platform, unifying into one modern runtime that runs happily on Linux.",
+      why:"Hub of the Microsoft ecosystem — expand here and you reach C#, Azure, Windows Server. Extremely fast, first-class enterprise support.",
+      rel:{powers:["csharp"],needs:["windows","linux"],rivals:["node","java"],seeAlso:["azure"]},
+      challenges:["dotnet new a console app; explain the csproj.","Add a NuGet package and use it.","Build a minimal web API with 2 endpoints.","Explain the difference: .NET Framework vs .NET 8.","Deploy the API in a Docker container."]},
+    c:{name:"C",cat:"legacy",tag:"the language operating systems are made of",born:"1972 · Dennis Ritchie / Bell Labs",
+      history:"Created to write Unix. Its syntax and memory model became the ancestor of C++, Java, C#, JavaScript, and Go.",
+      why:"You may never ship C, but it explains everything underneath: pointers, memory, why buffer overflows exist. Linux, Python, and most databases are written in it.",
+      rel:{powers:["cpp","linux","python"],seeAlso:["fortran"]},
+      challenges:["Write hello world; compile with gcc and explain each step.","Implement strlen with pointers.","Explain stack vs heap with a diagram.","Cause (and fix) a segfault deliberately.","Read a small piece of real Linux source."]},
+    cpp:{name:"C++",cat:"lang",tag:"C with abstractions — performance-critical software",born:"1985 · Bjarne Stroustrup",
+      history:"'C with Classes' grew into the language of game engines, browsers, and trading systems. Modern C++ (11 onward) is a very different, safer language.",
+      why:"Where performance is non-negotiable — Chrome, Unreal, databases — C++ is there. Also the language Rust is trying to replace, which tells you its importance.",
+      rel:{evolvedFrom:["c"],rivals:["java","csharp"],seeAlso:["linux"]},
+      challenges:["Explain RAII with a file-handle example.","Use std::vector & range-for correctly.","Explain unique_ptr vs shared_ptr.","Overload an operator sensibly.","Profile and optimize a hot loop."]},
+    fortran:{name:"Fortran",cat:"legacy",tag:"the first high-level language; still crunching numbers",born:"1957 · John Backus / IBM",
+      history:"FORmula TRANslation proved compilers could rival hand-written assembly. Weather models, physics simulations, and NumPy's underlying libraries (BLAS/LAPACK) still run Fortran.",
+      why:"'Unnecessary' for new apps, yet quietly essential: scientific computing's fastest numeric kernels are Fortran, and it's a masterclass in how long good code survives.",
+      rel:{powers:["python"],seeAlso:["cobol","c"]},
+      challenges:["Read a modern Fortran array operation and translate to Python.","Explain why BLAS/LAPACK still matter.","Write a loop that sums an array in Fortran syntax.","Compare column-major vs row-major memory.","Argue: should anyone learn Fortran in 2026?"]},
+    cobol:{name:"COBOL",cat:"legacy",tag:"the language your bank still runs on",born:"1959 · CODASYL / Grace Hopper's influence",
+      history:"Designed for business data processing in English-like syntax. An estimated 200+ billion lines still run banking, insurance, and government systems.",
+      why:"Nobody starts projects in COBOL — but the world's money moves through it nightly. Legacy modernization (a real federal-contracting niche) pays well precisely because few learn it.",
+      rel:{seeAlso:["fortran","sql","linux"]},
+      challenges:["Read a COBOL paragraph and explain it in plain English.","Explain PIC clauses.","Map a COBOL record layout to a SQL table.","Describe batch processing vs modern APIs.","Sketch a modernization plan: COBOL → cloud service."]},
+    sql:{name:"SQL",cat:"data",tag:"the universal language of data",born:"1974 · Chamberlin & Boyce / IBM",
+      history:"Based on relational theory (Codd, 1970). Survived object databases, survived NoSQL hype, and remains the query language even 'NoSQL' systems eventually add.",
+      why:"Fifty years old and more relevant than ever — Postgres, Snowflake, and even Kafka speak dialects of it. The single highest-ROI skill in data.",
+      rel:{powers:["mysqlpg","snowflake"],seeAlso:["cobol"]},
+      challenges:["Write SELECT/WHERE/ORDER on a sample table.","JOIN two tables; explain inner vs left.","GROUP BY with HAVING to find duplicates.","Write a window function (running total).","Read an EXPLAIN plan and add the right index."]},
+    mysqlpg:{name:"PostgreSQL",cat:"data",tag:"the open-source relational database of record",born:"1996 · UC Berkeley lineage",
+      history:"Descended from the Ingres/Postgres research projects. Slowly out-featured every rival: JSONB, full-text search, extensions (PostGIS, pgvector).",
+      why:"Default answer to 'which database?'. With pgvector it even serves AI workloads. Boring, reliable, free — the best kind of technology.",
+      rel:{needs:["sql","linux"],rivals:["snowflake"],seeAlso:["docker"]},
+      challenges:["Create a schema with proper types & constraints.","Use JSONB and query inside it.","Set up a foreign key and test cascade.","Write a CTE-based report query.","Explain MVCC and why VACUUM exists."]},
+    snowflake:{name:"Snowflake",cat:"data",tag:"cloud data warehouse, storage/compute separated",born:"2014 · Snowflake Inc.",
+      history:"Rebuilt the data warehouse for the cloud: storage and compute scale independently, billed by the second. Its 2020 IPO was the largest software IPO ever at the time.",
+      why:"Where enterprise analytics lives now. Understanding it (vs Postgres) teaches the OLTP/OLAP split — a core architecture concept.",
+      rel:{needs:["sql","aws","azure"],rivals:["mysqlpg"],seeAlso:["python"]},
+      challenges:["Explain OLTP vs OLAP with examples.","Describe virtual warehouses & auto-suspend.","Load a CSV into a stage and query it.","Explain time travel & zero-copy cloning.","Design a cost-control strategy for a team."]},
+    linux:{name:"Linux",cat:"os",tag:"the OS running (almost) all servers",born:"1991 · Linus Torvalds",
+      history:"A hobby kernel, joined with GNU tools, that beat commercial Unix. Today it runs the cloud, Android, supercomputers, and your router.",
+      why:"Every deployment path ends at a Linux box or container. Shell fluency is the difference between using the cloud and understanding it.",
+      rel:{evolvedFrom:["c"],rivals:["windows"],powers:["docker","node","php","mysqlpg"],seeAlso:["git"]},
+      challenges:["Navigate & manipulate files purely in the shell.","Explain permissions (chmod 755) precisely.","Pipe 3 commands together to solve a real task.","Write a bash script with args and error handling.","Trace a slow process with top/ps/journalctl."]},
+    windows:{name:"Windows Server",cat:"os",tag:"the enterprise Microsoft backbone",born:"1993 · Microsoft (NT)",
+      history:"Windows NT brought a real kernel to business computing. Active Directory made it the identity heart of nearly every corporation.",
+      why:"The Microsoft area's foundation: AD, IIS, PowerShell. Federal and enterprise environments live here — Azure AD/Entra is its cloud continuation.",
+      rel:{rivals:["linux"],powers:["dotnet"],seeAlso:["azure"]},
+      challenges:["Explain what Active Directory actually does.","Write a PowerShell one-liner to list services.","Describe Group Policy in plain English.","Compare IIS vs nginx conceptually.","Sketch a hybrid AD ↔ Entra ID setup."]},
+    azure:{name:"Azure",cat:"cloud",tag:"Microsoft's cloud — enterprise & gov favorite",born:"2010 · Microsoft",
+      history:"Late to the party behind AWS, but leveraged enterprise relationships and AD integration to become a strong #2 — dominant in government work.",
+      why:"If your clients run Microsoft, they run Azure. Gov-cloud regions and Entra ID integration make it the federal-contracting default.",
+      rel:{needs:["windows","linux"],rivals:["aws"],powers:["snowflake"],seeAlso:["dotnet","docker"]},
+      challenges:["Map 5 Azure services to their AWS equivalents.","Deploy a static site to Azure Storage/Static Web Apps.","Explain resource groups & subscriptions.","Set up an App Service with env config.","Design a landing zone sketch for a small org."]},
+    aws:{name:"AWS",cat:"cloud",tag:"the cloud that started the cloud",born:"2006 · Amazon",
+      history:"S3 and EC2 launched utility computing. Its primitives (buckets, lambdas, queues) became the vocabulary every other cloud copied.",
+      why:"Largest market share; its service model IS the mental model of cloud. Learn AWS concepts once, translate everywhere.",
+      rel:{needs:["linux"],rivals:["azure"],powers:["snowflake"],seeAlso:["docker"]},
+      challenges:["Explain S3/EC2/Lambda/RDS in one line each.","Host a static site on S3.","Write an IAM policy and explain least privilege.","Deploy a Lambda triggered by an upload.","Estimate & compare costs of 2 architectures."]},
+    docker:{name:"Docker",cat:"devops",tag:"ship your app with its environment",born:"2013 · dotCloud",
+      history:"Made Linux containers usable by everyone. 'Works on my machine' stopped being an excuse; images became the unit of deployment.",
+      why:"The packaging standard of modern software. Every cloud, CI system, and orchestrator consumes containers — it's plumbing you touch daily.",
+      rel:{needs:["linux"],powers:["k8s"],seeAlso:["git","node"]},
+      challenges:["Run and exec into a container.","Write a Dockerfile for a small app.","Use volumes & port mapping correctly.","Slim an image with multi-stage builds.","Compose a 2-service stack (app + db)."]},
+    k8s:{name:"Kubernetes",cat:"devops",tag:"container orchestration at scale",born:"2014 · Google (from Borg)",
+      history:"Google open-sourced its internal cluster wisdom. Won the orchestration war outright; now the substrate of most cloud platforms.",
+      why:"Necessary at scale, overkill for small apps — knowing WHEN you need it is the real skill. Its API patterns (declarative desired state) influence all modern infra.",
+      rel:{needs:["docker","linux"],seeAlso:["azure","aws"]},
+      challenges:["Explain pod vs deployment vs service.","Write a deployment YAML and apply it.","Scale & roll back a deployment.","Explain when k8s is the WRONG choice.","Debug a CrashLoopBackOff systematically."]},
+    git:{name:"Git",cat:"devops",tag:"distributed version control — the industry's memory",born:"2005 · Linus Torvalds",
+      history:"Written in weeks after a licensing spat killed Linux's previous VCS. GitHub built a social layer on top and changed how software is shared.",
+      why:"Universal. There is no professional software work without it. Deep git skill (rebase, bisect) quietly separates seniors from juniors.",
+      rel:{needs:["linux"],seeAlso:["docker"]},
+      challenges:["init/commit/branch/merge a toy repo.","Resolve a merge conflict calmly.","Interactive rebase to clean 3 commits.","Use bisect to find a bad commit.","Explain reflog and recover a 'lost' commit."]},
+    http:{name:"HTTP",cat:"legacy",tag:"the protocol every web request rides on",born:"1991 · Tim Berners-Lee / IETF",
+      history:"Began as a one-line GET protocol. Grew through 1.1's keep-alive, 2's multiplexing, and 3's QUIC — each version solving the last one's bottleneck.",
+      why:"Everything above (REST, APIs, browsers) is HTTP semantics. Debugging production without knowing status codes, headers, and caching is flying blind.",
+      rel:{powers:["html"],seeAlso:["linux","node"]},
+      challenges:["Explain GET vs POST vs PUT vs PATCH.","List 8 status codes you must know.","Inspect a request fully in devtools.","Explain caching headers (ETag, max-age).","Describe what HTTPS adds and how TLS handshakes."]}
+  }
+};
+
+/* ---------- persistence (single responsibility: store/load scores) ---------- */
+const scores = {};
+async function loadScores(){
+  for(const id of Object.keys(DATA.tech)){
+    try{const r=await window.storage.get("score:"+id); if(r) scores[id]=+r.value;}catch(e){}
+  }
+}
+async function saveScore(id,v){
+  scores[id]=v;
+  try{await window.storage.set("score:"+id,String(v));}catch(e){}
+  renderOverall(); renderMap(document.getElementById("search").value);
+}
+function renderOverall(){
+  const rated=Object.values(scores).filter(v=>v>0);
+  const el=document.getElementById("overall");
+  el.textContent = rated.length
+    ? Math.round(rated.reduce((a,b)=>a+b,0)/rated.length*20)+" / 100 · "+rated.length+" rated"
+    : "unrated · tap a node";
+}
+
+/* ---------- map rendering ---------- */
+function renderMap(filter=""){
+  const q=filter.trim().toLowerCase(), map=document.getElementById("map");
+  map.innerHTML="";
+  for(const [ck,cat] of Object.entries(DATA.cats)){
+    const items=Object.entries(DATA.tech).filter(([id,t])=>t.cat===ck &&
+      (!q || t.name.toLowerCase().includes(q) || t.tag.toLowerCase().includes(q) || id.includes(q)));
+    if(!items.length) continue;
+    const sec=document.createElement("section"); sec.className="cat";
+    sec.innerHTML=`<div class="cat-h" style="--cc:${cat.color}"><span class="sw"></span>${cat.name}<span class="n">${items.length}</span></div>`;
+    const grid=document.createElement("div"); grid.className="grid";
+    for(const [id,t] of items){
+      const b=document.createElement("button");
+      b.className="node"; b.style.setProperty("--cc",cat.color);
+      b.innerHTML=`<b>${t.name}</b><small>${t.tag}</small>`+
+        (scores[id]?`<span class="lvl">▮ level ${scores[id]}/5</span>`:`<span class="lvl" style="color:var(--ink-dim)">unrated</span>`);
+      b.onclick=()=>openTech(id);
+      grid.appendChild(b);
+    }
+    sec.appendChild(grid); map.appendChild(sec);
+  }
+  if(!map.children.length) map.innerHTML=`<div class="empty">no matches — a future agent should add “${q}”</div>`;
+}
+
+/* ---------- hop trail ---------- */
+const trail=[];
+function renderTrail(){
+  const el=document.getElementById("trail");
+  if(!trail.length){el.innerHTML=`<span class="hint">◦ your hop trail appears here — tap any node to start</span>`;return;}
+  el.innerHTML=trail.map((id,i)=>
+    `${i?'<span class="sep">→</span>':""}<button class="hop" onclick="openTech('${id}',true)">${DATA.tech[id].name}</button>`).join("");
+  el.scrollLeft=el.scrollWidth;
+}
+
+/* ---------- detail sheet ---------- */
+let current=null, curTab="learn";
+function openTech(id,fromTrail=false){
+  if(!DATA.tech[id]) return;
+  current=id; curTab="learn";
+  if(!fromTrail && trail[trail.length-1]!==id){trail.push(id); if(trail.length>12)trail.shift();}
+  renderTrail(); renderSheet();
+  document.body.classList.add("open");
+}
+function closeSheet(){document.body.classList.remove("open");}
+function setTab(t){curTab=t; renderSheet();}
+
+function renderSheet(){
+  const t=DATA.tech[current], cat=DATA.cats[t.cat], cc=cat.color;
+  document.getElementById("shead").innerHTML=
+    `<div class="kicker" style="--cc:${cc}">${cat.name}</div><h2>${t.name}</h2><div class="meta">${t.born}</div>`;
+  document.getElementById("stabs").innerHTML=["learn","connect","assess"].map(k=>
+    `<button class="tab" role="tab" aria-selected="${k===curTab}" style="--cc:${cc}" onclick="setTab('${k}')">${
+      {learn:"LEARN",connect:"CONNECT",assess:"ASSESS"}[k]}</button>`).join("");
+  const body=document.getElementById("sbody");
+
+  if(curTab==="learn"){
+    body.innerHTML=`<h3>History</h3><p>${t.history}</p>
+      <h3>Why it matters (or doesn't)</h3><p>${t.why}</p>`;
+  }
+  else if(curTab==="connect"){
+    let html="";
+    for(const [verb,label] of Object.entries(DATA.relVerbs)){
+      const ids=(t.rel?.[verb]||[]).filter(x=>DATA.tech[x]);
+      if(!ids.length) continue;
+      html+=`<h3><span class="rel-verb">${label}</span></h3><div class="chiprow">`+
+        ids.map(x=>`<button class="chip" style="--cc:${DATA.cats[DATA.tech[x].cat].color}" onclick="openTech('${x}')">${DATA.tech[x].name}</button>`).join("")+`</div>`;
+    }
+    body.innerHTML=html||`<p class="empty">no wired connections yet — agents: add rel edges.</p>`;
+  }
+  else{
+    const v=scores[current]||0;
+    const labels=["Heard of it — can define it","Used it once — tutorial level","Comfortable — built something small","Proficient — daily-driver ready","Expert — could teach & architect"];
+    body.innerHTML=`<h3>Self-assessment</h3><div class="lvls">`+
+      labels.map((l,i)=>`<button class="lvlbtn ${v===i+1?"on":""}" style="--cc:${cc}" onclick="saveScore('${current}',${v===i+1?0:i+1})">
+        <span class="num">${i+1}</span><span>${l}<br><small>${t.challenges?.[i]||"challenge coming soon"}</small></span></button>`).join("")+
+      `</div><div class="challenge">Rate honestly. Tap your current level again to clear. Complete the challenge at your level, then bump yourself up. Overall score updates in the header.</div>`;
+  }
+  body.scrollTop=0;
+}
+
+/* ---------- agent guide (in-app view of the rules) ---------- */
+function openGuide(){
+  current=null;
+  document.getElementById("shead").innerHTML=
+    `<div class="kicker">operations manual</div><h2>Agent Guide</h2><div class="meta">for future agents (and future you)</div>`;
+  document.getElementById("stabs").innerHTML="";
+  document.getElementById("sbody").innerHTML=`<div class="guide">
+    <h3>Architecture</h3>
+    <p>One file. <b>DATA</b> is the content, render functions are the plumbing. To grow the site, you only ever add to DATA — never touch rendering (Open/Closed). Each function does one job (Single Responsibility). No frameworks (KISS).</p>
+    <h3>Daily agent loop</h3>
+    <p>1 · Pick 2–3 techs referenced in <b>rel</b> but not yet in DATA (the frontier).<br>
+       2 · Write honest <b>history</b> + <b>why</b> — including why something is NOT necessary anymore.<br>
+       3 · Wire connections both directions where meaningful.<br>
+       4 · Write 5 challenges, easy→hard, each doable in under an hour.<br>
+       5 · Never rename an existing id — ids are score-storage keys.</p>
+    <h3>Adding a technology</h3>
+    <pre>DATA.tech["rust"] = {
+  name:"Rust", cat:"lang",
+  tag:"memory-safe systems language",
+  born:"2015 · Mozilla",
+  history:"...", why:"...",
+  rel:{ rivals:["cpp"], seeAlso:["c","linux"] },
+  challenges:["...","...","...","...","..."]
+};</pre>
+    <h3>Adding a category</h3>
+    <p>Add to <b>DATA.cats</b> with a name + a CSS color var (define the var in :root).</p>
+    <h3>Scoring model</h3>
+    <p>Per-tech self rating 1–5, persisted via window.storage. Overall = average of rated techs × 20, out of 100. Shown in the header pill.</p>
+    <h3>Design rules</h3>
+    <p>Mobile first. Tap targets ≥ 44px. Category color = left rail everywhere. The hop trail is the signature — keep it.</p>
+  </div>`;
+  document.body.classList.add("open");
+}
+
+/* ---------- boot ---------- */
+document.getElementById("search").addEventListener("input",e=>renderMap(e.target.value));
+(async()=>{await loadScores(); renderOverall(); renderMap(); renderTrail();})();
+</script>
+</body>
+</html>
