@@ -40,7 +40,8 @@ jobs:
 
       - name: Run daily technology agent
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || secrets.OPENAI_TECH_MAXXING_API_KEY }}
+          OPENAI_TECH_MAXXING_API_KEY: ${{ secrets.OPENAI_TECH_MAXXING_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_TECH_MAXXING_API_KEY }}
           FORCE_TECH_ID: ${{ github.event.inputs.forceTechnologyId || '' }}
           DAILY_AGENT_DRY_RUN: ${{ github.event.inputs.dryRun || 'false' }}
           DAILY_AGENT_MODEL: ${{ github.event.inputs.model || 'gpt-5.3-codex' }}
