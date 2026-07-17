@@ -47,6 +47,7 @@ jobs:
         run: node scripts/daily-agent.mjs
 
       - name: Commit generated updates
+        if: ${{ github.event.inputs.dryRun != 'true' }}
         run: |
           if git diff --quiet; then
             echo "No changes to commit"
