@@ -112,7 +112,7 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
         content: [
           {
             type: "input_text",
-            text: "You are a senior curriculum architect. Output valid JSON only. Prioritize mobile usability, anti-cheat assessment quality, and practical coding growth.",
+            text: "You are a senior curriculum architect. Output valid JSON only. Keep responses concise for low-cost daily runs. Prioritize mobile usability, anti-cheat assessment quality, practical coding growth, and history-focused lesson checks.",
           },
         ],
       },
@@ -134,26 +134,26 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
             latestChanges: {
               type: "array",
               minItems: 3,
-              maxItems: 6,
+              maxItems: 3,
               items: { type: "string" },
             },
             problemItSolves: { type: "string" },
             historyNotes: {
               type: "array",
               minItems: 3,
-              maxItems: 6,
+              maxItems: 4,
               items: { type: "string" },
             },
             relatedTechnologies: {
               type: "array",
               minItems: 3,
-              maxItems: 8,
+              maxItems: 5,
               items: { type: "string" },
             },
             docs: {
               type: "array",
               minItems: 3,
-              maxItems: 8,
+              maxItems: 4,
               items: {
                 type: "object",
                 additionalProperties: false,
@@ -167,7 +167,7 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
             practiceChallenges: {
               type: "array",
               minItems: 5,
-              maxItems: 8,
+              maxItems: 5,
               items: {
                 type: "object",
                 additionalProperties: false,
@@ -190,13 +190,13 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
                 antiCheatRules: {
                   type: "array",
                   minItems: 3,
-                  maxItems: 6,
+                  maxItems: 3,
                   items: { type: "string" },
                 },
                 multipleChoice: {
                   type: "array",
                   minItems: 3,
-                  maxItems: 6,
+                  maxItems: 3,
                   items: {
                     type: "object",
                     additionalProperties: false,
@@ -222,7 +222,7 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
                 codeDropdown: {
                   type: "array",
                   minItems: 1,
-                  maxItems: 3,
+                  maxItems: 1,
                   items: {
                     type: "object",
                     additionalProperties: false,
@@ -277,7 +277,8 @@ async function callModel({ apiKey, model, prompt, schemaName }) {
         },
       },
     },
-    reasoning: { effort: "high" },
+    max_output_tokens: 1800,
+    reasoning: { effort: "medium" },
   };
 
   const response = await fetch("https://api.openai.com/v1/responses", {
@@ -366,6 +367,11 @@ async function main() {
   const generated = readJson(GENERATED_PATH, []);
   const seeds = readJson(SEED_PATH, []);
 
+  if (!forceTechId && state.lastRunDate === todayIso()) {
+    console.log("Daily limit reached. Already processed one technology today.");
+    return;
+  }
+
   const target = pickTarget({
     baseTechs,
     extensions,
@@ -384,8 +390,8 @@ async function main() {
   const name = target.target.name;
 
   const prompt = isNew
-    ? `Create a new technology dossier for ${name} (${id}). Category hint: ${target.target.catHint || "lang"}.\n\nReturn content that is concise, accurate, and optimized for mobile learning experiences. Include anti-cheat assessment rules, multiple-choice checks, and at least one dropdown-based code completion challenge.`
-    : `Enhance this existing technology for daily learning progression: ${name} (${id}).\n\nReturn content that is concise, accurate, and optimized for mobile learning experiences. Include anti-cheat assessment rules, multiple-choice checks, and at least one dropdown-based code completion challenge.`;
+    ? `Create a new technology dossier for ${name} (${id}). Category hint: ${target.target.catHint || "lang"}.\n\nReturn concise, accurate mobile-first content. Include: (1) anti-cheat assessment rules, (2) three history-focused multiple-choice questions, and (3) one dropdown fill-in checkpoint designed to appear at the end of a lesson paragraph. Keep wording short to reduce token usage.`
+    : `Enhance this existing technology for daily learning progression: ${name} (${id}).\n\nReturn concise, accurate mobile-first content. Include: (1) anti-cheat assessment rules, (2) three history-focused multiple-choice questions, and (3) one dropdown fill-in checkpoint designed to appear at the end of a lesson paragraph. Keep wording short to reduce token usage.`;
 
   const result = dryRun
     ? {
@@ -451,68 +457,75 @@ async function main() {
           ],
           multipleChoice: [
             {
-              question: `Which statement best captures ${name}'s primary value?`,
+              question: `When did ${name} first become widely adopted?`,
               options: [
-                "It replaces all backend technologies",
-                "It provides structured solutions for a specific problem space",
-                "It only works for prototypes",
-                "It removes the need for testing",
+                "Before the internet era",
+                "After core tooling matured",
+                "Only in the last year",
+                "It never reached broad use",
               ],
               answerIndex: 1,
               explanation:
-                "Strong technologies usually win by narrowing complexity in a clear domain.",
+                "Adoption usually accelerates after stable tooling and community standards appear.",
             },
             {
-              question: `What is the best next step after learning ${name} fundamentals?`,
+              question: `What historical shift most helped ${name} grow?`,
               options: [
-                "Skip projects and only read docs",
-                "Build one practical feature end-to-end",
-                "Memorize trivia questions",
-                "Ignore testing and debugging",
+                "Removal of documentation",
+                "Ecosystem and tooling expansion",
+                "Elimination of testing",
+                "Blocking community contributions",
               ],
               answerIndex: 1,
               explanation:
-                "Application through projects cements concepts and exposes trade-offs.",
+                "Most technologies scale when ecosystem tools lower onboarding and production risk.",
             },
             {
-              question:
-                "Which practice best supports mobile-first learning UX?",
+              question: `Which statement best matches ${name}'s history?`,
               options: [
-                "Very long text-only assignments",
-                "Small interactive tasks with immediate feedback",
-                "Desktop-only coding editors",
-                "Hidden instructions",
+                "It stayed unchanged from day one",
+                "It evolved from focused origins into broader usage",
+                "It was replaced immediately",
+                "It only existed as a classroom concept",
               ],
               answerIndex: 1,
               explanation:
-                "Short, interactive loops are more usable on mobile devices.",
+                "Successful technologies typically evolve in response to real production needs.",
             },
           ],
           codeDropdown: [
             {
-              instructions: `Fill all blanks to complete this ${name} pseudocode flow.`,
-              language: "javascript",
+              instructions: `Complete this short ${name} history recap by filling each dropdown.`,
+              language: "text",
               template:
-                "function runTask(input) {\\n  const normalized = {{blank1}};\\n  if (!normalized) return {{blank2}};\\n  return {{blank3}};\\n}",
+                `${name} started as {{blank1}}. As adoption grew, teams relied on {{blank2}}. Today it is known for {{blank3}}.`,
               blanks: [
                 {
                   id: "blank1",
                   options: [
-                    "input.trim()",
-                    "JSON.parse(input)",
-                    "Number(input)",
+                    "a focused solution for a specific problem",
+                    "a replacement for every programming language",
+                    "a temporary experiment with no users",
                   ],
-                  answer: "input.trim()",
+                  answer: "a focused solution for a specific problem",
                 },
-                { id: "blank2", options: ["null", "0", "[]"], answer: "null" },
+                {
+                  id: "blank2",
+                  options: [
+                    "strong tooling and ecosystem support",
+                    "avoiding standards and documentation",
+                    "removing practical use cases",
+                  ],
+                  answer: "strong tooling and ecosystem support",
+                },
                 {
                   id: "blank3",
                   options: [
-                    "normalized.toUpperCase()",
-                    "normalized.push('x')",
-                    "delete normalized",
+                    "practical real-world delivery",
+                    "staying disconnected from production",
+                    "eliminating maintainability concerns",
                   ],
-                  answer: "normalized.toUpperCase()",
+                  answer: "practical real-world delivery",
                 },
               ],
             },

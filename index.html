@@ -456,6 +456,18 @@ function renderCodeTemplate(codeQ, st){
   return rendered;
 }
 
+function renderLessonCheckpoint(t, st){
+  const mcq=(t.assessment?.multipleChoice||[]);
+  const codeQ=(t.assessment?.codeDropdown||[])[0];
+  if(!mcq.length && !codeQ) return "";
+  return `<div class="assess-panel">
+    <h4>End-of-lesson history checkpoint</h4>
+    ${mcq.map((q,qi)=>`<div class="mcq"><q>${escHtml(q.question)}</q>${(q.options||[]).map((opt,oi)=>`<label><input type="radio" name="learn-mcq-${qi}" value="${oi}" ${st.mcqAnswers?.[qi]===oi?"checked":""} onchange="setMcqAnswer(${qi},this.value)">${escHtml(opt)}</label>`).join("")}</div>`).join("")}
+    ${(codeQ?`<div class="code-assess"><p class="hint">${escHtml(codeQ.instructions||"Fill every blank correctly.")}</p><pre>${renderCodeTemplate(codeQ, st)}</pre></div>`:"")}
+    <div class="assess-actions"><button onclick="evaluateAssessment()">Grade checkpoint</button></div>
+  </div>`;
+}
+
 async function loadAgentData(){
   async function maybeJson(url, fallback){
     try{
@@ -584,11 +596,13 @@ function renderSheet(){
   const body=document.getElementById("sbody");
 
   if(curTab==="learn"){
+    const st=ensureAssessmentState(current);
     body.innerHTML=`<h3>History</h3><p>${t.history}</p>
       <h3>Why it matters (or doesn't)</h3><p>${t.why}</p>`+
       ((t.problemItSolves||"")?`<h3>Problem it solves</h3><p>${t.problemItSolves}</p>`:"")+
       ((t.latestChanges?.length)?`<h3>Latest changes</h3><p>${t.latestChanges.map(escHtml).join("<br>")}</p>`:"")+
-      ((t.docs?.length)?`<h3>Documentation</h3><div class="chiprow">${t.docs.map(d=>`<a class="chip" style="--cc:${cc}" href="${escHtml(d.url)}" target="_blank" rel="noopener noreferrer">${escHtml(d.label||d.url)}</a>`).join("")}</div>`:"");
+      ((t.docs?.length)?`<h3>Documentation</h3><div class="chiprow">${t.docs.map(d=>`<a class="chip" style="--cc:${cc}" href="${escHtml(d.url)}" target="_blank" rel="noopener noreferrer">${escHtml(d.label||d.url)}</a>`).join("")}</div>`:"")+
+      renderLessonCheckpoint(t, st);
   }
   else if(curTab==="connect"){
     let html="";
