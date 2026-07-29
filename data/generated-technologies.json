@@ -1,1 +1,2455 @@
-[]
+[
+  {
+    "id": "svelte",
+    "name": "Svelte",
+    "cat": "front",
+    "born": "2026 · Daily Agent",
+    "tag": "compiler-based reactive ui for fast web apps",
+    "history": "2016: Rich Harris introduced Svelte as a compiler-first UI approach. 2019: Svelte 3 made Svelte widely popular with concise component syntax. 2020: SvelteKit emerged as the official framework for routing, SSR, and full apps. 2024+: Svelte 5 shifted toward rune-based reactivity while keeping a migration path from older syntax.",
+    "why": "Svelte helps teams build interactive web UIs with less boilerplate and smaller runtime overhead by moving more work to compile time. This often leads to faster apps, clearer component code, and easier onboarding for front-end developers.",
+    "rel": {
+      "seeAlso": [
+        "sveltekit",
+        "vite",
+        "typescript",
+        "javascript",
+        "react"
+      ]
+    },
+    "challenges": [
+      "Build a counter component with increment/decrement/reset buttons and a derived label (\"negative\", \"zero\", \"positive\"). Keep state local and reactive.",
+      "Create a signup form using two-way binding. Show inline validation messages and disable submit until all rules pass.",
+      "Fetch todos from a public API. Render loading, error, empty, and success states. Add a derived count of completed items.",
+      "Given a legacy component that uses `$:` and `export let`, migrate it to rune-based syntax while keeping behavior unchanged.",
+      "Build a small SvelteKit page with route params, data loading, and one reusable component. Include optimistic UI for one action."
+    ],
+    "extension": {
+      "tag": "compiler-based reactive ui for fast web apps",
+      "latestChanges": [
+        "Svelte 5 introduced runes like $state, $derived, and $effect for explicit reactivity.",
+        "Legacy syntax is still supported, enabling incremental migration.",
+        "Component composition improved with newer patterns (including snippets) and cleaner APIs.",
+        "SvelteKit + Vite workflows continue to improve DX, HMR speed, and diagnostics."
+      ],
+      "problemItSolves": "Svelte helps teams build interactive web UIs with less boilerplate and smaller runtime overhead by moving more work to compile time. This often leads to faster apps, clearer component code, and easier onboarding for front-end developers.",
+      "historyNotes": [
+        "2016: Rich Harris introduced Svelte as a compiler-first UI approach.",
+        "2019: Svelte 3 made Svelte widely popular with concise component syntax.",
+        "2020: SvelteKit emerged as the official framework for routing, SSR, and full apps.",
+        "2024+: Svelte 5 shifted toward rune-based reactivity while keeping a migration path from older syntax."
+      ],
+      "relatedTechnologies": [
+        "SvelteKit",
+        "Vite",
+        "TypeScript",
+        "JavaScript",
+        "React",
+        "Vue",
+        "SolidJS",
+        "Astro"
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://svelte.dev/docs"
+        },
+        {
+          "label": "Interactive tutorial",
+          "url": "https://svelte.dev/tutorial"
+        },
+        {
+          "label": "SvelteKit documentation",
+          "url": "https://svelte.dev/docs/kit"
+        },
+        {
+          "label": "Svelte 5 announcement",
+          "url": "https://svelte.dev/blog/svelte-5"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Reactive counter card",
+          "prompt": "Build a counter component with increment/decrement/reset buttons and a derived label (\"negative\", \"zero\", \"positive\"). Keep state local and reactive.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Form with live validation",
+          "prompt": "Create a signup form using two-way binding. Show inline validation messages and disable submit until all rules pass.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Async list with UX states",
+          "prompt": "Fetch todos from a public API. Render loading, error, empty, and success states. Add a derived count of completed items.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Legacy-to-runes migration",
+          "prompt": "Given a legacy component that uses `$:` and `export let`, migrate it to rune-based syntax while keeping behavior unchanged.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Mini feature slice",
+          "prompt": "Build a small SvelteKit page with route params, data loading, and one reusable component. Include optimistic UI for one action.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize MCQ order and option order on every attempt.",
+          "Use seeded variable names and values in code tasks so each learner gets a unique variant.",
+          "Require a short reasoning note (1-2 sentences) after each coding answer.",
+          "Set tight but fair time windows to reduce external lookup dependence.",
+          "Run AST-based similarity checks against known solution banks and peer submissions.",
+          "If score is high but reasoning is weak/inconsistent, trigger a short live follow-up task."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who originally created Svelte?",
+            "options": [
+              "Rich Harris",
+              "Evan You",
+              "Dan Abramov",
+              "Guillermo Rauch"
+            ],
+            "answerIndex": 0,
+            "explanation": "Svelte was created by Rich Harris."
+          },
+          {
+            "question": "What was a key impact of Svelte 3?",
+            "options": [
+              "It required class-based components",
+              "It popularized concise component syntax and compiler-driven reactivity",
+              "It replaced JavaScript with a custom language",
+              "It removed build tooling needs"
+            ],
+            "answerIndex": 1,
+            "explanation": "Svelte 3 made Svelte mainstream by showing how far compile-time reactivity could reduce boilerplate."
+          },
+          {
+            "question": "Which statement best describes Svelte’s rendering model?",
+            "options": [
+              "It always diffs a virtual DOM at runtime",
+              "It compiles components into targeted DOM update code",
+              "It renders only on the server",
+              "It depends on Shadow DOM for updates"
+            ],
+            "answerIndex": 1,
+            "explanation": "Svelte shifts work to build time and generates focused update logic."
+          },
+          {
+            "question": "In Svelte 5, which rune is used to create reactive local state?",
+            "options": [
+              "$effect",
+              "$derived",
+              "$state",
+              "$props"
+            ],
+            "answerIndex": 2,
+            "explanation": "$state is the primary rune for local reactive state."
+          },
+          {
+            "question": "What is the best use of $derived in Svelte 5?",
+            "options": [
+              "Triggering side effects like logging",
+              "Creating values computed from other reactive state",
+              "Declaring component props",
+              "Registering event handlers"
+            ],
+            "answerIndex": 1,
+            "explanation": "$derived is for computed/reactive values that depend on state."
+          },
+          {
+            "question": "What does SvelteKit mainly add on top of Svelte?",
+            "options": [
+              "A mandatory global state library",
+              "Routing, server rendering, and app-level tooling",
+              "A replacement for CSS",
+              "A virtual DOM layer"
+            ],
+            "answerIndex": 1,
+            "explanation": "SvelteKit provides framework capabilities for full applications."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this Svelte 5 component using runes so the doubled value updates automatically.",
+            "language": "svelte",
+            "template": "<script>\n  let count = {{blank1}}(0);\n  const doubled = {{blank2}}(count * 2);\n</script>\n\n<button onclick={() => count++}>\n  count: {count}\n</button>\n<p>doubled: {doubled}</p>",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "$state",
+                  "$derived",
+                  "$effect"
+                ],
+                "answer": "$state"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "$derived",
+                  "$props",
+                  "$inspect"
+                ],
+                "answer": "$derived"
+              }
+            ]
+          },
+          {
+            "instructions": "Fill in the runes for props access and computed value.",
+            "language": "svelte",
+            "template": "<script>\n  let { items } = {{blank3}}();\n  const doneCount = {{blank4}}(items.filter(i => i.done).length);\n</script>\n\n<p>done: {doneCount}</p>",
+            "blanks": [
+              {
+                "id": "blank3",
+                "options": [
+                  "$props",
+                  "$state",
+                  "$effect"
+                ],
+                "answer": "$props"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "$derived",
+                  "$bindable",
+                  "$host"
+                ],
+                "answer": "$derived"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:35:32.769Z"
+    }
+  },
+  {
+    "id": "vue",
+    "name": "Vue",
+    "cat": "front",
+    "born": "2026 · Daily Agent",
+    "tag": "progressive framework for reactive web interfaces",
+    "history": "2014: Evan You released Vue to simplify reactive UI development. 2016: Vue 2 popularized a lightweight component model with strong docs and ecosystem growth. 2020: Vue 3 launched with Proxy-based reactivity, Composition API, and better TypeScript support. 2023: Vue 2 reached EOL; Vue 3 became the primary production target for new projects.",
+    "why": "Vue helps teams build interactive front-end UIs with predictable reactivity, component reuse, and gradual adoption—from small widgets to full single-page applications.",
+    "rel": {
+      "seeAlso": [
+        "vite",
+        "pinia",
+        "vuerouter",
+        "nuxt",
+        "volar"
+      ]
+    },
+    "challenges": [
+      "Build a small counter component using `<script setup>` with `ref`. Add increment/decrement buttons and a computed label like 'Count: X'.",
+      "Create a list with `v-for` and a search input bound with `v-model`. Use a computed property to filter items case-insensitively.",
+      "Set up Vue Router with 3 routes (Home, Reports, Settings). Add navigation guards for a mock auth flag and lazy-load one route component.",
+      "Move duplicated local state into a Pinia store. Keep components dumb and verify updates sync across two distant components.",
+      "Instrument a component with `onMounted`, `watch`, and `onUnmounted` logs. Explain which events fire and why during route changes."
+    ],
+    "extension": {
+      "tag": "progressive framework for reactive web interfaces",
+      "latestChanges": [
+        "Vue 3.4 improved runtime performance and parser speed, reducing update overhead in many apps.",
+        "`defineModel` and other `<script setup>` ergonomics reduced boilerplate for component two-way binding.",
+        "Vue 2 reached official end of life (end of 2023), pushing teams toward Vue 3 migration.",
+        "Tooling around Vite, Volar, Vue Router, and Pinia is now the standard default stack."
+      ],
+      "problemItSolves": "Vue helps teams build interactive front-end UIs with predictable reactivity, component reuse, and gradual adoption—from small widgets to full single-page applications.",
+      "historyNotes": [
+        "2014: Evan You released Vue to simplify reactive UI development.",
+        "2016: Vue 2 popularized a lightweight component model with strong docs and ecosystem growth.",
+        "2020: Vue 3 launched with Proxy-based reactivity, Composition API, and better TypeScript support.",
+        "2023: Vue 2 reached EOL; Vue 3 became the primary production target for new projects."
+      ],
+      "relatedTechnologies": [
+        "Vite",
+        "Pinia",
+        "Vue Router",
+        "Nuxt",
+        "Volar",
+        "TypeScript"
+      ],
+      "docs": [
+        {
+          "label": "Vue Official Docs",
+          "url": "https://vuejs.org/"
+        },
+        {
+          "label": "Vue Guide: Introduction",
+          "url": "https://vuejs.org/guide/introduction.html"
+        },
+        {
+          "label": "Reactivity Fundamentals",
+          "url": "https://vuejs.org/guide/essentials/reactivity-fundamentals.html"
+        },
+        {
+          "label": "Vue Router Docs",
+          "url": "https://router.vuejs.org/"
+        },
+        {
+          "label": "Pinia Docs",
+          "url": "https://pinia.vuejs.org/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Reactive Counter Card",
+          "prompt": "Build a small counter component using `<script setup>` with `ref`. Add increment/decrement buttons and a computed label like 'Count: X'.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Searchable Product List",
+          "prompt": "Create a list with `v-for` and a search input bound with `v-model`. Use a computed property to filter items case-insensitively.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Mini Dashboard with Routing",
+          "prompt": "Set up Vue Router with 3 routes (Home, Reports, Settings). Add navigation guards for a mock auth flag and lazy-load one route component.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Shared State Refactor",
+          "prompt": "Move duplicated local state into a Pinia store. Keep components dumb and verify updates sync across two distant components.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Lifecycle Debug Drill",
+          "prompt": "Instrument a component with `onMounted`, `watch`, and `onUnmounted` logs. Explain which events fire and why during route changes.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question order and option order on every attempt.",
+          "Pull multiple-choice prompts from a larger bank; no two learners get the same full set.",
+          "Set short per-question timers to reduce answer lookup behavior.",
+          "Require a one-sentence rationale after each multiple-choice answer; auto-grade consistency with selected option.",
+          "Use hidden tests for code tasks, including edge cases not shown in the prompt.",
+          "Compare code submissions via AST similarity checks, not just exact text matching."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who created Vue?",
+            "options": [
+              "Evan You",
+              "Brendan Eich",
+              "Ryan Dahl",
+              "Guido van Rossum"
+            ],
+            "answerIndex": 0,
+            "explanation": "Vue was created by Evan You."
+          },
+          {
+            "question": "Which major API was introduced in Vue 3 to organize logic by feature?",
+            "options": [
+              "Composition API",
+              "Mixin API",
+              "Controller API",
+              "Template API"
+            ],
+            "answerIndex": 0,
+            "explanation": "Composition API lets developers group logic by concern and reuse it cleanly."
+          },
+          {
+            "question": "When did Vue 2 reach official end of life?",
+            "options": [
+              "End of 2021",
+              "End of 2023",
+              "End of 2024",
+              "It has no end date"
+            ],
+            "answerIndex": 1,
+            "explanation": "Official Vue 2 support ended at the end of 2023."
+          },
+          {
+            "question": "Why use a `computed` property instead of a method for derived UI values?",
+            "options": [
+              "Computed values are cached until dependencies change",
+              "Computed always runs once at build time",
+              "Computed can mutate props safely",
+              "Computed only works in Options API"
+            ],
+            "answerIndex": 0,
+            "explanation": "Computed values are memoized based on reactive dependencies."
+          },
+          {
+            "question": "What is the main purpose of `:key` in `v-for` lists?",
+            "options": [
+              "Encrypt list data",
+              "Help Vue track identity during DOM diffing",
+              "Enable two-way binding",
+              "Automatically sort items"
+            ],
+            "answerIndex": 1,
+            "explanation": "Stable keys let Vue patch list items correctly and efficiently."
+          },
+          {
+            "question": "Which primitive is best for a reactive scalar like a number in Vue 3?",
+            "options": [
+              "ref",
+              "readonly",
+              "provide",
+              "onMounted"
+            ],
+            "answerIndex": 0,
+            "explanation": "`ref` is the standard reactive wrapper for scalar values."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this Vue 3 component so the button text updates with click count.",
+            "language": "vue",
+            "template": "<template>\n  <button @click=\"{{blank1}}\" v-text=\"{{blank2}}\"></button>\n</template>\n\n<script setup>\nimport { ref, computed } from 'vue'\n\nconst count = {{blank3}}(0)\nconst label = {{blank4}}(() => `Clicks: ${count.value}`)\n\nfunction increment() {\n  count.value {{blank5}} 1\n}\n</script>",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "increment",
+                  "count++",
+                  "onClick"
+                ],
+                "answer": "increment"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "label",
+                  "count",
+                  "increment"
+                ],
+                "answer": "label"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "ref",
+                  "reactive",
+                  "watch"
+                ],
+                "answer": "ref"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "computed",
+                  "watch",
+                  "toRefs"
+                ],
+                "answer": "computed"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "+=",
+                  "=",
+                  "=="
+                ],
+                "answer": "+="
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:36:09.949Z"
+    }
+  },
+  {
+    "id": "go",
+    "name": "Go (Golang)",
+    "cat": "lang",
+    "born": "2026 · Daily Agent",
+    "tag": "compiled language for concurrent networked software",
+    "history": "Designed at Google by Robert Griesemer, Rob Pike, and Ken Thompson (work started in 2007). Publicly announced in 2009 and open-sourced soon after. Go 1.0 released in 2012 with a strong compatibility promise. Go modules became the default dependency system in Go 1.16.",
+    "why": "Go helps teams ship fast, reliable backend and infrastructure software with simple syntax, built-in concurrency (goroutines/channels), strong standard tooling, and easy static-binary deployment.",
+    "rel": {
+      "seeAlso": [
+        "tinygo",
+        "webassemblygowasm",
+        "docker",
+        "kubernetes",
+        "grpc"
+      ]
+    },
+    "challenges": [
+      "Build a command-line tool that converts Celsius to Fahrenheit and vice versa. Keep the full solution under 60 lines, validate bad input, and print helpful usage text.",
+      "Create an HTTP server with `/health` returning JSON: `{ \"status\": \"ok\" }`. Add proper status code, content-type header, and one unit test for the handler.",
+      "Implement a 3-stage pipeline (generate -> transform -> aggregate) using goroutines and channels. Add `context.Context` cancellation and ensure no goroutine leaks.",
+      "Create a Go module that wraps a public REST API. Include retries with backoff, context-aware timeouts, and table-driven tests for success/error paths.",
+      "Take a CPU-heavy function, profile it with `pprof`, optimize one hotspot, then run with PGO and compare benchmark results before/after."
+    ],
+    "extension": {
+      "tag": "compiled language for concurrent networked software",
+      "latestChanges": [
+        "Go 1.22 changed loop-variable semantics to per-iteration scope, reducing common closure bugs.",
+        "Go 1.22 added integer range loops (`for i := range 10`) and upgraded `net/http` routing patterns.",
+        "Go 1.21 introduced toolchain management improvements and the `min`, `max`, and `clear` built-ins.",
+        "PGO became production-ready in Go 1.21, making practical performance tuning easier."
+      ],
+      "problemItSolves": "Go helps teams ship fast, reliable backend and infrastructure software with simple syntax, built-in concurrency (goroutines/channels), strong standard tooling, and easy static-binary deployment.",
+      "historyNotes": [
+        "Designed at Google by Robert Griesemer, Rob Pike, and Ken Thompson (work started in 2007).",
+        "Publicly announced in 2009 and open-sourced soon after.",
+        "Go 1.0 released in 2012 with a strong compatibility promise.",
+        "Go modules became the default dependency system in Go 1.16."
+      ],
+      "relatedTechnologies": [
+        "TinyGo",
+        "WebAssembly (Go wasm)",
+        "Docker",
+        "Kubernetes",
+        "gRPC",
+        "Protocol Buffers",
+        "Rust"
+      ],
+      "docs": [
+        {
+          "label": "Official site",
+          "url": "https://go.dev/"
+        },
+        {
+          "label": "A Tour of Go",
+          "url": "https://go.dev/tour/"
+        },
+        {
+          "label": "Language specification",
+          "url": "https://go.dev/ref/spec"
+        },
+        {
+          "label": "Effective Go",
+          "url": "https://go.dev/doc/effective_go"
+        },
+        {
+          "label": "Go Modules reference",
+          "url": "https://go.dev/ref/mod"
+        },
+        {
+          "label": "Package documentation (pkg.go.dev)",
+          "url": "https://pkg.go.dev"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Mini CLI: unit converter",
+          "prompt": "Build a command-line tool that converts Celsius to Fahrenheit and vice versa. Keep the full solution under 60 lines, validate bad input, and print helpful usage text.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "JSON health endpoint",
+          "prompt": "Create an HTTP server with `/health` returning JSON: `{ \"status\": \"ok\" }`. Add proper status code, content-type header, and one unit test for the handler.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Concurrent pipeline with cancellation",
+          "prompt": "Implement a 3-stage pipeline (generate -> transform -> aggregate) using goroutines and channels. Add `context.Context` cancellation and ensure no goroutine leaks.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Module-based API client",
+          "prompt": "Create a Go module that wraps a public REST API. Include retries with backoff, context-aware timeouts, and table-driven tests for success/error paths.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Profiling and PGO pass",
+          "prompt": "Take a CPU-heavy function, profile it with `pprof`, optimize one hotspot, then run with PGO and compare benchmark results before/after.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize numeric values, variable names, and option order on every attempt.",
+          "Shuffle question order and use a large rotating question bank per objective.",
+          "Set strict per-question timers to reduce lookup behavior.",
+          "Require code-output prediction and bug-fix items, not only definitions.",
+          "Use plagiarism checks on code structure and require unique test-case additions.",
+          "Block copy-paste in high-stakes mode and log rapid answer pattern anomalies."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which company initiated Go's development?",
+            "options": [
+              "Google",
+              "Microsoft",
+              "Bell Labs",
+              "Mozilla"
+            ],
+            "answerIndex": 0,
+            "explanation": "Go was created at Google to improve developer productivity for large systems software."
+          },
+          {
+            "question": "Go was first publicly announced in which year?",
+            "options": [
+              "2007",
+              "2009",
+              "2012",
+              "2016"
+            ],
+            "answerIndex": 1,
+            "explanation": "Go was announced in 2009; Go 1.0 came later in 2012."
+          },
+          {
+            "question": "Which keyword starts a new goroutine?",
+            "options": [
+              "chan",
+              "go",
+              "defer",
+              "spawn"
+            ],
+            "answerIndex": 1,
+            "explanation": "`go` runs a function concurrently as a goroutine."
+          },
+          {
+            "question": "What is the idiomatic way to propagate cancellation and deadlines across API boundaries?",
+            "options": [
+              "global variables",
+              "panic/recover",
+              "context.Context",
+              "wait groups only"
+            ],
+            "answerIndex": 2,
+            "explanation": "`context.Context` is the standard mechanism for cancellation, deadlines, and request-scoped values."
+          },
+          {
+            "question": "What is the zero value of a map variable in Go?",
+            "options": [
+              "empty allocated map",
+              "nil",
+              "{}",
+              "undefined"
+            ],
+            "answerIndex": 1,
+            "explanation": "A map's zero value is `nil`; writes require `make` or a map literal first."
+          },
+          {
+            "question": "As of Go 1.22, what changed in `for` loop variable behavior?",
+            "options": [
+              "Loop variables are immutable",
+              "Each iteration has distinct loop variables",
+              "`range` was removed",
+              "Closures cannot capture loop variables"
+            ],
+            "answerIndex": 1,
+            "explanation": "Go 1.22 changed semantics so each iteration gets its own variable instance, reducing closure-capture bugs."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Fill in the blanks to send a computed sum over a channel and receive it in `main`.",
+            "language": "go",
+            "template": "package main\n\nimport \"fmt\"\n\nfunc sum(nums []int, out chan int) {\n    total := 0\n    for _, n := range nums {\n        total += n\n    }\n    out {{blank1}} total\n}\n\nfunc main() {\n    out := make(chan int)\n    go sum([]int{1, 2, 3}, out)\n    result := {{blank2}} out\n    fmt.Println(result)\n}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "<-",
+                  "->",
+                  ":="
+                ],
+                "answer": "<-"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "<-",
+                  "out <-",
+                  "*"
+                ],
+                "answer": "<-"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete this minimal JSON health server.",
+            "language": "go",
+            "template": "package main\n\nimport (\n    \"encoding/json\"\n    \"net/http\"\n)\n\ntype Health struct {\n    Status string `json:\\\"status\\\"`\n}\n\nfunc handler(w http.ResponseWriter, r *http.Request) {\n    w.Header().Set(\"Content-Type\", \"application/json\")\n    w.WriteHeader({{blank1}})\n    _ = json.NewEncoder(w).{{blank2}}(Health{Status: \"ok\"})\n}\n\nfunc main() {\n    http.HandleFunc(\"/health\", handler)\n    _ = http.ListenAndServe(\"{{blank3}}\", nil)\n}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "http.StatusOK",
+                  "http.MethodGet",
+                  "500"
+                ],
+                "answer": "http.StatusOK"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "Encode",
+                  "Decode",
+                  "Marshal"
+                ],
+                "answer": "Encode"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  ":8080",
+                  "8080",
+                  "/health"
+                ],
+                "answer": ":8080"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:36:43.929Z"
+    }
+  },
+  {
+    "id": "rust",
+    "name": "Rust",
+    "cat": "lang",
+    "born": "2026 · Daily Agent",
+    "tag": "a memory-safe systems programming language",
+    "history": "Started by Graydon Hoare in 2006; first announced publicly by Mozilla in 2010. Rust 1.0 (stable) released in 2015. Cargo became a major productivity advantage for builds and dependency management. Rust Foundation launched in 2021 to support governance, trademarks, and ecosystem stewardship. Rust editions (2015, 2018, 2021, 2024) allow language evolution with smoother migration.",
+    "why": "Rust helps you build fast, low-level software with strong memory safety guarantees and no garbage collector. It reduces common bugs (null misuse, use-after-free, data races) while keeping C/C++-class performance.",
+    "rel": {
+      "seeAlso": [
+        "c",
+        "c",
+        "zig",
+        "go",
+        "webassembly"
+      ]
+    },
+    "challenges": [
+      "Write a function that takes a String, returns its length, and explain why the original variable is moved.",
+      "Implement a function that returns the first word of a &str as a slice (&str) without allocating.",
+      "Build a thread-safe counter with Arc<Mutex<i32>> across 4 threads and print the final value.",
+      "Read a text file into String using Result and ?; propagate errors instead of panicking.",
+      "Create a tiny CLI that accepts a filename and word, then counts matching lines safely."
+    ],
+    "extension": {
+      "tag": "a memory-safe systems programming language",
+      "latestChanges": [
+        "Rust 2024 edition is available, with migration support in tooling.",
+        "Compiler diagnostics and Clippy lints keep improving on the regular release cycle.",
+        "Ecosystem focus remains strong for async services, embedded targets, and WebAssembly."
+      ],
+      "problemItSolves": "Rust helps you build fast, low-level software with strong memory safety guarantees and no garbage collector. It reduces common bugs (null misuse, use-after-free, data races) while keeping C/C++-class performance.",
+      "historyNotes": [
+        "Started by Graydon Hoare in 2006; first announced publicly by Mozilla in 2010.",
+        "Rust 1.0 (stable) released in 2015.",
+        "Cargo became a major productivity advantage for builds and dependency management.",
+        "Rust Foundation launched in 2021 to support governance, trademarks, and ecosystem stewardship.",
+        "Rust editions (2015, 2018, 2021, 2024) allow language evolution with smoother migration."
+      ],
+      "relatedTechnologies": [
+        "c",
+        "c++",
+        "zig",
+        "go",
+        "webassembly",
+        "cargo",
+        "clippy",
+        "tokio"
+      ],
+      "docs": [
+        {
+          "label": "Rust Language Home",
+          "url": "https://www.rust-lang.org/"
+        },
+        {
+          "label": "The Rust Programming Language (Book)",
+          "url": "https://doc.rust-lang.org/book/"
+        },
+        {
+          "label": "Rust by Example",
+          "url": "https://doc.rust-lang.org/rust-by-example/"
+        },
+        {
+          "label": "Standard Library Docs",
+          "url": "https://doc.rust-lang.org/std/"
+        },
+        {
+          "label": "The Cargo Book",
+          "url": "https://doc.rust-lang.org/cargo/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Ownership basics",
+          "prompt": "Write a function that takes a String, returns its length, and explain why the original variable is moved.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Safe slicing",
+          "prompt": "Implement a function that returns the first word of a &str as a slice (&str) without allocating.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Shared state concurrency",
+          "prompt": "Build a thread-safe counter with Arc<Mutex<i32>> across 4 threads and print the final value.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Result-driven file read",
+          "prompt": "Read a text file into String using Result and ?; propagate errors instead of panicking.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Mini CLI parser",
+          "prompt": "Create a tiny CLI that accepts a filename and word, then counts matching lines safely.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order on every attempt.",
+          "Use parameterized code variants (different names/literals) per learner.",
+          "Require a short reasoning note after each graded answer.",
+          "Show one question at a time on mobile; disable backtracking in final mode.",
+          "Flag improbable patterns (very fast perfect score + weak reasoning).",
+          "Lock external paste in graded mode and log repeated app-switch events."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who is credited with starting Rust?",
+            "options": [
+              "Graydon Hoare",
+              "Bjarne Stroustrup",
+              "Ken Thompson",
+              "Anders Hejlsberg"
+            ],
+            "answerIndex": 0,
+            "explanation": "Rust began as a personal project by Graydon Hoare before Mozilla sponsorship."
+          },
+          {
+            "question": "In which year was Rust 1.0 released?",
+            "options": [
+              "2010",
+              "2012",
+              "2015",
+              "2018"
+            ],
+            "answerIndex": 2,
+            "explanation": "Rust 1.0 marked the first stable release in 2015."
+          },
+          {
+            "question": "Which statement best describes Rust ownership?",
+            "options": [
+              "Each value has one owner; drop happens when the owner goes out of scope.",
+              "Values live forever unless manually freed.",
+              "A tracing garbage collector reclaims unreachable memory.",
+              "All assignments are deep copies by default."
+            ],
+            "answerIndex": 0,
+            "explanation": "Ownership ties lifetime to scope and enables memory safety without GC."
+          },
+          {
+            "question": "Why does Rust usually forbid mutable and immutable borrows at the same time?",
+            "options": [
+              "To speed up garbage collection",
+              "To prevent data races and unsafe aliasing writes",
+              "To force dynamic dispatch",
+              "To minimize executable size only"
+            ],
+            "answerIndex": 1,
+            "explanation": "The borrow rules prevent concurrent mutation/read patterns that can cause race bugs."
+          },
+          {
+            "question": "What is Cargo in the Rust ecosystem?",
+            "options": [
+              "A build tool and package manager",
+              "A virtual machine for Rust bytecode",
+              "A kernel module loader",
+              "A GUI designer"
+            ],
+            "answerIndex": 0,
+            "explanation": "Cargo handles building, dependency resolution, testing, and publishing."
+          },
+          {
+            "question": "What does the ? operator do on a Result<T, E>?",
+            "options": [
+              "Panics on Err and continues",
+              "Returns early with Err, otherwise yields the Ok value",
+              "Converts Result to Option automatically",
+              "Retries the operation until Ok"
+            ],
+            "answerIndex": 1,
+            "explanation": "? propagates errors cleanly by early return while extracting success values."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the function so it returns a reference to the larger number without taking ownership.",
+            "language": "rust",
+            "template": "fn max_ref<'a>(a: &'a i32, b: &'a i32) -> &'a i32 {\n    if a > b {\n        {{blank1}}\n    } else {\n        {{blank2}}\n    }\n}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "a",
+                  "*a",
+                  "return a;"
+                ],
+                "answer": "a"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "b",
+                  "*b",
+                  "a"
+                ],
+                "answer": "b"
+              }
+            ]
+          },
+          {
+            "instructions": "Fill in error propagation so the function returns io::Result<String> without panicking.",
+            "language": "rust",
+            "template": "use std::fs::File;\nuse std::io::{self, Read};\n\nfn read_file(path: &str) -> io::Result<String> {\n    let mut f = File::open(path){{blank3}};\n    let mut s = String::new();\n    f.read_to_string(&mut s){{blank4}};\n    Ok(s)\n}",
+            "blanks": [
+              {
+                "id": "blank3",
+                "options": [
+                  "?",
+                  ".unwrap()",
+                  ".ok()"
+                ],
+                "answer": "?"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "?",
+                  ".expect(\"read\")",
+                  ".unwrap()"
+                ],
+                "answer": "?"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:37:19.882Z"
+    }
+  },
+  {
+    "id": "terraform",
+    "name": "Terraform",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "infrastructure as code provisioning tool",
+    "history": "Created by HashiCorp; first released in 2014. Built around declarative HCL and provider plugins. Became a default multi-cloud IaC tool through the late 2010s. From v1.5+ licensing shifted from MPL to BUSL. OpenTofu forked from pre-BUSL Terraform and continues as an open alternative.",
+    "why": "Terraform lets teams define cloud and platform infrastructure as code, review changes before apply, and keep environments reproducible across dev/stage/prod.",
+    "rel": {
+      "seeAlso": [
+        "opentofu",
+        "pulumi",
+        "awscloudformation",
+        "ansible",
+        "kubernetes"
+      ]
+    },
+    "challenges": [
+      "Create one `local_file` resource. Run `init`, `plan`, `apply`, then `destroy`. Capture only the summary lines (add/change/destroy). Timebox: 15 minutes.",
+      "Build a module that creates a tagged AWS S3 bucket using `project` and `env` variables. Expose bucket name as output. Then call module from root. Timebox: 25 minutes.",
+      "Use an S3 backend + DynamoDB lock table. Run `plan`, simulate a config rename, then preserve resource with a `moved` block. Explain why no recreate happened. Timebox: 35 minutes.",
+      "After apply, change one cloud setting manually in console. Run `plan`, identify drift, and restore desired state via code. Submit drift lines only. Timebox: 20 minutes.",
+      "Add a `check` block validating an output condition (for example, required tag exists). Show failing then passing plan after fix. Timebox: 20 minutes."
+    ],
+    "extension": {
+      "tag": "infrastructure as code provisioning tool",
+      "latestChanges": [
+        "Config-driven import blocks reduce manual state-editing workflows.",
+        "Recent 1.x releases expanded native module testing via `terraform test`.",
+        "State refactoring safety improved with stronger move/import patterns.",
+        "License change (BUSL for newer releases) led to the OpenTofu community fork."
+      ],
+      "problemItSolves": "Terraform lets teams define cloud and platform infrastructure as code, review changes before apply, and keep environments reproducible across dev/stage/prod.",
+      "historyNotes": [
+        "Created by HashiCorp; first released in 2014.",
+        "Built around declarative HCL and provider plugins.",
+        "Became a default multi-cloud IaC tool through the late 2010s.",
+        "From v1.5+ licensing shifted from MPL to BUSL.",
+        "OpenTofu forked from pre-BUSL Terraform and continues as an open alternative."
+      ],
+      "relatedTechnologies": [
+        "OpenTofu",
+        "Pulumi",
+        "AWS CloudFormation",
+        "Ansible",
+        "Kubernetes",
+        "Terragrunt"
+      ],
+      "docs": [
+        {
+          "label": "Terraform documentation",
+          "url": "https://developer.hashicorp.com/terraform/docs"
+        },
+        {
+          "label": "Terraform language reference",
+          "url": "https://developer.hashicorp.com/terraform/language"
+        },
+        {
+          "label": "Terraform CLI command reference",
+          "url": "https://developer.hashicorp.com/terraform/cli"
+        },
+        {
+          "label": "Terraform Registry",
+          "url": "https://registry.terraform.io/"
+        },
+        {
+          "label": "Terraform tutorials",
+          "url": "https://developer.hashicorp.com/terraform/tutorials"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "first plan/apply cycle",
+          "prompt": "Create one `local_file` resource. Run `init`, `plan`, `apply`, then `destroy`. Capture only the summary lines (add/change/destroy). Timebox: 15 minutes.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 2,
+          "title": "variables + outputs mini-module",
+          "prompt": "Build a module that creates a tagged AWS S3 bucket using `project` and `env` variables. Expose bucket name as output. Then call module from root. Timebox: 25 minutes.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 3,
+          "title": "team-safe state workflow",
+          "prompt": "Use an S3 backend + DynamoDB lock table. Run `plan`, simulate a config rename, then preserve resource with a `moved` block. Explain why no recreate happened. Timebox: 35 minutes.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 4,
+          "title": "drift detection drill",
+          "prompt": "After apply, change one cloud setting manually in console. Run `plan`, identify drift, and restore desired state via code. Submit drift lines only. Timebox: 20 minutes.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 5,
+          "title": "policy-minded review",
+          "prompt": "Add a `check` block validating an output condition (for example, required tag exists). Show failing then passing plan after fix. Timebox: 20 minutes.",
+          "format": "multiple-choice"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Each learner gets a unique bucket/module name seed; copied answers fail on naming mismatch.",
+          "Require both command output snippets and a 1-2 sentence reasoning per step.",
+          "Use short oral follow-up: explain one line from `plan` in plain language.",
+          "Disallow full AI-generated dumps: graders look for personal variable names and error-recovery notes.",
+          "Randomize one provider/version constraint per attempt to prevent answer sharing.",
+          "Score process evidence (`init` -> `plan` -> `apply`) higher than final screenshot alone."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Terraform was first released in which year?",
+            "options": [
+              "2011",
+              "2014",
+              "2017",
+              "2020"
+            ],
+            "answerIndex": 1,
+            "explanation": "HashiCorp released Terraform in 2014."
+          },
+          {
+            "question": "Why is `terraform plan` important before `apply`?",
+            "options": [
+              "It installs cloud CLIs.",
+              "It previews proposed infrastructure changes safely.",
+              "It encrypts all Terraform files.",
+              "It replaces the need for state files."
+            ],
+            "answerIndex": 1,
+            "explanation": "`plan` shows intended adds/changes/destroys before any real change is made."
+          },
+          {
+            "question": "What is the primary role of the Terraform state file?",
+            "options": [
+              "Store provider binaries",
+              "Track real resource mappings to config",
+              "Cache terminal history",
+              "Store secrets only"
+            ],
+            "answerIndex": 1,
+            "explanation": "State maps resource addresses in code to real infrastructure objects."
+          },
+          {
+            "question": "Which event directly triggered the OpenTofu fork?",
+            "options": [
+              "Terraform dropped HCL",
+              "Terraform ended multi-cloud support",
+              "License moved to BUSL for newer versions",
+              "AWS acquired HashiCorp"
+            ],
+            "answerIndex": 2,
+            "explanation": "The licensing change for newer Terraform versions motivated the fork."
+          },
+          {
+            "question": "When should `terraform init` be re-run?",
+            "options": [
+              "Never after first run",
+              "Only after `destroy`",
+              "When providers/modules/backend settings change",
+              "Only on Windows"
+            ],
+            "answerIndex": 2,
+            "explanation": "`init` must run initially and again when dependency or backend config changes."
+          },
+          {
+            "question": "Which statement best describes Terraform's model?",
+            "options": [
+              "Imperative scripts that mutate line-by-line",
+              "Declarative desired state with dependency graph",
+              "Manual console-only provisioning",
+              "Event-driven serverless runtime"
+            ],
+            "answerIndex": 1,
+            "explanation": "Terraform uses declarative config and computes execution order from dependencies."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Terraform config so it is syntactically valid and follows common AWS + naming conventions.",
+            "language": "hcl",
+            "template": "terraform {\n  required_version = \"{{blank1}}\"\n}\n\nprovider \"aws\" {\n  region = \"{{blank2}}\"\n}\n\nresource \"aws_s3_bucket\" \"app_logs\" {\n  bucket = \"{{blank3}}\"\n  tags = {\n    Environment = \"{{blank4}}\"\n    ManagedBy   = \"{{blank5}}\"\n  }\n}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  ">= 1.5.0",
+                  "latest",
+                  "~> 0.11",
+                  "v1"
+                ],
+                "answer": ">= 1.5.0"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "us-east-1",
+                  "eastus",
+                  "auto",
+                  "region-1"
+                ],
+                "answer": "us-east-1"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "mobile-demo-logs-001",
+                  "MobileDemoLogs",
+                  "s3://mobile-demo-logs-001",
+                  "aws_s3_bucket.app_logs.id"
+                ],
+                "answer": "mobile-demo-logs-001"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "dev",
+                  "true",
+                  "*",
+                  "us-east-1"
+                ],
+                "answer": "dev"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "terraform",
+                  "hashicorp/aws",
+                  "apply",
+                  "resource"
+                ],
+                "answer": "terraform"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:37:56.748Z"
+    }
+  },
+  {
+    "id": "redis",
+    "name": "Redis",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "in-memory key-value store for caching and real-time data",
+    "history": "Redis was created by Salvatore Sanfilippo and first released in 2009. The name Redis comes from 'REmote DIctionary Server'. Redis Cluster (hash-slot based sharding) arrived in Redis 3.0. Sentinel became the standard built-in option for Redis high availability/failover in OSS deployments.",
+    "why": "Redis provides very fast read/write access for data that must be served in milliseconds, such as caches, sessions, counters, queues, rate limits, and real-time leaderboard/state workloads.",
+    "rel": {
+      "seeAlso": [
+        "valkey",
+        "memcached",
+        "postgresql",
+        "kafka",
+        "rabbitmq"
+      ]
+    },
+    "challenges": [
+      "Build login session storage using SET with EX, GET, and DEL. Add a check that denies access when TTL is expired.",
+      "Implement a fixed-window limiter using INCR + EXPIRE per IP. Return remaining requests and reset time.",
+      "Use ZADD, ZINCRBY, ZREVRANGE, and periodic persistence settings to support top-N ranking with fast reads.",
+      "Create a queue with BRPOPLPUSH (or equivalent pattern), retry handling, and dead-letter tracking.",
+      "Use WATCH/MULTI/EXEC or Lua to prevent overselling when multiple buyers hit the same stock key."
+    ],
+    "extension": {
+      "tag": "in-memory key-value store for caching and real-time data",
+      "latestChanges": [
+        "Redis 7.x expanded server-side programmability (Redis Functions) and sharded Pub/Sub improvements.",
+        "RESP3 adoption has increased across modern Redis clients for richer protocol semantics.",
+        "Redis Stack workflows (JSON, Search, TimeSeries, Bloom) became common for app-level data features, including vector search.",
+        "2024 licensing changes for Redis source code triggered ecosystem shifts, including the Valkey fork."
+      ],
+      "problemItSolves": "Redis provides very fast read/write access for data that must be served in milliseconds, such as caches, sessions, counters, queues, rate limits, and real-time leaderboard/state workloads.",
+      "historyNotes": [
+        "Redis was created by Salvatore Sanfilippo and first released in 2009.",
+        "The name Redis comes from 'REmote DIctionary Server'.",
+        "Redis Cluster (hash-slot based sharding) arrived in Redis 3.0.",
+        "Sentinel became the standard built-in option for Redis high availability/failover in OSS deployments."
+      ],
+      "relatedTechnologies": [
+        "Valkey",
+        "Memcached",
+        "PostgreSQL",
+        "Kafka",
+        "RabbitMQ",
+        "etcd"
+      ],
+      "docs": [
+        {
+          "label": "Official Redis docs",
+          "url": "https://redis.io/docs/latest/"
+        },
+        {
+          "label": "Command reference",
+          "url": "https://redis.io/commands/"
+        },
+        {
+          "label": "Data types overview",
+          "url": "https://redis.io/docs/latest/develop/data-types/"
+        },
+        {
+          "label": "Persistence (RDB and AOF)",
+          "url": "https://redis.io/docs/latest/operate/oss_and_stack/management/persistence/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Session Cache with TTL",
+          "prompt": "Build login session storage using SET with EX, GET, and DEL. Add a check that denies access when TTL is expired.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Per-IP Rate Limiter",
+          "prompt": "Implement a fixed-window limiter using INCR + EXPIRE per IP. Return remaining requests and reset time.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Realtime Leaderboard",
+          "prompt": "Use ZADD, ZINCRBY, ZREVRANGE, and periodic persistence settings to support top-N ranking with fast reads.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Reliable Worker Queue",
+          "prompt": "Create a queue with BRPOPLPUSH (or equivalent pattern), retry handling, and dead-letter tracking.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Atomic Inventory Update",
+          "prompt": "Use WATCH/MULTI/EXEC or Lua to prevent overselling when multiple buyers hit the same stock key.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order on every attempt.",
+          "Use value pools (different keys, TTLs, and command variants) so each learner gets a unique version.",
+          "Apply short per-question timers; if the app is backgrounded, pause and flag the attempt.",
+          "Disable copy/paste for dropdown coding items and log rapid pattern-click behavior.",
+          "Reveal explanations only after full submission.",
+          "Require a 1-line confidence check on missed questions to discourage guessing loops."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who created Redis?",
+            "options": [
+              "Salvatore Sanfilippo",
+              "Martin Kleppmann",
+              "Guido van Rossum",
+              "Bjarne Stroustrup"
+            ],
+            "answerIndex": 0,
+            "explanation": "Redis was created by Salvatore Sanfilippo (antirez)."
+          },
+          {
+            "question": "Redis was first released in:",
+            "options": [
+              "2003",
+              "2009",
+              "2014",
+              "2019"
+            ],
+            "answerIndex": 1,
+            "explanation": "Initial Redis release was in 2009."
+          },
+          {
+            "question": "What does Redis Cluster use to distribute keys?",
+            "options": [
+              "Consistent hashing ring with 1024 buckets",
+              "16384 hash slots",
+              "Random node assignment",
+              "Range sharding by timestamp"
+            ],
+            "answerIndex": 1,
+            "explanation": "Redis Cluster maps keys into 16384 hash slots."
+          },
+          {
+            "question": "Which persistence mode logs write operations for replay?",
+            "options": [
+              "RDB snapshots",
+              "AOF",
+              "LRU eviction",
+              "Pub/Sub"
+            ],
+            "answerIndex": 1,
+            "explanation": "AOF (Append Only File) stores write operations for replay on restart."
+          },
+          {
+            "question": "Which Redis data type is best for a leaderboard?",
+            "options": [
+              "List",
+              "Set",
+              "Sorted Set",
+              "Hash"
+            ],
+            "answerIndex": 2,
+            "explanation": "Sorted Sets store member + score, ideal for ranking."
+          },
+          {
+            "question": "What is true about Redis command atomicity?",
+            "options": [
+              "Single commands are atomic on a given Redis instance",
+              "Redis commands are eventually atomic after replication",
+              "Only Lua scripts are atomic",
+              "Atomicity requires Cluster mode"
+            ],
+            "answerIndex": 0,
+            "explanation": "Redis processes commands sequentially per instance, so each command is atomic there."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the redis-cli snippet to create a key with a 60s TTL, update it only if the key already exists, and keep the TTL.",
+            "language": "redis-cli",
+            "template": "SET {{key}} \"draft\" EX {{ttl}}\nSET {{key}} \"published\" XX {{ttlFlag}}\nTTL {{key}}",
+            "blanks": [
+              {
+                "id": "key",
+                "options": [
+                  "post:1001",
+                  "session:*",
+                  "leaderboard"
+                ],
+                "answer": "post:1001"
+              },
+              {
+                "id": "ttl",
+                "options": [
+                  "60",
+                  "0",
+                  "-1"
+                ],
+                "answer": "60"
+              },
+              {
+                "id": "ttlFlag",
+                "options": [
+                  "KEEPTTL",
+                  "NX",
+                  "GET"
+                ],
+                "answer": "KEEPTTL"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:38:32.326Z"
+    }
+  },
+  {
+    "id": "nextjs",
+    "name": "Next.js",
+    "cat": "front",
+    "born": "2026 · Daily Agent",
+    "tag": "react framework for full-stack web apps",
+    "history": "2016: Released by ZEIT (now Vercel) to simplify server-rendered React apps. 2019–2020: Static generation and Incremental Static Regeneration (ISR) became core capabilities. 2021: Next.js 12 introduced the SWC compiler and Edge Middleware. 2022: Next.js 13 introduced the App Router and React Server Components model. 2023+: App Router matured with stronger streaming, caching, and server-action workflows.",
+    "why": "Next.js removes repetitive React infrastructure work by combining routing, rendering modes (SSR/SSG/ISR), backend endpoints, and performance defaults (images, fonts, code splitting) into one production-ready framework.",
+    "rel": {
+      "seeAlso": [
+        "react",
+        "typescript",
+        "nodejs",
+        "vercel",
+        "turbopack"
+      ]
+    },
+    "challenges": [
+      "Given an app/profile/page.tsx screen with a button and local state, decide which file needs 'use client' and explain why in 2-3 lines.",
+      "Create app/posts/[slug]/page.tsx that fetches a post by slug. If fetch fails, render notFound(). Keep UI to title + short body preview.",
+      "Design a page that serves cached content but refreshes every 60 seconds. Briefly justify when ISR is better than full SSR for this case.",
+      "Build app/api/notes/route.ts with GET and POST. Return JSON, validate required fields, and use proper HTTP status codes.",
+      "You observe slow first load and large JS bundle. List 3 Next.js-specific fixes and map each fix to a measurable metric (LCP, TTFB, JS KB)."
+    ],
+    "extension": {
+      "tag": "react framework for full-stack web apps",
+      "latestChanges": [
+        "App Router is now the primary direction for new projects, with nested layouts and streaming-first UX.",
+        "Turbopack development workflows continue to improve local build and refresh speed.",
+        "Server Components patterns are more mainstream: server by default, client only when needed.",
+        "Recent releases refined caching controls and async request handling in route logic.",
+        "Ongoing alignment with newer React releases and modern TypeScript tooling remains a core focus."
+      ],
+      "problemItSolves": "Next.js removes repetitive React infrastructure work by combining routing, rendering modes (SSR/SSG/ISR), backend endpoints, and performance defaults (images, fonts, code splitting) into one production-ready framework.",
+      "historyNotes": [
+        "2016: Released by ZEIT (now Vercel) to simplify server-rendered React apps.",
+        "2019–2020: Static generation and Incremental Static Regeneration (ISR) became core capabilities.",
+        "2021: Next.js 12 introduced the SWC compiler and Edge Middleware.",
+        "2022: Next.js 13 introduced the App Router and React Server Components model.",
+        "2023+: App Router matured with stronger streaming, caching, and server-action workflows."
+      ],
+      "relatedTechnologies": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Vercel",
+        "Turbopack",
+        "Webpack"
+      ],
+      "docs": [
+        {
+          "label": "Official Docs",
+          "url": "https://nextjs.org/docs"
+        },
+        {
+          "label": "Learn Next.js",
+          "url": "https://nextjs.org/learn"
+        },
+        {
+          "label": "App Router Docs",
+          "url": "https://nextjs.org/docs/app"
+        },
+        {
+          "label": "Pages Router Docs",
+          "url": "https://nextjs.org/docs/pages"
+        },
+        {
+          "label": "Deploying on Vercel",
+          "url": "https://nextjs.org/docs/app/building-your-application/deploying"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Server vs Client Component (5 min)",
+          "prompt": "Given an app/profile/page.tsx screen with a button and local state, decide which file needs 'use client' and explain why in 2-3 lines.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Dynamic Route + 404 Handling (10 min)",
+          "prompt": "Create app/posts/[slug]/page.tsx that fetches a post by slug. If fetch fails, render notFound(). Keep UI to title + short body preview.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "ISR Strategy for a News Feed (12 min)",
+          "prompt": "Design a page that serves cached content but refreshes every 60 seconds. Briefly justify when ISR is better than full SSR for this case.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Route Handler API Guard (12 min)",
+          "prompt": "Build app/api/notes/route.ts with GET and POST. Return JSON, validate required fields, and use proper HTTP status codes.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Performance Triage (8 min)",
+          "prompt": "You observe slow first load and large JS bundle. List 3 Next.js-specific fixes and map each fix to a measurable metric (LCP, TTFB, JS KB).",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Single-question mobile view; lock answer after submit (no backtracking).",
+          "Timebox: 45-60 seconds per MCQ, 6-8 minutes per dropdown code task.",
+          "Require a one-sentence rationale for each MCQ answer.",
+          "Use equivalent code variants (renamed variables/endpoints) across learners.",
+          "Flag rapid paste/tab-switch patterns for instructor review (not instant auto-fail)."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which company originally created Next.js?",
+            "options": [
+              "Meta",
+              "Vercel (formerly ZEIT)",
+              "Google",
+              "Netlify"
+            ],
+            "answerIndex": 1,
+            "explanation": "Next.js was created by ZEIT, which later rebranded to Vercel."
+          },
+          {
+            "question": "Which release line introduced the App Router concept?",
+            "options": [
+              "Next.js 10",
+              "Next.js 11",
+              "Next.js 12",
+              "Next.js 13"
+            ],
+            "answerIndex": 3,
+            "explanation": "App Router was introduced in Next.js 13."
+          },
+          {
+            "question": "In the App Router, what is the default component type?",
+            "options": [
+              "Client Component",
+              "Server Component",
+              "Edge-only Component",
+              "Static HTML-only Component"
+            ],
+            "answerIndex": 1,
+            "explanation": "In the app directory, components are Server Components by default."
+          },
+          {
+            "question": "What does ISR primarily enable?",
+            "options": [
+              "Updating static pages incrementally after deploy",
+              "Realtime WebSocket streaming by default",
+              "Automatic database migrations",
+              "Client-side routing without bundles"
+            ],
+            "answerIndex": 0,
+            "explanation": "ISR lets static pages refresh in the background without rebuilding the entire site."
+          },
+          {
+            "question": "Where is getServerSideProps supported?",
+            "options": [
+              "App Router only",
+              "Pages Router only",
+              "Both App and Pages routers",
+              "Neither router"
+            ],
+            "answerIndex": 1,
+            "explanation": "getServerSideProps is a Pages Router data-fetching API, not used in App Router."
+          },
+          {
+            "question": "When do you need the 'use client' directive?",
+            "options": [
+              "When using React hooks/events in that component",
+              "For every page component",
+              "Only in API route files",
+              "Only for static generation"
+            ],
+            "answerIndex": 0,
+            "explanation": "Hooks like useState/useEffect and browser event handlers require a Client Component."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the App Router page so it fetches fresh data and returns a 404 page when the post is missing.",
+            "language": "tsx",
+            "template": "import { notFound } from 'next/navigation'\\n\\ntype Params = { slug: string }\\n\\nexport default async function Page({ params }: { params: Params }) {\\n  const res = await fetch(`https://api.example.com/posts/${params.slug}`, {\\n    cache: '{{blank1}}'\\n  })\\n\\n  if (!res.{{blank2}}) return {{blank3}}()\\n\\n  const post = await res.json()\\n  return <h1>{post.title}</h1>\\n}\\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "no-store",
+                  "force-cache",
+                  "only-if-cached"
+                ],
+                "answer": "no-store"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "ok",
+                  "json",
+                  "statusText"
+                ],
+                "answer": "ok"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "notFound",
+                  "redirect",
+                  "revalidatePath"
+                ],
+                "answer": "notFound"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete this interactive component so it works correctly in Next.js App Router.",
+            "language": "tsx",
+            "template": "{{blank1}}\\n\\nimport { useState } from 'react'\\n\\nexport default function Counter() {\\n  const [count, setCount] = useState(0)\\n  return (\\n    <button onClick={() => setCount(count + 1)}>\\n      Clicked {count} times\\n    </button>\\n  )\\n}\\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "'use client'",
+                  "'use server'",
+                  "'use strict'"
+                ],
+                "answer": "'use client'"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:39:06.835Z"
+    }
+  },
+  {
+    "id": "nuxt",
+    "name": "Nuxt (nuxt)",
+    "cat": "front",
+    "born": "2026 · Daily Agent",
+    "tag": "vue framework for full-stack web apps",
+    "history": "2016: Nuxt.js started to simplify Vue server-side rendering. 2018: Nuxt 2 expanded conventions, modules, and static generation workflows. 2021: Nuxt 3 development introduced the Nitro server engine and modern architecture. 2022: Nuxt 3 became stable with Vue 3, Vite, and composable-first patterns. 2023–2024: Nuxt 3.x refined layers, rendering controls, tooling, and ecosystem modules.",
+    "why": "Nuxt gives Vue teams a batteries-included way to build SEO-friendly, full-stack apps (pages, routing, data fetching, server APIs, rendering modes, and deployment) without wiring everything manually.",
+    "rel": {
+      "seeAlso": [
+        "vue3",
+        "nitro",
+        "vite",
+        "pinia",
+        "vuerouter"
+      ]
+    },
+    "challenges": [
+      "Create a Nuxt app with `pages/index.vue` and `pages/about.vue`. Add links between pages and verify route generation works without manual router setup.",
+      "Add `server/api/posts.ts` returning mock posts. In `pages/index.vue`, use Nuxt async data fetching so content is available on first render.",
+      "Configure `routeRules` so `/blog/**` uses SWR caching and `/admin/**` stays SSR-only. Explain why this split helps performance and freshness.",
+      "Create a base layer with shared components and config, then extend it from a second Nuxt app. Confirm the child app can override one component cleanly.",
+      "Implement route middleware that redirects unauthenticated users from `/dashboard` to `/login`, while preserving intended destination for post-login return."
+    ],
+    "extension": {
+      "tag": "vue framework for full-stack web apps",
+      "latestChanges": [
+        "Nuxt 3.x continues improving startup/build speed and TypeScript DX.",
+        "Hybrid rendering controls (SSR/SSG/SWR via route rules) are more production-friendly.",
+        "Nuxt DevTools and module tooling have matured for faster debugging.",
+        "Nitro deployment targets remain a core strength for Node and edge/serverless runtimes."
+      ],
+      "problemItSolves": "Nuxt gives Vue teams a batteries-included way to build SEO-friendly, full-stack apps (pages, routing, data fetching, server APIs, rendering modes, and deployment) without wiring everything manually.",
+      "historyNotes": [
+        "2016: Nuxt.js started to simplify Vue server-side rendering.",
+        "2018: Nuxt 2 expanded conventions, modules, and static generation workflows.",
+        "2021: Nuxt 3 development introduced the Nitro server engine and modern architecture.",
+        "2022: Nuxt 3 became stable with Vue 3, Vite, and composable-first patterns.",
+        "2023–2024: Nuxt 3.x refined layers, rendering controls, tooling, and ecosystem modules."
+      ],
+      "relatedTechnologies": [
+        "Vue 3",
+        "Nitro",
+        "Vite",
+        "Pinia",
+        "Vue Router",
+        "Unhead"
+      ],
+      "docs": [
+        {
+          "label": "Nuxt Documentation",
+          "url": "https://nuxt.com/docs"
+        },
+        {
+          "label": "Nuxt Getting Started",
+          "url": "https://nuxt.com/docs/getting-started/introduction"
+        },
+        {
+          "label": "Nitro Documentation",
+          "url": "https://nitro.unjs.io"
+        },
+        {
+          "label": "Nuxt Modules Directory",
+          "url": "https://nuxt.com/modules"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First page + auto routing",
+          "prompt": "Create a Nuxt app with `pages/index.vue` and `pages/about.vue`. Add links between pages and verify route generation works without manual router setup.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Server API + SSR fetch",
+          "prompt": "Add `server/api/posts.ts` returning mock posts. In `pages/index.vue`, use Nuxt async data fetching so content is available on first render.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Hybrid rendering by route",
+          "prompt": "Configure `routeRules` so `/blog/**` uses SWR caching and `/admin/**` stays SSR-only. Explain why this split helps performance and freshness.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Reusable layer",
+          "prompt": "Create a base layer with shared components and config, then extend it from a second Nuxt app. Confirm the child app can override one component cleanly.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Auth-aware middleware",
+          "prompt": "Implement route middleware that redirects unauthenticated users from `/dashboard` to `/login`, while preserving intended destination for post-login return.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per learner session.",
+          "Use a strict per-question timer (e.g., 45–75 seconds for MCQ).",
+          "Require a one-sentence confidence rationale for each MCQ answer.",
+          "Generate unique code challenge variants (endpoint names, keys, or routes).",
+          "Block copy-paste in assessment editor and log rapid context switching.",
+          "Follow auto-grading with a short live walkthrough of one submitted solution."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which release moved Nuxt to Vue 3 and made Nitro central to server/runtime behavior?",
+            "options": [
+              "Nuxt 1",
+              "Nuxt 2",
+              "Nuxt 3",
+              "Nuxt Bridge"
+            ],
+            "answerIndex": 2,
+            "explanation": "Nuxt 3 introduced Vue 3, Nitro, modern composables, and Vite-first workflows."
+          },
+          {
+            "question": "What is Nitro in the Nuxt architecture?",
+            "options": [
+              "A CSS framework for Nuxt UI",
+              "The server engine that powers APIs and deployment targets",
+              "A replacement for Vue Router",
+              "A browser-only state manager"
+            ],
+            "answerIndex": 1,
+            "explanation": "Nitro handles server routes, rendering backends, and multi-platform deployment output."
+          },
+          {
+            "question": "What is the main benefit of `useAsyncData` in a page component?",
+            "options": [
+              "It only runs after button clicks",
+              "It fetches data with SSR-aware lifecycle and payload integration",
+              "It replaces route middleware",
+              "It disables caching"
+            ],
+            "answerIndex": 1,
+            "explanation": "`useAsyncData` is designed for SSR/hydration-friendly data loading."
+          },
+          {
+            "question": "Which directory convention creates API endpoints in Nuxt 3?",
+            "options": [
+              "assets/api",
+              "plugins/api",
+              "server/api",
+              "composables/api"
+            ],
+            "answerIndex": 2,
+            "explanation": "Files in `server/api` become server endpoints automatically."
+          },
+          {
+            "question": "What are Nuxt Layers mainly used for?",
+            "options": [
+              "Running unit tests",
+              "Sharing and extending app structure/config across projects",
+              "Replacing package managers",
+              "Converting Vue apps to React"
+            ],
+            "answerIndex": 1,
+            "explanation": "Layers help teams reuse architecture, components, and config between apps."
+          },
+          {
+            "question": "Historically, what core problem did Nuxt first target?",
+            "options": [
+              "Desktop app packaging",
+              "Simplifying Vue SSR app setup",
+              "Database schema migration",
+              "WebSocket protocol design"
+            ],
+            "answerIndex": 1,
+            "explanation": "Nuxt began as a convention-based framework to reduce SSR setup complexity for Vue."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this Nuxt page so data is fetched in an SSR-friendly way from a server endpoint.",
+            "language": "vue",
+            "template": "<script setup lang=\"ts\">\nconst { data: posts, pending, error } = await {{c1}}(\n  'posts',\n  () => {{c2}}({{c3}})\n)\n</script>\n\n<template>\n  <p v-if=\"pending\">Loading...</p>\n  <ul v-else>\n    <li v-for=\"p in posts\" :key=\"p.id\">{{ p.title }}</li>\n  </ul>\n  <p v-if=\"error\">Failed to load.</p>\n</template>",
+            "blanks": [
+              {
+                "id": "c1",
+                "options": [
+                  "useState",
+                  "useAsyncData",
+                  "onMounted"
+                ],
+                "answer": "useAsyncData"
+              },
+              {
+                "id": "c2",
+                "options": [
+                  "$fetch",
+                  "navigateTo",
+                  "useRoute"
+                ],
+                "answer": "$fetch"
+              },
+              {
+                "id": "c3",
+                "options": [
+                  "'/api/posts'",
+                  "'posts'",
+                  "'~/server/api/posts'"
+                ],
+                "answer": "'/api/posts'"
+              }
+            ]
+          },
+          {
+            "instructions": "Fill route rules for hybrid rendering behavior.",
+            "language": "ts",
+            "template": "export default defineNuxtConfig({\n  routeRules: {\n    '/blog/**': { {{d1}}: 300 },\n    '/admin/**': { {{d2}}: false }\n  }\n})",
+            "blanks": [
+              {
+                "id": "d1",
+                "options": [
+                  "swr",
+                  "ssr",
+                  "cors"
+                ],
+                "answer": "swr"
+              },
+              {
+                "id": "d2",
+                "options": [
+                  "ssr",
+                  "swr",
+                  "redirect"
+                ],
+                "answer": "ssr"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:39:43.920Z"
+    }
+  },
+  {
+    "id": "vite",
+    "name": "Vite (vite)",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "fast frontend dev server and production bundler",
+    "history": "Created by Evan You in 2020 to address slow webpack-based Vue workflows. The name \"vite\" comes from French, meaning \"fast.\" It evolved from a Vue-first tool into a framework-agnostic platform via plugins. Its model: native ESM during development, Rollup-based bundling for production.",
+    "why": "Vite reduces slow feedback loops in frontend projects by starting dev servers quickly, updating modules instantly with HMR, and producing optimized production bundles with minimal config. For DevOps teams, it enables faster CI builds, predictable output folders, and simpler integration with preview/deployment pipelines.",
+    "rel": {
+      "seeAlso": [
+        "rollup",
+        "esbuild",
+        "webpack",
+        "parcel",
+        "snowpack"
+      ]
+    },
+    "challenges": [
+      "Scaffold a project with `npm create vite@latest`, run `npm run dev`, edit one component, and confirm hot updates without full reload.",
+      "Run `npm run build`, inspect the `dist` output, and identify one generated asset that appears hashed for cache busting.",
+      "Create a CI job that runs `npm ci` and `npm run build`, then stores the `dist` folder as an artifact for later deployment.",
+      "Configure Vite dev server to bind on all interfaces and test access from another device on your network.",
+      "Add one official framework plugin and explain how plugin hooks change dev/build behavior in your project."
+    ],
+    "extension": {
+      "tag": "fast frontend dev server and production bundler",
+      "latestChanges": [
+        "Vite 5 adopted Rollup 4 and a Node 18+ baseline.",
+        "Core workflows keep pushing ESM-first config and plugin patterns.",
+        "SSR and library-mode guidance has been expanded for real-world deployments.",
+        "Docs and migration guides were streamlined to reduce upgrade friction."
+      ],
+      "problemItSolves": "Vite reduces slow feedback loops in frontend projects by starting dev servers quickly, updating modules instantly with HMR, and producing optimized production bundles with minimal config. For DevOps teams, it enables faster CI builds, predictable output folders, and simpler integration with preview/deployment pipelines.",
+      "historyNotes": [
+        "Created by Evan You in 2020 to address slow webpack-based Vue workflows.",
+        "The name \"vite\" comes from French, meaning \"fast.\"",
+        "It evolved from a Vue-first tool into a framework-agnostic platform via plugins.",
+        "Its model: native ESM during development, Rollup-based bundling for production."
+      ],
+      "relatedTechnologies": [
+        "Rollup",
+        "esbuild",
+        "Webpack",
+        "Parcel",
+        "Snowpack",
+        "GitHub Actions",
+        "Vercel",
+        "Netlify"
+      ],
+      "docs": [
+        {
+          "label": "Official site",
+          "url": "https://vite.dev/"
+        },
+        {
+          "label": "Guide",
+          "url": "https://vite.dev/guide/"
+        },
+        {
+          "label": "Config reference",
+          "url": "https://vite.dev/config/"
+        },
+        {
+          "label": "GitHub repository",
+          "url": "https://github.com/vitejs/vite"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Quick start and verify HMR",
+          "prompt": "Scaffold a project with `npm create vite@latest`, run `npm run dev`, edit one component, and confirm hot updates without full reload.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Production build check",
+          "prompt": "Run `npm run build`, inspect the `dist` output, and identify one generated asset that appears hashed for cache busting.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "CI pipeline integration",
+          "prompt": "Create a CI job that runs `npm ci` and `npm run build`, then stores the `dist` folder as an artifact for later deployment.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Container-friendly dev setup",
+          "prompt": "Configure Vite dev server to bind on all interfaces and test access from another device on your network.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Plugin-based optimization",
+          "prompt": "Add one official framework plugin and explain how plugin hooks change dev/build behavior in your project.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Use short time limits per section (MC + code dropdown).",
+          "Require a one-sentence rationale for each MC answer.",
+          "Require a runnable repo link or commit hash for coding tasks.",
+          "Regenerate dropdown option sets per learner cohort.",
+          "Flag identical rationale text across submissions for review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who created Vite?",
+            "options": [
+              "Evan You",
+              "Rich Harris",
+              "Guillermo Rauch",
+              "Addy Osmani"
+            ],
+            "answerIndex": 0,
+            "explanation": "Vite was created by Evan You, also known for creating Vue."
+          },
+          {
+            "question": "Why is Vite usually faster to start in development than older bundler-first setups?",
+            "options": [
+              "It serves native ES modules and transforms files on demand.",
+              "It pre-bundles the entire app before first paint.",
+              "It skips source maps by default in dev.",
+              "It always compiles to WebAssembly first."
+            ],
+            "answerIndex": 0,
+            "explanation": "Vite avoids full upfront bundling in dev and does on-demand transforms."
+          },
+          {
+            "question": "By default, which tool handles Vite production bundling?",
+            "options": [
+              "Rollup",
+              "esbuild",
+              "Babel",
+              "SWC"
+            ],
+            "answerIndex": 0,
+            "explanation": "Vite uses Rollup for production builds by default."
+          },
+          {
+            "question": "What is esbuild mainly used for inside Vite core workflows?",
+            "options": [
+              "Dependency pre-bundling and fast transforms",
+              "Final CSS minification only",
+              "Generating service workers",
+              "SSR runtime execution"
+            ],
+            "answerIndex": 0,
+            "explanation": "esbuild is used for very fast dependency pre-bundling and transforms."
+          },
+          {
+            "question": "The name \"vite\" most directly refers to:",
+            "options": [
+              "A French word meaning fast",
+              "A Node.js acronym",
+              "A Vue internal codename",
+              "A browser API"
+            ],
+            "answerIndex": 0,
+            "explanation": "\"Vite\" comes from French and means \"fast.\""
+          },
+          {
+            "question": "Which CI command sequence is most reproducible for a Vite app using npm?",
+            "options": [
+              "npm ci && npm run build",
+              "npm install && npm run dev",
+              "npm update && vite preview",
+              "npm cache clean && npm test --watch"
+            ],
+            "answerIndex": 0,
+            "explanation": "`npm ci` is deterministic for CI, and `npm run build` creates deployable artifacts."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Vite config for a container-friendly dev setup and standard build output.",
+            "language": "javascript",
+            "template": "import { {{blank1}} } from 'vite'\nimport react from '@vitejs/plugin-react'\n\nexport default {{blank1}}({\n  plugins: [react()],\n  server: {\n    host: {{blank2}},\n    port: {{blank3}}\n  },\n  build: {\n    outDir: '{{blank4}}'\n  }\n})",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "defineConfig",
+                  "mergeConfig",
+                  "createServer"
+                ],
+                "answer": "defineConfig"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "true",
+                  "false",
+                  "'localhost'"
+                ],
+                "answer": "true"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "5173",
+                  "3000",
+                  "8080"
+                ],
+                "answer": "5173"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "dist",
+                  "public",
+                  "build-output"
+                ],
+                "answer": "dist"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete a minimal GitHub Actions job for building a Vite app in CI.",
+            "language": "yaml",
+            "template": "name: vite-ci\non: [push]\njobs:\n  build:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/{{blank5}}@v4\n      - uses: actions/{{blank6}}@v4\n        with:\n          node-version: {{blank7}}\n      - run: {{blank8}}\n      - run: {{blank9}}",
+            "blanks": [
+              {
+                "id": "blank5",
+                "options": [
+                  "checkout",
+                  "setup-node",
+                  "cache"
+                ],
+                "answer": "checkout"
+              },
+              {
+                "id": "blank6",
+                "options": [
+                  "setup-node",
+                  "upload-artifact",
+                  "download-artifact"
+                ],
+                "answer": "setup-node"
+              },
+              {
+                "id": "blank7",
+                "options": [
+                  "18",
+                  "20",
+                  "22"
+                ],
+                "answer": "20"
+              },
+              {
+                "id": "blank8",
+                "options": [
+                  "npm ci",
+                  "npm install",
+                  "npm update"
+                ],
+                "answer": "npm ci"
+              },
+              {
+                "id": "blank9",
+                "options": [
+                  "npm run build",
+                  "npm run dev",
+                  "vite preview"
+                ],
+                "answer": "npm run build"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:40:23.858Z"
+    }
+  },
+  {
+    "id": "webpack",
+    "name": "Webpack",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "a js module bundler and asset build pipeline",
+    "history": "2012: Tobias Koppers began webpack to bundle browser-focused JavaScript modules. 2017: Webpack 2 strengthened ES module workflows and tree-shaking behavior. 2018: Webpack 4 introduced mode (development/production) and more zero-config defaults. 2020: Webpack 5 added Module Federation, persistent caching, and removed automatic Node core polyfills.",
+    "why": "Webpack converts many frontend files into optimized deployable bundles. It manages dependency graphs, transformations, code splitting, and cache-friendly output for reliable CI/CD releases.",
+    "rel": {
+      "seeAlso": [
+        "babel",
+        "typescript",
+        "postcss",
+        "webpackdevserver",
+        "npmscripts"
+      ]
+    },
+    "challenges": [
+      "Create a minimal webpack.config.js with entry, output to dist, production mode, and clean builds. Run build and verify a hashed bundle file.",
+      "Add CSS handling (style-loader + css-loader) and configure splitChunks for shared vendor code. Compare bundle sizes before and after.",
+      "Given an older config, remove deprecated patterns, handle Node polyfill changes explicitly, and enable persistent cache for faster rebuilds.",
+      "Set deterministic chunk names and contenthash output. Explain how this improves browser cache hit rate during frequent deployments.",
+      "Use webpack stats or a bundle analyzer to identify one unexpectedly large dependency and propose a split or replacement."
+    ],
+    "extension": {
+      "tag": "a js module bundler and asset build pipeline",
+      "latestChanges": [
+        "Webpack 5 is still the active major line, with ongoing 5.x stability and compatibility updates.",
+        "Persistent filesystem caching and build performance tuning in 5.x continue improving large-project rebuild speed.",
+        "Module Federation adoption has grown, with stronger ecosystem patterns for micro-frontend deployments.",
+        "Asset Modules and improved ESM support have reduced reliance on older file/url/raw loader setups."
+      ],
+      "problemItSolves": "Webpack converts many frontend files into optimized deployable bundles. It manages dependency graphs, transformations, code splitting, and cache-friendly output for reliable CI/CD releases.",
+      "historyNotes": [
+        "2012: Tobias Koppers began webpack to bundle browser-focused JavaScript modules.",
+        "2017: Webpack 2 strengthened ES module workflows and tree-shaking behavior.",
+        "2018: Webpack 4 introduced mode (development/production) and more zero-config defaults.",
+        "2020: Webpack 5 added Module Federation, persistent caching, and removed automatic Node core polyfills."
+      ],
+      "relatedTechnologies": [
+        "Babel",
+        "TypeScript",
+        "PostCSS",
+        "webpack-dev-server",
+        "npm scripts",
+        "Rollup",
+        "Vite",
+        "esbuild"
+      ],
+      "docs": [
+        {
+          "label": "Official Concepts",
+          "url": "https://webpack.js.org/concepts/"
+        },
+        {
+          "label": "Configuration",
+          "url": "https://webpack.js.org/configuration/"
+        },
+        {
+          "label": "Guides",
+          "url": "https://webpack.js.org/guides/"
+        },
+        {
+          "label": "Loaders",
+          "url": "https://webpack.js.org/loaders/"
+        },
+        {
+          "label": "Plugins",
+          "url": "https://webpack.js.org/plugins/"
+        },
+        {
+          "label": "Module Federation",
+          "url": "https://webpack.js.org/concepts/module-federation/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First production bundle",
+          "prompt": "Create a minimal webpack.config.js with entry, output to dist, production mode, and clean builds. Run build and verify a hashed bundle file.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "CSS + code splitting",
+          "prompt": "Add CSS handling (style-loader + css-loader) and configure splitChunks for shared vendor code. Compare bundle sizes before and after.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "v4 to v5 migration check",
+          "prompt": "Given an older config, remove deprecated patterns, handle Node polyfill changes explicitly, and enable persistent cache for faster rebuilds.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "CI-friendly caching",
+          "prompt": "Set deterministic chunk names and contenthash output. Explain how this improves browser cache hit rate during frequent deployments.",
+          "format": "mixed"
+        },
+        {
+          "level": 1,
+          "title": "Bundle inspection",
+          "prompt": "Use webpack stats or a bundle analyzer to identify one unexpectedly large dependency and propose a split or replacement.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize option order per attempt and rotate question pool.",
+          "Require a one-sentence reason for each multiple-choice answer.",
+          "Use short, timed sections (60-90 seconds per MCQ) to reduce lookups.",
+          "For code dropdown, include distractors that are syntactically valid but semantically wrong.",
+          "Block copy-paste in assessment inputs and log rapid answer switching.",
+          "Regenerate at least one blank option set on each retake."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who originally created webpack?",
+            "options": [
+              "Evan You",
+              "Tobias Koppers",
+              "Ryan Dahl",
+              "Guido van Rossum"
+            ],
+            "answerIndex": 1,
+            "explanation": "Webpack was started by Tobias Koppers in 2012."
+          },
+          {
+            "question": "Which webpack major version introduced Module Federation?",
+            "options": [
+              "v2",
+              "v4",
+              "v5",
+              "v6"
+            ],
+            "answerIndex": 2,
+            "explanation": "Module Federation was introduced in webpack 5."
+          },
+          {
+            "question": "What is the primary role of a webpack loader?",
+            "options": [
+              "Transform files into modules webpack can include",
+              "Minify JavaScript after deploy",
+              "Start a production server",
+              "Manage Git branches"
+            ],
+            "answerIndex": 0,
+            "explanation": "Loaders transform source files (like CSS/TS) into modules in the dependency graph."
+          },
+          {
+            "question": "Why use [contenthash] in output filenames?",
+            "options": [
+              "To enforce source-map generation",
+              "To improve long-term browser caching",
+              "To make Node polyfills automatic",
+              "To disable code splitting"
+            ],
+            "answerIndex": 1,
+            "explanation": "When content changes, hash changes, enabling safe cache busting with strong client-side caching."
+          },
+          {
+            "question": "What changed by default in webpack 5 for Node.js core modules in browser builds?",
+            "options": [
+              "They are auto-polyfilled more aggressively",
+              "They are removed from JavaScript entirely",
+              "Automatic polyfills were removed",
+              "They became required for all builds"
+            ],
+            "answerIndex": 2,
+            "explanation": "Webpack 5 stopped auto-injecting many Node core polyfills; teams now add needed fallbacks explicitly."
+          },
+          {
+            "question": "Which module style best supports tree shaking in webpack?",
+            "options": [
+              "CommonJS require/module.exports only",
+              "Global script tags",
+              "ES modules (import/export)",
+              "Inline eval strings"
+            ],
+            "answerIndex": 2,
+            "explanation": "Tree shaking is most effective with static ESM import/export syntax."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the webpack config for a production build with CSS support and shared-chunk splitting.",
+            "language": "javascript",
+            "template": "const path = require('path');\n\nmodule.exports = {\n  mode: '{{blank1}}',\n  entry: './src/index.js',\n  output: {\n    filename: 'bundle.[contenthash].js',\n    path: path.resolve(__dirname, '{{blank2}}'),\n    clean: true\n  },\n  module: {\n    rules: [\n      {\n        test: /\\\\.css$/i,\n        use: ['{{blank3}}', '{{blank4}}']\n      }\n    ]\n  },\n  optimization: {\n    splitChunks: {\n      chunks: '{{blank5}}'\n    }\n  }\n};",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "development",
+                  "production",
+                  "none"
+                ],
+                "answer": "production"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "dist",
+                  "src",
+                  "public"
+                ],
+                "answer": "dist"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "style-loader",
+                  "css-loader",
+                  "sass-loader"
+                ],
+                "answer": "style-loader"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "css-loader",
+                  "babel-loader",
+                  "file-loader"
+                ],
+                "answer": "css-loader"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "all",
+                  "initial",
+                  "none"
+                ],
+                "answer": "all"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-29T01:40:56.212Z"
+    }
+  }
+]
