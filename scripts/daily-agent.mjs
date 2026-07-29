@@ -161,14 +161,28 @@ async function callModel({ apiKey, model, system, prompt, schemaName, schema }) 
 
   const maxAttempts = 3;
   for (let attempt = 1; ; attempt++) {
-    const response = await fetch("https://api.openai.com/v1/responses", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+    let response;
+    try {
+      response = await fetch("https://api.openai.com/v1/responses", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+    } catch (err) {
+      if (attempt < maxAttempts) {
+        console.warn(
+          `OpenAI transport attempt ${attempt}/${maxAttempts} failed; retrying: ${err.message}`,
+        );
+        await sleep(attempt * 5000);
+        continue;
+      }
+      throw new Error(
+        `OpenAI transport failed after ${maxAttempts} attempts: ${err.message}`,
+      );
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
