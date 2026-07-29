@@ -2,8 +2,9 @@ name: Daily Technology Agent
 
 on:
   schedule:
-    # 17:00 UTC daily (adjust if you want a different timezone)
+    # 5:00 PM Central daily, including daylight-saving-time changes.
     - cron: "0 17 * * *"
+      timezone: "America/Chicago"
   workflow_dispatch:
     inputs:
       forceTechnologyId:
@@ -19,6 +20,11 @@ on:
         description: "Override model name for this run"
         required: false
         default: "gpt-5.3-codex"
+        type: string
+      newTechCount:
+        description: "How many brand-new technologies to add this run"
+        required: false
+        default: "10"
         type: string
 
 permissions:
@@ -45,6 +51,7 @@ jobs:
           FORCE_TECH_ID: ${{ github.event.inputs.forceTechnologyId || '' }}
           DAILY_AGENT_DRY_RUN: ${{ github.event.inputs.dryRun || 'false' }}
           DAILY_AGENT_MODEL: ${{ github.event.inputs.model || 'gpt-5.3-codex' }}
+          DAILY_NEW_TECH_COUNT: ${{ github.event.inputs.newTechCount || '10' }}
         run: node scripts/daily-agent.mjs
 
       - name: Commit generated updates

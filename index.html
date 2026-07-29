@@ -35,6 +35,13 @@ header{position:sticky;top:0;z-index:30;background:var(--paper);
   box-shadow:0 0 0 3px rgba(36,86,230,.18)}
 .score-pill{margin-left:auto;font-family:var(--mono);font-size:12px;
   background:var(--ink);color:#fff;border-radius:999px;padding:5px 11px}
+.auth-btn{margin-left:8px;font-family:var(--mono);font-size:11px;font-weight:700;
+  letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;
+  padding:5px 10px;background:var(--card);color:var(--wire);
+  display:flex;align-items:center;justify-content:center}
+.auth-btn[hidden]{display:none}
+.auth-btn.in{padding:2px;width:28px;height:28px;border-radius:50%;overflow:hidden}
+.auth-btn.in img{width:100%;height:100%;border-radius:50%;display:block;object-fit:cover}
 #search{width:100%;margin-top:9px;padding:11px 13px;border:1px solid var(--line);
   border-radius:11px;font:15px var(--sans);background:var(--card);color:var(--ink)}
 #search:focus{outline:2px solid var(--wire);outline-offset:1px}
@@ -100,6 +107,11 @@ body.open #sheet{transform:none}
 
 /* ---- assess tab ---- */
 .lvls{display:flex;flex-direction:column;gap:8px}
+.lvlrow{display:flex;gap:8px}
+.lvlrow .lvlbtn{flex:1}
+.chk{flex:0 0 42px;border:1px solid var(--line);border-radius:11px;background:var(--paper);
+  color:var(--ink-dim);font-weight:700;font-size:16px}
+.chk.on{background:var(--cc,var(--wire));border-color:transparent;color:#fff}
 .lvlbtn{display:flex;gap:10px;align-items:baseline;text-align:left;background:var(--paper);
   border:1px solid var(--line);border-radius:11px;padding:11px 13px}
 .lvlbtn.on{border-color:var(--cc,var(--wire));background:#fff;
@@ -146,6 +158,7 @@ body.open #sheet{transform:none}
 <header>
   <div class="brand"><span class="dot"></span>TECH<b>WEB</b>
     <button class="score-pill" id="overall" onclick="openGuide()" aria-label="Overall score">— / —</button>
+    <button class="auth-btn" id="authBtn" hidden>SIGN IN</button>
   </div>
   <input id="search" type="search" placeholder="Search the web… (php, fortran, snowflake)" autocomplete="off">
 </header>
@@ -191,8 +204,12 @@ body.open #sheet{transform:none}
 
    ADD A CATEGORY: DATA.cats["key"]={name:"…",color:"var(--c-…)"} + a CSS var.
 
-   SCORING: user self-rates each tech 0–5 (0 = unrated). Stored per-tech in
-   window.storage key "score:<id>". Overall = average of rated techs ×20 → /100.
+   PROGRESS: user self-rates each tech 0–5 (0 = unrated) and can ✓ each
+   challenge as done. Progress = {scores:{techId:1-5}, done:{"techId:idx":1}},
+   always persisted to localStorage key "techweb:progress:v1". When the user
+   signs in with Google (optional cloud-sync module at the bottom of this file)
+   it also syncs to Firestore doc users/<uid> so progress follows them across
+   devices. Overall = average of rated techs ×20 → /100.
 
    AGENT DAILY LOOP (suggested):
    1. Pick 2–3 techs from the "seeAlso frontier" (ids referenced but missing).
@@ -359,11 +376,32 @@ const DATA = {
   }
 };
 
-/* ---------- persistence (single responsibility: store/load scores) ---------- */
+/* ---------- persistence (single responsibility: store/load progress) ----------
+   Progress lives in two maps: scores (self-rating per tech) and done
+   (✓-completed challenges, keyed "techId:levelIndex"). Both always mirror to
+   localStorage; when signed in, window.cloudSync (defined by the cloud-sync
+   module at the bottom of the file) also pushes them to Firestore. */
+const LS_KEY = "techweb:progress:v1";
 const scores = {};
+const done = {};
 let TECH_EXTENSIONS = {};
 let GENERATED_TECHS = [];
 const ASSESSMENT_STATE = {};
+
+function loadLocalProgress(){
+  try{
+    const p = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+    Object.assign(scores, p.scores || {});
+    Object.assign(done, p.done || {});
+  }catch(e){}
+}
+function saveLocalProgress(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify({scores, done})); }catch(e){}
+}
+function persistProgress(){
+  saveLocalProgress();
+  window.cloudSync?.push({scores:{...scores}, done:{...done}});
+}
 
 function escHtml(v=""){
   return String(v)
@@ -510,15 +548,17 @@ async function loadAgentData(){
   }
 }
 
-async function loadScores(){
-  for(const id of Object.keys(DATA.tech)){
-    try{const r=await window.storage.get("score:"+id); if(r) scores[id]=+r.value;}catch(e){}
-  }
-}
-async function saveScore(id,v){
-  scores[id]=v;
-  try{await window.storage.set("score:"+id,String(v));}catch(e){}
+function saveScore(id,v){
+  if(v>0) scores[id]=v; else delete scores[id];
+  persistProgress();
   renderOverall(); renderMap(document.getElementById("search").value);
+  if(document.body.classList.contains("open") && current) renderSheet();
+}
+function toggleDone(id,i){
+  const k=id+":"+i;
+  if(done[k]) delete done[k]; else done[k]=1;
+  persistProgress();
+  if(document.body.classList.contains("open") && current) renderSheet();
 }
 function renderOverall(){
   const rated=Object.values(scores).filter(v=>v>0);
@@ -542,7 +582,7 @@ function renderMap(filter=""){
     for(const [id,t] of items){
       const b=document.createElement("button");
       b.className="node"; b.style.setProperty("--cc",cat.color);
-      b.innerHTML=`<b>${t.name}</b><small>${t.tag}</small>`+
+      b.innerHTML=`<b>${escHtml(t.name)}</b><small>${escHtml(t.tag)}</small>`+
         (scores[id]?`<span class="lvl">▮ level ${scores[id]}/5</span>`:`<span class="lvl" style="color:var(--ink-dim)">unrated</span>`);
       b.onclick=()=>openTech(id);
       grid.appendChild(b);
@@ -558,7 +598,7 @@ function renderTrail(){
   const el=document.getElementById("trail");
   if(!trail.length){el.innerHTML=`<span class="hint">◦ your hop trail appears here — tap any node to start</span>`;return;}
   el.innerHTML=trail.map((id,i)=>
-    `${i?'<span class="sep">→</span>':""}<button class="hop" onclick="openTech('${id}',true)">${DATA.tech[id].name}</button>`).join("");
+    `${i?'<span class="sep">→</span>':""}<button class="hop" onclick="openTech('${id}',true)">${escHtml(DATA.tech[id].name)}</button>`).join("");
   el.scrollLeft=el.scrollWidth;
 }
 
@@ -577,16 +617,16 @@ function setTab(t){curTab=t; renderSheet();}
 function renderSheet(){
   const t=DATA.tech[current], cat=DATA.cats[t.cat], cc=cat.color;
   document.getElementById("shead").innerHTML=
-    `<div class="kicker" style="--cc:${cc}">${cat.name}</div><h2>${t.name}</h2><div class="meta">${t.born}</div>`;
+    `<div class="kicker" style="--cc:${cc}">${cat.name}</div><h2>${escHtml(t.name)}</h2><div class="meta">${escHtml(t.born)}</div>`;
   document.getElementById("stabs").innerHTML=["learn","connect","assess"].map(k=>
     `<button class="tab" role="tab" aria-selected="${k===curTab}" style="--cc:${cc}" onclick="setTab('${k}')">${
       {learn:"LEARN",connect:"CONNECT",assess:"ASSESS"}[k]}</button>`).join("");
   const body=document.getElementById("sbody");
 
   if(curTab==="learn"){
-    body.innerHTML=`<h3>History</h3><p>${t.history}</p>
-      <h3>Why it matters (or doesn't)</h3><p>${t.why}</p>`+
-      ((t.problemItSolves||"")?`<h3>Problem it solves</h3><p>${t.problemItSolves}</p>`:"")+
+    body.innerHTML=`<h3>History</h3><p>${escHtml(t.history)}</p>
+      <h3>Why it matters (or doesn't)</h3><p>${escHtml(t.why)}</p>`+
+      ((t.problemItSolves||"")?`<h3>Problem it solves</h3><p>${escHtml(t.problemItSolves)}</p>`:"")+
       ((t.latestChanges?.length)?`<h3>Latest changes</h3><p>${t.latestChanges.map(escHtml).join("<br>")}</p>`:"")+
       ((t.docs?.length)?`<h3>Documentation</h3><div class="chiprow">${t.docs.map(d=>`<a class="chip" style="--cc:${cc}" href="${escHtml(d.url)}" target="_blank" rel="noopener noreferrer">${escHtml(d.label||d.url)}</a>`).join("")}</div>`:"");
   }
@@ -596,7 +636,7 @@ function renderSheet(){
       const ids=(t.rel?.[verb]||[]).filter(x=>DATA.tech[x]);
       if(!ids.length) continue;
       html+=`<h3><span class="rel-verb">${label}</span></h3><div class="chiprow">`+
-        ids.map(x=>`<button class="chip" style="--cc:${DATA.cats[DATA.tech[x].cat].color}" onclick="openTech('${x}')">${DATA.tech[x].name}</button>`).join("")+`</div>`;
+        ids.map(x=>`<button class="chip" style="--cc:${DATA.cats[DATA.tech[x].cat].color}" onclick="openTech('${x}')">${escHtml(DATA.tech[x].name)}</button>`).join("")+`</div>`;
     }
     body.innerHTML=html||`<p class="empty">no wired connections yet — agents: add rel edges.</p>`;
   }
@@ -607,15 +647,19 @@ function renderSheet(){
     const mcq=(t.assessment?.multipleChoice||[]);
     const codeQ=(t.assessment?.codeDropdown||[])[0];
     body.innerHTML=`<h3>Self-assessment</h3><div class="lvls">`+
-      labels.map((l,i)=>`<button class="lvlbtn ${v===i+1?"on":""}" style="--cc:${cc}" onclick="saveScore('${current}',${v===i+1?0:i+1})">
-        <span class="num">${i+1}</span><span>${l}<br><small>${t.challenges?.[i]||"challenge coming soon"}</small></span></button>`).join("")+
-      `</div><div class="challenge">Rate honestly. Tap your current level again to clear. Complete the challenge at your level, then bump yourself up. Overall score updates in the header.</div>`+
+      labels.map((l,i)=>{
+        const k=current+":"+i, isOn=v===i+1;
+        return `<div class="lvlrow"><button class="lvlbtn ${isOn?"on":""}" style="--cc:${cc}" onclick="saveScore('${current}',${isOn?0:i+1})">
+        <span class="num">${i+1}</span><span>${l}<br><small>${escHtml(t.challenges?.[i]||"challenge coming soon")}</small></span></button>
+        <button class="chk ${done[k]?"on":""}" style="--cc:${cc}" onclick="toggleDone('${current}',${i})" aria-pressed="${!!done[k]}" aria-label="mark level ${i+1} challenge done">✓</button></div>`;
+      }).join("")+
+      `</div><div class="challenge">Rate honestly. Tap your current level again to clear. Complete the challenge at your level (✓ it when done), then bump yourself up. Overall score updates in the header.</div>`+
       ((t.practiceChallenges?.length)?`<div class="assess-panel"><h4>Practice queue</h4><ul class="rule-list">${t.practiceChallenges.map(c=>`<li><b>L${c.level||"-"}</b> · ${escHtml(c.title||"Challenge")}: ${escHtml(c.prompt||"")}</li>`).join("")}</ul></div>`:"")+
       (t.assessment?`<div class="assess-panel">
         <h4>Anti-cheat browser skill assessment</h4>
         <ul class="rule-list">${(t.assessment.antiCheatRules||[]).map(r=>`<li>${escHtml(r)}</li>`).join("")}</ul>
         <p class="hint">Focus switches detected this session: <b>${st.visibilityViolations}</b></p>
-        ${(mcq.length?`<div class="mcq"><q>${escHtml(mcq[0].question)}</q>${mcq[0].options.map((opt,oi)=>`<label><input type="radio" name="mcq-0" value="${oi}" ${st.mcqAnswers?.[0]===oi?"checked":""} onchange="setMcqAnswer(0,this.value)">${escHtml(opt)}</label>`).join("")}</div>`:"")}
+        ${mcq.map((q,qi)=>`<div class="mcq"><q>${qi+1}. ${escHtml(q.question)}</q>${q.options.map((opt,oi)=>`<label><input type="radio" name="mcq-${qi}" value="${oi}" ${st.mcqAnswers?.[qi]===oi?"checked":""} onchange="setMcqAnswer(${qi},this.value)">${escHtml(opt)}</label>`).join("")}</div>`).join("")}
         ${(codeQ?`<div class="code-assess"><p class="hint">${escHtml(codeQ.instructions||"Fill every blank correctly.")}</p><pre>${renderCodeTemplate(codeQ, st)}</pre></div>`:"")}
         <div class="assess-actions">
           <button onclick="evaluateAssessment()">Grade assessment</button>
@@ -653,17 +697,126 @@ function openGuide(){
 };</pre>
     <h3>Adding a category</h3>
     <p>Add to <b>DATA.cats</b> with a name + a CSS color var (define the var in :root).</p>
-    <h3>Scoring model</h3>
-    <p>Per-tech self rating 1–5, persisted via window.storage. Overall = average of rated techs × 20, out of 100. Shown in the header pill.</p>
+    <h3>Progress model</h3>
+    <p>Per-tech self rating 1–5 plus a ✓ per completed challenge, persisted in localStorage ("techweb:progress:v1"). Overall = average of rated techs × 20, out of 100. Shown in the header pill. Signing in with Google (button in the header, if enabled) syncs the same progress to Firestore so it follows the user across devices — see the cloud-sync module at the bottom of index.html and README.md for setup.</p>
     <h3>Design rules</h3>
     <p>Mobile first. Tap targets ≥ 44px. Category color = left rail everywhere. The hop trail is the signature — keep it.</p>
   </div>`;
   document.body.classList.add("open");
 }
 
+/* ---------- auth bridge (single responsibility: header button + merge) ----------
+   The cloud-sync module below calls window.TW.onAuth / mergeCloudProgress.
+   If cloud sync is not configured, the sign-in button simply stays hidden. */
+window.TW={
+  onAuth(user){
+    const b=document.getElementById("authBtn");
+    if(!window.cloudSync){b.hidden=true;return}
+    b.hidden=false;
+    if(user){
+      b.classList.add("in");
+      b.innerHTML=user.photoURL
+        ?`<img src="${escHtml(user.photoURL)}" alt="${escHtml(user.displayName||"account")}" referrerpolicy="no-referrer">`
+        :escHtml((user.displayName||user.email||"?").slice(0,1).toUpperCase());
+      b.title="Signed in as "+(user.displayName||user.email)+" — tap to sign out";
+      b.onclick=()=>{if(confirm("Sign out of "+(user.displayName||user.email)+"? Progress stays on this device and in the cloud.")) window.cloudSync.signOut()};
+    }else{
+      b.classList.remove("in");
+      b.textContent="SIGN IN";
+      b.title="Sign in with Google to sync your progress across devices";
+      b.onclick=()=>window.cloudSync.signIn();
+    }
+  },
+  getProgress(){return {scores:{...scores}, done:{...done}}},
+  /* merge is progress-preserving: higher score wins, done-marks union */
+  mergeCloudProgress(cloud){
+    for(const [k,v] of Object.entries(cloud?.scores||{})){
+      const n=Math.max(0,Math.min(5,Math.round(+v)||0));
+      if(n>(scores[k]||0)) scores[k]=n;
+    }
+    for(const k of Object.keys(cloud?.done||{})) done[k]=1;
+    saveLocalProgress();
+    renderOverall(); renderMap(document.getElementById("search").value);
+    if(document.body.classList.contains("open") && current) renderSheet();
+    return this.getProgress();
+  }
+};
+
 /* ---------- boot ---------- */
 document.getElementById("search").addEventListener("input",e=>renderMap(e.target.value));
-(async()=>{await loadAgentData(); await loadScores(); renderOverall(); renderMap(); renderTrail();})();
+(async()=>{loadLocalProgress(); await loadAgentData(); renderOverall(); renderMap(); renderTrail();})();
+</script>
+
+<script type="module">
+/* ============================================================================
+   CLOUD SYNC (optional) — Google sign-in + Firestore progress sync.
+
+   To enable: paste your Firebase web-app config below (README.md → "Google
+   login setup" has the step-by-step). The config is NOT a secret — it is safe
+   to commit. While FIREBASE_CONFIG is null the site runs local-only, nothing
+   is downloaded from Firebase, and the SIGN IN button stays hidden.
+
+   Data model: one Firestore doc per user at users/<uid> containing the same
+   {scores, done} shape as localStorage. On sign-in, cloud and local progress
+   merge (higher score wins, ✓ marks union) and the merged result is written
+   back. Every later change is debounced and mirrored to the doc.
+   ============================================================================ */
+const FIREBASE_CONFIG = null;
+/* Example:
+const FIREBASE_CONFIG = {
+  apiKey: "AIza…",
+  authDomain: "your-project.firebaseapp.com",
+  projectId: "your-project",
+  appId: "1:123456789:web:abc123"
+};
+*/
+
+if(FIREBASE_CONFIG?.apiKey){
+  const V="11.6.1";
+  const [{initializeApp},A,F]=await Promise.all([
+    import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`),
+    import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`),
+    import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`)
+  ]);
+  const app=initializeApp(FIREBASE_CONFIG);
+  const auth=A.getAuth(app), db=F.getFirestore(app);
+  const provider=new A.GoogleAuthProvider();
+  const userDoc=()=>F.doc(db,"users",auth.currentUser.uid);
+
+  let pushTimer=null;
+  window.cloudSync={
+    async signIn(){
+      try{ await A.signInWithPopup(auth,provider); }
+      catch(e){
+        if(e.code==="auth/popup-blocked"||e.code==="auth/operation-not-supported-in-this-environment")
+          await A.signInWithRedirect(auth,provider);
+        else if(e.code!=="auth/popup-closed-by-user"&&e.code!=="auth/cancelled-popup-request")
+          alert("Sign-in failed: "+e.message);
+      }
+    },
+    signOut(){ return A.signOut(auth); },
+    push(progress){
+      if(!auth.currentUser) return;
+      clearTimeout(pushTimer);
+      pushTimer=setTimeout(()=>{
+        if(!auth.currentUser) return;
+        F.setDoc(userDoc(),{...progress,updatedAt:F.serverTimestamp()})
+          .catch(e=>console.warn("cloud sync failed",e));
+      },400);
+    }
+  };
+
+  A.getRedirectResult(auth).catch(e=>console.warn("redirect sign-in failed",e));
+  A.onAuthStateChanged(auth,async user=>{
+    window.TW.onAuth(user);
+    if(!user) return;
+    try{
+      const snap=await F.getDoc(userDoc());
+      const merged=window.TW.mergeCloudProgress(snap.exists()?snap.data():{});
+      await F.setDoc(userDoc(),{...merged,updatedAt:F.serverTimestamp()});
+    }catch(e){ console.warn("initial cloud sync failed",e); }
+  });
+}
 </script>
 </body>
 </html>
