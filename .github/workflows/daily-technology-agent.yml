@@ -51,8 +51,13 @@ jobs:
           FORCE_TECH_ID: ${{ github.event.inputs.forceTechnologyId || '' }}
           DAILY_AGENT_DRY_RUN: ${{ github.event.inputs.dryRun || 'false' }}
           DAILY_AGENT_MODEL: ${{ github.event.inputs.model || 'gpt-5.3-codex' }}
-          DAILY_NEW_TECH_COUNT: ${{ github.event.inputs.newTechCount || '10' }}
-        run: node scripts/daily-agent.mjs
+          DAILY_AGENT_COUNT: ${{ github.event.inputs.newTechCount || '10' }}
+        run: |
+          if [[ -n "$FORCE_TECH_ID" ]]; then
+            node scripts/daily-agent.mjs
+          else
+            node scripts/run-daily-batch.mjs
+          fi
 
       - name: Commit generated updates
         if: ${{ github.event.inputs.dryRun != 'true' }}

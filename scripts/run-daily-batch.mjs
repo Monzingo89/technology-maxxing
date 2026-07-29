@@ -9,6 +9,9 @@ const GENERATED_PATH = path.join(ROOT, "data", "generated-technologies.json");
 const SUMMARY_PATH = path.join(ROOT, ".daily-agent", "last-run-summary.json");
 const SUMMARY_MD_PATH = path.join(ROOT, ".daily-agent", "last-run-summary.md");
 const COUNT = Number(process.env.DAILY_AGENT_COUNT || 10);
+const DRY_RUN = ["1", "true", "yes"].includes(
+  String(process.env.DAILY_AGENT_DRY_RUN || "").toLowerCase(),
+);
 
 function readJson(filePath, fallback) {
   try {
@@ -42,6 +45,15 @@ if (pendingSeeds.length < COUNT) {
 
 const selectedSeeds = pendingSeeds.slice(0, COUNT);
 const added = [];
+
+if (DRY_RUN) {
+  console.log(`Dry run: would create exactly ${COUNT} technologies:`);
+  for (const seed of selectedSeeds) {
+    console.log(`- ${seed.name} (${seed.id})`);
+  }
+  console.log("Dry run: no files written and no API calls made.");
+  process.exit(0);
+}
 
 for (let i = 0; i < selectedSeeds.length; i += 1) {
   const seed = selectedSeeds[i];

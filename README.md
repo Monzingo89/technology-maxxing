@@ -13,12 +13,13 @@ self-rate your level 1–5 per tech, and ✓ off challenges as you complete them
 `.github/workflows/daily-technology-agent.yml` runs every day at **5:00 PM
 America/Chicago**. Each scheduled run:
 
-1. Enriches the next existing technology that does not have an extension yet.
-2. Adds exactly **10 new technologies** using the remaining entries in
+1. Selects the next **10 unused technologies** from
    `.daily-agent/new-technologies-seed.json` first, then asks the model to fill
-   any open slots from the map's missing relationship frontier.
-3. Writes the generated structures to `data/`, updates
-   `.daily-agent/state.json`, commits the results, and pushes them to `main`.
+   each existing dossier structure.
+2. Writes the generated structures to `data/`, updates
+   `.daily-agent/state.json`, and produces JSON and Markdown run summaries in
+   `.daily-agent/`.
+3. Commits the results and pushes them to `main`.
 
 The agent only needs to add structured technology content; `index.html` already
 loads and renders both `data/generated-technologies.json` and
