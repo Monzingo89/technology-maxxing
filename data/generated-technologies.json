@@ -4952,5 +4952,2486 @@
       ],
       "updatedAt": "2026-07-29T22:33:10.788Z"
     }
+  },
+  {
+    "id": "cassandra",
+    "name": "Apache Cassandra",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "a distributed wide-column nosql database",
+    "history": "Created at Facebook by Avinash Lakshman and Prashant Malik (2008). Open-sourced by Facebook in 2008. Entered the Apache Incubator in 2009. Became an Apache Top-Level Project in 2010. Influenced by Amazon Dynamo (distribution) and Google Bigtable (data model).",
+    "why": "Cassandra solves always-on, high-write, globally distributed data storage where horizontal scale, fault tolerance, and tunable consistency matter more than complex joins or strict single-node ACID behavior.",
+    "rel": {
+      "seeAlso": [
+        "scylladb",
+        "apachehbase",
+        "amazondynamodb",
+        "apachekafka",
+        "apachespark"
+      ]
+    },
+    "challenges": [
+      "Design a table for 'latest orders by user'. Pick partition key and clustering columns, then explain how your design avoids cross-partition scans.",
+      "Run the same read/write flow with ONE, QUORUM, and ALL. Record latency and behavior after stopping one node. Summarize trade-offs in 5 bullets.",
+      "Model IoT sensor events with TTL and day buckets. Implement insert + query for last 24 hours and explain hot-partition risk mitigations.",
+      "Simulate node outage, recover it, then run validation steps (nodetool status, repair plan, read checks). Document what remained available and why.",
+      "Compare primary-key query, materialized view, and SAI for one product-search scenario. Choose one and justify with expected read/write load."
+    ],
+    "extension": {
+      "tag": "a distributed wide-column nosql database",
+      "latestChanges": [
+        "Cassandra 5.x adds native vector type support for similarity-search use cases.",
+        "Cassandra 5.x advances Storage-Attached Indexing (SAI) for scalable secondary indexing.",
+        "Cassandra 4.1 introduced guardrails and better operational safety defaults.",
+        "Cassandra 4.0 focused on major stability, observability, and performance improvements."
+      ],
+      "problemItSolves": "Cassandra solves always-on, high-write, globally distributed data storage where horizontal scale, fault tolerance, and tunable consistency matter more than complex joins or strict single-node ACID behavior.",
+      "historyNotes": [
+        "Created at Facebook by Avinash Lakshman and Prashant Malik (2008).",
+        "Open-sourced by Facebook in 2008.",
+        "Entered the Apache Incubator in 2009.",
+        "Became an Apache Top-Level Project in 2010.",
+        "Influenced by Amazon Dynamo (distribution) and Google Bigtable (data model)."
+      ],
+      "relatedTechnologies": [
+        "ScyllaDB",
+        "Apache HBase",
+        "Amazon DynamoDB",
+        "Apache Kafka",
+        "Apache Spark",
+        "Redis"
+      ],
+      "docs": [
+        {
+          "label": "Apache Cassandra Docs (latest)",
+          "url": "https://cassandra.apache.org/doc/latest/"
+        },
+        {
+          "label": "Apache Cassandra CQL Reference",
+          "url": "https://cassandra.apache.org/doc/latest/cassandra/cql/"
+        },
+        {
+          "label": "Apache Cassandra Project Site",
+          "url": "https://cassandra.apache.org/"
+        },
+        {
+          "label": "Apache Cassandra GitHub",
+          "url": "https://github.com/apache/cassandra"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Query-first data modeling",
+          "prompt": "Design a table for 'latest orders by user'. Pick partition key and clustering columns, then explain how your design avoids cross-partition scans.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Consistency tuning drill",
+          "prompt": "Run the same read/write flow with ONE, QUORUM, and ALL. Record latency and behavior after stopping one node. Summarize trade-offs in 5 bullets.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Time-series retention pattern",
+          "prompt": "Model IoT sensor events with TTL and day buckets. Implement insert + query for last 24 hours and explain hot-partition risk mitigations.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Failure simulation and repair basics",
+          "prompt": "Simulate node outage, recover it, then run validation steps (nodetool status, repair plan, read checks). Document what remained available and why.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Indexing decision memo",
+          "prompt": "Compare primary-key query, materialized view, and SAI for one product-search scenario. Choose one and justify with expected read/write load.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Each learner gets a unique keyspace name suffix and seed dataset.",
+          "Require a 60-90 second screen recording showing command execution and result output.",
+          "Oral follow-up: learner must explain partition key and consistency choices live.",
+          "Auto-check rejects identical clustering-key orders across submissions.",
+          "Use timed retake with shuffled MCQ options and altered numeric parameters.",
+          "Require one reflection answer: 'What breaks if replication_factor changes from 3 to 1?'"
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who created Cassandra at Facebook?",
+            "options": [
+              "Jeff Dean and Sanjay Ghemawat",
+              "Avinash Lakshman and Prashant Malik",
+              "Martin Kleppmann and Jay Kreps",
+              "Leslie Lamport and Barbara Liskov"
+            ],
+            "answerIndex": 1,
+            "explanation": "Cassandra was initiated at Facebook by Avinash Lakshman and Prashant Malik in 2008."
+          },
+          {
+            "question": "When did Cassandra become an Apache Top-Level Project?",
+            "options": [
+              "2008",
+              "2009",
+              "2010",
+              "2012"
+            ],
+            "answerIndex": 2,
+            "explanation": "It entered incubation in 2009 and became a top-level Apache project in 2010."
+          },
+          {
+            "question": "Which architecture trait best describes Cassandra nodes?",
+            "options": [
+              "Single primary with read replicas",
+              "Peer-to-peer with no single master",
+              "Shared-disk cluster with lock manager",
+              "Leader election per query"
+            ],
+            "answerIndex": 1,
+            "explanation": "Cassandra uses a peer-to-peer architecture to avoid a single point of failure."
+          },
+          {
+            "question": "What does consistency level QUORUM generally require?",
+            "options": [
+              "Exactly one replica acknowledgment",
+              "A majority of replica responses",
+              "All replicas in all data centers",
+              "Only local cache confirmation"
+            ],
+            "answerIndex": 1,
+            "explanation": "QUORUM means a majority of replicas for the operation must respond."
+          },
+          {
+            "question": "What is the recommended Cassandra modeling approach?",
+            "options": [
+              "Normalize first, query later",
+              "Query-first denormalized tables",
+              "Use many joins for flexibility",
+              "Store all entities in one wide row"
+            ],
+            "answerIndex": 1,
+            "explanation": "Cassandra modeling starts from access patterns; denormalization is normal."
+          },
+          {
+            "question": "Which workload is Cassandra especially strong for?",
+            "options": [
+              "Ad-hoc relational joins across many tables",
+              "Write-heavy time-series or event data at scale",
+              "Small single-node transactional apps",
+              "In-memory session cache only"
+            ],
+            "answerIndex": 1,
+            "explanation": "Cassandra excels at high-throughput writes and horizontally scalable event/time-series data."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this CQL setup for a local single-node lab and optimize reads for newest orders first.",
+            "language": "cql",
+            "template": "CREATE KEYSPACE IF NOT EXISTS {{blank1}}\nWITH replication = {'class': '{{blank2}}', 'replication_factor': {{blank3}}};\n\nUSE {{blank1}};\n\nCREATE TABLE IF NOT EXISTS orders_by_user (\n  user_id uuid,\n  order_ts timestamp,\n  order_id uuid,\n  total decimal,\n  PRIMARY KEY (user_id, order_ts)\n) WITH CLUSTERING ORDER BY (order_ts {{blank4}});\n\nSELECT * FROM orders_by_user WHERE user_id = {{blank5}} LIMIT 10;",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "orders_lab",
+                  "analytics",
+                  "default"
+                ],
+                "answer": "orders_lab"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "SimpleStrategy",
+                  "NetworkTopologyStrategy",
+                  "OldNetworkTopologyStrategy"
+                ],
+                "answer": "SimpleStrategy"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "1",
+                  "2",
+                  "3"
+                ],
+                "answer": "1"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "ASC",
+                  "DESC",
+                  "RANDOM"
+                ],
+                "answer": "DESC"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "?",
+                  "user_id",
+                  "'123e4567-e89b-12d3-a456-426614174000'"
+                ],
+                "answer": "?"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:26:17.507Z"
+    }
+  },
+  {
+    "id": "dynamodb",
+    "name": "Amazon DynamoDB",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "a managed key-value and document nosql database",
+    "history": "2012: DynamoDB launched as a fully managed NoSQL service on AWS. 2017: On-demand backup/restore and Global Tables expanded durability and multi-Region designs. 2018: On-demand capacity mode made bursty workloads easier without pre-planning throughput. 2019: ACID transactions became available for multi-item consistency needs. 2021: Standard-IA table class reduced cost for infrequently accessed data. 2023: Global Tables added multi-Region strong consistency capabilities.",
+    "why": "DynamoDB gives teams a fully managed, low-latency NoSQL database that scales automatically for unpredictable traffic, reducing server management, sharding, and operational overhead.",
+    "rel": {
+      "seeAlso": [
+        "awslambda",
+        "amazonapigateway",
+        "amazons3",
+        "amazonkinesisdatastreams",
+        "amazondynamodbstreams"
+      ]
+    },
+    "challenges": [
+      "Design PK/SK patterns for Users, Orders, and OrderItems in one table. Include 3 access patterns and sample keys.",
+      "Implement Create/Read/Update/Delete in AWS SDK v3. Use ConditionExpression to prevent overwriting existing orders.",
+      "Create a GSI to fetch all open orders by status and date. Explain expected RCU/WCU impact and hot-key risks.",
+      "Use DynamoDB Streams + Lambda to publish order state changes to an audit log with idempotency checks.",
+      "Simulate Region failover with Global Tables. Document consistency trade-offs and client retry behavior."
+    ],
+    "extension": {
+      "tag": "a managed key-value and document nosql database",
+      "latestChanges": [
+        "Global Tables introduced multi-Region strong consistency options for stricter cross-Region reads.",
+        "Incremental export to Amazon S3 enabled change exports without full table scans.",
+        "Tooling around PartiQL and AWS SDK v3 continues to improve developer workflows."
+      ],
+      "problemItSolves": "DynamoDB gives teams a fully managed, low-latency NoSQL database that scales automatically for unpredictable traffic, reducing server management, sharding, and operational overhead.",
+      "historyNotes": [
+        "2012: DynamoDB launched as a fully managed NoSQL service on AWS.",
+        "2017: On-demand backup/restore and Global Tables expanded durability and multi-Region designs.",
+        "2018: On-demand capacity mode made bursty workloads easier without pre-planning throughput.",
+        "2019: ACID transactions became available for multi-item consistency needs.",
+        "2021: Standard-IA table class reduced cost for infrequently accessed data.",
+        "2023: Global Tables added multi-Region strong consistency capabilities."
+      ],
+      "relatedTechnologies": [
+        "AWS Lambda",
+        "Amazon API Gateway",
+        "Amazon S3",
+        "Amazon Kinesis Data Streams",
+        "Amazon DynamoDB Streams",
+        "Amazon ElastiCache",
+        "Amazon CloudWatch",
+        "AWS IAM"
+      ],
+      "docs": [
+        {
+          "label": "Developer Guide",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Introduction.html"
+        },
+        {
+          "label": "API Reference",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/Welcome.html"
+        },
+        {
+          "label": "Best Practices",
+          "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/best-practices.html"
+        },
+        {
+          "label": "Pricing",
+          "url": "https://aws.amazon.com/dynamodb/pricing/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Model a single-table key schema",
+          "prompt": "Design PK/SK patterns for Users, Orders, and OrderItems in one table. Include 3 access patterns and sample keys.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 2,
+          "title": "Build CRUD with conditional writes",
+          "prompt": "Implement Create/Read/Update/Delete in AWS SDK v3. Use ConditionExpression to prevent overwriting existing orders.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 3,
+          "title": "Add a query-focused GSI",
+          "prompt": "Create a GSI to fetch all open orders by status and date. Explain expected RCU/WCU impact and hot-key risks.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 4,
+          "title": "Stream to event processor",
+          "prompt": "Use DynamoDB Streams + Lambda to publish order state changes to an audit log with idempotency checks.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 5,
+          "title": "Global resilience drill",
+          "prompt": "Simulate Region failover with Global Tables. Document consistency trade-offs and client retry behavior.",
+          "format": "multiple-choice"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question and option order on every attempt.",
+          "Use per-attempt table names and key prefixes so copied answers mismatch.",
+          "Require a one-sentence reason for each MC answer before scoring.",
+          "Lock answers after submission; no backtracking during timed mode.",
+          "Validate dropdown code with hidden tests and edge-case inputs."
+        ],
+        "multipleChoice": [
+          {
+            "question": "In which year was Amazon DynamoDB first launched?",
+            "options": [
+              "2010",
+              "2012",
+              "2014",
+              "2016"
+            ],
+            "answerIndex": 1,
+            "explanation": "DynamoDB was introduced by AWS in 2012 as a managed NoSQL database."
+          },
+          {
+            "question": "Which feature removed the need to pre-provision throughput for spiky workloads?",
+            "options": [
+              "On-demand capacity mode",
+              "DynamoDB Streams",
+              "Time to Live (TTL)",
+              "DAX"
+            ],
+            "answerIndex": 0,
+            "explanation": "On-demand mode automatically scales request capacity based on traffic."
+          },
+          {
+            "question": "What is the main goal of a good partition key design?",
+            "options": [
+              "Enable SQL joins",
+              "Spread traffic evenly to avoid hot partitions",
+              "Disable replication",
+              "Reduce encryption overhead"
+            ],
+            "answerIndex": 1,
+            "explanation": "Even key distribution prevents throttling and improves consistent performance."
+          },
+          {
+            "question": "By default, strongly consistent reads in DynamoDB apply to:",
+            "options": [
+              "All Regions in a global table",
+              "Only the Region replica you read from",
+              "Only items with TTL set",
+              "Only transactional writes"
+            ],
+            "answerIndex": 1,
+            "explanation": "Strong consistency is scoped to the local replica by default; cross-Region behavior depends on table configuration."
+          },
+          {
+            "question": "What does TTL (Time to Live) do in DynamoDB?",
+            "options": [
+              "Deletes items instantly at the exact expiration second",
+              "Marks items for background expiration-based deletion",
+              "Moves old items to S3 automatically",
+              "Reduces write capacity consumption for all items"
+            ],
+            "answerIndex": 1,
+            "explanation": "TTL marks items as expired and DynamoDB removes them asynchronously."
+          },
+          {
+            "question": "What did Global Tables primarily add to DynamoDB history?",
+            "options": [
+              "Columnar storage",
+              "Active-active multi-Region replication",
+              "Built-in relational joins",
+              "Mandatory SQL schema migration"
+            ],
+            "answerIndex": 1,
+            "explanation": "Global Tables replicate data across Regions for low-latency, resilient multi-Region architectures."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the AWS SDK v3 query to fetch the latest 10 orders for one user (descending sort key).",
+            "language": "javascript",
+            "template": "import { DynamoDBClient } from \"@aws-sdk/client-dynamodb\";\nimport { DynamoDBDocumentClient, QueryCommand } from \"@aws-sdk/lib-dynamodb\";\n\nconst client = new DynamoDBClient({ region: \"us-east-1\" });\nconst doc = DynamoDBDocumentClient.from(client);\n\nconst out = await doc.send(new QueryCommand({\n  TableName: \"{{blank1}}\",\n  KeyConditionExpression: \"{{blank2}}\",\n  ExpressionAttributeValues: {\n    \":pk\": \"{{blank3}}\"\n  },\n  ScanIndexForward: {{blank4}},\n  Limit: {{blank5}}\n}));\n\nconsole.log(out.Items);",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "OrdersTable",
+                  "users",
+                  "app_main"
+                ],
+                "answer": "OrdersTable"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "PK = :pk",
+                  "SK = :pk",
+                  "PK BETWEEN :pk"
+                ],
+                "answer": "PK = :pk"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "USER#42",
+                  "ORDER#42",
+                  "42"
+                ],
+                "answer": "USER#42"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "false",
+                  "true",
+                  "\"false\""
+                ],
+                "answer": "false"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "10",
+                  "100",
+                  "\"10\""
+                ],
+                "answer": "10"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:26:57.817Z"
+    }
+  },
+  {
+    "id": "databricks",
+    "name": "Databricks",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "unified lakehouse platform for data and ai",
+    "history": "2013: Founded by the creators of Apache Spark from UC Berkeley's AMPLab. Early years: Focused on managed Spark for large-scale data processing. Delta Lake was introduced to add ACID reliability to data lakes. Databricks helped popularize the 'lakehouse' architecture (warehouse-like reliability on low-cost object storage). Unity Catalog became the central governance model for data and AI assets.",
+    "why": "Databricks helps teams store, process, govern, analyze, and operationalize large-scale data and AI workloads in one platform. It reduces tool sprawl by combining data engineering, SQL analytics, machine learning, and governance on a lakehouse architecture.",
+    "rel": {
+      "seeAlso": [
+        "apachespark",
+        "deltalake",
+        "mlflow",
+        "unitycatalog",
+        "databrickssql"
+      ]
+    },
+    "challenges": [
+      "Create a notebook, load a small CSV from cloud storage into a DataFrame, show schema, and compute null counts for each column.",
+      "Ingest raw orders into a bronze Delta table, clean invalid rows into a silver Delta table, and schedule it as a job.",
+      "Create a catalog/schema/table, apply role-based permissions, and build a Databricks SQL query that only authorized users can run.",
+      "Use MERGE to upsert daily updates into a Delta table and validate record counts before and after the merge.",
+      "Train a simple model, register it in MLflow Model Registry, deploy an endpoint, and track prediction latency + drift signals."
+    ],
+    "extension": {
+      "tag": "unified lakehouse platform for data and ai",
+      "latestChanges": [
+        "Serverless options expanded for SQL analytics, jobs, and model serving.",
+        "Unity Catalog is now the default governance layer in many new deployments.",
+        "Lakeflow capabilities expanded for ingestion and pipeline orchestration.",
+        "Mosaic AI features grew for model evaluation, deployment, and agent workflows."
+      ],
+      "problemItSolves": "Databricks helps teams store, process, govern, analyze, and operationalize large-scale data and AI workloads in one platform. It reduces tool sprawl by combining data engineering, SQL analytics, machine learning, and governance on a lakehouse architecture.",
+      "historyNotes": [
+        "2013: Founded by the creators of Apache Spark from UC Berkeley's AMPLab.",
+        "Early years: Focused on managed Spark for large-scale data processing.",
+        "Delta Lake was introduced to add ACID reliability to data lakes.",
+        "Databricks helped popularize the 'lakehouse' architecture (warehouse-like reliability on low-cost object storage).",
+        "Unity Catalog became the central governance model for data and AI assets."
+      ],
+      "relatedTechnologies": [
+        "Apache Spark",
+        "Delta Lake",
+        "MLflow",
+        "Unity Catalog",
+        "Databricks SQL",
+        "Delta Sharing",
+        "Apache Kafka",
+        "dbt"
+      ],
+      "docs": [
+        {
+          "label": "Databricks Documentation",
+          "url": "https://docs.databricks.com/"
+        },
+        {
+          "label": "Databricks Academy",
+          "url": "https://www.databricks.com/learn/training/home"
+        },
+        {
+          "label": "Delta Lake Docs",
+          "url": "https://docs.delta.io/latest/index.html"
+        },
+        {
+          "label": "MLflow Docs",
+          "url": "https://mlflow.org/docs/latest/index.html"
+        },
+        {
+          "label": "Unity Catalog Overview",
+          "url": "https://docs.databricks.com/data-governance/unity-catalog/index.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First notebook: read and profile data",
+          "prompt": "Create a notebook, load a small CSV from cloud storage into a DataFrame, show schema, and compute null counts for each column.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Build a bronze-to-silver Delta flow",
+          "prompt": "Ingest raw orders into a bronze Delta table, clean invalid rows into a silver Delta table, and schedule it as a job.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Governed analytics with Unity Catalog",
+          "prompt": "Create a catalog/schema/table, apply role-based permissions, and build a Databricks SQL query that only authorized users can run.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Incremental upsert pipeline",
+          "prompt": "Use MERGE to upsert daily updates into a Delta table and validate record counts before and after the merge.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Deploy and monitor an ML model",
+          "prompt": "Train a simple model, register it in MLflow Model Registry, deploy an endpoint, and track prediction latency + drift signals.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question order and answer order for every attempt.",
+          "Use parameterized datasets (different table names and paths per learner).",
+          "Set strict time windows per section to limit external lookup.",
+          "Require short rationale notes for conceptual questions during review.",
+          "Run plagiarism checks on submitted code and notebook lineage.",
+          "Require a brief live walkthrough for any high score above threshold."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Databricks was founded by contributors to which major open-source project?",
+            "options": [
+              "Apache Spark",
+              "Apache Kafka",
+              "Apache Flink",
+              "Presto"
+            ],
+            "answerIndex": 0,
+            "explanation": "Databricks was created by the team that built Apache Spark at UC Berkeley AMPLab."
+          },
+          {
+            "question": "What best describes the lakehouse concept used by Databricks?",
+            "options": [
+              "A data warehouse that only stores structured data",
+              "A data lake with ACID reliability and warehouse-style performance features",
+              "A BI dashboarding tool for spreadsheet users",
+              "A NoSQL key-value database"
+            ],
+            "answerIndex": 1,
+            "explanation": "Lakehouse combines low-cost lake storage with reliability and performance features typically associated with warehouses."
+          },
+          {
+            "question": "What is a primary benefit of Delta Lake tables?",
+            "options": [
+              "Guaranteed ACID transactions and schema enforcement",
+              "Automatic GPU acceleration for all queries",
+              "Built-in streaming message broker",
+              "No need for metadata management"
+            ],
+            "answerIndex": 0,
+            "explanation": "Delta Lake adds transactional reliability, schema controls, and time-travel features on lake storage."
+          },
+          {
+            "question": "Unity Catalog is mainly used for:",
+            "options": [
+              "CI/CD deployment for mobile apps",
+              "Centralized governance of data and AI assets",
+              "Replacing Spark with SQL-only processing",
+              "Storing dashboard screenshots"
+            ],
+            "answerIndex": 1,
+            "explanation": "Unity Catalog centralizes permissions, lineage, and governance across tables, files, models, and more."
+          },
+          {
+            "question": "Databricks SQL is primarily optimized for:",
+            "options": [
+              "Real-time game rendering",
+              "Interactive BI analytics and SQL workloads",
+              "Edge-device firmware updates",
+              "Browser-based video transcoding"
+            ],
+            "answerIndex": 1,
+            "explanation": "Databricks SQL focuses on BI/analytics queries, dashboards, and SQL warehouse workloads."
+          },
+          {
+            "question": "Delta Sharing enables organizations to:",
+            "options": [
+              "Share data securely across platforms without copying full datasets",
+              "Encrypt laptop disks from the Databricks UI",
+              "Train ML models without data",
+              "Convert Python code to Scala automatically"
+            ],
+            "answerIndex": 0,
+            "explanation": "Delta Sharing is an open protocol for secure data sharing across tools and clouds."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the PySpark code to read raw Delta data and write a silver Delta table using an incremental-safe mode.",
+            "language": "python",
+            "template": "from pyspark.sql import functions as F\n\norders = (spark.read\n    .format(\"{{b1}}\")\n    .load(\"/Volumes/main/raw/orders\"))\n\nsilver = (orders\n    .filter(F.col(\"status\").isNotNull())\n    .withColumn(\"ingest_date\", F.current_date()))\n\n(silver.write\n    .format(\"{{b2}}\")\n    .mode(\"{{b3}}\")\n    .saveAsTable(\"main.sales.silver_orders\"))",
+            "blanks": [
+              {
+                "id": "b1",
+                "options": [
+                  "delta",
+                  "csv",
+                  "parquet"
+                ],
+                "answer": "delta"
+              },
+              {
+                "id": "b2",
+                "options": [
+                  "delta",
+                  "json",
+                  "orc"
+                ],
+                "answer": "delta"
+              },
+              {
+                "id": "b3",
+                "options": [
+                  "append",
+                  "overwrite",
+                  "ignore"
+                ],
+                "answer": "append"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:27:31.500Z"
+    }
+  },
+  {
+    "id": "spark",
+    "name": "Apache Spark",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "distributed engine for large-scale data pipelines",
+    "history": "Spark started at UC Berkeley AMPLab in 2009 to speed up iterative data processing. It was open-sourced in 2010 and became an Apache top-level project in 2014. Its ecosystem grew to include Spark SQL, Structured Streaming, MLlib, and GraphX. Recent evolution emphasizes adaptive optimization, cloud-native deployment, and Spark Connect.",
+    "why": "Apache Spark lets teams process very large datasets in parallel across many machines, using one engine for batch ETL, SQL analytics, streaming, and machine learning workloads.",
+    "rel": {
+      "seeAlso": [
+        "apachehadoop",
+        "hdfs",
+        "yarn",
+        "kubernetes",
+        "deltalake"
+      ]
+    },
+    "challenges": [
+      "Create a SparkSession, read a Parquet folder, print schema, and show 5 rows in under 10 lines.",
+      "Join large `orders` with small `countries`, apply a broadcast hint, then compare physical plans before and after AQE.",
+      "Create a Structured Streaming pipeline with watermark + aggregation, set checkpointing, and verify recovery after restart.",
+      "Given skewed keys, repartition and test performance impact on a groupBy workload. Report runtime and shuffle size.",
+      "Run the same transformation from a remote client using Spark Connect and explain one operational benefit."
+    ],
+    "extension": {
+      "tag": "distributed engine for large-scale data pipelines",
+      "latestChanges": [
+        "Spark 3.5.x improved SQL planning and Adaptive Query Execution behavior.",
+        "Spark Connect support expanded for remote DataFrame development.",
+        "PySpark compatibility and pandas API on Spark usability continued to improve.",
+        "Ongoing performance and reliability work for Kubernetes and Structured Streaming."
+      ],
+      "problemItSolves": "Apache Spark lets teams process very large datasets in parallel across many machines, using one engine for batch ETL, SQL analytics, streaming, and machine learning workloads.",
+      "historyNotes": [
+        "Spark started at UC Berkeley AMPLab in 2009 to speed up iterative data processing.",
+        "It was open-sourced in 2010 and became an Apache top-level project in 2014.",
+        "Its ecosystem grew to include Spark SQL, Structured Streaming, MLlib, and GraphX.",
+        "Recent evolution emphasizes adaptive optimization, cloud-native deployment, and Spark Connect."
+      ],
+      "relatedTechnologies": [
+        "Apache Hadoop",
+        "HDFS",
+        "YARN",
+        "Kubernetes",
+        "Delta Lake",
+        "Apache Iceberg",
+        "Apache Hive",
+        "Apache Kafka"
+      ],
+      "docs": [
+        {
+          "label": "Spark Documentation (Latest)",
+          "url": "https://spark.apache.org/docs/latest/"
+        },
+        {
+          "label": "Quick Start",
+          "url": "https://spark.apache.org/docs/latest/quick-start.html"
+        },
+        {
+          "label": "SQL, DataFrames, and Datasets Guide",
+          "url": "https://spark.apache.org/docs/latest/sql-programming-guide.html"
+        },
+        {
+          "label": "Structured Streaming Programming Guide",
+          "url": "https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html"
+        },
+        {
+          "label": "Spark Connect Overview",
+          "url": "https://spark.apache.org/docs/latest/spark-connect-overview.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Read and inspect a dataset",
+          "prompt": "Create a SparkSession, read a Parquet folder, print schema, and show 5 rows in under 10 lines.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Optimize a join",
+          "prompt": "Join large `orders` with small `countries`, apply a broadcast hint, then compare physical plans before and after AQE.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Build restart-safe streaming",
+          "prompt": "Create a Structured Streaming pipeline with watermark + aggregation, set checkpointing, and verify recovery after restart.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Tune partition strategy",
+          "prompt": "Given skewed keys, repartition and test performance impact on a groupBy workload. Report runtime and shuffle size.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Remote client with Spark Connect",
+          "prompt": "Run the same transformation from a remote client using Spark Connect and explain one operational benefit.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize MCQ option order and code-dropdown option order per attempt.",
+          "Use different dataset/table names and numeric values for each learner session.",
+          "Time-box each MCQ (45-75 seconds) and disable copy/paste in assessment views.",
+          "Require hidden test cases with nulls, skew, and schema variations for code checks.",
+          "Flag identical answer patterns and near-identical completion times for review.",
+          "Block full-credit submissions unless code passes both visible and hidden validations."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Spark became an Apache top-level project in which year?",
+            "options": [
+              "2012",
+              "2013",
+              "2014",
+              "2016"
+            ],
+            "answerIndex": 2,
+            "explanation": "Spark graduated to an Apache top-level project in 2014."
+          },
+          {
+            "question": "Where was Spark originally developed?",
+            "options": [
+              "Google Brain",
+              "UC Berkeley AMPLab",
+              "MIT CSAIL",
+              "Stanford DAWN"
+            ],
+            "answerIndex": 1,
+            "explanation": "Spark originated at UC Berkeley's AMPLab."
+          },
+          {
+            "question": "Which Spark operation type is lazy and does NOT execute a job by itself?",
+            "options": [
+              "Action",
+              "Transformation",
+              "Shuffle write",
+              "Checkpoint"
+            ],
+            "answerIndex": 1,
+            "explanation": "Transformations build lineage lazily; actions trigger execution."
+          },
+          {
+            "question": "Which feature can change join strategy at runtime using observed stats?",
+            "options": [
+              "Adaptive Query Execution",
+              "RDD checkpointing",
+              "Broadcast variable",
+              "GraphX Pregel"
+            ],
+            "answerIndex": 0,
+            "explanation": "AQE can re-optimize joins and partitions during execution."
+          },
+          {
+            "question": "In Structured Streaming, what is essential for fault-tolerant progress recovery?",
+            "options": [
+              "Accumulator variables",
+              "Checkpoint location",
+              "Driver local cache",
+              "UI retention settings"
+            ],
+            "answerIndex": 1,
+            "explanation": "Checkpoint metadata tracks offsets/state so queries can recover correctly."
+          },
+          {
+            "question": "Spark Connect primarily communicates between client and server using:",
+            "options": [
+              "JDBC",
+              "gRPC",
+              "REST-only JSON",
+              "SSH tunnels"
+            ],
+            "answerIndex": 1,
+            "explanation": "Spark Connect is built around a gRPC-based protocol."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the PySpark pipeline to aggregate sales revenue by country and write the top 10 results.",
+            "language": "python",
+            "template": "from pyspark.sql import SparkSession\\nfrom pyspark.sql import functions as F\\n\\nspark = {{blank1}}\\n\\nsales = {{blank2}}\\n\\nresult = (\\n    sales.groupBy(\"country\")\\n    .agg(F.sum(\"amount\").alias(\"revenue\"))\\n    .orderBy(F.col(\"revenue\").desc())\\n    {{blank3}}\\n)\\n\\n{{blank4}}\\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "SparkSession.builder.appName(\"sales-mobile\").getOrCreate()",
+                  "SparkSession.builder.getOrCreate(\"sales-mobile\")",
+                  "SparkSession.newSession()"
+                ],
+                "answer": "SparkSession.builder.appName(\"sales-mobile\").getOrCreate()"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "spark.read.parquet(\"/data/sales\")",
+                  "spark.load.parquet(\"/data/sales\")",
+                  "spark.read.csv(\"/data/sales\")"
+                ],
+                "answer": "spark.read.parquet(\"/data/sales\")"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  ".limit(10)",
+                  ".collect()",
+                  ".cache()"
+                ],
+                "answer": ".limit(10)"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "result.write.mode(\"overwrite\").parquet(\"/out/top_countries\")",
+                  "result.save(\"/out/top_countries\")",
+                  "spark.write.parquet(result, \"/out/top_countries\")"
+                ],
+                "answer": "result.write.mode(\"overwrite\").parquet(\"/out/top_countries\")"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:28:09.771Z"
+    }
+  },
+  {
+    "id": "airflow",
+    "name": "Apache Airflow (airflow)",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "python-based workflow orchestrator for data pipelines",
+    "history": "2014: Started at Airbnb to manage growing ETL dependency complexity. 2015: Open-sourced by Airbnb. 2016: Entered the Apache Incubator. 2019: Graduated to Apache Top-Level Project. 2020: Airflow 2.0 delivered major scheduler/UI improvements and TaskFlow API.",
+    "why": "Airflow helps teams author, schedule, observe, and retry complex data workflows as code (DAGs) instead of fragile cron chains and manual runbooks.",
+    "rel": {
+      "seeAlso": [
+        "apachespark",
+        "dbt",
+        "kubernetes",
+        "celery",
+        "postgresql"
+      ]
+    },
+    "challenges": [
+      "Create a DAG that runs daily, has catchup disabled, and prints a message in one Python task.",
+      "Extend a 3-task pipeline (extract -> transform -> load). Add per-task retries and a 5-minute retry delay.",
+      "Create two DAGs where DAG B triggers from a Dataset updated by DAG A. Validate behavior in the UI.",
+      "Replace a long-polling sensor with a deferrable equivalent and explain worker-slot savings.",
+      "Set up pools, SLA/alerts, and a backfill-safe strategy for late-arriving data."
+    ],
+    "extension": {
+      "tag": "python-based workflow orchestrator for data pipelines",
+      "latestChanges": [
+        "Recent 2.x releases expanded dynamic task mapping for scalable fan-out tasks.",
+        "Deferrable operators + triggerer improved efficiency for long-wait tasks.",
+        "Data-aware scheduling with Datasets enabled event-driven cross-DAG orchestration.",
+        "REST API and UI coverage improved for deployment, monitoring, and automation workflows."
+      ],
+      "problemItSolves": "Airflow helps teams author, schedule, observe, and retry complex data workflows as code (DAGs) instead of fragile cron chains and manual runbooks.",
+      "historyNotes": [
+        "2014: Started at Airbnb to manage growing ETL dependency complexity.",
+        "2015: Open-sourced by Airbnb.",
+        "2016: Entered the Apache Incubator.",
+        "2019: Graduated to Apache Top-Level Project.",
+        "2020: Airflow 2.0 delivered major scheduler/UI improvements and TaskFlow API."
+      ],
+      "relatedTechnologies": [
+        "Apache Spark",
+        "dbt",
+        "Kubernetes",
+        "Celery",
+        "PostgreSQL",
+        "Redis",
+        "Prefect",
+        "Dagster"
+      ],
+      "docs": [
+        {
+          "label": "Official docs (stable)",
+          "url": "https://airflow.apache.org/docs/apache-airflow/stable/"
+        },
+        {
+          "label": "Core concepts: DAGs",
+          "url": "https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html"
+        },
+        {
+          "label": "Providers index",
+          "url": "https://airflow.apache.org/docs/apache-airflow-providers/"
+        },
+        {
+          "label": "Astronomer learning guides",
+          "url": "https://www.astronomer.io/docs/learn/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Build your first DAG",
+          "prompt": "Create a DAG that runs daily, has catchup disabled, and prints a message in one Python task.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Add dependencies and retries",
+          "prompt": "Extend a 3-task pipeline (extract -> transform -> load). Add per-task retries and a 5-minute retry delay.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Use data-aware scheduling",
+          "prompt": "Create two DAGs where DAG B triggers from a Dataset updated by DAG A. Validate behavior in the UI.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Optimize idle wait time",
+          "prompt": "Replace a long-polling sensor with a deferrable equivalent and explain worker-slot savings.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Production hardening",
+          "prompt": "Set up pools, SLA/alerts, and a backfill-safe strategy for late-arriving data.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Use a large item bank; show only a subset each session.",
+          "Require a short rationale for each multiple-choice answer.",
+          "Enforce time windows per section to reduce external lookup.",
+          "For code tasks, use parameterized hidden tests with varied values.",
+          "Flag copy-paste bursts and identical submissions for manual review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Where was Apache Airflow originally created?",
+            "options": [
+              "Netflix",
+              "Airbnb",
+              "Google",
+              "LinkedIn"
+            ],
+            "answerIndex": 1,
+            "explanation": "Airflow began at Airbnb to orchestrate ETL/data workflows."
+          },
+          {
+            "question": "What is the core unit that defines workflow structure in Airflow?",
+            "options": [
+              "Pipeline",
+              "DAG",
+              "Executor",
+              "Dataset"
+            ],
+            "answerIndex": 1,
+            "explanation": "A DAG (Directed Acyclic Graph) defines tasks and dependencies."
+          },
+          {
+            "question": "What does setting catchup=False mainly do?",
+            "options": [
+              "Disables retries",
+              "Prevents scheduler startup",
+              "Skips automatic backfill for past intervals",
+              "Forces manual trigger only"
+            ],
+            "answerIndex": 2,
+            "explanation": "catchup=False avoids creating historical runs for prior schedule intervals."
+          },
+          {
+            "question": "Which component decides what tasks should run next based on DAG state?",
+            "options": [
+              "Webserver",
+              "Scheduler",
+              "Triggerer",
+              "Metadata DB"
+            ],
+            "answerIndex": 1,
+            "explanation": "The scheduler evaluates DAG/task state and queues runnable tasks."
+          },
+          {
+            "question": "Why use deferrable operators?",
+            "options": [
+              "To write DAGs without Python",
+              "To reduce worker slot usage during long waits",
+              "To replace the metadata database",
+              "To force sequential task execution"
+            ],
+            "answerIndex": 1,
+            "explanation": "Deferrable operators hand off waiting to the triggerer, freeing workers."
+          },
+          {
+            "question": "What is the main purpose of Datasets in Airflow?",
+            "options": [
+              "Store task logs",
+              "Define Python package dependencies",
+              "Enable data-driven scheduling across DAGs",
+              "Replace task retries"
+            ],
+            "answerIndex": 2,
+            "explanation": "Datasets let DAGs run when upstream data assets are updated."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the DAG so it runs daily, avoids backfill, and references the callable correctly.",
+            "language": "python",
+            "template": "from airflow import DAG\nfrom airflow.operators.python import PythonOperator\nfrom datetime import datetime\n\ndef extract():\n    return \"ok\"\n\nwith DAG(\n    dag_id=\"mobile_demo\",\n    start_date=datetime(2024, 1, 1),\n    schedule={{blank1}},\n    catchup={{blank2}},\n) as dag:\n    t1 = PythonOperator(\n        task_id=\"extract\",\n        python_callable={{blank3}}\n    )\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "\"@daily\"",
+                  "None",
+                  "\"@once\""
+                ],
+                "answer": "\"@daily\""
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "True",
+                  "False",
+                  "None"
+                ],
+                "answer": "False"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "extract",
+                  "\"extract\"",
+                  "extract()"
+                ],
+                "answer": "extract"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete dynamic task mapping with TaskFlow API.",
+            "language": "python",
+            "template": "from airflow.decorators import dag, task\nfrom datetime import datetime\n\n@dag(start_date=datetime(2024, 1, 1), schedule=None, catchup=False)\ndef map_demo():\n    @task\n    def square(x: int) -> int:\n        return x * x\n\n    square.{{blank4}}(x={{blank5}})\n\ndemo = map_demo()\n",
+            "blanks": [
+              {
+                "id": "blank4",
+                "options": [
+                  "expand",
+                  "partial",
+                  "map"
+                ],
+                "answer": "expand"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "[1, 2, 3]",
+                  "1",
+                  "{\"x\": [1, 2, 3]}"
+                ],
+                "answer": "[1, 2, 3]"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:28:34.745Z"
+    }
+  },
+  {
+    "id": "dbt",
+    "name": "dbt (data build tool)",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "sql-first transformation workflow for analytics",
+    "history": "2016: dbt was open-sourced by Fishtown Analytics. 2019: Fishtown Analytics rebranded to dbt Labs. Early 2020s: dbt helped define the analytics engineering role. Later releases added semantic-layer and mesh-oriented governance patterns.",
+    "why": "dbt turns raw warehouse tables into trusted analytics models using version-controlled SQL. It adds testing, documentation, lineage, and deployment patterns so data teams can ship reliable transformations faster.",
+    "rel": {
+      "seeAlso": [
+        "snowflake",
+        "bigquery",
+        "redshift",
+        "databricks",
+        "apacheairflow"
+      ]
+    },
+    "challenges": [
+      "Create a model that selects from a staging table using ref(), then add not_null and unique tests on its primary key.",
+      "Build an incremental model for daily orders and explain when full-refresh is required.",
+      "Design a CI job that only runs modified nodes using state/defer, and list failure gates before merge.",
+      "Define one business metric, document assumptions, and wire it to two downstream models with tests.",
+      "Given a failing relationship test, identify root cause, fix model SQL, and prove pass in dbt build output."
+    ],
+    "extension": {
+      "tag": "sql-first transformation workflow for analytics",
+      "latestChanges": [
+        "Recent dbt Core releases expanded unit testing and stronger project validation.",
+        "State-aware selection and deferral workflows improved CI speed for large projects.",
+        "dbt Cloud continued semantic layer adoption for reusable metrics across BI tools.",
+        "Python model support matured across major warehouse adapters."
+      ],
+      "problemItSolves": "dbt turns raw warehouse tables into trusted analytics models using version-controlled SQL. It adds testing, documentation, lineage, and deployment patterns so data teams can ship reliable transformations faster.",
+      "historyNotes": [
+        "2016: dbt was open-sourced by Fishtown Analytics.",
+        "2019: Fishtown Analytics rebranded to dbt Labs.",
+        "Early 2020s: dbt helped define the analytics engineering role.",
+        "Later releases added semantic-layer and mesh-oriented governance patterns."
+      ],
+      "relatedTechnologies": [
+        "Snowflake",
+        "BigQuery",
+        "Redshift",
+        "Databricks",
+        "Apache Airflow",
+        "GitHub Actions",
+        "Looker",
+        "Power BI"
+      ],
+      "docs": [
+        {
+          "label": "Official docs",
+          "url": "https://docs.getdbt.com/"
+        },
+        {
+          "label": "dbt Core GitHub",
+          "url": "https://github.com/dbt-labs/dbt-core"
+        },
+        {
+          "label": "Build dbt models",
+          "url": "https://docs.getdbt.com/docs/build/models"
+        },
+        {
+          "label": "dbt command reference",
+          "url": "https://docs.getdbt.com/reference/dbt-commands"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First model + test",
+          "prompt": "Create a model that selects from a staging table using ref(), then add not_null and unique tests on its primary key.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Incremental pattern",
+          "prompt": "Build an incremental model for daily orders and explain when full-refresh is required.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "CI slim build",
+          "prompt": "Design a CI job that only runs modified nodes using state/defer, and list failure gates before merge.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Metric governance mini-project",
+          "prompt": "Define one business metric, document assumptions, and wire it to two downstream models with tests.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Debugging drill",
+          "prompt": "Given a failing relationship test, identify root cause, fix model SQL, and prove pass in dbt build output.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize option order per learner session.",
+          "Require a 1-sentence rationale after each multiple-choice answer.",
+          "Block copy/paste into answer boxes during timed attempts.",
+          "Use question pools so each retake gets different item variants.",
+          "Set short time windows to reduce external lookup dependence.",
+          "Auto-flag identical rationale text across learners."
+        ],
+        "multipleChoice": [
+          {
+            "question": "What was the original company name behind dbt?",
+            "options": [
+              "dbt Labs",
+              "Fishtown Analytics",
+              "Mode Analytics",
+              "Stitch Data"
+            ],
+            "answerIndex": 1,
+            "explanation": "dbt started at Fishtown Analytics, which later rebranded to dbt Labs."
+          },
+          {
+            "question": "dbt primarily handles which ELT layer?",
+            "options": [
+              "Data ingestion from APIs",
+              "Warehouse transformation",
+              "BI dashboard rendering",
+              "Streaming transport"
+            ],
+            "answerIndex": 1,
+            "explanation": "dbt focuses on transforming data already loaded in the warehouse."
+          },
+          {
+            "question": "What is the main purpose of ref() in a dbt model?",
+            "options": [
+              "Encrypt sensitive columns",
+              "Create dependency-aware model references",
+              "Define warehouse credentials",
+              "Generate synthetic test data"
+            ],
+            "answerIndex": 1,
+            "explanation": "ref() resolves object names and builds DAG dependencies between models."
+          },
+          {
+            "question": "Which command is best known for running models plus associated tests in one workflow?",
+            "options": [
+              "dbt deps",
+              "dbt seed",
+              "dbt build",
+              "dbt parse"
+            ],
+            "answerIndex": 2,
+            "explanation": "dbt build executes selected resources, including models and tests, in dependency order."
+          },
+          {
+            "question": "Why are dbt schema tests usually stored in YAML?",
+            "options": [
+              "YAML runs faster than SQL",
+              "It keeps data quality rules versioned with code",
+              "Warehouses require YAML for constraints",
+              "YAML replaces SQL models"
+            ],
+            "answerIndex": 1,
+            "explanation": "YAML-based tests are easy to review in Git and enforce in CI."
+          },
+          {
+            "question": "Which statement best describes analytics engineering history?",
+            "options": [
+              "It emerged as teams needed software-style practices for analytics SQL",
+              "It replaced data warehousing completely",
+              "It removed the need for BI tools",
+              "It began as a NoSQL movement"
+            ],
+            "answerIndex": 0,
+            "explanation": "dbt popularized software engineering practices (tests, CI, modularity) for analytics transformations."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this dbt model so it correctly uses dependency-aware references.",
+            "language": "sql",
+            "template": "{{blank1}} customer_orders as (\n  select\n    o.order_id,\n    o.customer_id,\n    c.customer_name,\n    o.order_total\n  from {{blank2}} o\n  left join {{blank3}} c\n    on o.customer_id = c.customer_id\n)\n\nselect * from customer_orders",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "with",
+                  "select",
+                  "create table"
+                ],
+                "answer": "with"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "{{ ref('stg_orders') }}",
+                  "stg_orders",
+                  "{{ source('app','orders') }}"
+                ],
+                "answer": "{{ ref('stg_orders') }}"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "{{ ref('stg_customers') }}",
+                  "customers",
+                  "{{ source('app','customers') }}"
+                ],
+                "answer": "{{ ref('stg_customers') }}"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete the YAML test config for a primary key column.",
+            "language": "yaml",
+            "template": "models:\n  - name: dim_customers\n    columns:\n      - name: customer_id\n        tests:\n          - {{blank1}}\n          - {{blank2}}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "unique",
+                  "accepted_values",
+                  "relationships"
+                ],
+                "answer": "unique"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "not_null",
+                  "freshness",
+                  "exposure"
+                ],
+                "answer": "not_null"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:29:04.959Z"
+    }
+  },
+  {
+    "id": "prometheus",
+    "name": "Prometheus",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "open-source metrics monitoring and alerting system",
+    "history": "Started at SoundCloud in 2012 to solve microservice monitoring needs. Open-sourced early and built around a pull model plus dimensional labels. Joined CNCF in 2016. Became a CNCF Graduated project in 2018. PromQL, Alertmanager, and exporters drove wide adoption in cloud-native ops.",
+    "why": "Prometheus gives operators a reliable way to collect, store, query, and alert on time-series metrics so they can detect incidents fast, track SLOs, and understand system behavior over time.",
+    "rel": {
+      "seeAlso": [
+        "alertmanager",
+        "grafana",
+        "kubernetes",
+        "opentelemetry",
+        "thanos"
+      ]
+    },
+    "challenges": [
+      "Add one scrape job for node_exporter on localhost:9100 with a 15s interval, then verify target health in /targets.",
+      "Write a PromQL query for per-service 5xx request rate over 5 minutes using a counter metric.",
+      "Create an alert rule that fires when instance CPU usage stays above 80% for 10 minutes, with clear labels and runbook annotation.",
+      "Tune a high-latency alert using rate windows, for clauses, and label grouping to reduce flapping while preserving fast detection.",
+      "Design a small architecture for long-term retention using remote_write and a backend (for example Thanos or Mimir), and explain trade-offs."
+    ],
+    "extension": {
+      "tag": "open-source metrics monitoring and alerting system",
+      "latestChanges": [
+        "2.x releases improved TSDB efficiency and query performance at scale.",
+        "Agent mode enables lightweight scrape + remote_write for edge and short-lived nodes.",
+        "Native histograms and exemplars advanced for better latency/trace correlation (often feature-flagged).",
+        "Kubernetes service discovery and rule tooling continue to improve operational usability."
+      ],
+      "problemItSolves": "Prometheus gives operators a reliable way to collect, store, query, and alert on time-series metrics so they can detect incidents fast, track SLOs, and understand system behavior over time.",
+      "historyNotes": [
+        "Started at SoundCloud in 2012 to solve microservice monitoring needs.",
+        "Open-sourced early and built around a pull model plus dimensional labels.",
+        "Joined CNCF in 2016.",
+        "Became a CNCF Graduated project in 2018.",
+        "PromQL, Alertmanager, and exporters drove wide adoption in cloud-native ops."
+      ],
+      "relatedTechnologies": [
+        "Alertmanager",
+        "Grafana",
+        "Kubernetes",
+        "OpenTelemetry",
+        "Thanos",
+        "Grafana Mimir"
+      ],
+      "docs": [
+        {
+          "label": "Prometheus overview",
+          "url": "https://prometheus.io/docs/introduction/overview/"
+        },
+        {
+          "label": "PromQL basics",
+          "url": "https://prometheus.io/docs/prometheus/latest/querying/basics/"
+        },
+        {
+          "label": "Configuration",
+          "url": "https://prometheus.io/docs/prometheus/latest/configuration/configuration/"
+        },
+        {
+          "label": "Alerting rules",
+          "url": "https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/"
+        },
+        {
+          "label": "CNCF project page",
+          "url": "https://www.cncf.io/projects/prometheus/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First scrape target",
+          "prompt": "Add one scrape job for node_exporter on localhost:9100 with a 15s interval, then verify target health in /targets.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Error-rate query",
+          "prompt": "Write a PromQL query for per-service 5xx request rate over 5 minutes using a counter metric.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Actionable alert",
+          "prompt": "Create an alert rule that fires when instance CPU usage stays above 80% for 10 minutes, with clear labels and runbook annotation.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Reduce noisy alerts",
+          "prompt": "Tune a high-latency alert using rate windows, for clauses, and label grouping to reduce flapping while preserving fast detection.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Scale path design",
+          "prompt": "Design a small architecture for long-term retention using remote_write and a backend (for example Thanos or Mimir), and explain trade-offs.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize metric names, labels, and thresholds per learner instance.",
+          "Require a 1-2 sentence reasoning note for each non-trivial answer.",
+          "Use time-boxed questions and disable backtracking on graded checks.",
+          "Flag paste events and unusually large clipboard inserts in coding tasks.",
+          "Include one short verbal or written follow-up: explain why the query works.",
+          "Use equivalent but different datasets for practice vs. final assessment."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Prometheus was originally created at which company?",
+            "options": [
+              "SoundCloud",
+              "Google",
+              "Netflix",
+              "Red Hat"
+            ],
+            "answerIndex": 0,
+            "explanation": "Prometheus began at SoundCloud in 2012."
+          },
+          {
+            "question": "When did Prometheus become a CNCF Graduated project?",
+            "options": [
+              "2016",
+              "2017",
+              "2018",
+              "2020"
+            ],
+            "answerIndex": 2,
+            "explanation": "It joined CNCF in 2016 and graduated in 2018."
+          },
+          {
+            "question": "What is the core Prometheus data model?",
+            "options": [
+              "Logs grouped by file",
+              "Traces grouped by span",
+              "Labeled time-series metrics",
+              "Relational tables"
+            ],
+            "answerIndex": 2,
+            "explanation": "Prometheus stores numeric samples as time series identified by metric name and labels."
+          },
+          {
+            "question": "What is Alertmanager mainly responsible for?",
+            "options": [
+              "Scraping targets",
+              "Routing, grouping, and silencing alerts",
+              "Storing long-term metrics",
+              "Rendering dashboards"
+            ],
+            "answerIndex": 1,
+            "explanation": "Alertmanager handles alert deduplication, grouping, routing, and silences."
+          },
+          {
+            "question": "Which query best calculates per-second request rate from a counter over 5 minutes?",
+            "options": [
+              "sum(http_requests_total)",
+              "increase(http_requests_total[5m])",
+              "rate(http_requests_total[5m])",
+              "avg_over_time(http_requests_total[5m])"
+            ],
+            "answerIndex": 2,
+            "explanation": "rate(counter[5m]) estimates per-second increase for counter metrics."
+          },
+          {
+            "question": "What is Prometheus's default metrics collection approach?",
+            "options": [
+              "Push from app to server",
+              "Pull from targets",
+              "Batch upload once daily",
+              "Only read from logs"
+            ],
+            "answerIndex": 1,
+            "explanation": "Prometheus primarily scrapes metrics endpoints using a pull model."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete a minimal scrape config for node_exporter.",
+            "language": "yaml",
+            "template": "scrape_configs:\n  - job_name: '{{blank1}}'\n    scrape_interval: {{blank2}}\n    static_configs:\n      - targets: ['{{blank3}}']\n    metrics_path: '{{blank4}}'",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "node",
+                  "node-exporter",
+                  "prometheus"
+                ],
+                "answer": "node"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "15s",
+                  "5m",
+                  "1h"
+                ],
+                "answer": "15s"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "localhost:9100",
+                  "localhost:9090",
+                  "127.0.0.1:3000"
+                ],
+                "answer": "localhost:9100"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "/metrics",
+                  "/api/v1/query",
+                  "/healthz"
+                ],
+                "answer": "/metrics"
+              }
+            ]
+          },
+          {
+            "instructions": "Fill in a PromQL query for per-service request rate over 5 minutes.",
+            "language": "promql",
+            "template": "sum by ({{blank1}}) (rate({{blank2}}[{{blank3}}]))",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "service",
+                  "instance",
+                  "job"
+                ],
+                "answer": "service"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "http_requests_total",
+                  "up",
+                  "process_cpu_seconds_total"
+                ],
+                "answer": "http_requests_total"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "5m",
+                  "30s",
+                  "1h"
+                ],
+                "answer": "5m"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:29:36.658Z"
+    }
+  },
+  {
+    "id": "grafana",
+    "name": "Grafana",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "open-source observability dashboards and alerting platform",
+    "history": "Started in 2013 by Torkel Ödegaard, initially focused on Graphite-style monitoring dashboards. Grafana 1.0 was released in 2014 and adoption grew quickly in DevOps teams. Grafana Labs formed to maintain Grafana and build a larger observability ecosystem. In 2021, Grafana core licensing moved from Apache 2.0 to AGPLv3. Grafana 8 introduced unified alerting to reduce split alert workflows.",
+    "why": "Grafana gives teams one place to query, visualize, and alert on telemetry from many systems, reducing time-to-detect and speeding incident response.",
+    "rel": {
+      "seeAlso": [
+        "prometheus",
+        "loki",
+        "tempo",
+        "mimir",
+        "opentelemetry"
+      ]
+    },
+    "challenges": [
+      "Add a Prometheus data source, create one time-series panel for CPU usage, and save the dashboard in a folder named 'team-observability'.",
+      "Create a dashboard variable for service name, then build 3 panels (latency, error rate, request volume) that all use the variable.",
+      "Create a Grafana managed alert: trigger when 5xx error rate is above 2% for 10m, route it to a contact point, and add runbook link annotations.",
+      "Use provisioning files to auto-load one Prometheus data source and one dashboard on Grafana startup. Verify changes survive container restarts.",
+      "From a high-latency panel, add links so users can jump to related Loki logs and Tempo traces for the same service and time range."
+    ],
+    "extension": {
+      "tag": "open-source observability dashboards and alerting platform",
+      "latestChanges": [
+        "Recent major releases improved dashboard rendering speed and navigation UX.",
+        "AngularJS-based plugins are deprecated; modern plugins are React-first.",
+        "Unified alerting has matured with better routing, silences, and contact points.",
+        "Integrations continue to expand across Prometheus, Loki, Tempo, and OpenTelemetry."
+      ],
+      "problemItSolves": "Grafana gives teams one place to query, visualize, and alert on telemetry from many systems, reducing time-to-detect and speeding incident response.",
+      "historyNotes": [
+        "Started in 2013 by Torkel Ödegaard, initially focused on Graphite-style monitoring dashboards.",
+        "Grafana 1.0 was released in 2014 and adoption grew quickly in DevOps teams.",
+        "Grafana Labs formed to maintain Grafana and build a larger observability ecosystem.",
+        "In 2021, Grafana core licensing moved from Apache 2.0 to AGPLv3.",
+        "Grafana 8 introduced unified alerting to reduce split alert workflows."
+      ],
+      "relatedTechnologies": [
+        "Prometheus",
+        "Loki",
+        "Tempo",
+        "Mimir",
+        "OpenTelemetry",
+        "Kubernetes",
+        "InfluxDB",
+        "Elasticsearch"
+      ],
+      "docs": [
+        {
+          "label": "Grafana documentation (latest)",
+          "url": "https://grafana.com/docs/grafana/latest/"
+        },
+        {
+          "label": "Provisioning",
+          "url": "https://grafana.com/docs/grafana/latest/administration/provisioning/"
+        },
+        {
+          "label": "Alerting",
+          "url": "https://grafana.com/docs/grafana/latest/alerting/"
+        },
+        {
+          "label": "Dashboard templates",
+          "url": "https://grafana.com/grafana/dashboards/"
+        },
+        {
+          "label": "Plugin development",
+          "url": "https://grafana.com/developers/plugin-tools/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First dashboard in 10 minutes",
+          "prompt": "Add a Prometheus data source, create one time-series panel for CPU usage, and save the dashboard in a folder named 'team-observability'.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Reusable multi-service dashboard",
+          "prompt": "Create a dashboard variable for service name, then build 3 panels (latency, error rate, request volume) that all use the variable.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Actionable alerting",
+          "prompt": "Create a Grafana managed alert: trigger when 5xx error rate is above 2% for 10m, route it to a contact point, and add runbook link annotations.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Provisioning-as-code",
+          "prompt": "Use provisioning files to auto-load one Prometheus data source and one dashboard on Grafana startup. Verify changes survive container restarts.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Correlate metrics, logs, and traces",
+          "prompt": "From a high-latency panel, add links so users can jump to related Loki logs and Tempo traces for the same service and time range.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle both question order and option order per attempt.",
+          "Use short per-question timers (45-75 seconds) in graded mode.",
+          "Rotate service names, label keys, and threshold values in coding tasks.",
+          "Require behavior-based validation for code tasks, not text-match only.",
+          "Show full explanations only after submission, not during attempt.",
+          "Flag repeated rapid retries with identical wrong patterns for review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Grafana first gained major popularity as a visualization layer for which backend?",
+            "options": [
+              "Graphite",
+              "Kafka",
+              "MySQL",
+              "RabbitMQ"
+            ],
+            "answerIndex": 0,
+            "explanation": "Early Grafana adoption was strongly tied to Graphite metrics dashboards."
+          },
+          {
+            "question": "What licensing change happened to Grafana core in 2021?",
+            "options": [
+              "MIT to Apache 2.0",
+              "Apache 2.0 to AGPLv3",
+              "GPLv2 to BSD-3-Clause",
+              "No license change"
+            ],
+            "answerIndex": 1,
+            "explanation": "Grafana core moved from Apache 2.0 to AGPLv3 in 2021."
+          },
+          {
+            "question": "Which statement best describes Grafana's primary role?",
+            "options": [
+              "It is a packet capture engine",
+              "It stores all metrics by default",
+              "It queries data sources, visualizes data, and manages alerts",
+              "It replaces Kubernetes scheduling"
+            ],
+            "answerIndex": 2,
+            "explanation": "Grafana is mainly a query/visualization/alerting layer on top of data sources."
+          },
+          {
+            "question": "What is the goal of unified alerting in Grafana?",
+            "options": [
+              "Only allow alerting from logs",
+              "Provide one alerting model and UI across rule types",
+              "Disable external notification channels",
+              "Store metrics in SQLite"
+            ],
+            "answerIndex": 1,
+            "explanation": "Unified alerting consolidates alert rule management and notification flows."
+          },
+          {
+            "question": "Why is React important in modern Grafana plugin development?",
+            "options": [
+              "Grafana now requires AngularJS for all plugins",
+              "React-based plugins are the supported path as AngularJS is phased out",
+              "React is only for mobile apps, not Grafana",
+              "React is required only for dashboards, not plugins"
+            ],
+            "answerIndex": 1,
+            "explanation": "AngularJS support has been deprecated; plugin development is React-first."
+          },
+          {
+            "question": "Which feature best helps reuse one dashboard across many services or clusters?",
+            "options": [
+              "Dashboard variables",
+              "Snapshots",
+              "Playlists",
+              "Annotations"
+            ],
+            "answerIndex": 0,
+            "explanation": "Variables let one dashboard adapt to different labels, services, or environments."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this provisioning file to create a default Prometheus data source on Grafana startup.",
+            "language": "yaml",
+            "template": "apiVersion: 1\ndatasources:\n  - name: Prometheus\n    type: {{blank1}}\n    access: {{blank2}}\n    url: http://prometheus:9090\n    isDefault: {{blank3}}\n    editable: {{blank4}}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "prometheus",
+                  "loki",
+                  "tempo"
+                ],
+                "answer": "prometheus"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "proxy",
+                  "direct",
+                  "server"
+                ],
+                "answer": "proxy"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "true",
+                  "false",
+                  "null"
+                ],
+                "answer": "true"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "true",
+                  "false",
+                  "locked"
+                ],
+                "answer": "true"
+              }
+            ]
+          },
+          {
+            "instructions": "Fill the missing function to compute 5xx error ratio in a Grafana PromQL panel.",
+            "language": "promql",
+            "template": "sum(rate(http_requests_total{status=~\"5..\"}[5m])) /\n{{blank1}}(rate(http_requests_total[5m]))\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "sum",
+                  "avg",
+                  "count"
+                ],
+                "answer": "sum"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:30:14.938Z"
+    }
+  },
+  {
+    "id": "opentelemetry",
+    "name": "OpenTelemetry (opentelemetry)",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "open standard for app telemetry collection",
+    "history": "2019: OpenTracing and OpenCensus merged under CNCF to form OpenTelemetry. Tracing became the earliest stable signal and drove broad early adoption. Metrics support later stabilized across core APIs/SDKs, enabling full-stack observability workflows. The OpenTelemetry Collector became a central deployment pattern for routing and processing telemetry.",
+    "why": "OpenTelemetry standardizes how apps emit traces, metrics, and logs so teams avoid vendor lock-in and duplicated instrumentation work. It gives a common pipeline (SDKs + Collector + OTLP) to observe distributed systems consistently.",
+    "rel": {
+      "seeAlso": [
+        "jaeger",
+        "zipkin",
+        "prometheus",
+        "grafanatempo",
+        "loki"
+      ]
+    },
+    "challenges": [
+      "Auto-instrument a small HTTP service and confirm one request trace appears via a local debug exporter.",
+      "Send OTLP traces from your app to an OpenTelemetry Collector, add batch processing, and export to your tracing backend.",
+      "Add trace_id to logs, create a latency metric dashboard, and document how you jump from alert -> metric -> trace -> logs.",
+      "Implement head-based sampling and compare error investigations before vs after sampling changes.",
+      "Add memory limiter + retry/queue settings in Collector and validate behavior under load spikes."
+    ],
+    "extension": {
+      "tag": "open standard for app telemetry collection",
+      "latestChanges": [
+        "Collector and SDK releases continue frequently with performance and stability improvements.",
+        "OTLP over gRPC/HTTP remains the default vendor-neutral export path.",
+        "Semantic conventions are versioned more explicitly, making upgrades safer.",
+        "Auto-instrumentation support keeps expanding across major runtimes/frameworks.",
+        "Profiling and eBPF-assisted observability are active experimental areas."
+      ],
+      "problemItSolves": "OpenTelemetry standardizes how apps emit traces, metrics, and logs so teams avoid vendor lock-in and duplicated instrumentation work. It gives a common pipeline (SDKs + Collector + OTLP) to observe distributed systems consistently.",
+      "historyNotes": [
+        "2019: OpenTracing and OpenCensus merged under CNCF to form OpenTelemetry.",
+        "Tracing became the earliest stable signal and drove broad early adoption.",
+        "Metrics support later stabilized across core APIs/SDKs, enabling full-stack observability workflows.",
+        "The OpenTelemetry Collector became a central deployment pattern for routing and processing telemetry."
+      ],
+      "relatedTechnologies": [
+        "jaeger",
+        "zipkin",
+        "prometheus",
+        "grafana tempo",
+        "loki",
+        "elastic observability",
+        "w3c trace context",
+        "opentelemetry collector"
+      ],
+      "docs": [
+        {
+          "label": "OpenTelemetry Docs",
+          "url": "https://opentelemetry.io/docs/"
+        },
+        {
+          "label": "Collector Docs",
+          "url": "https://opentelemetry.io/docs/collector/"
+        },
+        {
+          "label": "Language SDKs",
+          "url": "https://opentelemetry.io/docs/languages/"
+        },
+        {
+          "label": "Specifications",
+          "url": "https://opentelemetry.io/docs/specs/"
+        },
+        {
+          "label": "Semantic Conventions",
+          "url": "https://opentelemetry.io/docs/specs/semconv/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First trace locally",
+          "prompt": "Auto-instrument a small HTTP service and confirm one request trace appears via a local debug exporter.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Build a collector pipeline",
+          "prompt": "Send OTLP traces from your app to an OpenTelemetry Collector, add batch processing, and export to your tracing backend.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Correlate signals",
+          "prompt": "Add trace_id to logs, create a latency metric dashboard, and document how you jump from alert -> metric -> trace -> logs.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Sampling strategy test",
+          "prompt": "Implement head-based sampling and compare error investigations before vs after sampling changes.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Production hardening",
+          "prompt": "Add memory limiter + retry/queue settings in Collector and validate behavior under load spikes.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order on every attempt.",
+          "Use per-learner values (service name, endpoint, pipeline names) in dropdown coding tasks.",
+          "Require a brief reason (1 sentence) for each multiple-choice selection before scoring.",
+          "Require runtime proof for code tasks (terminal output or screenshot showing telemetry flow).",
+          "Use time-windowed question pools so retakes pull different conceptual/history items.",
+          "Flag near-identical answer timing/patterns across learners for manual review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which projects merged to create OpenTelemetry?",
+            "options": [
+              "OpenTracing and OpenCensus",
+              "Jaeger and Zipkin",
+              "Prometheus and OpenMetrics",
+              "Fluentd and Logstash"
+            ],
+            "answerIndex": 0,
+            "explanation": "OpenTelemetry started by merging OpenTracing and OpenCensus under CNCF."
+          },
+          {
+            "question": "What is OTLP mainly used for?",
+            "options": [
+              "A vendor-neutral protocol to send telemetry data",
+              "A trace query language",
+              "A metrics storage engine",
+              "A dashboard UI toolkit"
+            ],
+            "answerIndex": 0,
+            "explanation": "OTLP is the OpenTelemetry Protocol for exporting telemetry consistently."
+          },
+          {
+            "question": "What is the primary role of the OpenTelemetry Collector?",
+            "options": [
+              "Write application business logs",
+              "Receive, process, and export telemetry",
+              "Replace all observability backends",
+              "Store telemetry indefinitely"
+            ],
+            "answerIndex": 1,
+            "explanation": "Collector acts as a telemetry pipeline component between sources and backends."
+          },
+          {
+            "question": "Which standard is commonly used for distributed trace context propagation?",
+            "options": [
+              "W3C Trace Context",
+              "OAuth 2.0",
+              "OpenAPI",
+              "Syslog RFC 5424"
+            ],
+            "answerIndex": 0,
+            "explanation": "OpenTelemetry commonly uses W3C Trace Context headers for cross-service propagation."
+          },
+          {
+            "question": "Which signal is best for following one user request across many services?",
+            "options": [
+              "Traces",
+              "Metrics",
+              "Logs",
+              "Profiles"
+            ],
+            "answerIndex": 0,
+            "explanation": "Traces model end-to-end request flow and span relationships."
+          },
+          {
+            "question": "Why do semantic conventions matter in OpenTelemetry?",
+            "options": [
+              "They standardize attribute names across services/tools",
+              "They encrypt telemetry by default",
+              "They remove the need for sampling",
+              "They guarantee zero telemetry cost"
+            ],
+            "answerIndex": 0,
+            "explanation": "Semantic conventions improve consistency, portability, and query reliability."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this Collector config to receive OTLP traces and print them with the debug exporter.",
+            "language": "yaml",
+            "template": "receivers:\n  {{b1}}:\n    protocols:\n      grpc:\n      http:\n\nprocessors:\n  {{b2}}: {}\n\nexporters:\n  {{b3}}:\n    verbosity: detailed\n\nservice:\n  pipelines:\n    traces:\n      receivers: [{{b4}}]\n      processors: [{{b5}}]\n      exporters: [{{b6}}]\n",
+            "blanks": [
+              {
+                "id": "b1",
+                "options": [
+                  "otlp",
+                  "prometheus",
+                  "jaeger"
+                ],
+                "answer": "otlp"
+              },
+              {
+                "id": "b2",
+                "options": [
+                  "batch",
+                  "attributes",
+                  "k8sattributes"
+                ],
+                "answer": "batch"
+              },
+              {
+                "id": "b3",
+                "options": [
+                  "debug",
+                  "otlp",
+                  "prometheus"
+                ],
+                "answer": "debug"
+              },
+              {
+                "id": "b4",
+                "options": [
+                  "otlp",
+                  "prometheus",
+                  "zipkin"
+                ],
+                "answer": "otlp"
+              },
+              {
+                "id": "b5",
+                "options": [
+                  "batch",
+                  "memory_limiter",
+                  "filter"
+                ],
+                "answer": "batch"
+              }
+            ]
+          },
+          {
+            "instructions": "Choose the final exporter reference in the traces pipeline.",
+            "language": "yaml",
+            "template": "service:\n  pipelines:\n    traces:\n      exporters: [{{b6}}]\n",
+            "blanks": [
+              {
+                "id": "b6",
+                "options": [
+                  "debug",
+                  "jaeger",
+                  "kafka"
+                ],
+                "answer": "debug"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:30:56.466Z"
+    }
+  },
+  {
+    "id": "ansible",
+    "name": "Ansible",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "agentless automation for servers and apps",
+    "history": "2012: Created by Michael DeHaan. 2015: Acquired by Red Hat. 2019–2020: Ecosystem split into ansible-core plus collections/community package. Collections became the default distribution model for most modules and plugins.",
+    "why": "Ansible automates provisioning, configuration, deployment, and orchestration across many machines using readable YAML and agentless remote execution.",
+    "rel": {
+      "seeAlso": [
+        "ssh",
+        "winrm",
+        "yaml",
+        "jinja2",
+        "awx"
+      ]
+    },
+    "challenges": [
+      "Create an inventory with a [web] group and 2 hosts. Run an ad-hoc ping only against web. Submit command + output snippet.",
+      "Write a playbook that installs nginx, ensures service is enabled/started, and is idempotent on second run.",
+      "Build a role that deploys an app config from template using variables per environment (dev/prod). Verify with check mode first.",
+      "Update app package across app servers using serial batches and a health-check task after each batch.",
+      "Add ansible-lint and a Molecule scenario to a repo and fail pipeline on lint/test errors."
+    ],
+    "extension": {
+      "tag": "agentless automation for servers and apps",
+      "latestChanges": [
+        "ansible-core continues frequent releases with clearer deprecation guidance.",
+        "Execution Environments are widely used to standardize runtime dependencies.",
+        "Collections-first packaging remains the standard for modules, roles, and plugins.",
+        "CI integration with ansible-lint and Molecule is now common in team workflows."
+      ],
+      "problemItSolves": "Ansible automates provisioning, configuration, deployment, and orchestration across many machines using readable YAML and agentless remote execution.",
+      "historyNotes": [
+        "2012: Created by Michael DeHaan.",
+        "2015: Acquired by Red Hat.",
+        "2019–2020: Ecosystem split into ansible-core plus collections/community package.",
+        "Collections became the default distribution model for most modules and plugins."
+      ],
+      "relatedTechnologies": [
+        "SSH",
+        "WinRM",
+        "YAML",
+        "Jinja2",
+        "AWX",
+        "Red Hat Ansible Automation Platform",
+        "Terraform",
+        "Jenkins"
+      ],
+      "docs": [
+        {
+          "label": "Official Ansible Documentation",
+          "url": "https://docs.ansible.com/"
+        },
+        {
+          "label": "Ansible Core Documentation",
+          "url": "https://docs.ansible.com/ansible-core/"
+        },
+        {
+          "label": "Ansible Galaxy (Collections and Roles)",
+          "url": "https://galaxy.ansible.com/"
+        },
+        {
+          "label": "ansible-lint",
+          "url": "https://ansible.readthedocs.io/projects/lint/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Inventory + Connectivity Check",
+          "prompt": "Create an inventory with a [web] group and 2 hosts. Run an ad-hoc ping only against web. Submit command + output snippet.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Idempotent Web Setup Playbook",
+          "prompt": "Write a playbook that installs nginx, ensures service is enabled/started, and is idempotent on second run.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Reusable Role with Variables",
+          "prompt": "Build a role that deploys an app config from template using variables per environment (dev/prod). Verify with check mode first.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Safe Rolling Update",
+          "prompt": "Update app package across app servers using serial batches and a health-check task after each batch.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "CI Guardrails",
+          "prompt": "Add ansible-lint and a Molecule scenario to a repo and fail pipeline on lint/test errors.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize hostnames, package names, and group names per attempt.",
+          "Require a 1–2 sentence reasoning note for each MCQ answer.",
+          "For code tasks, use hidden tests for idempotence and correct module choice.",
+          "Reject full-copy submissions by requiring one live edit checkpoint.",
+          "Add a short follow-up question on the learner’s own playbook decisions.",
+          "Flag unusually fast perfect attempts for manual review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which design choice most accelerated Ansible adoption?",
+            "options": [
+              "Mandatory agent installation on each managed node",
+              "Agentless execution over SSH/WinRM",
+              "Binary-only proprietary playbooks",
+              "State files stored in a central database"
+            ],
+            "answerIndex": 1,
+            "explanation": "Ansible can manage many systems without installing agents, typically via SSH (or WinRM for Windows)."
+          },
+          {
+            "question": "Who acquired Ansible in 2015?",
+            "options": [
+              "HashiCorp",
+              "Canonical",
+              "Red Hat",
+              "VMware"
+            ],
+            "answerIndex": 2,
+            "explanation": "Red Hat acquired Ansible in 2015."
+          },
+          {
+            "question": "What does an idempotent Ansible task do?",
+            "options": [
+              "Runs only once, ever",
+              "Always reports changed=true",
+              "Can run repeatedly without changing already-correct state",
+              "Skips all failed hosts automatically"
+            ],
+            "answerIndex": 2,
+            "explanation": "Idempotence means repeated runs converge to the same desired state without unnecessary changes."
+          },
+          {
+            "question": "What is the primary purpose of an inventory in Ansible?",
+            "options": [
+              "Store encrypted vault passwords",
+              "Define managed hosts and groups",
+              "Pin Python package versions",
+              "Render Jinja templates"
+            ],
+            "answerIndex": 1,
+            "explanation": "Inventory describes target hosts and host grouping for play execution."
+          },
+          {
+            "question": "What was a major outcome of the ansible-core + collections model?",
+            "options": [
+              "All modules moved into the Linux kernel",
+              "Most modules/plugins are distributed via collections",
+              "YAML was replaced by JSON-only syntax",
+              "SSH support was removed"
+            ],
+            "answerIndex": 1,
+            "explanation": "Collections became the standard packaging/distribution method for content outside core engine pieces."
+          },
+          {
+            "question": "What does --check mode primarily provide?",
+            "options": [
+              "A dry-run style preview of potential changes",
+              "A forced rollback to previous state",
+              "Automatic parallelism tuning",
+              "A full security audit report"
+            ],
+            "answerIndex": 0,
+            "explanation": "Check mode estimates what would change without actually applying most changes."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the playbook so it targets the web group, installs nginx in an idempotent way, and ensures service is enabled and running.",
+            "language": "yaml",
+            "template": "- name: Configure web servers\\n  hosts: {{blank1}}\\n  become: {{blank2}}\\n  tasks:\\n    - name: Install nginx\\n      ansible.builtin.{{blank3}}:\\n        name: nginx\\n        state: {{blank4}}\\n    - name: Ensure nginx is running\\n      ansible.builtin.service:\\n        name: nginx\\n        state: {{blank5}}\\n        enabled: {{blank6}}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "web",
+                  "all",
+                  "localhost"
+                ],
+                "answer": "web"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "true",
+                  "false",
+                  "auto"
+                ],
+                "answer": "true"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "package",
+                  "service",
+                  "command"
+                ],
+                "answer": "package"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "present",
+                  "started",
+                  "reloaded"
+                ],
+                "answer": "present"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "started",
+                  "present",
+                  "stopped"
+                ],
+                "answer": "started"
+              }
+            ]
+          },
+          {
+            "instructions": "Fill in this ad-hoc command to ping only db hosts from inventory.ini.",
+            "language": "bash",
+            "template": "ansible {{blank7}} -i {{blank8}} -m {{blank9}}",
+            "blanks": [
+              {
+                "id": "blank7",
+                "options": [
+                  "db",
+                  "all",
+                  "localhost"
+                ],
+                "answer": "db"
+              },
+              {
+                "id": "blank8",
+                "options": [
+                  "inventory.ini",
+                  "playbook.yml",
+                  "ansible.cfg"
+                ],
+                "answer": "inventory.ini"
+              },
+              {
+                "id": "blank9",
+                "options": [
+                  "ping",
+                  "shell",
+                  "copy"
+                ],
+                "answer": "ping"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-30T22:36:31.224Z"
+    }
   }
 ]
