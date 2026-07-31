@@ -7433,5 +7433,2361 @@
       ],
       "updatedAt": "2026-07-30T22:36:31.224Z"
     }
+  },
+  {
+    "id": "jenkins",
+    "name": "Jenkins",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "open-source ci/cd automation server",
+    "history": "Started as Hudson in 2005. Forked and renamed Jenkins in 2011 after project governance changes. Became one of the most widely adopted CI tools in the DevOps movement. Expanded from freestyle jobs to robust pipeline-as-code and cloud-native agent patterns.",
+    "why": "Jenkins automates repetitive software delivery work—builds, tests, scans, and deployments—so teams can ship faster with consistent, auditable workflows across environments.",
+    "rel": {
+      "seeAlso": [
+        "git",
+        "docker",
+        "kubernetes",
+        "githubactions",
+        "gitlabcicd"
+      ]
+    },
+    "challenges": [
+      "Create a minimal Declarative Pipeline with one Build stage that runs a shell command. Trigger it from a Git push and capture a successful run screenshot/log snippet.",
+      "Add Test and Package stages to a Maven or Node project. Publish test results and archive build artifacts. Fail the pipeline when tests fail.",
+      "Build a multibranch pipeline that runs lint+test on all branches, deploys only from main, and moves repeated logic into a shared library function.",
+      "Run pipeline stages on containerized agents, inject credentials securely, and prove cleanup after each run.",
+      "Implement manual approval, environment promotion, and rollback hooks. Include audit-friendly logs and a post-deploy health check."
+    ],
+    "extension": {
+      "tag": "open-source ci/cd automation server",
+      "latestChanges": [
+        "Maintains two release tracks: weekly and long-term support (LTS).",
+        "Current versions emphasize modern Java runtime support (commonly Java 17+).",
+        "Ongoing security updates target plugin vulnerabilities and credential safety.",
+        "Pipeline-as-code usage keeps growing via Declarative Pipeline and shared libraries."
+      ],
+      "problemItSolves": "Jenkins automates repetitive software delivery work—builds, tests, scans, and deployments—so teams can ship faster with consistent, auditable workflows across environments.",
+      "historyNotes": [
+        "Started as Hudson in 2005.",
+        "Forked and renamed Jenkins in 2011 after project governance changes.",
+        "Became one of the most widely adopted CI tools in the DevOps movement.",
+        "Expanded from freestyle jobs to robust pipeline-as-code and cloud-native agent patterns."
+      ],
+      "relatedTechnologies": [
+        "Git",
+        "Docker",
+        "Kubernetes",
+        "GitHub Actions",
+        "GitLab CI/CD",
+        "Terraform",
+        "Ansible",
+        "SonarQube"
+      ],
+      "docs": [
+        {
+          "label": "Jenkins Documentation",
+          "url": "https://www.jenkins.io/doc/"
+        },
+        {
+          "label": "Pipeline Syntax Reference",
+          "url": "https://www.jenkins.io/doc/book/pipeline/syntax/"
+        },
+        {
+          "label": "Jenkins LTS Changelog",
+          "url": "https://www.jenkins.io/changelog-stable/"
+        },
+        {
+          "label": "Jenkins Plugin Index",
+          "url": "https://plugins.jenkins.io/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First pipeline from a Jenkinsfile",
+          "prompt": "Create a minimal Declarative Pipeline with one Build stage that runs a shell command. Trigger it from a Git push and capture a successful run screenshot/log snippet.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Test reports and artifacts",
+          "prompt": "Add Test and Package stages to a Maven or Node project. Publish test results and archive build artifacts. Fail the pipeline when tests fail.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Branch-aware CI with reusable logic",
+          "prompt": "Build a multibranch pipeline that runs lint+test on all branches, deploys only from main, and moves repeated logic into a shared library function.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Ephemeral agents in containers",
+          "prompt": "Run pipeline stages on containerized agents, inject credentials securely, and prove cleanup after each run.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Production-ready delivery gate",
+          "prompt": "Implement manual approval, environment promotion, and rollback hooks. Include audit-friendly logs and a post-deploy health check.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question order and option order per attempt.",
+          "Use a short timer per question (e.g., 45–60 seconds) to reduce external lookup.",
+          "Require a one-line reason for each multiple-choice answer.",
+          "For code dropdowns, shuffle options and include close distractors.",
+          "Block answer reveal until all items are submitted; show explanations only after grading.",
+          "Use question pools so retakes draw different but equivalent items."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Jenkins originated as a fork of which project?",
+            "options": [
+              "TeamCity",
+              "Bamboo",
+              "Hudson",
+              "CruiseControl"
+            ],
+            "answerIndex": 2,
+            "explanation": "Jenkins was forked from Hudson in 2011."
+          },
+          {
+            "question": "Which file usually stores a Jenkins pipeline in source control?",
+            "options": [
+              "pipeline.yml",
+              "Jenkinsfile",
+              "build.gradle",
+              "ci.config"
+            ],
+            "answerIndex": 1,
+            "explanation": "Pipeline-as-code in Jenkins is typically defined in a Jenkinsfile."
+          },
+          {
+            "question": "What is the main role of a Jenkins agent?",
+            "options": [
+              "Store user credentials",
+              "Run build steps assigned by the controller",
+              "Manage plugin updates",
+              "Host the web UI"
+            ],
+            "answerIndex": 1,
+            "explanation": "Agents execute jobs; the controller schedules and coordinates them."
+          },
+          {
+            "question": "Why do teams use Jenkins shared libraries?",
+            "options": [
+              "To replace all plugins",
+              "To centralize reusable pipeline logic",
+              "To avoid using source control",
+              "To disable scripted pipelines"
+            ],
+            "answerIndex": 1,
+            "explanation": "Shared libraries reduce duplication and standardize CI/CD behavior."
+          },
+          {
+            "question": "What does the LTS release line provide?",
+            "options": [
+              "Daily experimental features only",
+              "Security and stability-focused releases",
+              "A plugin marketplace mirror",
+              "Automatic cloud hosting"
+            ],
+            "answerIndex": 1,
+            "explanation": "LTS prioritizes stability and curated fixes over rapid feature cadence."
+          },
+          {
+            "question": "What is a key security risk in Jenkins environments?",
+            "options": [
+              "Using too many stages",
+              "Unreviewed or outdated plugins",
+              "Too many branch names",
+              "Running on SSD storage"
+            ],
+            "answerIndex": 1,
+            "explanation": "Plugins can introduce vulnerabilities if not reviewed and updated."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Jenkins Declarative Pipeline so it runs build and test commands, then always publishes JUnit XML reports.",
+            "language": "groovy",
+            "template": "pipeline {\n  {{blank1}} any\n  stages {\n    stage('Build') {\n      steps {\n        {{blank2}} 'mvn -B clean package'\n      }\n    }\n    stage('Test') {\n      steps {\n        {{blank2}} 'mvn test'\n      }\n    }\n  }\n  post {\n    {{blank3}} {\n      junit {{blank4}}\n    }\n  }\n}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "agent",
+                  "node",
+                  "executor"
+                ],
+                "answer": "agent"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "sh",
+                  "run",
+                  "exec"
+                ],
+                "answer": "sh"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "always",
+                  "unstable",
+                  "changed"
+                ],
+                "answer": "always"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "'target/surefire-reports/*.xml'",
+                  "'target/*.jar'",
+                  "'reports/output.xml'"
+                ],
+                "answer": "'target/surefire-reports/*.xml'"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:23:42.173Z"
+    }
+  },
+  {
+    "id": "githubactions",
+    "name": "GitHub Actions",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "ci/cd workflow automation in github repos",
+    "history": "2018: GitHub Actions launched in public beta. 2019: GitHub Actions became generally available. Reusable workflows and workflow_call enabled DRY pipeline design. Environments added approval gates and deployment protections for safer releases.",
+    "why": "GitHub Actions automates build, test, release, and deployment steps directly from repository events, reducing manual DevOps work and improving delivery speed, consistency, and auditability.",
+    "rel": {
+      "seeAlso": [
+        "github",
+        "githubpackages",
+        "docker",
+        "kubernetes",
+        "terraform"
+      ]
+    },
+    "challenges": [
+      "Create .github/workflows/ci.yml to run npm ci and npm test on push and pull_request to main.",
+      "Extend CI to test Node 18 and 20 using strategy.matrix, and fail fast on test errors.",
+      "Add a deploy job that runs only on main after tests pass, uses environment protection, and authenticates to cloud via OIDC (no static secrets).",
+      "Extract shared test logic into a reusable workflow and call it from two repositories.",
+      "Harden a workflow with least-privilege permissions, pinned action SHAs, and dependency review checks."
+    ],
+    "extension": {
+      "tag": "ci/cd workflow automation in github repos",
+      "latestChanges": [
+        "Artifact attestations added for stronger build provenance.",
+        "Larger GitHub-hosted runners expanded for heavier CI workloads.",
+        "OIDC-based cloud auth guidance expanded to reduce long-lived secrets.",
+        "Official actions migrated toward newer Node runtimes; older runtimes deprecated."
+      ],
+      "problemItSolves": "GitHub Actions automates build, test, release, and deployment steps directly from repository events, reducing manual DevOps work and improving delivery speed, consistency, and auditability.",
+      "historyNotes": [
+        "2018: GitHub Actions launched in public beta.",
+        "2019: GitHub Actions became generally available.",
+        "Reusable workflows and workflow_call enabled DRY pipeline design.",
+        "Environments added approval gates and deployment protections for safer releases."
+      ],
+      "relatedTechnologies": [
+        "GitHub",
+        "GitHub Packages",
+        "Docker",
+        "Kubernetes",
+        "Terraform",
+        "Jenkins",
+        "CircleCI",
+        "Azure DevOps Pipelines"
+      ],
+      "docs": [
+        {
+          "label": "GitHub Actions documentation",
+          "url": "https://docs.github.com/actions"
+        },
+        {
+          "label": "Workflow syntax reference",
+          "url": "https://docs.github.com/actions/using-workflows/workflow-syntax-for-github-actions"
+        },
+        {
+          "label": "Secure use reference",
+          "url": "https://docs.github.com/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions"
+        },
+        {
+          "label": "GitHub Marketplace (Actions)",
+          "url": "https://github.com/marketplace?type=actions"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Ship your first CI workflow",
+          "prompt": "Create .github/workflows/ci.yml to run npm ci and npm test on push and pull_request to main.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Matrix test strategy",
+          "prompt": "Extend CI to test Node 18 and 20 using strategy.matrix, and fail fast on test errors.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Secure deploy pipeline",
+          "prompt": "Add a deploy job that runs only on main after tests pass, uses environment protection, and authenticates to cloud via OIDC (no static secrets).",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Reusable workflow refactor",
+          "prompt": "Extract shared test logic into a reusable workflow and call it from two repositories.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Policy hardening",
+          "prompt": "Harden a workflow with least-privilege permissions, pinned action SHAs, and dependency review checks.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Use a time-boxed attempt (no pauses after start).",
+          "Randomize MCQ order and option order per learner.",
+          "Require a one-sentence reason for each MCQ answer.",
+          "For code tasks, require a unique workflow name and job id per learner.",
+          "Validate with both automated checks and manual review of commit history.",
+          "Reject submissions that use broad write permissions without justification."
+        ],
+        "multipleChoice": [
+          {
+            "question": "In which year did GitHub Actions become generally available (GA)?",
+            "options": [
+              "2017",
+              "2018",
+              "2019",
+              "2021"
+            ],
+            "answerIndex": 2,
+            "explanation": "Actions entered public beta in 2018 and reached GA in 2019."
+          },
+          {
+            "question": "Where must workflow files live in a repository?",
+            "options": [
+              "/workflows",
+              "/.github/workflows",
+              "/.github/actions",
+              "/ci"
+            ],
+            "answerIndex": 1,
+            "explanation": "GitHub loads workflow YAML files from .github/workflows."
+          },
+          {
+            "question": "What is the main purpose of strategy.matrix in a job?",
+            "options": [
+              "Encrypt repository secrets",
+              "Run the same job across multiple variable combinations",
+              "Trigger workflows from external repos",
+              "Merge pull requests automatically"
+            ],
+            "answerIndex": 1,
+            "explanation": "Matrix expands one job definition into multiple runs (for versions, OS, etc.)."
+          },
+          {
+            "question": "What does OIDC primarily help with in GitHub Actions?",
+            "options": [
+              "Caching dependencies",
+              "Creating issue templates",
+              "Federated cloud auth without long-lived secrets",
+              "Compressing artifacts"
+            ],
+            "answerIndex": 2,
+            "explanation": "OIDC exchanges short-lived identity tokens for cloud credentials."
+          },
+          {
+            "question": "Which statement best distinguishes a workflow from an action?",
+            "options": [
+              "A workflow is one step; an action is many jobs",
+              "A workflow orchestrates jobs; an action is a reusable unit used in steps",
+              "They are identical terms",
+              "An action triggers events; a workflow stores secrets"
+            ],
+            "answerIndex": 1,
+            "explanation": "Workflows define automation flow; actions are reusable building blocks inside steps."
+          },
+          {
+            "question": "Which event should you use to run checks when a PR is opened or updated?",
+            "options": [
+              "issues",
+              "pull_request",
+              "fork",
+              "milestone"
+            ],
+            "answerIndex": 1,
+            "explanation": "pull_request triggers on PR lifecycle activities like open/synchronize."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the workflow so it runs Node.js tests on both push and pull requests to main using a matrix.",
+            "language": "yaml",
+            "template": "name: node-ci\non:\n  {{blank1}}:\n    branches: [main]\n  {{blank2}}:\njobs:\n  test:\n    runs-on: {{blank3}}\n    strategy:\n      matrix:\n        node: [18, 20]\n    steps:\n      - uses: {{blank4}}\n      - uses: {{blank5}}\n        with:\n          node-version: ${{ matrix.node }}\n          cache: npm\n      - run: npm ci\n      - run: npm test",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "push",
+                  "release",
+                  "schedule"
+                ],
+                "answer": "push"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "pull_request",
+                  "workflow_call",
+                  "repository_dispatch"
+                ],
+                "answer": "pull_request"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "ubuntu-latest",
+                  "self-hosted",
+                  "windows-2016"
+                ],
+                "answer": "ubuntu-latest"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "actions/checkout@v4",
+                  "github/checkout@v4",
+                  "actions/source@v1"
+                ],
+                "answer": "actions/checkout@v4"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "actions/setup-node@v4",
+                  "actions/setup-python@v5",
+                  "actions/cache@v4"
+                ],
+                "answer": "actions/setup-node@v4"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:24:12.437Z"
+    }
+  },
+  {
+    "id": "gitlabci",
+    "name": "GitLab CI/CD",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "integrated pipelines for build, test, and deploy",
+    "history": "GitLab CI started as a separate project before being integrated into core GitLab around the GitLab 8.x era. The `.gitlab-ci.yml` file became the central declarative format for defining jobs, stages, and rules. GitLab Runner evolved from early runner tooling into a multi-executor system (shell, Docker, Kubernetes, and more). Capabilities such as Auto DevOps, review apps, child pipelines, and merge trains broadened CI/CD from simple testing to full delivery orchestration.",
+    "why": "GitLab CI/CD automates software delivery inside the same platform where code is planned, reviewed, and merged. It reduces manual release steps, catches defects earlier, standardizes deployments, and adds traceability for audits and incident response.",
+    "rel": {
+      "seeAlso": [
+        "git",
+        "docker",
+        "kubernetes",
+        "helm",
+        "terraform"
+      ]
+    },
+    "challenges": [
+      "Write a `.gitlab-ci.yml` with `build` and `test` stages for a Node.js app. Use `node:20`, run `npm ci`, `npm run build`, and `npm test`.",
+      "Add caching and artifacts so tests can reuse dependencies and build output. Use `needs` to reduce stage wait time.",
+      "Add a `deploy_prod` job that runs only on `main`, requires a manual action, and publishes an environment named `production`.",
+      "Refactor one large pipeline into parent-child pipelines. Keep lint/test in parent and trigger service-specific child pipelines.",
+      "Add a merge-request pipeline rule that runs SAST and fails the pipeline on high-severity findings."
+    ],
+    "extension": {
+      "tag": "integrated pipelines for build, test, and deploy",
+      "latestChanges": [
+        "Reusable CI/CD components and template composition have expanded for standardizing pipelines across projects.",
+        "Policy-driven compliance and security checks are more deeply enforced at merge request and pipeline levels.",
+        "Runner scalability has improved with stronger autoscaling patterns for container and cloud workloads.",
+        "Pipeline UX improvements continue in areas like downstream pipelines, merge trains, and deployment visibility."
+      ],
+      "problemItSolves": "GitLab CI/CD automates software delivery inside the same platform where code is planned, reviewed, and merged. It reduces manual release steps, catches defects earlier, standardizes deployments, and adds traceability for audits and incident response.",
+      "historyNotes": [
+        "GitLab CI started as a separate project before being integrated into core GitLab around the GitLab 8.x era.",
+        "The `.gitlab-ci.yml` file became the central declarative format for defining jobs, stages, and rules.",
+        "GitLab Runner evolved from early runner tooling into a multi-executor system (shell, Docker, Kubernetes, and more).",
+        "Capabilities such as Auto DevOps, review apps, child pipelines, and merge trains broadened CI/CD from simple testing to full delivery orchestration."
+      ],
+      "relatedTechnologies": [
+        "Git",
+        "Docker",
+        "Kubernetes",
+        "Helm",
+        "Terraform",
+        "Argo CD",
+        "Jenkins",
+        "GitHub Actions"
+      ],
+      "docs": [
+        {
+          "label": "GitLab CI/CD docs",
+          "url": "https://docs.gitlab.com/ee/ci/"
+        },
+        {
+          "label": "GitLab CI YAML reference",
+          "url": "https://docs.gitlab.com/ee/ci/yaml/"
+        },
+        {
+          "label": "GitLab Runner docs",
+          "url": "https://docs.gitlab.com/runner/"
+        },
+        {
+          "label": "GitLab releases",
+          "url": "https://about.gitlab.com/releases/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Create a minimal pipeline",
+          "prompt": "Write a `.gitlab-ci.yml` with `build` and `test` stages for a Node.js app. Use `node:20`, run `npm ci`, `npm run build`, and `npm test`.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Speed up feedback",
+          "prompt": "Add caching and artifacts so tests can reuse dependencies and build output. Use `needs` to reduce stage wait time.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Safe production deploy",
+          "prompt": "Add a `deploy_prod` job that runs only on `main`, requires a manual action, and publishes an environment named `production`.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Split complex workflows",
+          "prompt": "Refactor one large pipeline into parent-child pipelines. Keep lint/test in parent and trigger service-specific child pipelines.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Security gate in merge requests",
+          "prompt": "Add a merge-request pipeline rule that runs SAST and fails the pipeline on high-severity findings.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Generate per-learner pipeline variables (branch name, image tag, environment name) so copied answers fail hidden checks.",
+          "Require execution evidence: submission must include a successful pipeline URL and job logs from the learner’s own project.",
+          "Use hidden tests to validate behavior (job order, rules, artifacts, and manual gate), not just YAML text similarity.",
+          "Shuffle multiple-choice options and question order on every attempt.",
+          "Limit rapid retries and enforce a short cool-down after repeated incorrect attempts.",
+          "Add one short rationale prompt after coding tasks; auto-flag answers with mismatch between rationale and pipeline behavior."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which statement best describes GitLab CI/CD’s core advantage?",
+            "options": [
+              "A standalone build server disconnected from source control",
+              "A unified workflow where code, review, pipeline, and deployment are in one platform",
+              "A package registry only",
+              "A monitoring-only tool for production logs"
+            ],
+            "answerIndex": 1,
+            "explanation": "GitLab CI/CD is tightly integrated with repository and merge workflows, reducing context switching and improving traceability."
+          },
+          {
+            "question": "Historically, GitLab CI was first:",
+            "options": [
+              "Built into Linux kernel tooling",
+              "A separate project later integrated into GitLab",
+              "A plugin for Jenkins",
+              "An AWS-native service called CodePipeline"
+            ],
+            "answerIndex": 1,
+            "explanation": "GitLab CI began separately and was later integrated into GitLab’s main product line."
+          },
+          {
+            "question": "In `.gitlab-ci.yml`, what is a `stage`?",
+            "options": [
+              "A single shell command",
+              "A grouping that orders jobs in pipeline phases",
+              "A container registry namespace",
+              "A Git branch protection rule"
+            ],
+            "answerIndex": 1,
+            "explanation": "Stages define high-level pipeline phases (for example build, test, deploy) and job ordering."
+          },
+          {
+            "question": "What component actually executes CI jobs?",
+            "options": [
+              "GitLab Pages",
+              "GitLab Runner",
+              "Gitaly",
+              "Prometheus exporter"
+            ],
+            "answerIndex": 1,
+            "explanation": "Runners pick up jobs from GitLab and execute them with configured executors."
+          },
+          {
+            "question": "What is the main purpose of a manual production job (`when: manual`)?",
+            "options": [
+              "To force every branch to deploy automatically",
+              "To require human approval before sensitive deployment steps",
+              "To skip deployment logs",
+              "To disable environment tracking"
+            ],
+            "answerIndex": 1,
+            "explanation": "Manual jobs introduce controlled approval gates for risky or regulated environments."
+          },
+          {
+            "question": "Why use `needs` in GitLab CI/CD jobs?",
+            "options": [
+              "To encrypt secrets at rest",
+              "To let jobs start earlier by declaring direct dependencies",
+              "To create Git tags automatically",
+              "To replace runners"
+            ],
+            "answerIndex": 1,
+            "explanation": "`needs` creates a DAG-like dependency flow so jobs can run as soon as prerequisites finish."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this `.gitlab-ci.yml` so build runs first, tests depend on build artifacts, and production deploy is manual on `main`.",
+            "language": "yaml",
+            "template": "stages:\n  - build\n  - test\n  - deploy\n\nbuild_app:\n  stage: {{blank1}}\n  image: {{blank2}}\n  script:\n    - npm ci\n    - npm run build\n  artifacts:\n    paths:\n      - dist/\n\ntest_app:\n  stage: {{blank3}}\n  image: node:20\n  needs: [{{blank4}}]\n  script:\n    - npm test\n\ndeploy_prod:\n  stage: deploy\n  script:\n    - ./scripts/deploy.sh\n  environment:\n    name: production\n  when: {{blank5}}\n  only:\n    - {{blank6}}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "build",
+                  "test",
+                  "deploy"
+                ],
+                "answer": "build"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "node:20",
+                  "python:3.12",
+                  "alpine:latest"
+                ],
+                "answer": "node:20"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "deploy",
+                  "test",
+                  "build"
+                ],
+                "answer": "test"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "build_app",
+                  "deploy_prod",
+                  "test_app"
+                ],
+                "answer": "build_app"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "manual",
+                  "always",
+                  "on_failure"
+                ],
+                "answer": "manual"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:24:40.959Z"
+    }
+  },
+  {
+    "id": "helm",
+    "name": "Helm",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "kubernetes package manager for app releases",
+    "history": "2015: Created at Deis to simplify Kubernetes app deployment. 2016: Helm 2 introduced Tiller for in-cluster release management. 2018: Donated to CNCF, accelerating ecosystem adoption. 2019: Helm 3 removed Tiller and redesigned security/release handling. 2020: Helm became a CNCF graduated project.",
+    "why": "Helm turns raw Kubernetes YAML into reusable, versioned charts so teams can install, upgrade, and roll back applications consistently across environments.",
+    "rel": {
+      "seeAlso": [
+        "kubernetes",
+        "kustomize",
+        "argocd",
+        "flux",
+        "ociregistries"
+      ]
+    },
+    "challenges": [
+      "Install an nginx chart into a new namespace called web, then verify release status and list revisions.",
+      "Create dev and prod values files for one chart (replicas, resources, service type). Deploy both with clear release names.",
+      "Upgrade a release with a bad image tag, detect failure quickly, and roll back to the previous healthy revision.",
+      "Package a local chart, push it to an OCI registry, then install it from OCI in a clean namespace.",
+      "Add a chart dependency, lock versions, run dependency update, and explain how reproducibility is preserved."
+    ],
+    "extension": {
+      "tag": "kubernetes package manager for app releases",
+      "latestChanges": [
+        "OCI registry workflows are now a mainstream way to publish and pull charts.",
+        "Helm 3 remains the active major line, using caller RBAC instead of Tiller.",
+        "Chart value validation with values.schema.json is widely used in CI pipelines.",
+        "GitOps tools increasingly consume Helm charts directly for declarative delivery."
+      ],
+      "problemItSolves": "Helm turns raw Kubernetes YAML into reusable, versioned charts so teams can install, upgrade, and roll back applications consistently across environments.",
+      "historyNotes": [
+        "2015: Created at Deis to simplify Kubernetes app deployment.",
+        "2016: Helm 2 introduced Tiller for in-cluster release management.",
+        "2018: Donated to CNCF, accelerating ecosystem adoption.",
+        "2019: Helm 3 removed Tiller and redesigned security/release handling.",
+        "2020: Helm became a CNCF graduated project."
+      ],
+      "relatedTechnologies": [
+        "Kubernetes",
+        "Kustomize",
+        "Argo CD",
+        "Flux",
+        "OCI registries",
+        "ChartMuseum"
+      ],
+      "docs": [
+        {
+          "label": "Helm Documentation",
+          "url": "https://helm.sh/docs/"
+        },
+        {
+          "label": "Helm GitHub Repository",
+          "url": "https://github.com/helm/helm"
+        },
+        {
+          "label": "Chart Best Practices",
+          "url": "https://helm.sh/docs/chart_best_practices/"
+        },
+        {
+          "label": "Helm Commands Reference",
+          "url": "https://helm.sh/docs/helm/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First release install",
+          "prompt": "Install an nginx chart into a new namespace called web, then verify release status and list revisions.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Parameterize by environment",
+          "prompt": "Create dev and prod values files for one chart (replicas, resources, service type). Deploy both with clear release names.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Safe upgrade and rollback",
+          "prompt": "Upgrade a release with a bad image tag, detect failure quickly, and roll back to the previous healthy revision.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Package and publish",
+          "prompt": "Package a local chart, push it to an OCI registry, then install it from OCI in a clean namespace.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Dependency control",
+          "prompt": "Add a chart dependency, lock versions, run dependency update, and explain how reproducibility is preserved.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize release names, namespaces, and value keys per learner attempt.",
+          "Shuffle multiple-choice option order on every session.",
+          "Require a one-sentence rationale before finalizing each MC answer.",
+          "Use short per-question timers to reduce answer searching.",
+          "Grade code challenges with hidden checks (command intent + required flags).",
+          "Issue a new randomized dataset for retakes; do not reuse prior prompts."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which major Helm version removed Tiller?",
+            "options": [
+              "Helm 1",
+              "Helm 2",
+              "Helm 3",
+              "Helm 4"
+            ],
+            "answerIndex": 2,
+            "explanation": "Helm 3 removed Tiller and relies on Kubernetes API access of the calling user/service account."
+          },
+          {
+            "question": "In Helm, what is a chart?",
+            "options": [
+              "A Kubernetes node image",
+              "A packaged application definition with templates and metadata",
+              "A running pod replica set",
+              "A kubectl plugin"
+            ],
+            "answerIndex": 1,
+            "explanation": "A chart bundles templates, default values, and metadata for deployable Kubernetes apps."
+          },
+          {
+            "question": "Why is `helm upgrade --install` common in CI/CD?",
+            "options": [
+              "It creates a cluster if missing",
+              "It is idempotent for first deploy and later updates",
+              "It bypasses RBAC checks",
+              "It only works with local charts"
+            ],
+            "answerIndex": 1,
+            "explanation": "`upgrade --install` handles both initial install and subsequent upgrades in one command."
+          },
+          {
+            "question": "Which input has the highest value precedence in Helm?",
+            "options": [
+              "Chart values.yaml",
+              "Parent chart values",
+              "A file passed with -f",
+              "A key passed with --set"
+            ],
+            "answerIndex": 3,
+            "explanation": "`--set` overrides values from files and defaults when keys overlap."
+          },
+          {
+            "question": "By default, where does Helm 3 store release metadata in-cluster?",
+            "options": [
+              "Directly in etcd without Kubernetes objects",
+              "Secrets in the target namespace",
+              "Only on the operator laptop",
+              "Container registry tags"
+            ],
+            "answerIndex": 1,
+            "explanation": "Helm 3 uses Kubernetes Secrets by default for release state storage."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the command for an idempotent deployment: use Helm to deploy nginx from OCI into namespace web, creating the namespace if needed, and set replicaCount to 3.",
+            "language": "bash",
+            "template": "helm {{blank1}} {{blank2}} oci://registry-1.docker.io/bitnamicharts/nginx\n  --namespace {{blank3}} --create-namespace\n  --{{blank4}}\n  --set replicaCount={{blank5}}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "install",
+                  "upgrade",
+                  "template"
+                ],
+                "answer": "upgrade"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "web",
+                  "nginx",
+                  "prod-release"
+                ],
+                "answer": "web"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "web",
+                  "kube-system",
+                  "default"
+                ],
+                "answer": "web"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "debug",
+                  "install",
+                  "atomic"
+                ],
+                "answer": "install"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "1",
+                  "2",
+                  "3"
+                ],
+                "answer": "3"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:25:12.510Z"
+    }
+  },
+  {
+    "id": "istio",
+    "name": "Istio",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "a kubernetes service mesh for traffic and security",
+    "history": "2017: Istio was announced by Google, IBM, and Lyft. Istio adopted Envoy as its core data plane proxy technology. The project moved from older Mixer-based policy/telemetry patterns to lighter proxy-native approaches. Recent evolution emphasizes ambient mesh to reduce sidecar operational overhead.",
+    "why": "Istio gives platform teams a consistent way to secure, route, and observe service-to-service traffic without rewriting each app. It centralizes mTLS, retries, timeouts, canary routing, and traffic policy so microservices stay simpler and safer.",
+    "rel": {
+      "seeAlso": [
+        "kubernetes",
+        "envoyproxy",
+        "gatewayapi",
+        "linkerd",
+        "consul"
+      ]
+    },
+    "challenges": [
+      "Install Istio on a local or test cluster, deploy the Bookinfo sample, and confirm proxies are connected with `istioctl proxy-status`.",
+      "Apply PeerAuthentication in STRICT mode for one namespace, then prove plaintext traffic fails while mTLS traffic succeeds.",
+      "Create DestinationRule subsets and a VirtualService for a 90/10 split, then shift traffic to 50/50 and finally 0/100 based on observed error rate and latency.",
+      "Route the same workload in sidecar mode and ambient mode, measure resource usage and latency, and summarize trade-offs for production.",
+      "Implement AuthorizationPolicy to allow only one caller service to an API, then validate denied and allowed requests with logs and metrics."
+    ],
+    "extension": {
+      "tag": "a kubernetes service mesh for traffic and security",
+      "latestChanges": [
+        "Ambient mesh (ztunnel + waypoint proxies) matured, enabling sidecarless adoption paths for many services.",
+        "Gateway API support expanded, improving Kubernetes-native ingress and traffic policy workflows.",
+        "Operational tooling improved for upgrades, multi-cluster setups, and day-2 mesh management.",
+        "Telemetry integrations continued to align with OpenTelemetry-based observability stacks."
+      ],
+      "problemItSolves": "Istio gives platform teams a consistent way to secure, route, and observe service-to-service traffic without rewriting each app. It centralizes mTLS, retries, timeouts, canary routing, and traffic policy so microservices stay simpler and safer.",
+      "historyNotes": [
+        "2017: Istio was announced by Google, IBM, and Lyft.",
+        "Istio adopted Envoy as its core data plane proxy technology.",
+        "The project moved from older Mixer-based policy/telemetry patterns to lighter proxy-native approaches.",
+        "Recent evolution emphasizes ambient mesh to reduce sidecar operational overhead."
+      ],
+      "relatedTechnologies": [
+        "Kubernetes",
+        "Envoy Proxy",
+        "Gateway API",
+        "Linkerd",
+        "Consul",
+        "OpenTelemetry",
+        "Prometheus",
+        "Jaeger"
+      ],
+      "docs": [
+        {
+          "label": "Istio docs",
+          "url": "https://istio.io/latest/docs/"
+        },
+        {
+          "label": "Ambient mesh overview",
+          "url": "https://istio.io/latest/docs/ambient/"
+        },
+        {
+          "label": "Traffic management tasks",
+          "url": "https://istio.io/latest/docs/tasks/traffic-management/"
+        },
+        {
+          "label": "Istio GitHub repository",
+          "url": "https://github.com/istio/istio"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Install and verify mesh health",
+          "prompt": "Install Istio on a local or test cluster, deploy the Bookinfo sample, and confirm proxies are connected with `istioctl proxy-status`.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 2,
+          "title": "Enable strict service-to-service security",
+          "prompt": "Apply PeerAuthentication in STRICT mode for one namespace, then prove plaintext traffic fails while mTLS traffic succeeds.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 3,
+          "title": "Run a safe canary release",
+          "prompt": "Create DestinationRule subsets and a VirtualService for a 90/10 split, then shift traffic to 50/50 and finally 0/100 based on observed error rate and latency.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 4,
+          "title": "Compare sidecar vs ambient path",
+          "prompt": "Route the same workload in sidecar mode and ambient mode, measure resource usage and latency, and summarize trade-offs for production.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 5,
+          "title": "Policy hardening drill",
+          "prompt": "Implement AuthorizationPolicy to allow only one caller service to an API, then validate denied and allowed requests with logs and metrics.",
+          "format": "multiple-choice"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Show one item per screen; lock previous answers after submission.",
+          "Require a 1-2 sentence reason for each multiple-choice answer.",
+          "For dropdown coding, randomize subset names/weights while preserving valid constraints.",
+          "Grade YAML/command semantics server-side, not exact text position alone.",
+          "Use short timers per item and auto-submit on timeout."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who originally announced Istio in 2017?",
+            "options": [
+              "Google, IBM, and Lyft",
+              "AWS and HashiCorp",
+              "Microsoft and Red Hat",
+              "CNCF and Docker"
+            ],
+            "answerIndex": 0,
+            "explanation": "Istio was launched publicly through a collaboration led by Google, IBM, and Lyft."
+          },
+          {
+            "question": "What is the main purpose of a service mesh like Istio?",
+            "options": [
+              "Manage pod scheduling",
+              "Standardize service-to-service traffic, security, and observability",
+              "Replace Kubernetes API server",
+              "Build container images"
+            ],
+            "answerIndex": 1,
+            "explanation": "A service mesh focuses on runtime communication concerns across services."
+          },
+          {
+            "question": "In Istio architecture, which part is the data plane?",
+            "options": [
+              "Envoy proxies",
+              "istiod only",
+              "Kubernetes etcd",
+              "CoreDNS"
+            ],
+            "answerIndex": 0,
+            "explanation": "Envoy proxies process live request traffic; istiod is the control plane."
+          },
+          {
+            "question": "Which Istio resource defines subsets such as v1 and v2 for a service?",
+            "options": [
+              "VirtualService",
+              "Gateway",
+              "DestinationRule",
+              "PeerAuthentication"
+            ],
+            "answerIndex": 2,
+            "explanation": "DestinationRule defines subsets and traffic policies for a destination."
+          },
+          {
+            "question": "What does STRICT mode in PeerAuthentication enforce?",
+            "options": [
+              "Only HTTP/1.1",
+              "Only JWT-based user auth",
+              "Mutual TLS for in-mesh traffic",
+              "Cross-cluster replication"
+            ],
+            "answerIndex": 2,
+            "explanation": "STRICT rejects plaintext and requires mTLS between workloads in scope."
+          },
+          {
+            "question": "What is a key operational advantage of ambient mesh?",
+            "options": [
+              "It removes Kubernetes dependency",
+              "It can reduce sidecar overhead for many workloads",
+              "It requires no control plane",
+              "It disables mTLS by default"
+            ],
+            "answerIndex": 1,
+            "explanation": "Ambient mode can reduce per-pod sidecar cost while retaining mesh capabilities."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Istio manifests to enforce mesh mTLS and send 90% traffic to v1 and 10% to v2.",
+            "language": "yaml",
+            "template": "apiVersion: networking.istio.io/v1beta1\nkind: DestinationRule\nmetadata:\n  name: reviews\nspec:\n  host: reviews\n  trafficPolicy:\n    tls:\n      mode: {{blank1}}\n  subsets:\n  - name: v1\n    labels:\n      version: v1\n  - name: v2\n    labels:\n      version: v2\n---\napiVersion: networking.istio.io/v1beta1\nkind: VirtualService\nmetadata:\n  name: reviews\nspec:\n  hosts:\n  - reviews\n  http:\n  - route:\n    - destination:\n        host: reviews\n        subset: {{blank2}}\n      weight: {{blank3}}\n    - destination:\n        host: reviews\n        subset: {{blank4}}\n      weight: {{blank5}}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "DISABLE",
+                  "SIMPLE",
+                  "ISTIO_MUTUAL"
+                ],
+                "answer": "ISTIO_MUTUAL"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "v1",
+                  "v2",
+                  "stable"
+                ],
+                "answer": "v1"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "10",
+                  "50",
+                  "90"
+                ],
+                "answer": "90"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "v1",
+                  "v2",
+                  "canary"
+                ],
+                "answer": "v2"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "10",
+                  "50",
+                  "90"
+                ],
+                "answer": "10"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:25:43.176Z"
+    }
+  },
+  {
+    "id": "nginx",
+    "name": "NGINX (nginx)",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "event-driven reverse proxy and web server",
+    "history": "Created by Igor Sysoev to solve C10k-style concurrency limits. First public release was in 2004. NGINX, Inc. was founded in 2011 to support commercial adoption. F5 acquired NGINX in 2019.",
+    "why": "NGINX serves static files quickly and handles high concurrency with low memory use. It is widely used as a reverse proxy to route requests to app servers, terminate TLS, load balance traffic, cache responses, and enforce limits.",
+    "rel": {
+      "seeAlso": [
+        "apachehttpserver",
+        "haproxy",
+        "caddy",
+        "varnishcache",
+        "openresty"
+      ]
+    },
+    "challenges": [
+      "Write a server block that listens on port 80 and serves /var/www/site with index.html as the default file. Validate with nginx -t, then reload safely.",
+      "Route /api/ traffic to a local Node service on port 3000. Preserve Host and client IP headers. Confirm behavior with curl and access logs.",
+      "Create an upstream with two app servers, proxy / to it, enable rate limiting for bursts, and add security headers for common browser protections.",
+      "Model blue/green upstream pools and switch traffic with minimal downtime using a single config change plus reload.",
+      "Configure short-lived proxy cache for GET responses and bypass cache on Authorization headers. Measure hit ratio from logs."
+    ],
+    "extension": {
+      "tag": "event-driven reverse proxy and web server",
+      "latestChanges": [
+        "Mainline 1.25 added early HTTP/3 (QUIC) support.",
+        "Stable and mainline branches continue regular security and bug-fix releases.",
+        "Recent updates improved TLS behavior, HTTP handling, and module compatibility."
+      ],
+      "problemItSolves": "NGINX serves static files quickly and handles high concurrency with low memory use. It is widely used as a reverse proxy to route requests to app servers, terminate TLS, load balance traffic, cache responses, and enforce limits.",
+      "historyNotes": [
+        "Created by Igor Sysoev to solve C10k-style concurrency limits.",
+        "First public release was in 2004.",
+        "NGINX, Inc. was founded in 2011 to support commercial adoption.",
+        "F5 acquired NGINX in 2019."
+      ],
+      "relatedTechnologies": [
+        "Apache HTTP Server",
+        "HAProxy",
+        "Caddy",
+        "Varnish Cache",
+        "OpenResty",
+        "Kubernetes Ingress"
+      ],
+      "docs": [
+        {
+          "label": "Official NGINX documentation",
+          "url": "https://nginx.org/en/docs/"
+        },
+        {
+          "label": "Beginner’s guide",
+          "url": "https://nginx.org/en/docs/beginners_guide.html"
+        },
+        {
+          "label": "NGINX reverse proxy admin guide",
+          "url": "https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/"
+        },
+        {
+          "label": "HTTP load balancing guide",
+          "url": "https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Serve a static site",
+          "prompt": "Write a server block that listens on port 80 and serves /var/www/site with index.html as the default file. Validate with nginx -t, then reload safely.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Proxy an API service",
+          "prompt": "Route /api/ traffic to a local Node service on port 3000. Preserve Host and client IP headers. Confirm behavior with curl and access logs.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Add load balancing and basic hardening",
+          "prompt": "Create an upstream with two app servers, proxy / to it, enable rate limiting for bursts, and add security headers for common browser protections.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Blue-green cutover drill",
+          "prompt": "Model blue/green upstream pools and switch traffic with minimal downtime using a single config change plus reload.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Cache strategy tuning",
+          "prompt": "Configure short-lived proxy cache for GET responses and bypass cache on Authorization headers. Measure hit ratio from logs.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question order and option order on every attempt.",
+          "Apply short timers per question to reduce external lookup time.",
+          "Require a brief rationale for each MCQ answer; mismatched rationale triggers review.",
+          "Randomize hostnames/ports in code challenges so copied answer keys fail.",
+          "Block paste in rationale fields and flag unrealistically fast completion patterns.",
+          "Passing requires both conceptual score (>=80%) and full correctness on code dropdown."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who originally created NGINX?",
+            "options": [
+              "Igor Sysoev",
+              "Rasmus Lerdorf",
+              "Brendan Eich",
+              "Linus Torvalds"
+            ],
+            "answerIndex": 0,
+            "explanation": "Igor Sysoev built NGINX to handle many concurrent connections efficiently."
+          },
+          {
+            "question": "When was NGINX first publicly released?",
+            "options": [
+              "1999",
+              "2004",
+              "2011",
+              "2019"
+            ],
+            "answerIndex": 1,
+            "explanation": "NGINX first appeared publicly in 2004."
+          },
+          {
+            "question": "Which architecture best describes classic NGINX request handling?",
+            "options": [
+              "One OS thread per request",
+              "One process per connection with blocking I/O",
+              "Event-driven, non-blocking worker model",
+              "JVM actor-based runtime"
+            ],
+            "answerIndex": 2,
+            "explanation": "NGINX uses an event-driven, non-blocking model to scale connection handling."
+          },
+          {
+            "question": "What is the primary role of NGINX as a reverse proxy?",
+            "options": [
+              "Compiling backend code",
+              "Forwarding client requests to upstream services",
+              "Generating SSL certificates automatically",
+              "Replacing DNS servers"
+            ],
+            "answerIndex": 1,
+            "explanation": "As a reverse proxy, NGINX receives client traffic and forwards it to backend servers."
+          },
+          {
+            "question": "How do stable and mainline NGINX branches differ?",
+            "options": [
+              "Stable gets newest features first",
+              "Mainline is frozen and stable changes daily",
+              "Stable is more conservative; mainline gets newer features sooner",
+              "They are identical release tracks"
+            ],
+            "answerIndex": 2,
+            "explanation": "Mainline receives newer features and changes earlier, while stable is more conservative."
+          },
+          {
+            "question": "Why is NGINX often fast for static file delivery?",
+            "options": [
+              "It transpiles files before sending",
+              "It avoids network sockets entirely",
+              "It combines efficient event loops with optimized file serving",
+              "It runs only in kernel mode"
+            ],
+            "answerIndex": 2,
+            "explanation": "NGINX is optimized for I/O efficiency and static serving patterns."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Tap each blank to complete a minimal reverse-proxy + load-balancing config for an API service.",
+            "language": "nginx",
+            "template": "upstream api_upstream {\n    server {{blank1}};\n    server {{blank2}};\n}\n\nserver {\n    listen {{blank3}};\n    server_name {{blank4}};\n\n    location /api/ {\n        proxy_pass {{blank5}};\n        proxy_set_header Host {{blank6}};\n        proxy_set_header X-Forwarded-For {{blank7}};\n    }\n}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "127.0.0.1:3000",
+                  "http://127.0.0.1:3000",
+                  "/var/www/html",
+                  "localhost"
+                ],
+                "answer": "127.0.0.1:3000"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "127.0.0.1:3001",
+                  "3001",
+                  "https://127.0.0.1:3001",
+                  "api.example.com"
+                ],
+                "answer": "127.0.0.1:3001"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "80",
+                  "443 ssl",
+                  "3000",
+                  "8080 default_server"
+                ],
+                "answer": "80"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "api.example.com",
+                  "http://api.example.com",
+                  "_",
+                  "/api"
+                ],
+                "answer": "api.example.com"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "http://api_upstream",
+                  "api_upstream",
+                  "/api",
+                  "$host"
+                ],
+                "answer": "http://api_upstream"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:26:17.111Z"
+    }
+  },
+  {
+    "id": "apachehttpd",
+    "name": "Apache HTTP Server (apachehttpd)",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "open-source web server for http and https delivery",
+    "history": "1995: Began as a community patch set around NCSA HTTPd (often described as 'a patchy server'). 1999: Apache Software Foundation (ASF) was formed to steward projects including httpd. 2002: Apache 2.0 introduced major architectural changes, including MPM support. 2012: Apache 2.4 became the long-term mainstream branch with improved performance and authz model. Today: Apache remains a core web infrastructure component for hosting, proxying, and legacy modernization.",
+    "why": "Apache HTTP Server delivers websites and APIs over HTTP/HTTPS with flexible routing, virtual hosting, access control, logging, and module-based extensibility. It helps backend teams host multiple apps, terminate TLS, and reverse-proxy traffic from one configurable edge server.",
+    "rel": {
+      "seeAlso": [
+        "nginx",
+        "haproxy",
+        "caddy",
+        "tomcat",
+        "phpfpm"
+      ]
+    },
+    "challenges": [
+      "Create two name-based VirtualHost blocks: one for site-a.example and one for site-b.example. Each should serve a different DocumentRoot and write separate access logs.",
+      "Configure Apache to terminate TLS on :443 and proxy requests to a local app on port 3000. Preserve the original Host header and redirect all :80 traffic to HTTPS.",
+      "Protect /admin with authentication and allow only a specific CIDR range. Return 403 for unauthorized users and verify rule order with test cases.",
+      "Compare prefork, worker, and event MPM for a mixed static + proxied workload. Choose one, justify it, and propose baseline settings for KeepAlive and MaxRequestWorkers.",
+      "Design a safe rollout flow: config lint, syntax test, canary VirtualHost, graceful reload, rollback trigger, and post-deploy log checks."
+    ],
+    "extension": {
+      "tag": "open-source web server for http and https delivery",
+      "latestChanges": [
+        "Active 2.4.x branch continues to receive security and bug-fix releases.",
+        "Ongoing hardening and compatibility work for modern TLS/OpenSSL stacks.",
+        "Steady stability updates across core modules like proxying, HTTP/2, and auth."
+      ],
+      "problemItSolves": "Apache HTTP Server delivers websites and APIs over HTTP/HTTPS with flexible routing, virtual hosting, access control, logging, and module-based extensibility. It helps backend teams host multiple apps, terminate TLS, and reverse-proxy traffic from one configurable edge server.",
+      "historyNotes": [
+        "1995: Began as a community patch set around NCSA HTTPd (often described as 'a patchy server').",
+        "1999: Apache Software Foundation (ASF) was formed to steward projects including httpd.",
+        "2002: Apache 2.0 introduced major architectural changes, including MPM support.",
+        "2012: Apache 2.4 became the long-term mainstream branch with improved performance and authz model.",
+        "Today: Apache remains a core web infrastructure component for hosting, proxying, and legacy modernization."
+      ],
+      "relatedTechnologies": [
+        "Nginx",
+        "HAProxy",
+        "Caddy",
+        "Tomcat",
+        "PHP-FPM",
+        "OpenSSL",
+        "Let's Encrypt",
+        "mod_wsgi"
+      ],
+      "docs": [
+        {
+          "label": "Official Apache HTTP Server 2.4 Docs",
+          "url": "https://httpd.apache.org/docs/2.4/"
+        },
+        {
+          "label": "Module Index (2.4)",
+          "url": "https://httpd.apache.org/docs/2.4/mod/"
+        },
+        {
+          "label": "Virtual Hosts Guide",
+          "url": "https://httpd.apache.org/docs/2.4/vhosts/"
+        },
+        {
+          "label": "Authentication and Authorization How-To",
+          "url": "https://httpd.apache.org/docs/2.4/howto/auth.html"
+        },
+        {
+          "label": ".htaccess Tutorial",
+          "url": "https://httpd.apache.org/docs/2.4/howto/htaccess.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Host two domains on one server",
+          "prompt": "Create two name-based VirtualHost blocks: one for site-a.example and one for site-b.example. Each should serve a different DocumentRoot and write separate access logs.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 2,
+          "title": "Reverse proxy a backend app",
+          "prompt": "Configure Apache to terminate TLS on :443 and proxy requests to a local app on port 3000. Preserve the original Host header and redirect all :80 traffic to HTTPS.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 3,
+          "title": "Harden an admin route",
+          "prompt": "Protect /admin with authentication and allow only a specific CIDR range. Return 403 for unauthorized users and verify rule order with test cases.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 4,
+          "title": "Tune concurrency model",
+          "prompt": "Compare prefork, worker, and event MPM for a mixed static + proxied workload. Choose one, justify it, and propose baseline settings for KeepAlive and MaxRequestWorkers.",
+          "format": "multiple-choice"
+        },
+        {
+          "level": 5,
+          "title": "Zero-downtime config deploy",
+          "prompt": "Design a safe rollout flow: config lint, syntax test, canary VirtualHost, graceful reload, rollback trigger, and post-deploy log checks.",
+          "format": "multiple-choice"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Each attempt uses randomized domains, ports, and backend targets; answers must match that exact scenario.",
+          "Question and option order is shuffled per attempt to reduce answer sharing.",
+          "Code completion is graded by both selected options and resulting config validity/behavior tests.",
+          "Require short justification text on conceptual questions; mismatched reasoning flags manual review.",
+          "Limit rapid retries with cooldowns and variant regeneration after each failed attempt.",
+          "Track suspicious patterns (identical timing/answers across accounts) for proctor review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Apache HTTP Server originally grew from community patches to which earlier web server?",
+            "options": [
+              "NCSA HTTPd",
+              "Microsoft IIS",
+              "lighttpd",
+              "Caddy"
+            ],
+            "answerIndex": 0,
+            "explanation": "The early Apache project evolved from patching and extending NCSA HTTPd in the mid-1990s."
+          },
+          {
+            "question": "What is the main purpose of Apache MPMs (Multi-Processing Modules)?",
+            "options": [
+              "To define URL rewrite rules",
+              "To control process/thread concurrency behavior",
+              "To store SSL certificates",
+              "To generate HTML templates"
+            ],
+            "answerIndex": 1,
+            "explanation": "MPMs determine how Apache handles connections using processes and/or threads."
+          },
+          {
+            "question": "Which directive starts a host-specific configuration block based on hostname/IP:port?",
+            "options": [
+              "Directory",
+              "Location",
+              "VirtualHost",
+              "IfModule"
+            ],
+            "answerIndex": 2,
+            "explanation": "VirtualHost blocks are used for host-based routing and per-site settings."
+          },
+          {
+            "question": "What is a common use of mod_proxy in backend architectures?",
+            "options": [
+              "Reverse proxying requests to upstream services",
+              "Compiling Apache modules",
+              "Issuing TLS certificates automatically",
+              "Replacing DNS records"
+            ],
+            "answerIndex": 0,
+            "explanation": "mod_proxy is widely used to forward traffic from Apache to app servers/services."
+          },
+          {
+            "question": "In Apache 2.4 access control, which directive is central for allow/deny decisions?",
+            "options": [
+              "Order",
+              "Allow",
+              "Deny",
+              "Require"
+            ],
+            "answerIndex": 3,
+            "explanation": "Apache 2.4 uses the Require-based authorization model; older Order/Allow/Deny patterns are legacy."
+          },
+          {
+            "question": "When is .htaccess typically appropriate despite performance overhead?",
+            "options": [
+              "For kernel-level firewalling",
+              "When developers need per-directory overrides without main config access",
+              "For replacing all VirtualHost files",
+              "For database query optimization"
+            ],
+            "answerIndex": 1,
+            "explanation": ".htaccess is useful for delegated, directory-level control when global config access is unavailable."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this HTTPS + reverse proxy VirtualHost config. Choose the best options for each blank.",
+            "language": "apacheconf",
+            "template": "<VirtualHost *:80>\n    ServerName {{blank1}}\n    Redirect {{blank2}} / https://{{blank1}}/\n</VirtualHost>\n\n<VirtualHost *:443>\n    ServerName {{blank1}}\n    {{blank3}} on\n    SSLCertificateFile /etc/letsencrypt/live/{{blank1}}/fullchain.pem\n    SSLCertificateKeyFile /etc/letsencrypt/live/{{blank1}}/privkey.pem\n\n    ProxyPreserveHost On\n    ProxyPass / {{blank4}}\n    ProxyPassReverse / {{blank4}}\n</VirtualHost>",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "app.example.com",
+                  "localhost",
+                  "/var/www/html",
+                  "*:443"
+                ],
+                "answer": "app.example.com"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "permanent",
+                  "gone",
+                  "temp",
+                  "seeother"
+                ],
+                "answer": "permanent"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "SSLEngine",
+                  "SSLProxyEngine",
+                  "RewriteEngine",
+                  "Protocols"
+                ],
+                "answer": "SSLEngine"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "http://127.0.0.1:3000/",
+                  "fcgi://127.0.0.1:9000",
+                  "https://cdn.example.com/",
+                  "unix:/run/php/php-fpm.sock"
+                ],
+                "answer": "http://127.0.0.1:3000/"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:26:54.828Z"
+    }
+  },
+  {
+    "id": "deno",
+    "name": "Deno",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "secure javascript/typescript runtime for backends",
+    "history": "2018: Ryan Dahl introduced Deno, reflecting on Node.js design tradeoffs. 2020: Deno 1.0 launched with secure-by-default permissions and built-in TypeScript support. 2022-2023: npm and Node compatibility expanded significantly. 2024: Deno 2 emphasized easier migration from Node ecosystems while keeping Deno’s security and DX goals.",
+    "why": "Deno helps backend developers build APIs, scripts, and CLIs with fewer setup steps by combining a secure-by-default runtime, first-class TypeScript, and built-in tooling in one platform.",
+    "rel": {
+      "seeAlso": [
+        "nodejs",
+        "bun",
+        "typescript",
+        "webapis",
+        "jsr"
+      ]
+    },
+    "challenges": [
+      "Create main.ts with Deno.serve. Return JSON {\"ok\":true} on GET /. Run on port 8000 and verify with curl.",
+      "Build cli.ts that reads a file path from Deno.args and prints the first 80 characters. Handle missing read permission with a friendly message.",
+      "Create POST /users using Deno.serve and npm:zod. Validate {\"name\":string,\"email\":string}. Return 400 for invalid body and 201 for valid body.",
+      "Add deno.json tasks for dev and test. Write at least two deno test cases for your /users route (valid and invalid payload).",
+      "Use deno compile to produce a runnable binary of your CLI. Document required permissions and one sample command."
+    ],
+    "extension": {
+      "tag": "secure javascript/typescript runtime for backends",
+      "latestChanges": [
+        "Deno 2 focused on smoother Node.js and npm package compatibility.",
+        "JSR became a first-class package registry for modern TypeScript/JavaScript modules.",
+        "Tooling stayed integrated: fmt, lint, test, task, and compile in one runtime.",
+        "Runtime and docs continued aligning with Web APIs to reduce ecosystem lock-in."
+      ],
+      "problemItSolves": "Deno helps backend developers build APIs, scripts, and CLIs with fewer setup steps by combining a secure-by-default runtime, first-class TypeScript, and built-in tooling in one platform.",
+      "historyNotes": [
+        "2018: Ryan Dahl introduced Deno, reflecting on Node.js design tradeoffs.",
+        "2020: Deno 1.0 launched with secure-by-default permissions and built-in TypeScript support.",
+        "2022-2023: npm and Node compatibility expanded significantly.",
+        "2024: Deno 2 emphasized easier migration from Node ecosystems while keeping Deno’s security and DX goals."
+      ],
+      "relatedTechnologies": [
+        "Node.js",
+        "Bun",
+        "TypeScript",
+        "Web APIs",
+        "JSR",
+        "Fresh"
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.deno.com/"
+        },
+        {
+          "label": "Runtime manual",
+          "url": "https://docs.deno.com/runtime/manual/"
+        },
+        {
+          "label": "Node and npm compatibility",
+          "url": "https://docs.deno.com/runtime/manual/node/"
+        },
+        {
+          "label": "API reference",
+          "url": "https://docs.deno.com/api/deno/"
+        },
+        {
+          "label": "JSR package registry",
+          "url": "https://jsr.io/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "first deno api endpoint",
+          "prompt": "Create main.ts with Deno.serve. Return JSON {\"ok\":true} on GET /. Run on port 8000 and verify with curl.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "permission-aware file cli",
+          "prompt": "Build cli.ts that reads a file path from Deno.args and prints the first 80 characters. Handle missing read permission with a friendly message.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "validated post route with npm package",
+          "prompt": "Create POST /users using Deno.serve and npm:zod. Validate {\"name\":string,\"email\":string}. Return 400 for invalid body and 201 for valid body.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "test and task automation",
+          "prompt": "Add deno.json tasks for dev and test. Write at least two deno test cases for your /users route (valid and invalid payload).",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "ship a single binary",
+          "prompt": "Use deno compile to produce a runnable binary of your CLI. Document required permissions and one sample command.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Use a unique prompt seed per learner (port numbers, route names, file names).",
+          "Require a short written rationale for each code answer (2-3 sentences).",
+          "Lock theory section to no external browsing; allow docs only in practical section.",
+          "Use hidden test cases not shown to learners.",
+          "After submission, require one live edit request (small feature change) to verify understanding.",
+          "Flag answers with near-identical structure across learners for manual review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who introduced Deno publicly in 2018?",
+            "options": [
+              "Ryan Dahl",
+              "Brendan Eich",
+              "Anders Hejlsberg",
+              "Guido van Rossum"
+            ],
+            "answerIndex": 0,
+            "explanation": "Deno was announced by Ryan Dahl, creator of Node.js."
+          },
+          {
+            "question": "Which security statement is correct for Deno by default?",
+            "options": [
+              "It allows full file and network access automatically.",
+              "It denies sensitive access unless permissions are granted.",
+              "It only blocks network access, not file access.",
+              "It requires Docker to enforce permissions."
+            ],
+            "answerIndex": 1,
+            "explanation": "Deno is secure-by-default; file, network, and other sensitive capabilities require explicit permission flags."
+          },
+          {
+            "question": "What was a major direction in Deno 2?",
+            "options": [
+              "Dropping TypeScript support",
+              "Removing web-standard APIs",
+              "Improving Node.js and npm compatibility",
+              "Replacing JavaScript with Rust-only scripting"
+            ],
+            "answerIndex": 2,
+            "explanation": "Deno 2 aimed to reduce migration friction by strengthening Node/npm interoperability."
+          },
+          {
+            "question": "What is JSR mainly used for?",
+            "options": [
+              "Container orchestration",
+              "TypeScript/JavaScript package publishing and consumption",
+              "Database migrations only",
+              "Browser rendering"
+            ],
+            "answerIndex": 1,
+            "explanation": "JSR is a package registry designed for modern JS/TS modules."
+          },
+          {
+            "question": "Which tool is built into Deno runtime workflows?",
+            "options": [
+              "deno test",
+              "webpack",
+              "babel-cli",
+              "pm2"
+            ],
+            "answerIndex": 0,
+            "explanation": "Deno includes a native test runner via deno test."
+          },
+          {
+            "question": "How do you typically import an npm package in Deno?",
+            "options": [
+              "import x from \"node_modules/x\"",
+              "import x from \"npm:package-name\"",
+              "import x from \"pkg://package-name\"",
+              "import x from \"deno:package-name\""
+            ],
+            "answerIndex": 1,
+            "explanation": "Deno supports npm packages through the npm: specifier."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the minimal Deno HTTP server. Choose the best options.",
+            "language": "typescript",
+            "template": "const handler = (_req: Request): Response => {\n  return new Response(JSON.stringify({ ok: true }), {\n    status: {{blank1}},\n    headers: { \"content-type\": \"application/json\" }\n  });\n};\n\nDeno.{{blank2}}(handler);",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "200",
+                  "201",
+                  "500"
+                ],
+                "answer": "200"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "listen",
+                  "serve",
+                  "start"
+                ],
+                "answer": "serve"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete file reading logic and permission error handling.",
+            "language": "typescript",
+            "template": "try {\n  const text = await Deno.{{blank1}}(\"notes.txt\");\n  console.log(text.{{blank2}}(0, 50));\n} catch (err) {\n  if (err instanceof Deno.errors.{{blank3}}) {\n    console.error(\"run with --allow-read\");\n  } else {\n    throw err;\n  }\n}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "readTextFile",
+                  "readDir",
+                  "remove"
+                ],
+                "answer": "readTextFile"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "slice",
+                  "map",
+                  "filter"
+                ],
+                "answer": "slice"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "PermissionDenied",
+                  "AlreadyExists",
+                  "BrokenPipe"
+                ],
+                "answer": "PermissionDenied"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:27:32.357Z"
+    }
+  },
+  {
+    "id": "bun",
+    "name": "Bun (bun)",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "fast js runtime and toolkit for backend apps",
+    "history": "2021: Bun was announced by Oven. 2022: Public alpha introduced a JavaScriptCore + Zig-based runtime. 2023: Bun 1.0 shipped as a stable baseline for production use. 2024: Bun 1.1 focused on speed, ergonomics, and deeper Node compatibility.",
+    "why": "Bun reduces backend tool sprawl by combining runtime, package manager, test runner, and bundling utilities in one fast tool. This can cut install time, simplify scripts, and improve local dev speed compared with stitching many separate tools together.",
+    "rel": {
+      "seeAlso": [
+        "nodejs",
+        "deno",
+        "npm",
+        "pnpm",
+        "esbuild"
+      ]
+    },
+    "challenges": [
+      "Create a new Bun project, add a start script, and run it with bun run. Capture startup time and compare to Node on your device.",
+      "Build a /api/health endpoint using Bun.serve that returns JSON and proper content-type headers. Add a 404 fallback.",
+      "Take a small Node CLI script that reads a file and prints stats. Run it in Bun, note any compatibility issues, and document fixes.",
+      "In a sample workspace, compare dependency install times across bun install and one other package manager. Summarize tradeoffs, not just speed.",
+      "Set up bun test for an API utility module with success and failure cases. Add one flaky-case guard and explain why it matters."
+    ],
+    "extension": {
+      "tag": "fast js runtime and toolkit for backend apps",
+      "latestChanges": [
+        "As of Bun 1.1 (2024), performance and startup speed were further improved.",
+        "Node.js compatibility coverage expanded, reducing migration friction.",
+        "Windows support advanced from early preview toward practical daily use.",
+        "Built-in tooling (install, test, bunx, watch flows) became more stable for teams."
+      ],
+      "problemItSolves": "Bun reduces backend tool sprawl by combining runtime, package manager, test runner, and bundling utilities in one fast tool. This can cut install time, simplify scripts, and improve local dev speed compared with stitching many separate tools together.",
+      "historyNotes": [
+        "2021: Bun was announced by Oven.",
+        "2022: Public alpha introduced a JavaScriptCore + Zig-based runtime.",
+        "2023: Bun 1.0 shipped as a stable baseline for production use.",
+        "2024: Bun 1.1 focused on speed, ergonomics, and deeper Node compatibility."
+      ],
+      "relatedTechnologies": [
+        "Node.js",
+        "Deno",
+        "npm",
+        "pnpm",
+        "esbuild",
+        "JavaScriptCore",
+        "Zig"
+      ],
+      "docs": [
+        {
+          "label": "Official docs",
+          "url": "https://bun.sh/docs"
+        },
+        {
+          "label": "API reference",
+          "url": "https://bun.sh/docs/api"
+        },
+        {
+          "label": "GitHub repository",
+          "url": "https://github.com/oven-sh/bun"
+        },
+        {
+          "label": "Bun blog/releases",
+          "url": "https://bun.sh/blog"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First run + scripts",
+          "prompt": "Create a new Bun project, add a start script, and run it with bun run. Capture startup time and compare to Node on your device.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Tiny API endpoint",
+          "prompt": "Build a /api/health endpoint using Bun.serve that returns JSON and proper content-type headers. Add a 404 fallback.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Node-to-Bun migration drill",
+          "prompt": "Take a small Node CLI script that reads a file and prints stats. Run it in Bun, note any compatibility issues, and document fixes.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Package install benchmark",
+          "prompt": "In a sample workspace, compare dependency install times across bun install and one other package manager. Summarize tradeoffs, not just speed.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Test pipeline hardening",
+          "prompt": "Set up bun test for an API utility module with success and failure cases. Add one flaky-case guard and explain why it matters.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle MCQ option order per attempt.",
+          "Use question pools so each learner gets a different subset.",
+          "Time-box each section and lock answers after submission.",
+          "For coding tasks, randomize route names/ports to prevent answer sharing.",
+          "Require a brief written rationale for one answer to verify understanding.",
+          "Flag near-identical submissions across learners for manual review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which JavaScript engine underpins Bun’s runtime execution?",
+            "options": [
+              "V8",
+              "SpiderMonkey",
+              "JavaScriptCore",
+              "Chakra"
+            ],
+            "answerIndex": 2,
+            "explanation": "Bun runs JavaScript on JavaScriptCore (not V8)."
+          },
+          {
+            "question": "What was the key milestone of Bun 1.0?",
+            "options": [
+              "First experimental preview only",
+              "Stable production-ready baseline release",
+              "A rewrite in Rust",
+              "Removal of package management features"
+            ],
+            "answerIndex": 1,
+            "explanation": "Bun 1.0 marked the stable baseline intended for production adoption."
+          },
+          {
+            "question": "Which choice best describes Bun’s core product strategy?",
+            "options": [
+              "Only a frontend framework",
+              "A single toolchain: runtime + package manager + test/build utilities",
+              "A hosted serverless platform only",
+              "A database engine"
+            ],
+            "answerIndex": 1,
+            "explanation": "Bun emphasizes integrated tooling to reduce multi-tool setup overhead."
+          },
+          {
+            "question": "Which command is commonly used to run package binaries without global install in Bun workflows?",
+            "options": [
+              "bunx",
+              "bun global run",
+              "bun exec-bin",
+              "bun shim"
+            ],
+            "answerIndex": 0,
+            "explanation": "bunx is Bun’s equivalent workflow for invoking package binaries."
+          },
+          {
+            "question": "Who created Bun?",
+            "options": [
+              "The Node.js TSC",
+              "Oven",
+              "The Deno company",
+              "Mozilla"
+            ],
+            "answerIndex": 1,
+            "explanation": "Bun was created by Oven."
+          },
+          {
+            "question": "When migrating a Node app to Bun, what is the safest expectation?",
+            "options": [
+              "All Node APIs always behave identically",
+              "Most common Node APIs work, but edge cases should be tested",
+              "No npm packages work",
+              "TypeScript is unsupported"
+            ],
+            "answerIndex": 1,
+            "explanation": "Compatibility is strong and improving, but real app behavior should still be validated."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Bun server so /api/health returns JSON with the correct header.",
+            "language": "javascript",
+            "template": "const server = {{blank1}}({\n  port: 3000,\n  fetch(req) {\n    const url = new URL(req.url);\n\n    if (url.pathname === \"/api/health\") {\n      return new {{blank2}}(\n        JSON.stringify({ ok: true, runtime: \"bun\" }),\n        { headers: { {{blank3}}: \"application/json\" } }\n      );\n    }\n\n    return new {{blank2}}(\"Not Found\", { status: 404 });\n  },\n});\n\nconsole.log(`listening on :${server.port}`);",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "Bun.serve",
+                  "Bun.listen",
+                  "http.createServer"
+                ],
+                "answer": "Bun.serve"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "Response",
+                  "Request",
+                  "Headers"
+                ],
+                "answer": "Response"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "'content-type'",
+                  "'accept'",
+                  "'cache-control'"
+                ],
+                "answer": "'content-type'"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:28:02.530Z"
+    }
+  },
+  {
+    "id": "springboot",
+    "name": "Spring Boot",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "java toolkit for fast production backends",
+    "history": "Spring Framework began in the early 2000s to simplify enterprise Java development. Spring Boot 1.0 was released in 2014 to speed up app bootstrapping and deployment. Spring Boot 2.0 (2018) expanded modern web and observability capabilities. Spring Boot 3.0 (2022) moved to Jakarta namespaces and required Java 17+. Spring Boot 3.x continues improvements in native compilation, observability, and developer experience.",
+    "why": "Spring Boot removes most setup friction in backend Java apps by providing auto-configuration, starter dependencies, embedded servers, and production-ready tooling. You can ship REST APIs and services quickly without manual XML-heavy configuration.",
+    "rel": {
+      "seeAlso": [
+        "springframework",
+        "springmvc",
+        "springwebflux",
+        "springdatajpa",
+        "springsecurity"
+      ]
+    },
+    "challenges": [
+      "Create a new Spring Boot project with spring-web. Add one GET endpoint /hello returning plain text. Run locally and verify with browser or curl.",
+      "Build a simple Task API (create, list, mark done) using Spring Web + Spring Data JPA + H2. Add validation for title and return proper HTTP status codes.",
+      "Add Actuator health/info endpoints, basic request metrics, and a Docker image. Document one scaling or reliability improvement you made and why.",
+      "Run your app with debug auto-configuration report enabled. Identify one bean that was auto-created and explain which classpath dependency triggered it.",
+      "Use Maven or Gradle to list project dependencies. Identify which one brings the embedded server and name the server."
+    ],
+    "extension": {
+      "tag": "java toolkit for fast production backends",
+      "latestChanges": [
+        "Spring Boot 3.x keeps Java 17+ as baseline and aligns with Spring Framework 6.",
+        "AOT processing and GraalVM native-image support were improved for faster startup and lower memory use.",
+        "Observability support (metrics, tracing, health) continues to mature through Micrometer and Actuator.",
+        "Developer workflows improved across Docker/OCI image building and local service integration."
+      ],
+      "problemItSolves": "Spring Boot removes most setup friction in backend Java apps by providing auto-configuration, starter dependencies, embedded servers, and production-ready tooling. You can ship REST APIs and services quickly without manual XML-heavy configuration.",
+      "historyNotes": [
+        "Spring Framework began in the early 2000s to simplify enterprise Java development.",
+        "Spring Boot 1.0 was released in 2014 to speed up app bootstrapping and deployment.",
+        "Spring Boot 2.0 (2018) expanded modern web and observability capabilities.",
+        "Spring Boot 3.0 (2022) moved to Jakarta namespaces and required Java 17+.",
+        "Spring Boot 3.x continues improvements in native compilation, observability, and developer experience."
+      ],
+      "relatedTechnologies": [
+        "Spring Framework",
+        "Spring MVC",
+        "Spring WebFlux",
+        "Spring Data JPA",
+        "Spring Security",
+        "Maven",
+        "Gradle",
+        "Docker"
+      ],
+      "docs": [
+        {
+          "label": "Spring Boot Reference Documentation",
+          "url": "https://docs.spring.io/spring-boot/docs/current/reference/html/"
+        },
+        {
+          "label": "Spring Boot API Docs",
+          "url": "https://docs.spring.io/spring-boot/docs/current/api/"
+        },
+        {
+          "label": "Spring Guides",
+          "url": "https://spring.io/guides"
+        },
+        {
+          "label": "Spring Initializr",
+          "url": "https://start.spring.io"
+        },
+        {
+          "label": "Spring Boot Actuator",
+          "url": "https://docs.spring.io/spring-boot/docs/current/reference/html/actuator.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Hello API in 15 minutes",
+          "prompt": "Create a new Spring Boot project with spring-web. Add one GET endpoint /hello returning plain text. Run locally and verify with browser or curl.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "CRUD mini-service",
+          "prompt": "Build a simple Task API (create, list, mark done) using Spring Web + Spring Data JPA + H2. Add validation for title and return proper HTTP status codes.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Production hardening sprint",
+          "prompt": "Add Actuator health/info endpoints, basic request metrics, and a Docker image. Document one scaling or reliability improvement you made and why.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Debug auto-configuration",
+          "prompt": "Run your app with debug auto-configuration report enabled. Identify one bean that was auto-created and explain which classpath dependency triggered it.",
+          "format": "coding"
+        },
+        {
+          "level": 1,
+          "title": "Dependency audit",
+          "prompt": "Use Maven or Gradle to list project dependencies. Identify which one brings the embedded server and name the server.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Use parameterized variants of coding prompts (endpoint names, entity fields, status rules).",
+          "Require a brief 'why' explanation after each coding submission; empty/generic explanations do not pass.",
+          "Block copy-paste for final assessment screen where platform support exists; log unusual paste spikes.",
+          "Run server-side tests plus hidden tests; passing visible tests alone is insufficient.",
+          "Require webcam/mic proctoring only for high-stakes exams; for low-stakes mobile practice, use behavior analytics and retake limits."
+        ],
+        "multipleChoice": [
+          {
+            "question": "What is Spring Boot auto-configuration mainly for?",
+            "options": [
+              "To replace Java with YAML",
+              "To infer sensible bean configuration from classpath and settings",
+              "To force XML configuration",
+              "To compile Java into JavaScript"
+            ],
+            "answerIndex": 1,
+            "explanation": "Auto-configuration detects libraries and properties, then creates common beans automatically."
+          },
+          {
+            "question": "Which major shift happened in Spring Boot 3.0?",
+            "options": [
+              "Moved from Java to Kotlin-only",
+              "Adopted Jakarta namespaces and Java 17+ baseline",
+              "Dropped embedded servers",
+              "Removed Actuator"
+            ],
+            "answerIndex": 1,
+            "explanation": "Boot 3.0 aligns with Jakarta EE 9+ package names and modern Java baseline requirements."
+          },
+          {
+            "question": "In a Maven Spring Boot project, where are dependencies typically declared?",
+            "options": [
+              "application.properties",
+              "pom.xml",
+              "Dockerfile",
+              "README.md"
+            ],
+            "answerIndex": 1,
+            "explanation": "Maven dependencies are managed in pom.xml."
+          },
+          {
+            "question": "What is Spring Boot Actuator used for?",
+            "options": [
+              "UI component rendering",
+              "Database schema migrations only",
+              "Production monitoring and management endpoints",
+              "Replacing unit tests"
+            ],
+            "answerIndex": 2,
+            "explanation": "Actuator exposes health, metrics, info, and operational endpoints."
+          },
+          {
+            "question": "Which annotation usually marks the main Boot application class?",
+            "options": [
+              "@EnableJpaRepositories",
+              "@SpringBootApplication",
+              "@Bean",
+              "@ConfigurationProperties"
+            ],
+            "answerIndex": 1,
+            "explanation": "@SpringBootApplication combines key configuration annotations and is used on the entry class."
+          },
+          {
+            "question": "When was Spring Boot 1.0 released?",
+            "options": [
+              "2004",
+              "2010",
+              "2014",
+              "2020"
+            ],
+            "answerIndex": 2,
+            "explanation": "Spring Boot reached 1.0 in 2014."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this minimal Spring Boot REST app by selecting the correct tokens for each blank.",
+            "language": "java",
+            "template": "package com.example.demo;\n\nimport org.springframework.boot.SpringApplication;\nimport org.springframework.boot.autoconfigure.SpringBootApplication;\nimport org.springframework.web.bind.annotation.GetMapping;\nimport org.springframework.web.bind.annotation.RestController;\n\n{{blank1}}\npublic class DemoApplication {\n  public static void main(String[] args) {\n    SpringApplication.{{blank2}}(DemoApplication.class, args);\n  }\n}\n\n{{blank3}}\nclass HelloController {\n  {{blank4}}(\"/hello\")\n  String hello() {\n    return \"Hello, Spring Boot!\";\n  }\n}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "@SpringBootApplication",
+                  "@Configuration",
+                  "@EnableAutoConfiguration"
+                ],
+                "answer": "@SpringBootApplication"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "run",
+                  "start",
+                  "launch"
+                ],
+                "answer": "run"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "@RestController",
+                  "@Controller",
+                  "@Component"
+                ],
+                "answer": "@RestController"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "@GetMapping",
+                  "@PostMapping",
+                  "@RequestMapping"
+                ],
+                "answer": "@GetMapping"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-07-31T22:28:30.249Z"
+    }
   }
 ]
