@@ -14463,5 +14463,2363 @@
       ],
       "updatedAt": "2026-08-02T22:25:13.200Z"
     }
+  },
+  {
+    "id": "vault",
+    "name": "HashiCorp Vault",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "centralized secrets and encryption lifecycle manager",
+    "history": "2015: Vault was introduced by HashiCorp as a tool for secrets and data protection. Early adoption grew around dynamic secrets for databases and cloud APIs. Integrated Storage (Raft) reduced dependency on external storage backends for many teams. Vault Agent and Kubernetes integrations improved secret delivery patterns. 2023: HashiCorp changed licensing to BUSL; OpenBao emerged as an open governance fork.",
+    "why": "Vault reduces secret sprawl by centralizing storage, access control, dynamic credential issuance, and encryption-as-a-service. It helps teams avoid hardcoded keys, rotate secrets safely, and enforce least privilege with auditability.",
+    "rel": {
+      "seeAlso": [
+        "terraform",
+        "consul",
+        "nomad",
+        "kubernetes",
+        "openbao"
+      ]
+    },
+    "challenges": [
+      "Run a local dev Vault, enable KV v2 at a custom path, write one API key, and read it back using CLI.",
+      "Create a policy that allows read-only access to one KV path and denies list/read elsewhere. Verify with a scoped token.",
+      "Configure AppRole for a sample service, fetch a token using role_id and secret_id, then read only authorized secrets.",
+      "Enable Transit, encrypt a plaintext payload, decrypt it, and explain why data is never stored in Transit by default.",
+      "Configure the database secrets engine for short-lived credentials and demonstrate automatic expiration/rotation behavior."
+    ],
+    "extension": {
+      "tag": "centralized secrets and encryption lifecycle manager",
+      "latestChanges": [
+        "Integrated Storage (Raft) is now a common default for self-managed clusters.",
+        "After HashiCorp’s 2023 BUSL license move, the OpenBao community fork launched under the Linux Foundation.",
+        "Managed Vault offerings continue improving operational automation (upgrades, backups, observability).",
+        "Cloud-native auth patterns (OIDC, Kubernetes, JWT) are increasingly emphasized in production designs."
+      ],
+      "problemItSolves": "Vault reduces secret sprawl by centralizing storage, access control, dynamic credential issuance, and encryption-as-a-service. It helps teams avoid hardcoded keys, rotate secrets safely, and enforce least privilege with auditability.",
+      "historyNotes": [
+        "2015: Vault was introduced by HashiCorp as a tool for secrets and data protection.",
+        "Early adoption grew around dynamic secrets for databases and cloud APIs.",
+        "Integrated Storage (Raft) reduced dependency on external storage backends for many teams.",
+        "Vault Agent and Kubernetes integrations improved secret delivery patterns.",
+        "2023: HashiCorp changed licensing to BUSL; OpenBao emerged as an open governance fork."
+      ],
+      "relatedTechnologies": [
+        "Terraform",
+        "Consul",
+        "Nomad",
+        "Kubernetes",
+        "OpenBao",
+        "AWS KMS",
+        "Azure Key Vault",
+        "Google Cloud KMS"
+      ],
+      "docs": [
+        {
+          "label": "Vault Docs",
+          "url": "https://developer.hashicorp.com/vault/docs"
+        },
+        {
+          "label": "Vault Tutorials",
+          "url": "https://developer.hashicorp.com/vault/tutorials"
+        },
+        {
+          "label": "Vault API Docs",
+          "url": "https://developer.hashicorp.com/vault/api-docs"
+        },
+        {
+          "label": "OpenBao Project",
+          "url": "https://openbao.org/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Store and read a KV secret",
+          "prompt": "Run a local dev Vault, enable KV v2 at a custom path, write one API key, and read it back using CLI.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Least-privilege policy",
+          "prompt": "Create a policy that allows read-only access to one KV path and denies list/read elsewhere. Verify with a scoped token.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "AppRole login flow",
+          "prompt": "Configure AppRole for a sample service, fetch a token using role_id and secret_id, then read only authorized secrets.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Transit encryption service",
+          "prompt": "Enable Transit, encrypt a plaintext payload, decrypt it, and explain why data is never stored in Transit by default.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Dynamic database credentials",
+          "prompt": "Configure the database secrets engine for short-lived credentials and demonstrate automatic expiration/rotation behavior.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize MCQ option order on every attempt.",
+          "Require a 1-sentence confidence rationale before answer submission.",
+          "Use unique secret paths and policy names per learner attempt.",
+          "Block copy-paste in code answers; allow manual typing only.",
+          "Grade code by command outcome and resulting Vault state, not exact text.",
+          "Enforce a short cooldown before retakes on failed attempts."
+        ],
+        "multipleChoice": [
+          {
+            "question": "In which year was HashiCorp Vault first released?",
+            "options": [
+              "2012",
+              "2015",
+              "2018",
+              "2020"
+            ],
+            "answerIndex": 1,
+            "explanation": "Vault launched in 2015."
+          },
+          {
+            "question": "Which Vault feature is best known for reducing long-lived credential risk?",
+            "options": [
+              "Static .env files",
+              "Dynamic secrets with leases",
+              "Manual key spreadsheets",
+              "Embedded plaintext configs"
+            ],
+            "answerIndex": 1,
+            "explanation": "Dynamic secrets create short-lived credentials and support rotation."
+          },
+          {
+            "question": "What does KV v2 add compared to KV v1?",
+            "options": [
+              "Built-in SQL querying",
+              "Secret versioning and soft delete",
+              "Automatic root token rotation",
+              "TLS termination"
+            ],
+            "answerIndex": 1,
+            "explanation": "KV v2 introduces version history and recovery-oriented behaviors."
+          },
+          {
+            "question": "What is the primary role of a Vault auth method?",
+            "options": [
+              "Encrypt stored values directly",
+              "Issue tokens after identity verification",
+              "Replicate data across regions",
+              "Generate TLS certs only"
+            ],
+            "answerIndex": 1,
+            "explanation": "Auth methods validate identity and return Vault tokens with policies."
+          },
+          {
+            "question": "Why are unseal keys used in Vault?",
+            "options": [
+              "To sign JWT tokens for apps",
+              "To reconstruct the master key at startup",
+              "To replace TLS certificates",
+              "To sync secrets to Git"
+            ],
+            "answerIndex": 1,
+            "explanation": "Vault starts sealed; unseal keys reconstruct access to the master key."
+          },
+          {
+            "question": "Which event is historically tied to OpenBao’s creation?",
+            "options": [
+              "Vault moving to Rust",
+              "HashiCorp’s 2023 BUSL licensing change",
+              "Consul deprecation",
+              "Kubernetes removing secrets"
+            ],
+            "answerIndex": 1,
+            "explanation": "OpenBao formed after the Vault/HashiCorp licensing change in 2023."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the CLI flow to enable KV v2, write a secret, and read it.",
+            "language": "bash",
+            "template": "vault secrets enable -path={{blank1}} -version={{blank2}} {{blank3}}\nvault kv put {{blank1}}/payments stripe_key={{blank4}}\nvault kv get {{blank1}}/payments",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "secret",
+                  "transit",
+                  "database"
+                ],
+                "answer": "secret"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "1",
+                  "2",
+                  "v2"
+                ],
+                "answer": "2"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "kv",
+                  "pki",
+                  "aws"
+                ],
+                "answer": "kv"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "sk_live_demo",
+                  "true",
+                  "24h"
+                ],
+                "answer": "sk_live_demo"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete a read-only policy for a KV v2 path and write it to Vault.",
+            "language": "hcl",
+            "template": "path \"{{blank1}}/data/payments\" {\n  capabilities = [\"{{blank2}}\"]\n}\n\n# apply\nvault policy write {{blank3}} app-policy.hcl",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "secret",
+                  "auth",
+                  "sys"
+                ],
+                "answer": "secret"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "read",
+                  "sudo",
+                  "create"
+                ],
+                "answer": "read"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "app-ro",
+                  "root",
+                  "default"
+                ],
+                "answer": "app-ro"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:24:57.402Z"
+    }
+  },
+  {
+    "id": "consul",
+    "name": "HashiCorp Consul",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "service discovery and networking control plane",
+    "history": "2014: HashiCorp released Consul for service discovery and health checking. Consul included a KV store and distributed coordination primitives early on. Connect introduced service mesh capabilities, including mTLS and intentions. Consul expanded with Kubernetes integrations and multi-cluster networking patterns like peering.",
+    "why": "Consul helps distributed systems find each other, stay health-aware, and enforce service-to-service security policies across VMs, containers, and multiple environments.",
+    "rel": {
+      "seeAlso": [
+        "hashicorpnomad",
+        "hashicorpvault",
+        "envoy",
+        "kubernetes",
+        "istio"
+      ]
+    },
+    "challenges": [
+      "Create a service definition file for a web app on port 8080 with an HTTP health check every 10s. Register it and verify it appears healthy in the catalog.",
+      "Set default-deny for a namespace, then allow only frontend -> payments traffic. Validate blocked and allowed paths with test requests.",
+      "Given two services with failing mTLS traffic, find whether the issue is ACL token scope, sidecar registration, or intention policy. Provide a fix plan in 5 steps.",
+      "Establish cluster peering between staging and shared-services clusters, then resolve a remote service name from staging. Document required ports, trust, and policy controls.",
+      "Design a rollout checklist for enabling Consul in production: TLS, ACL bootstrap, backup/restore, health SLOs, and failure testing."
+    ],
+    "extension": {
+      "tag": "service discovery and networking control plane",
+      "latestChanges": [
+        "Consul Dataplane is now a common default path for service mesh sidecar operations.",
+        "Cluster peering is a key pattern for cross-cluster service discovery without full WAN federation.",
+        "Managed Consul offerings continue expanding guided workflows for upgrades, ACLs, and observability.",
+        "Recent platform guidance emphasizes stronger default security with TLS and ACL-first setups."
+      ],
+      "problemItSolves": "Consul helps distributed systems find each other, stay health-aware, and enforce service-to-service security policies across VMs, containers, and multiple environments.",
+      "historyNotes": [
+        "2014: HashiCorp released Consul for service discovery and health checking.",
+        "Consul included a KV store and distributed coordination primitives early on.",
+        "Connect introduced service mesh capabilities, including mTLS and intentions.",
+        "Consul expanded with Kubernetes integrations and multi-cluster networking patterns like peering."
+      ],
+      "relatedTechnologies": [
+        "HashiCorp Nomad",
+        "HashiCorp Vault",
+        "Envoy",
+        "Kubernetes",
+        "Istio",
+        "etcd",
+        "NGINX"
+      ],
+      "docs": [
+        {
+          "label": "Consul documentation",
+          "url": "https://developer.hashicorp.com/consul/docs"
+        },
+        {
+          "label": "Consul tutorials",
+          "url": "https://developer.hashicorp.com/consul/tutorials"
+        },
+        {
+          "label": "Service mesh (Connect) docs",
+          "url": "https://developer.hashicorp.com/consul/docs/connect"
+        },
+        {
+          "label": "ACL system docs",
+          "url": "https://developer.hashicorp.com/consul/docs/security/acl"
+        },
+        {
+          "label": "Consul GitHub repository",
+          "url": "https://github.com/hashicorp/consul"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Register a healthy web service",
+          "prompt": "Create a service definition file for a web app on port 8080 with an HTTP health check every 10s. Register it and verify it appears healthy in the catalog.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Lock down service access with intentions",
+          "prompt": "Set default-deny for a namespace, then allow only frontend -> payments traffic. Validate blocked and allowed paths with test requests.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Troubleshoot mesh communication failure",
+          "prompt": "Given two services with failing mTLS traffic, find whether the issue is ACL token scope, sidecar registration, or intention policy. Provide a fix plan in 5 steps.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Peer two Consul clusters",
+          "prompt": "Establish cluster peering between staging and shared-services clusters, then resolve a remote service name from staging. Document required ports, trust, and policy controls.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Production readiness drill",
+          "prompt": "Design a rollout checklist for enabling Consul in production: TLS, ACL bootstrap, backup/restore, health SLOs, and failure testing.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question and option order per learner.",
+          "Use a short timer per question to reduce answer lookups.",
+          "Require one-sentence confidence notes on each answer.",
+          "Lock navigation after submission of each question.",
+          "Randomize service names/ports in code challenges.",
+          "Auto-flag identical answer patterns across attempts for review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which company created Consul?",
+            "options": [
+              "HashiCorp",
+              "Google",
+              "Red Hat",
+              "Docker Inc."
+            ],
+            "answerIndex": 0,
+            "explanation": "Consul is a HashiCorp project released in 2014."
+          },
+          {
+            "question": "What was Consul's original core use case?",
+            "options": [
+              "Container image building",
+              "Service discovery with health checks",
+              "CI pipeline orchestration",
+              "Log aggregation"
+            ],
+            "answerIndex": 1,
+            "explanation": "Consul started as a service discovery and health-aware registry system."
+          },
+          {
+            "question": "Which Consul capability introduced service mesh behavior?",
+            "options": [
+              "Raft snapshots",
+              "Connect",
+              "Prepared queries",
+              "Autopilot"
+            ],
+            "answerIndex": 1,
+            "explanation": "Connect added mTLS-based service mesh and traffic authorization."
+          },
+          {
+            "question": "In Consul, intentions are used to:",
+            "options": [
+              "Tune CPU limits",
+              "Authorize service-to-service communication",
+              "Store encryption keys",
+              "Schedule batch jobs"
+            ],
+            "answerIndex": 1,
+            "explanation": "Intentions define allow/deny policy between services."
+          },
+          {
+            "question": "What is the role of a Consul agent?",
+            "options": [
+              "It replaces all application containers",
+              "It is a local daemon that joins the cluster and handles checks/registration",
+              "It is only a cloud load balancer",
+              "It is a one-time bootstrap script"
+            ],
+            "answerIndex": 1,
+            "explanation": "Agents run on nodes, manage local state, and communicate with Consul servers."
+          },
+          {
+            "question": "Why use Consul cluster peering?",
+            "options": [
+              "To bypass TLS requirements",
+              "To discover/connect services across clusters with explicit trust",
+              "To replace ACLs entirely",
+              "To disable service health checks"
+            ],
+            "answerIndex": 1,
+            "explanation": "Peering enables cross-cluster service connectivity while keeping cluster boundaries."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Consul service definition to enable a Connect sidecar and an HTTP health check.",
+            "language": "hcl",
+            "template": "service {\n  name = \"payments\"\n  id   = \"payments-1\"\n  port = 9000\n\n  connect {\n    {{blank1}} {}\n  }\n\n  check {\n    {{blank2}}     = \"http://127.0.0.1:9000/health\"\n    interval = \"10s\"\n    timeout  = \"1s\"\n  }\n}\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "sidecar_service",
+                  "mesh_gateway",
+                  "proxy_defaults"
+                ],
+                "answer": "sidecar_service"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "http",
+                  "tcp",
+                  "script"
+                ],
+                "answer": "http"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete the CLI command to create an allow policy from frontend to payments.",
+            "language": "bash",
+            "template": "consul {{blank1}} create frontend payments\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "intention",
+                  "acl",
+                  "services"
+                ],
+                "answer": "intention"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:25:29.633Z"
+    }
+  },
+  {
+    "id": "oauth",
+    "name": "OAuth 2.0",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "delegated authorization for api access",
+    "history": "2007-2010: OAuth 1.0 emerged to avoid password sharing but was hard to implement. 2012: OAuth 2.0 was standardized in RFC 6749 (framework) and RFC 6750 (bearer tokens). OpenID Connect (built on OAuth 2.0) became the common identity layer for login. Security guidance evolved through RFC 6819 and later OAuth 2.0 Security BCP. Current direction: OAuth 2.1 and FAPI profiles push safer defaults and remove weak patterns.",
+    "why": "OAuth 2.0 lets users grant limited app access to APIs without sharing their passwords. It standardizes scopes, token lifetimes, and delegated consent across clients, authorization servers, and resource servers.",
+    "rel": {
+      "seeAlso": [
+        "openidconnectoidc",
+        "jwt",
+        "saml20",
+        "pkce",
+        "mtls"
+      ]
+    },
+    "challenges": [
+      "Given 3 app types (server web app, SPA, machine-to-machine), choose the safest OAuth 2.0 grant and explain in one line each.",
+      "Design scopes for a notes API (read, create, delete, admin). Keep least privilege and separate user vs admin paths.",
+      "You received a security report: stolen bearer token used from another device. Propose 3 mitigations using OAuth features and deployment controls.",
+      "Given logs from an auth code + PKCE exchange, identify two likely causes of invalid_grant and the exact fix for each.",
+      "Migrate a legacy implicit-flow SPA to authorization code + PKCE. List endpoint changes, frontend changes, and rollout checks."
+    ],
+    "extension": {
+      "tag": "delegated authorization for api access",
+      "latestChanges": [
+        "OAuth 2.1 draft consolidates best practices and removes risky legacy flows.",
+        "PKCE is now expected for public clients (SPAs and mobile apps).",
+        "Implicit grant and Resource Owner Password Credentials grant are broadly discouraged.",
+        "Sender-constrained tokens (mTLS, DPoP) are gaining adoption to reduce bearer-token replay."
+      ],
+      "problemItSolves": "OAuth 2.0 lets users grant limited app access to APIs without sharing their passwords. It standardizes scopes, token lifetimes, and delegated consent across clients, authorization servers, and resource servers.",
+      "historyNotes": [
+        "2007-2010: OAuth 1.0 emerged to avoid password sharing but was hard to implement.",
+        "2012: OAuth 2.0 was standardized in RFC 6749 (framework) and RFC 6750 (bearer tokens).",
+        "OpenID Connect (built on OAuth 2.0) became the common identity layer for login.",
+        "Security guidance evolved through RFC 6819 and later OAuth 2.0 Security BCP.",
+        "Current direction: OAuth 2.1 and FAPI profiles push safer defaults and remove weak patterns."
+      ],
+      "relatedTechnologies": [
+        "openid connect (oidc)",
+        "jwt",
+        "saml 2.0",
+        "pkce",
+        "mtls",
+        "dpop"
+      ],
+      "docs": [
+        {
+          "label": "RFC 6749: OAuth 2.0 Framework",
+          "url": "https://datatracker.ietf.org/doc/html/rfc6749"
+        },
+        {
+          "label": "RFC 6750: Bearer Token Usage",
+          "url": "https://datatracker.ietf.org/doc/html/rfc6750"
+        },
+        {
+          "label": "OAuth 2.0 Security Best Current Practice",
+          "url": "https://datatracker.ietf.org/doc/html/rfc9700"
+        },
+        {
+          "label": "OAuth 2.1 Draft",
+          "url": "https://datatracker.ietf.org/doc/draft-ietf-oauth-v2-1/"
+        },
+        {
+          "label": "OpenID Connect Core 1.0",
+          "url": "https://openid.net/specs/openid-connect-core-1_0.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Flow picker",
+          "prompt": "Given 3 app types (server web app, SPA, machine-to-machine), choose the safest OAuth 2.0 grant and explain in one line each.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Scope design mini-lab",
+          "prompt": "Design scopes for a notes API (read, create, delete, admin). Keep least privilege and separate user vs admin paths.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Token hardening",
+          "prompt": "You received a security report: stolen bearer token used from another device. Propose 3 mitigations using OAuth features and deployment controls.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Debug invalid_grant",
+          "prompt": "Given logs from an auth code + PKCE exchange, identify two likely causes of invalid_grant and the exact fix for each.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Migration task",
+          "prompt": "Migrate a legacy implicit-flow SPA to authorization code + PKCE. List endpoint changes, frontend changes, and rollout checks.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question and option order per attempt.",
+          "Use a time window (e.g., 60-90 seconds per MCQ) to reduce lookup behavior.",
+          "Require a one-sentence confidence note for each answer.",
+          "Use scenario-based wording with changed app names/URLs per learner.",
+          "Lock backward navigation during graded mode.",
+          "For code dropdowns, randomize distractor options with similar syntax."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which RFC first standardized the OAuth 2.0 authorization framework?",
+            "options": [
+              "RFC 2616",
+              "RFC 6749",
+              "RFC 7231",
+              "RFC 9110"
+            ],
+            "answerIndex": 1,
+            "explanation": "RFC 6749 defines the OAuth 2.0 framework."
+          },
+          {
+            "question": "Which flow is recommended for SPAs and native apps today?",
+            "options": [
+              "Implicit grant",
+              "Authorization code + PKCE",
+              "Resource owner password credentials",
+              "Client credentials without PKCE"
+            ],
+            "answerIndex": 1,
+            "explanation": "Authorization code with PKCE mitigates code interception and is current best practice."
+          },
+          {
+            "question": "What is the main purpose of OAuth 2.0?",
+            "options": [
+              "Encrypt all API payloads",
+              "Delegate authorization without sharing user passwords",
+              "Authenticate users directly with passwords",
+              "Replace TLS certificates"
+            ],
+            "answerIndex": 1,
+            "explanation": "OAuth 2.0 is an authorization delegation framework, not a transport encryption replacement."
+          },
+          {
+            "question": "Why is the implicit grant discouraged?",
+            "options": [
+              "It requires mutual TLS",
+              "It exposes tokens in front-channel contexts and lacks modern protections",
+              "It cannot work with browser apps",
+              "It only supports refresh tokens"
+            ],
+            "answerIndex": 1,
+            "explanation": "Implicit flow sends access tokens through the browser front channel, increasing leak risk."
+          },
+          {
+            "question": "What does a bearer token imply?",
+            "options": [
+              "The token is bound to one device by default",
+              "Anyone who possesses it can use it unless additional binding is enforced",
+              "It is always encrypted and unreadable",
+              "It never expires"
+            ],
+            "answerIndex": 1,
+            "explanation": "Bearer tokens are possession-based; theft enables replay unless sender-constrained methods are used."
+          },
+          {
+            "question": "Which statement about OAuth 2.0 vs OpenID Connect is correct?",
+            "options": [
+              "OAuth 2.0 is for identity only; OIDC is for API scopes",
+              "OAuth 2.0 handles delegated API authorization; OIDC adds authentication/identity claims",
+              "They are unrelated standards",
+              "OIDC replaces authorization servers with resource servers"
+            ],
+            "answerIndex": 1,
+            "explanation": "OIDC is an identity layer built on OAuth 2.0."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the token exchange for Authorization Code + PKCE.",
+            "language": "javascript",
+            "template": "const params = new URLSearchParams({\n  grant_type: \"{{b1}}\",\n  code: authCode,\n  redirect_uri: \"{{b2}}\",\n  client_id: process.env.CLIENT_ID,\n  code_verifier: pkceVerifier\n});\n\nconst res = await fetch(\"https://auth.example.com/oauth/token\", {\n  method: \"POST\",\n  headers: { \"Content-Type\": \"{{b3}}\" },\n  body: params\n});\n\nif (!res.ok) throw new Error(\"Token request failed\");\nconst tokens = await res.{{b4}}();\nconsole.log(tokens.access_token);",
+            "blanks": [
+              {
+                "id": "b1",
+                "options": [
+                  "authorization_code",
+                  "implicit",
+                  "password",
+                  "client_credentials"
+                ],
+                "answer": "authorization_code"
+              },
+              {
+                "id": "b2",
+                "options": [
+                  "https://app.example.com/callback",
+                  "urn:ietf:wg:oauth:2.0:oob",
+                  "https://api.example.com/token",
+                  "https://auth.example.com/authorize"
+                ],
+                "answer": "https://app.example.com/callback"
+              },
+              {
+                "id": "b3",
+                "options": [
+                  "application/json",
+                  "application/x-www-form-urlencoded",
+                  "text/plain",
+                  "multipart/form-data"
+                ],
+                "answer": "application/x-www-form-urlencoded"
+              },
+              {
+                "id": "b4",
+                "options": [
+                  "json",
+                  "text",
+                  "blob",
+                  "arrayBuffer"
+                ],
+                "answer": "json"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:25:54.116Z"
+    }
+  },
+  {
+    "id": "openidconnect",
+    "name": "OpenID Connect",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "identity layer for oauth 2.0 authentication",
+    "history": "Created by the OpenID Foundation as the modern successor to OpenID 2.0. OpenID Connect Core 1.0 was finalized in 2014. It became the default web/mobile SSO choice for consumer and enterprise identity. Now considered mature/legacy in many stacks, but still heavily deployed and operationally critical.",
+    "why": "OpenID Connect standardizes user authentication on top of OAuth 2.0, so apps can verify who a user is (ID token), fetch basic profile claims, and avoid building custom login protocols per provider.",
+    "rel": {
+      "seeAlso": [
+        "oauth20",
+        "oauth21draft",
+        "pkcerfc7636",
+        "jwtjwsjwk",
+        "saml20"
+      ]
+    },
+    "challenges": [
+      "Given a decoded ID token payload, identify issuer (iss), audience (aud), subject (sub), expiration (exp), and nonce. State whether the token should be accepted.",
+      "Sketch an OIDC Authorization Code + PKCE sequence for a native app. Include where state, nonce, code_verifier, and token validation happen.",
+      "You inherit an SPA using implicit flow. List concrete migration steps to Code + PKCE and explain how this changes token exposure risk.",
+      "A login fails with 'invalid_audience'. Check discovery metadata, client_id usage, and ID token aud/azp logic. Propose a minimal fix plan.",
+      "Choose the smallest scope set to satisfy: sign-in, display name, and email verification status. Explain tradeoffs in privacy and UX."
+    ],
+    "extension": {
+      "tag": "identity layer for oauth 2.0 authentication",
+      "latestChanges": [
+        "Core 1.0 is stable; most updates now come from security profiles and best practices.",
+        "OAuth 2.1 direction reinforces using Authorization Code + PKCE instead of implicit flow.",
+        "Logout interoperability improved via RP-initiated, front-channel, and back-channel logout specs.",
+        "OIDC-based credential work (OIDC4VP/OIDC4CI) is extending patterns into digital identity wallets."
+      ],
+      "problemItSolves": "OpenID Connect standardizes user authentication on top of OAuth 2.0, so apps can verify who a user is (ID token), fetch basic profile claims, and avoid building custom login protocols per provider.",
+      "historyNotes": [
+        "Created by the OpenID Foundation as the modern successor to OpenID 2.0.",
+        "OpenID Connect Core 1.0 was finalized in 2014.",
+        "It became the default web/mobile SSO choice for consumer and enterprise identity.",
+        "Now considered mature/legacy in many stacks, but still heavily deployed and operationally critical."
+      ],
+      "relatedTechnologies": [
+        "OAuth 2.0",
+        "OAuth 2.1 (draft)",
+        "PKCE (RFC 7636)",
+        "JWT / JWS / JWK",
+        "SAML 2.0",
+        "WebAuthn / FIDO2",
+        "FAPI 1.0/2.0",
+        "OpenID 2.0 (deprecated)"
+      ],
+      "docs": [
+        {
+          "label": "OpenID Connect Core 1.0",
+          "url": "https://openid.net/specs/openid-connect-core-1_0.html"
+        },
+        {
+          "label": "OpenID Connect Discovery 1.0",
+          "url": "https://openid.net/specs/openid-connect-discovery-1_0.html"
+        },
+        {
+          "label": "OpenID Connect RP-Initiated Logout 1.0",
+          "url": "https://openid.net/specs/openid-connect-rpinitiated-1_0.html"
+        },
+        {
+          "label": "PKCE (RFC 7636)",
+          "url": "https://datatracker.ietf.org/doc/html/rfc7636"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Read an ID token quickly",
+          "prompt": "Given a decoded ID token payload, identify issuer (iss), audience (aud), subject (sub), expiration (exp), and nonce. State whether the token should be accepted.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Design a secure mobile login",
+          "prompt": "Sketch an OIDC Authorization Code + PKCE sequence for a native app. Include where state, nonce, code_verifier, and token validation happen.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Legacy flow migration",
+          "prompt": "You inherit an SPA using implicit flow. List concrete migration steps to Code + PKCE and explain how this changes token exposure risk.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Provider interoperability debug",
+          "prompt": "A login fails with 'invalid_audience'. Check discovery metadata, client_id usage, and ID token aud/azp logic. Propose a minimal fix plan.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Claim minimization",
+          "prompt": "Choose the smallest scope set to satisfy: sign-in, display name, and email verification status. Explain tradeoffs in privacy and UX.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question and option order per attempt.",
+          "Use a large item bank with equivalent variants (claims, years, endpoints).",
+          "Set short per-question timers to reduce lookups (mobile-friendly chunks).",
+          "Require a 1-sentence confidence note on missed questions during review.",
+          "Regenerate nonce/state/code_challenge values for each code challenge attempt.",
+          "Block copy/paste in assessment view; allow only controlled note panel."
+        ],
+        "multipleChoice": [
+          {
+            "question": "What is OpenID Connect primarily adding to OAuth 2.0?",
+            "options": [
+              "Authentication and identity claims",
+              "End-to-end payload encryption",
+              "Directory synchronization",
+              "Network-layer transport security"
+            ],
+            "answerIndex": 0,
+            "explanation": "OIDC is an identity layer over OAuth 2.0, adding login semantics and ID tokens."
+          },
+          {
+            "question": "When was OpenID Connect Core 1.0 finalized?",
+            "options": [
+              "2010",
+              "2012",
+              "2014",
+              "2018"
+            ],
+            "answerIndex": 2,
+            "explanation": "Core 1.0 was finalized in 2014 and remains the baseline spec."
+          },
+          {
+            "question": "Which token is meant to convey the authentication event to the client app?",
+            "options": [
+              "Access token",
+              "Refresh token",
+              "ID token",
+              "Device code"
+            ],
+            "answerIndex": 2,
+            "explanation": "The ID token contains authentication claims about the end-user and auth event."
+          },
+          {
+            "question": "Why is the nonce parameter used in OIDC authorization requests?",
+            "options": [
+              "To rotate TLS certificates",
+              "To prevent replay/token substitution attacks",
+              "To replace client authentication",
+              "To request offline access"
+            ],
+            "answerIndex": 1,
+            "explanation": "Nonce binds the auth response to the request context and mitigates replay/substitution risk."
+          },
+          {
+            "question": "For mobile and SPA clients today, which flow is recommended?",
+            "options": [
+              "Implicit flow",
+              "Hybrid flow only",
+              "Resource Owner Password flow",
+              "Authorization Code flow with PKCE"
+            ],
+            "answerIndex": 3,
+            "explanation": "Current guidance favors Code + PKCE for public clients due to stronger security."
+          },
+          {
+            "question": "Which path is used to discover OIDC provider metadata?",
+            "options": [
+              "/openid/config",
+              "/.well-known/openid-configuration",
+              "/oauth2/discovery.json",
+              "/.well-known/jwks.json"
+            ],
+            "answerIndex": 1,
+            "explanation": "OIDC Discovery uses the standard well-known metadata endpoint."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this secure mobile OIDC authorization request.",
+            "language": "http",
+            "template": "GET https://id.example.com/authorize?\n  response_type={{b1}}&\n  client_id=mobile-client&\n  redirect_uri=com.example.app%3A%2Fcallback&\n  scope={{b2}}&\n  state={{b3}}&\n  nonce={{b4}}&\n  code_challenge={{b5}}&\n  code_challenge_method={{b6}}",
+            "blanks": [
+              {
+                "id": "b1",
+                "options": [
+                  "code",
+                  "token",
+                  "id_token"
+                ],
+                "answer": "code"
+              },
+              {
+                "id": "b2",
+                "options": [
+                  "openid profile",
+                  "profile email",
+                  "email"
+                ],
+                "answer": "openid profile"
+              },
+              {
+                "id": "b3",
+                "options": [
+                  "random_csrf_value",
+                  "client_secret",
+                  "sub"
+                ],
+                "answer": "random_csrf_value"
+              },
+              {
+                "id": "b4",
+                "options": [
+                  "random_replay_guard",
+                  "aud",
+                  "at_hash"
+                ],
+                "answer": "random_replay_guard"
+              },
+              {
+                "id": "b5",
+                "options": [
+                  "BASE64URL(SHA256(verifier))",
+                  "plain_password",
+                  "jwks_uri"
+                ],
+                "answer": "BASE64URL(SHA256(verifier))"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:26:26.384Z"
+    }
+  },
+  {
+    "id": "tls",
+    "name": "TLS (Transport Layer Security)",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "protocol that encrypts data in transit",
+    "history": "SSL 2.0/3.0 had serious weaknesses; TLS 1.0 replaced SSL 3.0 in 1999. TLS 1.2 (2008) improved algorithm agility and enabled stronger cipher choices. High-profile attacks (BEAST, POODLE, Heartbleed impact on implementations) pushed stricter configs. TLS 1.3 (RFC 8446, 2018) removed many legacy features and reduced handshake latency. Legacy versions/ciphers remain a migration concern in old enterprise systems.",
+    "why": "TLS protects data over networks from eavesdropping, tampering, and impersonation by providing encryption, integrity checks, and endpoint authentication.",
+    "rel": {
+      "seeAlso": [
+        "ssl",
+        "https",
+        "x509certificates",
+        "mtls",
+        "dtls"
+      ]
+    },
+    "challenges": [
+      "Given a config that allows TLS 1.0 and RSA key exchange, list two concrete risks and one immediate fix.",
+      "Write client code that enforces certificate validation, hostname checking, and minimum TLS 1.2.",
+      "Create a phased plan to disable TLS 1.0/1.1 in a legacy environment without causing major outages.",
+      "Use a CLI tool to verify negotiated protocol and cipher, then explain whether the result meets modern policy.",
+      "Design a minimal mTLS setup for an internal API and describe cert lifecycle controls."
+    ],
+    "extension": {
+      "tag": "protocol that encrypts data in transit",
+      "latestChanges": [
+        "TLS 1.3 is the current modern baseline (faster handshake, fewer legacy options).",
+        "TLS 1.0 and 1.1 are formally deprecated (RFC 8996) and disabled in modern platforms.",
+        "Strong cipher use is centered on AEAD suites (AES-GCM, ChaCha20-Poly1305) with ephemeral key exchange."
+      ],
+      "problemItSolves": "TLS protects data over networks from eavesdropping, tampering, and impersonation by providing encryption, integrity checks, and endpoint authentication.",
+      "historyNotes": [
+        "SSL 2.0/3.0 had serious weaknesses; TLS 1.0 replaced SSL 3.0 in 1999.",
+        "TLS 1.2 (2008) improved algorithm agility and enabled stronger cipher choices.",
+        "High-profile attacks (BEAST, POODLE, Heartbleed impact on implementations) pushed stricter configs.",
+        "TLS 1.3 (RFC 8446, 2018) removed many legacy features and reduced handshake latency.",
+        "Legacy versions/ciphers remain a migration concern in old enterprise systems."
+      ],
+      "relatedTechnologies": [
+        "SSL",
+        "HTTPS",
+        "X.509 certificates",
+        "mTLS",
+        "DTLS",
+        "QUIC"
+      ],
+      "docs": [
+        {
+          "label": "RFC 8446 (TLS 1.3)",
+          "url": "https://www.rfc-editor.org/rfc/rfc8446"
+        },
+        {
+          "label": "RFC 8996 (Deprecating TLS 1.0/1.1)",
+          "url": "https://www.rfc-editor.org/rfc/rfc8996"
+        },
+        {
+          "label": "Mozilla Server Side TLS Guidelines",
+          "url": "https://wiki.mozilla.org/Security/Server_Side_TLS"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Find legacy TLS risk",
+          "prompt": "Given a config that allows TLS 1.0 and RSA key exchange, list two concrete risks and one immediate fix.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Harden a client connection",
+          "prompt": "Write client code that enforces certificate validation, hostname checking, and minimum TLS 1.2.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Plan a safe migration",
+          "prompt": "Create a phased plan to disable TLS 1.0/1.1 in a legacy environment without causing major outages.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Handshake visibility",
+          "prompt": "Use a CLI tool to verify negotiated protocol and cipher, then explain whether the result meets modern policy.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Mutual TLS rollout",
+          "prompt": "Design a minimal mTLS setup for an internal API and describe cert lifecycle controls.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question order and option order per attempt.",
+          "Use a short per-question timer (30-60 seconds) for recall-based items.",
+          "Require a one-sentence justification on selected high-value questions.",
+          "Use parallel question variants (different scenarios, same concept).",
+          "For code dropdowns, rotate hostnames/ports/cipher policies between attempts.",
+          "Block answer reveal until submission; show feedback only after full attempt."
+        ],
+        "multipleChoice": [
+          {
+            "question": "TLS directly evolved from which older protocol family?",
+            "options": [
+              "SSH",
+              "IPsec",
+              "SSL",
+              "Kerberos"
+            ],
+            "answerIndex": 2,
+            "explanation": "TLS was designed as the successor to SSL after SSL weaknesses became clear."
+          },
+          {
+            "question": "What is a key security improvement in TLS 1.3?",
+            "options": [
+              "RC4 is re-enabled for compatibility",
+              "Static RSA key exchange is removed",
+              "Server certificates are no longer needed",
+              "Compression is enabled by default"
+            ],
+            "answerIndex": 1,
+            "explanation": "TLS 1.3 removes static RSA key exchange and legacy options, improving security."
+          },
+          {
+            "question": "Why is hostname verification important in TLS clients?",
+            "options": [
+              "It makes encryption faster",
+              "It prevents use of expired ciphers",
+              "It checks that the cert matches the intended domain",
+              "It replaces certificate chain validation"
+            ],
+            "answerIndex": 2,
+            "explanation": "Without hostname verification, a valid cert for another domain could be misused."
+          },
+          {
+            "question": "Forward secrecy means:",
+            "options": [
+              "Old encrypted sessions can be decrypted if server key leaks",
+              "Past sessions stay protected even if long-term keys later leak",
+              "Certificates never expire",
+              "No need for key exchange"
+            ],
+            "answerIndex": 1,
+            "explanation": "Ephemeral key exchange protects past session keys from future long-term key compromise."
+          },
+          {
+            "question": "Which RFC deprecated TLS 1.0 and TLS 1.1?",
+            "options": [
+              "RFC 8446",
+              "RFC 8996",
+              "RFC 5246",
+              "RFC 2818"
+            ],
+            "answerIndex": 1,
+            "explanation": "RFC 8996 formally deprecates TLS 1.0 and 1.1."
+          },
+          {
+            "question": "mTLS is best described as:",
+            "options": [
+              "Only client authenticates server",
+              "Only server authenticates client",
+              "Both client and server authenticate each other with certificates",
+              "A TLS mode without certificates"
+            ],
+            "answerIndex": 2,
+            "explanation": "Mutual TLS requires certificate-based authentication on both sides."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Python TLS client so it uses secure defaults suitable for production.",
+            "language": "python",
+            "template": "import ssl, socket\n\nctx = ssl.SSLContext(ssl.PROTOCOL_TLS_CLIENT)\nctx.minimum_version = ssl.TLSVersion.{{blank1}}\nctx.check_hostname = {{blank2}}\nctx.verify_mode = ssl.{{blank3}}\n\nwith socket.create_connection((\"api.example.com\", 443)) as raw:\n    with ctx.wrap_socket(raw, server_hostname=\"api.example.com\") as tls_sock:\n        print(tls_sock.version())",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "TLSv1",
+                  "TLSv1_2",
+                  "TLSv1_3"
+                ],
+                "answer": "TLSv1_2"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "True",
+                  "False",
+                  "None"
+                ],
+                "answer": "True"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "CERT_NONE",
+                  "CERT_OPTIONAL",
+                  "CERT_REQUIRED"
+                ],
+                "answer": "CERT_REQUIRED"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete the OpenSSL command to test a TLS 1.3 handshake with proper SNI.",
+            "language": "bash",
+            "template": "openssl s_client -connect api.example.com:443 -servername {{blank1}} -{{blank2}}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "api.example.com",
+                  "localhost",
+                  "0.0.0.0"
+                ],
+                "answer": "api.example.com"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "tls1",
+                  "tls1_2",
+                  "tls1_3"
+                ],
+                "answer": "tls1_3"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:26:59.502Z"
+    }
+  },
+  {
+    "id": "websocket",
+    "name": "WebSocket",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "full-duplex browser-server channel over one tcp link",
+    "history": "Early drafts appeared around 2008 to solve inefficient long polling. Standardized in 2011 as RFC 6455. Became the default realtime web transport for a decade. Now considered a mature/legacy baseline in some architectures as newer options (like WebTransport) emerge.",
+    "why": "WebSocket keeps one persistent, full-duplex connection so client and server can push messages instantly without repeated HTTP polling. This reduces latency and request overhead for chat, live dashboards, multiplayer state, and event feeds.",
+    "rel": {
+      "seeAlso": [
+        "serversenteventssse",
+        "httplongpolling",
+        "socketio",
+        "webtransport",
+        "webrtcdatachannel"
+      ]
+    },
+    "challenges": [
+      "Open a wss:// connection, send a JSON join message on open, render incoming messages, and handle clean close vs unexpected close.",
+      "Implement reconnect logic with exponential backoff (max 30s), reset delay on successful open, and avoid duplicate sockets.",
+      "Add app-level ping/pong heartbeats, mark connection stale after missed intervals, and trigger reconnect with user-visible status.",
+      "Send short-lived token during handshake/query, rotate token on reconnect, and reject unauthorized room subscriptions server-side.",
+      "Bridge high-frequency server events to UI with queue limits, drop policy, and metrics for lag/overflow."
+    ],
+    "extension": {
+      "tag": "full-duplex browser-server channel over one tcp link",
+      "latestChanges": [
+        "Core protocol remains stable (RFC 6455); most updates are in tooling and infra.",
+        "Secure-by-default deployment has become standard: use wss:// behind TLS.",
+        "HTTP/2 bootstrap support (RFC 8441) exists in some stacks, but adoption is uneven."
+      ],
+      "problemItSolves": "WebSocket keeps one persistent, full-duplex connection so client and server can push messages instantly without repeated HTTP polling. This reduces latency and request overhead for chat, live dashboards, multiplayer state, and event feeds.",
+      "historyNotes": [
+        "Early drafts appeared around 2008 to solve inefficient long polling.",
+        "Standardized in 2011 as RFC 6455.",
+        "Became the default realtime web transport for a decade.",
+        "Now considered a mature/legacy baseline in some architectures as newer options (like WebTransport) emerge."
+      ],
+      "relatedTechnologies": [
+        "Server-Sent Events (SSE)",
+        "HTTP long polling",
+        "Socket.IO",
+        "WebTransport",
+        "WebRTC DataChannel",
+        "MQTT over WebSocket"
+      ],
+      "docs": [
+        {
+          "label": "MDN: WebSocket API",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket"
+        },
+        {
+          "label": "RFC 6455: The WebSocket Protocol",
+          "url": "https://datatracker.ietf.org/doc/html/rfc6455"
+        },
+        {
+          "label": "WHATWG WebSockets Standard",
+          "url": "https://websockets.spec.whatwg.org/"
+        },
+        {
+          "label": "RFC 8441: Bootstrapping WebSockets with HTTP/2",
+          "url": "https://datatracker.ietf.org/doc/html/rfc8441"
+        },
+        {
+          "label": "OWASP WebSocket Security Cheat Sheet",
+          "url": "https://cheatsheetseries.owasp.org/cheatsheets/WebSocket_Security_Cheat_Sheet.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Build a minimal chat client",
+          "prompt": "Open a wss:// connection, send a JSON join message on open, render incoming messages, and handle clean close vs unexpected close.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Reconnect with capped backoff",
+          "prompt": "Implement reconnect logic with exponential backoff (max 30s), reset delay on successful open, and avoid duplicate sockets.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Heartbeat + stale connection detection",
+          "prompt": "Add app-level ping/pong heartbeats, mark connection stale after missed intervals, and trigger reconnect with user-visible status.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Secure room authorization",
+          "prompt": "Send short-lived token during handshake/query, rotate token on reconnect, and reject unauthorized room subscriptions server-side.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Backpressure-aware stream bridge",
+          "prompt": "Bridge high-frequency server events to UI with queue limits, drop policy, and metrics for lag/overflow.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize endpoints, room names, and retry values per learner attempt.",
+          "Shuffle MCQ option order each attempt while preserving a single correct answer.",
+          "Require a one-sentence confidence note for each MCQ before submit.",
+          "Block full-credit on code tasks unless hidden tests pass (open/send/message/close behavior).",
+          "Use variant templates with different blank placements to reduce answer sharing.",
+          "Enforce cooldown before re-attempt and show only partial feedback after first try."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which year was WebSocket standardized as RFC 6455?",
+            "options": [
+              "2008",
+              "2011",
+              "2014",
+              "2019"
+            ],
+            "answerIndex": 1,
+            "explanation": "RFC 6455 was published in 2011."
+          },
+          {
+            "question": "What core problem does WebSocket solve compared with repeated HTTP polling?",
+            "options": [
+              "It compresses all media files automatically.",
+              "It enables persistent, low-latency two-way messaging.",
+              "It removes the need for any server state.",
+              "It guarantees message delivery order across all servers."
+            ],
+            "answerIndex": 1,
+            "explanation": "WebSocket keeps one open connection for bidirectional realtime communication."
+          },
+          {
+            "question": "In an HTTP/1.1 WebSocket handshake, which headers indicate protocol upgrade intent?",
+            "options": [
+              "Accept and Content-Type",
+              "Upgrade and Connection",
+              "ETag and If-None-Match",
+              "Authorization and Cookie"
+            ],
+            "answerIndex": 1,
+            "explanation": "Clients request upgrade using Upgrade: websocket and Connection: Upgrade."
+          },
+          {
+            "question": "For production browser apps, which URL scheme should typically be used?",
+            "options": [
+              "http://",
+              "ws://",
+              "wss://",
+              "tcp://"
+            ],
+            "answerIndex": 2,
+            "explanation": "wss:// is WebSocket over TLS and is the secure default."
+          },
+          {
+            "question": "Why should servers validate the Origin header for browser WebSocket connections?",
+            "options": [
+              "To increase frame size limits",
+              "To prevent unauthorized cross-site socket use",
+              "To enable HTTP caching",
+              "To force binary-only payloads"
+            ],
+            "answerIndex": 1,
+            "explanation": "Origin validation helps mitigate cross-site WebSocket hijacking risks."
+          },
+          {
+            "question": "Which statement correctly compares SSE and WebSocket?",
+            "options": [
+              "SSE is full-duplex; WebSocket is server-only.",
+              "SSE is server-to-client only; WebSocket is bidirectional.",
+              "Both require UDP.",
+              "WebSocket cannot send text."
+            ],
+            "answerIndex": 1,
+            "explanation": "SSE pushes one-way from server; WebSocket supports two-way messaging."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the client so it connects securely, sends a join packet, reads incoming data, and reconnects after an unclean close.",
+            "language": "javascript",
+            "template": "function connect() {\n  const socket = new WebSocket({{blank1}});\n\n  socket.addEventListener(\"open\", () => {\n    socket.{{blank2}}(JSON.stringify({ type: \"join\", room: \"general\" }));\n  });\n\n  socket.addEventListener(\"message\", (event) => {\n    const msg = JSON.parse(event.{{blank3}});\n    console.log(\"incoming:\", msg.type);\n  });\n\n  socket.addEventListener(\"close\", (event) => {\n    if (!event.wasClean) {\n      setTimeout(connect, {{blank4}});\n    }\n  });\n}\n\nconnect();",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "\"ws://api.example.com/ws\"",
+                  "\"wss://api.example.com/ws\"",
+                  "\"https://api.example.com/ws\""
+                ],
+                "answer": "\"wss://api.example.com/ws\""
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "send",
+                  "emit",
+                  "write"
+                ],
+                "answer": "send"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "data",
+                  "body",
+                  "payload"
+                ],
+                "answer": "data"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "1000",
+                  "5000",
+                  "\"5s\""
+                ],
+                "answer": "5000"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:27:31.858Z"
+    }
+  },
+  {
+    "id": "webrtc",
+    "name": "WebRTC",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "browser api for real-time media and data",
+    "history": "2010–2011: Technology from GIPS was open-sourced by Google and evolved into WebRTC. Standardization split: W3C defined browser APIs, while IETF defined transport/signaling-related protocols (ICE, STUN/TURN usage, RTP/DTLS/SRTP, SDP/JSEP flow). WebRTC replaced plugin-era real-time web communication approaches (for example Flash-based calling stacks). By the late 2010s, cross-browser support became practical; today it is a mature, foundational real-time web stack often treated as a 'legacy baseline' in product architecture.",
+    "why": "WebRTC enables low-latency peer-to-peer audio, video, and arbitrary data exchange in browsers/apps without requiring plugins, while still supporting relay fallback when direct peer paths fail.",
+    "rel": {
+      "seeAlso": [
+        "ice",
+        "stun",
+        "turn",
+        "sdpjsep",
+        "rtprtcp"
+      ]
+    },
+    "challenges": [
+      "Draw the exact signaling sequence for a browser-to-browser data chat: offer, answer, ICE candidate exchange, and connected state checks.",
+      "Implement reconnect logic when network type changes (Wi-Fi to cellular). Log ICE state transitions and recovery time.",
+      "Refactor a pure P2P group call design to SFU-based routing. Compare bandwidth, latency, and server cost trade-offs.",
+      "Force TURN-only mode in a test room and measure quality impact vs normal ICE policy. Propose optimization steps.",
+      "Audit your signaling and media path for identity, replay, and metadata leakage risks; provide mitigations."
+    ],
+    "extension": {
+      "tag": "browser api for real-time media and data",
+      "latestChanges": [
+        "Major browsers now align on Unified Plan SDP semantics; older Plan B behavior is effectively legacy.",
+        "Encoded media transform workflows (for advanced effects/E2EE patterns) continue to mature in Chromium-based environments.",
+        "Current ecosystem focus is interoperability, NAT traversal reliability, and lower battery/network cost on mobile."
+      ],
+      "problemItSolves": "WebRTC enables low-latency peer-to-peer audio, video, and arbitrary data exchange in browsers/apps without requiring plugins, while still supporting relay fallback when direct peer paths fail.",
+      "historyNotes": [
+        "2010–2011: Technology from GIPS was open-sourced by Google and evolved into WebRTC.",
+        "Standardization split: W3C defined browser APIs, while IETF defined transport/signaling-related protocols (ICE, STUN/TURN usage, RTP/DTLS/SRTP, SDP/JSEP flow).",
+        "WebRTC replaced plugin-era real-time web communication approaches (for example Flash-based calling stacks).",
+        "By the late 2010s, cross-browser support became practical; today it is a mature, foundational real-time web stack often treated as a 'legacy baseline' in product architecture."
+      ],
+      "relatedTechnologies": [
+        "ICE",
+        "STUN",
+        "TURN",
+        "SDP/JSEP",
+        "RTP/RTCP",
+        "DTLS-SRTP",
+        "WebSockets (for signaling)",
+        "SFU media servers"
+      ],
+      "docs": [
+        {
+          "label": "WebRTC.org overview",
+          "url": "https://webrtc.org/"
+        },
+        {
+          "label": "MDN WebRTC API",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API"
+        },
+        {
+          "label": "W3C WebRTC 1.0 spec",
+          "url": "https://w3c.github.io/webrtc-pc/"
+        },
+        {
+          "label": "IETF RTCWEB architecture (RFC 8825)",
+          "url": "https://datatracker.ietf.org/doc/rfc8825/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "1:1 data chat handshake map",
+          "prompt": "Draw the exact signaling sequence for a browser-to-browser data chat: offer, answer, ICE candidate exchange, and connected state checks.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Mobile call resilience test",
+          "prompt": "Implement reconnect logic when network type changes (Wi-Fi to cellular). Log ICE state transitions and recovery time.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "SFU migration design",
+          "prompt": "Refactor a pure P2P group call design to SFU-based routing. Compare bandwidth, latency, and server cost trade-offs.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "TURN-only fallback drill",
+          "prompt": "Force TURN-only mode in a test room and measure quality impact vs normal ICE policy. Propose optimization steps.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Security posture review",
+          "prompt": "Audit your signaling and media path for identity, replay, and metadata leakage risks; provide mitigations.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Use randomized peer IDs and room codes per attempt; do not reuse previous signaling transcripts.",
+          "Require a short typed rationale for each multiple-choice answer to verify conceptual ownership.",
+          "Shuffle question order and option order on every retry.",
+          "In code tasks, vary variable names and server config values while preserving logic.",
+          "Block copy-paste into final answers for timed checks; allow scratchpad notes separately.",
+          "Score includes a live run check: code must reach expected connection state transitions, not just syntactic correctness."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which organizations primarily standardized WebRTC components?",
+            "options": [
+              "W3C and IETF",
+              "ECMA and ISO",
+              "WHATWG and Unicode",
+              "W3C only"
+            ],
+            "answerIndex": 0,
+            "explanation": "WebRTC browser APIs were standardized at W3C, while transport/protocol pieces were handled in IETF work."
+          },
+          {
+            "question": "What is the main job of STUN in WebRTC?",
+            "options": [
+              "Encrypt media packets end-to-end",
+              "Discover a public-facing address/port mapping",
+              "Store call recordings",
+              "Replace ICE negotiation"
+            ],
+            "answerIndex": 1,
+            "explanation": "STUN helps a client discover how it appears to external networks, which supports ICE candidate gathering."
+          },
+          {
+            "question": "When is TURN most needed?",
+            "options": [
+              "When both peers are on open public IPs",
+              "When direct peer-to-peer paths fail due to strict NAT/firewall",
+              "Only for screen sharing",
+              "Only during codec negotiation"
+            ],
+            "answerIndex": 1,
+            "explanation": "TURN relays traffic when direct ICE connectivity cannot be established."
+          },
+          {
+            "question": "Which WebRTC object carries arbitrary low-latency app data?",
+            "options": [
+              "MediaStreamTrack",
+              "RTCDataChannel",
+              "RTCRtpSender",
+              "AudioContext"
+            ],
+            "answerIndex": 1,
+            "explanation": "RTCDataChannel provides bidirectional data transport over SCTP/DTLS."
+          },
+          {
+            "question": "Historically, WebRTC most directly reduced dependence on what?",
+            "options": [
+              "Server-side rendering",
+              "Browser plugins for real-time communication",
+              "HTTP caching",
+              "Relational databases"
+            ],
+            "answerIndex": 1,
+            "explanation": "Before WebRTC, browser-based calling often depended on plugins such as Flash-based stacks."
+          },
+          {
+            "question": "In offer/answer flow, what should the offerer do right after createOffer()?",
+            "options": [
+              "Immediately close the connection",
+              "Call setLocalDescription(offer) before signaling it",
+              "Call createAnswer()",
+              "Send ICE candidates only, no SDP"
+            ],
+            "answerIndex": 1,
+            "explanation": "The offerer sets local description first, then sends SDP through the signaling channel."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the offerer-side setup for a basic RTCDataChannel session.",
+            "language": "javascript",
+            "template": "const pc = new RTCPeerConnection({\n  iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]\n});\n\nconst chat = pc.{{blank1}}('chat');\npc.{{blank2}} = (event) => {\n  if (event.candidate) signalSend({ candidate: event.candidate });\n};\n\nconst offer = await pc.{{blank3}}();\nawait pc.{{blank4}}(offer);\nsignalSend({ type: offer.type, sdp: offer.sdp });",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "createDataChannel",
+                  "ondatachannel",
+                  "addTrack",
+                  "createOffer"
+                ],
+                "answer": "createDataChannel"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "onicecandidate",
+                  "ontrack",
+                  "onmessage",
+                  "onconnectionstatechange"
+                ],
+                "answer": "onicecandidate"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "createOffer",
+                  "createAnswer",
+                  "getStats",
+                  "restartIce"
+                ],
+                "answer": "createOffer"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "setLocalDescription",
+                  "setRemoteDescription",
+                  "addIceCandidate",
+                  "close"
+                ],
+                "answer": "setLocalDescription"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:27:58.414Z"
+    }
+  },
+  {
+    "id": "rest",
+    "name": "REST",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "architectural style for stateless web apis",
+    "history": "REST was defined by Roy Fielding in his 2000 dissertation as an architectural style, not a protocol. It emerged from lessons learned while designing the early web architecture. Core constraints include client-server, statelessness, cacheability, uniform interface, layered system, and optional code-on-demand. REST became the dominant public API style in the 2010s and remains foundational, though now considered mature/legacy in many stacks.",
+    "why": "REST provides a consistent way to expose and consume resources over the web so clients and servers can evolve independently, scale horizontally, and use standard HTTP features like caching and status codes.",
+    "rel": {
+      "seeAlso": [
+        "http",
+        "uri",
+        "json",
+        "xml",
+        "openapi"
+      ]
+    },
+    "challenges": [
+      "Given a Todo resource, choose GET/POST/PUT/PATCH/DELETE routes and matching success status codes (200, 201, 204). Keep routes noun-based.",
+      "Design GET /products with pagination, filtering, ETag, and 304 handling. Include sample request/response headers.",
+      "Convert endpoints like /createUser and /getUserById into resource-oriented routes. Add proper status codes for validation, not found, and conflicts.",
+      "Propose a v1 to v2 migration plan using additive changes, deprecation headers, and compatibility tests.",
+      "Define a reusable error response schema (code, message, details, traceId) and map it to 400/401/403/404/409/422/500."
+    ],
+    "extension": {
+      "tag": "architectural style for stateless web apis",
+      "latestChanges": [
+        "HTTP semantics were consolidated in RFC 9110 (2022), clarifying method and status code behavior used by REST APIs.",
+        "HTTP/2 and HTTP/3 improved transport speed and multiplexing, while REST constraints remained unchanged.",
+        "Modern REST practice now commonly includes OpenAPI contracts, linting, and contract testing for consistency."
+      ],
+      "problemItSolves": "REST provides a consistent way to expose and consume resources over the web so clients and servers can evolve independently, scale horizontally, and use standard HTTP features like caching and status codes.",
+      "historyNotes": [
+        "REST was defined by Roy Fielding in his 2000 dissertation as an architectural style, not a protocol.",
+        "It emerged from lessons learned while designing the early web architecture.",
+        "Core constraints include client-server, statelessness, cacheability, uniform interface, layered system, and optional code-on-demand.",
+        "REST became the dominant public API style in the 2010s and remains foundational, though now considered mature/legacy in many stacks."
+      ],
+      "relatedTechnologies": [
+        "HTTP",
+        "URI",
+        "JSON",
+        "XML",
+        "OpenAPI",
+        "HATEOAS",
+        "GraphQL",
+        "gRPC"
+      ],
+      "docs": [
+        {
+          "label": "Fielding dissertation: REST architectural style",
+          "url": "https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+        },
+        {
+          "label": "RFC 9110: HTTP Semantics",
+          "url": "https://www.rfc-editor.org/rfc/rfc9110"
+        },
+        {
+          "label": "MDN: HTTP request methods",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Map CRUD to HTTP correctly",
+          "prompt": "Given a Todo resource, choose GET/POST/PUT/PATCH/DELETE routes and matching success status codes (200, 201, 204). Keep routes noun-based.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Design a cache-friendly list endpoint",
+          "prompt": "Design GET /products with pagination, filtering, ETag, and 304 handling. Include sample request/response headers.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Refactor RPC endpoints to REST",
+          "prompt": "Convert endpoints like /createUser and /getUserById into resource-oriented routes. Add proper status codes for validation, not found, and conflicts.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Versioning without breakage",
+          "prompt": "Propose a v1 to v2 migration plan using additive changes, deprecation headers, and compatibility tests.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Error model standardization",
+          "prompt": "Define a reusable error response schema (code, message, details, traceId) and map it to 400/401/403/404/409/422/500.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question order and options on every attempt.",
+          "Use per-learner variants for resource names, IDs, and status-code distractors.",
+          "Require a short justification before showing correctness.",
+          "Allow one retake only; regenerate all question variants on retake.",
+          "Flag unusually fast submissions and near-identical answer patterns for review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who introduced REST as an architectural style?",
+            "options": [
+              "Tim Berners-Lee",
+              "Roy Fielding",
+              "Brendan Eich",
+              "Linus Torvalds"
+            ],
+            "answerIndex": 1,
+            "explanation": "Roy Fielding defined REST in his 2000 dissertation."
+          },
+          {
+            "question": "Which REST constraint requires each request to contain all context needed to process it?",
+            "options": [
+              "Layered system",
+              "Cacheable",
+              "Stateless",
+              "Code-on-demand"
+            ],
+            "answerIndex": 2,
+            "explanation": "Statelessness means the server does not store client session state between requests."
+          },
+          {
+            "question": "In REST, a URI primarily identifies a:",
+            "options": [
+              "TCP socket",
+              "Server thread",
+              "Resource",
+              "Serialization format"
+            ],
+            "answerIndex": 2,
+            "explanation": "URIs identify resources; representations (JSON/XML/etc.) are separate."
+          },
+          {
+            "question": "Which HTTP method is idempotent by definition?",
+            "options": [
+              "POST",
+              "PUT",
+              "PATCH",
+              "CONNECT"
+            ],
+            "answerIndex": 1,
+            "explanation": "Repeating the same PUT should leave the resource in the same final state."
+          },
+          {
+            "question": "Is JSON mandatory for a REST API?",
+            "options": [
+              "Yes, always",
+              "No, any representation can be used",
+              "Only for public APIs",
+              "Only with HTTP/2"
+            ],
+            "answerIndex": 1,
+            "explanation": "REST is format-agnostic; JSON is common but not required."
+          },
+          {
+            "question": "What is the main value of REST's uniform interface?",
+            "options": [
+              "Tighter client-server coupling",
+              "Consistent semantics that reduce integration friction",
+              "Eliminates status codes",
+              "Requires HATEOAS in every API"
+            ],
+            "answerIndex": 1,
+            "explanation": "Uniform semantics (methods, status codes, resource patterns) improve interoperability."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this Express route so it follows REST for reading a single resource.",
+            "language": "javascript",
+            "template": "app.{{verb}}('/orders/:id', async (req, res) => {\n  const order = await repo.find(req.params.id);\n  if (!order) return res.sendStatus({{notFoundCode}});\n  return res.{{successSender}}(order);\n});",
+            "blanks": [
+              {
+                "id": "verb",
+                "options": [
+                  "get",
+                  "post",
+                  "patch"
+                ],
+                "answer": "get"
+              },
+              {
+                "id": "notFoundCode",
+                "options": [
+                  "404",
+                  "400",
+                  "204"
+                ],
+                "answer": "404"
+              },
+              {
+                "id": "successSender",
+                "options": [
+                  "json",
+                  "sendStatus",
+                  "end"
+                ],
+                "answer": "json"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:28:27.889Z"
+    }
+  },
+  {
+    "id": "soap",
+    "name": "SOAP",
+    "cat": "legacy",
+    "born": "2026 · Daily Agent",
+    "tag": "xml protocol for contract-first web services",
+    "history": "1998: SOAP 1.0 was introduced by Microsoft, IBM, and partners. 2000: SOAP 1.1 was published as a W3C Note. 2003: SOAP 1.2 became a W3C Recommendation. 2000s: WS-* standards (like WS-Security and WS-Addressing) expanded SOAP in enterprise stacks. 2010s+: REST/JSON became dominant for new public APIs, while SOAP remained in legacy and regulated systems.",
+    "why": "SOAP provides a strict, contract-driven way for systems to exchange structured messages, especially when teams need formal schemas, message-level security, and reliable enterprise workflows.",
+    "rel": {
+      "seeAlso": [
+        "xml",
+        "wsdl",
+        "xsd",
+        "wssecurity",
+        "wsaddressing"
+      ]
+    },
+    "challenges": [
+      "Given a SOAP XML message, identify Envelope, Header, Body, and operation element in under 60 seconds.",
+      "From a small WSDL snippet, pick the correct operation name, namespace, and required request fields.",
+      "Given a Fault response, determine if the issue is namespace mismatch, missing required element, or auth failure.",
+      "Choose when SOAP is preferable over REST for a regulated workflow needing strict contracts and message signing.",
+      "Review a request and decide which WS-Security header is mandatory for replay protection."
+    ],
+    "extension": {
+      "tag": "xml protocol for contract-first web services",
+      "latestChanges": [
+        "Core standard is still SOAP 1.2; no newer major version.",
+        "Most current work is maintenance: security updates, interop fixes, and platform LTS support.",
+        "Adoption is strongest in legacy enterprise, finance, telecom, and government integrations."
+      ],
+      "problemItSolves": "SOAP provides a strict, contract-driven way for systems to exchange structured messages, especially when teams need formal schemas, message-level security, and reliable enterprise workflows.",
+      "historyNotes": [
+        "1998: SOAP 1.0 was introduced by Microsoft, IBM, and partners.",
+        "2000: SOAP 1.1 was published as a W3C Note.",
+        "2003: SOAP 1.2 became a W3C Recommendation.",
+        "2000s: WS-* standards (like WS-Security and WS-Addressing) expanded SOAP in enterprise stacks.",
+        "2010s+: REST/JSON became dominant for new public APIs, while SOAP remained in legacy and regulated systems."
+      ],
+      "relatedTechnologies": [
+        "XML",
+        "WSDL",
+        "XSD",
+        "WS-Security",
+        "WS-Addressing",
+        "UDDI",
+        "REST"
+      ],
+      "docs": [
+        {
+          "label": "W3C SOAP 1.2 Part 1 (Messaging Framework)",
+          "url": "https://www.w3.org/TR/soap12-part1/"
+        },
+        {
+          "label": "W3C SOAP 1.2 Part 2 (Adjuncts)",
+          "url": "https://www.w3.org/TR/soap12-part2/"
+        },
+        {
+          "label": "WSDL 1.1 (W3C Note)",
+          "url": "https://www.w3.org/TR/wsdl"
+        },
+        {
+          "label": "XML Schema Overview",
+          "url": "https://www.w3.org/XML/Schema"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Read a SOAP envelope",
+          "prompt": "Given a SOAP XML message, identify Envelope, Header, Body, and operation element in under 60 seconds.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Map WSDL to request",
+          "prompt": "From a small WSDL snippet, pick the correct operation name, namespace, and required request fields.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Debug a SOAP fault",
+          "prompt": "Given a Fault response, determine if the issue is namespace mismatch, missing required element, or auth failure.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Legacy integration decision",
+          "prompt": "Choose when SOAP is preferable over REST for a regulated workflow needing strict contracts and message signing.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Header policy check",
+          "prompt": "Review a request and decide which WS-Security header is mandatory for replay protection.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order on every attempt.",
+          "Use a large item pool with equivalent variants (same skill, different wording/data).",
+          "Apply per-question timers to reduce external lookup time.",
+          "Disable backtracking in graded mode.",
+          "Show only one question per screen for mobile focus.",
+          "For code dropdown tasks, log rapid guess-pattern changes and flag abnormal attempts."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which SOAP version became a W3C Recommendation in 2003?",
+            "options": [
+              "SOAP 1.0",
+              "SOAP 1.1",
+              "SOAP 1.2",
+              "SOAP 2.0"
+            ],
+            "answerIndex": 2,
+            "explanation": "SOAP 1.2 is the W3C Recommendation; 1.1 was a W3C Note."
+          },
+          {
+            "question": "Which element is required in every SOAP message?",
+            "options": [
+              "Envelope",
+              "Header",
+              "Fault",
+              "Action"
+            ],
+            "answerIndex": 0,
+            "explanation": "Envelope is mandatory; Header is optional; Fault appears only on errors."
+          },
+          {
+            "question": "What is the main role of WSDL in SOAP systems?",
+            "options": [
+              "Compress XML payloads",
+              "Define service contract (operations, messages, bindings)",
+              "Encrypt transport traffic",
+              "Cache API responses"
+            ],
+            "answerIndex": 1,
+            "explanation": "WSDL is the formal contract that clients use to generate or validate calls."
+          },
+          {
+            "question": "SOAP being transport-agnostic means:",
+            "options": [
+              "It only works over HTTPS",
+              "It can be carried over multiple transports like HTTP or SMTP",
+              "It cannot use HTTP headers",
+              "It must use binary payloads"
+            ],
+            "answerIndex": 1,
+            "explanation": "SOAP is XML messaging and can ride on different transport protocols."
+          },
+          {
+            "question": "Which WS-* spec focuses on message-level security features?",
+            "options": [
+              "WS-Addressing",
+              "WS-Security",
+              "WS-ReliableMessaging",
+              "WSDL"
+            ],
+            "answerIndex": 1,
+            "explanation": "WS-Security defines signing, encryption, and security token mechanisms."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the SOAP 1.2 request skeleton for a GetBalance operation.",
+            "language": "xml",
+            "template": "<soap:Envelope xmlns:soap=\"{{envNs}}\" xmlns:bk=\"{{svcNs}}\">\n  <soap:Header/>\n  <soap:Body>\n    <bk:{{operation}}>\n      <bk:CustomerId>{{customerId}}</bk:CustomerId>\n    </bk:{{operation}}>\n  </soap:Body>\n</soap:Envelope>",
+            "blanks": [
+              {
+                "id": "envNs",
+                "options": [
+                  "http://schemas.xmlsoap.org/soap/envelope/",
+                  "http://www.w3.org/2003/05/soap-envelope",
+                  "urn:soap-env"
+                ],
+                "answer": "http://www.w3.org/2003/05/soap-envelope"
+              },
+              {
+                "id": "svcNs",
+                "options": [
+                  "http://example.com/bank",
+                  "http://www.w3.org/2003/05/soap-envelope",
+                  "urn:local"
+                ],
+                "answer": "http://example.com/bank"
+              },
+              {
+                "id": "operation",
+                "options": [
+                  "GetBalance",
+                  "POST",
+                  "Fault"
+                ],
+                "answer": "GetBalance"
+              },
+              {
+                "id": "customerId",
+                "options": [
+                  "C1024",
+                  "true",
+                  "<id/>"
+                ],
+                "answer": "C1024"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:29:02.566Z"
+    }
+  },
+  {
+    "id": "microservices",
+    "name": "Microservices Architecture",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "an app style using small independent services",
+    "history": "Microservices evolved from SOA ideas, with stronger focus on small deployable units. Around 2011, the term 'microservices' was discussed at software architecture workshops. The 2014 Fowler/Lewis article helped standardize the term and core principles. Containers and Kubernetes accelerated adoption by simplifying packaging and deployment.",
+    "why": "It helps teams ship, scale, and recover parts of a system independently instead of redeploying a single large application.",
+    "rel": {
+      "seeAlso": [
+        "domaindrivendesignddd",
+        "apigateway",
+        "docker",
+        "kubernetes",
+        "servicemeshistiolinkerd"
+      ]
+    },
+    "challenges": [
+      "Given an e-commerce monolith (users, catalog, orders, payments), split it into 4-6 services and justify each boundary in one sentence.",
+      "Model checkout with REST for command intake and events for order/payment updates. Include failure paths and retries.",
+      "Add circuit breaker, timeout, retry, and idempotency strategy for an Orders service calling Payments. Define metrics and alerts.",
+      "Design a saga for order creation across Orders, Inventory, and Payments with compensating actions and event schema.",
+      "Create a release checklist for one microservice: contract testing, tracing, canary rollout, rollback trigger, and SLO guardrails."
+    ],
+    "extension": {
+      "tag": "an app style using small independent services",
+      "latestChanges": [
+        "Platform engineering teams now provide microservice templates and golden paths.",
+        "Ambient service mesh modes are reducing sidecar overhead in production clusters.",
+        "OpenTelemetry tracing is becoming a default requirement for service-to-service calls.",
+        "Event-driven contracts (Kafka/NATS) are used more often alongside REST APIs.",
+        "Cost and ops pressure is driving teams to merge overly small services."
+      ],
+      "problemItSolves": "It helps teams ship, scale, and recover parts of a system independently instead of redeploying a single large application.",
+      "historyNotes": [
+        "Microservices evolved from SOA ideas, with stronger focus on small deployable units.",
+        "Around 2011, the term 'microservices' was discussed at software architecture workshops.",
+        "The 2014 Fowler/Lewis article helped standardize the term and core principles.",
+        "Containers and Kubernetes accelerated adoption by simplifying packaging and deployment."
+      ],
+      "relatedTechnologies": [
+        "Domain-Driven Design (DDD)",
+        "API Gateway",
+        "Docker",
+        "Kubernetes",
+        "Service Mesh (Istio/Linkerd)",
+        "Event-Driven Architecture",
+        "gRPC",
+        "OpenTelemetry"
+      ],
+      "docs": [
+        {
+          "label": "Martin Fowler: Microservices",
+          "url": "https://martinfowler.com/articles/microservices.html"
+        },
+        {
+          "label": "microservices.io patterns",
+          "url": "https://microservices.io/"
+        },
+        {
+          "label": "The Twelve-Factor App",
+          "url": "https://12factor.net/"
+        },
+        {
+          "label": "Kubernetes Concepts",
+          "url": "https://kubernetes.io/docs/concepts/"
+        },
+        {
+          "label": "Azure Microservices Architecture Guide",
+          "url": "https://learn.microsoft.com/azure/architecture/microservices/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Find service boundaries",
+          "prompt": "Given an e-commerce monolith (users, catalog, orders, payments), split it into 4-6 services and justify each boundary in one sentence.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Design synchronous + async flows",
+          "prompt": "Model checkout with REST for command intake and events for order/payment updates. Include failure paths and retries.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Resilience implementation plan",
+          "prompt": "Add circuit breaker, timeout, retry, and idempotency strategy for an Orders service calling Payments. Define metrics and alerts.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Data consistency without 2PC",
+          "prompt": "Design a saga for order creation across Orders, Inventory, and Payments with compensating actions and event schema.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Production hardening checklist",
+          "prompt": "Create a release checklist for one microservice: contract testing, tracing, canary rollout, rollback trigger, and SLO guardrails.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question order and option order on every attempt.",
+          "Use time-boxed attempts with one-question-per-screen mobile flow.",
+          "Require a short rationale for each MCQ selection before submit.",
+          "Regenerate dropdown distractors and values on retries.",
+          "Block copy/paste into rationale fields during proctored mode.",
+          "Show results only after full submission; no per-question instant feedback in graded mode."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which 2014 source most helped popularize the term 'microservices'?",
+            "options": [
+              "Kubernetes v1 release notes",
+              "Fowler and Lewis article on martinfowler.com",
+              "The Reactive Manifesto",
+              "The HTTP/2 RFC"
+            ],
+            "answerIndex": 1,
+            "explanation": "The Fowler/Lewis article became a widely cited reference for microservices principles."
+          },
+          {
+            "question": "Which company publicly demonstrated microservices practices early through OSS tooling like Eureka and Hystrix?",
+            "options": [
+              "Netflix",
+              "Oracle",
+              "IBM",
+              "Adobe"
+            ],
+            "answerIndex": 0,
+            "explanation": "Netflix shared many production patterns and open-source tools used in microservice systems."
+          },
+          {
+            "question": "Why is 'database per service' commonly recommended?",
+            "options": [
+              "To force every query through the API gateway",
+              "To let each service own schema and release changes independently",
+              "To make distributed joins easier",
+              "To avoid backups"
+            ],
+            "answerIndex": 1,
+            "explanation": "Independent data ownership reduces coupling and lets teams deploy without cross-service schema locks."
+          },
+          {
+            "question": "What usually becomes harder after moving from monolith to microservices?",
+            "options": [
+              "Writing HTML templates",
+              "Distributed transactions and observability",
+              "Defining CSS variables",
+              "Using unit tests"
+            ],
+            "answerIndex": 1,
+            "explanation": "Network boundaries introduce consistency, latency, tracing, and failure-handling complexity."
+          },
+          {
+            "question": "What is the main role of an API gateway in microservices?",
+            "options": [
+              "Run database migrations",
+              "Store all service data",
+              "Provide a single entry for routing, auth, and aggregation",
+              "Replace internal service discovery"
+            ],
+            "answerIndex": 2,
+            "explanation": "A gateway centralizes client-facing concerns while services stay focused on business capabilities."
+          },
+          {
+            "question": "Which pattern stops repeated calls to an unhealthy downstream service?",
+            "options": [
+              "Circuit breaker",
+              "Repository",
+              "Singleton",
+              "Decorator"
+            ],
+            "answerIndex": 0,
+            "explanation": "Circuit breakers open after failures and prevent cascading outages."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this Kubernetes setup so the Orders microservice is independently deployable and reachable inside the cluster.",
+            "language": "yaml",
+            "template": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: orders-service\nspec:\n  replicas: {{blank1}}\n  selector:\n    matchLabels:\n      app: orders-service\n  template:\n    metadata:\n      labels:\n        app: orders-service\n    spec:\n      containers:\n        - name: orders-service\n          image: acme/orders-service:1.0.0\n          ports:\n            - containerPort: {{blank2}}\n          readinessProbe:\n            httpGet:\n              path: /health\n              port: {{blank3}}\n---\napiVersion: v1\nkind: Service\nmetadata:\n  name: orders-service\nspec:\n  selector:\n    app: orders-service\n  ports:\n    - port: 80\n      targetPort: {{blank4}}\n  type: {{blank5}}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "1",
+                  "2",
+                  "0",
+                  "10"
+                ],
+                "answer": "2"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "80",
+                  "443",
+                  "8080",
+                  "3000"
+                ],
+                "answer": "8080"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "8080",
+                  "9090",
+                  "3306",
+                  "6379"
+                ],
+                "answer": "8080"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "8080",
+                  "8443",
+                  "53",
+                  "25"
+                ],
+                "answer": "8080"
+              },
+              {
+                "id": "blank5",
+                "options": [
+                  "ClusterIP",
+                  "NodePort",
+                  "ExternalName",
+                  "LoadBalancer"
+                ],
+                "answer": "ClusterIP"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-03T22:29:40.014Z"
+    }
   }
 ]
