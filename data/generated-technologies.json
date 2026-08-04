@@ -16821,5 +16821,2351 @@
       ],
       "updatedAt": "2026-08-03T22:29:40.014Z"
     }
+  },
+  {
+    "id": "serverless",
+    "name": "Serverless Computing (serverless)",
+    "cat": "cloud",
+    "born": "2026 · Daily Agent",
+    "tag": "event-driven cloud execution without server management",
+    "history": "2007–2013: PaaS platforms popularized app deployment without direct server ops. 2014: AWS Lambda launched and made Function-as-a-Service mainstream. 2016: Azure Functions and Google Cloud Functions expanded multi-cloud serverless options. 2018: Knative brought serverless-style patterns to Kubernetes environments. 2019+: Edge runtimes (for example Cloudflare Workers) pushed serverless closer to users. 2020s: Ecosystem matured around IaC, observability, security scanning, and event standards.",
+    "why": "Serverless lets teams ship backend code without provisioning or patching servers, while auto-scaling and paying mainly per request/runtime. It is strong for bursty, event-driven workloads and small teams needing fast delivery.",
+    "rel": {
+      "seeAlso": [
+        "cloudcomputing",
+        "functionasaservicefaas",
+        "backendasaservicebaas",
+        "eventdrivenarchitecture",
+        "apigateway"
+      ]
+    },
+    "challenges": [
+      "Create one HTTP-triggered function that returns JSON {\"ok\": true}. Test locally, then deploy.",
+      "Build an image-upload flow: storage event triggers a function that validates file type and writes metadata to a database.",
+      "Design a queue-based order processor with retries, dead-letter queue handling, idempotency key checks, and structured logs.",
+      "Set concurrency limits and alerts for a function receiving burst traffic. Explain trade-offs between latency and spend.",
+      "Measure first-invocation latency vs warm-invocation latency and summarize one mitigation strategy."
+    ],
+    "extension": {
+      "tag": "event-driven cloud execution without server management",
+      "latestChanges": [
+        "Container-based serverless platforms are converging with FaaS workflows.",
+        "Cold-start mitigation improved via snapshotting and pre-warming options.",
+        "Edge serverless adoption increased for low-latency API and personalization.",
+        "Observability tooling now includes built-in tracing and per-invocation cost views.",
+        "CloudEvents adoption continues to improve cross-platform event portability."
+      ],
+      "problemItSolves": "Serverless lets teams ship backend code without provisioning or patching servers, while auto-scaling and paying mainly per request/runtime. It is strong for bursty, event-driven workloads and small teams needing fast delivery.",
+      "historyNotes": [
+        "2007–2013: PaaS platforms popularized app deployment without direct server ops.",
+        "2014: AWS Lambda launched and made Function-as-a-Service mainstream.",
+        "2016: Azure Functions and Google Cloud Functions expanded multi-cloud serverless options.",
+        "2018: Knative brought serverless-style patterns to Kubernetes environments.",
+        "2019+: Edge runtimes (for example Cloudflare Workers) pushed serverless closer to users.",
+        "2020s: Ecosystem matured around IaC, observability, security scanning, and event standards."
+      ],
+      "relatedTechnologies": [
+        "cloud computing",
+        "function as a service (faas)",
+        "backend as a service (baas)",
+        "event-driven architecture",
+        "api gateway",
+        "containers",
+        "kubernetes",
+        "infrastructure as code"
+      ],
+      "docs": [
+        {
+          "label": "AWS Lambda Developer Guide",
+          "url": "https://docs.aws.amazon.com/lambda/"
+        },
+        {
+          "label": "Azure Functions Documentation",
+          "url": "https://learn.microsoft.com/azure/azure-functions/"
+        },
+        {
+          "label": "Google Cloud Functions Documentation",
+          "url": "https://cloud.google.com/functions/docs"
+        },
+        {
+          "label": "CNCF CloudEvents Specification",
+          "url": "https://cloudevents.io/"
+        },
+        {
+          "label": "Serverless Framework Docs",
+          "url": "https://www.serverless.com/framework/docs"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Hello Function",
+          "prompt": "Create one HTTP-triggered function that returns JSON {\"ok\": true}. Test locally, then deploy.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Event Pipeline",
+          "prompt": "Build an image-upload flow: storage event triggers a function that validates file type and writes metadata to a database.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Resilient Async Processing",
+          "prompt": "Design a queue-based order processor with retries, dead-letter queue handling, idempotency key checks, and structured logs.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Cost Guardrail Drill",
+          "prompt": "Set concurrency limits and alerts for a function receiving burst traffic. Explain trade-offs between latency and spend.",
+          "format": "coding"
+        },
+        {
+          "level": 1,
+          "title": "Cold Start Awareness",
+          "prompt": "Measure first-invocation latency vs warm-invocation latency and summarize one mitigation strategy.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Use scenario variants (different providers/events) so answers cannot be copied verbatim.",
+          "Time-box each section and disable answer backtracking after submission.",
+          "Require code execution checks (tests) rather than text-only answers.",
+          "Flag near-identical code structure across learners with AST similarity checks.",
+          "Use proctoring signals where policy allows (focus change, rapid paste bursts)."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which launch is most associated with making FaaS mainstream in 2014?",
+            "options": [
+              "AWS Lambda",
+              "Azure Functions",
+              "Heroku Dynos",
+              "Kubernetes"
+            ],
+            "answerIndex": 0,
+            "explanation": "AWS Lambda launched in 2014 and is widely credited with mainstreaming modern FaaS."
+          },
+          {
+            "question": "In a serverless model, who is primarily responsible for OS patching of the execution environment?",
+            "options": [
+              "The application team",
+              "The cloud provider",
+              "The end user",
+              "A third-party CDN"
+            ],
+            "answerIndex": 1,
+            "explanation": "The provider manages the underlying servers, runtime host maintenance, and patching."
+          },
+          {
+            "question": "What billing pattern is most typical for serverless functions?",
+            "options": [
+              "Fixed monthly VM cost",
+              "Per request and execution duration",
+              "Per developer seat",
+              "Per subnet"
+            ],
+            "answerIndex": 1,
+            "explanation": "Serverless commonly charges by invocation count and compute time used."
+          },
+          {
+            "question": "What is the main technical cause of a cold start?",
+            "options": [
+              "DNS lookup failure",
+              "Function code syntax error",
+              "Initializing a new runtime/container instance",
+              "Database schema migration"
+            ],
+            "answerIndex": 2,
+            "explanation": "Cold starts happen when the platform must create and initialize a new execution environment."
+          },
+          {
+            "question": "Which workload is usually the best fit for serverless first?",
+            "options": [
+              "Steady 24/7 high-CPU batch job",
+              "Bursty event-driven API or automation task",
+              "Large monolith with in-memory session state",
+              "GPU-heavy training job running for days"
+            ],
+            "answerIndex": 1,
+            "explanation": "Serverless excels at variable traffic and event-triggered workloads."
+          },
+          {
+            "question": "Which approach best reduces vendor lock-in risk in serverless systems?",
+            "options": [
+              "Using only provider-specific SDK calls in business logic",
+              "Hard-coding event payload assumptions",
+              "Using open event contracts and a portability layer",
+              "Avoiding all managed services"
+            ],
+            "answerIndex": 2,
+            "explanation": "Abstracting provider specifics and using open contracts improves portability."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Node.js Lambda handler for an API response.",
+            "language": "javascript",
+            "template": "export const {{blank1}} = async ({{blank2}}) => {\n  const name = {{blank2}}.queryStringParameters?.name ?? 'world';\n  return {\n    statusCode: {{blank3}},\n    headers: { 'content-type': 'application/json' },\n    body: JSON.stringify({ message: `hello, ${name}` })\n  };\n};",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "handler",
+                  "bootstrap",
+                  "run"
+                ],
+                "answer": "handler"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "event",
+                  "request",
+                  "payload"
+                ],
+                "answer": "event"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "200",
+                  "404",
+                  "500"
+                ],
+                "answer": "200"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:26:46.109Z"
+    }
+  },
+  {
+    "id": "eventdriven",
+    "name": "Event-Driven Architecture",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "services reacting to published events asynchronously",
+    "history": "1980s: GUI toolkits and OS kernels popularized event loops and callback-based interaction. 1990s: Enterprise message brokers and queues enabled asynchronous integration between systems. 2000s: SOA and ESB patterns formalized event messaging in large organizations. 2010s: Microservices and Apache Kafka accelerated event streaming and event-first system design. 2020s: Cloud-native architectures normalized event buses, serverless triggers, and event standards.",
+    "why": "It decouples systems that would otherwise depend on direct synchronous calls, improving scalability, resilience, and delivery speed. Producers publish facts (events), and consumers react independently, reducing tight coupling and enabling near-real-time workflows.",
+    "rel": {
+      "seeAlso": [
+        "pubsub",
+        "messagequeues",
+        "apachekafka",
+        "rabbitmq",
+        "nats"
+      ]
+    },
+    "challenges": [
+      "Given checkout steps (order, payment, inventory, email), list 4 domain events in order and identify producer/consumer for each.",
+      "Write pseudocode for a consumer that safely handles duplicate order.created events using an idempotency key.",
+      "Design retry + dead-letter handling for payment.failed events. Define retry count, backoff strategy, and operator alert condition.",
+      "Propose a backward-compatible v2 for user.registered by adding fields without breaking existing consumers.",
+      "Model a saga for travel booking (flight, hotel, payment). List success events and compensating events."
+    ],
+    "extension": {
+      "tag": "services reacting to published events asynchronously",
+      "latestChanges": [
+        "CloudEvents and AsyncAPI are improving cross-platform event interoperability.",
+        "Kafka, Pulsar, and cloud event buses now offer stronger schema and governance tooling.",
+        "Serverless platforms increasingly use events as the default integration model.",
+        "Teams are adopting event contracts, tracing, and dead-letter policies earlier in design."
+      ],
+      "problemItSolves": "It decouples systems that would otherwise depend on direct synchronous calls, improving scalability, resilience, and delivery speed. Producers publish facts (events), and consumers react independently, reducing tight coupling and enabling near-real-time workflows.",
+      "historyNotes": [
+        "1980s: GUI toolkits and OS kernels popularized event loops and callback-based interaction.",
+        "1990s: Enterprise message brokers and queues enabled asynchronous integration between systems.",
+        "2000s: SOA and ESB patterns formalized event messaging in large organizations.",
+        "2010s: Microservices and Apache Kafka accelerated event streaming and event-first system design.",
+        "2020s: Cloud-native architectures normalized event buses, serverless triggers, and event standards."
+      ],
+      "relatedTechnologies": [
+        "Pub/Sub",
+        "Message Queues",
+        "Apache Kafka",
+        "RabbitMQ",
+        "NATS",
+        "Event Sourcing",
+        "CQRS",
+        "Saga Pattern"
+      ],
+      "docs": [
+        {
+          "label": "CloudEvents Specification",
+          "url": "https://cloudevents.io/"
+        },
+        {
+          "label": "AsyncAPI Documentation",
+          "url": "https://www.asyncapi.com/docs"
+        },
+        {
+          "label": "Martin Fowler: Event-Driven Architecture",
+          "url": "https://martinfowler.com/articles/201701-event-driven.html"
+        },
+        {
+          "label": "AWS Event-Driven Architecture Overview",
+          "url": "https://aws.amazon.com/event-driven-architecture/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Map event flow for checkout",
+          "prompt": "Given checkout steps (order, payment, inventory, email), list 4 domain events in order and identify producer/consumer for each.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Design idempotent order consumer",
+          "prompt": "Write pseudocode for a consumer that safely handles duplicate order.created events using an idempotency key.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Failure recovery with DLQ",
+          "prompt": "Design retry + dead-letter handling for payment.failed events. Define retry count, backoff strategy, and operator alert condition.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Version an event contract",
+          "prompt": "Propose a backward-compatible v2 for user.registered by adding fields without breaking existing consumers.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Trace a cross-service saga",
+          "prompt": "Model a saga for travel booking (flight, hotel, payment). List success events and compensating events.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Show your reasoning in 1-3 short lines for each answer; answers without rationale get no credit.",
+          "Question and option order should be randomized per learner session.",
+          "Use scenario-specific IDs (order numbers, event names) regenerated each attempt.",
+          "Require at least one architecture trade-off statement in free-response grading.",
+          "Block copy-paste for code items during first attempt; allow on review.",
+          "Set a short retake cooldown and serve a fresh variant pool on retake."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Which decade first made event loops mainstream in user-facing software?",
+            "options": [
+              "1980s",
+              "2000s",
+              "2010s",
+              "2020s"
+            ],
+            "answerIndex": 0,
+            "explanation": "GUI frameworks in the 1980s widely used event loops for input and rendering workflows."
+          },
+          {
+            "question": "Which technology is most associated with log-based event streaming in modern microservices?",
+            "options": [
+              "Apache Kafka",
+              "FTP",
+              "SOAP over HTTP",
+              "LDAP"
+            ],
+            "answerIndex": 0,
+            "explanation": "Kafka popularized durable, replayable event logs for streaming architectures."
+          },
+          {
+            "question": "What is an event in EDA?",
+            "options": [
+              "A request to execute work now",
+              "A fact that something already happened",
+              "A schema migration script",
+              "A cron schedule"
+            ],
+            "answerIndex": 1,
+            "explanation": "Events represent past facts (e.g., order.created), not imperative commands."
+          },
+          {
+            "question": "Why are idempotent consumers critical in many EDA systems?",
+            "options": [
+              "To reduce schema size",
+              "To handle duplicate deliveries safely",
+              "To force synchronous consistency",
+              "To avoid logging"
+            ],
+            "answerIndex": 1,
+            "explanation": "At-least-once delivery can produce duplicates, so handlers must be safe to repeat."
+          },
+          {
+            "question": "Which pattern rebuilds current state by replaying immutable events?",
+            "options": [
+              "Circuit Breaker",
+              "Event Sourcing",
+              "Bulkhead",
+              "Two-Phase Commit"
+            ],
+            "answerIndex": 1,
+            "explanation": "Event Sourcing stores state changes as events and reconstructs state by replaying them."
+          },
+          {
+            "question": "In pub/sub, what should a producer usually know about consumers?",
+            "options": [
+              "Exact network address of each consumer",
+              "Internal database schema of consumers",
+              "As little as possible",
+              "Consumer deployment schedules"
+            ],
+            "answerIndex": 2,
+            "explanation": "Loose coupling is a key goal; producers publish without hard dependencies on consumers."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Node.js event flow so order events are consumed idempotently and a follow-up event is published.",
+            "language": "javascript",
+            "template": "const EventEmitter = require('events');\nconst bus = new EventEmitter();\n\nconst processed = new Set();\n\nbus.{{blank1}}('order.created', (event) => {\n  if (processed.{{blank2}}(event.orderId)) return;\n  processed.add(event.orderId);\n  console.log(`reserve stock for ${event.orderId}`);\n  bus.{{blank3}}('stock.reserved', { orderId: event.orderId });\n});\n\nbus.on('stock.reserved', (event) => {\n  console.log(`notify billing for ${event.orderId}`);\n});\n\nbus.emit('order.created', { orderId: 'A-42' });",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "on",
+                  "emit",
+                  "once"
+                ],
+                "answer": "on"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "has",
+                  "get",
+                  "map"
+                ],
+                "answer": "has"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "emit",
+                  "listen",
+                  "await"
+                ],
+                "answer": "emit"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:27:11.140Z"
+    }
+  },
+  {
+    "id": "domain_driven_design",
+    "name": "Domain-Driven Design",
+    "cat": "back",
+    "born": "2026 · Daily Agent",
+    "tag": "modeling complex business domains in software",
+    "history": "2003: Eric Evans publishes Domain-Driven Design (the 'Blue Book'). Mid-2000s: Strategic patterns (bounded contexts, context maps) gain wider adoption. 2009-2013: CQRS and event sourcing are often combined with DDD in complex systems. 2013: Vaughn Vernon publishes Implementing Domain-Driven Design, expanding tactical guidance. Late 2010s+: DDD becomes a common fit for backend microservice decomposition.",
+    "why": "Domain-Driven Design helps teams handle complex business logic by aligning software models with real business language and boundaries. It reduces misunderstandings between engineers and domain experts, improves changeability, and keeps critical rules explicit in code.",
+    "rel": {
+      "seeAlso": [
+        "microservices",
+        "cqrs",
+        "eventsourcing",
+        "hexagonalarchitecture",
+        "cleanarchitecture"
+      ]
+    },
+    "challenges": [
+      "Choose a domain (e.g., payments). Write 10 core terms, one precise definition each, and 3 ambiguous terms to avoid. Validate with a non-engineer.",
+      "For an online store, split into 3-5 bounded contexts (catalog, pricing, orders, fulfillment, etc.). Add one upstream/downstream relationship and one anti-corruption layer point.",
+      "Implement an Order aggregate with rules: cannot confirm empty order, cannot ship unless confirmed, emit domain events on confirm/ship. Add unit tests for each rule.",
+      "Given two teams with conflicting definitions of 'Customer', propose a context map and integration strategy to prevent model leakage.",
+      "Take a CRUD-style service and move at least 3 business rules from application service into entities/value objects while preserving test coverage."
+    ],
+    "extension": {
+      "tag": "modeling complex business domains in software",
+      "latestChanges": [
+        "DDD is now commonly paired with microservices via bounded-context-aligned service boundaries.",
+        "Remote event storming (Miro/Mural/FigJam) has become standard for distributed teams.",
+        "DDD is frequently implemented with Hexagonal/Clean Architecture in backend systems.",
+        "Teams increasingly use AI drafts for domain glossaries, then validate with domain experts."
+      ],
+      "problemItSolves": "Domain-Driven Design helps teams handle complex business logic by aligning software models with real business language and boundaries. It reduces misunderstandings between engineers and domain experts, improves changeability, and keeps critical rules explicit in code.",
+      "historyNotes": [
+        "2003: Eric Evans publishes Domain-Driven Design (the 'Blue Book').",
+        "Mid-2000s: Strategic patterns (bounded contexts, context maps) gain wider adoption.",
+        "2009-2013: CQRS and event sourcing are often combined with DDD in complex systems.",
+        "2013: Vaughn Vernon publishes Implementing Domain-Driven Design, expanding tactical guidance.",
+        "Late 2010s+: DDD becomes a common fit for backend microservice decomposition."
+      ],
+      "relatedTechnologies": [
+        "microservices",
+        "cqrs",
+        "event sourcing",
+        "hexagonal architecture",
+        "clean architecture",
+        "object-oriented design",
+        "business process modeling"
+      ],
+      "docs": [
+        {
+          "label": "Domain Language (DDD community)",
+          "url": "https://domainlanguage.com/"
+        },
+        {
+          "label": "DDD Reference by Eric Evans",
+          "url": "https://domainlanguage.com/ddd/reference/"
+        },
+        {
+          "label": "Implementing Domain-Driven Design (Vernon)",
+          "url": "https://www.oreilly.com/library/view/implementing-domain-driven-design/9780133039900/"
+        },
+        {
+          "label": "Context Mapper (tooling)",
+          "url": "https://contextmapper.org/docs/home/"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Ubiquitous Language Mini-Glossary",
+          "prompt": "Choose a domain (e.g., payments). Write 10 core terms, one precise definition each, and 3 ambiguous terms to avoid. Validate with a non-engineer.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Bounded Context Split",
+          "prompt": "For an online store, split into 3-5 bounded contexts (catalog, pricing, orders, fulfillment, etc.). Add one upstream/downstream relationship and one anti-corruption layer point.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "Aggregate Invariants Kata",
+          "prompt": "Implement an Order aggregate with rules: cannot confirm empty order, cannot ship unless confirmed, emit domain events on confirm/ship. Add unit tests for each rule.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Context Map Review",
+          "prompt": "Given two teams with conflicting definitions of 'Customer', propose a context map and integration strategy to prevent model leakage.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Refactor Anemic Model",
+          "prompt": "Take a CRUD-style service and move at least 3 business rules from application service into entities/value objects while preserving test coverage.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize both question order and option order per attempt.",
+          "Use parallel quiz pools (A/B) with equivalent difficulty and concepts.",
+          "Set tight per-question timers and auto-submit on timeout.",
+          "Show one question at a time on mobile; disable backtracking after submit.",
+          "Delay answer-key release until the assessment window closes.",
+          "For code dropdown, grade with hidden tests (state transitions, invariants, naming variants)."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who introduced Domain-Driven Design in 2003?",
+            "options": [
+              "Martin Fowler",
+              "Eric Evans",
+              "Vaughn Vernon",
+              "Alistair Cockburn"
+            ],
+            "answerIndex": 1,
+            "explanation": "Eric Evans authored the original DDD book in 2003."
+          },
+          {
+            "question": "What is a ubiquitous language in DDD?",
+            "options": [
+              "A shared model vocabulary used by domain experts and developers",
+              "A universal programming language for all services",
+              "A naming style enforced by linters",
+              "A glossary used only in documentation"
+            ],
+            "answerIndex": 0,
+            "explanation": "Ubiquitous language is shared and used in both conversation and code."
+          },
+          {
+            "question": "What does a bounded context define?",
+            "options": [
+              "A database schema boundary only",
+              "A deployment region",
+              "A boundary where a specific domain model is valid",
+              "A team size limit"
+            ],
+            "answerIndex": 2,
+            "explanation": "Inside a bounded context, terms and rules have consistent meaning."
+          },
+          {
+            "question": "What is the primary role of an aggregate root?",
+            "options": [
+              "Generate SQL migrations",
+              "Enforce invariants for the aggregate",
+              "Replace all repositories",
+              "Handle UI validation"
+            ],
+            "answerIndex": 1,
+            "explanation": "The aggregate root protects consistency and governs state changes."
+          },
+          {
+            "question": "What does a context map describe?",
+            "options": [
+              "Frontend routes",
+              "Relationships between bounded contexts",
+              "Only event schemas",
+              "Class inheritance trees"
+            ],
+            "answerIndex": 1,
+            "explanation": "Context maps capture boundaries and integration relationships."
+          },
+          {
+            "question": "Which pairing is most common with DDD for write/read separation?",
+            "options": [
+              "MVC + ORM",
+              "CQRS",
+              "Waterfall + UML",
+              "REST + SOAP together"
+            ],
+            "answerIndex": 1,
+            "explanation": "CQRS is often used with DDD when read and write models diverge."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the TypeScript snippet so the aggregate exposes behavior, raises a domain event, and repository naming matches DDD style.",
+            "language": "typescript",
+            "template": "export class Order extends AggregateRoot {\\n  private status: OrderStatus = OrderStatus.Draft;\\n\\n  {{blank1}} confirm() {\\n    if (this.status !== OrderStatus.Draft) throw new Error('Invalid state');\\n    this.status = OrderStatus.Confirmed;\\n    this.{{blank2}}(new OrderConfirmed(this.id));\\n  }\\n}\\n\\nexport interface OrderRepository {\\n  {{blank3}}ById(id: string): Promise<Order | null>;\\n  save(order: Order): Promise<void>;\\n}\\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "public",
+                  "private",
+                  "static"
+                ],
+                "answer": "public"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "addDomainEvent",
+                  "toJSON",
+                  "clone"
+                ],
+                "answer": "addDomainEvent"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "find",
+                  "load",
+                  "query"
+                ],
+                "answer": "find"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:27:46.867Z"
+    }
+  },
+  {
+    "id": "tdd",
+    "name": "Test-Driven Development (TDD)",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "test-first workflow for safe code evolution",
+    "history": "TDD grew from 1990s xUnit testing patterns in the Smalltalk community. Kent Beck formalized TDD within Extreme Programming (XP). The Red-Green-Refactor loop became the standard micro-cycle. TDD spread broadly through tools like JUnit, NUnit, RSpec, and pytest.",
+    "why": "TDD lowers regression risk and improves code design by turning requirements into executable tests before implementation, creating fast feedback and safer refactoring.",
+    "rel": {
+      "seeAlso": [
+        "extremeprogrammingxp",
+        "continuousintegrationci",
+        "cicdpipelines",
+        "xunitframeworks",
+        "refactoring"
+      ]
+    },
+    "challenges": [
+      "Write one failing unit test for a function `is_even(n)` before writing any implementation. Keep the test name behavior-focused.",
+      "Implement `is_even(n)` using the smallest change needed to pass your failing test, then add two more tests for edge cases (0 and negative values).",
+      "Given a working `calculate_total(items, tax_rate)` function and passing tests, refactor for readability (extract helper methods) without changing behavior.",
+      "A production bug shows discounts above 100% are accepted. First add a failing test that reproduces the bug, then patch the code and keep all prior tests green.",
+      "Run mutation testing on a small module and add tests that kill at least three surviving mutants. Explain what behavior each new test protects."
+    ],
+    "extension": {
+      "tag": "test-first workflow for safe code evolution",
+      "latestChanges": [
+        "TDD is increasingly enforced by CI merge gates that require passing tests.",
+        "Teams often pair TDD with mutation testing to check test quality, not just coverage.",
+        "Property-based testing is more commonly used with TDD to uncover edge cases early.",
+        "AI-assisted test drafting is rising, but human review remains essential for intent and clarity."
+      ],
+      "problemItSolves": "TDD lowers regression risk and improves code design by turning requirements into executable tests before implementation, creating fast feedback and safer refactoring.",
+      "historyNotes": [
+        "TDD grew from 1990s xUnit testing patterns in the Smalltalk community.",
+        "Kent Beck formalized TDD within Extreme Programming (XP).",
+        "The Red-Green-Refactor loop became the standard micro-cycle.",
+        "TDD spread broadly through tools like JUnit, NUnit, RSpec, and pytest."
+      ],
+      "relatedTechnologies": [
+        "Extreme Programming (XP)",
+        "Continuous Integration (CI)",
+        "CI/CD pipelines",
+        "xUnit frameworks",
+        "Refactoring",
+        "Mutation Testing",
+        "Behavior-Driven Development (BDD)"
+      ],
+      "docs": [
+        {
+          "label": "Martin Fowler: TestDrivenDevelopment",
+          "url": "https://martinfowler.com/bliki/TestDrivenDevelopment.html"
+        },
+        {
+          "label": "JUnit 5 User Guide",
+          "url": "https://junit.org/junit5/docs/current/user-guide/"
+        },
+        {
+          "label": "pytest Documentation",
+          "url": "https://docs.pytest.org/en/stable/"
+        },
+        {
+          "label": "RSpec Documentation",
+          "url": "https://rspec.info/documentation/"
+        },
+        {
+          "label": "Continuous Integration (Fowler)",
+          "url": "https://martinfowler.com/articles/continuousIntegration.html"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First Red Test",
+          "prompt": "Write one failing unit test for a function `is_even(n)` before writing any implementation. Keep the test name behavior-focused.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Green With Minimum Code",
+          "prompt": "Implement `is_even(n)` using the smallest change needed to pass your failing test, then add two more tests for edge cases (0 and negative values).",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Refactor Safely",
+          "prompt": "Given a working `calculate_total(items, tax_rate)` function and passing tests, refactor for readability (extract helper methods) without changing behavior.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Bug Reproduction via Test",
+          "prompt": "A production bug shows discounts above 100% are accepted. First add a failing test that reproduces the bug, then patch the code and keep all prior tests green.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Strengthen Test Suite",
+          "prompt": "Run mutation testing on a small module and add tests that kill at least three surviving mutants. Explain what behavior each new test protects.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize function names and numeric inputs each attempt.",
+          "Use hidden tests in addition to visible checks.",
+          "Require tests-first commit order in challenge logs when supported.",
+          "Limit copy-paste of full solutions; allow targeted line edits.",
+          "Flag improbable completion patterns (very fast + perfect) for review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who is most associated with formalizing TDD in Extreme Programming?",
+            "options": [
+              "Kent Beck",
+              "Martin Fowler",
+              "Bjarne Stroustrup",
+              "Linus Torvalds"
+            ],
+            "answerIndex": 0,
+            "explanation": "Kent Beck is the key figure who popularized and formalized TDD in XP practices."
+          },
+          {
+            "question": "What is the canonical TDD loop order?",
+            "options": [
+              "Refactor -> Green -> Red",
+              "Red -> Green -> Refactor",
+              "Green -> Refactor -> Red",
+              "Red -> Refactor -> Green"
+            ],
+            "answerIndex": 1,
+            "explanation": "Start with a failing test (Red), make it pass (Green), then improve design safely (Refactor)."
+          },
+          {
+            "question": "Why write a test before implementation in TDD?",
+            "options": [
+              "To maximize lines of code",
+              "To define expected behavior and get fast feedback",
+              "To avoid all debugging forever",
+              "To replace code reviews"
+            ],
+            "answerIndex": 1,
+            "explanation": "The main goal is behavior specification plus a fast feedback loop during development."
+          },
+          {
+            "question": "In TDD, what does a failing test after refactoring usually indicate?",
+            "options": [
+              "Coverage is too high",
+              "Behavior changed or regression introduced",
+              "Refactoring is always wrong",
+              "Compiler settings changed"
+            ],
+            "answerIndex": 1,
+            "explanation": "Refactoring should preserve behavior; a new failing test signals unintended change."
+          },
+          {
+            "question": "Which tooling family most directly enabled TDD adoption across languages?",
+            "options": [
+              "xUnit-style frameworks",
+              "Package managers",
+              "Container runtimes",
+              "GUI builders"
+            ],
+            "answerIndex": 0,
+            "explanation": "xUnit frameworks standardized unit test structure and execution, enabling TDD workflows."
+          },
+          {
+            "question": "How does BDD relate to TDD?",
+            "options": [
+              "BDD is unrelated to testing",
+              "BDD extends test-first ideas with business-readable specifications",
+              "BDD replaces all unit tests",
+              "BDD focuses only on load testing"
+            ],
+            "answerIndex": 1,
+            "explanation": "BDD evolved from similar test-first principles, emphasizing shared language and scenario clarity."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this pytest snippet to follow a TDD-style safety check for discount logic.",
+            "language": "python",
+            "template": "import pytest\n\ndef apply_discount(price, pct):\n    if pct < 0 or pct > 100:\n        raise {{blank1}}\n    return price * (1 - pct / 100)\n\n\ndef test_apply_discount_20_percent():\n    assert apply_discount(200, 20) {{blank2}} 160\n\n\ndef test_apply_discount_rejects_invalid_percent():\n    with {{blank3}}(ValueError):\n        apply_discount(100, 150)\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "ValueError",
+                  "TypeError",
+                  "RuntimeError"
+                ],
+                "answer": "ValueError"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "==",
+                  "!=",
+                  ">"
+                ],
+                "answer": "=="
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "pytest.raises",
+                  "unittest.assertRaises",
+                  "raises"
+                ],
+                "answer": "pytest.raises"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:28:18.756Z"
+    }
+  },
+  {
+    "id": "playwright",
+    "name": "Playwright",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "cross-browser end-to-end test automation framework",
+    "history": "2020: Microsoft released Playwright with built-in multi-browser support. 2021: Playwright Test became the first-party runner with retries, parallelism, and projects. 2022-2024: Tracing, UI Mode, API testing, and component testing capabilities expanded steadily.",
+    "why": "Playwright helps teams run reliable browser tests across Chromium, Firefox, and WebKit with one API. It reduces flaky timing issues using auto-waiting, isolates tests with browser contexts, and fits well into CI/CD pipelines for fast release confidence.",
+    "rel": {
+      "seeAlso": [
+        "selenium",
+        "cypress",
+        "puppeteer",
+        "jest",
+        "githubactions"
+      ]
+    },
+    "challenges": [
+      "Write a Playwright Test that opens a page, checks the main heading, and avoids hard waits.",
+      "Log in once, save storage state, and run two authenticated tests in parallel using separate contexts.",
+      "Configure retries, shard tests across 2 workers in CI, and upload traces only on failure.",
+      "Given an intermittent failure, use trace artifacts to identify whether timing, selector strategy, or test data caused the issue.",
+      "Seed data with APIRequestContext, validate it in UI, then clean up in teardown to keep tests deterministic."
+    ],
+    "extension": {
+      "tag": "cross-browser end-to-end test automation framework",
+      "latestChanges": [
+        "Frequent monthly releases keep browser engines and APIs current.",
+        "UI Mode and Trace Viewer workflows have improved local debugging speed.",
+        "Locator and web-first assertion enhancements continue to reduce flaky waits.",
+        "Component testing support has continued to mature across frontend stacks."
+      ],
+      "problemItSolves": "Playwright helps teams run reliable browser tests across Chromium, Firefox, and WebKit with one API. It reduces flaky timing issues using auto-waiting, isolates tests with browser contexts, and fits well into CI/CD pipelines for fast release confidence.",
+      "historyNotes": [
+        "2020: Microsoft released Playwright with built-in multi-browser support.",
+        "2021: Playwright Test became the first-party runner with retries, parallelism, and projects.",
+        "2022-2024: Tracing, UI Mode, API testing, and component testing capabilities expanded steadily."
+      ],
+      "relatedTechnologies": [
+        "Selenium",
+        "Cypress",
+        "Puppeteer",
+        "Jest",
+        "GitHub Actions",
+        "BrowserStack"
+      ],
+      "docs": [
+        {
+          "label": "Playwright docs (intro)",
+          "url": "https://playwright.dev/docs/intro"
+        },
+        {
+          "label": "Playwright Test",
+          "url": "https://playwright.dev/docs/test-intro"
+        },
+        {
+          "label": "CI setup",
+          "url": "https://playwright.dev/docs/ci"
+        },
+        {
+          "label": "Trace Viewer",
+          "url": "https://playwright.dev/docs/trace-viewer"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First stable smoke test",
+          "prompt": "Write a Playwright Test that opens a page, checks the main heading, and avoids hard waits.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Auth reuse with storage state",
+          "prompt": "Log in once, save storage state, and run two authenticated tests in parallel using separate contexts.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "CI reliability pass",
+          "prompt": "Configure retries, shard tests across 2 workers in CI, and upload traces only on failure.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Flake triage drill",
+          "prompt": "Given an intermittent failure, use trace artifacts to identify whether timing, selector strategy, or test data caused the issue.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "API + UI contract check",
+          "prompt": "Seed data with APIRequestContext, validate it in UI, then clean up in teardown to keep tests deterministic.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Use per-learner randomized page text and element IDs in graded tasks.",
+          "Require a short written rationale (2-3 lines) for each locator strategy used.",
+          "Accept submissions only with commit hash, run timestamp, and generated test artifacts.",
+          "Verify failing/ passing flows through trace files, not screenshots alone.",
+          "Time-box attempts and rotate equivalent question pools each session.",
+          "Disallow copy-paste from prior submissions; compare diff patterns across attempts."
+        ],
+        "multipleChoice": [
+          {
+            "question": "When was Playwright first released by Microsoft?",
+            "options": [
+              "2018",
+              "2019",
+              "2020",
+              "2022"
+            ],
+            "answerIndex": 2,
+            "explanation": "Playwright was publicly released in 2020."
+          },
+          {
+            "question": "What is the main reason Playwright tests are often less flaky than naive browser scripts?",
+            "options": [
+              "It disables JavaScript in pages",
+              "It relies on fixed sleep timers",
+              "It uses auto-waiting with locators and assertions",
+              "It runs only on Chromium"
+            ],
+            "answerIndex": 2,
+            "explanation": "Web-first assertions and locator auto-waiting reduce timing-related flakiness."
+          },
+          {
+            "question": "Which isolation unit is best for parallel test sessions in Playwright?",
+            "options": [
+              "A shared page object",
+              "A browser context per test/session",
+              "A single global cookie jar",
+              "A single browser tab"
+            ],
+            "answerIndex": 1,
+            "explanation": "Browser contexts provide fast, isolated sessions for parallel tests."
+          },
+          {
+            "question": "Which artifact is most useful to debug a failed CI Playwright run?",
+            "options": [
+              "A minified bundle file",
+              "trace.zip from the failed test",
+              "Only a screenshot",
+              "A package-lock diff"
+            ],
+            "answerIndex": 1,
+            "explanation": "Trace artifacts capture timeline, network, actions, and DOM snapshots."
+          },
+          {
+            "question": "Which browser engines are supported through Playwright's core API?",
+            "options": [
+              "Chromium only",
+              "Chromium and Firefox only",
+              "Chromium, Firefox, and WebKit",
+              "WebKit only"
+            ],
+            "answerIndex": 2,
+            "explanation": "Playwright supports all three major engines with one API."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Playwright test using resilient APIs (no hard waits).",
+            "language": "typescript",
+            "template": "import { test, expect } from '@playwright/test';\n\ntest('checkout button is visible', async ({ page }) => {\n  await page.{{blank1}}('https://example.com/shop');\n  const checkout = page.{{blank2}}('button', { name: 'Checkout' });\n  await {{blank3}}(checkout).{{blank4}}();\n});",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "goto",
+                  "click",
+                  "waitForTimeout"
+                ],
+                "answer": "goto"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "getByRole",
+                  "locatorAll",
+                  "getByTitle"
+                ],
+                "answer": "getByRole"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "expect",
+                  "test",
+                  "page"
+                ],
+                "answer": "expect"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "toBeVisible",
+                  "toHaveURL",
+                  "toBeHidden"
+                ],
+                "answer": "toBeVisible"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete this GitHub Actions step sequence to run Playwright tests in CI.",
+            "language": "yaml",
+            "template": "name: e2e\non: [push]\n\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/{{blank1}}@v4\n      - uses: actions/setup-node@v4\n        with:\n          node-version: {{blank2}}\n      - run: npm {{blank3}}\n      - run: npx playwright {{blank4}}",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "checkout",
+                  "cache",
+                  "upload-artifact"
+                ],
+                "answer": "checkout"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "'20'",
+                  "'16'",
+                  "'14'"
+                ],
+                "answer": "'20'"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "ci",
+                  "update",
+                  "audit"
+                ],
+                "answer": "ci"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "test",
+                  "codegen",
+                  "show-trace"
+                ],
+                "answer": "test"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:28:47.685Z"
+    }
+  },
+  {
+    "id": "cypress",
+    "name": "Cypress",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "javascript end-to-end testing for web apps",
+    "history": "2015: Cypress company formed to rethink flaky front-end testing. 2017: Cypress was open-sourced and adoption accelerated in JS teams. Cypress introduced a built-in Test Runner UX that made debugging easier than many legacy tools. Component Testing matured over time, expanding Cypress beyond only end-to-end checks. Dashboard evolved into Cypress Cloud for team-level analytics and CI optimization.",
+    "why": "Cypress helps teams ship web apps faster by running reliable browser tests close to real user behavior. It reduces flaky timing issues with automatic waiting/retries, gives fast local feedback, and fits naturally into CI/CD pipelines.",
+    "rel": {
+      "seeAlso": [
+        "playwright",
+        "selenium",
+        "webdriverio",
+        "jest",
+        "mocha"
+      ]
+    },
+    "challenges": [
+      "Write one Cypress test that visits your app home page, checks a visible heading, and avoids brittle CSS selectors by using data-cy attributes.",
+      "Refactor a login flow using cy.session() so three protected-route tests reuse auth state. Measure runtime before and after.",
+      "Given a flaky checkout test, add network stubbing for one unstable API call, set clear assertions, and explain why the new version is more deterministic.",
+      "Implement a test for SSO login where identity provider runs on a different domain. Use cy.origin() and verify successful redirect back to the app.",
+      "Design a Cypress CI strategy with test splitting and retries. Include when to fail fast, when to rerun, and how to read flake metrics in Cypress Cloud."
+    ],
+    "extension": {
+      "tag": "javascript end-to-end testing for web apps",
+      "latestChanges": [
+        "Modern projects use unified cypress.config.* with separate e2e/component sections.",
+        "cy.session() is widely used to cache login state and speed CI runs.",
+        "cy.origin() enables safer cross-origin flows (for SSO and third-party auth screens).",
+        "Cypress Cloud added stronger flake analytics, run insights, and parallelization controls."
+      ],
+      "problemItSolves": "Cypress helps teams ship web apps faster by running reliable browser tests close to real user behavior. It reduces flaky timing issues with automatic waiting/retries, gives fast local feedback, and fits naturally into CI/CD pipelines.",
+      "historyNotes": [
+        "2015: Cypress company formed to rethink flaky front-end testing.",
+        "2017: Cypress was open-sourced and adoption accelerated in JS teams.",
+        "Cypress introduced a built-in Test Runner UX that made debugging easier than many legacy tools.",
+        "Component Testing matured over time, expanding Cypress beyond only end-to-end checks.",
+        "Dashboard evolved into Cypress Cloud for team-level analytics and CI optimization."
+      ],
+      "relatedTechnologies": [
+        "Playwright",
+        "Selenium",
+        "WebdriverIO",
+        "Jest",
+        "Mocha",
+        "GitHub Actions",
+        "CircleCI"
+      ],
+      "docs": [
+        {
+          "label": "Official Docs",
+          "url": "https://docs.cypress.io"
+        },
+        {
+          "label": "Changelog",
+          "url": "https://docs.cypress.io/app/references/changelog"
+        },
+        {
+          "label": "GitHub Repository",
+          "url": "https://github.com/cypress-io/cypress"
+        },
+        {
+          "label": "CI Guide",
+          "url": "https://docs.cypress.io/guides/continuous-integration/introduction"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First Stable Test",
+          "prompt": "Write one Cypress test that visits your app home page, checks a visible heading, and avoids brittle CSS selectors by using data-cy attributes.",
+          "format": "mixed"
+        },
+        {
+          "level": 2,
+          "title": "Login Without Repeating Setup",
+          "prompt": "Refactor a login flow using cy.session() so three protected-route tests reuse auth state. Measure runtime before and after.",
+          "format": "mixed"
+        },
+        {
+          "level": 3,
+          "title": "CI Flake Triage",
+          "prompt": "Given a flaky checkout test, add network stubbing for one unstable API call, set clear assertions, and explain why the new version is more deterministic.",
+          "format": "mixed"
+        },
+        {
+          "level": 4,
+          "title": "Cross-Origin Auth",
+          "prompt": "Implement a test for SSO login where identity provider runs on a different domain. Use cy.origin() and verify successful redirect back to the app.",
+          "format": "mixed"
+        },
+        {
+          "level": 5,
+          "title": "Parallel Pipeline Design",
+          "prompt": "Design a Cypress CI strategy with test splitting and retries. Include when to fail fast, when to rerun, and how to read flake metrics in Cypress Cloud.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Use a private repo branch with a unique seed token provided at exam start; token must appear in test data and commit message.",
+          "Record screen + terminal for the full attempt; pauses over 2 minutes require spoken/typed explanation.",
+          "No external AI/chat tools during timed section; browser history and clipboard logs may be reviewed.",
+          "Each code answer must include a 1-2 sentence rationale about selector choice and assertion strategy.",
+          "Question order and option order are randomized per learner; practical tasks use different app routes per learner.",
+          "Final 5-minute viva: learner explains one failing test and debugs it live."
+        ],
+        "multipleChoice": [
+          {
+            "question": "When did Cypress become open source?",
+            "options": [
+              "2013",
+              "2015",
+              "2017",
+              "2020"
+            ],
+            "answerIndex": 2,
+            "explanation": "Cypress was open-sourced in 2017, which drove broad community adoption."
+          },
+          {
+            "question": "What is a core reason Cypress tests feel less flaky than many legacy UI tests?",
+            "options": [
+              "It only runs headless",
+              "It uses automatic waiting/retries around commands and assertions",
+              "It disables network calls by default",
+              "It runs only on Firefox"
+            ],
+            "answerIndex": 1,
+            "explanation": "Cypress automatically retries commands/assertions until timeout, reducing timing race failures."
+          },
+          {
+            "question": "What does cy.session() primarily help with?",
+            "options": [
+              "Mocking fetch requests",
+              "Caching and restoring authenticated browser state",
+              "Cross-browser screenshots",
+              "Generating random selectors"
+            ],
+            "answerIndex": 1,
+            "explanation": "cy.session() avoids repeating expensive login steps across tests."
+          },
+          {
+            "question": "Which feature is designed for testing flows that move across domains?",
+            "options": [
+              "cy.fixture()",
+              "cy.origin()",
+              "cy.clock()",
+              "cy.task()"
+            ],
+            "answerIndex": 1,
+            "explanation": "cy.origin() enables commands/assertions in a different origin context."
+          },
+          {
+            "question": "Why is Cypress commonly placed in CI/CD pipelines?",
+            "options": [
+              "It replaces source control",
+              "It verifies user-critical paths on every change",
+              "It compiles TypeScript faster than tsc",
+              "It manages production secrets"
+            ],
+            "answerIndex": 1,
+            "explanation": "Teams run Cypress in CI to catch regressions before deployment."
+          },
+          {
+            "question": "Best selector strategy for maintainable Cypress tests?",
+            "options": [
+              "Deep CSS chains from visual layout",
+              "Text from any dynamic paragraph",
+              "Stable data-* attributes like data-cy",
+              "Auto-generated framework class names"
+            ],
+            "answerIndex": 2,
+            "explanation": "Stable test-specific attributes reduce coupling to UI style/layout changes."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the Cypress login test using the best command in each blank.",
+            "language": "javascript",
+            "template": "describe('auth flow', () => {\n  it('logs in and lands on dashboard', () => {\n    cy.{{blank1}}('/login')\n    cy.get('[data-cy=email]').type('user@example.com')\n    cy.get('[data-cy=password]').type('P@ssw0rd!')\n    cy.{{blank2}}('button', 'Sign in').click()\n    cy.url().should('{{blank3}}', '/dashboard')\n  })\n})",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "visit",
+                  "request",
+                  "mount"
+                ],
+                "answer": "visit"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "contains",
+                  "intercept",
+                  "wrap"
+                ],
+                "answer": "contains"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "include",
+                  "deep.equal",
+                  "have.length"
+                ],
+                "answer": "include"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:29:13.007Z"
+    }
+  },
+  {
+    "id": "jest",
+    "name": "Jest",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "javascript test runner with mocks and coverage",
+    "history": "2014: Created at Facebook to test React code with minimal setup. 2016: Open-sourced and quickly adopted beyond React projects. Jest 27: jest-circus became the default test runner. Jest 28+: package split and cleanup improved install footprint and maintenance. Recent majors focus on stability, ESM workflows, and CI performance.",
+    "why": "Jest gives teams a fast, standard way to run automated tests, mock dependencies, and measure coverage. It reduces regressions, shortens feedback loops, and plugs directly into CI/CD gates so broken code is blocked before deploy.",
+    "rel": {
+      "seeAlso": [
+        "vitest",
+        "mocha",
+        "jasmine",
+        "testinglibrary",
+        "babel"
+      ]
+    },
+    "challenges": [
+      "Create a sum(a, b) function and a Jest test file with 3 cases (positive, zero, negative). Run in watch mode and fix failures.",
+      "Test a service function that calls fetch. Mock fetch, assert called URL, and assert transformed JSON output.",
+      "Add Jest coverage thresholds to a project and wire them into CI so pull requests fail when lines coverage drops below 80%.",
+      "Given an unstable async test, replace arbitrary timeouts with proper async/await and deterministic mocks.",
+      "Configure Jest in a monorepo to run only changed package tests locally while full tests run in CI."
+    ],
+    "extension": {
+      "tag": "javascript test runner with mocks and coverage",
+      "latestChanges": [
+        "Aligns with current Node LTS releases; older Node versions are regularly removed.",
+        "ESM interoperability keeps improving for mixed CommonJS/ESM repositories.",
+        "Watch mode, filtering flags, and caching continue to reduce local feedback time.",
+        "Reporter and CLI output refinements improve CI debugging speed."
+      ],
+      "problemItSolves": "Jest gives teams a fast, standard way to run automated tests, mock dependencies, and measure coverage. It reduces regressions, shortens feedback loops, and plugs directly into CI/CD gates so broken code is blocked before deploy.",
+      "historyNotes": [
+        "2014: Created at Facebook to test React code with minimal setup.",
+        "2016: Open-sourced and quickly adopted beyond React projects.",
+        "Jest 27: jest-circus became the default test runner.",
+        "Jest 28+: package split and cleanup improved install footprint and maintenance.",
+        "Recent majors focus on stability, ESM workflows, and CI performance."
+      ],
+      "relatedTechnologies": [
+        "Vitest",
+        "Mocha",
+        "Jasmine",
+        "Testing Library",
+        "Babel",
+        "TypeScript",
+        "GitHub Actions",
+        "Istanbul (coverage)"
+      ],
+      "docs": [
+        {
+          "label": "Official docs",
+          "url": "https://jestjs.io/docs/getting-started"
+        },
+        {
+          "label": "CLI options",
+          "url": "https://jestjs.io/docs/cli"
+        },
+        {
+          "label": "Mock functions",
+          "url": "https://jestjs.io/docs/mock-functions"
+        },
+        {
+          "label": "Configuration",
+          "url": "https://jestjs.io/docs/configuration"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First green test",
+          "prompt": "Create a sum(a, b) function and a Jest test file with 3 cases (positive, zero, negative). Run in watch mode and fix failures.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Mock an API call",
+          "prompt": "Test a service function that calls fetch. Mock fetch, assert called URL, and assert transformed JSON output.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "CI quality gate",
+          "prompt": "Add Jest coverage thresholds to a project and wire them into CI so pull requests fail when lines coverage drops below 80%.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Refactor flaky async test",
+          "prompt": "Given an unstable async test, replace arbitrary timeouts with proper async/await and deterministic mocks.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Monorepo selective testing",
+          "prompt": "Configure Jest in a monorepo to run only changed package tests locally while full tests run in CI.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Randomize question and option order per attempt.",
+          "Time-box each attempt and auto-submit on long inactivity.",
+          "Require a short reasoning note for each multiple-choice answer.",
+          "Use hidden test cases and variable renaming in code challenges.",
+          "Block copy-paste in timed mode where platform allows.",
+          "Flag highly similar submissions for manual review."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Jest was originally created to solve testing pain mainly in which context?",
+            "options": [
+              "Large React codebases at Facebook",
+              "Android UI automation",
+              "PHP backend integration testing",
+              "Database migration testing"
+            ],
+            "answerIndex": 0,
+            "explanation": "Jest started at Facebook to make React-focused testing fast and low-config."
+          },
+          {
+            "question": "Which Jest feature stores expected rendered output for future comparisons?",
+            "options": [
+              "Mutation testing",
+              "Snapshot testing",
+              "Contract testing",
+              "Load testing"
+            ],
+            "answerIndex": 1,
+            "explanation": "Snapshot tests serialize output and detect unintended UI/output changes."
+          },
+          {
+            "question": "What is the primary use of jest.fn()?",
+            "options": [
+              "Create a mock/spying function",
+              "Start the Jest CLI",
+              "Generate code coverage reports",
+              "Transpile TypeScript"
+            ],
+            "answerIndex": 0,
+            "explanation": "jest.fn() creates mock functions so calls and arguments can be inspected."
+          },
+          {
+            "question": "Why is jest --coverage commonly used in CI pipelines?",
+            "options": [
+              "It speeds up test execution by skipping assertions",
+              "It prevents flaky tests automatically",
+              "It measures tested code and can enforce minimum thresholds",
+              "It replaces linting with runtime checks"
+            ],
+            "answerIndex": 2,
+            "explanation": "Coverage in CI helps enforce quality gates before merge/deploy."
+          },
+          {
+            "question": "Which runner became default in Jest 27?",
+            "options": [
+              "jasmine2",
+              "tap",
+              "jest-circus",
+              "mocha-runner"
+            ],
+            "answerIndex": 2,
+            "explanation": "Jest 27 switched the default runner to jest-circus."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this async Jest test.",
+            "language": "javascript",
+            "template": "import { getUserName } from './user';\n\ntest('returns user name', {{blank_async}} () => {\n  const name = await getUserName(42);\n  {{blank_expect}}(name).{{blank_matcher}}('Ada');\n});",
+            "blanks": [
+              {
+                "id": "blank_async",
+                "options": [
+                  "async",
+                  "await",
+                  "function"
+                ],
+                "answer": "async"
+              },
+              {
+                "id": "blank_expect",
+                "options": [
+                  "expect",
+                  "assert",
+                  "check"
+                ],
+                "answer": "expect"
+              },
+              {
+                "id": "blank_matcher",
+                "options": [
+                  "toBe",
+                  "toHaveLength",
+                  "toThrow"
+                ],
+                "answer": "toBe"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete Jest config for a Node service with CI coverage gate.",
+            "language": "javascript",
+            "template": "module.exports = {\n  testEnvironment: {{blank_env}},\n  collectCoverage: {{blank_collect}},\n  coverageThreshold: {\n    global: { lines: {{blank_lines}} }\n  }\n};",
+            "blanks": [
+              {
+                "id": "blank_env",
+                "options": [
+                  "'node'",
+                  "'jsdom'",
+                  "'happy-dom'"
+                ],
+                "answer": "'node'"
+              },
+              {
+                "id": "blank_collect",
+                "options": [
+                  "true",
+                  "false",
+                  "'on'"
+                ],
+                "answer": "true"
+              },
+              {
+                "id": "blank_lines",
+                "options": [
+                  "60",
+                  "80",
+                  "95"
+                ],
+                "answer": "80"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:29:48.450Z"
+    }
+  },
+  {
+    "id": "vitest",
+    "name": "Vitest (vitest)",
+    "cat": "devops",
+    "born": "2026 · Daily Agent",
+    "tag": "a vite-native testing framework for js/ts",
+    "history": "Created in the Vite ecosystem to provide a fast alternative to slower test runners in ESM-first projects. Adopted Jest-compatible patterns (describe/it/expect/vi) to reduce migration cost. Evolved from unit-focused usage into broader workflows: browser mode, workspaces, and CI-ready coverage/reporting.",
+    "why": "Vitest gives JavaScript/TypeScript teams fast, Jest-like testing with Vite-powered startup and reruns. It shortens CI feedback loops, supports mocking/snapshots/coverage, and fits modern monorepos without heavy config.",
+    "rel": {
+      "seeAlso": [
+        "vite",
+        "jest",
+        "testinglibrary",
+        "playwright",
+        "nodejstestenvironments"
+      ]
+    },
+    "challenges": [
+      "Create one passing unit test and one failing test, then fix the failing assertion. Run once with `vitest run` and in watch mode with `vitest`.",
+      "Write a service test that uses `vi.mock` and `mockResolvedValue` to isolate an API client. Assert call count and returned value.",
+      "Configure coverage output for local terminal + lcov, then add a CI command that runs tests once and fails on regression.",
+      "Given a slow suite, split tests with projects/workspace config and explain which files should run in jsdom vs node.",
+      "Convert three plain boolean checks into idiomatic `expect` assertions (`toBe`, `toEqual`, `toContain`)."
+    ],
+    "extension": {
+      "tag": "a vite-native testing framework for js/ts",
+      "latestChanges": [
+        "Expanded Browser Mode support for closer-to-real DOM execution.",
+        "Faster reruns through better transform caching and watch filtering.",
+        "Improved workspace/monorepo ergonomics for multi-project repos.",
+        "Coverage workflows refined (v8/istanbul options, cleaner CI output)."
+      ],
+      "problemItSolves": "Vitest gives JavaScript/TypeScript teams fast, Jest-like testing with Vite-powered startup and reruns. It shortens CI feedback loops, supports mocking/snapshots/coverage, and fits modern monorepos without heavy config.",
+      "historyNotes": [
+        "Created in the Vite ecosystem to provide a fast alternative to slower test runners in ESM-first projects.",
+        "Adopted Jest-compatible patterns (describe/it/expect/vi) to reduce migration cost.",
+        "Evolved from unit-focused usage into broader workflows: browser mode, workspaces, and CI-ready coverage/reporting."
+      ],
+      "relatedTechnologies": [
+        "Vite",
+        "Jest",
+        "Testing Library",
+        "Playwright",
+        "Node.js test environments",
+        "GitHub Actions"
+      ],
+      "docs": [
+        {
+          "label": "Official site",
+          "url": "https://vitest.dev/"
+        },
+        {
+          "label": "Guide",
+          "url": "https://vitest.dev/guide/"
+        },
+        {
+          "label": "Configuration",
+          "url": "https://vitest.dev/config/"
+        },
+        {
+          "label": "Mocking",
+          "url": "https://vitest.dev/guide/mocking"
+        },
+        {
+          "label": "Coverage",
+          "url": "https://vitest.dev/guide/coverage"
+        },
+        {
+          "label": "CLI",
+          "url": "https://vitest.dev/guide/cli"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First fast test",
+          "prompt": "Create one passing unit test and one failing test, then fix the failing assertion. Run once with `vitest run` and in watch mode with `vitest`.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Mock an async dependency",
+          "prompt": "Write a service test that uses `vi.mock` and `mockResolvedValue` to isolate an API client. Assert call count and returned value.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "CI-quality setup",
+          "prompt": "Configure coverage output for local terminal + lcov, then add a CI command that runs tests once and fails on regression.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Debug speed bottleneck",
+          "prompt": "Given a slow suite, split tests with projects/workspace config and explain which files should run in jsdom vs node.",
+          "format": "mixed"
+        },
+        {
+          "level": 1,
+          "title": "Assertion fluency",
+          "prompt": "Convert three plain boolean checks into idiomatic `expect` assertions (`toBe`, `toEqual`, `toContain`).",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Use per-learner variable names and input values generated at runtime.",
+          "Require a short written rationale for each multiple-choice answer (1 sentence).",
+          "For code tasks, grade both final code and test-run evidence (before/after results).",
+          "Disallow full-credit if only output is provided without source changes.",
+          "Randomize option order and blank option pools per attempt.",
+          "Include one follow-up oral or typed defense question: 'why this API, not an alternative?'"
+        ],
+        "multipleChoice": [
+          {
+            "question": "Vitest was designed to integrate most closely with which tool ecosystem?",
+            "options": [
+              "Vite",
+              "Gulp",
+              "Grunt",
+              "Babel-only"
+            ],
+            "answerIndex": 0,
+            "explanation": "Vitest is built around Vite’s module graph and transform pipeline."
+          },
+          {
+            "question": "Which command is most appropriate for CI where tests should run once and exit?",
+            "options": [
+              "vitest",
+              "vitest run",
+              "vitest watch",
+              "vitest dev"
+            ],
+            "answerIndex": 1,
+            "explanation": "`vitest run` executes once and exits with a status code for CI."
+          },
+          {
+            "question": "Which API is commonly used to mock a module in Vitest?",
+            "options": [
+              "vi.mock",
+              "expect.mock",
+              "test.stub",
+              "vite.mock"
+            ],
+            "answerIndex": 0,
+            "explanation": "`vi.mock` is the standard Vitest module mocking API."
+          },
+          {
+            "question": "Why do many teams experience faster feedback after moving from older runners to Vitest?",
+            "options": [
+              "It uses Vite-powered transforms and caching",
+              "It skips assertions by default",
+              "It disables source maps",
+              "It only runs one test file"
+            ],
+            "answerIndex": 0,
+            "explanation": "Vitest benefits from Vite’s fast transform system and efficient reruns."
+          },
+          {
+            "question": "Vitest intentionally mirrors much of which testing API style to ease migration?",
+            "options": [
+              "Mocha-only globals",
+              "Jest-style describe/it/expect",
+              "Cypress command chains",
+              "JUnit annotations"
+            ],
+            "answerIndex": 1,
+            "explanation": "Vitest keeps a familiar Jest-like API for lower switching cost."
+          },
+          {
+            "question": "Which coverage provider is commonly used as Vitest’s fast default choice?",
+            "options": [
+              "v8",
+              "phpunit",
+              "nyc-only",
+              "karma"
+            ],
+            "answerIndex": 0,
+            "explanation": "V8 coverage is a common default because it is built into modern JS runtimes."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the async mock test using Vitest APIs.",
+            "language": "typescript",
+            "template": "import { describe, it, expect, vi } from 'vitest'\nimport { formatUser } from './formatUser'\n\nvi.{{c1b1}}('./api', () => ({\n  fetchUser: vi.fn().{{c1b2}}({ id: 1, name: 'Ada' })\n}))\n\ndescribe('formatUser', () => {\n  it('formats fetched user name', async () => {\n    const value = await formatUser(1)\n    expect(value).{{c1b3}}('ADA')\n  })\n})",
+            "blanks": [
+              {
+                "id": "c1b1",
+                "options": [
+                  "mock",
+                  "spyOn",
+                  "stubGlobal"
+                ],
+                "answer": "mock"
+              },
+              {
+                "id": "c1b2",
+                "options": [
+                  "mockResolvedValue",
+                  "mockReturnValue",
+                  "mockRejectedValue"
+                ],
+                "answer": "mockResolvedValue"
+              },
+              {
+                "id": "c1b3",
+                "options": [
+                  "toBe",
+                  "toHaveLength",
+                  "toThrow"
+                ],
+                "answer": "toBe"
+              }
+            ]
+          },
+          {
+            "instructions": "Complete a minimal CI-friendly Vitest config for Node tests with lcov coverage.",
+            "language": "typescript",
+            "template": "import { defineConfig } from 'vitest/config'\n\nexport default defineConfig({\n  test: {\n    environment: '{{c2b1}}',\n    coverage: {\n      provider: '{{c2b2}}',\n      reporter: ['text', '{{c2b3}}']\n    }\n  }\n})",
+            "blanks": [
+              {
+                "id": "c2b1",
+                "options": [
+                  "node",
+                  "jsdom",
+                  "happy-dom"
+                ],
+                "answer": "node"
+              },
+              {
+                "id": "c2b2",
+                "options": [
+                  "v8",
+                  "istanbul",
+                  "jest"
+                ],
+                "answer": "v8"
+              },
+              {
+                "id": "c2b3",
+                "options": [
+                  "lcov",
+                  "dot",
+                  "json-summary-only"
+                ],
+                "answer": "lcov"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:30:19.185Z"
+    }
+  },
+  {
+    "id": "pytorch",
+    "name": "PyTorch",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "python-first deep learning and tensor framework",
+    "history": "2016: Open-sourced by Facebook AI Research (FAIR). Early adoption grew from dynamic eager execution and Pythonic APIs. 2018: Caffe2 and PyTorch development paths were unified. 2022: PyTorch Foundation launched under the Linux Foundation. 2023+: PyTorch 2.x compiler stack (`torch.compile`) became a major performance focus.",
+    "why": "PyTorch helps you build, train, and deploy ML models using tensors, automatic differentiation, GPU acceleration, and distributed tooling, so you can focus on model design instead of manual gradient math and low-level kernels.",
+    "rel": {
+      "seeAlso": [
+        "numpy",
+        "cuda",
+        "onnx",
+        "tensorflow",
+        "jax"
+      ]
+    },
+    "challenges": [
+      "Create a tensor `x` with `requires_grad=True`, compute `y = (x**2).sum()`, call `backward()`, and print `x.grad`.",
+      "Train `nn.Linear(1,1)` for one batch using MSE loss and SGD. Log loss before and after one optimizer step.",
+      "Move model and batch tensors to `cuda` when available, train for 3 epochs, and report average epoch loss.",
+      "Run inference with `model.eval()` and `torch.no_grad()`. Compare outputs to train mode with dropout enabled.",
+      "Prepare a small model for deployment using `torch.export` (or equivalent in your installed version) and note unsupported ops."
+    ],
+    "extension": {
+      "tag": "python-first deep learning and tensor framework",
+      "latestChanges": [
+        "PyTorch 2.x made `torch.compile` a central path for speeding up eager models.",
+        "`torch.export` improved stable graph capture for deployment.",
+        "ExecuTorch expanded mobile/edge inference options.",
+        "Distributed training features like FSDP and DTensor continued maturing for large models."
+      ],
+      "problemItSolves": "PyTorch helps you build, train, and deploy ML models using tensors, automatic differentiation, GPU acceleration, and distributed tooling, so you can focus on model design instead of manual gradient math and low-level kernels.",
+      "historyNotes": [
+        "2016: Open-sourced by Facebook AI Research (FAIR).",
+        "Early adoption grew from dynamic eager execution and Pythonic APIs.",
+        "2018: Caffe2 and PyTorch development paths were unified.",
+        "2022: PyTorch Foundation launched under the Linux Foundation.",
+        "2023+: PyTorch 2.x compiler stack (`torch.compile`) became a major performance focus."
+      ],
+      "relatedTechnologies": [
+        "NumPy",
+        "CUDA",
+        "ONNX",
+        "TensorFlow",
+        "JAX",
+        "Hugging Face Transformers",
+        "PyTorch Lightning"
+      ],
+      "docs": [
+        {
+          "label": "PyTorch Docs",
+          "url": "https://pytorch.org/docs/stable/index.html"
+        },
+        {
+          "label": "PyTorch Tutorials",
+          "url": "https://pytorch.org/tutorials/"
+        },
+        {
+          "label": "Get Started",
+          "url": "https://pytorch.org/get-started/locally/"
+        },
+        {
+          "label": "PyTorch GitHub",
+          "url": "https://github.com/pytorch/pytorch"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "Tensor + Autograd Warm-up",
+          "prompt": "Create a tensor `x` with `requires_grad=True`, compute `y = (x**2).sum()`, call `backward()`, and print `x.grad`.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Single-Batch Training Step",
+          "prompt": "Train `nn.Linear(1,1)` for one batch using MSE loss and SGD. Log loss before and after one optimizer step.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "GPU-Aware Mini Loop",
+          "prompt": "Move model and batch tensors to `cuda` when available, train for 3 epochs, and report average epoch loss.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Evaluation Safety Check",
+          "prompt": "Run inference with `model.eval()` and `torch.no_grad()`. Compare outputs to train mode with dropout enabled.",
+          "format": "coding"
+        },
+        {
+          "level": 5,
+          "title": "Export Readiness",
+          "prompt": "Prepare a small model for deployment using `torch.export` (or equivalent in your installed version) and note unsupported ops.",
+          "format": "coding"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Shuffle question and option order per attempt.",
+          "Use a short per-question time cap (45-75 seconds) for MC items.",
+          "Block copy/paste in graded code fields on mobile and desktop.",
+          "Require all code dropdown answers plus a one-line rationale after submission.",
+          "Use hidden tests with changed tensor shapes, dtypes, and batch sizes.",
+          "Regenerate equivalent variants on retake; keep concept same, surface form different."
+        ],
+        "multipleChoice": [
+          {
+            "question": "Who originally open-sourced PyTorch in 2016?",
+            "options": [
+              "Google Brain",
+              "Facebook AI Research (FAIR)",
+              "NVIDIA",
+              "OpenAI"
+            ],
+            "answerIndex": 1,
+            "explanation": "PyTorch started at FAIR before broader foundation governance."
+          },
+          {
+            "question": "Which early design choice most helped PyTorch adoption among researchers?",
+            "options": [
+              "Static graph-only execution",
+              "Dynamic eager execution with Pythonic debugging",
+              "No GPU support",
+              "Mandatory Java APIs"
+            ],
+            "answerIndex": 1,
+            "explanation": "Eager mode made experimentation and debugging straightforward."
+          },
+          {
+            "question": "What is the main role of `autograd` in PyTorch?",
+            "options": [
+              "Manage package installation",
+              "Compute gradients automatically",
+              "Quantize every model by default",
+              "Replace DataLoader"
+            ],
+            "answerIndex": 1,
+            "explanation": "`autograd` records operations and computes derivatives for backprop."
+          },
+          {
+            "question": "What does `model.eval()` primarily change?",
+            "options": [
+              "Turns off gradient tracking globally",
+              "Switches layers like dropout/batchnorm to inference behavior",
+              "Moves model to CPU",
+              "Saves model weights"
+            ],
+            "answerIndex": 1,
+            "explanation": "`eval()` affects layer behavior; it does not itself disable gradients."
+          },
+          {
+            "question": "Why use `torch.no_grad()` during inference?",
+            "options": [
+              "To increase randomization",
+              "To avoid gradient tracking and reduce memory use",
+              "To force training mode",
+              "To initialize model weights"
+            ],
+            "answerIndex": 1,
+            "explanation": "No-grad mode speeds inference and lowers memory overhead."
+          },
+          {
+            "question": "Where is PyTorch foundation governance hosted now?",
+            "options": [
+              "Apache Software Foundation",
+              "Linux Foundation",
+              "CNCF",
+              "Eclipse Foundation"
+            ],
+            "answerIndex": 1,
+            "explanation": "The PyTorch Foundation is under the Linux Foundation."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete this minimal regression training step.",
+            "language": "python",
+            "template": "import torch\nimport torch.nn as nn\n\nx = torch.tensor([[1.0], [2.0], [3.0]])\ny = torch.tensor([[2.0], [4.0], [6.0]])\n\nmodel = nn.Linear(1, 1)\nloss_fn = {{blank1}}()\noptimizer = {{blank2}}(model.parameters(), lr=0.1)\n\npred = model(x)\nloss = loss_fn(pred, y)\noptimizer.{{blank3}}()\nloss.backward()\noptimizer.{{blank4}}()\n",
+            "blanks": [
+              {
+                "id": "blank1",
+                "options": [
+                  "nn.MSELoss",
+                  "nn.CrossEntropyLoss",
+                  "nn.ReLU",
+                  "torch.no_grad"
+                ],
+                "answer": "nn.MSELoss"
+              },
+              {
+                "id": "blank2",
+                "options": [
+                  "torch.optim.SGD",
+                  "torch.utils.data.DataLoader",
+                  "torch.compile",
+                  "nn.Linear"
+                ],
+                "answer": "torch.optim.SGD"
+              },
+              {
+                "id": "blank3",
+                "options": [
+                  "zero_grad",
+                  "step",
+                  "eval",
+                  "train"
+                ],
+                "answer": "zero_grad"
+              },
+              {
+                "id": "blank4",
+                "options": [
+                  "step",
+                  "backward",
+                  "detach",
+                  "item"
+                ],
+                "answer": "step"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:30:48.556Z"
+    }
+  },
+  {
+    "id": "tensorflow",
+    "name": "TensorFlow",
+    "cat": "data",
+    "born": "2026 · Daily Agent",
+    "tag": "an open-source framework for machine learning workflows",
+    "history": "Google open-sourced TensorFlow in 2015 as the successor to DistBelief-era internal tooling. TensorFlow 1.x emphasized static graphs and session-based execution. TensorFlow 2.0 (2019) made eager execution and Keras-style APIs the default for usability. TensorFlow grew into a broader ecosystem: TensorBoard (tracking), TFX (pipelines), and TFLite (edge inference).",
+    "why": "TensorFlow helps teams build, train, and deploy machine learning models across laptops, cloud clusters, browsers, and mobile/edge devices using one core framework.",
+    "rel": {
+      "seeAlso": [
+        "keras",
+        "pytorch",
+        "jax",
+        "tensorboard",
+        "tensorflowlite"
+      ]
+    },
+    "challenges": [
+      "Build a tf.keras model for MNIST, train for 1 epoch, and report accuracy. Keep code under 25 lines.",
+      "Replace raw NumPy feeding with tf.data.Dataset batching, shuffling, and prefetching. Compare training time.",
+      "Train a small model using tf.GradientTape instead of model.fit, and log loss every 100 steps.",
+      "Convert a trained model to TensorFlow Lite, apply post-training quantization, and measure model size change.",
+      "In 5 bullet points, explain eager execution, tf.function, tensors, gradients, and model export."
+    ],
+    "extension": {
+      "tag": "an open-source framework for machine learning workflows",
+      "latestChanges": [
+        "TensorFlow 2.x keeps eager execution as the default, with optional graph speedups via tf.function.",
+        "Recent releases improved support for modern Python/toolchains and accelerator backends.",
+        "TensorFlow Lite workflows for quantization and edge deployment continue to mature.",
+        "The ecosystem is aligning with newer Keras patterns; legacy code may need compatibility adjustments."
+      ],
+      "problemItSolves": "TensorFlow helps teams build, train, and deploy machine learning models across laptops, cloud clusters, browsers, and mobile/edge devices using one core framework.",
+      "historyNotes": [
+        "Google open-sourced TensorFlow in 2015 as the successor to DistBelief-era internal tooling.",
+        "TensorFlow 1.x emphasized static graphs and session-based execution.",
+        "TensorFlow 2.0 (2019) made eager execution and Keras-style APIs the default for usability.",
+        "TensorFlow grew into a broader ecosystem: TensorBoard (tracking), TFX (pipelines), and TFLite (edge inference)."
+      ],
+      "relatedTechnologies": [
+        "Keras",
+        "PyTorch",
+        "JAX",
+        "TensorBoard",
+        "TensorFlow Lite",
+        "TFX",
+        "ONNX"
+      ],
+      "docs": [
+        {
+          "label": "TensorFlow home",
+          "url": "https://www.tensorflow.org/"
+        },
+        {
+          "label": "Learn TensorFlow",
+          "url": "https://www.tensorflow.org/learn"
+        },
+        {
+          "label": "TensorFlow guides",
+          "url": "https://www.tensorflow.org/guide"
+        },
+        {
+          "label": "Keras API in TensorFlow",
+          "url": "https://www.tensorflow.org/api_docs/python/tf/keras"
+        },
+        {
+          "label": "TensorFlow Lite",
+          "url": "https://www.tensorflow.org/lite"
+        }
+      ],
+      "practiceChallenges": [
+        {
+          "level": 1,
+          "title": "First classifier in minutes",
+          "prompt": "Build a tf.keras model for MNIST, train for 1 epoch, and report accuracy. Keep code under 25 lines.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Input pipeline upgrade",
+          "prompt": "Replace raw NumPy feeding with tf.data.Dataset batching, shuffling, and prefetching. Compare training time.",
+          "format": "coding"
+        },
+        {
+          "level": 3,
+          "title": "Custom training step",
+          "prompt": "Train a small model using tf.GradientTape instead of model.fit, and log loss every 100 steps.",
+          "format": "coding"
+        },
+        {
+          "level": 4,
+          "title": "Edge deployment mini-project",
+          "prompt": "Convert a trained model to TensorFlow Lite, apply post-training quantization, and measure model size change.",
+          "format": "coding"
+        },
+        {
+          "level": 2,
+          "title": "Concept check sprint",
+          "prompt": "In 5 bullet points, explain eager execution, tf.function, tensors, gradients, and model export.",
+          "format": "mixed"
+        }
+      ],
+      "assessment": {
+        "antiCheatRules": [
+          "Each learner receives a randomized dataset slice and seed; exact metric values should differ.",
+          "Require a 60-90 second screen-recorded walkthrough of code structure and key choices.",
+          "Auto-grade includes hidden tests with changed input shapes to catch hardcoded answers.",
+          "Short reflection is mandatory: explain one bug encountered and how it was fixed.",
+          "Disallow paste-only submissions: at least 3 incremental commits or notebook checkpoints required.",
+          "For pair work, each member must submit an individual oral explanation of one model component."
+        ],
+        "multipleChoice": [
+          {
+            "question": "When was TensorFlow first open-sourced by Google?",
+            "options": [
+              "2012",
+              "2015",
+              "2018",
+              "2021"
+            ],
+            "answerIndex": 1,
+            "explanation": "TensorFlow was publicly released in 2015."
+          },
+          {
+            "question": "What was the biggest default API shift from TensorFlow 1.x to 2.x?",
+            "options": [
+              "Sessions became mandatory",
+              "Eager execution became default",
+              "Only C++ API remained",
+              "Keras was removed"
+            ],
+            "answerIndex": 1,
+            "explanation": "TensorFlow 2.x made eager execution the default to simplify development."
+          },
+          {
+            "question": "What is tf.function mainly used for?",
+            "options": [
+              "Downloading datasets",
+              "Converting Python code to optimized computation graphs",
+              "Visualizing confusion matrices",
+              "Encrypting model files"
+            ],
+            "answerIndex": 1,
+            "explanation": "tf.function traces Python functions into graphs for performance and deployability."
+          },
+          {
+            "question": "Which tool is primarily used to visualize TensorFlow training metrics?",
+            "options": [
+              "TensorBoard",
+              "TFX",
+              "ONNX Runtime",
+              "NumPy"
+            ],
+            "answerIndex": 0,
+            "explanation": "TensorBoard is TensorFlow's standard visualization and experiment-tracking tool."
+          },
+          {
+            "question": "What is TensorFlow Lite designed for?",
+            "options": [
+              "Large-scale distributed training only",
+              "Mobile and edge model inference",
+              "SQL-based feature storage",
+              "Replacing Python with Java"
+            ],
+            "answerIndex": 1,
+            "explanation": "TensorFlow Lite targets on-device inference with optimized model formats."
+          },
+          {
+            "question": "In supervised learning with tf.keras, what does the loss function guide?",
+            "options": [
+              "How gradients update weights",
+              "How many files are in a dataset",
+              "How logs are displayed",
+              "How GPUs are physically connected"
+            ],
+            "answerIndex": 0,
+            "explanation": "Loss quantifies prediction error, and optimization uses its gradients to update model weights."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the TensorFlow code to define, compile, and quickly train a simple CNN for MNIST.",
+            "language": "python",
+            "template": "import tensorflow as tf\n\n(x_train, y_train), _ = tf.keras.datasets.mnist.load_data()\nx_train = x_train.astype(\"float32\") / 255.0\nx_train = tf.expand_dims(x_train, -1)\n\nmodel = tf.keras.Sequential([\n    tf.keras.layers.{{b1}}(16, 3, activation=\"relu\"),\n    tf.keras.layers.{{b2}}(),\n    tf.keras.layers.Dense(10, activation=\"softmax\")\n])\n\nmodel.{{b3}}(\n    optimizer=\"adam\",\n    loss=\"sparse_categorical_crossentropy\",\n    metrics=[\"accuracy\"]\n)\n\nmodel.fit(x_train, y_train, epochs={{b4}}, batch_size=128)",
+            "blanks": [
+              {
+                "id": "b1",
+                "options": [
+                  "Conv2D",
+                  "LSTM",
+                  "Embedding"
+                ],
+                "answer": "Conv2D"
+              },
+              {
+                "id": "b2",
+                "options": [
+                  "Flatten",
+                  "RepeatVector",
+                  "GlobalAveragePooling1D"
+                ],
+                "answer": "Flatten"
+              },
+              {
+                "id": "b3",
+                "options": [
+                  "compile",
+                  "evaluate",
+                  "save_weights"
+                ],
+                "answer": "compile"
+              },
+              {
+                "id": "b4",
+                "options": [
+                  "1",
+                  "5",
+                  "25"
+                ],
+                "answer": "1"
+              }
+            ]
+          }
+        ]
+      },
+      "mobileUxNotes": [
+        "Prioritize large touch targets and short prompts.",
+        "Prefer dropdown code blanks over free-form typing on mobile.",
+        "Keep each assessment step under ~60 seconds."
+      ],
+      "updatedAt": "2026-08-04T22:31:12.099Z"
+    }
   }
 ]
