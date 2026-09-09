@@ -1,5 +1,3077 @@
 [
   {
+    "id": "numpy",
+    "name": "NumPy",
+    "cat": "data",
+    "born": "Numerical computing library",
+    "tag": "multidimensional arrays broadcasting and vectorized math",
+    "history": "NumPy supplies Python with typed, multidimensional arrays and array-oriented numerical operations. Broadcasting lets compatible shapes participate in calculations without manually repeating data.",
+    "why": "A foundation for scientific Python when homogeneous numeric arrays fit the problem. Shape, dtype, copying, and memory layout affect correctness and performance.",
+    "rel": {
+      "needs": [
+        "python"
+      ],
+      "seeAlso": [
+        "pandas",
+        "scipy",
+        "pytorch",
+        "tensorflow"
+      ]
+    },
+    "challenges": [
+      "Create a two-dimensional array and inspect its shape and dtype.",
+      "Replace a scalar loop with a vectorized expression.",
+      "Predict the result shape of three broadcasting examples.",
+      "Demonstrate the difference between a view and a copy.",
+      "Benchmark an array calculation while checking identical results."
+    ],
+    "extension": {
+      "problemItSolves": "A foundation for scientific Python when homogeneous numeric arrays fit the problem. Shape, dtype, copying, and memory layout affect correctness and performance.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://numpy.org/doc/stable/user/whatisnumpy.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "pandas",
+    "name": "pandas",
+    "cat": "data",
+    "born": "Python data analysis library",
+    "tag": "dataframes labeled tables joins and groupby",
+    "history": "pandas offers Series and DataFrame structures for labeled data. It combines tabular transformation, indexing, missing-value handling, aggregation, and input/output tools in Python.",
+    "why": "Useful for cleaning and exploring business or research tables. Validate join cardinality and missing-data assumptions before interpreting results.",
+    "rel": {
+      "needs": [
+        "python",
+        "numpy"
+      ],
+      "rivals": [
+        "polars"
+      ],
+      "seeAlso": [
+        "sql"
+      ]
+    },
+    "challenges": [
+      "Load a CSV with explicit column types.",
+      "Inspect missing values before filling or dropping them.",
+      "Join two tables and validate their key cardinality.",
+      "Calculate grouped statistics and reconcile the totals.",
+      "Build a repeatable cleaning pipeline with assertions."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for cleaning and exploring business or research tables. Validate join cardinality and missing-data assumptions before interpreting results.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://pandas.pydata.org/docs/getting_started/overview.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "scipy",
+    "name": "SciPy",
+    "cat": "data",
+    "born": "Scientific computing library",
+    "tag": "optimization integration statistics and scientific algorithms",
+    "history": "SciPy builds scientific algorithms around the NumPy ecosystem, including optimization, integration, interpolation, statistics, signal processing, and sparse matrices.",
+    "why": "Provides established numerical routines instead of requiring custom implementations. Solver assumptions and tolerances still need explicit checking.",
+    "rel": {
+      "needs": [
+        "python",
+        "numpy"
+      ],
+      "seeAlso": [
+        "scikitlearn",
+        "julia"
+      ]
+    },
+    "challenges": [
+      "Solve a small linear system and check its residual.",
+      "Fit a curve to synthetic observations.",
+      "Compare numerical integration against a known integral.",
+      "Optimize a function with different starting points.",
+      "Report sensitivity to solver tolerances and noisy inputs."
+    ],
+    "extension": {
+      "problemItSolves": "Provides established numerical routines instead of requiring custom implementations. Solver assumptions and tolerances still need explicit checking.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://scipy.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "scikitlearn",
+    "name": "scikit-learn",
+    "cat": "ai",
+    "born": "Machine learning library",
+    "tag": "classical machine learning preprocessing and evaluation",
+    "history": "scikit-learn provides Python tools for supervised and unsupervised learning, preprocessing, model selection, and evaluation with consistent estimator interfaces.",
+    "why": "A strong fit for classical machine learning on structured features. Pipelines help prevent training information from leaking into evaluation data.",
+    "rel": {
+      "needs": [
+        "python",
+        "numpy",
+        "scipy"
+      ],
+      "seeAlso": [
+        "pandas",
+        "pytorch"
+      ]
+    },
+    "challenges": [
+      "Split labeled data before fitting a transformation.",
+      "Fit a simple baseline classifier.",
+      "Combine preprocessing and an estimator in a pipeline.",
+      "Tune parameters using cross-validation on training data.",
+      "Evaluate once on held-out data and inspect failure cases."
+    ],
+    "extension": {
+      "problemItSolves": "A strong fit for classical machine learning on structured features. Pipelines help prevent training information from leaking into evaluation data.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://scikit-learn.org/stable/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "keras",
+    "name": "Keras",
+    "cat": "ai",
+    "born": "Deep learning API",
+    "tag": "high-level neural networks with multiple backends",
+    "history": "Keras provides layers, models, training loops, and serialization for deep learning. Keras 3 supports multiple execution backends, including TensorFlow, JAX, and PyTorch.",
+    "why": "Reduces boilerplate when building neural networks while allowing lower-level customization. Backend portability depends on the operations and components used.",
+    "rel": {
+      "needs": [
+        "python"
+      ],
+      "seeAlso": [
+        "tensorflow",
+        "pytorch",
+        "jax",
+        "cnn"
+      ]
+    },
+    "challenges": [
+      "Build a small Sequential classifier.",
+      "Inspect tensor shapes through each layer.",
+      "Add validation and early stopping.",
+      "Save and reload a model and compare predictions.",
+      "Test supported operations before switching backends."
+    ],
+    "extension": {
+      "problemItSolves": "Reduces boilerplate when building neural networks while allowing lower-level customization. Backend portability depends on the operations and components used.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://keras.io/keras_3/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "jax",
+    "name": "JAX",
+    "cat": "ai",
+    "born": "Accelerated array computing library",
+    "tag": "automatic differentiation jit compilation and vectorization",
+    "history": "JAX combines array computing with composable transformations such as automatic differentiation, compilation, and vectorization. It targets high-performance numerical and machine learning workloads.",
+    "why": "Useful when differentiable numerical programs and accelerator execution matter. Pure-function assumptions, random keys, and compilation behavior require attention.",
+    "rel": {
+      "needs": [
+        "python"
+      ],
+      "seeAlso": [
+        "numpy",
+        "keras",
+        "pytorch",
+        "tensorflow"
+      ]
+    },
+    "challenges": [
+      "Differentiate a scalar function and check it numerically.",
+      "Compile an array calculation with jit.",
+      "Vectorize a function across a batch.",
+      "Manage random keys explicitly across repeated calls.",
+      "Separate compilation time from steady-state benchmark time."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when differentiable numerical programs and accelerator execution matter. Pure-function assumptions, random keys, and compilation behavior require attention.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.jax.dev/en/latest/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "jupyter",
+    "name": "Jupyter",
+    "cat": "devops",
+    "born": "Interactive computing ecosystem",
+    "tag": "notebooks kernels reproducible computational documents",
+    "history": "Project Jupyter develops interactive computing tools that combine executable code, outputs, and narrative in notebooks. Kernels connect notebook interfaces to different programming languages.",
+    "why": "Useful for exploration and communicating analysis. Hidden execution state can undermine reproducibility unless notebooks are rerun from a clean kernel.",
+    "rel": {
+      "seeAlso": [
+        "python",
+        "r",
+        "julia",
+        "pandas"
+      ]
+    },
+    "challenges": [
+      "Create a notebook with code, a chart, and interpretation.",
+      "Inspect which kernel runs the notebook.",
+      "Restart the kernel and run every cell in order.",
+      "Move reusable logic into an importable module.",
+      "Reproduce the notebook with a documented environment."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for exploration and communicating analysis. Hidden execution state can undermine reproducibility unless notebooks are rerun from a clean kernel.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://jupyter.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "polars",
+    "name": "Polars",
+    "cat": "data",
+    "born": "DataFrame engine",
+    "tag": "columnar dataframes expressions and lazy queries",
+    "history": "Polars is a DataFrame engine with expression-based transformations and eager and lazy execution. Its columnar design and query optimization target efficient analytical data processing.",
+    "why": "An alternative for tabular workloads that benefit from query planning and parallel execution. Measure representative workloads rather than assuming every operation is faster.",
+    "rel": {
+      "rivals": [
+        "pandas"
+      ],
+      "seeAlso": [
+        "arrow",
+        "python",
+        "rust",
+        "parquet"
+      ]
+    },
+    "challenges": [
+      "Read a table and select typed columns.",
+      "Express a grouped aggregation without row loops.",
+      "Inspect a lazy query plan.",
+      "Compare eager and lazy results for equality.",
+      "Benchmark a filtered Parquet scan against a full read."
+    ],
+    "extension": {
+      "problemItSolves": "An alternative for tabular workloads that benefit from query planning and parallel execution. Measure representative workloads rather than assuming every operation is faster.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.pola.rs/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "duckdb",
+    "name": "DuckDB",
+    "cat": "data",
+    "born": "Embedded analytical database",
+    "tag": "in-process sql analytics over tables and files",
+    "history": "DuckDB is an in-process analytical database designed for SQL workloads. It can query data from files and application data structures without requiring a separate database server.",
+    "why": "Useful for local analytics, embedded reporting, and exploring columnar files. It is not a drop-in replacement for every transactional server workload.",
+    "rel": {
+      "needs": [
+        "sql"
+      ],
+      "seeAlso": [
+        "parquet",
+        "pandas",
+        "sqlite",
+        "polars"
+      ]
+    },
+    "challenges": [
+      "Query a CSV directly with SQL.",
+      "Aggregate a Parquet dataset.",
+      "Inspect the query execution plan.",
+      "Compare a file scan with a persisted table.",
+      "Measure memory and runtime for a realistic analytical query."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for local analytics, embedded reporting, and exploring columnar files. It is not a drop-in replacement for every transactional server workload.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://duckdb.org/why_duckdb"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "clickhouse",
+    "name": "ClickHouse",
+    "cat": "data",
+    "born": "Column-oriented analytical database",
+    "tag": "olap database for large-scale event analytics",
+    "history": "ClickHouse is a column-oriented SQL database for analytical workloads. Its storage and execution model focus on scanning and aggregating large datasets efficiently.",
+    "why": "Useful for event analytics and reporting over substantial data volumes. Table ordering, ingestion patterns, and query design are important operational choices.",
+    "rel": {
+      "needs": [
+        "sql"
+      ],
+      "seeAlso": [
+        "kafka",
+        "grafana",
+        "duckdb",
+        "snowflake"
+      ]
+    },
+    "challenges": [
+      "Create a table for timestamped events.",
+      "Load a small synthetic event dataset.",
+      "Calculate grouped time-window metrics.",
+      "Compare queries under different ordering choices.",
+      "Measure ingestion and query latency separately."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for event analytics and reporting over substantial data volumes. Table ordering, ingestion patterns, and query design are important operational choices.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://clickhouse.com/docs/get-started/about/intro"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "powerbi",
+    "name": "Power BI",
+    "cat": "data",
+    "born": "Microsoft analytics platform",
+    "tag": "powerbi semantic models dax dashboards and reports",
+    "history": "Power BI is Microsoft's business analytics platform for connecting data, building semantic models, creating reports, and sharing analysis. Desktop authoring and the online service play different roles.",
+    "why": "Connects data preparation, reusable measures, and business reporting. Model relationships, refresh behavior, and access controls determine whether published numbers are trustworthy.",
+    "rel": {
+      "rivals": [
+        "tableau"
+      ],
+      "seeAlso": [
+        "sql",
+        "azure",
+        "snowflake",
+        "m365copilot"
+      ]
+    },
+    "challenges": [
+      "Import a sample dataset and inspect its types.",
+      "Build a star schema with explicit relationships.",
+      "Create a DAX measure and test its filter context.",
+      "Design a report whose totals reconcile to source data.",
+      "Document refresh and row-level access requirements before publishing."
+    ],
+    "extension": {
+      "problemItSolves": "Connects data preparation, reusable measures, and business reporting. Model relationships, refresh behavior, and access controls determine whether published numbers are trustworthy.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "tableau",
+    "name": "Tableau",
+    "cat": "data",
+    "born": "Visual analytics platform",
+    "tag": "interactive business intelligence and visual data exploration",
+    "history": "Tableau provides tools for connecting to data, exploring it visually, and sharing interactive analytics. It is a business intelligence platform rather than a database engine.",
+    "why": "Useful for visual investigation and communicating metrics. Aggregation level, filters, and data freshness must remain clear to report consumers.",
+    "rel": {
+      "rivals": [
+        "powerbi"
+      ],
+      "seeAlso": [
+        "sql",
+        "snowflake",
+        "databricks"
+      ]
+    },
+    "challenges": [
+      "Connect to a small table with known totals.",
+      "Build a chart with an explicit aggregation level.",
+      "Add filters and verify their effect on totals.",
+      "Create a dashboard with consistent metric definitions.",
+      "Check accessibility and freshness before sharing."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for visual investigation and communicating metrics. Aggregation level, filters, and data freshness must remain clear to report consumers.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.tableau.com/why-tableau/what-is-tableau"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "hadoop",
+    "name": "Hadoop",
+    "cat": "data",
+    "born": "Distributed computing framework",
+    "tag": "distributed storage yarn and mapreduce ecosystem",
+    "history": "Apache Hadoop supplies components for distributed storage and processing across clusters. Its core projects include HDFS, YARN, MapReduce, and shared utilities.",
+    "why": "Important for understanding large-scale data infrastructure and existing cluster estates. Hadoop is an ecosystem, not a synonym for every big-data processing engine.",
+    "rel": {
+      "seeAlso": [
+        "hdfs",
+        "hive",
+        "spark",
+        "java",
+        "flink"
+      ]
+    },
+    "challenges": [
+      "Separate the responsibilities of HDFS, YARN, and MapReduce.",
+      "Trace a simple MapReduce job from input to output.",
+      "Explain how data locality affects execution.",
+      "Inspect a job failure using sample logs.",
+      "Compare a Hadoop-based design with an object-storage-based design."
+    ],
+    "extension": {
+      "problemItSolves": "Important for understanding large-scale data infrastructure and existing cluster estates. Hadoop is an ecosystem, not a synonym for every big-data processing engine.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://hadoop.apache.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "hdfs",
+    "name": "HDFS",
+    "cat": "data",
+    "born": "Distributed filesystem",
+    "tag": "hadoop block storage replication and namenodes",
+    "history": "HDFS is Hadoop's distributed filesystem. It divides files into blocks stored across DataNodes, while NameNodes manage filesystem metadata.",
+    "why": "Designed for high-throughput access to large files with fault tolerance. Small-file workloads and metadata pressure require different considerations from sequential scans.",
+    "rel": {
+      "seeAlso": [
+        "hadoop",
+        "hive",
+        "spark",
+        "linux"
+      ]
+    },
+    "challenges": [
+      "Draw the NameNode and DataNode responsibilities.",
+      "Trace how a client reads a replicated block.",
+      "Estimate storage overhead from a replication factor.",
+      "Explain the small-file metadata problem.",
+      "Describe recovery when one storage node becomes unavailable."
+    ],
+    "extension": {
+      "problemItSolves": "Designed for high-throughput access to large files with fault tolerance. Small-file workloads and metadata pressure require different considerations from sequential scans.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "hive",
+    "name": "Apache Hive",
+    "cat": "data",
+    "born": "Data warehouse software",
+    "tag": "sql warehouse tables and metadata for distributed data",
+    "history": "Apache Hive provides SQL-oriented data warehousing over distributed storage. Table metadata connects logical schemas to stored datasets.",
+    "why": "Useful for querying and organizing large analytical datasets in compatible ecosystems. Query engine and storage configuration affect performance and supported behavior.",
+    "rel": {
+      "seeAlso": [
+        "hadoop",
+        "hdfs",
+        "sql",
+        "trino",
+        "parquet"
+      ]
+    },
+    "challenges": [
+      "Define an external table over sample data.",
+      "Explain managed versus external table ownership.",
+      "Partition a table by a useful query dimension.",
+      "Check partition pruning in a query plan.",
+      "Validate schema changes against existing files."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for querying and organizing large analytical datasets in compatible ecosystems. Query engine and storage configuration affect performance and supported behavior.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://hive.apache.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "flink",
+    "name": "Apache Flink",
+    "cat": "data",
+    "born": "Distributed stream processing engine",
+    "tag": "stateful streams event time and checkpoints",
+    "history": "Apache Flink processes bounded and unbounded data streams with stateful computations. Event time and fault-tolerant state management are central concepts.",
+    "why": "Useful for continuous calculations and event-driven data pipelines. Late events, state growth, and sink behavior must be handled explicitly.",
+    "rel": {
+      "seeAlso": [
+        "kafka",
+        "spark",
+        "java",
+        "eventdriven"
+      ]
+    },
+    "challenges": [
+      "Compute counts over an event-time window.",
+      "Introduce out-of-order events and inspect watermarks.",
+      "Explain keyed state versus operator state.",
+      "Restore a test job from a checkpoint.",
+      "Verify end-to-end delivery semantics with the selected sink."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for continuous calculations and event-driven data pipelines. Late events, state growth, and sink behavior must be handled explicitly.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://flink.apache.org/what-is-flink/flink-architecture/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "iceberg",
+    "name": "Apache Iceberg",
+    "cat": "data",
+    "born": "Analytical table format",
+    "tag": "lakehouse snapshots schema evolution and table metadata",
+    "history": "Apache Iceberg is a table format for large analytical datasets. Metadata and snapshots organize underlying data files and support table evolution across compatible engines.",
+    "why": "Adds table-level management to file-based analytics. A table format is distinct from its data-file format and from the engine executing queries.",
+    "rel": {
+      "rivals": [
+        "deltalake"
+      ],
+      "seeAlso": [
+        "parquet",
+        "spark",
+        "trino",
+        "hive"
+      ]
+    },
+    "challenges": [
+      "Distinguish a table format from Parquet files.",
+      "Inspect metadata for a small table snapshot.",
+      "Query an earlier snapshot in a supported engine.",
+      "Test a schema change against existing data.",
+      "Plan snapshot expiration without breaking required retention."
+    ],
+    "extension": {
+      "problemItSolves": "Adds table-level management to file-based analytics. A table format is distinct from its data-file format and from the engine executing queries.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://iceberg.apache.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "deltalake",
+    "name": "Delta Lake",
+    "cat": "data",
+    "born": "Lakehouse storage framework",
+    "tag": "transaction logs reliable tables and schema enforcement",
+    "history": "Delta Lake adds transaction-log-based table management to data lakes. Its ecosystem supports reliable analytical tables and integrations with processing engines.",
+    "why": "Useful when file-based datasets need transactional updates and schema controls. Protocol and feature compatibility matter when multiple engines access a table.",
+    "rel": {
+      "rivals": [
+        "iceberg"
+      ],
+      "seeAlso": [
+        "spark",
+        "databricks",
+        "parquet"
+      ]
+    },
+    "challenges": [
+      "Explain the role of the transaction log.",
+      "Create a table and perform an update.",
+      "Query a historical table version.",
+      "Test a schema enforcement failure.",
+      "Check reader compatibility before enabling a table feature."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when file-based datasets need transactional updates and schema controls. Protocol and feature compatibility matter when multiple engines access a table.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.delta.io/index.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "arrow",
+    "name": "Apache Arrow",
+    "cat": "data",
+    "born": "Columnar memory format and libraries",
+    "tag": "interoperable in-memory columnar data and interchange",
+    "history": "Apache Arrow defines a language-independent columnar memory format and related tools. It supports efficient analytical data interchange between compatible systems.",
+    "why": "Reduces serialization and copying in suitable integrations. Zero-copy exchange depends on compatible representations and is not guaranteed for every conversion.",
+    "rel": {
+      "seeAlso": [
+        "parquet",
+        "polars",
+        "pandas",
+        "duckdb"
+      ]
+    },
+    "challenges": [
+      "Distinguish in-memory Arrow from on-disk Parquet.",
+      "Inspect a table's schema and record batches.",
+      "Convert a compatible table between two libraries.",
+      "Check whether a conversion copies buffers.",
+      "Measure memory use while exchanging a large table."
+    ],
+    "extension": {
+      "problemItSolves": "Reduces serialization and copying in suitable integrations. Zero-copy exchange depends on compatible representations and is not guaranteed for every conversion.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://arrow.apache.org/overview/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "parquet",
+    "name": "Apache Parquet",
+    "cat": "data",
+    "born": "Columnar file format",
+    "tag": "compressed analytical files column pruning and schemas",
+    "history": "Apache Parquet is a column-oriented file format for data storage and retrieval. Encoding and compression are organized to support efficient analytical access.",
+    "why": "Useful for storing typed analytical datasets and reading selected columns. It does not itself provide a database server or table-level transaction system.",
+    "rel": {
+      "seeAlso": [
+        "arrow",
+        "duckdb",
+        "spark",
+        "iceberg",
+        "deltalake"
+      ]
+    },
+    "challenges": [
+      "Write a typed table to Parquet.",
+      "Read only the columns needed for an aggregation.",
+      "Compare file size against an equivalent CSV.",
+      "Inspect row groups and schema metadata.",
+      "Measure a filtered scan with different file layouts."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for storing typed analytical datasets and reading selected columns. It does not itself provide a database server or table-level transaction system.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://parquet.apache.org/docs/overview/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "trino",
+    "name": "Trino",
+    "cat": "data",
+    "born": "Distributed SQL query engine",
+    "tag": "federated analytics across heterogeneous data sources",
+    "history": "Trino runs distributed SQL queries over data exposed through connectors. It separates query execution from the systems that store the underlying data.",
+    "why": "Useful for joining and analyzing data across compatible sources. Connector capabilities, pushdown, and network movement affect cost and correctness.",
+    "rel": {
+      "seeAlso": [
+        "sql",
+        "hive",
+        "iceberg",
+        "parquet",
+        "hadoop"
+      ]
+    },
+    "challenges": [
+      "Configure a catalog against sample data.",
+      "Query two schemas through one SQL interface.",
+      "Inspect a distributed query plan.",
+      "Check which filters are pushed to a source.",
+      "Measure data movement for a cross-source join."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for joining and analyzing data across compatible sources. Connector capabilities, pushdown, and network movement affect cost and correctness.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://trino.io/docs/current/overview.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "mlflow",
+    "name": "MLflow",
+    "cat": "ai",
+    "born": "AI lifecycle platform",
+    "tag": "experiment tracking model management evaluation and tracing",
+    "history": "MLflow provides tools for tracking experiments, managing models, and evaluating AI applications. Its documentation covers both traditional machine learning and generative AI workflows.",
+    "why": "Makes runs, artifacts, and evaluation evidence easier to compare. Tracking a run does not by itself establish model quality or reproducibility.",
+    "rel": {
+      "seeAlso": [
+        "pytorch",
+        "scikitlearn",
+        "databricks",
+        "dvc",
+        "langchain"
+      ]
+    },
+    "challenges": [
+      "Log parameters and metrics for a baseline run.",
+      "Attach a model artifact and dataset identifier.",
+      "Compare two runs using a fixed evaluation set.",
+      "Record a model's input and output contract.",
+      "Reproduce a saved result from its recorded environment."
+    ],
+    "extension": {
+      "problemItSolves": "Makes runs, artifacts, and evaluation evidence easier to compare. Tracking a run does not by itself establish model quality or reproducibility.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://mlflow.org/docs/latest/index.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "dvc",
+    "name": "DVC",
+    "cat": "devops",
+    "born": "Data versioning and pipeline tool",
+    "tag": "version datasets and models alongside git",
+    "history": "DVC tracks data and model artifacts using metadata that can be committed to Git, while larger content lives in configured storage. It also supports reproducible pipeline stages.",
+    "why": "Connects code versions with data versions without storing every large artifact directly in Git. Remote storage and access policies still need management.",
+    "rel": {
+      "seeAlso": [
+        "git",
+        "python",
+        "mlflow",
+        "pytorch"
+      ]
+    },
+    "challenges": [
+      "Track a small dataset and inspect the metadata file.",
+      "Commit code and data pointers together.",
+      "Configure an approved remote without committing credentials.",
+      "Reproduce a pipeline stage after an input changes.",
+      "Restore a previous dataset version and verify its checksum."
+    ],
+    "extension": {
+      "problemItSolves": "Connects code versions with data versions without storing every large artifact directly in Git. Remote storage and access policies still need management.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://doc.dvc.org/start"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "qdrant",
+    "name": "Qdrant",
+    "cat": "data",
+    "born": "Vector database",
+    "tag": "vector similarity search with payload filtering",
+    "history": "Qdrant stores vectors and associated payloads for similarity search. Its interfaces support managing collections and combining vector queries with structured filters.",
+    "why": "Useful for semantic retrieval where metadata constraints matter. Embedding quality and measured recall remain separate from database availability.",
+    "rel": {
+      "rivals": [
+        "milvus",
+        "weaviate"
+      ],
+      "seeAlso": [
+        "embeddings",
+        "rag",
+        "python"
+      ]
+    },
+    "challenges": [
+      "Create a collection with the correct vector dimension.",
+      "Insert vectors with document metadata.",
+      "Run a nearest-neighbor query with a filter.",
+      "Compare approximate results with a small exact baseline.",
+      "Test deletion and isolation between document groups."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for semantic retrieval where metadata constraints matter. Embedding quality and measured recall remain separate from database availability.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://qdrant.tech/documentation/overview/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "milvus",
+    "name": "Milvus",
+    "cat": "data",
+    "born": "Vector database",
+    "tag": "scalable vector indexing and similarity retrieval",
+    "history": "Milvus is a vector database for storing, indexing, and searching vector representations. It supports similarity-search workloads over large collections of data.",
+    "why": "Provides vector retrieval infrastructure for AI applications. Index selection, consistency, and deployment complexity should match the workload.",
+    "rel": {
+      "rivals": [
+        "qdrant",
+        "pinecone"
+      ],
+      "seeAlso": [
+        "embeddings",
+        "rag"
+      ]
+    },
+    "challenges": [
+      "Define a collection schema for document vectors.",
+      "Load a small labeled retrieval dataset.",
+      "Build an index and run similarity searches.",
+      "Compare recall under different search parameters.",
+      "Measure ingestion and query behavior separately."
+    ],
+    "extension": {
+      "problemItSolves": "Provides vector retrieval infrastructure for AI applications. Index selection, consistency, and deployment complexity should match the workload.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://milvus.io/docs/overview.md"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "chroma",
+    "name": "Chroma",
+    "cat": "data",
+    "born": "AI retrieval database",
+    "tag": "embedding collections document retrieval and metadata",
+    "history": "Chroma provides database and retrieval tools for AI applications, organizing embeddings, documents, and metadata into collections.",
+    "why": "Useful for building and testing retrieval workflows. Persistence, embedding configuration, and deployment mode must be chosen deliberately.",
+    "rel": {
+      "seeAlso": [
+        "embeddings",
+        "rag",
+        "langchain",
+        "qdrant"
+      ]
+    },
+    "challenges": [
+      "Create a collection with a chosen embedding function.",
+      "Add documents with stable identifiers.",
+      "Query the collection and inspect returned metadata.",
+      "Update a document without creating an unintended duplicate.",
+      "Verify persistence after restarting the application."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for building and testing retrieval workflows. Persistence, embedding configuration, and deployment mode must be chosen deliberately.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.trychroma.com/docs/overview/introduction"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "pinecone",
+    "name": "Pinecone",
+    "cat": "data",
+    "born": "Managed vector database",
+    "tag": "hosted vector search for semantic retrieval",
+    "history": "Pinecone provides managed vector database services for similarity search. Applications store and query representations while the service handles database infrastructure.",
+    "why": "Useful when hosted retrieval is preferable to operating a vector database. Evaluate access controls, cost, latency, and data residency for the deployment.",
+    "rel": {
+      "rivals": [
+        "milvus",
+        "qdrant"
+      ],
+      "seeAlso": [
+        "embeddings",
+        "rag"
+      ]
+    },
+    "challenges": [
+      "Choose an index configuration matching the embedding model.",
+      "Upsert sample records with stable IDs.",
+      "Search with a metadata constraint.",
+      "Test namespace or tenant isolation.",
+      "Estimate cost using expected storage and query volume."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when hosted retrieval is preferable to operating a vector database. Evaluate access controls, cost, latency, and data residency for the deployment.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.pinecone.io/guides/get-started/overview"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "weaviate",
+    "name": "Weaviate",
+    "cat": "data",
+    "born": "Vector database",
+    "tag": "vector keyword and hybrid retrieval with object metadata",
+    "history": "Weaviate is a database for vector-based and hybrid search over objects and their properties. Integrations can connect stored data with embedding and generative models.",
+    "why": "Useful when semantic and keyword retrieval need to work together. Model integration and database retrieval are separate parts of the system.",
+    "rel": {
+      "rivals": [
+        "qdrant"
+      ],
+      "seeAlso": [
+        "embeddings",
+        "rag",
+        "elasticsearch"
+      ]
+    },
+    "challenges": [
+      "Define a collection for a sample document corpus.",
+      "Import objects with searchable properties.",
+      "Compare keyword, vector, and hybrid results.",
+      "Apply a metadata filter and verify exclusions.",
+      "Evaluate retrieval quality on labeled queries."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when semantic and keyword retrieval need to work together. Model integration and database retrieval are separate parts of the system.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.weaviate.io/weaviate"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "huggingface",
+    "name": "Hugging Face Hub",
+    "cat": "cloud",
+    "born": "Model and dataset collaboration platform",
+    "tag": "model repositories datasets cards and spaces",
+    "history": "The Hugging Face Hub hosts repositories for models, datasets, and applications, with documentation and collaboration features. Repository content and permissions vary by project.",
+    "why": "Helps discover and share AI artifacts. Model cards, licenses, dataset provenance, and executable repository code require independent review.",
+    "rel": {
+      "seeAlso": [
+        "transformers",
+        "pytorch",
+        "tensorflow",
+        "llama",
+        "git"
+      ]
+    },
+    "challenges": [
+      "Locate a model card and its license.",
+      "Compare two dataset cards for provenance and limitations.",
+      "Pin a repository revision for reproducibility.",
+      "Inspect files before enabling repository-provided code.",
+      "Document the exact artifact used in an experiment."
+    ],
+    "extension": {
+      "problemItSolves": "Helps discover and share AI artifacts. Model cards, licenses, dataset provenance, and executable repository code require independent review.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://huggingface.co/docs/hub/index"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "transformers",
+    "name": "Hugging Face Transformers",
+    "cat": "ai",
+    "born": "Pretrained model library",
+    "tag": "model loading tokenization and inference pipelines",
+    "history": "Transformers is Hugging Face's library for working with pretrained models across tasks and modalities. It provides model, tokenizer, and processing interfaces.",
+    "why": "Reduces integration work for supported model architectures. The library is distinct from the general transformer architecture and from the Hub hosting platform.",
+    "rel": {
+      "seeAlso": [
+        "huggingface",
+        "pytorch",
+        "llama",
+        "vit",
+        "python"
+      ]
+    },
+    "challenges": [
+      "Load a pinned model and its matching tokenizer.",
+      "Inspect token IDs and attention masks.",
+      "Run an inference pipeline on labeled examples.",
+      "Compare batched and single-example outputs.",
+      "Record checkpoint, configuration, and preprocessing together."
+    ],
+    "extension": {
+      "problemItSolves": "Reduces integration work for supported model architectures. The library is distinct from the general transformer architecture and from the Hub hosting platform.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://huggingface.co/docs/transformers/index"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "ollama",
+    "name": "Ollama",
+    "cat": "ai",
+    "born": "Model runtime and service",
+    "tag": "run models locally and access supported cloud models",
+    "history": "Ollama provides tools and APIs for running and interacting with models. Its documentation includes local execution as well as cloud-related offerings.",
+    "why": "Useful for experimenting with model-backed applications through a compact runtime interface. Privacy and hardware assumptions depend on whether execution is local or hosted.",
+    "rel": {
+      "seeAlso": [
+        "llama",
+        "llamacpp",
+        "openrouter",
+        "python"
+      ]
+    },
+    "challenges": [
+      "Identify where a selected model executes.",
+      "Run a small model within available memory.",
+      "Call the API with a fixed prompt.",
+      "Measure response latency and memory use.",
+      "Verify network behavior before treating a workflow as offline."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for experimenting with model-backed applications through a compact runtime interface. Privacy and hardware assumptions depend on whether execution is local or hosted.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.ollama.com/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "vllm",
+    "name": "vLLM",
+    "cat": "ai",
+    "born": "Model inference and serving engine",
+    "tag": "high-throughput language model serving",
+    "history": "vLLM is an inference and serving engine for language models. It focuses on efficient execution and serving workloads rather than training foundation models.",
+    "why": "Useful for operating supported models behind application APIs. Throughput, latency, model compatibility, and accelerator memory need workload-specific measurement.",
+    "rel": {
+      "seeAlso": [
+        "pytorch",
+        "llama",
+        "openrouter",
+        "k8s"
+      ]
+    },
+    "challenges": [
+      "Check support for a selected model and hardware.",
+      "Serve a small model in a test environment.",
+      "Send concurrent requests with bounded output lengths.",
+      "Measure time to first token and total latency.",
+      "Compare throughput under different concurrency levels."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for operating supported models behind application APIs. Throughput, latency, model compatibility, and accelerator memory need workload-specific measurement.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.vllm.ai/en/latest/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "llamacpp",
+    "name": "llama.cpp",
+    "cat": "ai",
+    "born": "C/C++ model inference engine",
+    "tag": "local language model inference and quantized weights",
+    "history": "llama.cpp implements language-model inference in C and C++ with support for multiple hardware backends. Its ecosystem includes quantized model workflows and serving tools.",
+    "why": "Useful for running supported models on varied local hardware. Quantization reduces resource requirements but can change quality and compatibility.",
+    "rel": {
+      "seeAlso": [
+        "c",
+        "cpp",
+        "llama",
+        "ollama",
+        "vllm"
+      ]
+    },
+    "challenges": [
+      "Select a compatible model file and backend.",
+      "Run a fixed prompt locally.",
+      "Compare two quantization levels on the same examples.",
+      "Measure memory use and token generation speed.",
+      "Test the server interface without exposing it publicly."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for running supported models on varied local hardware. Quantization reduces resource requirements but can change quality and compatibility.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://github.com/ggml-org/llama.cpp"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "onnx",
+    "name": "ONNX",
+    "cat": "ai",
+    "born": "Machine learning model interchange format",
+    "tag": "portable computation graphs and operator specifications",
+    "history": "ONNX defines an open representation for machine learning models, including computation graphs and operators. Compatible tools can export, inspect, and execute these models.",
+    "why": "Helps move models between supported toolchains. ONNX is a format and specification, not itself the runtime executing every exported graph.",
+    "rel": {
+      "seeAlso": [
+        "pytorch",
+        "tensorflow",
+        "tensorrt",
+        "numpy"
+      ]
+    },
+    "challenges": [
+      "Export a small supported model.",
+      "Inspect graph inputs, outputs, and operator versions.",
+      "Validate the exported model structure.",
+      "Compare outputs with the original framework.",
+      "Identify unsupported operators before planning deployment."
+    ],
+    "extension": {
+      "problemItSolves": "Helps move models between supported toolchains. ONNX is a format and specification, not itself the runtime executing every exported graph.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://onnx.ai/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "tensorrt",
+    "name": "NVIDIA TensorRT",
+    "cat": "ai",
+    "born": "NVIDIA inference optimization toolkit",
+    "tag": "optimized deep learning inference on nvidia hardware",
+    "history": "TensorRT provides tools for optimizing and executing deep learning inference on NVIDIA hardware. Deployment behavior depends on the model, supported operators, and target environment.",
+    "why": "Useful when latency and throughput justify a specialized inference path. Precision changes and optimization must be validated against baseline outputs.",
+    "rel": {
+      "seeAlso": [
+        "onnx",
+        "pytorch",
+        "tensorflow",
+        "cpp"
+      ]
+    },
+    "challenges": [
+      "Check hardware and operator compatibility.",
+      "Build an inference engine for a small model.",
+      "Compare predictions against a reference implementation.",
+      "Benchmark warm inference separately from engine building.",
+      "Evaluate accuracy before adopting reduced precision."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when latency and throughput justify a specialized inference path. Precision changes and optimization must be validated against baseline outputs.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.nvidia.com/deeplearning/tensorrt/latest/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "langchain",
+    "name": "LangChain",
+    "cat": "ai",
+    "born": "AI application framework",
+    "tag": "model integrations tools and agent application components",
+    "history": "LangChain supplies abstractions and integrations for model-powered applications, including model interfaces, tools, and agent workflows.",
+    "why": "Useful for connecting models with application capabilities. Framework orchestration does not replace tool authorization, deterministic tests, or output validation.",
+    "rel": {
+      "seeAlso": [
+        "langgraph",
+        "rag",
+        "python",
+        "openrouter",
+        "mlflow"
+      ]
+    },
+    "challenges": [
+      "Call a model through a configured interface.",
+      "Define a narrowly scoped read-only tool.",
+      "Validate structured output against a schema.",
+      "Test a tool failure without repeating side effects.",
+      "Evaluate the workflow on fixed successful and adversarial cases."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for connecting models with application capabilities. Framework orchestration does not replace tool authorization, deterministic tests, or output validation.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.langchain.com/oss/python/langchain/overview"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "langgraph",
+    "name": "LangGraph",
+    "cat": "ai",
+    "born": "Stateful agent orchestration framework",
+    "tag": "graphs persistence durable execution and human review",
+    "history": "LangGraph supports stateful, graph-oriented orchestration for agent applications. Its documentation covers persistence, durable execution, and human-in-the-loop workflows.",
+    "why": "Useful when an agent needs explicit state transitions and resumable work. Persistence does not automatically make external side effects idempotent.",
+    "rel": {
+      "seeAlso": [
+        "langchain",
+        "python",
+        "eventdriven",
+        "mlflow"
+      ]
+    },
+    "challenges": [
+      "Model a workflow as nodes and transitions.",
+      "Define the state passed between nodes.",
+      "Persist a checkpoint and resume execution.",
+      "Add a review step before a consequential action.",
+      "Test recovery without duplicating an external write."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when an agent needs explicit state transitions and resumable work. Persistence does not automatically make external side effects idempotent.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.langchain.com/oss/python/langgraph/overview"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "llamaindex",
+    "name": "LlamaIndex",
+    "cat": "ai",
+    "born": "Data and agent application framework",
+    "tag": "document ingestion indexing retrieval and llm workflows",
+    "history": "LlamaIndex provides tools for connecting data to language-model applications, including ingestion, indexing, retrieval, and workflow components.",
+    "why": "Useful for document-backed assistants and retrieval pipelines. Data permissions, chunking, and retrieval evaluation remain application responsibilities.",
+    "rel": {
+      "seeAlso": [
+        "rag",
+        "embeddings",
+        "python",
+        "qdrant",
+        "langchain"
+      ]
+    },
+    "challenges": [
+      "Ingest a small corpus with source identifiers.",
+      "Choose a chunking strategy and inspect boundaries.",
+      "Retrieve passages for questions with known answers.",
+      "Generate answers that retain source references.",
+      "Evaluate retrieval misses separately from generation errors."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for document-backed assistants and retrieval pipelines. Data permissions, chunking, and retrieval evaluation remain application responsibilities.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://developers.llamaindex.ai/python/framework/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "rag",
+    "name": "Retrieval-Augmented Generation",
+    "cat": "ai",
+    "born": "AI application architecture",
+    "tag": "rag retrieve evidence before generating answers",
+    "history": "Retrieval-augmented generation combines retrieval from an external collection with model-generated output. The original RAG paper studied a model combining parametric and non-parametric memory.",
+    "why": "Helps ground answers in supplied information without assuming it is memorized by a model. Retrieval does not guarantee truth, source quality, or authorization.",
+    "rel": {
+      "seeAlso": [
+        "embeddings",
+        "qdrant",
+        "langchain",
+        "llamaindex",
+        "elasticsearch"
+      ]
+    },
+    "challenges": [
+      "Build a corpus with known answer locations.",
+      "Retrieve passages before generating an answer.",
+      "Attach source IDs to supported claims.",
+      "Test questions whose answers are absent from the corpus.",
+      "Measure retrieval recall and answer faithfulness separately."
+    ],
+    "extension": {
+      "problemItSolves": "Helps ground answers in supplied information without assuming it is memorized by a model. Retrieval does not guarantee truth, source quality, or authorization.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Original RAG research paper",
+          "url": "https://arxiv.org/abs/2005.11401"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "embeddings",
+    "name": "Embeddings",
+    "cat": "ai",
+    "born": "Numerical representation technique",
+    "tag": "vectors encode semantic relationships for similarity search",
+    "history": "Embedding models map inputs such as text to numerical vectors. Similarity between compatible vectors can support retrieval, clustering, and related tasks.",
+    "why": "Useful for matching meaning beyond exact keywords. Similarity scores are model-dependent and do not establish factual correctness.",
+    "rel": {
+      "seeAlso": [
+        "rag",
+        "numpy",
+        "qdrant",
+        "milvus",
+        "transformers"
+      ]
+    },
+    "challenges": [
+      "Embed a small set of related and unrelated sentences.",
+      "Inspect vector dimensions and normalization.",
+      "Rank results using an appropriate similarity measure.",
+      "Evaluate retrieval with labeled relevant documents.",
+      "Rebuild or version an index when changing embedding models."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for matching meaning beyond exact keywords. Similarity scores are model-dependent and do not establish factual correctness.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/embeddings/get-text-embeddings"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "astro",
+    "name": "Astro",
+    "cat": "front",
+    "born": "Web framework",
+    "tag": "content-focused server rendering and interactive islands",
+    "history": "Astro is a web framework centered on content-driven sites. It uses server rendering and selectively hydrated interactive islands to control client-side JavaScript.",
+    "why": "Useful for content-heavy sites with isolated interactive components. Rendering and deployment choices should follow the application's actual interaction needs.",
+    "rel": {
+      "seeAlso": [
+        "html",
+        "js",
+        "react",
+        "svelte",
+        "vite"
+      ]
+    },
+    "challenges": [
+      "Build a page from a reusable Astro component.",
+      "Load structured content into a route.",
+      "Add one interactive island.",
+      "Inspect which JavaScript reaches the browser.",
+      "Compare static and server-rendered deployment requirements."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for content-heavy sites with isolated interactive components. Rendering and deployment choices should follow the application's actual interaction needs.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.astro.build/en/concepts/why-astro/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "sveltekit",
+    "name": "SvelteKit",
+    "cat": "front",
+    "born": "Full-stack Svelte framework",
+    "tag": "svelte routing data loading rendering and server endpoints",
+    "history": "SvelteKit supplies application structure around Svelte, including routing, data loading, rendering, and server capabilities. Adapters connect builds to deployment environments.",
+    "why": "Useful for building complete Svelte applications. Server-only code and browser code must be kept separate to avoid leaking secrets or breaking rendering.",
+    "rel": {
+      "needs": [
+        "svelte"
+      ],
+      "rivals": [
+        "nextjs"
+      ],
+      "seeAlso": [
+        "vite",
+        "node"
+      ]
+    },
+    "challenges": [
+      "Create a route with a shared layout.",
+      "Load data using the appropriate server boundary.",
+      "Submit and validate a form action.",
+      "Test loading, empty, and error states.",
+      "Choose an adapter matching the hosting environment."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for building complete Svelte applications. Server-only code and browser code must be kept separate to avoid leaking secrets or breaking rendering.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://svelte.dev/docs/kit/introduction"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "solidjs",
+    "name": "SolidJS",
+    "cat": "front",
+    "born": "Reactive UI library",
+    "tag": "fine-grained reactive signals and declarative components",
+    "history": "SolidJS builds interfaces with declarative components and fine-grained reactive primitives. Signals track changing values and update dependent computations.",
+    "why": "Useful for reactive interfaces with explicit data dependencies. Similar JSX syntax does not imply React's component execution model.",
+    "rel": {
+      "needs": [
+        "js"
+      ],
+      "rivals": [
+        "react",
+        "svelte"
+      ],
+      "seeAlso": [
+        "ts"
+      ]
+    },
+    "challenges": [
+      "Create a signal-backed counter.",
+      "Derive a value from reactive state.",
+      "Render and update a keyed list.",
+      "Clean up a subscription when a component is disposed.",
+      "Explain how signal updates differ from component rerenders."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for reactive interfaces with explicit data dependencies. Similar JSX syntax does not imply React's component execution model.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.solidjs.com/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "htmx",
+    "name": "htmx",
+    "cat": "front",
+    "born": "HTML interaction library",
+    "tag": "server-driven html updates through attributes",
+    "history": "htmx extends HTML with attributes for issuing requests and swapping returned content into the page. It supports server-driven interaction without requiring a full client application framework.",
+    "why": "Useful for progressively enhanced, server-rendered interfaces. Server responses, authentication, and request validation still need normal web security controls.",
+    "rel": {
+      "needs": [
+        "html"
+      ],
+      "seeAlso": [
+        "http",
+        "django",
+        "fastapi"
+      ]
+    },
+    "challenges": [
+      "Load an HTML fragment into a target element.",
+      "Submit a form and render validation feedback.",
+      "Add a loading indicator for a slow response.",
+      "Test browser history and navigation behavior.",
+      "Verify authorization and CSRF protections on write endpoints."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for progressively enhanced, server-rendered interfaces. Server responses, authentication, and request validation still need normal web security controls.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://htmx.org/docs/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "alpinejs",
+    "name": "Alpine.js",
+    "cat": "front",
+    "born": "Lightweight browser interaction library",
+    "tag": "html directives local state and small interactions",
+    "history": "Alpine.js adds declarative behavior directly to HTML through directives for state, events, and rendering. It is designed for compact interactive components.",
+    "why": "Useful for adding local interactions to existing markup. Complex shared application state may need a more deliberate architecture.",
+    "rel": {
+      "needs": [
+        "html",
+        "js"
+      ],
+      "seeAlso": [
+        "htmx",
+        "vue"
+      ]
+    },
+    "challenges": [
+      "Create a component with local state.",
+      "Toggle an accessible disclosure panel.",
+      "Bind an input and display its value.",
+      "Render a list with stable keys.",
+      "Test keyboard and focus behavior when content changes."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for adding local interactions to existing markup. Complex shared application state may need a more deliberate architecture.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://alpinejs.dev/start-here"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "bootstrap",
+    "name": "Bootstrap",
+    "cat": "front",
+    "born": "CSS and UI framework",
+    "tag": "responsive grid utility classes and reusable components",
+    "history": "Bootstrap provides layout, styling utilities, and reusable interface components. Its grid and component conventions support responsive web development.",
+    "why": "Useful for consistent interfaces with established patterns. Component accessibility and responsive behavior still need testing in the actual application.",
+    "rel": {
+      "needs": [
+        "html",
+        "css"
+      ],
+      "rivals": [
+        "tailwind"
+      ],
+      "seeAlso": [
+        "js"
+      ]
+    },
+    "challenges": [
+      "Build a responsive grid with stacked mobile columns.",
+      "Style a form with visible validation feedback.",
+      "Configure a component requiring JavaScript.",
+      "Customize theme values without editing vendor files.",
+      "Test keyboard navigation and narrow-screen layout."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for consistent interfaces with established patterns. Component accessibility and responsive behavior still need testing in the actual application.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://getbootstrap.com/docs/5.3/getting-started/introduction/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "shadcnui",
+    "name": "shadcn/ui",
+    "cat": "front",
+    "born": "Open-code UI component system",
+    "tag": "owned react component source with tailwind styling",
+    "history": "shadcn/ui distributes component source that developers add to and own within their projects. It is not simply an opaque component package updated independently of application code.",
+    "why": "Useful when teams want accessible component patterns and direct customization. Once copied, component maintenance and local modifications become project responsibilities.",
+    "rel": {
+      "needs": [
+        "react",
+        "tailwind"
+      ],
+      "seeAlso": [
+        "ts",
+        "nextjs"
+      ]
+    },
+    "challenges": [
+      "Add a component and inspect its local source.",
+      "Apply project theme tokens consistently.",
+      "Compose a validated form.",
+      "Test focus management in a dialog.",
+      "Review upstream changes against local customizations."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when teams want accessible component patterns and direct customization. Once copied, component maintenance and local modifications become project responsibilities.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://ui.shadcn.com/docs"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "d3",
+    "name": "D3.js",
+    "cat": "front",
+    "born": "Data visualization library",
+    "tag": "data joins scales layouts and browser graphics",
+    "history": "D3 provides JavaScript tools for working with data and creating visualizations using web standards. Its modules include scales, shapes, selections, and data transformations.",
+    "why": "Useful for custom visual encodings rather than only prebuilt chart types. Correct scales, labels, and accessible alternatives remain essential.",
+    "rel": {
+      "needs": [
+        "js"
+      ],
+      "seeAlso": [
+        "html",
+        "css",
+        "powerbi"
+      ]
+    },
+    "challenges": [
+      "Map a numeric domain to a pixel range.",
+      "Bind data to chart elements with stable keys.",
+      "Add axes and units to a chart.",
+      "Update the visualization after data changes.",
+      "Provide an accessible table and test misleading scale choices."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for custom visual encodings rather than only prebuilt chart types. Correct scales, labels, and accessible alternatives remain essential.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://d3js.org/what-is-d3"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "threejs",
+    "name": "Three.js",
+    "cat": "front",
+    "born": "JavaScript 3D library",
+    "tag": "browser scenes cameras materials and interactive rendering",
+    "history": "Three.js provides abstractions for browser-based 3D graphics, including scenes, cameras, geometry, materials, and renderers. Its project includes WebGL and WebGPU rendering paths.",
+    "why": "Useful for interactive spatial experiences without implementing an entire graphics engine. Asset loading, resource disposal, and device performance need deliberate handling.",
+    "rel": {
+      "needs": [
+        "js"
+      ],
+      "seeAlso": [
+        "html",
+        "webassembly",
+        "unity"
+      ]
+    },
+    "challenges": [
+      "Render a mesh with a camera and visible lighting.",
+      "Animate using elapsed time rather than frame count.",
+      "Load a model and handle loading failures.",
+      "Resize the renderer without distorting the camera.",
+      "Dispose resources and verify mobile rendering performance."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for interactive spatial experiences without implementing an entire graphics engine. Asset loading, resource disposal, and device performance need deliberate handling.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://github.com/mrdoob/three.js"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "webassembly",
+    "name": "WebAssembly",
+    "cat": "back",
+    "born": "Portable binary instruction format",
+    "tag": "wasm sandboxed execution and compilation target",
+    "history": "WebAssembly defines a portable binary instruction format designed as a compilation target. It runs in web and non-web environments through compatible runtimes.",
+    "why": "Useful for bringing supported compiled code into host applications. Host APIs, memory exchange, and runtime capabilities determine what a module can do.",
+    "rel": {
+      "seeAlso": [
+        "rust",
+        "cpp",
+        "js",
+        "blazor"
+      ]
+    },
+    "challenges": [
+      "Compile a small function to a Wasm module.",
+      "Call an exported function from a host.",
+      "Inspect imports required by the module.",
+      "Exchange a typed buffer through linear memory.",
+      "Compare boundary overhead with the computation saved."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for bringing supported compiled code into host applications. Host APIs, memory exchange, and runtime capabilities determine what a module can do.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://webassembly.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "blazor",
+    "name": "Blazor",
+    "cat": "front",
+    "born": ".NET web UI framework",
+    "tag": "csharp razor components server and webassembly rendering",
+    "history": "Blazor builds web interfaces with C# and Razor components in the ASP.NET Core ecosystem. Supported rendering approaches include static server rendering and interactive server or WebAssembly execution.",
+    "why": "Useful for sharing .NET skills and code across web applications. Rendering mode affects latency, deployment, state, and what executes in the browser.",
+    "rel": {
+      "needs": [
+        "dotnet",
+        "csharp",
+        "aspnetcore"
+      ],
+      "seeAlso": [
+        "webassembly"
+      ]
+    },
+    "challenges": [
+      "Build a Razor component with a parameter.",
+      "Handle a form with validation.",
+      "Identify where each rendering mode executes code.",
+      "Call a service without placing secrets in client code.",
+      "Test reconnect or loading behavior for the selected mode."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for sharing .NET skills and code across web applications. Rendering mode affects latency, deployment, state, and what executes in the browser.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://learn.microsoft.com/en-us/aspnet/core/blazor/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "aspnetcore",
+    "name": "ASP.NET Core",
+    "cat": "back",
+    "born": ".NET web framework",
+    "tag": "cross-platform web apis middleware and dependency injection",
+    "history": "ASP.NET Core is the cross-platform web framework in the .NET ecosystem. It supports web applications, APIs, and services with shared hosting and application infrastructure.",
+    "why": "Useful for typed web services and .NET applications. Middleware ordering, service lifetimes, and authentication boundaries shape runtime behavior.",
+    "rel": {
+      "needs": [
+        "dotnet"
+      ],
+      "seeAlso": [
+        "csharp",
+        "blazor",
+        "http"
+      ]
+    },
+    "challenges": [
+      "Create an endpoint with typed input validation.",
+      "Register a service with an appropriate lifetime.",
+      "Trace a request through middleware.",
+      "Add authorization and test denied requests.",
+      "Write an integration test for success and failure responses."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for typed web services and .NET applications. Middleware ordering, service lifetimes, and authentication boundaries shape runtime behavior.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://dotnet.microsoft.com/en-us/apps/aspnet"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "express",
+    "name": "Express",
+    "cat": "back",
+    "born": "Node.js web framework",
+    "tag": "minimal http routing and middleware",
+    "history": "Express provides routing and middleware for Node.js web applications. Its small core leaves many application policies and integrations to the project.",
+    "why": "Useful for straightforward HTTP services. Explicit error handling, validation, and security configuration are necessary around the minimal framework.",
+    "rel": {
+      "needs": [
+        "node"
+      ],
+      "rivals": [
+        "fastify"
+      ],
+      "seeAlso": [
+        "js",
+        "http",
+        "nestjs"
+      ]
+    },
+    "challenges": [
+      "Create a route with an explicit status code.",
+      "Add middleware that records a request identifier.",
+      "Validate incoming JSON.",
+      "Handle asynchronous failures in an error path.",
+      "Test malformed requests and missing routes."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for straightforward HTTP services. Explicit error handling, validation, and security configuration are necessary around the minimal framework.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://expressjs.com/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "nestjs",
+    "name": "NestJS",
+    "cat": "back",
+    "born": "Node.js application framework",
+    "tag": "typescript modules controllers and dependency injection",
+    "history": "NestJS structures server-side applications around modules, controllers, and injectable providers. It uses TypeScript and integrates with underlying HTTP platforms.",
+    "why": "Useful when a Node application benefits from consistent architecture and testable dependencies. Framework structure does not replace clear domain boundaries.",
+    "rel": {
+      "needs": [
+        "node"
+      ],
+      "seeAlso": [
+        "ts",
+        "express",
+        "fastify"
+      ]
+    },
+    "challenges": [
+      "Create a module with a controller and service.",
+      "Inject a dependency through the framework.",
+      "Validate a request DTO.",
+      "Test a service with a replaced dependency.",
+      "Add an authorization guard and test rejection."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when a Node application benefits from consistent architecture and testable dependencies. Framework structure does not replace clear domain boundaries.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.nestjs.com/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "hono",
+    "name": "Hono",
+    "cat": "back",
+    "born": "Web standards-based framework",
+    "tag": "lightweight routing across javascript runtimes",
+    "history": "Hono is a web framework built around web-standard request and response interfaces. It supports multiple JavaScript runtime and deployment environments.",
+    "why": "Useful for portable lightweight services. Runtime-specific APIs and adapters can still limit portability between hosts.",
+    "rel": {
+      "seeAlso": [
+        "js",
+        "ts",
+        "cloudflare",
+        "bun",
+        "deno"
+      ]
+    },
+    "challenges": [
+      "Return a JSON response from a route.",
+      "Add middleware for a request header.",
+      "Validate user input before processing it.",
+      "Test handlers with a request object.",
+      "Identify host-specific APIs before moving runtimes."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for portable lightweight services. Runtime-specific APIs and adapters can still limit portability between hosts.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://hono.dev/docs"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "fastify",
+    "name": "Fastify",
+    "cat": "back",
+    "born": "Node.js web framework",
+    "tag": "schema-based validation serialization and encapsulated plugins",
+    "history": "Fastify provides a Node.js framework with schema-oriented validation and serialization and an encapsulated plugin system.",
+    "why": "Useful for structured HTTP services with reusable plugins. Treat application schemas as trusted code and test serialization contracts.",
+    "rel": {
+      "needs": [
+        "node"
+      ],
+      "rivals": [
+        "express"
+      ],
+      "seeAlso": [
+        "js",
+        "nestjs"
+      ]
+    },
+    "challenges": [
+      "Define a route with request and response schemas.",
+      "Reject malformed inputs with a clear response.",
+      "Encapsulate a service in a plugin.",
+      "Test a route using request injection.",
+      "Check which response fields serialization exposes."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for structured HTTP services with reusable plugins. Treat application schemas as trusted code and test serialization contracts.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://fastify.dev/docs/latest/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "phoenix",
+    "name": "Phoenix",
+    "cat": "back",
+    "born": "Elixir web framework",
+    "tag": "beam web applications channels and live interfaces",
+    "history": "Phoenix is an Elixir web framework built on the Erlang runtime ecosystem. It includes facilities for web routing and real-time communication.",
+    "why": "Useful for concurrent web services and live experiences. Process isolation and supervision complement, but do not eliminate, application-level failure handling.",
+    "rel": {
+      "needs": [
+        "elixir"
+      ],
+      "seeAlso": [
+        "http",
+        "websocket",
+        "rails"
+      ]
+    },
+    "challenges": [
+      "Trace a request from router to controller.",
+      "Render a validated form.",
+      "Broadcast an event to a test channel.",
+      "Handle a disconnected client.",
+      "Write a test for an authorization boundary."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for concurrent web services and live experiences. Process isolation and supervision complement, but do not eliminate, application-level failure handling.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://phoenix.hexdocs.pm/overview.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "elixir",
+    "name": "Elixir",
+    "cat": "lang",
+    "born": "Functional programming language",
+    "tag": "beam concurrency immutable data and fault-tolerant systems",
+    "history": "Elixir is a functional language running on the Erlang virtual machine. It builds on lightweight processes, message passing, and the OTP ecosystem.",
+    "why": "Useful for concurrent and resilient services. Process supervision defines recovery structure rather than automatically fixing incorrect application logic.",
+    "rel": {
+      "seeAlso": [
+        "phoenix",
+        "clojure",
+        "scala",
+        "linux"
+      ]
+    },
+    "challenges": [
+      "Transform immutable data with pattern matching.",
+      "Send a message between two processes.",
+      "Implement a small stateful server.",
+      "Place a worker under supervision.",
+      "Test recovery after an intentional worker failure."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for concurrent and resilient services. Process supervision defines recovery structure rather than automatically fixing incorrect application logic.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://elixir-lang.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "bash",
+    "name": "Bash",
+    "cat": "lang",
+    "born": "GNU command shell and scripting language",
+    "tag": "shell scripts pipelines quoting and process automation",
+    "history": "Bash is GNU's command shell, combining interactive command execution with scripting constructs. It connects processes through pipelines, redirection, variables, and control flow.",
+    "why": "Useful for automating command-line workflows. Quoting, exit statuses, and filesystem assumptions are critical when scripts handle arbitrary input.",
+    "rel": {
+      "seeAlso": [
+        "linux",
+        "git",
+        "powershell",
+        "githubactions"
+      ]
+    },
+    "challenges": [
+      "Pass a filename containing spaces safely to a command.",
+      "Combine commands through a pipeline and redirection.",
+      "Check and propagate a command's exit status.",
+      "Use a temporary directory and cleanup trap.",
+      "Test a script with empty input and failing commands."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for automating command-line workflows. Quoting, exit statuses, and filesystem assumptions are critical when scripts handle arbitrary input.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.gnu.org/software/bash/manual/bash.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "powershell",
+    "name": "PowerShell",
+    "cat": "lang",
+    "born": "Shell and automation language",
+    "tag": "cross-platform dotnet object pipelines and scripting",
+    "history": "PowerShell is a cross-platform automation shell and scripting language built on .NET. Its pipelines commonly pass structured objects rather than only text.",
+    "why": "Useful for system administration and repeatable automation. Object properties, terminating errors, and platform-specific modules need explicit handling.",
+    "rel": {
+      "seeAlso": [
+        "dotnet",
+        "windows",
+        "linux",
+        "bash",
+        "azure"
+      ]
+    },
+    "challenges": [
+      "Inspect an object's available properties.",
+      "Filter and select objects in a pipeline.",
+      "Write a function with validated parameters.",
+      "Handle a terminating error with try and catch.",
+      "Test platform assumptions before running on another OS."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for system administration and repeatable automation. Object properties, terminating errors, and platform-specific modules need explicit handling.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://learn.microsoft.com/en-us/powershell/scripting/overview"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "r",
+    "name": "R",
+    "cat": "lang",
+    "born": "Statistical programming language",
+    "tag": "statistical computing graphics and data analysis",
+    "history": "R is a language and environment for statistical computing and graphics, drawing on the S language tradition. Packages extend its analytical capabilities.",
+    "why": "Useful for statistical analysis and reproducible research. Model assumptions and package environments need as much care as the code itself.",
+    "rel": {
+      "seeAlso": [
+        "python",
+        "jupyter",
+        "powerbi",
+        "julia"
+      ]
+    },
+    "challenges": [
+      "Create and summarize a typed data frame.",
+      "Visualize a distribution with labeled axes.",
+      "Fit a simple statistical model.",
+      "Inspect model assumptions using diagnostics.",
+      "Reproduce the analysis from a clean session."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for statistical analysis and reproducible research. Model assumptions and package environments need as much care as the code itself.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.r-project.org/about.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "julia",
+    "name": "Julia",
+    "cat": "lang",
+    "born": "Technical computing language",
+    "tag": "multiple dispatch numerical programming and compilation",
+    "history": "Julia is a programming language designed for technical and numerical computing. Multiple dispatch is central to how it selects behavior for combinations of argument types.",
+    "why": "Useful for expressive numerical programs with compiled execution. Compilation latency, type stability, and package environments affect practical performance.",
+    "rel": {
+      "seeAlso": [
+        "python",
+        "r",
+        "numpy",
+        "jupyter"
+      ]
+    },
+    "challenges": [
+      "Define methods for two different argument types.",
+      "Write an array-based numerical calculation.",
+      "Inspect type stability in a function.",
+      "Separate first-call compilation from repeated timing.",
+      "Reproduce results using a project environment."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for expressive numerical programs with compiled execution. Compilation latency, type stability, and package environments affect practical performance.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.julialang.org/en/v1/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "scala",
+    "name": "Scala",
+    "cat": "lang",
+    "born": "Functional and object-oriented language",
+    "tag": "typed jvm programming with functional abstractions",
+    "history": "Scala combines object-oriented and functional programming with static typing. Its JVM ecosystem supports interoperability with Java libraries.",
+    "why": "Useful for JVM applications and data-engineering ecosystems. Advanced type and abstraction features should support maintainability rather than obscure simple operations.",
+    "rel": {
+      "seeAlso": [
+        "java",
+        "spark",
+        "kotlin",
+        "clojure"
+      ]
+    },
+    "challenges": [
+      "Model data with immutable case classes.",
+      "Transform collections without mutating shared state.",
+      "Handle optional values explicitly.",
+      "Call a Java library from Scala.",
+      "Test a pattern match for all expected variants."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for JVM applications and data-engineering ecosystems. Advanced type and abstraction features should support maintainability rather than obscure simple operations.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.scala-lang.org/tour/tour-of-scala.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "lua",
+    "name": "Lua",
+    "cat": "lang",
+    "born": "Embeddable scripting language",
+    "tag": "lightweight scripting tables and host integration",
+    "history": "Lua is a lightweight language designed for embedding and extension. Tables are its central data structure, supporting multiple programming patterns.",
+    "why": "Useful for scripting within host applications. The host determines available APIs and privileges; embedding alone does not establish a secure sandbox.",
+    "rel": {
+      "seeAlso": [
+        "c",
+        "cpp",
+        "python",
+        "godot"
+      ]
+    },
+    "challenges": [
+      "Represent a record and sequence using tables.",
+      "Write a closure that retains local state.",
+      "Handle an error with protected execution.",
+      "Call a documented API in an approved host.",
+      "Define which host capabilities a script should receive."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for scripting within host applications. The host determines available APIs and privileges; embedding alone does not establish a secure sandbox.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.lua.org/about.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "zig",
+    "name": "Zig",
+    "cat": "lang",
+    "born": "Systems programming language and toolchain",
+    "tag": "explicit allocation compile-time execution and c interoperability",
+    "history": "Zig is a systems programming language with compile-time execution and explicit resource-management conventions. Its toolchain also supports C interoperability.",
+    "why": "Useful when control over memory and build targets matters. Explicit allocation does not remove the need to reason about ownership and lifetime.",
+    "rel": {
+      "seeAlso": [
+        "c",
+        "cpp",
+        "rust",
+        "webassembly"
+      ]
+    },
+    "challenges": [
+      "Write a function with an explicit error result.",
+      "Allocate and release a buffer through an allocator.",
+      "Use compile-time evaluation for a small generic operation.",
+      "Call a C function through an interface.",
+      "Test failure paths for allocation and invalid input."
+    ],
+    "extension": {
+      "problemItSolves": "Useful when control over memory and build targets matters. Explicit allocation does not remove the need to reason about ownership and lifetime.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://ziglang.org/learn/overview/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "haskell",
+    "name": "Haskell",
+    "cat": "lang",
+    "born": "Pure functional programming language",
+    "tag": "static types lazy evaluation and explicit effects",
+    "history": "Haskell is a statically typed, purely functional language with lazy evaluation. Its type system and abstractions distinguish pure computations from effectful actions.",
+    "why": "Useful for exploring typed functional design and compositional programs. Evaluation behavior and abstraction choices affect memory use and approachability.",
+    "rel": {
+      "seeAlso": [
+        "ocaml",
+        "scala",
+        "clojure"
+      ]
+    },
+    "challenges": [
+      "Define an algebraic data type.",
+      "Handle every constructor with pattern matching.",
+      "Compose pure list transformations.",
+      "Keep input/output separate from pure logic.",
+      "Test properties over generated input cases."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for exploring typed functional design and compositional programs. Evaluation behavior and abstraction choices affect memory use and approachability.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.haskell.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "ocaml",
+    "name": "OCaml",
+    "cat": "lang",
+    "born": "Typed functional programming language",
+    "tag": "pattern matching modules and expressive static types",
+    "history": "OCaml is a general-purpose language combining functional programming, static typing, and other programming styles. Pattern matching and a module system support structured programs.",
+    "why": "Useful for typed domain models, language tools, and reliable application logic. Exhaustive cases and explicit interfaces help control change.",
+    "rel": {
+      "seeAlso": [
+        "haskell",
+        "scala",
+        "rust"
+      ]
+    },
+    "challenges": [
+      "Represent a domain with variant types.",
+      "Write an exhaustive pattern match.",
+      "Handle an optional result without a sentinel value.",
+      "Separate implementation behind a module signature.",
+      "Test transformations over recursive data."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for typed domain models, language tools, and reliable application logic. Exhaustive cases and explicit interfaces help control change.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://ocaml.org/about"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "clojure",
+    "name": "Clojure",
+    "cat": "lang",
+    "born": "Functional Lisp language",
+    "tag": "jvm lisp immutable collections and managed state",
+    "history": "Clojure is a Lisp dialect centered on functional programming and immutable data. Its JVM implementation integrates with Java and provides explicit mechanisms for managing state.",
+    "why": "Useful for data-oriented programs with interactive development. Distinguishing identity, state, and immutable values helps reason about concurrency.",
+    "rel": {
+      "seeAlso": [
+        "java",
+        "elixir",
+        "scala",
+        "haskell"
+      ]
+    },
+    "challenges": [
+      "Transform maps and vectors without mutation.",
+      "Compose functions into a data pipeline.",
+      "Call a Java method.",
+      "Manage a shared value with an appropriate state primitive.",
+      "Test concurrent updates for the intended invariant."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for data-oriented programs with interactive development. Distinguishing identity, state, and immutable values helps reason about concurrency.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://clojure.org/about/rationale"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "pnpm",
+    "name": "pnpm",
+    "cat": "devops",
+    "born": "JavaScript package manager",
+    "tag": "shared package storage lockfiles and workspaces",
+    "history": "pnpm manages JavaScript dependencies using a shared content-addressable store and linked project installations. It also supports multi-package workspaces.",
+    "why": "Useful for dependency management across projects and monorepos. Lockfile discipline and explicit dependency declarations improve reproducibility.",
+    "rel": {
+      "needs": [
+        "node"
+      ],
+      "seeAlso": [
+        "js",
+        "ts",
+        "git"
+      ]
+    },
+    "challenges": [
+      "Install dependencies and inspect the lockfile.",
+      "Run a project script through pnpm.",
+      "Declare dependencies in the package that uses them.",
+      "Create a two-package workspace.",
+      "Verify a frozen-lockfile install in a clean environment."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for dependency management across projects and monorepos. Lockfile discipline and explicit dependency declarations improve reproducibility.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://pnpm.io/motivation"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "uv",
+    "name": "uv",
+    "cat": "devops",
+    "born": "Python package and project manager",
+    "tag": "python environments dependencies lockfiles and tools",
+    "history": "uv is a Python package and project management tool written in Rust. Its workflows include dependency resolution, environments, project execution, and tool management.",
+    "why": "Useful for consolidating Python environment tasks. A locked environment should still be tested on the actual target platform.",
+    "rel": {
+      "rivals": [
+        "poetry"
+      ],
+      "seeAlso": [
+        "python",
+        "rust",
+        "git"
+      ]
+    },
+    "challenges": [
+      "Initialize a Python project.",
+      "Add a dependency and inspect the lockfile.",
+      "Run a command in the managed environment.",
+      "Install an isolated command-line tool.",
+      "Recreate the project environment from its committed metadata."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for consolidating Python environment tasks. A locked environment should still be tested on the actual target platform.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.astral.sh/uv/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "poetry",
+    "name": "Poetry",
+    "cat": "devops",
+    "born": "Python dependency and packaging tool",
+    "tag": "python project metadata dependency resolution and publishing",
+    "history": "Poetry manages Python project dependencies, environments, and packaging workflows. It records project metadata and resolved dependency information.",
+    "why": "Useful for maintaining installable Python projects. Package metadata, interpreter constraints, and repository credentials need separate validation.",
+    "rel": {
+      "rivals": [
+        "uv"
+      ],
+      "seeAlso": [
+        "python",
+        "git"
+      ]
+    },
+    "challenges": [
+      "Define package metadata and Python constraints.",
+      "Add a dependency group for development tools.",
+      "Inspect a resolved lockfile.",
+      "Build a package and inspect its contents.",
+      "Install the built artifact in a clean test environment."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for maintaining installable Python projects. Package metadata, interpreter constraints, and repository credentials need separate validation.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://python-poetry.org/docs/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "gradle",
+    "name": "Gradle",
+    "cat": "devops",
+    "born": "Build automation system",
+    "tag": "task graphs incremental builds and multi-project automation",
+    "history": "Gradle automates builds using task graphs and configurable project models. It is widely integrated with JVM tooling and supports multiple kinds of build workflows.",
+    "why": "Useful for complex builds that benefit from reusable plugins and incremental work. Cache correctness depends on accurately declared inputs and outputs.",
+    "rel": {
+      "rivals": [
+        "maven"
+      ],
+      "seeAlso": [
+        "java",
+        "kotlin",
+        "bazel"
+      ]
+    },
+    "challenges": [
+      "Run a project using its Gradle wrapper.",
+      "Inspect the dependencies between build tasks.",
+      "Declare inputs and outputs for a custom task.",
+      "Create a small multi-project build.",
+      "Verify incremental behavior after changing one input."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for complex builds that benefit from reusable plugins and incremental work. Cache correctness depends on accurately declared inputs and outputs.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.gradle.org/current/userguide/what_is_gradle.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "maven",
+    "name": "Apache Maven",
+    "cat": "devops",
+    "born": "Project build and dependency tool",
+    "tag": "pom-based java builds conventions and lifecycles",
+    "history": "Apache Maven uses a project object model and conventions to manage builds, dependencies, and project information. Lifecycle phases coordinate common build activities.",
+    "why": "Useful for consistent Java project builds. Dependency mediation and plugin versions should be inspected rather than left implicit.",
+    "rel": {
+      "rivals": [
+        "gradle"
+      ],
+      "seeAlso": [
+        "java",
+        "springboot",
+        "git"
+      ]
+    },
+    "challenges": [
+      "Read a project's POM and identify its coordinates.",
+      "Run tests through the build lifecycle.",
+      "Inspect the dependency tree.",
+      "Pin a build plugin version.",
+      "Package and test the artifact outside the source tree."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for consistent Java project builds. Dependency mediation and plugin versions should be inspected rather than left implicit.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://maven.apache.org/what-is-maven.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "bazel",
+    "name": "Bazel",
+    "cat": "devops",
+    "born": "Build and test system",
+    "tag": "declared dependencies reproducible builds and caching",
+    "history": "Bazel builds and tests projects from declared targets and dependencies. It supports multiple languages and uses caching to avoid repeating eligible work.",
+    "why": "Useful for large codebases with explicit build graphs. Reproducibility depends on declaring inputs and controlling environmental dependencies.",
+    "rel": {
+      "seeAlso": [
+        "java",
+        "cpp",
+        "python",
+        "gradle"
+      ]
+    },
+    "challenges": [
+      "Define a library and a test target.",
+      "Inspect the dependencies of a target.",
+      "Change one source file and observe rebuilt work.",
+      "Remove an undeclared environment dependency.",
+      "Compare clean and cached builds for identical outputs."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for large codebases with explicit build graphs. Reproducibility depends on declaring inputs and controlling environmental dependencies.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://bazel.build/about/intro"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "nix",
+    "name": "Nix",
+    "cat": "devops",
+    "born": "Declarative package and build system",
+    "tag": "reproducible packages isolated builds and development environments",
+    "history": "Nix provides a declarative approach to packages and build environments. Its store and dependency model support reproducible, isolated software construction.",
+    "why": "Useful for describing environments as versioned configuration. Reproducibility still depends on pinned inputs and avoiding impure external assumptions.",
+    "rel": {
+      "seeAlso": [
+        "linux",
+        "bash",
+        "docker",
+        "bazel"
+      ]
+    },
+    "challenges": [
+      "Enter a development environment with declared tools.",
+      "Pin the inputs used by that environment.",
+      "Build a small package.",
+      "Inspect the package's dependency closure.",
+      "Reproduce the environment on another compatible machine."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for describing environments as versioned configuration. Reproducibility still depends on pinned inputs and avoiding impure external assumptions.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://nix.dev/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "podman",
+    "name": "Podman",
+    "cat": "devops",
+    "born": "Container management engine",
+    "tag": "daemonless containers pods and rootless workflows",
+    "history": "Podman manages containers, images, and pods without requiring a central daemon. It supports rootless container workflows where the host permits them.",
+    "why": "Useful for container operations with different privilege and service-management choices. Rootless operation does not make untrusted images harmless.",
+    "rel": {
+      "rivals": [
+        "docker"
+      ],
+      "seeAlso": [
+        "linux",
+        "k8s",
+        "trivy"
+      ]
+    },
+    "challenges": [
+      "Run a trusted image without unnecessary privileges.",
+      "Map a port and verify the exposed interface.",
+      "Persist test data in a volume.",
+      "Inspect a container's user and resource limits.",
+      "Compare a rootless workflow with its host requirements."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for container operations with different privilege and service-management choices. Rootless operation does not make untrusted images harmless.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://docs.podman.io/en/latest/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "argocd",
+    "name": "Argo CD",
+    "cat": "devops",
+    "born": "Kubernetes GitOps delivery tool",
+    "tag": "git desired state cluster reconciliation and drift detection",
+    "history": "Argo CD is a declarative continuous delivery tool for Kubernetes. It compares application configuration in Git with cluster state and can synchronize differences.",
+    "why": "Useful for auditable deployment configuration and drift visibility. Sync policies and access control govern consequential changes to a cluster.",
+    "rel": {
+      "needs": [
+        "k8s",
+        "git"
+      ],
+      "seeAlso": [
+        "helm",
+        "githubactions"
+      ]
+    },
+    "challenges": [
+      "Register a test application from a Git repository.",
+      "Inspect the desired-versus-live diff.",
+      "Perform a reviewed synchronization.",
+      "Introduce harmless drift and observe detection.",
+      "Test rollback and access limits in a non-production cluster."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for auditable deployment configuration and drift visibility. Sync policies and access control govern consequential changes to a cluster.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://argo-cd.readthedocs.io/en/stable/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "keycloak",
+    "name": "Keycloak",
+    "cat": "devops",
+    "born": "Identity and access management server",
+    "tag": "single sign-on identity federation oidc oauth and saml",
+    "history": "Keycloak provides identity and access management, including single sign-on and identity federation. It supports protocols such as OpenID Connect and SAML.",
+    "why": "Useful for centralizing authentication across applications. Applications still need to enforce authorization and validate tokens correctly.",
+    "rel": {
+      "seeAlso": [
+        "oauth",
+        "openidconnect",
+        "tls",
+        "vault"
+      ]
+    },
+    "challenges": [
+      "Create a test realm and client.",
+      "Configure exact redirect URIs.",
+      "Complete a login using a suitable protocol flow.",
+      "Validate token issuer, audience, and expiration.",
+      "Test denied access and logout behavior."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for centralizing authentication across applications. Applications still need to enforce authorization and validate tokens correctly.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.keycloak.org/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "wireshark",
+    "name": "Wireshark",
+    "cat": "devops",
+    "born": "Network protocol analyzer",
+    "tag": "packet capture protocol inspection and display filters",
+    "history": "Wireshark captures and analyzes network traffic through protocol-aware inspection tools. Display filters help isolate relevant packets in a capture.",
+    "why": "Useful for diagnosing communication problems on networks you are authorized to inspect. Captures can contain sensitive data and need careful handling.",
+    "rel": {
+      "seeAlso": [
+        "http",
+        "tls",
+        "linux",
+        "websocket"
+      ]
+    },
+    "challenges": [
+      "Open a synthetic or authorized sample capture.",
+      "Filter traffic by a known connection.",
+      "Trace a request and response sequence.",
+      "Distinguish capture filters from display filters.",
+      "Explain what encrypted traffic reveals without decrypting payloads."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for diagnosing communication problems on networks you are authorized to inspect. Captures can contain sensitive data and need careful handling.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://www.wireshark.org/docs/wsug_html_chunked/ChapterIntroduction.html"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
+    "id": "trivy",
+    "name": "Trivy",
+    "cat": "devops",
+    "born": "Security scanning tool",
+    "tag": "vulnerability misconfiguration and secret scanning",
+    "history": "Trivy scans supported artifacts and environments for security issues, including vulnerabilities, misconfigurations, and secrets. Scan coverage depends on target type and enabled scanners.",
+    "why": "Useful for adding security checks to development and delivery workflows. Findings require triage; a clean scan is not proof that software is secure.",
+    "rel": {
+      "seeAlso": [
+        "docker",
+        "podman",
+        "terraform",
+        "k8s",
+        "githubactions"
+      ]
+    },
+    "challenges": [
+      "Scan a trusted test image.",
+      "Inspect the affected package and advisory for a finding.",
+      "Scan infrastructure configuration for misconfigurations.",
+      "Configure a documented severity policy in a test pipeline.",
+      "Track justified exceptions with owners and expiration dates."
+    ],
+    "extension": {
+      "problemItSolves": "Useful for adding security checks to development and delivery workflows. Findings require triage; a clean scan is not proof that software is secure.",
+      "latestChanges": [
+        "Research snapshot: September 9, 2026. This entry summarizes the linked primary documentation; it does not assert a latest release version."
+      ],
+      "docs": [
+        {
+          "label": "Official documentation",
+          "url": "https://trivy.dev/docs/latest/guide/"
+        }
+      ],
+      "updatedAt": "2026-09-09"
+    }
+  },
+  {
     "id": "openrouter", "name": "OpenRouter", "cat": "cloud",
     "born": "API platform · OpenRouter",
     "tag": "unified api and routing across ai model providers",
