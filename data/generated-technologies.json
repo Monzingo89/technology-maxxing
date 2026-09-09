@@ -1,5 +1,75 @@
 [
   {
+    "id": "cnn",
+    "name": "CNN (Convolutional Neural Network)",
+    "cat": "data",
+    "born": "Architecture family · Deep learning",
+    "tag": "neural networks that learn local spatial features",
+    "history": "LeNet demonstrated convolutional networks for handwritten character recognition in the 1990s. AlexNet's 2012 ImageNet result helped popularize deeper CNNs. Later architectures explored greater depth, multi-scale processing, and residual connections. CNN describes a family of architectures, not a single product or release.",
+    "why": "CNNs reuse learned filters across local regions, producing feature maps that can capture increasingly complex patterns. This structure is useful for image classification and other vision tasks. The Data category groups this concept with its implementation tools: PyTorch and TensorFlow, often used through Python. None of these specific tools is required by the mathematical architecture.",
+    "rel": { "seeAlso": ["python", "pytorch", "tensorflow"] },
+    "challenges": [
+      "Apply a 3x3 filter to a small grid by hand and explain weight sharing.",
+      "Calculate the output dimensions of a convolution with specified stride and padding.",
+      "Build a small image classifier and inspect every layer's output shape.",
+      "Compare training and validation curves and diagnose overfitting.",
+      "Evaluate a pretrained CNN on held-out images and report per-class errors."
+    ],
+    "extension": {
+      "problemItSolves": "Learns features from spatially structured inputs instead of relying entirely on manually designed image descriptors. Local connectivity and shared weights reduce parameters relative to a fully connected layer on the same input. Pooling or strided convolutions can reduce spatial resolution; pooling is not mandatory.",
+      "latestChanges": [
+        "Reference snapshot: September 9, 2026. CNN is an architecture family with no single latest version.",
+        "TensorFlow's introductory tutorial trains a convolutional image classifier; PyTorch's tutorial demonstrates a LeNet-style network and automatic differentiation."
+      ],
+      "relatedTechnologies": ["python", "pytorch", "tensorflow"],
+      "docs": [
+        { "label": "Stanford CS231n: CNN concepts and history", "url": "https://cs231n.github.io/convolutional-networks/" },
+        { "label": "TensorFlow: CNN image classifier", "url": "https://www.tensorflow.org/tutorials/images/cnn" },
+        { "label": "PyTorch: convolutional network tutorial", "url": "https://docs.pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html" }
+      ],
+      "practiceChallenges": [
+        { "level": 1, "title": "Trace a filter", "prompt": "Compute one output value from a 3x3 filter over a 5x5 grid, then shift the filter one column.", "format": "mixed" },
+        { "level": 2, "title": "Check tensor shapes", "prompt": "For a 32x32 RGB image, calculate the output of 16 filters of size 3x3, stride 1, no padding, and dilation 1. Verify with a framework.", "format": "coding" },
+        { "level": 3, "title": "Train a baseline", "prompt": "Train a small image classifier with separate training and validation data; log layer shapes and compare against a majority-class baseline.", "format": "coding" },
+        { "level": 4, "title": "Diagnose generalization", "prompt": "Compare learning curves before and after training-only augmentation; explain whether validation performance improves.", "format": "mixed" },
+        { "level": 5, "title": "Audit an evaluation", "prompt": "Evaluate transfer learning on held-out data, grouping related images before splitting. Report a confusion matrix, failure examples, and inference latency.", "format": "mixed" }
+      ],
+      "assessment": {
+        "antiCheatRules": ["Predict dimensions before running code.", "Keep the final test split out of model selection.", "Explain incorrect predictions and retain reproducible settings."],
+        "multipleChoice": [
+          {
+            "question": "What does convolutional weight sharing mean?",
+            "options": ["A filter reuses its weights across spatial positions", "Every layer must use identical weights", "The model has no trainable parameters"],
+            "answerIndex": 0,
+            "explanation": "The same learned filter is applied at multiple positions."
+          },
+          {
+            "question": "What is the spatial output size for a 32x32 input, 3x3 kernel, stride 1, no padding, and dilation 1?",
+            "options": ["32x32", "30x30", "16x16"],
+            "answerIndex": 1,
+            "explanation": "Each dimension is (32 - 3) / 1 + 1 = 30."
+          },
+          {
+            "question": "Training accuracy rises while validation accuracy falls. What should you investigate?",
+            "options": ["Guaranteed generalization", "Whether the test set should become training data", "Overfitting and split quality"],
+            "answerIndex": 2,
+            "explanation": "Improved training fit alone does not establish generalization."
+          }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Choose the PyTorch layer for a 2D convolution over RGB images.",
+            "language": "python",
+            "template": "from torch import nn\n\nfeatures = nn.{{layer}}(in_channels=3, out_channels=16, kernel_size=3)",
+            "blanks": [{ "id": "layer", "options": ["Conv2d", "Linear", "Embedding"], "answer": "Conv2d" }]
+          }
+        ]
+      },
+      "updatedAt": "2026-09-09",
+      "researchMethod": "Researched in Codex using university course notes and official framework documentation; no generation API call."
+    }
+  },
+  {
     "id": "coffeescript",
     "name": "CoffeeScript",
     "cat": "lang",
