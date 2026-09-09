@@ -1,5 +1,213 @@
 [
   {
+    "id": "openrouter", "name": "OpenRouter", "cat": "cloud",
+    "born": "API platform · OpenRouter",
+    "tag": "unified api and routing across ai model providers",
+    "history": "OpenRouter provides a common interface to models from multiple providers. Its documentation covers HTTP access, SDKs, provider selection, and fallback routing. It is an access layer rather than a foundation model.",
+    "why": "Lets applications compare or switch models through a shared API. Provider capabilities, data policies, and availability still differ. HTTP and Python are integration connections; the model-family links are navigation into the broader provider ecosystem.",
+    "rel": { "seeAlso": ["http", "python", "claude", "deepseek", "llama"] },
+    "challenges": ["Distinguish a model from its hosting provider and router.", "Sketch a chat request with a placeholder credential and explicit model ID.", "Compare two supported models on identical saved prompts.", "Design fallback behavior for a timeout without duplicating tool actions.", "Report quality, latency, and total cost across a fixed evaluation set."],
+    "extension": {
+      "problemItSolves": "Reduces integration work when using multiple model providers through one endpoint.",
+      "latestChanges": ["Checked September 9, 2026: official docs describe API access, SDKs, and provider/model routing. Consult the catalog for current availability."],
+      "docs": [{"label":"API quickstart","url":"https://openrouter.ai/docs/quickstart"},{"label":"Models and provider FAQ","url":"https://openrouter.ai/docs/faq"}],
+      "assessment": {"antiCheatRules":["Use placeholders for credentials.","Keep prompts fixed when comparing providers."],"multipleChoice":[{"question":"What role does OpenRouter primarily play?","options":["A multi-provider API access layer","A programming language","A single model architecture"],"answerIndex":0,"explanation":"It routes requests to models and providers through a common interface."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"deepseek", "name":"DeepSeek", "cat":"ai",
+    "born":"AI lab and model family · DeepSeek",
+    "tag":"language and reasoning models with api access",
+    "history":"DeepSeek develops language and reasoning models. Its R1 publication describes reinforcement-learning-based reasoning and distilled models. The hosted API and downloadable research releases are distinct access paths, with capabilities tied to the selected model.",
+    "why":"A model-family option for text, reasoning, and coding workloads. Compare a specific checkpoint or API model rather than treating the brand as one fixed capability. Llama and Claude are comparison links; Python and HTTP support application integration.",
+    "rel":{"rivals":["llama","claude"],"seeAlso":["python","http","openrouter"]},
+    "challenges":["Identify the exact model behind a DeepSeek result.","Compare a reasoning task with a simple extraction task.","Write a test set with known answers and explicit scoring.","Compare hosted inference with a downloadable checkpoint for your constraints.","Measure reliability and latency across repeated runs, retaining failures."],
+    "extension":{
+      "problemItSolves":"Supplies models for natural-language and reasoning applications through hosted and model-release workflows.",
+      "latestChanges":["Research snapshot: September 9, 2026. R1 is a documented reasoning-model lineage, not a claim that it is the latest DeepSeek release."],
+      "docs":[{"label":"Official API documentation","url":"https://api-docs.deepseek.com/quick_start/pricing"},{"label":"DeepSeek-R1 research and models","url":"https://github.com/deepseek-ai/DeepSeek-R1"}],
+      "assessment":{"antiCheatRules":["Record the exact model identity.","Score against held-out answers."],"multipleChoice":[{"question":"What is needed for a reproducible DeepSeek comparison?","options":["Only the company name","The model identity, settings, and test set","Only one successful answer"],"answerIndex":1,"explanation":"Different models and settings can produce materially different results."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"grok", "name":"Grok", "cat":"ai",
+    "born":"AI assistant and model family · xAI",
+    "tag":"conversational ai with connected tools and model apis",
+    "history":"Grok spans an assistant experience and a family of models exposed through developer services. The official documentation distinguishes the chat product, API capabilities, and agent products such as Grok Bot.",
+    "why":"Useful for conversational assistance and model-backed applications. Search, media, and agent capabilities depend on the chosen product and tools. Claude and Perplexity are comparison links; HTTP connects the developer API to application infrastructure.",
+    "rel":{"rivals":["claude","perplexity"],"seeAlso":["http","cursor"]},
+    "challenges":["Separate Grok model behavior from a tool-enabled chat feature.","Ask a factual question and check the cited primary source.","Compare the same task with and without available search tools.","Create a rubric for image or document analysis using known examples.","Evaluate task completion and unsupported claims across repeated trials."],
+    "extension":{
+      "problemItSolves":"Provides a conversational interface and model services for answering questions and completing supported tasks.",
+      "latestChanges":["Checked September 9, 2026: current docs separate Grok, developer APIs, and Grok Bot. Features vary by surface."],
+      "docs":[{"label":"Grok overview","url":"https://docs.x.ai/grok/overview"},{"label":"Grok Bot overview","url":"https://docs.x.ai/grok-bot/overview"}],
+      "assessment":{"antiCheatRules":["Verify sources independently.","Record which tools were enabled."],"multipleChoice":[{"question":"Does a model alone guarantee up-to-date web results?","options":["Yes, always","Only if its name includes AI","No; retrieval depends on the product and tools"],"answerIndex":2,"explanation":"Model generation and live retrieval are separate capabilities."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"kimik3", "name":"Kimi K3", "cat":"ai",
+    "born":"2026 · Moonshot AI / Kimi",
+    "tag":"multimodal model for long-context reasoning and coding",
+    "history":"Kimi's K3 announcement describes a 2.8-trillion-parameter mixture-of-experts model with native vision and a one-million-token context window. It targets coding, reasoning, and knowledge work and is distinct from the surrounding Kimi applications.",
+    "why":"An option for tasks combining long documents, images, and extended reasoning. Large context capacity is not a guarantee that every detail will be retrieved correctly. DeepSeek, Llama, and GPT-6 Astra are evaluation alternatives rather than dependencies.",
+    "rel":{"rivals":["deepseek","llama","gpt6astra"],"seeAlso":["python","http"]},
+    "challenges":["Distinguish K3 from the Kimi application that hosts it.","Test retrieval of known facts from a long document.","Compare text-only and image-assisted answers on labeled examples.","Test a coding task with acceptance tests and a fixed context budget.","Measure accuracy at different document lengths instead of relying on context-window size."],
+    "extension":{
+      "problemItSolves":"Combines long-context processing, vision, and reasoning in a model intended for extended tasks.",
+      "latestChanges":["Checked September 9, 2026: the official K3 technical blog documents the architecture and access through Kimi products and API. Benchmark statements there are vendor-reported."],
+      "docs":[{"label":"Kimi K3 technical blog","url":"https://www.kimi.com/en/blog/kimi-k3"},{"label":"Kimi application","url":"https://www.kimi.com/en/"}],
+      "assessment":{"antiCheatRules":["Use documents with known answers.","Record missing facts as failures."],"multipleChoice":[{"question":"What does a large context window establish?","options":["Input capacity, not guaranteed retrieval accuracy","Perfect recall of every detail","Unlimited output length"],"answerIndex":0,"explanation":"Context capacity and successful use of that context must be evaluated separately."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"llama", "name":"Llama", "cat":"ai",
+    "born":"Model family · Meta",
+    "tag":"meta model weights and tools for custom ai deployments",
+    "history":"Meta's Llama releases include multiple generations and model sizes. The official model repository records model cards, release dates, licenses, and usage policies. This entry covers the family rather than assigning every release the same capabilities.",
+    "why":"Supports building AI applications around available model weights or hosted deployments. Check the selected release's license and hardware needs; downloadable weights do not make every release unrestricted. PyTorch and Python are implementation-ecosystem links; DeepSeek is a model-family comparison.",
+    "rel":{"rivals":["deepseek"],"seeAlso":["pytorch","python","openrouter"]},
+    "challenges":["Read the model card and license for one specific Llama release.","Estimate memory needs from a chosen checkpoint and precision.","Build an evaluation set for a narrowly defined task.","Compare a hosted endpoint with a local deployment using the same inputs.","Measure quality and resource use after changing quantization or serving configuration."],
+    "extension":{
+      "problemItSolves":"Offers model releases that teams can evaluate and deploy within the terms of the selected release.",
+      "latestChanges":["Checked September 9, 2026: the official repository documents multiple Llama generations. Consult each model card for supported modalities and constraints."],
+      "docs":[{"label":"Official models, cards, and licenses","url":"https://github.com/meta-llama/llama-models"}],
+      "assessment":{"antiCheatRules":["Name the exact checkpoint.","Report resource use alongside quality."],"multipleChoice":[{"question":"Which determines the terms for a Llama deployment?","options":["The assumption that all downloadable models are unrestricted","The selected release's license and policies","The Python version alone"],"answerIndex":1,"explanation":"Terms and model capabilities are release-specific."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"perplexity", "name":"Perplexity", "cat":"ai",
+    "born":"AI research and answer platform · Perplexity",
+    "tag":"web-grounded answers and research with source links",
+    "history":"Perplexity combines search and generated answers in a research-oriented product. Its developer platform separately exposes search and agent-related APIs. The user-facing service and its developer interfaces are related but not identical offerings.",
+    "why":"Helps collect and synthesize information with links back to sources. A citation is evidence to inspect, not proof that an answer is correct. Grok and Claude are comparison links; HTTP connects its developer services to applications.",
+    "rel":{"rivals":["grok","claude"],"seeAlso":["http","m365copilot"]},
+    "challenges":["Ask a research question and open every cited source.","Separate primary sources from secondary commentary.","Create a claim-to-source table and flag unsupported statements.","Repeat a query with a date boundary and compare the evidence.","Produce a short research memo with uncertainty and contradictory evidence recorded."],
+    "extension":{
+      "problemItSolves":"Reduces the work of locating and synthesizing source material for research questions.",
+      "latestChanges":["Checked September 9, 2026: developer documentation includes search and agent APIs in addition to the consumer research experience."],
+      "docs":[{"label":"What is Perplexity?","url":"https://www.perplexity.ai/help-center/en/articles/10352155-what-is-perplexity"},{"label":"Developer platform overview","url":"https://docs.perplexity.ai/docs/getting-started/overview"}],
+      "assessment":{"antiCheatRules":["Open cited pages.","Mark claims unsupported when the source does not establish them."],"multipleChoice":[{"question":"What should you check about a citation?","options":["Only whether a link exists","Only the page title","Whether the source supports the associated claim"],"answerIndex":2,"explanation":"Source relevance and support matter more than the presence of a link."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"cursor", "name":"Cursor", "cat":"devops",
+    "born":"AI coding tool · Cursor",
+    "tag":"codebase-aware editor and agents for software work",
+    "history":"Cursor provides an AI editor and coding-agent workflows for understanding repositories, planning changes, fixing bugs, and reviewing code. Its documentation also covers CLI and cloud agents, rules, skills, and integrations.",
+    "why":"Brings model-driven assistance into software development workflows. The coding tool and selected model are separate choices. Git supplies change history; GitHub Copilot and Poolside are alternatives; Claude Fable is a model option documented in Cursor's catalog.",
+    "rel":{"rivals":["githubcopilot","poolside"],"seeAlso":["git","claudefable","grok"]},
+    "challenges":["Ask Cursor to explain a small repository and verify its file references.","Write scoped acceptance criteria for one change.","Review an agent-generated diff and run the relevant tests.","Add project rules and evaluate whether the next change follows them.","Compare manual and agent-assisted completion of matched tasks, including review time."],
+    "extension":{
+      "problemItSolves":"Connects code context, editing, and verification workflows in one development tool.",
+      "latestChanges":["Checked September 9, 2026: docs cover editor, CLI, cloud-agent workflows, and a selectable model catalog."],
+      "docs":[{"label":"Cursor documentation","url":"https://cursor.com/docs"}],
+      "assessment":{"antiCheatRules":["Inspect the diff before accepting it.","Count failing tests and review effort."],"multipleChoice":[{"question":"What establishes that an agent's code change meets a request?","options":["Reviewed behavior and relevant verification","The agent saying done","The number of lines changed"],"answerIndex":0,"explanation":"Completion should be assessed against acceptance criteria and evidence."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"claude", "name":"Claude", "cat":"ai",
+    "born":"AI assistant and model family · Anthropic",
+    "tag":"anthropic assistants and models for reasoning and work",
+    "history":"Claude is Anthropic's assistant and model family, used for writing, analysis, coding, and other tasks. Product experiences and model releases evolve independently; Fable is represented separately as a named model line within this family.",
+    "why":"Provides a general assistant and model ecosystem for knowledge work and application development. Compare a named model and enabled tools for reproducible results. Fable is a family relationship; Perplexity and Grok are alternative assistant experiences.",
+    "rel":{"rivals":["perplexity","grok"],"seeAlso":["claudefable","http","openrouter"]},
+    "challenges":["Identify the Claude product and model used for a task.","Summarize a document and verify each important claim.","Ask for a code change and evaluate it with tests.","Compare answers with and without a relevant source document.","Create a repeatable evaluation for a multi-step work task."],
+    "extension":{
+      "problemItSolves":"Supports language-based work through assistant products and model-backed applications.",
+      "latestChanges":["Research snapshot: September 9, 2026. Features depend on the selected Claude model, product, and available tools."],
+      "docs":[{"label":"Claude product overview","url":"https://claude.com/product/overview"},{"label":"Claude Fable model line","url":"https://www.anthropic.com/claude/fable"}],
+      "assessment":{"antiCheatRules":["Keep input documents available for verification.","Identify the actual model and tools."],"multipleChoice":[{"question":"How should Claude and Claude Fable be represented?","options":["As unrelated companies","As a broader family and a named model line","As programming languages"],"answerIndex":1,"explanation":"Fable belongs to Anthropic's Claude model family."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"openclaw", "name":"OpenClaw", "cat":"devops",
+    "born":"Open-source assistant runtime · OpenClaw",
+    "tag":"self-hosted assistant gateway across chat channels",
+    "history":"OpenClaw connects an assistant runtime and gateway to chat channels and a browser control interface. Its documentation describes installation on user-controlled hardware, channel configuration, and choosing model access.",
+    "why":"Lets users operate an assistant through familiar messaging surfaces while managing the gateway themselves. Self-hosting the gateway does not imply that a configured model also runs locally. Node.js and Linux connect to deployment; model and API links represent separately configured inference.",
+    "rel":{"seeAlso":["node","linux","openrouter","claude"]},
+    "challenges":["Draw the boundary between gateway, chat channel, and model provider.","Read a sample configuration and identify channel access rules.","Design a local test using a harmless task and limited tools.","Explain how an unreachable model endpoint should be reported.","Audit a task from incoming message through tool execution to final response."],
+    "extension":{
+      "problemItSolves":"Connects assistant execution to multiple communication surfaces through a user-managed gateway.",
+      "latestChanges":["Checked September 9, 2026: official docs describe the Gateway, browser dashboard, channels, and onboarding. No software was installed for this entry."],
+      "docs":[{"label":"OpenClaw documentation","url":"https://docs.openclaw.ai/"},{"label":"OpenClaw FAQ","url":"https://docs.openclaw.ai/faq"}],
+      "assessment":{"antiCheatRules":["Identify where each component executes.","Use harmless tasks for initial evaluation."],"multipleChoice":[{"question":"Does a self-hosted gateway guarantee local model inference?","options":["Yes, for every configuration","Only when it has a dashboard","No; the configured model may be remote"],"answerIndex":2,"explanation":"Gateway hosting and inference hosting are separate configuration choices."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"claudefable", "name":"Claude Fable", "cat":"ai",
+    "born":"2026 · Anthropic Claude model line",
+    "tag":"claude models for extended coding and knowledge work",
+    "history":"Anthropic introduced Claude Fable 5 alongside Mythos 5 in 2026. As of this research snapshot, the Fable product page describes Fable 5.1 for long-running coding, agent, and knowledge-work tasks. This entry tracks the named Fable line within Claude.",
+    "why":"A candidate for tasks involving sustained reasoning and multiple steps. Evaluate the exact release with its configured tools and access conditions. Claude is the parent family; Cursor documents it as a model option; GPT-6 Astra is an evaluation alternative.",
+    "rel":{"rivals":["gpt6astra"],"seeAlso":["claude","cursor","kimik3"]},
+    "challenges":["Distinguish the Claude family from a Fable release.","Define acceptance criteria for a multi-step task.","Evaluate a code change with hidden regression cases.","Check a document-based answer against tables and figures in the source.","Measure completed tasks, intervention count, and unsupported claims over repeated runs."],
+    "extension":{
+      "problemItSolves":"Targets complex work that requires continuity across reasoning, tools, and verification steps.",
+      "latestChanges":["Checked September 9, 2026: Anthropic's Fable page describes Fable 5.1. Access, retention, and routing conditions are documented there; benchmark claims are vendor-reported."],
+      "docs":[{"label":"Claude Fable product details","url":"https://www.anthropic.com/claude/fable"},{"label":"Fable 5 introduction","url":"https://www.anthropic.com/news/claude-fable-5-mythos-5"}],
+      "assessment":{"antiCheatRules":["Record the Fable release tested.","Judge outputs against prewritten acceptance criteria."],"multipleChoice":[{"question":"What is Claude Fable in this matrix?","options":["A named model line within Claude","A separate accessibility-testing company","A database engine"],"answerIndex":0,"explanation":"This entry refers to Anthropic's model line, as requested."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"gpt6astra", "name":"GPT-6 Astra", "cat":"ai",
+    "born":"2026-09-03 · OpenAI",
+    "tag":"reasoning model for complex tool-assisted work",
+    "history":"OpenAI released GPT-6 Astra in September 2026. The model documentation identifies gpt-6-astra for complex reasoning, coding, research, computer use, and document creation. The model is distinct from the applications and tools that expose it.",
+    "why":"An option for multi-step tasks that combine reasoning with external tools. A model entry does not guarantee that browsing or computer access is available in every integration. Claude Fable and Kimi K3 are comparison candidates; HTTP and Python connect to API use.",
+    "rel":{"rivals":["claudefable","kimik3"],"seeAlso":["http","python"]},
+    "challenges":["Identify the API model ID separately from a product label.","Write a task with explicit deliverables and acceptance criteria.","Compare a grounded answer against supplied source documents.","Evaluate a tool-assisted workflow with logged actions and failure recovery.","Measure completion rate, latency, and resource use across repeated trials."],
+    "extension":{
+      "problemItSolves":"Supports demanding reasoning and execution workflows when paired with suitable tools and context.",
+      "latestChanges":["Checked September 9, 2026: the official model page lists gpt-6-astra and supported reasoning settings. Consult it for current limits and pricing."],
+      "docs":[{"label":"Official Astra model reference","url":"https://developers.openai.com/api/docs/models/gpt-6-astra"},{"label":"Release and safety overview","url":"https://openai.com/index/safety-overview-gpt-6-astra/"}],
+      "assessment":{"antiCheatRules":["Record model settings and enabled tools.","Verify the requested outcome independently."],"multipleChoice":[{"question":"What determines whether an Astra integration can act on a website?","options":["The model name alone","The tools and permissions exposed by the integration","The length of the prompt alone"],"answerIndex":1,"explanation":"A model requires an execution surface to perform external actions."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"m365copilot", "name":"M365 Copilot (Microsoft 365 Copilot)", "cat":"ai",
+    "born":"Workplace assistant · Microsoft",
+    "tag":"ai assistance within microsoft 365 work applications",
+    "history":"Microsoft 365 Copilot brings AI assistance into work applications such as Word, Excel, PowerPoint, Outlook, and Teams. Microsoft distinguishes experiences by licensing, integration depth, and whether responses can use organizational data.",
+    "why":"Supports drafting, summarization, analysis, and work-data retrieval within Microsoft 365. Organizational grounding follows user permissions and the configured experience. GitHub Copilot is a related brand with a different software-development focus, not the same product.",
+    "rel":{"seeAlso":["githubcopilot","claude","perplexity","oauth"]},
+    "challenges":["Identify which Copilot experience and work-data access your account has.","Summarize a test document and verify every action item.","Check a generated spreadsheet formula against known values.","Test whether a work-data answer respects the intended document scope.","Evaluate a multi-app workflow by checking source fidelity and final artifacts."],
+    "extension":{
+      "problemItSolves":"Brings AI assistance to existing workplace content and applications, subject to licensing and access controls.",
+      "latestChanges":["Checked September 9, 2026: Microsoft's overview distinguishes web-grounded and work-grounded experiences and explains permission-scoped organizational context."],
+      "docs":[{"label":"Microsoft 365 Copilot overview","url":"https://learn.microsoft.com/en-us/microsoft-365/copilot/microsoft-365-copilot-overview"}],
+      "assessment":{"antiCheatRules":["Use test documents with known content.","Compare generated artifacts with source material."],"multipleChoice":[{"question":"How does organizational data access work?","options":["Every user can access every company document","It ignores existing permissions","It depends on user permissions and the configured experience"],"answerIndex":2,"explanation":"Work-data grounding is permission-scoped and varies by available experience."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
+    "id":"githubcopilot", "name":"GitHub Copilot", "cat":"devops",
+    "born":"AI development assistant · GitHub",
+    "tag":"coding assistance and agents across development workflows",
+    "history":"GitHub Copilot provides AI assistance across developer surfaces, including IDEs, GitHub, and command-line workflows. Its capabilities include coding assistance and agent-driven development; availability varies by plan and surface.",
+    "why":"Helps developers understand code and produce changes inside their development workflow. Git and testing remain the basis for assessing changes. Cursor and Poolside are alternatives; Microsoft 365 Copilot is a separate workplace product sharing the Copilot brand.",
+    "rel":{"rivals":["cursor","poolside"],"seeAlso":["git","tdd","m365copilot"]},
+    "challenges":["Explain one unfamiliar function and check the explanation against the code.","Write a test before requesting an implementation.","Review a generated change and identify missing edge cases.","Compare agent output with repository conventions and CI results.","Measure task completion with review time and regression rates included."],
+    "extension":{
+      "problemItSolves":"Adds AI assistance to software-development tasks where code context and review workflows already exist.",
+      "latestChanges":["Checked September 9, 2026: official docs describe Copilot across IDE, GitHub, command-line, and desktop agent experiences. Features vary by plan."],
+      "docs":[{"label":"What is GitHub Copilot?","url":"https://docs.github.com/en/copilot/get-started/what-is-github-copilot"}],
+      "assessment":{"antiCheatRules":["Run relevant tests.","Review changes before accepting them."],"multipleChoice":[{"question":"Which product is primarily focused on software-development assistance?","options":["GitHub Copilot","A generic spreadsheet viewer","Microsoft 365 Copilot only"],"answerIndex":0,"explanation":"GitHub Copilot focuses on development workflows; Microsoft 365 Copilot focuses on workplace applications."}],"codeDropdown":[]},
+      "updatedAt":"2026-09-09"
+    }
+  },
+  {
     "id": "vit",
     "name": "Vision Transformer (ViT)",
     "cat": "data",
