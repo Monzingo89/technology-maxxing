@@ -1,5 +1,61 @@
 [
   {
+    "id": "vit",
+    "name": "Vision Transformer (ViT)",
+    "cat": "data",
+    "born": "2020-10-22 · Original preprint; ICLR 2021",
+    "tag": "image patches processed with transformer attention",
+    "history": "Dosovitskiy and colleagues introduced ViT in an October 2020 preprint, subsequently published at ICLR 2021. The work applied a Transformer to sequences of image patches and demonstrated strong image-recognition results after large-scale pretraining. ViT is an architecture family, not a product with one current release.",
+    "why": "ViT embeds image patches as tokens, adds positional information, and processes them with Transformer blocks. Self-attention relates patches across the image. CNNs provide a useful comparison because their local filters encode different architectural assumptions. Neither approach is universally superior: compare accuracy, pretraining data, compute, and latency on the same task.",
+    "rel": { "rivals": ["cnn"], "seeAlso": ["python", "pytorch", "tensorflow"] },
+    "challenges": [
+      "Split a 224x224 image into non-overlapping 16x16 patches and count the tokens.",
+      "Trace shapes from flattened RGB patches through a learned projection.",
+      "Run a pretrained ViT using the preprocessing specified for its weights.",
+      "Compare a CNN and ViT on the same held-out image split.",
+      "Measure the accuracy, memory, and latency impact of changing image resolution."
+    ],
+    "extension": {
+      "problemItSolves": "Provides an attention-based way to learn image representations. Standard global self-attention models relationships between all patch tokens; its pairwise attention computation grows quadratically with sequence length. Smaller patches or larger images increase the token count.",
+      "latestChanges": [
+        "Reference snapshot: September 9, 2026. Architecture history and implementation references, not a release changelog.",
+        "Torchvision provides ViT builders with optional pretrained weights. Keras provides an image-classification implementation using patch projection and Transformer blocks."
+      ],
+      "relatedTechnologies": ["python", "pytorch", "tensorflow"],
+      "docs": [
+        { "label": "Original ViT paper", "url": "https://arxiv.org/abs/2010.11929" },
+        { "label": "Google Research: ICLR publication", "url": "https://research.google/pubs/an-image-is-worth-16x16-words-transformers-for-image-recognition-at-scale/" },
+        { "label": "Torchvision: ViT models", "url": "https://docs.pytorch.org/vision/stable/models/vision_transformer.html" },
+        { "label": "Keras: ViT image classifier", "url": "https://keras.io/examples/vision/image_classification_with_vision_transformer/" }
+      ],
+      "practiceChallenges": [
+        { "level": 1, "title": "Count patch tokens", "prompt": "Calculate tokens for 224x224 images using 16x16 patches. Explain whether your count includes a class token.", "format": "mixed" },
+        { "level": 2, "title": "Trace patch embeddings", "prompt": "Calculate flattened RGB patch dimensions and the output shape after projection to an embedding width of 192.", "format": "coding" },
+        { "level": 3, "title": "Pretrained inference", "prompt": "Load a pretrained ViT, use its documented preprocessing, and record predictions on a small labeled image set.", "format": "coding" },
+        { "level": 4, "title": "Compare architectures", "prompt": "Compare a CNN and ViT with the same data split; disclose different pretraining datasets and compute budgets.", "format": "mixed" },
+        { "level": 5, "title": "Resolution tradeoffs", "prompt": "Measure accuracy, peak memory, and latency at supported resolutions; document any positional-embedding adaptation.", "format": "mixed" }
+      ],
+      "assessment": {
+        "antiCheatRules": ["Predict tensor shapes before executing code.", "Keep evaluation images out of training and model selection.", "Record preprocessing and checkpoint identity with results."],
+        "multipleChoice": [
+          { "question": "How many 16x16 patches fit a 224x224 image, excluding a class token?", "options": ["196", "224", "256"], "answerIndex": 0, "explanation": "There are 14 patches along each dimension: 14 x 14 = 196." },
+          { "question": "Why add positional information to patch embeddings?", "options": ["To remove all trainable weights", "To represent where patches occur", "To guarantee higher accuracy than CNNs"], "answerIndex": 1, "explanation": "Position information identifies locations within the patch sequence." },
+          { "question": "For standard global attention, doubling the token count changes the number of token pairs by what factor?", "options": ["2", "1", "4"], "answerIndex": 2, "explanation": "The pair count scales as N squared, so (2N) squared is four times N squared." }
+        ],
+        "codeDropdown": [
+          {
+            "instructions": "Complete the count of non-overlapping patches; assume both image dimensions are divisible by patch_size.",
+            "language": "python",
+            "template": "height = width = 224\npatch_size = 16\nnum_patches = (height // patch_size) {{op}} (width // patch_size)",
+            "blanks": [{ "id": "op", "options": ["*", "+", "-"], "answer": "*" }]
+          }
+        ]
+      },
+      "updatedAt": "2026-09-09",
+      "researchMethod": "Researched in Codex using the original paper and official implementation documentation; no generation API call."
+    }
+  },
+  {
     "id": "cnn",
     "name": "CNN (Convolutional Neural Network)",
     "cat": "data",
