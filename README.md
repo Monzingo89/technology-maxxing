@@ -1,4 +1,4 @@
-# TECHWEB — technology-maxxing
+# IoT — technology-maxxing
 
 A single-file, zero-dependency web of technologies. Browse nodes, hop connections,
 self-rate your level 1–5 per tech, and ✓ off challenges as you complete them.

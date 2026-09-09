@@ -3,10 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>TECHWEB — the browsable web of technologies</title>
+<title>IoT — the browsable web of technologies</title>
+<meta name="theme-color" content="#2456E6">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <style>
 /* ============================================================
-   TECHWEB — schematic-paper design system
+   IoT — schematic-paper design system
    Tokens first (single source of truth for future agents)
    ============================================================ */
 :root{
@@ -29,7 +31,7 @@ button{font:inherit;cursor:pointer;border:0;background:none;color:inherit;
 header{position:sticky;top:0;z-index:30;background:var(--paper);
   border-bottom:1px solid var(--line);padding:10px 14px 8px}
 .brand{font-family:var(--mono);font-weight:700;font-size:15px;
-  letter-spacing:.22em;display:flex;align-items:center;gap:8px}
+  letter-spacing:0;display:flex;align-items:center;gap:8px}
 .brand b{color:var(--wire)}
 .brand .dot{width:8px;height:8px;border-radius:50%;background:var(--wire);
   box-shadow:0 0 0 3px rgba(36,86,230,.18)}
@@ -156,7 +158,7 @@ body.open #sheet{transform:none}
 <body>
 
 <header>
-  <div class="brand"><span class="dot"></span>TECH<b>WEB</b>
+  <div class="brand"><img src="favicon.svg" width="28" height="28" alt="">IoT
     <button class="score-pill" id="overall" onclick="openGuide()" aria-label="Overall score">— / —</button>
     <button class="auth-btn" id="authBtn" hidden>SIGN IN</button>
   </div>
@@ -179,7 +181,7 @@ body.open #sheet{transform:none}
 
 <script>
 /* ============================================================================
-   TECHWEB CORE — read this block before touching anything (humans & agents)
+   IoT CORE — read this block before touching anything (humans & agents)
 
    ARCHITECTURE (SOLID + KISS):
    • Single Responsibility — DATA holds content; render*() functions only draw;
@@ -508,25 +510,6 @@ async function loadAgentData(){
   TECH_EXTENSIONS = await maybeJson("data/technology-extensions.json",{});
   GENERATED_TECHS = await maybeJson("data/generated-technologies.json",[]);
 
-  for(const [id,ext] of Object.entries(TECH_EXTENSIONS||{})){
-    if(!DATA.tech[id]) continue;
-    const t=DATA.tech[id];
-    if(ext.tag) t.tag=ext.tag;
-    if(ext.latestChanges) t.latestChanges=ext.latestChanges;
-    if(ext.problemItSolves) t.problemItSolves=ext.problemItSolves;
-    if(ext.historyNotes) t.historyNotes=ext.historyNotes;
-    if(ext.docs) t.docs=ext.docs;
-    if(ext.practiceChallenges) t.practiceChallenges=ext.practiceChallenges;
-    if(ext.assessment) t.assessment=ext.assessment;
-    if(Array.isArray(ext.relatedTechnologies)){
-      t.rel=t.rel||{};
-      const relatedIds=ext.relatedTechnologies
-        .map(x=>String(x||"").toLowerCase().replace(/[^a-z0-9]/g,""))
-        .filter(x=>DATA.tech[x]);
-      t.rel.seeAlso=Array.from(new Set([...(t.rel.seeAlso||[]), ...relatedIds]));
-    }
-  }
-
   for(const item of (GENERATED_TECHS||[])){
     if(!item?.id || DATA.tech[item.id]) continue;
     DATA.tech[item.id]={
@@ -545,6 +528,38 @@ async function loadAgentData(){
       practiceChallenges:item.extension?.practiceChallenges||[],
       assessment:item.extension?.assessment||null
     };
+  }
+
+  // Resolve relationships only after every generated node is available.
+  const normalize=v=>String(v||"").toLowerCase().replace(/[^a-z0-9]/g,"");
+  const aliases=new Map();
+  for(const [id,t] of Object.entries(DATA.tech)){
+    aliases.set(normalize(t.name),id);
+  }
+  for(const id of Object.keys(DATA.tech)) aliases.set(normalize(id),id);
+  for(const [id,t] of Object.entries(DATA.tech)){
+    const ext=TECH_EXTENSIONS[id]||GENERATED_TECHS.find(item=>item.id===id)?.extension;
+    if(ext){
+      for(const key of ["tag","latestChanges","problemItSolves","historyNotes","docs","practiceChallenges","assessment"]){
+        if(ext[key]) t[key]=ext[key];
+      }
+      t.rel=t.rel||{};
+      t.rel.seeAlso=[...(t.rel.seeAlso||[]),...(ext.relatedTechnologies||[])];
+    }
+    for(const [verb,refs] of Object.entries(t.rel||{})){
+      t.rel[verb]=[...new Set(refs.map(ref=>aliases.get(normalize(ref))||ref))];
+    }
+  }
+  const inverse={needs:"powers",powers:"needs",rivals:"rivals",seeAlso:"seeAlso",evolvedFrom:"seeAlso"};
+  for(const [id,t] of Object.entries(DATA.tech)){
+    for(const [verb,refs] of Object.entries(t.rel||{})){
+      if(!inverse[verb]) continue;
+      for(const target of refs){
+        if(target===id||!DATA.tech[target]) continue;
+        const rel=DATA.tech[target].rel ||= {};
+        rel[inverse[verb]]=[...new Set([...(rel[inverse[verb]]||[]),id])];
+      }
+    }
   }
 }
 
