@@ -51,8 +51,18 @@ test('bulk catalog preserves requested entries and resolves every new connection
   const catalog = vm.runInContext('DATA.tech', context);
   const batchIds = 'numpy pandas scipy scikitlearn keras jax jupyter polars duckdb clickhouse powerbi tableau hadoop hdfs hive flink iceberg deltalake arrow parquet trino mlflow dvc qdrant milvus chroma pinecone weaviate huggingface transformers ollama vllm llamacpp onnx tensorrt langchain langgraph llamaindex rag embeddings astro sveltekit solidjs htmx alpinejs bootstrap shadcnui d3 threejs webassembly blazor aspnetcore express nestjs hono fastify phoenix elixir bash powershell r julia scala lua zig haskell ocaml clojure pnpm uv poetry gradle maven bazel nix podman argocd keycloak wireshark trivy'.split(' ');
   assert.equal(batchIds.length, 80);
+  const secondBatchIds = 'erlang fsharp perl racket scheme commonlisp solidity vyper prolog elm purescript rescript gleam crystal nim dlang objectivec groovy awk zsh influxdb timescaledb neo4j cockroachdb yugabytedb tidb scylladb couchdb couchbase surrealdb arangodb valkey memcached opensearch solr meilisearch typesense nats pulsar redpanda caddy envoy traefik haproxy linkerd cilium calico containerd buildah buildkit packer vagrant opentofu crossplane flux tekton kustomize certmanager sops age storybook testinglibrary selenium pytest hypothesis ruff mypy eslint prettier biome swc esbuild rollup turborepo nx tanstackquery tanstackrouter zustand redux xstate'.split(' ');
+  assert.equal(secondBatchIds.length, 80);
+  assert.equal(new Set([...batchIds, ...secondBatchIds]).size, 160, 'bulk batches must not overlap');
+  const baseCatalog = vm.runInContext('DATA.tech', await load([]));
+  const normalizedNames = new Set(Object.values(baseCatalog).map(t => t.name.toLowerCase().replace(/[^a-z0-9]/g, '')));
+  for (const entry of generated) {
+    const name = entry.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    assert.ok(!normalizedNames.has(name), `duplicate technology name ${entry.name}`);
+    normalizedNames.add(name);
+  }
   const inverse = { needs: 'powers', powers: 'needs', rivals: 'rivals', seeAlso: 'seeAlso', evolvedFrom: 'seeAlso' };
-  for (const id of batchIds) {
+  for (const id of [...batchIds, ...secondBatchIds]) {
     const entry = generated.find(t => t.id === id);
     assert.ok(entry, `missing ${id}`);
     assert.equal(entry.challenges.length, 5, `${id} exercises`);
