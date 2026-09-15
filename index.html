@@ -38,6 +38,8 @@ header{position:sticky;top:0;z-index:30;background:var(--paper);
   box-shadow:0 0 0 3px rgba(36,86,230,.18)}
 .score-pill{margin-left:auto;font-family:var(--mono);font-size:12px;
   background:var(--ink);color:#fff;border-radius:999px;padding:5px 11px}
+.catalog-pill{font-family:var(--mono);font-size:11px;color:var(--ink-dim);
+  border:1px solid var(--line);border-radius:999px;padding:4px 8px;background:var(--card)}
 .auth-btn{margin-left:8px;font-family:var(--mono);font-size:11px;font-weight:700;
   letter-spacing:.08em;border:1px solid var(--line);border-radius:999px;
   padding:5px 10px;background:var(--card);color:var(--wire);
@@ -160,6 +162,7 @@ body.open #sheet{transform:none}
 
 <header>
   <div class="brand"><img src="favicon.svg" width="28" height="28" alt="">IoT
+    <span class="catalog-pill" id="catalogCount">loading catalog</span>
     <button class="score-pill" id="overall" onclick="openGuide()" aria-label="Overall score">— / —</button>
     <button class="auth-btn" id="authBtn" hidden>SIGN IN</button>
   </div>
@@ -390,6 +393,7 @@ const scores = {};
 const done = {};
 let TECH_EXTENSIONS = {};
 let GENERATED_TECHS = [];
+const CATALOG_VERSION = "2026-09-10-257";
 const ASSESSMENT_STATE = {};
 
 function loadLocalProgress(){
@@ -501,7 +505,8 @@ function renderCodeTemplate(codeQ, st){
 async function loadAgentData(){
   async function maybeJson(url, fallback){
     try{
-      const res=await fetch(url,{cache:"no-store"});
+      const sep=url.includes("?")?"&":"?";
+      const res=await fetch(`${url}${sep}v=${encodeURIComponent(CATALOG_VERSION)}`,{cache:"no-store"});
       if(!res.ok) return fallback;
       return await res.json();
     }catch(e){
@@ -530,6 +535,14 @@ async function loadAgentData(){
       practiceChallenges:item.extension?.practiceChallenges||[],
       assessment:item.extension?.assessment||null
     };
+  }
+
+  const catalogEl=document.getElementById?.("catalogCount");
+  if(catalogEl){
+    const total=Object.keys(DATA.tech).length;
+    const generated=(GENERATED_TECHS||[]).filter(item=>item?.id && DATA.tech[item.id]).length;
+    catalogEl.textContent=`${total} techs · ${generated} generated`;
+    catalogEl.title=`Catalog ${CATALOG_VERSION}`;
   }
 
   // Resolve relationships only after every generated node is available.
