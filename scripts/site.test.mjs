@@ -44,12 +44,19 @@ test('repository data loads without broken category assignments', async () => {
   assert.equal(vm.runInContext('Object.values(DATA.tech).every(t=>DATA.cats[t.cat])', context), true);
 });
 
-test('public assessment banks provide thirty answerable questions per topic', () => {
+test('public assessment banks provide ten focused answerable questions per topic', () => {
   const index = JSON.parse(fs.readFileSync(new URL('../public/knowledge-index.json', import.meta.url), 'utf8'));
   assert.equal(Object.keys(index.assessments).length, index.technologies.length);
   for (const technology of index.technologies) {
     const bank = index.assessments[technology.id];
-    assert.equal(bank.length, 30, `${technology.id} should have 30 questions`);
+    assert.equal(bank.length, 10, `${technology.id} should have 10 questions`);
+    assert.equal(technology.assessmentCount, 10);
+    assert.equal(new Set(bank.map((question) => question.id)).size, 10);
+    assert.equal(new Set(bank.map((question) => question.question)).size, 10);
+    assert.ok(
+      bank.some((question) => /practice|prove practical|source|technical background|worth learning/i.test(question.question)),
+      `${technology.id} should include focused assessment material`,
+    );
     for (const question of bank) {
       assert.equal(typeof question.question, 'string');
       assert.ok(question.question.length > 10);

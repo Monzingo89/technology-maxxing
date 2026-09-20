@@ -1,6 +1,6 @@
 import { randomInt, randomUUID } from "node:crypto";
 
-export const POLICY_VERSION = "2026-09-15";
+export const POLICY_VERSION = "2026-09-19";
 export const HOUSES = ["claude", "openai", "gemini"];
 export const CATEGORIES = [
   "foundations",

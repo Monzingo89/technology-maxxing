@@ -4,6 +4,8 @@ import { FieldValue, getFirestore } from "firebase-admin/firestore";
 import { onCall, HttpsError } from "firebase-functions/v2/https";
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { createHash } from "node:crypto";
+import { defineSecret } from "firebase-functions/params";
+import { createGuestQuota, GuestQuotaError, requestIp } from "./guest-quota.js";
 import {
   InputError,
   requireValue,
@@ -37,6 +39,34 @@ const options = {
   enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true",
   memory: "256MiB",
 };
+const guestIpHashKey = defineSecret("GUEST_IP_HASH_KEY");
+const guestCallable = (operation) => onCall(
+  { ...options, secrets: [guestIpHashKey] },
+  async (request) => {
+    try {
+      if (operation !== "clear" && request.auth)
+        throw new HttpsError("failed-precondition", "Signed-in members do not need a guest allowance.");
+      const quota = createGuestQuota({ db, secret: guestIpHashKey.value() });
+      const ip = requestIp(request.rawRequest, process.env.FUNCTIONS_EMULATOR === "true");
+      const data = request.data || {};
+      if (operation === "clear")
+        return await quota.clear(ip, data.receipt, request.auth, (uid) => getAuth().getUser(uid));
+      if (operation === "start") return await quota.start(ip, data.attemptId);
+      if (operation === "complete") return await quota.complete(ip, data.attemptId, data.receipt);
+      return await quota.get(ip);
+    } catch (error) {
+      if (error instanceof HttpsError) throw error;
+      if (error instanceof GuestQuotaError) throw new HttpsError(error.code, error.message, error.details);
+      if (error?.code === "auth/user-not-found") throw new HttpsError("unauthenticated", "Sign in again to continue.");
+      // No request bodies, IP addresses, or quota identifiers in application logs.
+      throw new HttpsError("unavailable", "Guest assessment access could not be checked. Please retry.");
+    }
+  },
+);
+export const getGuestAllowance = guestCallable("status");
+export const startGuestAssessment = guestCallable("start");
+export const completeGuestAssessment = guestCallable("complete");
+export const clearGuestAllowance = guestCallable("clear");
 const ref = (collection, id) => db.collection(collection).doc(id);
 const callable = (handler, verified = true) =>
   onCall(options, async (request) => {

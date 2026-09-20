@@ -46,7 +46,11 @@ export default function Auth({
     setPendingProvider(google ? "google" : "email");
     try {
       let signedIn: User;
-      if (google) signedIn = await signInGoogle();
+      if (google) {
+        const user = await signInGoogle();
+        if (!user) return;
+        signedIn = user;
+      }
       else if (mode === "reset") {
         await recoverPassword(email);
         setMessage(

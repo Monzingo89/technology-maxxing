@@ -75,6 +75,7 @@ const categories = Object.entries(data.cats).map(([id, category]) => ({
   id,
   name: asText(category.name),
 }));
+const ASSESSMENT_QUESTION_COUNT = 10;
 const technologies = Object.entries(data.tech)
   .map(([id, item]) => {
     if (!/^[a-z0-9][a-z0-9_-]*$/.test(id))
@@ -187,16 +188,20 @@ const mcq = (id, question, correct, pool, explanation) => ({
   answerIndex: 0,
   explanation: explanation || correct,
 });
+const fitOptions = (correct, options, pool) =>
+  unique([correct, ...options, ...distractors(correct, pool)]).slice(0, 4);
 const normalizeAuthoredQuestion = (question, index) => {
   const correct = question.options[question.answerIndex];
   return {
     id: `authored-${index}`,
     question: question.question,
-    options: unique([correct, ...question.options, ...distractors(correct, [])]).slice(0, 4),
+    options: fitOptions(correct, question.options, []),
     answerIndex: 0,
     explanation: question.explanation,
   };
 };
+const focusedPrompt = (name, prompt) =>
+  prompt.endsWith("?") ? prompt : `For ${name}, ${prompt}`;
 function buildAssessmentBank(technology, allTechnologies) {
   const t = technology;
   const sameCategory = allTechnologies.filter(
@@ -223,84 +228,80 @@ function buildAssessmentBank(technology, allTechnologies) {
     ),
   );
   const correctDocHost = t.docs[0] ? new URL(t.docs[0].url).hostname : "official documentation";
-  const correctChallenge = t.challenges[0] || `Explain where ${t.name} is useful.`;
+  const challengeQuestions = t.challenges.slice(0, 5).map((challenge, index) =>
+    mcq(
+      `challenge-${index}`,
+      `Which task would best prove practical knowledge of ${t.name} in scenario ${index + 1}?`,
+      challenge,
+      challengePool,
+      challenge,
+    ),
+  );
+  const practiceQuestions = t.practiceChallenges.slice(0, 3).map((challenge, index) => {
+    const correct = focusedPrompt(t.name, challenge.prompt);
+    const pool = unique(
+      otherTopics.flatMap((item) =>
+        item.practiceChallenges.map((itemChallenge) =>
+          focusedPrompt(item.name, itemChallenge.prompt),
+        ),
+      ),
+    );
+    return mcq(
+      `practice-scenario-${index}`,
+      `Which scenario is the most focused ${t.name} practice task at level ${challenge.level || index + 1}?`,
+      correct,
+      pool,
+      correct,
+    );
+  });
+  const relatedQuestions = t.related.slice(0, 3).map((item, index) =>
+    mcq(
+      `related-${index}`,
+      `In the IoT map, which topic is most directly connected to ${t.name} as "${relationLabels[item.relationship] || item.relationship}"?`,
+      item.name,
+      topicNamePool,
+      `${item.name} is connected to ${t.name}.`,
+    ),
+  );
   const questions = [
-    ...t.questionBank.map(normalizeAuthoredQuestion),
+    ...t.questionBank.map(normalizeAuthoredQuestion).slice(0, 2),
+    ...challengeQuestions,
+    ...practiceQuestions,
+    mcq(
+      "why",
+      `Which reason best explains when ${t.name} is worth learning?`,
+      firstSentence(t.why, t.tag),
+      whyPool,
+      t.why,
+    ),
+    mcq(
+      "history",
+      `Which technical background note belongs to ${t.name}?`,
+      firstSentence(t.history, t.tag),
+      whyPool,
+      t.history,
+    ),
+    mcq(
+      "docs",
+      `Which source is the best first check for ${t.name}?`,
+      correctDocHost,
+      docsPool,
+      `The catalog links ${t.name} to ${correctDocHost}.`,
+    ),
+    ...relatedQuestions,
     mcq(
       "category",
-      `Which category does ${t.name} belong to in the IoT library?`,
+      `Which category best frames ${t.name} in the IoT library?`,
       t.category,
       categoryPool,
       `${t.name} is listed under ${t.category}.`,
     ),
     mcq(
       "tag",
-      `Which description best matches ${t.name}?`,
+      `Which focused description best matches ${t.name}?`,
       t.tag || firstSentence(t.why, t.name),
       tagPool,
       t.tag || t.why,
-    ),
-    mcq(
-      "why",
-      `Why would someone learn ${t.name}?`,
-      firstSentence(t.why, t.tag),
-      whyPool,
-      t.why,
-    ),
-    mcq(
-      "origin",
-      `Which origin or identity note is attached to ${t.name}?`,
-      t.born || t.category,
-      bornPool,
-      t.born || `${t.name} is cataloged as ${t.category}.`,
-    ),
-    mcq(
-      "history",
-      `Which historical note belongs to ${t.name}?`,
-      firstSentence(t.history, t.tag),
-      whyPool,
-      t.history,
-    ),
-    mcq(
-      "practice",
-      `Which exercise belongs with ${t.name}?`,
-      correctChallenge,
-      challengePool,
-      correctChallenge,
-    ),
-    mcq(
-      "docs",
-      `Which source would you most likely open to verify ${t.name}?`,
-      correctDocHost,
-      docsPool,
-      `The catalog links ${t.name} to ${correctDocHost}.`,
-    ),
-    ...t.related.slice(0, 8).map((item, index) =>
-      mcq(
-        `related-${index}`,
-        `Which topic is connected to ${t.name} as "${relationLabels[item.relationship] || item.relationship}"?`,
-        item.name,
-        topicNamePool,
-        `${item.name} is connected to ${t.name}.`,
-      ),
-    ),
-    ...sameCategory.slice(0, 8).map((item, index) =>
-      mcq(
-        `same-category-${index}`,
-        `Which topic shares the ${t.category} category with ${t.name}?`,
-        item.name,
-        topicNamePool,
-        `${item.name} is also listed in ${t.category}.`,
-      ),
-    ),
-    ...t.challenges.slice(0, 5).map((challenge, index) =>
-      mcq(
-        `challenge-${index}`,
-        `Which task would help assess knowledge of ${t.name}?`,
-        challenge,
-        challengePool,
-        challenge,
-      ),
     ),
   ];
   const fallback = relatedPool.length
@@ -308,22 +309,30 @@ function buildAssessmentBank(technology, allTechnologies) {
     : sameCategoryPool.length
       ? sameCategoryPool
       : topicNamePool;
-  for (let index = 0; questions.length < 30; index += 1) {
+  for (let index = 0; questions.length < ASSESSMENT_QUESTION_COUNT; index += 1) {
     const correct = fallback[index % fallback.length] || t.name;
     questions.push(
       mcq(
         `concept-${index}`,
-        `Which answer is most relevant to ${t.name}?`,
+        `Which connected concept is most relevant to ${t.name}?`,
         correct,
         topicNamePool,
         `${correct} is relevant to ${t.name} in the catalog context.`,
       ),
     );
   }
-  return unique(questions.map((question) => JSON.stringify(question)))
-    .map((value) => JSON.parse(value))
-    .slice(0, 30)
+  const byPrompt = new Map();
+  for (const question of questions) {
+    const promptKey = question.question.replace(/\s+/g, " ").trim().toLowerCase();
+    if (!byPrompt.has(promptKey)) byPrompt.set(promptKey, question);
+  }
+  const bank = Array.from(byPrompt.values())
+    .slice(0, ASSESSMENT_QUESTION_COUNT)
     .map((question, index) => ({ ...question, id: `${t.id}-${index + 1}` }));
+  const prompts = new Set(bank.map((question) => question.question));
+  if (prompts.size !== bank.length)
+    throw new Error(`Assessment bank for ${t.id} contains repeated prompts.`);
+  return bank;
 }
 const assessmentBanks = Object.fromEntries(
   technologies.map((technology) => [
@@ -332,8 +341,8 @@ const assessmentBanks = Object.fromEntries(
   ]),
 );
 for (const [id, bank] of Object.entries(assessmentBanks)) {
-  if (bank.length !== 30)
-    throw new Error(`Assessment bank for ${id} has ${bank.length} questions; expected 30.`);
+  if (bank.length !== ASSESSMENT_QUESTION_COUNT)
+    throw new Error(`Assessment bank for ${id} has ${bank.length} questions; expected ${ASSESSMENT_QUESTION_COUNT}.`);
 }
 
 // Keep the discovery app fast on mobile; full detail lives on each static page.
@@ -379,7 +388,7 @@ for (const technology of technologies) {
         : "";
     })
     .join("");
-  const content = `<p class="eyebrow">${esc(t.category)} / Knowledge library</p><h1>${esc(t.name)}</h1>${t.tag ? `<p class="lede">${esc(t.tag)}</p>` : ""}<p class="meta">${esc(t.born)}</p><h2>Why learn ${esc(t.name)}?</h2><p>${esc(t.why)}</p>${t.problemItSolves && t.problemItSolves !== t.why ? `<h2>The problem it solves</h2><p>${esc(t.problemItSolves)}</p>` : ""}<h2>Where it came from</h2><p>${esc(t.history)}</p>${t.historyNotes.length ? `<ul>${t.historyNotes.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${t.challenges.length ? `<h2>Build your understanding</h2><p>Work through these exercises in order. Try the task before opening a reference.</p><ol>${t.challenges.map((challenge) => `<li>${esc(challenge)}</li>`).join("")}</ol>` : ""}${t.practiceChallenges.length ? `<h2>More ways to practice</h2><div class="grid">${t.practiceChallenges.map((challenge) => `<article class="card"><small>Level ${esc(challenge.level)}</small><h3>${esc(challenge.title)}</h3><p>${esc(challenge.prompt)}</p></article>`).join("")}</div>` : ""}${t.docs.length ? `<h2>Documentation and sources</h2><ul>${t.docs.map((doc) => `<li><a href="${esc(doc.url)}" rel="noopener noreferrer">${esc(doc.label)}</a> <small>(${esc(new URL(doc.url).hostname)})</small></li>`).join("")}</ul>` : ""}${t.latestChanges.length ? `<h2>Catalog research notes</h2><ul>${t.latestChanges.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${relatedGroups ? `<h2>Connect the ideas</h2>${relatedGroups}` : ""}<aside class="callout"><h2>Test your knowledge.</h2><p>Study this topic, then return to AI Space for a timed 30-question assessment and ELO tracking.</p><a href="../../">Take an assessment →</a></aside><p class="meta">Catalog source: <a href="https://github.com/Monzingo89/technology-maxxing">technology-maxxing</a>. This page reproduces the existing catalog’s learning material and source links.</p>`;
+  const content = `<p class="eyebrow">${esc(t.category)} / Knowledge library</p><h1>${esc(t.name)}</h1>${t.tag ? `<p class="lede">${esc(t.tag)}</p>` : ""}<p class="meta">${esc(t.born)}</p><h2>Why learn ${esc(t.name)}?</h2><p>${esc(t.why)}</p>${t.problemItSolves && t.problemItSolves !== t.why ? `<h2>The problem it solves</h2><p>${esc(t.problemItSolves)}</p>` : ""}<h2>Where it came from</h2><p>${esc(t.history)}</p>${t.historyNotes.length ? `<ul>${t.historyNotes.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${t.challenges.length ? `<h2>Build your understanding</h2><p>Work through these exercises in order. Try the task before opening a reference.</p><ol>${t.challenges.map((challenge) => `<li>${esc(challenge)}</li>`).join("")}</ol>` : ""}${t.practiceChallenges.length ? `<h2>More ways to practice</h2><div class="grid">${t.practiceChallenges.map((challenge) => `<article class="card"><small>Level ${esc(challenge.level)}</small><h3>${esc(challenge.title)}</h3><p>${esc(challenge.prompt)}</p></article>`).join("")}</div>` : ""}${t.docs.length ? `<h2>Documentation and sources</h2><ul>${t.docs.map((doc) => `<li><a href="${esc(doc.url)}" rel="noopener noreferrer">${esc(doc.label)}</a> <small>(${esc(new URL(doc.url).hostname)})</small></li>`).join("")}</ul>` : ""}${t.latestChanges.length ? `<h2>Catalog research notes</h2><ul>${t.latestChanges.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${relatedGroups ? `<h2>Connect the ideas</h2>${relatedGroups}` : ""}<aside class="callout"><h2>Test your knowledge.</h2><p>Study this topic, then return to AI Space for a timed 10-question assessment and ELO tracking.</p><a href="../../">Take an assessment →</a></aside><p class="meta">Catalog source: <a href="https://github.com/Monzingo89/technology-maxxing">technology-maxxing</a>. This page reproduces the existing catalog’s learning material and source links.</p>`;
   const directory = path.join(out, "learn", t.id);
   fs.mkdirSync(directory, { recursive: true });
   fs.writeFileSync(

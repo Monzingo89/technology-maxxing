@@ -23,8 +23,25 @@ import {
   signInGoogle,
   signUpEmail,
 } from "./services/firebase";
+import {
+  clearGuestAllowance,
+  completeGuestAssessment,
+  getGuestAllowance,
+  startGuestAssessment,
+  type GuestAllowance,
+} from "./services/guest";
+import { legalVersion, privacySections, termsSections } from "./content/legal";
 
-type View = "library" | "assessments" | "papers" | "leaderboards";
+type View =
+  "library" | "assessments" | "papers" | "leaderboards" | "privacy" | "terms";
+function readView(): View {
+  const route = location.hash.slice(1);
+  return ["assessments", "papers", "leaderboards", "privacy", "terms"].includes(
+    route,
+  )
+    ? (route as View)
+    : "library";
+}
 type Mode = "signup" | "login";
 
 type Question = {
@@ -62,6 +79,7 @@ type Progress = {
 };
 
 type ActiveAssessment = {
+  guestAttempt?: { attemptId: string; receipt: string };
   technology: Technology;
   questions: Question[];
   index: number;
@@ -71,8 +89,10 @@ type ActiveAssessment = {
 };
 
 const GUEST_LIMIT = 5;
+const guestAccessUnavailable = !firebaseReady && !import.meta.env.DEV;
+const ASSESSMENT_QUESTION_COUNT = 10;
 const QUESTION_SECONDS = 20;
-const TOTAL_MINUTES = 30;
+const TOTAL_MINUTES = 10;
 const PASS_RATE = 0.7;
 const RETAKE_LOCK_MS = 5 * 24 * 60 * 60 * 1000;
 const PROGRESS_KEY = "aispace:iot-assessment-progress";
@@ -202,13 +222,19 @@ function loadProgress(): Progress {
 }
 
 function saveProgress(progress: Progress) {
-  localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+  } catch {
+    /* Browser storage is optional. */
+  }
 }
 
 function loadPaperVotes() {
   try {
     const data = JSON.parse(localStorage.getItem(PAPER_VOTES_KEY) || "{}");
-    return data && typeof data === "object" ? (data as Record<string, number>) : {};
+    return data && typeof data === "object"
+      ? (data as Record<string, number>)
+      : {};
   } catch {
     return {};
   }
@@ -247,6 +273,52 @@ function shuffleQuestion(question: Question, seed: string): Question {
   };
 }
 
+function questionRepeatKey(question: Question) {
+  return question.question
+    .toLowerCase()
+    .replace(/\b(which topic|which answer|which task)\b/g, "which item")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function questionDifficulty(question: Question) {
+  const text = `${question.question} ${question.explanation}`.toLowerCase();
+  if (text.includes("task") || text.includes("assess knowledge")) return 5;
+  if (text.includes("why would someone learn")) return 4;
+  if (text.includes("historical note") || text.includes("origin")) return 3;
+  if (text.includes("source") || text.includes("verify")) return 2;
+  if (text.includes("description") || text.includes("connected")) return 1;
+  return 0;
+}
+
+function selectAssessmentQuestions(bank: Question[], seed: string) {
+  const randomized = shuffle(bank, seed)
+    .map((question, index) => ({
+      question,
+      order: index,
+      difficulty: questionDifficulty(question),
+    }))
+    .sort((a, b) => b.difficulty - a.difficulty || a.order - b.order);
+  const selected: Question[] = [];
+  const seenKeys = new Set<string>();
+  for (const item of randomized) {
+    const key = questionRepeatKey(item.question);
+    if (seenKeys.has(key)) continue;
+    seenKeys.add(key);
+    selected.push(item.question);
+    if (selected.length === ASSESSMENT_QUESTION_COUNT) break;
+  }
+  if (selected.length < ASSESSMENT_QUESTION_COUNT) {
+    const selectedIds = new Set(selected.map((question) => question.id));
+    for (const item of randomized) {
+      if (selectedIds.has(item.question.id)) continue;
+      selected.push(item.question);
+      if (selected.length === ASSESSMENT_QUESTION_COUNT) break;
+    }
+  }
+  return selected;
+}
+
 function formatLock(timestamp?: number) {
   if (!timestamp || timestamp <= Date.now()) return "";
   const hours = Math.ceil((timestamp - Date.now()) / 3_600_000);
@@ -262,10 +334,79 @@ function updateElo(current: number, passed: boolean, scoreRate: number) {
 }
 
 export default function App() {
-  const [view, setView] = useState<View>("library");
+  const [view, updateView] = useState<View>(readView);
+  const setView = (next: View) => {
+    updateView(next);
+    location.hash = next;
+  };
+  const legalView = view === "privacy" || view === "terms";
+  const [accepted, setAccepted] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
+  const userRef = useRef<User | null>(null);
+  const [allowance, setAllowance] = useState<GuestAllowance | null>(null);
+  const [quotaBusy, setQuotaBusy] = useState(false);
+  const [quotaError, setQuotaError] = useState("");
+  const [cleanupError, setCleanupError] = useState("");
+  const [assessmentBusy, setAssessmentBusy] = useState(false);
+  const assessmentBusyRef = useRef(false);
+  const activeRef = useRef<ActiveAssessment | null>(null);
+  const [pendingCompletion, setPendingCompletion] = useState<{
+    current: ActiveAssessment;
+    answers: (number | null)[];
+  } | null>(null);
+
+  useEffect(() => {
+    const changed = () => {
+      updateView(readView());
+      setAuthOpen(false);
+    };
+    window.addEventListener("hashchange", changed);
+    return () => window.removeEventListener("hashchange", changed);
+  }, []);
+  useEffect(() => {
+    document.title =
+      view === "privacy"
+        ? "Privacy Policy | IoT"
+        : view === "terms"
+          ? "Terms of Service | IoT"
+          : "IoT | Knowledge assessments";
+    if (view === "privacy" || view === "terms") {
+      window.scrollTo(0, 0);
+      document.getElementById("legal-title")?.focus({ preventScroll: true });
+    }
+  }, [view]);
+
+  async function refreshAllowance() {
+    if (!firebaseReady || userRef.current) return;
+    setQuotaBusy(true);
+    setQuotaError("");
+    try {
+      const status = await getGuestAllowance();
+      if (!userRef.current) setAllowance(status);
+    } catch {
+      if (!userRef.current)
+        setQuotaError(
+          "We couldn’t check your guest allowance. Please retry before starting an assessment.",
+        );
+    } finally {
+      setQuotaBusy(false);
+    }
+  }
+  async function removeGuestRecord() {
+    setCleanupError("");
+    try {
+      await clearGuestAllowance();
+    } catch {
+      setCleanupError(
+        "You’re signed in, but your guest network record has not been removed yet. Retry to finish deleting it.",
+      );
+    }
+  }
   const [user, setUser] = useState<User | null>(null);
   const [technologies, setTechnologies] = useState<Technology[]>([]);
-  const [questionBanks, setQuestionBanks] = useState<Record<string, Question[]>>({});
+  const [questionBanks, setQuestionBanks] = useState<
+    Record<string, Question[]>
+  >({});
   const [loadError, setLoadError] = useState("");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
@@ -302,8 +443,20 @@ export default function App() {
       .catch((error) => setLoadError(error.message));
 
     return onAuth((next) => {
+      userRef.current = next;
       setUser(next);
-      if (next) setAuthOpen(false);
+      setAuthReady(true);
+      if (next) {
+        setAuthOpen(false);
+        setPassword("");
+        setQuotaError("");
+        setAllowance(null);
+        void removeGuestRecord();
+      } else {
+        setCleanupError("");
+        setAllowance(null);
+        void refreshAllowance();
+      }
     });
   }, []);
 
@@ -312,7 +465,11 @@ export default function App() {
   }, [progress]);
 
   useEffect(() => {
-    localStorage.setItem(PAPER_VOTES_KEY, JSON.stringify(paperVotes));
+    try {
+      localStorage.setItem(PAPER_VOTES_KEY, JSON.stringify(paperVotes));
+    } catch {
+      /* Browser storage is optional. */
+    }
   }, [paperVotes]);
 
   useEffect(() => {
@@ -330,7 +487,10 @@ export default function App() {
   }, [now, active]);
 
   const categories = useMemo(
-    () => ["All", ...Array.from(new Set(technologies.map((item) => item.category))).sort()],
+    () => [
+      "All",
+      ...Array.from(new Set(technologies.map((item) => item.category))).sort(),
+    ],
     [technologies],
   );
 
@@ -340,7 +500,9 @@ export default function App() {
       .filter((item) => category === "All" || item.category === category)
       .filter((item) =>
         text
-          ? `${item.name} ${item.category} ${item.tag}`.toLowerCase().includes(text)
+          ? `${item.name} ${item.category} ${item.tag}`
+              .toLowerCase()
+              .includes(text)
           : true,
       );
   }, [category, query, technologies]);
@@ -367,8 +529,9 @@ export default function App() {
   }, [library.length, visibleTopics]);
 
   const assessments = useMemo(() => {
-    const picked = FEATURED.map((id) => technologies.find((item) => item.id === id))
-      .filter(Boolean) as Technology[];
+    const picked = FEATURED.map((id) =>
+      technologies.find((item) => item.id === id),
+    ).filter(Boolean) as Technology[];
     return picked.length ? picked : technologies.slice(0, 8);
   }, [technologies]);
 
@@ -396,9 +559,15 @@ export default function App() {
     [paperVotes],
   );
 
+  const guestCompleted = Math.max(
+    progress.guestCount,
+    allowance?.completed || 0,
+  );
   const guestRemaining = user
     ? "unlimited"
-    : Math.max(0, GUEST_LIMIT - progress.guestCount);
+    : !authReady || guestAccessUnavailable || (firebaseReady && !allowance)
+      ? "—"
+      : Math.max(0, GUEST_LIMIT - guestCompleted);
 
   function openAuth(mode: Mode = "signup") {
     setAuthMode(mode);
@@ -406,52 +575,131 @@ export default function App() {
     setAuthOpen(true);
   }
 
-  function startAssessment(item: Technology) {
+  async function startAssessment(item: Technology) {
+    if (
+      guestAccessUnavailable ||
+      !authReady ||
+      assessmentBusyRef.current ||
+      activeRef.current ||
+      pendingCompletion
+    )
+      return;
     const topic = progress.topics[item.id];
     if (topic?.lockedUntil && topic.lockedUntil > Date.now()) return;
-    if (!user && progress.guestCount >= GUEST_LIMIT) {
+    if (!userRef.current && guestCompleted >= GUEST_LIMIT) {
       openAuth("signup");
       return;
     }
-
     const bank = questionBanks[item.id] || [];
-    const seed = `${user?.uid || "guest"}:${item.id}:${Date.now()}`;
-    const questions = shuffle(bank, seed)
-      .slice(0, 30)
-      .map((question, index) => shuffleQuestion(question, `${seed}:${index}`));
-    if (!questions.length) return;
-    setLastResult(null);
-    setView("assessments");
-    setActive({
-      technology: item,
-      questions,
-      index: 0,
-      answers: Array(questions.length).fill(null),
-      startedAt: Date.now(),
-      questionStartedAt: Date.now(),
-    });
+    if (!bank.length) return;
+    assessmentBusyRef.current = true;
+    setAssessmentBusy(true);
+    setQuotaError("");
+    try {
+      let guestAttempt: ActiveAssessment["guestAttempt"];
+      if (!userRef.current && firebaseReady) {
+        const status = await startGuestAssessment();
+        setAllowance(status);
+        guestAttempt = { attemptId: status.attemptId, receipt: status.receipt };
+      }
+      const seed = `${userRef.current?.uid || "guest"}:${item.id}:${Date.now()}`;
+      const questions = selectAssessmentQuestions(bank, seed)
+        .map((question, index) =>
+          shuffleQuestion(question, `${seed}:${index}`),
+        );
+      const next = {
+        technology: item,
+        questions,
+        guestAttempt,
+        index: 0,
+        answers: Array(questions.length).fill(null),
+        startedAt: Date.now(),
+        questionStartedAt: Date.now(),
+      };
+      activeRef.current = next;
+      setActive(next);
+      setNow(Date.now());
+      setLastResult(null);
+      setView("assessments");
+    } catch (error) {
+      const failure = error as {
+        details?: { reason?: string };
+        message?: string;
+      };
+      if (failure.details?.reason === "guest-limit") {
+        setProgress((current) => ({ ...current, guestCount: GUEST_LIMIT }));
+        openAuth("signup");
+      } else
+        setQuotaError(
+          failure.details?.reason === "active-assessment"
+            ? "A guest assessment is already open on this network. Finish it or try again after 35 minutes."
+            : "We couldn’t start your assessment. Check your connection and retry.",
+        );
+    } finally {
+      assessmentBusyRef.current = false;
+      setAssessmentBusy(false);
+    }
   }
 
   function answerCurrent(answer: number | null) {
-    setActive((current) => {
-      if (!current) return current;
-      const answers = [...current.answers];
-      answers[current.index] = answer;
-      const nextIndex = current.index + 1;
-      if (nextIndex >= current.questions.length) {
-        finishAssessment(current, answers);
-        return null;
-      }
-      return {
-        ...current,
-        answers,
-        index: nextIndex,
-        questionStartedAt: Date.now(),
-      };
-    });
+    const current = activeRef.current;
+    if (!current || assessmentBusyRef.current) return;
+    const answers = [...current.answers];
+    answers[current.index] = answer;
+    const nextIndex = current.index + 1;
+    if (
+      nextIndex >= current.questions.length ||
+      Date.now() - current.startedAt >= TOTAL_MINUTES * 60_000
+    ) {
+      activeRef.current = null;
+      setActive(null);
+      void finishAssessment(current, answers);
+      return;
+    }
+    const next = {
+      ...current,
+      answers,
+      index: nextIndex,
+      questionStartedAt: Date.now(),
+    };
+    activeRef.current = next;
+    setActive(next);
+    setNow(Date.now());
   }
 
-  function finishAssessment(current: ActiveAssessment, answers: (number | null)[]) {
+  async function finishAssessment(
+    current: ActiveAssessment,
+    answers: (number | null)[],
+  ) {
+    if (assessmentBusyRef.current) return;
+    assessmentBusyRef.current = true;
+    setAssessmentBusy(true);
+    setQuotaError("");
+    let completed = progress.guestCount;
+    try {
+      if (!userRef.current && current.guestAttempt) {
+        const status = await completeGuestAssessment(
+          current.guestAttempt.attemptId,
+          current.guestAttempt.receipt,
+        );
+        setAllowance(status);
+        completed = Math.max(status.completed, progress.guestCount + 1);
+      } else if (!userRef.current) completed++;
+    } catch (error) {
+      const expired =
+        (error as { details?: { reason?: string } }).details?.reason ===
+        "expired-attempt";
+      setPendingCompletion(expired ? null : { current, answers });
+      setQuotaError(
+        expired
+          ? "This guest assessment session expired before it could be saved. Start another assessment or sign in."
+          : "Your assessment is finished, but we couldn’t save your guest allowance. Retry to save your result.",
+      );
+      assessmentBusyRef.current = false;
+      setAssessmentBusy(false);
+      return;
+    }
+    setPendingCompletion(null);
     const score = current.questions.reduce(
       (total, question, index) =>
         total + (answers[index] === question.answerIndex ? 1 : 0),
@@ -470,7 +718,7 @@ export default function App() {
     const elo = updateElo(existing.elo, passed, scoreRate);
     const nextProgress: Progress = {
       ...progress,
-      guestCount: user ? progress.guestCount : progress.guestCount + 1,
+      guestCount: completed,
       overallElo: updateElo(progress.overallElo, passed, scoreRate),
       topics: {
         ...progress.topics,
@@ -489,12 +737,28 @@ export default function App() {
       },
     };
     setProgress(nextProgress);
-    setLastResult({ technology: current.technology, score, total, passed, elo });
-    if (!user && nextProgress.guestCount >= GUEST_LIMIT) openAuth("signup");
+    setLastResult({
+      technology: current.technology,
+      score,
+      total,
+      passed,
+      elo,
+    });
+    assessmentBusyRef.current = false;
+    setAssessmentBusy(false);
+    if (!userRef.current && nextProgress.guestCount >= GUEST_LIMIT)
+      openAuth("signup");
   }
 
   async function submitAuth(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (authBusy) return;
+    if (authMode === "signup" && !accepted) {
+      setAuthError(
+        "Please confirm that you are 18 or older and agree to the policies.",
+      );
+      return;
+    }
     if (!firebaseReady) {
       setAuthError("Signup opens when Firebase is connected for this site.");
       return;
@@ -512,6 +776,13 @@ export default function App() {
   }
 
   async function submitGoogle() {
+    if (authBusy) return;
+    if (authMode === "signup" && !accepted) {
+      setAuthError(
+        "Please confirm that you are 18 or older and agree to the policies.",
+      );
+      return;
+    }
     if (!firebaseReady) {
       setAuthError("Signup opens when Firebase is connected for this site.");
       return;
@@ -555,23 +826,35 @@ export default function App() {
   return (
     <main className="simple-app">
       <header className="site-header">
-        <a className="brand" href="#" onClick={(event) => event.preventDefault()}>
+        <a className="brand" href="#library">
           IoT
         </a>
         <nav aria-label="Main navigation">
-          <button className={view === "library" ? "active" : ""} onClick={() => setView("library")}>
+          <button
+            className={view === "library" ? "active" : ""}
+            onClick={() => setView("library")}
+          >
             <Library size={18} />
             Library
           </button>
-          <button className={view === "assessments" ? "active" : ""} onClick={() => setView("assessments")}>
+          <button
+            className={view === "assessments" ? "active" : ""}
+            onClick={() => setView("assessments")}
+          >
             <CheckCircle2 size={18} />
             Assessments
           </button>
-          <button className={view === "papers" ? "active" : ""} onClick={() => setView("papers")}>
+          <button
+            className={view === "papers" ? "active" : ""}
+            onClick={() => setView("papers")}
+          >
             <FileText size={18} />
             Papers
           </button>
-          <button className={view === "leaderboards" ? "active" : ""} onClick={() => setView("leaderboards")}>
+          <button
+            className={view === "leaderboards" ? "active" : ""}
+            onClick={() => setView("leaderboards")}
+          >
             <Trophy size={18} />
             Leaderboards
           </button>
@@ -594,22 +877,102 @@ export default function App() {
         </div>
       </header>
 
-      <section className="hero">
-        <div>
-          <p className="eyebrow">IoT knowledge assessments</p>
-          <h1>Prove what you know, topic by topic.</h1>
+      {cleanupError ? (
+        <p className="error" role="alert">
+          {cleanupError}{" "}
+          <button
+            className="small-button"
+            onClick={() => void removeGuestRecord()}
+          >
+            Retry deletion
+          </button>
+        </p>
+      ) : null}
+      {quotaError ? (
+        <p className="error" role="alert">
+          {quotaError}{" "}
+          <button
+            className="small-button"
+            disabled={assessmentBusy || quotaBusy}
+            onClick={() =>
+              pendingCompletion
+                ? void finishAssessment(
+                    pendingCompletion.current,
+                    pendingCompletion.answers,
+                  )
+                : void refreshAllowance()
+            }
+          >
+            {pendingCompletion
+              ? "Retry saving result"
+              : "Retry allowance check"}
+          </button>
+        </p>
+      ) : null}
+      {assessmentBusy ? (
+        <p role="status">
+          {pendingCompletion || !active
+            ? "Checking assessment access…"
+            : "Saving assessment…"}
+        </p>
+      ) : null}
+      {legalView ? (
+        <article className="panel legal-page" aria-labelledby="legal-title">
+          <a href="#library">Back to library</a>
+          <h1 id="legal-title" tabIndex={-1}>
+            {view === "privacy" ? "Privacy Policy" : "Terms of Service"}
+          </h1>
+          <p>Effective September 19, 2026 · Version {legalVersion}</p>
+          {(view === "privacy" ? privacySections : termsSections).map(
+            (section) => (
+              <section key={section.title}>
+                <h2>{section.title}</h2>
+                <p>{section.body}</p>
+              </section>
+            ),
+          )}
           <p>
-            Every topic has a 30-question multiple-choice bank. Assessments are
-            randomized per user, capped at 20 seconds per question, and failed
-            attempts lock that topic for 5 days.
+            Questions or data requests:{" "}
+            <a href="mailto:robertjmonzingo@gmail.com">
+              robertjmonzingo@gmail.com
+            </a>
+            .
           </p>
-        </div>
-        <aside className="quota-card">
-          <span>Guest assessments left</span>
-          <strong>{guestRemaining}</strong>
-          <p>Overall ELO: {progress.overallElo}. Free signup unlocks more attempts.</p>
-        </aside>
-      </section>
+        </article>
+      ) : (
+        <section className="hero">
+          <div>
+            <p className="eyebrow">IoT knowledge assessments</p>
+            <h1>Prove what you know, topic by topic.</h1>
+            <p>
+              Every assessment is a 10-question multiple-choice run from a
+              larger bank. Questions are randomized per user, capped at 20
+              seconds each, and failed attempts lock that topic for 5 days.
+            </p>
+          </div>
+          <aside className="quota-card">
+            <span>Guest assessments left</span>
+            <strong>{guestRemaining}</strong>
+            <p>
+              Overall ELO: {progress.overallElo}. Free signup unlocks more
+              attempts.
+            </p>
+            {!user && firebaseReady ? (
+              <p>
+                Five completed guest assessments per network.{" "}
+                <a href="#privacy">How we remember visits</a>
+              </p>
+            ) : null}
+            {!firebaseReady ? (
+              <p>
+                {guestAccessUnavailable
+                  ? "Guest assessments are temporarily unavailable. You can still browse the library and papers."
+                  : "Local preview: this browser’s allowance only."}
+              </p>
+            ) : null}
+          </aside>
+        </section>
+      )}
 
       {view === "library" ? (
         <section className="panel">
@@ -650,13 +1013,26 @@ export default function App() {
                   <span>{item.category}</span>
                   <h3>{item.name}</h3>
                   <p>{item.tag}</p>
-                  <small>{item.assessmentCount || 30} assessment questions</small>
+                  <small>
+                    {ASSESSMENT_QUESTION_COUNT} assessment questions
+                  </small>
                   <div className="card-actions">
                     <a href={item.learnPath}>
                       Study
                       <ArrowRight size={16} />
                     </a>
-                    <button disabled={!!lock} onClick={() => startAssessment(item)}>
+                    <button
+                      disabled={
+                        guestAccessUnavailable ||
+                        !!lock ||
+                        assessmentBusy ||
+                        !!active ||
+                        !!pendingCompletion ||
+                        !authReady ||
+                        (!user && firebaseReady && (!allowance || quotaBusy))
+                      }
+                      onClick={() => void startAssessment(item)}
+                    >
                       {lock ? (
                         <>
                           <Lock size={16} />
@@ -700,9 +1076,12 @@ export default function App() {
           <div className="panel-head">
             <div>
               <h2>Assessments</h2>
-              <p>30 randomized questions. 20 seconds per question. 70% passes.</p>
+              <p>
+                10 harder randomized questions. 20 seconds per question. 70%
+                passes.
+              </p>
             </div>
-            {!user && progress.guestCount >= GUEST_LIMIT ? (
+            {!user && guestCompleted >= GUEST_LIMIT ? (
               <button className="primary" onClick={() => openAuth("signup")}>
                 Sign up free
               </button>
@@ -734,14 +1113,16 @@ export default function App() {
           ) : (
             <>
               {lastResult ? (
-                <article className={`result-card ${lastResult.passed ? "passed" : "failed"}`}>
+                <article
+                  className={`result-card ${lastResult.passed ? "passed" : "failed"}`}
+                >
                   <h3>
                     {lastResult.passed ? "Passed" : "Failed"}:{" "}
                     {lastResult.technology.name}
                   </h3>
                   <p>
-                    Score: {lastResult.score}/{lastResult.total}. Topic ELO is now{" "}
-                    {lastResult.elo}.
+                    Score: {lastResult.score}/{lastResult.total}. Topic ELO is
+                    now {lastResult.elo}.
                     {!lastResult.passed
                       ? " This assessment is locked for 5 days."
                       : ""}
@@ -750,13 +1131,22 @@ export default function App() {
               ) : null}
               <div className="assessment-grid">
                 {assessments.map((item) => {
-                  const lock = formatLock(progress.topics[item.id]?.lockedUntil);
+                  const lock = formatLock(
+                    progress.topics[item.id]?.lockedUntil,
+                  );
                   return (
                     <button
                       className="assessment-card"
                       key={item.id}
-                      disabled={!!lock}
-                      onClick={() => startAssessment(item)}
+                      disabled={
+                        guestAccessUnavailable ||
+                        !!lock ||
+                        assessmentBusy ||
+                        !!pendingCompletion ||
+                        !authReady ||
+                        (!user && firebaseReady && (!allowance || quotaBusy))
+                      }
+                      onClick={() => void startAssessment(item)}
                     >
                       <span>{item.category}</span>
                       <h3>{item.name}</h3>
@@ -764,7 +1154,7 @@ export default function App() {
                       <small>
                         {lock
                           ? `Retake available in ${lock}`
-                          : `${item.assessmentCount || 30} questions`}
+                          : `${ASSESSMENT_QUESTION_COUNT} questions`}
                       </small>
                     </button>
                   );
@@ -782,7 +1172,8 @@ export default function App() {
               <h2>White Paper Hall of Fame</h2>
               <p>
                 Ten high-signal papers to read first. Signed-in users can vote,
-                and new submissions go to Robert for review before they appear here.
+                and new submissions go to Robert for review before they appear
+                here.
               </p>
             </div>
             <a
@@ -798,9 +1189,15 @@ export default function App() {
               <article className="paper-card" key={paper.id}>
                 <strong>#{index + 1}</strong>
                 <div>
-                  <span>{paper.topic} · {paper.year}</span>
+                  <span>
+                    {paper.topic} · {paper.year}
+                  </span>
                   <h3>
-                    <a href={paper.url} rel="noopener noreferrer">
+                    <a
+                      href={paper.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {paper.title}
                     </a>
                   </h3>
@@ -851,8 +1248,8 @@ export default function App() {
                   <div>
                     <h3>{item.technology?.name}</h3>
                     <p>
-                      ELO {item.elo} · best {Math.round(item.bestScore * 100)}% ·{" "}
-                      {item.attempts} attempts
+                      ELO {item.elo} · best {Math.round(item.bestScore * 100)}%
+                      · {item.attempts} attempts
                     </p>
                   </div>
                 </article>
@@ -864,9 +1261,22 @@ export default function App() {
         </section>
       ) : null}
 
+      <footer className="site-footer">
+        <span>IoT · A free, not-for-profit learning project</span>
+        <nav aria-label="Legal">
+          <a href="#privacy">Privacy Policy</a>
+          <a href="#terms">Terms of Service</a>
+        </nav>
+      </footer>
+
       {authOpen ? (
         <div className="modal-backdrop" role="presentation">
-          <section className="auth-modal" role="dialog" aria-modal="true">
+          <section
+            className="auth-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="auth-title"
+          >
             <button
               className="close"
               aria-label="Close signup"
@@ -874,11 +1284,38 @@ export default function App() {
             >
               x
             </button>
-            <h2>{authMode === "signup" ? "Create a free account" : "Log in"}</h2>
+            <h2 id="auth-title">
+              {authMode === "signup" ? "Create a free account" : "Log in"}
+            </h2>
             <p>Keep going after five guest assessments. There is no charge.</p>
+            {authMode === "signup" ? (
+              <label className="signup-agreement">
+                <input
+                  type="checkbox"
+                  checked={accepted}
+                  disabled={authBusy}
+                  onChange={(event) => setAccepted(event.target.checked)}
+                />
+                <span>
+                  I am 18 or older and agree to the{" "}
+                  <a href="#terms" target="_blank" rel="noopener noreferrer">
+                    Terms of Service
+                  </a>{" "}
+                  and{" "}
+                  <a href="#privacy" target="_blank" rel="noopener noreferrer">
+                    Privacy Policy
+                  </a>
+                  .
+                </span>
+              </label>
+            ) : null}
             <button
               className="google-button"
-              disabled={authBusy || !firebaseReady}
+              disabled={
+                authBusy ||
+                !firebaseReady ||
+                (authMode === "signup" && !accepted)
+              }
               onClick={() => void submitGoogle()}
             >
               {authBusy ? <LoaderCircle size={18} /> : <span>G</span>}
@@ -889,6 +1326,7 @@ export default function App() {
                 Email
                 <input
                   type="email"
+                  placeholder="you@example.com"
                   autoComplete="email"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
@@ -899,6 +1337,11 @@ export default function App() {
                 Password
                 <input
                   type="password"
+                  placeholder={
+                    authMode === "signup"
+                      ? "At least 12 characters"
+                      : "Your password"
+                  }
                   autoComplete={
                     authMode === "signup" ? "new-password" : "current-password"
                   }
@@ -909,13 +1352,22 @@ export default function App() {
                 />
               </label>
               {authError ? <p className="error">{authError}</p> : null}
-              <button className="primary full" disabled={authBusy || !firebaseReady}>
+              <button
+                className="primary full"
+                disabled={
+                  authBusy ||
+                  !firebaseReady ||
+                  (authMode === "signup" && !accepted)
+                }
+              >
                 {authMode === "signup" ? "Sign up free" : "Log in"}
               </button>
             </form>
             <button
               className="link-button"
-              onClick={() => setAuthMode(authMode === "signup" ? "login" : "signup")}
+              onClick={() =>
+                setAuthMode(authMode === "signup" ? "login" : "signup")
+              }
             >
               {authMode === "signup"
                 ? "Already have an account? Log in"

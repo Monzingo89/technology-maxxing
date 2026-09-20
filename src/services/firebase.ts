@@ -4,7 +4,11 @@ import {
   getAuth,
   connectAuthEmulator,
   GoogleAuthProvider,
+  browserLocalPersistence,
+  getRedirectResult,
+  setPersistence,
   signInWithPopup,
+  signInWithRedirect,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -104,10 +108,35 @@ export function onAuth(callback: (user: User | null) => void) {
   }
   return onAuthStateChanged(auth, callback);
 }
-export async function signInGoogle() {
+function googleProvider() {
   const provider = new GoogleAuthProvider();
   provider.setCustomParameters({ prompt: "select_account" });
-  return (await signInWithPopup(needAuth(), provider)).user;
+  return provider;
+}
+function shouldUseRedirect(error: unknown) {
+  const code = (error as { code?: string })?.code;
+  return [
+    "auth/popup-blocked",
+    "auth/popup-closed-by-user",
+    "auth/cancelled-popup-request",
+    "auth/operation-not-supported-in-this-environment",
+  ].includes(code || "");
+}
+export async function completeGoogleRedirect() {
+  if (!auth) return null;
+  return (await getRedirectResult(auth))?.user || null;
+}
+export async function signInGoogle() {
+  const auth = needAuth();
+  await setPersistence(auth, browserLocalPersistence);
+  const provider = googleProvider();
+  try {
+    return (await signInWithPopup(auth, provider)).user;
+  } catch (error) {
+    if (!shouldUseRedirect(error)) throw error;
+    await signInWithRedirect(auth, googleProvider());
+    return null;
+  }
 }
 export function authErrorMessage(error: unknown): string {
   const code = (error as { code?: string })?.code;
