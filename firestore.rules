@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function verified() { return signedIn() && request.auth.token.email_verified == true; }
+    function member() { return verified() && exists(/databases/$(database)/documents/profiles/$(request.auth.uid)); }
+    function moderator() { return verified() && request.auth.token.moderator == true; }
+    function teammate(team) {
+      return member() && team.active == true && request.auth.uid in team.members;
+    }
+    // Server-authoritative values are never writable by a client SDK.
+    match /profiles/{uid} { allow read: if member() || (signedIn() && request.auth.uid == uid); }
+    match /accounts/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      match /courses/{course} { allow read: if signedIn() && request.auth.uid == uid; }
+    }
+    match /presence/{uid} { allow read: if member(); }
+    match /leaderboards/{category}/entries/{uid} { allow read: if member(); }
+    match /gallery/{id} {
+      allow read: if member() && (resource.data.status == 'published' || resource.data.uid == request.auth.uid || moderator());
+    }
+    match /invites/{id} { allow read: if member() && request.auth.uid in resource.data.participants; }
+    match /teams/{id} {
+      allow read: if member() && request.auth.uid in resource.data.members;
+      match /messages/{messageId} {
+        allow read: if teammate(get(/databases/$(database)/documents/teams/$(id)).data);
+      }
+    }
+    match /blocks/{id} { allow read: if member() && resource.data.uid == request.auth.uid; }
+    match /reports/{id} { allow read: if moderator(); }
+    match /dailyMetrics/{id} { allow read: if moderator(); }
+    match /dailyBanks/{id} { allow read: if moderator(); }
+    // Includes quiz sessions, question banks, username reservations, rate limits,
+    // raw events, and school answers. Functions are the only access path.
+    match /{document=**} { allow read, write: if false; }
+  }
+}

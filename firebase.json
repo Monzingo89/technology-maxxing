@@ -1,0 +1,48 @@
+{
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "ai-space",
+      "runtime": "nodejs22",
+      "ignore": ["node_modules", "test", "*.log", ".env*"],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run catalog",
+        "npm --prefix \"$RESOURCE_DIR\" run check",
+        "npm --prefix \"$RESOURCE_DIR\" test"
+      ]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          {
+            "key": "Referrer-Policy",
+            "value": "strict-origin-when-cross-origin"
+          },
+          {
+            "key": "Permissions-Policy",
+            "value": "camera=(), microphone=(), geolocation=()"
+          }
+        ]
+      }
+    ],
+    "rewrites": [{ "source": "**", "destination": "/index.html" }]
+  },
+  "emulators": {
+    "auth": { "port": 9099 },
+    "firestore": { "port": 8080 },
+    "functions": { "port": 5001 },
+    "hosting": { "port": 5000 },
+    "ui": { "enabled": true, "port": 4000 },
+    "singleProjectMode": true
+  }
+}

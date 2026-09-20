@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
 
-const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const html = fs.readFileSync(new URL('../library.html', import.meta.url), 'utf8');
 const source = html.split('<script>')[1].split('/* ---------- boot ---------- */')[0];
 
 async function load(generated, extensions = {}) {
@@ -42,6 +42,23 @@ test('repository data loads without broken category assignments', async () => {
   const read = name => JSON.parse(fs.readFileSync(new URL(`../data/${name}.json`, import.meta.url), 'utf8'));
   const context = await load(read('generated-technologies'), read('technology-extensions'));
   assert.equal(vm.runInContext('Object.values(DATA.tech).every(t=>DATA.cats[t.cat])', context), true);
+});
+
+test('public assessment banks provide thirty answerable questions per topic', () => {
+  const index = JSON.parse(fs.readFileSync(new URL('../public/knowledge-index.json', import.meta.url), 'utf8'));
+  assert.equal(Object.keys(index.assessments).length, index.technologies.length);
+  for (const technology of index.technologies) {
+    const bank = index.assessments[technology.id];
+    assert.equal(bank.length, 30, `${technology.id} should have 30 questions`);
+    for (const question of bank) {
+      assert.equal(typeof question.question, 'string');
+      assert.ok(question.question.length > 10);
+      assert.equal(question.options.length, 4);
+      assert.ok(question.options.every(option => typeof option === 'string' && option.length > 0));
+      assert.ok(Number.isInteger(question.answerIndex));
+      assert.ok(question.answerIndex >= 0 && question.answerIndex < question.options.length);
+    }
+  }
 });
 
 test('bulk catalog preserves requested entries and resolves every new connection', async () => {

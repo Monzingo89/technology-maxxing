@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const ROOT = process.cwd();
-const INDEX_PATH = path.join(ROOT, "index.html");
+const INDEX_PATH = path.join(ROOT, "library.html");
 const STATE_PATH = path.join(ROOT, ".daily-agent", "state.json");
 const SEED_PATH = path.join(ROOT, ".daily-agent", "new-technologies-seed.json");
 const EXTENSIONS_PATH = path.join(ROOT, "data", "technology-extensions.json");
@@ -66,12 +66,12 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/* ---------- index.html parsing ---------- */
+/* ---------- library.html parsing ---------- */
 
 function extractTechBlock(indexHtml) {
   const blockMatch = indexHtml.match(/tech:\s*\{([\s\S]*?)\n\s*\}\s*\};/);
   if (!blockMatch) {
-    throw new Error("Could not locate DATA.tech block in index.html");
+    throw new Error("Could not locate DATA.tech block in library.html");
   }
   return blockMatch[1];
 }
