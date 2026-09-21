@@ -11,7 +11,9 @@ import {
   LogIn,
   LogOut,
   Search,
+  Settings,
   Trophy,
+  UserRound,
 } from "lucide-react";
 import type { User } from "firebase/auth";
 import {
@@ -429,6 +431,7 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [authBusy, setAuthBusy] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}knowledge-index.json`)
@@ -861,13 +864,79 @@ export default function App() {
         </nav>
         <div className="account">
           {user ? (
-            <>
-              <span>{user.email || "Signed in"}</span>
-              <button className="small-button" onClick={() => void logOut()}>
-                <LogOut size={16} />
-                Sign out
+            <div className="account-menu">
+              <button
+                className="avatar-button"
+                aria-haspopup="menu"
+                aria-expanded={accountOpen}
+                onClick={() => setAccountOpen((current) => !current)}
+              >
+                {user.photoURL ? (
+                  <img src={user.photoURL} alt="" referrerPolicy="no-referrer" />
+                ) : (
+                  <span>
+                    {(user.displayName || user.email || "A")
+                      .trim()
+                      .charAt(0)
+                      .toUpperCase()}
+                  </span>
+                )}
               </button>
-            </>
+              {accountOpen ? (
+                <div className="account-popover" role="menu">
+                  <div className="account-summary">
+                    {user.photoURL ? (
+                      <img
+                        src={user.photoURL}
+                        alt=""
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <span>
+                        {(user.displayName || user.email || "A")
+                          .trim()
+                          .charAt(0)
+                          .toUpperCase()}
+                      </span>
+                    )}
+                    <div>
+                      <strong>{user.displayName || "Signed in"}</strong>
+                      <small>{user.email || "Google account"}</small>
+                    </div>
+                  </div>
+                  <button
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountOpen(false);
+                      setView("leaderboards");
+                    }}
+                  >
+                    <UserRound size={16} />
+                    Account overview
+                  </button>
+                  <button
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountOpen(false);
+                      setView("privacy");
+                    }}
+                  >
+                    <Settings size={16} />
+                    Account settings
+                  </button>
+                  <button
+                    role="menuitem"
+                    onClick={() => {
+                      setAccountOpen(false);
+                      void logOut();
+                    }}
+                  >
+                    <LogOut size={16} />
+                    Sign out
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : (
             <button className="small-button" onClick={() => openAuth("signup")}>
               <LogIn size={16} />
