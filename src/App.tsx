@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
+  ArrowUp,
   BarChart3,
   CheckCircle2,
   Clock3,
@@ -1595,6 +1596,15 @@ export default function App() {
           )}
         </section>
       ) : null}
+
+      <button
+        className="back-to-top"
+        type="button"
+        aria-label="Back to top"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <ArrowUp size={22} aria-hidden="true" />
+      </button>
 
       <footer className="site-footer">
         <span>IoT · A free, not-for-profit learning project</span>
