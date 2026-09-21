@@ -101,8 +101,9 @@ input {
 }
 
 .site-header {
+  --avatar-size: 76px;
   display: grid;
-  grid-template-columns: minmax(160px, 1fr) minmax(0, auto) minmax(64px, 1fr);
+  grid-template-columns: minmax(180px, 1fr) minmax(0, auto) minmax(var(--avatar-size), 1fr);
   align-items: center;
   gap: 20px;
   padding: 14px 0 42px;
@@ -118,10 +119,17 @@ input {
   display: flex;
   gap: 8px;
   min-width: 0;
+  max-width: 100%;
   padding: 6px;
   border: 1px solid #dfe4ec;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.75);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.site-header nav::-webkit-scrollbar {
+  display: none;
 }
 
 .site-header nav button,
@@ -139,9 +147,14 @@ input {
 
 .site-header nav button {
   height: 42px;
+  min-width: 0;
   padding: 11px 16px;
   color: #596373;
   white-space: nowrap;
+}
+
+.site-header nav button svg {
+  flex: 0 0 auto;
 }
 
 .site-header nav button.active {
@@ -155,9 +168,10 @@ input {
   align-items: center;
   justify-content: flex-end;
   gap: 12px;
+  min-width: 0;
+  min-height: var(--avatar-size);
   color: #596373;
   font-size: 14px;
-  min-width: 0;
 }
 
 .account-menu {
@@ -167,13 +181,13 @@ input {
 .avatar-button {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
   border: 1px solid #dfe4ec;
   border-radius: 999px;
   background: #ffffff;
   color: #1d2530;
-  box-shadow: 0 10px 26px rgba(47, 56, 72, 0.12);
+  box-shadow: 0 14px 34px rgba(47, 56, 72, 0.16);
   overflow: hidden;
 }
 
@@ -195,9 +209,13 @@ input {
   font-weight: 800;
 }
 
+.avatar-button span {
+  font-size: clamp(24px, 2.1vw, 34px);
+}
+
 .account-popover {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 12px);
   right: 0;
   z-index: 20;
   width: min(300px, calc(100vw - 32px));
@@ -210,7 +228,7 @@ input {
 
 .account-summary {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 52px minmax(0, 1fr);
   gap: 12px;
   align-items: center;
   padding: 8px 8px 12px;
@@ -220,6 +238,8 @@ input {
 
 .account-summary img,
 .account-summary > span {
+  width: 52px;
+  height: 52px;
   border-radius: 999px;
 }
 
@@ -728,14 +748,34 @@ input {
   color: #ffffff;
 }
 
+@media (max-width: 980px) {
+  .site-header {
+    grid-template-columns: minmax(0, 1fr) var(--avatar-size);
+  }
+
+  .site-header nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+    justify-self: center;
+  }
+
+  .account {
+    grid-column: 2;
+    grid-row: 1;
+  }
+}
+
 @media (max-width: 760px) {
   .site-header {
-    grid-template-columns: 1fr;
+    --avatar-size: 56px;
+    grid-template-columns: minmax(0, 1fr) var(--avatar-size);
     padding-bottom: 22px;
   }
 
-  .site-header nav,
-  .account {
+  .site-header nav {
+    width: 100%;
+    flex-wrap: wrap;
     justify-content: stretch;
   }
 
@@ -743,12 +783,11 @@ input {
     justify-content: flex-end;
   }
 
-  .site-header nav { flex-wrap: wrap; }
-  .site-header nav button { flex-basis: calc(50% - 8px); }
+  .site-header nav button { flex-basis: calc(50% - 4px); }
 
   .site-header nav button,
   .account .small-button {
-    flex: 1;
+    flex: 1 1 calc(50% - 4px);
   }
 
   .hero {
@@ -763,6 +802,10 @@ input {
 
   .paper-card {
     grid-template-columns: 1fr;
+  }
+
+  .account-popover {
+    right: 0;
   }
 
   .vote-box {
@@ -790,3 +833,15 @@ input {
 .auth-modal .signup-agreement { grid-template-columns: 20px 1fr; align-items: start; margin-top: 20px; font-size: 14px; font-weight: 400; line-height: 1.6; }
 .signup-agreement input { width: 18px; height: 18px; margin-top: 3px; }
 .auth-modal { max-height: calc(100dvh - 32px); overflow-y: auto; }
+
+
+@media (max-width: 420px) {
+  .site-header {
+    --avatar-size: 50px;
+    gap: 14px;
+  }
+
+  .site-header nav button {
+    padding-inline: 10px;
+  }
+}
