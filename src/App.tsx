@@ -467,6 +467,7 @@ export default function App() {
   const [category, setCategory] = useState("All");
   const [leaderboardTopic, setLeaderboardTopic] = useState("All topics");
   const [visibleTopics, setVisibleTopics] = useState(TOPICS_PAGE_SIZE);
+  const [isAutoLoadingTopics, setIsAutoLoadingTopics] = useState(false);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState(loadProgress);
   const [paperVotes, setPaperVotes] = useState(loadPaperVotes);
@@ -593,16 +594,22 @@ export default function App() {
 
   useEffect(() => {
     const target = loadMoreRef.current;
-    if (!target || visibleTopics >= library.length) return;
+    if (!target || visibleTopics >= library.length) {
+      setIsAutoLoadingTopics(false);
+      return;
+    }
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries.some((entry) => entry.isIntersecting)) {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setIsAutoLoadingTopics(true);
+        window.requestAnimationFrame(() => {
           setVisibleTopics((current) =>
             Math.min(current + TOPICS_PAGE_SIZE, library.length),
           );
-        }
+          setIsAutoLoadingTopics(false);
+        });
       },
-      { rootMargin: "720px 0px" },
+      { rootMargin: "720px 0px 960px" },
     );
     observer.observe(target);
     return () => observer.disconnect();
@@ -1294,18 +1301,19 @@ export default function App() {
               );
             })}
           </div>
-          <div className="load-more-sentinel" ref={loadMoreRef}>
+          <div
+            className="load-more-sentinel"
+            ref={loadMoreRef}
+            role="status"
+            aria-live="polite"
+          >
             {visibleTopics < library.length ? (
-              <button
-                className="small-button"
-                onClick={() =>
-                  setVisibleTopics((current) =>
-                    Math.min(current + TOPICS_PAGE_SIZE, library.length),
-                  )
-                }
-              >
-                Load more topics
-              </button>
+              <span className="infinite-loader">
+                <LoaderCircle size={18} aria-hidden="true" />
+                {isAutoLoadingTopics
+                  ? "Loading more topics..."
+                  : `${Math.min(visibleTopics, library.length)} of ${library.length} topics shown`}
+              </span>
             ) : library.length ? (
               <span>All {library.length} topics loaded.</span>
             ) : (

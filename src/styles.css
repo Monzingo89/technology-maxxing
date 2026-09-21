@@ -45,6 +45,18 @@ button:disabled {
   opacity: 0.55;
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infinite-loader svg {
+    animation: none;
+  }
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -422,9 +434,26 @@ input {
 .load-more-sentinel {
   display: flex;
   justify-content: center;
+  min-height: 72px;
   padding: 28px 0 4px;
   color: #596373;
   font-weight: 700;
+}
+
+.infinite-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid #dfe4ec;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  padding: 10px 14px;
+  box-shadow: 0 14px 34px rgba(47, 56, 72, 0.08);
+}
+
+.infinite-loader svg {
+  color: #4e63ce;
+  animation: spin 0.9s linear infinite;
 }
 
 .topic-card,
