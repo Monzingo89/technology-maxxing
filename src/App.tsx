@@ -465,6 +465,7 @@ export default function App() {
   const [loadError, setLoadError] = useState("");
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState("All");
+  const [leaderboardTopic, setLeaderboardTopic] = useState("All topics");
   const [visibleTopics, setVisibleTopics] = useState(TOPICS_PAGE_SIZE);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const [progress, setProgress] = useState(loadProgress);
@@ -627,6 +628,27 @@ export default function App() {
         .slice(0, 20),
     [progress.topics, technologies],
   );
+
+  const leaderboardTopicOptions = useMemo(
+    () => ["All topics", ...topicLeaderboard.map((item) => item.technology?.name || item.id)],
+    [topicLeaderboard],
+  );
+
+  const visibleTopicLeaderboard = useMemo(
+    () =>
+      leaderboardTopic === "All topics"
+        ? topicLeaderboard
+        : topicLeaderboard.filter(
+            (item) => (item.technology?.name || item.id) === leaderboardTopic,
+          ),
+    [leaderboardTopic, topicLeaderboard],
+  );
+
+  useEffect(() => {
+    if (!leaderboardTopicOptions.includes(leaderboardTopic)) {
+      setLeaderboardTopic("All topics");
+    }
+  }, [leaderboardTopic, leaderboardTopicOptions]);
 
   const leaderboardHonors = useMemo(() => {
     const ranksByUser = new Map<string, number[]>();
@@ -1504,9 +1526,24 @@ export default function App() {
               )}
             </div>
           ) : topicLeaderboard.length ? (
-            <div className="leaderboard-list local-leaderboard-list">
-              {topicLeaderboard.map((item, index) => {
-                const honor = honorForRanks([index + 1]);
+            <>
+              <div
+                className="category-row leaderboard-topic-row"
+                aria-label="Group leaderboard by topic"
+              >
+                {leaderboardTopicOptions.map((topic) => (
+                  <button
+                    key={topic}
+                    className={topic === leaderboardTopic ? "selected" : ""}
+                    onClick={() => setLeaderboardTopic(topic)}
+                  >
+                    {topic}
+                  </button>
+                ))}
+              </div>
+              <div className="leaderboard-list local-leaderboard-list">
+                {visibleTopicLeaderboard.map((item, index) => {
+                  const honor = honorForRanks([index + 1]);
                 const localName = user?.displayName || user?.email || "You";
                 return (
                   <article key={item.id}>
@@ -1542,8 +1579,9 @@ export default function App() {
                     </div>
                   </article>
                 );
-              })}
-            </div>
+                })}
+              </div>
+            </>
           ) : (
             <p>Complete an assessment to seed your leaderboards.</p>
           )}
