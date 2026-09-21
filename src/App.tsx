@@ -1014,9 +1014,11 @@ export default function App() {
           {user ? (
             <div className="account-menu">
               <button
-                className="avatar-button"
+                className={`avatar-button honor-${accountHonor}`}
                 aria-haspopup="menu"
                 aria-expanded={accountOpen}
+                aria-label={`Account menu. ${honorLabel(accountHonor)}`}
+                title={honorLabel(accountHonor)}
                 onClick={() => setAccountOpen((current) => !current)}
               >
                 {user.photoURL ? (
@@ -1033,6 +1035,16 @@ export default function App() {
                       .toUpperCase()}
                   </span>
                 )}
+                {accountHonor !== "none" && accountHonor !== "bronze" ? (
+                  <span className="account-crown" aria-hidden="true">
+                    <Trophy size={22} />
+                    {accountHonor === "sapphire" ||
+                    accountHonor === "emerald" ||
+                    accountHonor === "ruby" ? (
+                      <i />
+                    ) : null}
+                  </span>
+                ) : null}
               </button>
               {accountOpen ? (
                 <div className="account-popover" role="menu">
