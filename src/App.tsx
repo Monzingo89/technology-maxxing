@@ -405,7 +405,6 @@ export default function App() {
   const [allowance, setAllowance] = useState<GuestAllowance | null>(null);
   const [quotaBusy, setQuotaBusy] = useState(false);
   const [quotaError, setQuotaError] = useState("");
-  const [cleanupError, setCleanupError] = useState("");
   const [assessmentBusy, setAssessmentBusy] = useState(false);
   const assessmentBusyRef = useRef(false);
   const activeRef = useRef<ActiveAssessment | null>(null);
@@ -452,13 +451,10 @@ export default function App() {
     }
   }
   async function removeGuestRecord() {
-    setCleanupError("");
     try {
       await clearGuestAllowance();
     } catch {
-      setCleanupError(
-        "You’re signed in, but your guest network record has not been removed yet. Retry to finish deleting it.",
-      );
+      // Keep guest cleanup retries silent; signed-in users should not see backend cleanup state.
     }
   }
   const [user, setUser] = useState<User | null>(null);
@@ -522,7 +518,6 @@ export default function App() {
         setAllowance(null);
         void removeGuestRecord();
       } else {
-        setCleanupError("");
         setAllowance(null);
         void refreshAllowance();
       }
@@ -1099,17 +1094,6 @@ export default function App() {
         </div>
       </header>
 
-      {cleanupError ? (
-        <p className="error" role="alert">
-          {cleanupError}{" "}
-          <button
-            className="small-button"
-            onClick={() => void removeGuestRecord()}
-          >
-            Retry deletion
-          </button>
-        </p>
-      ) : null}
       {quotaError ? (
         <p className="error" role="alert">
           {quotaError}{" "}
