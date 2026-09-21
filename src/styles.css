@@ -186,6 +186,7 @@ input {
 }
 
 .avatar-button {
+  position: relative;
   display: grid;
   place-items: center;
   width: var(--avatar-size);
@@ -195,7 +196,7 @@ input {
   background: #ffffff;
   color: #1d2530;
   box-shadow: 0 14px 34px rgba(47, 56, 72, 0.16);
-  overflow: hidden;
+  overflow: visible;
 }
 
 .avatar-button img,
@@ -203,6 +204,12 @@ input {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.avatar-button > img,
+.avatar-button > span:first-child {
+  border-radius: inherit;
+  overflow: hidden;
 }
 
 .avatar-button span,
@@ -326,7 +333,9 @@ input {
 }
 
 .quota-card {
+  min-width: 0;
   padding: 24px;
+  overflow: hidden;
 }
 
 .quota-card span {
@@ -337,10 +346,13 @@ input {
 
 .quota-card strong {
   display: block;
+  max-width: 100%;
   margin: 8px 0;
   font:
-    800 56px/1 "Manrope",
+    800 clamp(38px, 4.8vw, 48px) / 1 "Manrope",
     sans-serif;
+  letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
 }
 
 .panel {
@@ -667,7 +679,8 @@ input {
   background: linear-gradient(135deg, #1d2530, #c1763c);
 }
 
-.leaderboard-avatar > span:first-child {
+.leaderboard-avatar > span:first-child,
+.leaderboard-avatar > img {
   display: grid;
   place-items: center;
   width: 100%;
@@ -675,6 +688,7 @@ input {
   border-radius: inherit;
   font-weight: 800;
   letter-spacing: -0.04em;
+  object-fit: cover;
 }
 
 .leaderboard-avatar.honor-bronze {
@@ -684,7 +698,8 @@ input {
     0 14px 30px rgba(103, 65, 38, 0.25);
 }
 
-.leaderboard-crown {
+.leaderboard-crown,
+.account-crown {
   position: absolute;
   top: -15px;
   right: -8px;
@@ -694,20 +709,34 @@ input {
   height: 24px;
   color: #e7edf7;
   filter: drop-shadow(0 4px 5px rgba(29, 37, 48, 0.24));
+  pointer-events: none;
 }
 
-.leaderboard-avatar.honor-gold .leaderboard-crown {
+.account-crown {
+  top: -10px;
+  right: -7px;
+  width: 34px;
+  height: 28px;
+}
+
+.leaderboard-avatar.honor-gold .leaderboard-crown,
+.avatar-button.honor-gold .account-crown {
   color: #d4a017;
 }
 
 .leaderboard-avatar.honor-silver .leaderboard-crown,
 .leaderboard-avatar.honor-sapphire .leaderboard-crown,
 .leaderboard-avatar.honor-emerald .leaderboard-crown,
-.leaderboard-avatar.honor-ruby .leaderboard-crown {
+.leaderboard-avatar.honor-ruby .leaderboard-crown,
+.avatar-button.honor-silver .account-crown,
+.avatar-button.honor-sapphire .account-crown,
+.avatar-button.honor-emerald .account-crown,
+.avatar-button.honor-ruby .account-crown {
   color: #d7dde8;
 }
 
-.leaderboard-crown i {
+.leaderboard-crown i,
+.account-crown i {
   position: absolute;
   top: 9px;
   left: 50%;
@@ -720,12 +749,14 @@ input {
   box-shadow: 0 0 8px rgba(47, 111, 237, 0.7);
 }
 
-.leaderboard-avatar.honor-emerald .leaderboard-crown i {
+.leaderboard-avatar.honor-emerald .leaderboard-crown i,
+.avatar-button.honor-emerald .account-crown i {
   background: #14a36d;
   box-shadow: 0 0 8px rgba(20, 163, 109, 0.7);
 }
 
-.leaderboard-avatar.honor-ruby .leaderboard-crown i {
+.leaderboard-avatar.honor-ruby .leaderboard-crown i,
+.avatar-button.honor-ruby .account-crown i {
   background: #c5283d;
   box-shadow: 0 0 8px rgba(197, 40, 61, 0.72);
 }

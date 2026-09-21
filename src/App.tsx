@@ -493,7 +493,6 @@ export default function App() {
   const [liveLeaderboards, setLiveLeaderboards] = useState<
     Partial<Record<Category, LeaderboardEntry[]>>
   >({});
-  const [leaderboardError, setLeaderboardError] = useState("");
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}knowledge-index.json`)
@@ -549,12 +548,10 @@ export default function App() {
         id,
         (entries) => {
           setLiveLeaderboards((current) => ({ ...current, [id]: entries }));
-          setLeaderboardError("");
         },
-        () =>
-          setLeaderboardError(
-            "Live leaderboards could not load. Local assessment rankings are shown until they reconnect.",
-          ),
+        (error) => {
+          console.warn("Live leaderboard unavailable", id, error);
+        },
       ),
     );
     return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
@@ -663,6 +660,13 @@ export default function App() {
   const hasLiveLeaderboards = userLeaderboards.some(
     (board) => board.rows.length,
   );
+
+  const accountHonor = useMemo(() => {
+    if (!user) return "none" as LeaderboardHonor;
+    const liveRanks = leaderboardHonors.get(user.uid) || [];
+    if (liveRanks.length) return honorForRanks(liveRanks);
+    return topicLeaderboard.length ? honorForRanks([1]) : "none";
+  }, [leaderboardHonors, topicLeaderboard.length, user]);
 
   const rankedPapers = useMemo(
     () =>
@@ -1442,9 +1446,6 @@ export default function App() {
               Overall ELO {progress.overallElo}
             </div>
           </div>
-          {leaderboardError ? (
-            <p className="error">{leaderboardError}</p>
-          ) : null}
           {hasLiveLeaderboards ? (
             <div className="leaderboard-board-grid">
               {userLeaderboards.map((board) =>
@@ -1492,19 +1493,44 @@ export default function App() {
             </div>
           ) : topicLeaderboard.length ? (
             <div className="leaderboard-list local-leaderboard-list">
-              {topicLeaderboard.map((item, index) => (
-                <article key={item.id}>
-                  <strong>#{index + 1}</strong>
-                  <div>
-                    <h3>{item.technology?.name}</h3>
-                    <p>
-                      Local topic ELO {item.elo} · best{" "}
-                      {Math.round(item.bestScore * 100)}% · {item.attempts}{" "}
-                      attempts
-                    </p>
-                  </div>
-                </article>
-              ))}
+              {topicLeaderboard.map((item, index) => {
+                const honor = honorForRanks([index + 1]);
+                const localName = user?.displayName || user?.email || "You";
+                return (
+                  <article key={item.id}>
+                    <strong>#{index + 1}</strong>
+                    <div
+                      className={`leaderboard-avatar honor-${honor}`}
+                      aria-label={honorLabel(honor)}
+                      title={honorLabel(honor)}
+                    >
+                      {user?.photoURL ? (
+                        <img src={user.photoURL} alt="" referrerPolicy="no-referrer" />
+                      ) : (
+                        <span>{leaderboardInitials(localName)}</span>
+                      )}
+                      {honor !== "none" && honor !== "bronze" ? (
+                        <span className="leaderboard-crown" aria-hidden="true">
+                          <Trophy size={18} />
+                          {honor === "sapphire" ||
+                          honor === "emerald" ||
+                          honor === "ruby" ? (
+                            <i />
+                          ) : null}
+                        </span>
+                      ) : null}
+                    </div>
+                    <div>
+                      <h4>{localName}</h4>
+                      <p>
+                        {item.technology?.name} · Local topic ELO {item.elo} ·
+                        best {Math.round(item.bestScore * 100)}% · {item.attempts}{" "}
+                        attempts
+                      </p>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           ) : (
             <p>Complete an assessment to seed your leaderboards.</p>
