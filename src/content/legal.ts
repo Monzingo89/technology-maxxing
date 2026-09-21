@@ -50,7 +50,7 @@ export const termsSections: LegalSection[] = [
   },
   {
     title: "Assessments and fair use",
-    body: "Assessments normally contain 10 focused randomized questions with 20 seconds per question, a 10-minute overall limit, and a 70% passing score. A failed assessment locks that topic for five days in the current browser. Local topic scores and retake history are learning aids; connected leaderboard scores, ELO values, and badge ranks are public app rankings but are not independently verified credentials. Do not manipulate results, submit abusive traffic, interfere with other users, attempt unauthorized access, or introduce malicious code. We may restrict access reasonably to protect the service and its users; contact support if you believe a restriction is mistaken.",
+    body: "Assessments normally contain 5 focused randomized questions with 20 seconds per question, a 10-minute overall limit, and a 70% passing score. A failed assessment locks that topic for five days in the current browser. Local topic scores and retake history are learning aids; connected leaderboard scores, ELO values, and badge ranks are public app rankings but are not independently verified credentials. Do not manipulate results, submit abusive traffic, interfere with other users, attempt unauthorized access, or introduce malicious code. We may restrict access reasonably to protect the service and its users; contact support if you believe a restriction is mistaken.",
   },
   {
     title: "Educational content and research papers",

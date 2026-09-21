@@ -95,7 +95,7 @@ type ActiveAssessment = {
 
 const GUEST_LIMIT = 5;
 const guestAccessUnavailable = !firebaseReady && !import.meta.env.DEV;
-const ASSESSMENT_QUESTION_COUNT = 10;
+const ASSESSMENT_QUESTION_COUNT = 5;
 const QUESTION_SECONDS = 20;
 const TOTAL_MINUTES = 10;
 const PASS_RATE = 0.7;
@@ -1167,8 +1167,8 @@ export default function App() {
             <p className="eyebrow">IoT knowledge assessments</p>
             <h1>Prove what you know, topic by topic.</h1>
             <p>
-              Every assessment is a 10-question multiple-choice run from a
-              larger bank. Questions are randomized per user, capped at 20
+              Every assessment is a 5-question multiple-choice run from a
+              focused bank. Questions are randomized per user, capped at 20
               seconds each, and failed attempts lock that topic for 5 days.
             </p>
           </div>
@@ -1299,8 +1299,7 @@ export default function App() {
             <div>
               <h2>Assessments</h2>
               <p>
-                10 harder randomized questions. 20 seconds per question. 70%
-                passes.
+                5 hard focused questions. 20 seconds per question. 70% passes.
               </p>
             </div>
             {!user && guestCompleted >= GUEST_LIMIT ? (

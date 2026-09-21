@@ -75,7 +75,7 @@ const categories = Object.entries(data.cats).map(([id, category]) => ({
   id,
   name: asText(category.name),
 }));
-const ASSESSMENT_QUESTION_COUNT = 10;
+const ASSESSMENT_QUESTION_COUNT = 5;
 const technologies = Object.entries(data.tech)
   .map(([id, item]) => {
     if (!/^[a-z0-9][a-z0-9_-]*$/.test(id))
@@ -170,8 +170,15 @@ const firstSentence = (value, fallback) => {
   const text = asText(value).replace(/\s+/g, " ").trim();
   return text.split(/(?<=[.!?])\s+/)[0]?.replace(/[.!?]$/, "") || fallback;
 };
+const compact = (value, fallback, limit = 150) => {
+  const text = firstSentence(value, fallback).replace(/\s+/g, " ").trim();
+  return text.length <= limit ? text : `${text.slice(0, limit - 1).trim()}…`;
+};
+const optionText = (value, fallback) => compact(value, fallback, 170);
 const distractors = (correct, pool, count = 3) => {
-  const options = unique(pool).filter((item) => item !== correct);
+  const options = unique(pool.map((item) => optionText(item, ""))).filter(
+    (item) => item && item !== correct,
+  );
   const generic = [
     "It is mainly a consumer payment network",
     "It is primarily a desktop image editor",
@@ -181,13 +188,16 @@ const distractors = (correct, pool, count = 3) => {
   while (options.length < count) options.push(generic[options.length % generic.length]);
   return options.slice(0, count);
 };
-const mcq = (id, question, correct, pool, explanation) => ({
-  id,
-  question,
-  options: unique([correct, ...distractors(correct, pool)]).slice(0, 4),
-  answerIndex: 0,
-  explanation: explanation || correct,
-});
+const mcq = (id, question, correctValue, pool, explanation) => {
+  const correct = optionText(correctValue, correctValue);
+  return {
+    id,
+    question,
+    options: unique([correct, ...distractors(correct, pool)]).slice(0, 4),
+    answerIndex: 0,
+    explanation: compact(explanation || correct, correct, 220),
+  };
+};
 const fitOptions = (correct, options, pool) =>
   unique([correct, ...options, ...distractors(correct, pool)]).slice(0, 4);
 const normalizeAuthoredQuestion = (question, index) => {
@@ -200,138 +210,116 @@ const normalizeAuthoredQuestion = (question, index) => {
     explanation: question.explanation,
   };
 };
-const focusedPrompt = (name, prompt) =>
-  prompt.endsWith("?") ? prompt : `For ${name}, ${prompt}`;
+const relationOption = (name, relationship) =>
+  `${name} — ${relationLabels[relationship] || relationship}`;
 function buildAssessmentBank(technology, allTechnologies) {
   const t = technology;
   const sameCategory = allTechnologies.filter(
     (item) => item.id !== t.id && item.category === t.category,
   );
   const otherTopics = allTechnologies.filter((item) => item.id !== t.id);
-  const categoryPool = unique(categories.map((item) => item.name));
-  const topicNamePool = unique(otherTopics.map((item) => item.name));
-  const tagPool = unique(otherTopics.map((item) => item.tag));
-  const whyPool = unique(otherTopics.map((item) => firstSentence(item.why, item.tag)));
-  const bornPool = unique(otherTopics.map((item) => item.born));
-  const sameCategoryPool = unique(sameCategory.map((item) => item.name));
-  const relatedPool = unique(t.related.map((item) => item.name));
-  const challengePool = unique(otherTopics.flatMap((item) => item.challenges));
+  const comparisonPool = sameCategory.length >= 3 ? sameCategory : otherTopics;
+  const tagPool = unique(comparisonPool.map((item) => item.tag || item.why));
+  const whyPool = unique(comparisonPool.map((item) => item.why || item.tag));
+  const problemPool = unique(comparisonPool.map((item) => item.problemItSolves || item.why || item.tag));
+  const historyPool = unique(comparisonPool.map((item) => item.history || item.born || item.tag));
   const docsPool = unique(
     otherTopics.flatMap((item) =>
       item.docs.map((doc) => {
         try {
-          return new URL(doc.url).hostname;
+          return `${doc.label || new URL(doc.url).hostname} (${new URL(doc.url).hostname})`;
         } catch {
-          return "";
+          return doc.label || "";
         }
       }),
     ),
   );
-  const correctDocHost = t.docs[0] ? new URL(t.docs[0].url).hostname : "official documentation";
-  const challengeQuestions = t.challenges.slice(0, 5).map((challenge, index) =>
-    mcq(
-      `challenge-${index}`,
-      `Which task would best prove practical knowledge of ${t.name} in scenario ${index + 1}?`,
-      challenge,
-      challengePool,
-      challenge,
+  const ownDoc = t.docs[0]
+    ? `${t.docs[0].label || new URL(t.docs[0].url).hostname} (${new URL(t.docs[0].url).hostname})`
+    : "";
+  const relatedOptions = t.related.map((item) => relationOption(item.name, item.relationship));
+  const relatedPool = unique(
+    otherTopics.flatMap((item) =>
+      item.related.map((related) => relationOption(related.name, related.relationship)),
     ),
   );
-  const practiceQuestions = t.practiceChallenges.slice(0, 3).map((challenge, index) => {
-    const correct = focusedPrompt(t.name, challenge.prompt);
-    const pool = unique(
-      otherTopics.flatMap((item) =>
-        item.practiceChallenges.map((itemChallenge) =>
-          focusedPrompt(item.name, itemChallenge.prompt),
-        ),
-      ),
-    );
-    return mcq(
-      `practice-scenario-${index}`,
-      `Which scenario is the most focused ${t.name} practice task at level ${challenge.level || index + 1}?`,
-      correct,
-      pool,
-      correct,
-    );
-  });
-  const relatedQuestions = t.related.slice(0, 3).map((item, index) =>
-    mcq(
-      `related-${index}`,
-      `In the IoT map, which topic is most directly connected to ${t.name} as "${relationLabels[item.relationship] || item.relationship}"?`,
-      item.name,
-      topicNamePool,
-      `${item.name} is connected to ${t.name}.`,
-    ),
-  );
+  const challengePool = unique(comparisonPool.flatMap((item) => item.challenges));
+  const ownChallenge = t.challenges[0] || t.practiceChallenges[0]?.prompt || t.tag || t.why;
+  const sourceOrPractice = ownDoc && docsPool.length >= 3
+    ? mcq(
+        "source",
+        `Which linked source should you check first for ${t.name}?`,
+        ownDoc,
+        docsPool,
+        `The catalog links ${t.name} to ${ownDoc}.`,
+      )
+    : mcq(
+        "exercise",
+        `Which hands-on exercise specifically fits ${t.name}?`,
+        ownChallenge,
+        challengePool,
+        ownChallenge,
+      );
+  const relationshipOrPractice = relatedOptions.length
+    ? mcq(
+        "relationship",
+        `Which catalog relationship is correct for ${t.name}?`,
+        relatedOptions[0],
+        relatedPool,
+        relatedOptions[0],
+      )
+    : mcq(
+        "practice",
+        `Which second exercise specifically fits ${t.name}?`,
+        t.challenges[1] || t.practiceChallenges[1]?.prompt || ownChallenge,
+        challengePool,
+        t.challenges[1] || t.practiceChallenges[1]?.prompt || ownChallenge,
+      );
   const questions = [
-    ...t.questionBank.map(normalizeAuthoredQuestion).slice(0, 2),
-    ...challengeQuestions,
-    ...practiceQuestions,
     mcq(
-      "why",
-      `Which reason best explains when ${t.name} is worth learning?`,
-      firstSentence(t.why, t.tag),
-      whyPool,
-      t.why,
-    ),
-    mcq(
-      "history",
-      `Which technical background note belongs to ${t.name}?`,
-      firstSentence(t.history, t.tag),
-      whyPool,
-      t.history,
-    ),
-    mcq(
-      "docs",
-      `Which source is the best first check for ${t.name}?`,
-      correctDocHost,
-      docsPool,
-      `The catalog links ${t.name} to ${correctDocHost}.`,
-    ),
-    ...relatedQuestions,
-    mcq(
-      "category",
-      `Which category best frames ${t.name} in the IoT library?`,
-      t.category,
-      categoryPool,
-      `${t.name} is listed under ${t.category}.`,
-    ),
-    mcq(
-      "tag",
-      `Which focused description best matches ${t.name}?`,
-      t.tag || firstSentence(t.why, t.name),
+      "role",
+      `Which statement best matches the primary role of ${t.name}?`,
+      t.tag || t.why,
       tagPool,
       t.tag || t.why,
     ),
+    mcq(
+      "problem",
+      `What problem is ${t.name} mainly used to address?`,
+      t.problemItSolves || t.why || t.tag,
+      problemPool,
+      t.problemItSolves || t.why || t.tag,
+    ),
+    mcq(
+      "history",
+      `Which background note belongs to ${t.name}?`,
+      t.history || t.born || t.tag,
+      historyPool,
+      t.history || t.born || t.tag,
+    ),
+    sourceOrPractice,
+    relationshipOrPractice,
   ];
-  const fallback = relatedPool.length
-    ? relatedPool
-    : sameCategoryPool.length
-      ? sameCategoryPool
-      : topicNamePool;
-  for (let index = 0; questions.length < ASSESSMENT_QUESTION_COUNT; index += 1) {
-    const correct = fallback[index % fallback.length] || t.name;
-    questions.push(
-      mcq(
-        `concept-${index}`,
-        `Which connected concept is most relevant to ${t.name}?`,
-        correct,
-        topicNamePool,
-        `${correct} is relevant to ${t.name} in the catalog context.`,
-      ),
-    );
+  for (const question of t.questionBank.map(normalizeAuthoredQuestion)) {
+    const replaceIndex = questions.findIndex((item) => item.id === "practice" || item.id === "relationship");
+    if (replaceIndex >= 0 && !questions.some((item) => item.question === question.question)) {
+      questions[replaceIndex] = question;
+      break;
+    }
   }
-  const byPrompt = new Map();
-  for (const question of questions) {
-    const promptKey = question.question.replace(/\s+/g, " ").trim().toLowerCase();
-    if (!byPrompt.has(promptKey)) byPrompt.set(promptKey, question);
-  }
-  const bank = Array.from(byPrompt.values())
-    .slice(0, ASSESSMENT_QUESTION_COUNT)
-    .map((question, index) => ({ ...question, id: `${t.id}-${index + 1}` }));
+  const bank = questions.slice(0, ASSESSMENT_QUESTION_COUNT).map((question, index) => ({
+    ...question,
+    id: `${t.id}-${index + 1}`,
+  }));
   const prompts = new Set(bank.map((question) => question.question));
   if (prompts.size !== bank.length)
     throw new Error(`Assessment bank for ${t.id} contains repeated prompts.`);
+  for (const question of bank) {
+    if (question.options.length !== 4)
+      throw new Error(`Assessment question ${question.id} does not have four options.`);
+    if (/scenario \d+|best prove practical knowledge/i.test(question.question))
+      throw new Error(`Assessment question ${question.id} still uses scenario filler.`);
+  }
   return bank;
 }
 const assessmentBanks = Object.fromEntries(
@@ -388,7 +376,7 @@ for (const technology of technologies) {
         : "";
     })
     .join("");
-  const content = `<p class="eyebrow">${esc(t.category)} / Knowledge library</p><h1>${esc(t.name)}</h1>${t.tag ? `<p class="lede">${esc(t.tag)}</p>` : ""}<p class="meta">${esc(t.born)}</p><h2>Why learn ${esc(t.name)}?</h2><p>${esc(t.why)}</p>${t.problemItSolves && t.problemItSolves !== t.why ? `<h2>The problem it solves</h2><p>${esc(t.problemItSolves)}</p>` : ""}<h2>Where it came from</h2><p>${esc(t.history)}</p>${t.historyNotes.length ? `<ul>${t.historyNotes.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${t.challenges.length ? `<h2>Build your understanding</h2><p>Work through these exercises in order. Try the task before opening a reference.</p><ol>${t.challenges.map((challenge) => `<li>${esc(challenge)}</li>`).join("")}</ol>` : ""}${t.practiceChallenges.length ? `<h2>More ways to practice</h2><div class="grid">${t.practiceChallenges.map((challenge) => `<article class="card"><small>Level ${esc(challenge.level)}</small><h3>${esc(challenge.title)}</h3><p>${esc(challenge.prompt)}</p></article>`).join("")}</div>` : ""}${t.docs.length ? `<h2>Documentation and sources</h2><ul>${t.docs.map((doc) => `<li><a href="${esc(doc.url)}" rel="noopener noreferrer">${esc(doc.label)}</a> <small>(${esc(new URL(doc.url).hostname)})</small></li>`).join("")}</ul>` : ""}${t.latestChanges.length ? `<h2>Catalog research notes</h2><ul>${t.latestChanges.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${relatedGroups ? `<h2>Connect the ideas</h2>${relatedGroups}` : ""}<aside class="callout"><h2>Test your knowledge.</h2><p>Study this topic, then return to AI Space for a timed 10-question assessment and ELO tracking.</p><a href="../../">Take an assessment →</a></aside><p class="meta">Catalog source: <a href="https://github.com/Monzingo89/technology-maxxing">technology-maxxing</a>. This page reproduces the existing catalog’s learning material and source links.</p>`;
+  const content = `<p class="eyebrow">${esc(t.category)} / Knowledge library</p><h1>${esc(t.name)}</h1>${t.tag ? `<p class="lede">${esc(t.tag)}</p>` : ""}<p class="meta">${esc(t.born)}</p><h2>Why learn ${esc(t.name)}?</h2><p>${esc(t.why)}</p>${t.problemItSolves && t.problemItSolves !== t.why ? `<h2>The problem it solves</h2><p>${esc(t.problemItSolves)}</p>` : ""}<h2>Where it came from</h2><p>${esc(t.history)}</p>${t.historyNotes.length ? `<ul>${t.historyNotes.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${t.challenges.length ? `<h2>Build your understanding</h2><p>Work through these exercises in order. Try the task before opening a reference.</p><ol>${t.challenges.map((challenge) => `<li>${esc(challenge)}</li>`).join("")}</ol>` : ""}${t.practiceChallenges.length ? `<h2>More ways to practice</h2><div class="grid">${t.practiceChallenges.map((challenge) => `<article class="card"><small>Level ${esc(challenge.level)}</small><h3>${esc(challenge.title)}</h3><p>${esc(challenge.prompt)}</p></article>`).join("")}</div>` : ""}${t.docs.length ? `<h2>Documentation and sources</h2><ul>${t.docs.map((doc) => `<li><a href="${esc(doc.url)}" rel="noopener noreferrer">${esc(doc.label)}</a> <small>(${esc(new URL(doc.url).hostname)})</small></li>`).join("")}</ul>` : ""}${t.latestChanges.length ? `<h2>Catalog research notes</h2><ul>${t.latestChanges.map((note) => `<li>${esc(note)}</li>`).join("")}</ul>` : ""}${relatedGroups ? `<h2>Connect the ideas</h2>${relatedGroups}` : ""}<aside class="callout"><h2>Test your knowledge.</h2><p>Study this topic, then return to AI Space for a timed 5-question assessment and ELO tracking.</p><a href="../../">Take an assessment →</a></aside><p class="meta">Catalog source: <a href="https://github.com/Monzingo89/technology-maxxing">technology-maxxing</a>. This page reproduces the existing catalog’s learning material and source links.</p>`;
   const directory = path.join(out, "learn", t.id);
   fs.mkdirSync(directory, { recursive: true });
   fs.writeFileSync(
