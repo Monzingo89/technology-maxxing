@@ -24,6 +24,7 @@ import {
   signInEmail,
   signInGoogle,
   signUpEmail,
+  watchLeaderboard,
 } from "./services/firebase";
 import {
   clearGuestAllowance,
@@ -33,6 +34,7 @@ import {
   type GuestAllowance,
 } from "./services/guest";
 import { legalVersion, privacySections, termsSections } from "./content/legal";
+import type { Category, LeaderboardEntry } from "./services/types";
 
 type View =
   "library" | "assessments" | "papers" | "leaderboards" | "privacy" | "terms";
@@ -204,6 +206,17 @@ const HALL_OF_FAME_PAPERS = [
 ];
 const TOPICS_PAGE_SIZE = 48;
 
+const LIVE_LEADERBOARD_CATEGORIES: { id: Category; label: string }[] = [
+  { id: "foundations", label: "Foundations" },
+  { id: "prompting", label: "Prompting" },
+  { id: "agents", label: "Agents" },
+  { id: "models", label: "Models" },
+  { id: "safety", label: "Safety" },
+];
+
+type LeaderboardHonor =
+  "none" | "bronze" | "silver" | "gold" | "sapphire" | "emerald" | "ruby";
+
 const initialProgress: Progress = {
   guestCount: 0,
   overallElo: 1000,
@@ -335,6 +348,49 @@ function updateElo(current: number, passed: boolean, scoreRate: number) {
   return Math.round(current + 48 * (result - expected));
 }
 
+function leaderboardInitials(username: string) {
+  return (
+    username
+      .split(/[^a-z0-9]+/i)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "U"
+  );
+}
+
+function honorForRanks(ranks: number[]): LeaderboardHonor {
+  const firsts = ranks.filter((rank) => rank === 1).length;
+  const topTwos = ranks.filter((rank) => rank <= 2).length;
+  const topThrees = ranks.filter((rank) => rank <= 3).length;
+  if (firsts > 1) return "ruby";
+  if (topTwos > 1) return "emerald";
+  if (topThrees > 1) return "sapphire";
+  if (firsts === 1) return "gold";
+  if (topTwos === 1) return "silver";
+  if (topThrees === 1) return "bronze";
+  return "none";
+}
+
+function honorLabel(honor: LeaderboardHonor) {
+  switch (honor) {
+    case "ruby":
+      return "Multi-category first place: silver crown with ruby";
+    case "emerald":
+      return "Top two in multiple leaderboards: silver crown with emerald";
+    case "sapphire":
+      return "Top three in multiple leaderboards: silver crown with sapphire";
+    case "gold":
+      return "First place: gold crown";
+    case "silver":
+      return "Top two: silver crown";
+    case "bronze":
+      return "Top three: bronze avatar highlight";
+    default:
+      return "Leaderboard user";
+  }
+}
+
 export default function App() {
   const [view, updateView] = useState<View>(readView);
   const setView = (next: View) => {
@@ -432,6 +488,10 @@ export default function App() {
   const [authError, setAuthError] = useState("");
   const [authBusy, setAuthBusy] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [liveLeaderboards, setLiveLeaderboards] = useState<
+    Partial<Record<Category, LeaderboardEntry[]>>
+  >({});
+  const [leaderboardError, setLeaderboardError] = useState("");
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}knowledge-index.json`)
@@ -480,6 +540,24 @@ export default function App() {
     const timer = window.setInterval(() => setNow(Date.now()), 500);
     return () => window.clearInterval(timer);
   }, [active]);
+
+  useEffect(() => {
+    if (!firebaseReady) return;
+    const unsubscribers = LIVE_LEADERBOARD_CATEGORIES.map(({ id }) =>
+      watchLeaderboard(
+        id,
+        (entries) => {
+          setLiveLeaderboards((current) => ({ ...current, [id]: entries }));
+          setLeaderboardError("");
+        },
+        () =>
+          setLeaderboardError(
+            "Live leaderboards could not load. Local assessment rankings are shown until they reconnect.",
+          ),
+      ),
+    );
+    return () => unsubscribers.forEach((unsubscribe) => unsubscribe());
+  }, []);
 
   useEffect(() => {
     if (!active) return;
@@ -552,6 +630,39 @@ export default function App() {
     [progress.topics, technologies],
   );
 
+  const leaderboardHonors = useMemo(() => {
+    const ranksByUser = new Map<string, number[]>();
+    LIVE_LEADERBOARD_CATEGORIES.forEach(({ id }) => {
+      (liveLeaderboards[id] || []).slice(0, 3).forEach((entry, index) => {
+        ranksByUser.set(entry.uid, [
+          ...(ranksByUser.get(entry.uid) || []),
+          index + 1,
+        ]);
+      });
+    });
+    return ranksByUser;
+  }, [liveLeaderboards]);
+
+  const userLeaderboards = useMemo(
+    () =>
+      LIVE_LEADERBOARD_CATEGORIES.map(({ id, label }) => ({
+        id,
+        label,
+        rows: (liveLeaderboards[id] || []).slice(0, 10).map((entry, index) => ({
+          ...entry,
+          rank: index + 1,
+          category: id,
+          categoryLabel: label,
+          honor: honorForRanks(leaderboardHonors.get(entry.uid) || []),
+        })),
+      })),
+    [leaderboardHonors, liveLeaderboards],
+  );
+
+  const hasLiveLeaderboards = userLeaderboards.some(
+    (board) => board.rows.length,
+  );
+
   const rankedPapers = useMemo(
     () =>
       HALL_OF_FAME_PAPERS.map((paper) => ({
@@ -606,10 +717,9 @@ export default function App() {
         guestAttempt = { attemptId: status.attemptId, receipt: status.receipt };
       }
       const seed = `${userRef.current?.uid || "guest"}:${item.id}:${Date.now()}`;
-      const questions = selectAssessmentQuestions(bank, seed)
-        .map((question, index) =>
-          shuffleQuestion(question, `${seed}:${index}`),
-        );
+      const questions = selectAssessmentQuestions(bank, seed).map(
+        (question, index) => shuffleQuestion(question, `${seed}:${index}`),
+      );
       const next = {
         technology: item,
         questions,
@@ -872,7 +982,11 @@ export default function App() {
                 onClick={() => setAccountOpen((current) => !current)}
               >
                 {user.photoURL ? (
-                  <img src={user.photoURL} alt="" referrerPolicy="no-referrer" />
+                  <img
+                    src={user.photoURL}
+                    alt=""
+                    referrerPolicy="no-referrer"
+                  />
                 ) : (
                   <span>
                     {(user.displayName || user.email || "A")
@@ -1300,8 +1414,8 @@ export default function App() {
             <div>
               <h2>Leaderboards</h2>
               <p>
-                Local ELO is live now. Once accounts are connected, these same
-                fields can back overall and per-topic global boards.
+                See the top users by category. Crown badges update from rank
+                across all live leaderboards.
               </p>
             </div>
             <div className="elo-pill">
@@ -1309,24 +1423,73 @@ export default function App() {
               Overall ELO {progress.overallElo}
             </div>
           </div>
-          <div className="leaderboard-list">
-            {topicLeaderboard.length ? (
-              topicLeaderboard.map((item, index) => (
+          {leaderboardError ? (
+            <p className="error">{leaderboardError}</p>
+          ) : null}
+          {hasLiveLeaderboards ? (
+            <div className="leaderboard-board-grid">
+              {userLeaderboards.map((board) =>
+                board.rows.length ? (
+                  <section className="leaderboard-board" key={board.id}>
+                    <h3>{board.label}</h3>
+                    <div className="leaderboard-list">
+                      {board.rows.map((item) => (
+                        <article key={`${board.id}-${item.uid}`}>
+                          <strong>#{item.rank}</strong>
+                          <div
+                            className={`leaderboard-avatar ${item.house} honor-${item.honor}`}
+                            aria-label={honorLabel(item.honor)}
+                            title={honorLabel(item.honor)}
+                          >
+                            <span>{leaderboardInitials(item.username)}</span>
+                            {item.honor !== "none" &&
+                            item.honor !== "bronze" ? (
+                              <span
+                                className="leaderboard-crown"
+                                aria-hidden="true"
+                              >
+                                <Trophy size={18} />
+                                {item.honor === "sapphire" ||
+                                item.honor === "emerald" ||
+                                item.honor === "ruby" ? (
+                                  <i />
+                                ) : null}
+                              </span>
+                            ) : null}
+                          </div>
+                          <div>
+                            <h4>{item.username}</h4>
+                            <p>
+                              Score {item.score} · ELO {item.elo} · knowledge{" "}
+                              {item.knowledge} · {item.rounds} rounds
+                            </p>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                ) : null,
+              )}
+            </div>
+          ) : topicLeaderboard.length ? (
+            <div className="leaderboard-list local-leaderboard-list">
+              {topicLeaderboard.map((item, index) => (
                 <article key={item.id}>
                   <strong>#{index + 1}</strong>
                   <div>
                     <h3>{item.technology?.name}</h3>
                     <p>
-                      ELO {item.elo} · best {Math.round(item.bestScore * 100)}%
-                      · {item.attempts} attempts
+                      Local topic ELO {item.elo} · best{" "}
+                      {Math.round(item.bestScore * 100)}% · {item.attempts}{" "}
+                      attempts
                     </p>
                   </div>
                 </article>
-              ))
-            ) : (
-              <p>Complete an assessment to seed your leaderboards.</p>
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <p>Complete an assessment to seed your leaderboards.</p>
+          )}
         </section>
       ) : null}
 
