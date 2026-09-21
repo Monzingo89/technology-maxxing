@@ -19,7 +19,7 @@ export const privacySections: LegalSection[] = [
   },
   {
     title: "Accounts and information you send us",
-    body: "If you create an account, Google Firebase Authentication processes your email address, account identifier, credentials, and authentication/security information. Google sign-in can provide your name, email, and profile image to the authentication service. Passwords are handled by Firebase Authentication and are not stored in assessment progress or paper votes. If you email a paper submission, support question, or privacy request, we receive the message, your email address, and any information you include, and use them to respond or review the submission. Please do not include sensitive information that is unnecessary for your request.",
+    body: "If you create an account, Google Firebase Authentication processes your email address, account identifier, credentials, and authentication/security information. Google sign-in can provide your name, email, and profile image to the authentication service. Passwords are handled by Firebase Authentication and are not stored in assessment progress or paper votes. If you submit a paper link, support question, or privacy request, we receive the message or link, your account identifier or email address where applicable, and any information you include, and use them to respond or review the submission. Please do not include sensitive information that is unnecessary for your request.",
   },
   {
     title: "Browser storage and current data use",

@@ -40,29 +40,42 @@ const options = {
   memory: "256MiB",
 };
 const guestIpHashKey = defineSecret("GUEST_IP_HASH_KEY");
-const guestCallable = (operation) => onCall(
-  { ...options, secrets: [guestIpHashKey] },
-  async (request) => {
+const resendApiKey = defineSecret("RESEND_API_KEY");
+const guestCallable = (operation) =>
+  onCall({ ...options, secrets: [guestIpHashKey] }, async (request) => {
     try {
       if (operation !== "clear" && request.auth)
-        throw new HttpsError("failed-precondition", "Signed-in members do not need a guest allowance.");
+        throw new HttpsError(
+          "failed-precondition",
+          "Signed-in members do not need a guest allowance.",
+        );
       const quota = createGuestQuota({ db, secret: guestIpHashKey.value() });
-      const ip = requestIp(request.rawRequest, process.env.FUNCTIONS_EMULATOR === "true");
+      const ip = requestIp(
+        request.rawRequest,
+        process.env.FUNCTIONS_EMULATOR === "true",
+      );
       const data = request.data || {};
       if (operation === "clear")
-        return await quota.clear(ip, data.receipt, request.auth, (uid) => getAuth().getUser(uid));
+        return await quota.clear(ip, data.receipt, request.auth, (uid) =>
+          getAuth().getUser(uid),
+        );
       if (operation === "start") return await quota.start(ip, data.attemptId);
-      if (operation === "complete") return await quota.complete(ip, data.attemptId, data.receipt);
+      if (operation === "complete")
+        return await quota.complete(ip, data.attemptId, data.receipt);
       return await quota.get(ip);
     } catch (error) {
       if (error instanceof HttpsError) throw error;
-      if (error instanceof GuestQuotaError) throw new HttpsError(error.code, error.message, error.details);
-      if (error?.code === "auth/user-not-found") throw new HttpsError("unauthenticated", "Sign in again to continue.");
+      if (error instanceof GuestQuotaError)
+        throw new HttpsError(error.code, error.message, error.details);
+      if (error?.code === "auth/user-not-found")
+        throw new HttpsError("unauthenticated", "Sign in again to continue.");
       // No request bodies, IP addresses, or quota identifiers in application logs.
-      throw new HttpsError("unavailable", "Guest assessment access could not be checked. Please retry.");
+      throw new HttpsError(
+        "unavailable",
+        "Guest assessment access could not be checked. Please retry.",
+      );
     }
-  },
-);
+  });
 export const getGuestAllowance = guestCallable("status");
 export const startGuestAssessment = guestCallable("start");
 export const completeGuestAssessment = guestCallable("complete");
@@ -107,6 +120,60 @@ const callable = (handler, verified = true) =>
       );
     }
   });
+
+function paperUrl(value) {
+  const text = cleanText(value, 12, 1000);
+  let parsed;
+  try {
+    parsed = new URL(text);
+  } catch {
+    throw new InputError("Paste a valid paper link.");
+  }
+  requireValue(
+    ["http:", "https:"].includes(parsed.protocol),
+    "Paper link must start with http or https.",
+  );
+  return parsed.toString();
+}
+
+async function emailPaperSubmission({
+  url,
+  username,
+  uid,
+  email,
+  submissionId,
+}) {
+  let key = "";
+  try {
+    key = resendApiKey.value();
+  } catch {
+    return false;
+  }
+  if (!key) return false;
+  const response = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${key}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "AI Space <onboarding@resend.dev>",
+      to: ["robertjmonzingo@gmail.com"],
+      subject: "AI Space paper submission",
+      text: [
+        "A user submitted a paper link from AI Space.",
+        "",
+        `Paper URL: ${url}`,
+        `Username: ${username}`,
+        `User ID: ${uid}`,
+        email ? `Account email: ${email}` : "Account email: unavailable",
+        `Submission ID: ${submissionId}`,
+      ].join("\n"),
+    }),
+  });
+  if (!response.ok) throw new Error("Paper submission email failed.");
+  return true;
+}
 
 async function member(uid) {
   const profile = await ref("profiles", uid).get();
@@ -320,7 +387,7 @@ export const answerDailyQuiz = callable(async (uid, data) => {
       tx.set(ranking, {
         ...rating,
         uid,
-        username: profile.username,
+        username,
         house: profile.house,
         updatedAt: now,
       });
@@ -500,6 +567,66 @@ export const reportContent = callable(async (uid, data) => {
   });
   return { reportId: target.id };
 });
+
+export const submitPaper = onCall(
+  { ...options, secrets: [resendApiKey] },
+  async (request) => {
+    if (!request.auth)
+      throw new HttpsError("unauthenticated", "Sign in to submit a paper.");
+    try {
+      const uid = request.auth.uid;
+      await rateLimit(uid, "paperSubmission", 5, DAY);
+      const url = paperUrl(request.data?.url);
+      const username = cleanText(
+        request.auth.token.name ||
+          request.auth.token.email?.split("@")[0] ||
+          "Signed-in user",
+        3,
+        80,
+      );
+      const target = db.collection("paperSubmissions").doc();
+      const submission = {
+        id: target.id,
+        uid,
+        username,
+        email: request.auth.token.email || null,
+        url,
+        status: "submitted",
+        emailed: false,
+        createdAt: Date.now(),
+      };
+      await target.create(submission);
+      const emailed = await emailPaperSubmission({
+        url,
+        username,
+        uid,
+        email: request.auth.token.email || "",
+        submissionId: target.id,
+      });
+      if (emailed)
+        await target.update({ emailed: true, emailedAt: Date.now() });
+      return {
+        submissionId: target.id,
+        emailed,
+        message: emailed
+          ? "Paper submitted and emailed to Robert."
+          : "Paper submitted for review. Email delivery is not configured yet.",
+      };
+    } catch (error) {
+      if (error instanceof InputError)
+        throw new HttpsError("invalid-argument", error.message);
+      if (error instanceof HttpsError) throw error;
+      // The paper URL and account email are intentionally omitted from logs.
+      console.error("AI Space paper submission failed", {
+        code: error?.code || "unknown",
+      });
+      throw new HttpsError(
+        "internal",
+        "The paper could not be submitted. Please retry.",
+      );
+    }
+  },
+);
 
 export const publishGallery = callable(async (uid, data) => {
   const profile = await member(uid);

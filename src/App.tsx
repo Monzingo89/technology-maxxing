@@ -24,6 +24,7 @@ import {
   signInEmail,
   signInGoogle,
   signUpEmail,
+  submitPaper,
   watchLeaderboard,
 } from "./services/firebase";
 import {
@@ -488,6 +489,11 @@ export default function App() {
   const [authError, setAuthError] = useState("");
   const [authBusy, setAuthBusy] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [paperModalOpen, setPaperModalOpen] = useState(false);
+  const [paperUrl, setPaperUrl] = useState("");
+  const [paperSubmitBusy, setPaperSubmitBusy] = useState(false);
+  const [paperSubmitError, setPaperSubmitError] = useState("");
+  const [paperSubmitMessage, setPaperSubmitMessage] = useState("");
   const [liveLeaderboards, setLiveLeaderboards] = useState<
     Partial<Record<Category, LeaderboardEntry[]>>
   >({});
@@ -920,6 +926,39 @@ export default function App() {
       ...current,
       [id]: current[id] === value ? 0 : value,
     }));
+  }
+
+  async function submitPaperLink(event: FormEvent) {
+    event.preventDefault();
+    setPaperSubmitError("");
+    setPaperSubmitMessage("");
+    const url = paperUrl.trim();
+    if (!url) {
+      setPaperSubmitError("Paste a paper link first.");
+      return;
+    }
+    if (!user) {
+      setPaperModalOpen(false);
+      openAuth("signup");
+      setPaperSubmitError("Sign in, then submit the paper link again.");
+      return;
+    }
+    if (!firebaseReady) {
+      setPaperSubmitError(
+        "Paper submissions open when Firebase is connected for this site.",
+      );
+      return;
+    }
+    setPaperSubmitBusy(true);
+    try {
+      const result = await submitPaper(url);
+      setPaperSubmitMessage(result.message);
+      setPaperUrl("");
+    } catch (error) {
+      setPaperSubmitError(authErrorMessage(error));
+    } finally {
+      setPaperSubmitBusy(false);
+    }
   }
 
   const activeQuestion = active?.questions[active.index];
@@ -1359,13 +1398,10 @@ export default function App() {
                 here.
               </p>
             </div>
-            <a
-              className="primary"
-              href="mailto:robertjmonzingo@gmail.com?subject=White%20Paper%20Hall%20of%20Fame%20Submission&body=Paper%20title%3A%0APaper%20URL%3A%0AWhy%20it%20belongs%3A%0ASubmitted%20by%3A"
-            >
+            <button className="primary" onClick={() => setPaperModalOpen(true)}>
               Submit a paper
               <ArrowRight size={16} />
-            </a>
+            </button>
           </div>
           <div className="paper-list">
             {rankedPapers.map((paper, index) => (
@@ -1500,6 +1536,57 @@ export default function App() {
           <a href="#terms">Terms of Service</a>
         </nav>
       </footer>
+
+      {paperModalOpen ? (
+        <div className="modal-backdrop" role="presentation">
+          <section
+            className="auth-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="paper-submit-title"
+          >
+            <button
+              className="close"
+              aria-label="Close paper submission"
+              onClick={() => {
+                setPaperModalOpen(false);
+                setPaperSubmitError("");
+              }}
+            >
+              ×
+            </button>
+            <h2 id="paper-submit-title">Submit a paper</h2>
+            <p>
+              Paste the link to the paper. We’ll send it to Robert for review.
+            </p>
+            <form onSubmit={(event) => void submitPaperLink(event)}>
+              <label>
+                Paper link
+                <input
+                  type="url"
+                  placeholder="https://arxiv.org/abs/..."
+                  value={paperUrl}
+                  onChange={(event) => setPaperUrl(event.target.value)}
+                  required
+                />
+              </label>
+              {paperSubmitError ? (
+                <p className="error">{paperSubmitError}</p>
+              ) : null}
+              {paperSubmitMessage ? (
+                <p className="success-message">{paperSubmitMessage}</p>
+              ) : null}
+              <button
+                className="primary full"
+                disabled={paperSubmitBusy || !paperUrl.trim()}
+              >
+                {paperSubmitBusy ? <LoaderCircle size={18} /> : null}
+                Submit
+              </button>
+            </form>
+          </section>
+        </div>
+      ) : null}
 
       {authOpen ? (
         <div className="modal-backdrop" role="presentation">

@@ -141,17 +141,31 @@ export async function signInGoogle() {
 export function authErrorMessage(error: unknown): string {
   const code = (error as { code?: string })?.code;
   const messages: Record<string, string> = {
-    "auth/popup-blocked": "Your browser blocked Google’s sign-in window. Allow pop-ups for this site, then select Continue with Google again.",
-    "auth/popup-closed-by-user": "Google sign-in was closed before it finished. Select Continue with Google to try again.",
-    "auth/cancelled-popup-request": "A Google sign-in window is already open. Finish signing in there, or close it and try again.",
-    "auth/unauthorized-domain": "This address is not enabled for Google sign-in. Add this hostname to Firebase Authentication → Settings → Authorized domains, then try again.",
-    "auth/operation-not-allowed": "Google sign-in is not enabled for this Firebase project. Enable Google in Authentication → Sign-in method.",
-    "auth/network-request-failed": "Couldn’t reach Google sign-in. Check your connection and try again.",
-    "auth/invalid-credential": "The email or password is incorrect. Try again or reset your password.",
-    "auth/too-many-requests": "Too many attempts. Please wait a moment before trying again.",
-    "auth/account-exists-with-different-credential": "This email already uses another sign-in method. Log in with that method first.",
+    "auth/popup-blocked":
+      "Your browser blocked Google’s sign-in window. Allow pop-ups for this site, then select Continue with Google again.",
+    "auth/popup-closed-by-user":
+      "Google sign-in was closed before it finished. Select Continue with Google to try again.",
+    "auth/cancelled-popup-request":
+      "A Google sign-in window is already open. Finish signing in there, or close it and try again.",
+    "auth/unauthorized-domain":
+      "This address is not enabled for Google sign-in. Add this hostname to Firebase Authentication → Settings → Authorized domains, then try again.",
+    "auth/operation-not-allowed":
+      "Google sign-in is not enabled for this Firebase project. Enable Google in Authentication → Sign-in method.",
+    "auth/network-request-failed":
+      "Couldn’t reach Google sign-in. Check your connection and try again.",
+    "auth/invalid-credential":
+      "The email or password is incorrect. Try again or reset your password.",
+    "auth/too-many-requests":
+      "Too many attempts. Please wait a moment before trying again.",
+    "auth/account-exists-with-different-credential":
+      "This email already uses another sign-in method. Log in with that method first.",
   };
-  return (code && messages[code]) || (error instanceof Error ? error.message : "Sign-in didn’t finish. Please try again.");
+  return (
+    (code && messages[code]) ||
+    (error instanceof Error
+      ? error.message
+      : "Sign-in didn’t finish. Please try again.")
+  );
 }
 export async function signUpEmail(email: string, password: string) {
   const credential = await createUserWithEmailAndPassword(
@@ -183,6 +197,14 @@ export async function refreshUser() {
 }
 export async function logOut() {
   await signOut(needAuth());
+}
+
+export async function submitPaper(url: string) {
+  return callAction<{
+    submissionId: string;
+    emailed: boolean;
+    message: string;
+  }>("submitPaper", { url });
 }
 export async function callAction<T = Record<string, unknown>>(
   name: string,
