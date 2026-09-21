@@ -424,10 +424,10 @@ export default function App() {
   useEffect(() => {
     document.title =
       view === "privacy"
-        ? "Privacy Policy | IoT"
+        ? "Privacy Policy | AI Space"
         : view === "terms"
-          ? "Terms of Service | IoT"
-          : "IoT | Knowledge assessments";
+          ? "Terms of Service | AI Space"
+          : "AI Space — IoT Library, AI Topics, Timed Assessments";
     if (view === "privacy" || view === "terms") {
       window.scrollTo(0, 0);
       document.getElementById("legal-title")?.focus({ preventScroll: true });
