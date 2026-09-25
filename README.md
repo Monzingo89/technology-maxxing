@@ -96,7 +96,11 @@ At implementation time, the seed queue had one unused entry. Add seeds before ex
 
 ## Hosting and mobile
 
-Use `dist/` as the hosting output. Firebase Hosting configuration is included. GitHub Pages needs **GitHub Actions** as its source, not the previous root-file publishing mode, because TypeScript source must be built. The included workflow builds on pushes and on completion of the daily catalog workflow; no deployment has been made by this implementation.
+The production frontend is configured for Vercel at **https://tech.robertjmonzingo.com/**. `vercel.json` builds the React source with `npm run build` and publishes `dist/`. Static learning pages retain their trailing slashes; the app uses hash navigation. Keep `index.html` as a source entry pointing to `/src/main.tsx`, rather than copying a built page back over it.
+
+The Vercel project is `technology-maxxing`. Configure its production and preview environments with the public `VITE_FIREBASE_*` settings, `VITE_BASE_PATH=/`, and `SITE_URL=https://tech.robertjmonzingo.com/`. `.vercelignore` excludes local environment files and unrelated local artifacts from uploads. Never import the entire local `.env`, which can contain server secrets.
+
+After linking the intended Vercel project, deploy with `vercel --prod`. Verify the custom-domain homepage, `/learn/react/`, `/library.html`, `/knowledge-index.json`, `/sitemap.xml`, and `/manifest.webmanifest`. Firebase Authentication must authorize the custom hostname, and App Check must accept it. Vercel deploys the frontend; existing Firebase Functions remain a separate backend deployment. Firebase Hosting configuration is also included for alternate hosting.
 
 ```bash
 npm run native:sync

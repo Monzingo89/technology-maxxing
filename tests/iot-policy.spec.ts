@@ -4,7 +4,7 @@ for (const viewport of [
   { width: 1440, height: 1050 },
   { width: 390, height: 844 },
 ]) {
-  test(`policies, signup placeholders and paper tabs at ${viewport.width}px`, async ({
+  test(`account entry points, policies and paper tabs at ${viewport.width}px`, async ({
     page,
     context,
   }) => {
@@ -17,9 +17,52 @@ for (const viewport of [
         name: "Prove what you know, topic by topic.",
       }),
     ).toBeVisible();
+    const loginButton = page
+      .locator(".site-header")
+      .getByRole("button", { name: "Log in", exact: true });
+    const signupButton = page
+      .locator(".site-header")
+      .getByRole("button", { name: "Sign up", exact: true });
+    await expect(loginButton).toBeVisible();
+    await expect(signupButton).toBeVisible();
+    await loginButton.click();
+    const loginDialog = page.getByRole("dialog");
+    await expect(
+      loginDialog.getByRole("heading", { name: "Welcome back" }),
+    ).toBeVisible();
+    await expect(loginDialog.getByRole("checkbox")).toHaveCount(0);
+    await expect(
+      loginDialog.getByLabel("Email", { exact: true }),
+    ).toBeFocused();
+    await expect(
+      loginDialog.getByLabel("Password", { exact: true }),
+    ).toHaveAttribute("autocomplete", "current-password");
+    await loginDialog
+      .getByLabel("Email", { exact: true })
+      .fill("returning@example.com");
+    await loginDialog
+      .getByLabel("Password", { exact: true })
+      .fill("not-submitted");
+    await loginDialog.getByRole("button", { name: "Forgot password?" }).click();
+    await expect(
+      loginDialog.getByRole("heading", { name: "Reset your password" }),
+    ).toBeVisible();
+    await expect(
+      loginDialog.getByLabel("Password", { exact: true }),
+    ).toHaveCount(0);
+    await expect(loginDialog.getByLabel("Email", { exact: true })).toHaveValue(
+      "returning@example.com",
+    );
+    await loginDialog.getByRole("button", { name: "Back to log in" }).click();
+    await expect(
+      loginDialog.getByLabel("Password", { exact: true }),
+    ).toHaveValue("");
+    await page.keyboard.press("Escape");
+    await expect(loginDialog).toHaveCount(0);
+    await expect(loginButton).toBeFocused();
     await page
-      .getByRole("button", { name: "Sign up free", exact: true })
-      .first()
+      .locator(".site-header")
+      .getByRole("button", { name: "Sign up", exact: true })
       .click();
     const dialog = page.getByRole("dialog");
     await expect(dialog.getByLabel("Email", { exact: true })).toHaveAttribute(
@@ -42,7 +85,7 @@ for (const viewport of [
     await expect(
       dialog.getByLabel("Password", { exact: true }),
     ).toHaveAttribute("placeholder", "Your password");
-    await dialog.getByRole("button", { name: "Close signup" }).click();
+    await dialog.getByRole("button", { name: "Close account dialog" }).click();
 
     await page
       .getByRole("navigation", { name: "Legal", exact: true })

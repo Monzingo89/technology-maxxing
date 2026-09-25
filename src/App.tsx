@@ -19,9 +19,11 @@ import {
 import type { User } from "firebase/auth";
 import {
   authErrorMessage,
+  completeGoogleRedirect,
   firebaseReady,
   logOut,
   onAuth,
+  recoverPassword,
   signInEmail,
   signInGoogle,
   signUpEmail,
@@ -48,14 +50,19 @@ function readView(): View {
     ? (route as View)
     : "library";
 }
-type Mode = "signup" | "login";
+type Mode = "signup" | "login" | "reset";
 
 type Question = {
   id: string;
   question: string;
   options: string[];
   answerIndex: number;
+  answerIndices?: number[];
+  kind?: "single" | "multiple";
   explanation: string;
+  skill?: string;
+  difficulty?: "foundation" | "applied" | "advanced";
+  sources?: { label: string; url: string }[];
 };
 
 type Technology = {
@@ -89,7 +96,7 @@ type ActiveAssessment = {
   technology: Technology;
   questions: Question[];
   index: number;
-  answers: (number | null)[];
+  answers: (number | number[] | null)[];
   startedAt: number;
   questionStartedAt: number;
 };
@@ -97,7 +104,7 @@ type ActiveAssessment = {
 const GUEST_LIMIT = 5;
 const guestAccessUnavailable = !firebaseReady && !import.meta.env.DEV;
 const ASSESSMENT_QUESTION_COUNT = 5;
-const QUESTION_SECONDS = 20;
+const QUESTION_SECONDS = 10;
 const TOTAL_MINUTES = 10;
 const PASS_RATE = 0.7;
 const RETAKE_LOCK_MS = 5 * 24 * 60 * 60 * 1000;
@@ -278,16 +285,36 @@ function shuffle<T>(items: T[], seed: string) {
 }
 
 function shuffleQuestion(question: Question, seed: string): Question {
+  const correctIndices = new Set(
+    question.kind === "multiple" && question.answerIndices
+      ? question.answerIndices
+      : [question.answerIndex],
+  );
   const options = question.options.map((option, index) => ({
     option,
-    correct: index === question.answerIndex,
+    correct: correctIndices.has(index),
   }));
   const shuffled = shuffle(options, seed);
   return {
     ...question,
     options: shuffled.map((item) => item.option),
     answerIndex: shuffled.findIndex((item) => item.correct),
+    answerIndices:
+      question.kind === "multiple"
+        ? shuffled.flatMap((item, index) => (item.correct ? [index] : []))
+        : undefined,
   };
+}
+
+function answerIsCorrect(question: Question, answer: number | number[] | null) {
+  if (question.kind !== "multiple") return answer === question.answerIndex;
+  if (!Array.isArray(answer)) return false;
+  const expected = [...(question.answerIndices || [])].sort((a, b) => a - b);
+  const selected = [...new Set(answer)].sort((a, b) => a - b);
+  return (
+    expected.length === selected.length &&
+    expected.every((value, index) => value === selected[index])
+  );
 }
 
 function questionRepeatKey(question: Question) {
@@ -298,38 +325,28 @@ function questionRepeatKey(question: Question) {
     .trim();
 }
 
-function questionDifficulty(question: Question) {
-  const text = `${question.question} ${question.explanation}`.toLowerCase();
-  if (text.includes("task") || text.includes("assess knowledge")) return 5;
-  if (text.includes("why would someone learn")) return 4;
-  if (text.includes("historical note") || text.includes("origin")) return 3;
-  if (text.includes("source") || text.includes("verify")) return 2;
-  if (text.includes("description") || text.includes("connected")) return 1;
-  return 0;
-}
-
 function selectAssessmentQuestions(bank: Question[], seed: string) {
-  const randomized = shuffle(bank, seed)
-    .map((question, index) => ({
-      question,
-      order: index,
-      difficulty: questionDifficulty(question),
-    }))
-    .sort((a, b) => b.difficulty - a.difficulty || a.order - b.order);
+  const randomized = shuffle(bank, seed);
+  const level = { foundation: 0, applied: 1, advanced: 2 };
+  // Reviewed assessments progress from foundations to application and limits.
+  // Equal-level questions and their answer choices are still randomized.
+  if (bank.every((question) => question.difficulty)) {
+    randomized.sort((a, b) => level[a.difficulty!] - level[b.difficulty!]);
+  }
   const selected: Question[] = [];
   const seenKeys = new Set<string>();
-  for (const item of randomized) {
-    const key = questionRepeatKey(item.question);
+  for (const question of randomized) {
+    const key = questionRepeatKey(question);
     if (seenKeys.has(key)) continue;
     seenKeys.add(key);
-    selected.push(item.question);
+    selected.push(question);
     if (selected.length === ASSESSMENT_QUESTION_COUNT) break;
   }
   if (selected.length < ASSESSMENT_QUESTION_COUNT) {
     const selectedIds = new Set(selected.map((question) => question.id));
-    for (const item of randomized) {
-      if (selectedIds.has(item.question.id)) continue;
-      selected.push(item.question);
+    for (const question of randomized) {
+      if (selectedIds.has(question.id)) continue;
+      selected.push(question);
       if (selected.length === ASSESSMENT_QUESTION_COUNT) break;
     }
   }
@@ -411,7 +428,7 @@ export default function App() {
   const activeRef = useRef<ActiveAssessment | null>(null);
   const [pendingCompletion, setPendingCompletion] = useState<{
     current: ActiveAssessment;
-    answers: (number | null)[];
+    answers: (number | number[] | null)[];
   } | null>(null);
 
   useEffect(() => {
@@ -443,10 +460,8 @@ export default function App() {
       const status = await getGuestAllowance();
       if (!userRef.current) setAllowance(status);
     } catch {
-      if (!userRef.current)
-        setQuotaError(
-          "We couldn’t check your guest allowance. Please retry before starting an assessment.",
-        );
+      // A background allowance check should not interrupt browsing.
+      if (!userRef.current) setAllowance(null);
     } finally {
       setQuotaBusy(false);
     }
@@ -473,20 +488,32 @@ export default function App() {
   const [progress, setProgress] = useState(loadProgress);
   const [paperVotes, setPaperVotes] = useState(loadPaperVotes);
   const [active, setActive] = useState<ActiveAssessment | null>(null);
+  const [multipleSelection, setMultipleSelection] = useState<number[]>([]);
+  const [pendingAssessment, setPendingAssessment] = useState<Technology | null>(
+    null,
+  );
   const [lastResult, setLastResult] = useState<{
     technology: Technology;
     score: number;
     total: number;
     passed: boolean;
     elo: number;
+    review: {
+      question: Question;
+      selectedIndex: number | number[] | null;
+    }[];
   } | null>(null);
   const [now, setNow] = useState(Date.now());
   const [authOpen, setAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<Mode>("signup");
+  const [authMode, setAuthMode] = useState<Mode>("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
-  const [authBusy, setAuthBusy] = useState(false);
+  const [authMessage, setAuthMessage] = useState("");
+  const [authAction, setAuthAction] = useState<"email" | "google" | null>(null);
+  const authBusy = authAction !== null;
+  const authDialogRef = useRef<HTMLDialogElement>(null);
+  const authEmailRef = useRef<HTMLInputElement>(null);
   const [accountOpen, setAccountOpen] = useState(false);
   const [paperModalOpen, setPaperModalOpen] = useState(false);
   const [paperUrl, setPaperUrl] = useState("");
@@ -496,6 +523,31 @@ export default function App() {
   const [liveLeaderboards, setLiveLeaderboards] = useState<
     Partial<Record<Category, LeaderboardEntry[]>>
   >({});
+
+  useEffect(() => {
+    if (!authOpen) return;
+    const dialog = authDialogRef.current;
+    const trigger = document.activeElement;
+    dialog?.showModal();
+    authEmailRef.current?.focus();
+    return () => {
+      dialog?.close();
+      if (trigger instanceof HTMLElement && trigger.isConnected)
+        trigger.focus();
+    };
+  }, [authOpen]);
+
+  useEffect(() => {
+    if (authOpen) authEmailRef.current?.focus();
+  }, [authOpen, authMode]);
+
+  useEffect(() => {
+    void completeGoogleRedirect().catch((error) => {
+      setAuthMode("login");
+      setAuthError(authErrorMessage(error));
+      setAuthOpen(true);
+    });
+  }, []);
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}knowledge-index.json`)
@@ -638,7 +690,10 @@ export default function App() {
   );
 
   const leaderboardTopicOptions = useMemo(
-    () => ["All topics", ...topicLeaderboard.map((item) => item.technology?.name || item.id)],
+    () => [
+      "All topics",
+      ...topicLeaderboard.map((item) => item.technology?.name || item.id),
+    ],
     [topicLeaderboard],
   );
 
@@ -718,10 +773,21 @@ export default function App() {
       ? "—"
       : Math.max(0, GUEST_LIMIT - guestCompleted);
 
-  function openAuth(mode: Mode = "signup") {
+  function openAuth(mode: Mode = "login") {
+    if (authBusy) return;
     setAuthMode(mode);
     setAuthError("");
+    setAuthMessage("");
+    setPassword("");
     setAuthOpen(true);
+  }
+
+  function closeAuth() {
+    if (authBusy) return;
+    setAuthOpen(false);
+    setPassword("");
+    setAuthError("");
+    setAuthMessage("");
   }
 
   async function startAssessment(item: Technology) {
@@ -789,11 +855,18 @@ export default function App() {
     }
   }
 
-  function answerCurrent(answer: number | null) {
+  function requestAssessment(item: Technology) {
+    if (assessmentBusy || active || pendingCompletion) return;
+    setPendingAssessment(item);
+  }
+
+  function answerCurrent(answer: number | number[] | null) {
     const current = activeRef.current;
     if (!current || assessmentBusyRef.current) return;
     const answers = [...current.answers];
-    answers[current.index] = answer;
+    const expired =
+      Date.now() - current.questionStartedAt >= QUESTION_SECONDS * 1000;
+    answers[current.index] = expired ? null : answer;
     const nextIndex = current.index + 1;
     if (
       nextIndex >= current.questions.length ||
@@ -812,12 +885,13 @@ export default function App() {
     };
     activeRef.current = next;
     setActive(next);
+    setMultipleSelection([]);
     setNow(Date.now());
   }
 
   async function finishAssessment(
     current: ActiveAssessment,
-    answers: (number | null)[],
+    answers: (number | number[] | null)[],
   ) {
     if (assessmentBusyRef.current) return;
     assessmentBusyRef.current = true;
@@ -850,7 +924,7 @@ export default function App() {
     setPendingCompletion(null);
     const score = current.questions.reduce(
       (total, question, index) =>
-        total + (answers[index] === question.answerIndex ? 1 : 0),
+        total + (answerIsCorrect(question, answers[index]) ? 1 : 0),
       0,
     );
     const total = current.questions.length;
@@ -891,6 +965,10 @@ export default function App() {
       total,
       passed,
       elo,
+      review: current.questions.map((question, index) => ({
+        question,
+        selectedIndex: answers[index] ?? null,
+      })),
     });
     assessmentBusyRef.current = false;
     setAssessmentBusy(false);
@@ -908,18 +986,31 @@ export default function App() {
       return;
     }
     if (!firebaseReady) {
-      setAuthError("Signup opens when Firebase is connected for this site.");
+      setAuthError(
+        "Account access is temporarily unavailable. Please try again later.",
+      );
       return;
     }
-    setAuthBusy(true);
+    setAuthAction("email");
     setAuthError("");
+    setAuthMessage("");
     try {
-      if (authMode === "signup") await signUpEmail(email, password);
+      if (authMode === "reset") {
+        try {
+          await recoverPassword(email);
+        } catch (error) {
+          if ((error as { code?: string }).code !== "auth/user-not-found")
+            throw error;
+        }
+        setAuthMessage(
+          "If an account uses this email, you’ll receive a password reset link. Check your inbox and spam folder.",
+        );
+      } else if (authMode === "signup") await signUpEmail(email, password);
       else await signInEmail(email, password);
     } catch (error) {
       setAuthError(authErrorMessage(error));
     } finally {
-      setAuthBusy(false);
+      setAuthAction(null);
     }
   }
 
@@ -932,17 +1023,20 @@ export default function App() {
       return;
     }
     if (!firebaseReady) {
-      setAuthError("Signup opens when Firebase is connected for this site.");
+      setAuthError(
+        "Account access is temporarily unavailable. Please try again later.",
+      );
       return;
     }
-    setAuthBusy(true);
+    setAuthAction("google");
     setAuthError("");
+    setAuthMessage("");
     try {
       await signInGoogle();
     } catch (error) {
       setAuthError(authErrorMessage(error));
     } finally {
-      setAuthBusy(false);
+      setAuthAction(null);
     }
   }
 
@@ -1131,11 +1225,26 @@ export default function App() {
                 </div>
               ) : null}
             </div>
+          ) : !authReady ? (
+            <span className="auth-loading" role="status">
+              Loading account…
+            </span>
           ) : (
-            <button className="small-button" onClick={() => openAuth("signup")}>
-              <LogIn size={16} />
-              Sign up free
-            </button>
+            <div className="auth-actions">
+              <button
+                className="small-button"
+                onClick={() => openAuth("login")}
+              >
+                <LogIn size={16} aria-hidden="true" />
+                Log in
+              </button>
+              <button
+                className="small-button signup-button"
+                onClick={() => openAuth("signup")}
+              >
+                Sign up
+              </button>
+            </div>
           )}
         </div>
       </header>
@@ -1198,7 +1307,7 @@ export default function App() {
             <h1>Prove what you know, topic by topic.</h1>
             <p>
               Every assessment is a 5-question multiple-choice run from a
-              focused bank. Questions are randomized per user, capped at 20
+              focused bank. Questions are randomized per user, capped at 10
               seconds each, and failed attempts lock that topic for 5 days.
             </p>
           </div>
@@ -1283,7 +1392,7 @@ export default function App() {
                         !authReady ||
                         (!user && firebaseReady && (!allowance || quotaBusy))
                       }
-                      onClick={() => void startAssessment(item)}
+                      onClick={() => requestAssessment(item)}
                     >
                       {lock ? (
                         <>
@@ -1330,7 +1439,7 @@ export default function App() {
             <div>
               <h2>Assessments</h2>
               <p>
-                5 hard focused questions. 20 seconds per question. 70% passes.
+                5 focused questions. 10 seconds per question. 4 correct to pass.
               </p>
             </div>
             {!user && guestCompleted >= GUEST_LIMIT ? (
@@ -1347,20 +1456,61 @@ export default function App() {
                 <span>
                   Question {active.index + 1} / {active.questions.length}
                 </span>
-                <span>
+                <span
+                  className={`question-timer${questionSecondsLeft <= 3 ? " urgent" : ""}`}
+                  aria-label={`${questionSecondsLeft} seconds remaining`}
+                >
                   <Clock3 size={16} />
                   {questionSecondsLeft}s
                 </span>
                 <span>{totalMinutesLeft}m left</span>
               </div>
               <h3>{activeQuestion.question}</h3>
-              <div className="answer-grid">
-                {activeQuestion.options.map((option, index) => (
-                  <button key={option} onClick={() => answerCurrent(index)}>
-                    {option}
+              {activeQuestion.kind === "multiple" ? (
+                <fieldset className="checkbox-question">
+                  <legend>Select every compatible technology.</legend>
+                  <div className="answer-grid checkbox-grid">
+                    {activeQuestion.options.map((option, index) => (
+                      <label key={option}>
+                        <input
+                          type="checkbox"
+                          checked={multipleSelection.includes(index)}
+                          disabled={questionSecondsLeft === 0}
+                          onChange={(event) =>
+                            setMultipleSelection((current) =>
+                              event.target.checked
+                                ? [...current, index]
+                                : current.filter((item) => item !== index),
+                            )
+                          }
+                        />
+                        <span>{option}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <button
+                    className="primary submit-checkbox-answer"
+                    disabled={
+                      questionSecondsLeft === 0 || !multipleSelection.length
+                    }
+                    onClick={() => answerCurrent(multipleSelection)}
+                  >
+                    Submit selections
                   </button>
-                ))}
-              </div>
+                </fieldset>
+              ) : (
+                <div className="answer-grid">
+                  {activeQuestion.options.map((option, index) => (
+                    <button
+                      key={option}
+                      disabled={questionSecondsLeft === 0}
+                      onClick={() => answerCurrent(index)}
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              )}
             </article>
           ) : (
             <>
@@ -1379,6 +1529,84 @@ export default function App() {
                       ? " This assessment is locked for 5 days."
                       : ""}
                   </p>
+                  {lastResult.review.every(({ question }) => question.skill) ? (
+                    <section
+                      className="answer-review"
+                      aria-label="Answer review"
+                    >
+                      <h4>Review your answers</h4>
+                      {lastResult.review.map(({ question, selectedIndex }) => {
+                        const correct = answerIsCorrect(
+                          question,
+                          selectedIndex,
+                        );
+                        const selectedAnswers = Array.isArray(selectedIndex)
+                          ? selectedIndex.map(
+                              (index) => question.options[index],
+                            )
+                          : selectedIndex === null
+                            ? []
+                            : [question.options[selectedIndex]];
+                        const correctAnswers =
+                          question.kind === "multiple"
+                            ? (question.answerIndices || []).map(
+                                (index) => question.options[index],
+                              )
+                            : [question.options[question.answerIndex]];
+                        return (
+                          <details key={question.id} open={!correct}>
+                            <summary>
+                              <span
+                                className={
+                                  correct ? "review-correct" : "review-missed"
+                                }
+                              >
+                                {correct
+                                  ? "Correct"
+                                  : selectedIndex === null
+                                    ? "Unanswered"
+                                    : "Review"}
+                              </span>
+                              {question.skill}
+                            </summary>
+                            <p className="review-prompt">{question.question}</p>
+                            {!correct ? (
+                              <p>
+                                <strong>Your answer:</strong>{" "}
+                                {selectedIndex === null
+                                  ? "No answer before time ran out."
+                                  : selectedAnswers.join(", ")}
+                              </p>
+                            ) : null}
+                            <p>
+                              <strong>
+                                Correct answer
+                                {correctAnswers.length > 1 ? "s" : ""}:
+                              </strong>{" "}
+                              {correctAnswers.join(", ")}
+                            </p>
+                            <p>{question.explanation}</p>
+                            <ul
+                              className="review-sources"
+                              aria-label="Supporting sources"
+                            >
+                              {question.sources?.map((source) => (
+                                <li key={source.url}>
+                                  <a
+                                    href={source.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {source.label}
+                                  </a>
+                                </li>
+                              ))}
+                            </ul>
+                          </details>
+                        );
+                      })}
+                    </section>
+                  ) : null}
                 </article>
               ) : null}
               <div className="assessment-grid">
@@ -1398,7 +1626,7 @@ export default function App() {
                         !authReady ||
                         (!user && firebaseReady && (!allowance || quotaBusy))
                       }
-                      onClick={() => void startAssessment(item)}
+                      onClick={() => requestAssessment(item)}
                     >
                       <span>{item.category}</span>
                       <h3>{item.name}</h3>
@@ -1553,41 +1781,48 @@ export default function App() {
               <div className="leaderboard-list local-leaderboard-list">
                 {visibleTopicLeaderboard.map((item, index) => {
                   const honor = honorForRanks([index + 1]);
-                const localName = user?.displayName || user?.email || "You";
-                return (
-                  <article key={item.id}>
-                    <strong>#{index + 1}</strong>
-                    <div
-                      className={`leaderboard-avatar honor-${honor}`}
-                      aria-label={honorLabel(honor)}
-                      title={honorLabel(honor)}
-                    >
-                      {user?.photoURL ? (
-                        <img src={user.photoURL} alt="" referrerPolicy="no-referrer" />
-                      ) : (
-                        <span>{leaderboardInitials(localName)}</span>
-                      )}
-                      {honor !== "none" && honor !== "bronze" ? (
-                        <span className="leaderboard-crown" aria-hidden="true">
-                          <Trophy size={18} />
-                          {honor === "sapphire" ||
-                          honor === "emerald" ||
-                          honor === "ruby" ? (
-                            <i />
-                          ) : null}
-                        </span>
-                      ) : null}
-                    </div>
-                    <div>
-                      <h4>{localName}</h4>
-                      <p>
-                        {item.technology?.name} · Local topic ELO {item.elo} ·
-                        best {Math.round(item.bestScore * 100)}% · {item.attempts}{" "}
-                        attempts
-                      </p>
-                    </div>
-                  </article>
-                );
+                  const localName = user?.displayName || user?.email || "You";
+                  return (
+                    <article key={item.id}>
+                      <strong>#{index + 1}</strong>
+                      <div
+                        className={`leaderboard-avatar honor-${honor}`}
+                        aria-label={honorLabel(honor)}
+                        title={honorLabel(honor)}
+                      >
+                        {user?.photoURL ? (
+                          <img
+                            src={user.photoURL}
+                            alt=""
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <span>{leaderboardInitials(localName)}</span>
+                        )}
+                        {honor !== "none" && honor !== "bronze" ? (
+                          <span
+                            className="leaderboard-crown"
+                            aria-hidden="true"
+                          >
+                            <Trophy size={18} />
+                            {honor === "sapphire" ||
+                            honor === "emerald" ||
+                            honor === "ruby" ? (
+                              <i />
+                            ) : null}
+                          </span>
+                        ) : null}
+                      </div>
+                      <div>
+                        <h4>{localName}</h4>
+                        <p>
+                          {item.technology?.name} · Local topic ELO {item.elo} ·
+                          best {Math.round(item.bestScore * 100)}% ·{" "}
+                          {item.attempts} attempts
+                        </p>
+                      </div>
+                    </article>
+                  );
                 })}
               </div>
             </>
@@ -1613,6 +1848,44 @@ export default function App() {
           <a href="#terms">Terms of Service</a>
         </nav>
       </footer>
+
+      {pendingAssessment ? (
+        <div className="modal-backdrop" role="presentation">
+          <section
+            className="auth-modal assessment-warning"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="assessment-warning-title"
+          >
+            <button
+              className="close"
+              aria-label="Cancel assessment"
+              onClick={() => setPendingAssessment(null)}
+            >
+              ×
+            </button>
+            <h2 id="assessment-warning-title">Ready for a timed assessment?</h2>
+            <p>
+              Each question has a strict 10-second timer. During the final 3
+              seconds, the timer turns red and pulses. If time reaches zero
+              before you select an answer, that question is marked incorrect.
+            </p>
+            <div className="assessment-warning-actions">
+              <button onClick={() => setPendingAssessment(null)}>Cancel</button>
+              <button
+                className="primary"
+                onClick={() => {
+                  const item = pendingAssessment;
+                  setPendingAssessment(null);
+                  void startAssessment(item);
+                }}
+              >
+                Start assessment
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : null}
 
       {paperModalOpen ? (
         <div className="modal-backdrop" role="presentation">
@@ -1666,69 +1939,97 @@ export default function App() {
       ) : null}
 
       {authOpen ? (
-        <div className="modal-backdrop" role="presentation">
-          <section
-            className="auth-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="auth-title"
+        <dialog
+          ref={authDialogRef}
+          className="auth-modal"
+          aria-labelledby="auth-title"
+          aria-describedby="auth-description"
+          onCancel={(event) => {
+            event.preventDefault();
+            closeAuth();
+          }}
+        >
+          <button
+            className="close"
+            aria-label="Close account dialog"
+            disabled={authBusy}
+            onClick={closeAuth}
           >
-            <button
-              className="close"
-              aria-label="Close signup"
-              onClick={() => setAuthOpen(false)}
-            >
-              x
-            </button>
-            <h2 id="auth-title">
-              {authMode === "signup" ? "Create a free account" : "Log in"}
-            </h2>
-            <p>Keep going after five guest assessments. There is no charge.</p>
-            {authMode === "signup" ? (
-              <label className="signup-agreement">
-                <input
-                  type="checkbox"
-                  checked={accepted}
-                  disabled={authBusy}
-                  onChange={(event) => setAccepted(event.target.checked)}
-                />
-                <span>
-                  I am 18 or older and agree to the{" "}
-                  <a href="#terms" target="_blank" rel="noopener noreferrer">
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a href="#privacy" target="_blank" rel="noopener noreferrer">
-                    Privacy Policy
-                  </a>
-                  .
-                </span>
-              </label>
-            ) : null}
-            <button
-              className="google-button"
-              disabled={
-                authBusy ||
-                !firebaseReady ||
-                (authMode === "signup" && !accepted)
-              }
-              onClick={() => void submitGoogle()}
-            >
-              {authBusy ? <LoaderCircle size={18} /> : <span>G</span>}
-              Continue with Google
-            </button>
-            <form onSubmit={(event) => void submitAuth(event)}>
-              <label>
-                Email
-                <input
-                  type="email"
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  required
-                />
-              </label>
+            x
+          </button>
+          <h2 id="auth-title">
+            {authMode === "signup"
+              ? "Create your account"
+              : authMode === "reset"
+                ? "Reset your password"
+                : "Welcome back"}
+          </h2>
+          <p id="auth-description">
+            {authMode === "signup"
+              ? "Sign up for free to keep learning and track your progress."
+              : authMode === "reset"
+                ? "Enter your account email and we’ll send you a reset link."
+                : "Log in to your account to pick up where you left off."}
+          </p>
+          {authMode === "signup" ? (
+            <label className="signup-agreement">
+              <input
+                type="checkbox"
+                checked={accepted}
+                disabled={authBusy}
+                onChange={(event) => setAccepted(event.target.checked)}
+              />
+              <span>
+                I am 18 or older and agree to the{" "}
+                <a href="#terms" target="_blank" rel="noopener noreferrer">
+                  Terms of Service
+                </a>{" "}
+                and{" "}
+                <a href="#privacy" target="_blank" rel="noopener noreferrer">
+                  Privacy Policy
+                </a>
+                .
+              </span>
+            </label>
+          ) : null}
+          {authMode !== "reset" ? (
+            <>
+              <button
+                className="google-button"
+                disabled={
+                  authBusy ||
+                  !firebaseReady ||
+                  (authMode === "signup" && !accepted)
+                }
+                onClick={() => void submitGoogle()}
+              >
+                {authAction === "google" ? (
+                  <LoaderCircle size={18} />
+                ) : (
+                  <span aria-hidden="true">G</span>
+                )}
+                {authAction === "google"
+                  ? "Waiting for Google…"
+                  : "Continue with Google"}
+              </button>
+              <div className="auth-divider">or continue with email</div>
+            </>
+          ) : null}
+          <form onSubmit={(event) => void submitAuth(event)}>
+            <label>
+              Email
+              <input
+                ref={authEmailRef}
+                type="email"
+                placeholder="you@example.com"
+                autoComplete="email"
+                value={email}
+                disabled={authBusy}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </label>
+            {authMode !== "reset" ? (
               <label>
                 Password
                 <input
@@ -1743,40 +2044,71 @@ export default function App() {
                   }
                   minLength={authMode === "signup" ? 12 : 1}
                   value={password}
+                  disabled={authBusy}
                   onChange={(event) => setPassword(event.target.value)}
                   required
                 />
               </label>
-              {authError ? <p className="error">{authError}</p> : null}
+            ) : null}
+            {authMode === "login" ? (
               <button
-                className="primary full"
-                disabled={
-                  authBusy ||
-                  !firebaseReady ||
-                  (authMode === "signup" && !accepted)
-                }
+                type="button"
+                className="link-button forgot-password"
+                disabled={authBusy}
+                onClick={() => openAuth("reset")}
               >
-                {authMode === "signup" ? "Sign up free" : "Log in"}
+                Forgot password?
               </button>
-            </form>
-            <button
-              className="link-button"
-              onClick={() =>
-                setAuthMode(authMode === "signup" ? "login" : "signup")
-              }
-            >
-              {authMode === "signup"
-                ? "Already have an account? Log in"
-                : "Need an account? Sign up free"}
-            </button>
-            {!firebaseReady ? (
-              <p className="setup-note">
-                Firebase is not configured in this local preview yet, so account
-                creation is disabled until the site has real Firebase keys.
+            ) : null}
+            {authError ? (
+              <p className="error" role="alert">
+                {authError}
               </p>
             ) : null}
-          </section>
-        </div>
+            {authMessage ? (
+              <p className="auth-message" role="status">
+                {authMessage}
+              </p>
+            ) : null}
+            <button
+              className="primary full"
+              disabled={
+                authBusy ||
+                !firebaseReady ||
+                (authMode === "signup" && !accepted)
+              }
+            >
+              {authAction === "email"
+                ? authMode === "signup"
+                  ? "Creating account…"
+                  : authMode === "reset"
+                    ? "Sending reset link…"
+                    : "Logging in…"
+                : authMode === "signup"
+                  ? "Create account"
+                  : authMode === "reset"
+                    ? "Send reset link"
+                    : "Log in"}
+            </button>
+          </form>
+          <button
+            className="link-button"
+            disabled={authBusy}
+            onClick={() => openAuth(authMode === "login" ? "signup" : "login")}
+          >
+            {authMode === "signup"
+              ? "Already have an account? Log in"
+              : authMode === "reset"
+                ? "Back to log in"
+                : "New here? Create an account"}
+          </button>
+          {!firebaseReady ? (
+            <p className="setup-note">
+              Account access is temporarily unavailable. You can still browse
+              the library.
+            </p>
+          ) : null}
+        </dialog>
       ) : null}
     </main>
   );

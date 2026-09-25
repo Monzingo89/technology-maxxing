@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
+import { validateReviewedBanks } from "./assessment-banks.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "public");
@@ -20,6 +21,7 @@ const readData = (name) =>
   JSON.parse(fs.readFileSync(path.join(root, "data", `${name}.json`), "utf8"));
 const generated = readData("generated-technologies");
 const extensions = readData("technology-extensions");
+const reviewedBanks = readData("assessment-banks");
 // Only the trusted, checked-in catalog runtime is evaluated. No fetched scripts or user input.
 const context = vm.createContext({
   window: {},
@@ -57,7 +59,7 @@ const httpsUrl = (value) => {
   }
 };
 const site = new URL(
-  process.env.SITE_URL || "https://monzingo89.github.io/technology-maxxing/",
+  process.env.SITE_URL || "https://tech.robertjmonzingo.com/",
 );
 if (
   !["http:", "https:"].includes(site.protocol) ||
@@ -141,6 +143,14 @@ const technologies = Object.entries(data.tech)
   .sort((a, b) => a.name.localeCompare(b.name));
 if (!technologies.length)
   throw new Error("Refusing to publish an empty knowledge catalog.");
+validateReviewedBanks(
+  reviewedBanks,
+  technologies.map((technology) => technology.id),
+);
+for (const technology of technologies) {
+  const reviewed = reviewedBanks[technology.id];
+  if (reviewed) technology.questionBank = reviewed.questions;
+}
 fs.mkdirSync(out, { recursive: true });
 fs.writeFileSync(
   path.join(out, "knowledge.json"),
@@ -174,7 +184,7 @@ const compact = (value, fallback, limit = 150) => {
   const text = firstSentence(value, fallback).replace(/\s+/g, " ").trim();
   return text.length <= limit ? text : `${text.slice(0, limit - 1).trim()}…`;
 };
-const optionText = (value, fallback) => compact(value, fallback, 170);
+const optionText = (value, fallback) => compact(value, fallback, 110);
 const distractors = (correct, pool, count = 3) => {
   const options = unique(pool.map((item) => optionText(item, ""))).filter(
     (item) => item && item !== correct,
@@ -185,7 +195,8 @@ const distractors = (correct, pool, count = 3) => {
     "It is a hardware-only networking appliance",
     "It is mostly used for handwritten document storage",
   ];
-  while (options.length < count) options.push(generic[options.length % generic.length]);
+  while (options.length < count)
+    options.push(generic[options.length % generic.length]);
   return options.slice(0, count);
 };
 const mcq = (id, question, correctValue, pool, explanation) => {
@@ -212,6 +223,26 @@ const normalizeAuthoredQuestion = (question, index) => {
 };
 const relationOption = (name, relationship) =>
   `${name} — ${relationLabels[relationship] || relationship}`;
+const stableOffset = (value, length) => {
+  if (!length) return 0;
+  let hash = 0;
+  for (const character of value)
+    hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
+  return hash % length;
+};
+const rotateForTopic = (items, topicId, dimension) => {
+  if (items.length < 2) return items;
+  const offset = stableOffset(`${topicId}:${dimension}`, items.length);
+  return [...items.slice(offset), ...items.slice(0, offset)];
+};
+const problemAnswer = (item) => {
+  const explicit = item.problemItSolves;
+  if (explicit && explicit.trim() !== item.why?.trim()) return explicit;
+  const need = compact(item.tag || item.why, "a practical technology need", 100)
+    .replace(/[.!?]+$/, "")
+    .trim();
+  return `A project needs this capability: ${need}.`;
+};
 function buildAssessmentBank(technology, allTechnologies) {
   const t = technology;
   const sameCategory = allTechnologies.filter(
@@ -219,106 +250,128 @@ function buildAssessmentBank(technology, allTechnologies) {
   );
   const otherTopics = allTechnologies.filter((item) => item.id !== t.id);
   const comparisonPool = sameCategory.length >= 3 ? sameCategory : otherTopics;
-  const tagPool = unique(comparisonPool.map((item) => item.tag || item.why));
-  const whyPool = unique(comparisonPool.map((item) => item.why || item.tag));
-  const problemPool = unique(comparisonPool.map((item) => item.problemItSolves || item.why || item.tag));
-  const historyPool = unique(comparisonPool.map((item) => item.history || item.born || item.tag));
-  const docsPool = unique(
-    otherTopics.flatMap((item) =>
-      item.docs.map((doc) => {
-        try {
-          return `${doc.label || new URL(doc.url).hostname} (${new URL(doc.url).hostname})`;
-        } catch {
-          return doc.label || "";
-        }
-      }),
-    ),
+  const tagPool = rotateForTopic(
+    unique(comparisonPool.map((item) => item.tag || item.why)),
+    t.id,
+    "purpose",
   );
-  const ownDoc = t.docs[0]
-    ? `${t.docs[0].label || new URL(t.docs[0].url).hostname} (${new URL(t.docs[0].url).hostname})`
-    : "";
-  const relatedOptions = t.related.map((item) => relationOption(item.name, item.relationship));
-  const relatedPool = unique(
-    otherTopics.flatMap((item) =>
-      item.related.map((related) => relationOption(related.name, related.relationship)),
-    ),
+  const whyPool = rotateForTopic(
+    unique(comparisonPool.map((item) => item.why || item.tag)),
+    t.id,
+    "popularity",
   );
-  const challengePool = unique(comparisonPool.flatMap((item) => item.challenges));
-  const ownChallenge = t.challenges[0] || t.practiceChallenges[0]?.prompt || t.tag || t.why;
-  const sourceOrPractice = ownDoc && docsPool.length >= 3
-    ? mcq(
-        "source",
-        `Which linked source should you check first for ${t.name}?`,
-        ownDoc,
-        docsPool,
-        `The catalog links ${t.name} to ${ownDoc}.`,
-      )
-    : mcq(
-        "exercise",
-        `Which hands-on exercise specifically fits ${t.name}?`,
-        ownChallenge,
-        challengePool,
-        ownChallenge,
-      );
-  const relationshipOrPractice = relatedOptions.length
-    ? mcq(
-        "relationship",
-        `Which catalog relationship is correct for ${t.name}?`,
-        relatedOptions[0],
-        relatedPool,
-        relatedOptions[0],
-      )
-    : mcq(
-        "practice",
-        `Which second exercise specifically fits ${t.name}?`,
-        t.challenges[1] || t.practiceChallenges[1]?.prompt || ownChallenge,
-        challengePool,
-        t.challenges[1] || t.practiceChallenges[1]?.prompt || ownChallenge,
-      );
-  const questions = [
-    mcq(
-      "role",
-      `Which statement best matches the primary role of ${t.name}?`,
-      t.tag || t.why,
-      tagPool,
-      t.tag || t.why,
-    ),
-    mcq(
-      "problem",
-      `What problem is ${t.name} mainly used to address?`,
-      t.problemItSolves || t.why || t.tag,
-      problemPool,
-      t.problemItSolves || t.why || t.tag,
-    ),
-    mcq(
-      "history",
-      `Which background note belongs to ${t.name}?`,
-      t.history || t.born || t.tag,
-      historyPool,
-      t.history || t.born || t.tag,
-    ),
-    sourceOrPractice,
-    relationshipOrPractice,
-  ];
-  for (const question of t.questionBank.map(normalizeAuthoredQuestion)) {
-    const replaceIndex = questions.findIndex((item) => item.id === "practice" || item.id === "relationship");
-    if (replaceIndex >= 0 && !questions.some((item) => item.question === question.question)) {
-      questions[replaceIndex] = question;
-      break;
-    }
-  }
-  const bank = questions.slice(0, ASSESSMENT_QUESTION_COUNT).map((question, index) => ({
+  const problemPool = rotateForTopic(
+    unique(comparisonPool.map(problemAnswer)),
+    t.id,
+    "problem",
+  );
+  const sources = t.docs.slice(0, 2);
+  const withMetadata = (question, skill, difficulty = "applied") => ({
     ...question,
-    id: `${t.id}-${index + 1}`,
-  }));
+    skill,
+    difficulty,
+    sources,
+  });
+  const categoryPool = rotateForTopic(
+    unique(allTechnologies.map((item) => item.category).filter(Boolean)),
+    t.id,
+    "category",
+  );
+  const compatibilityFallback =
+    t.id === "webrtc"
+      ? allTechnologies.filter((item) => ["js", "node"].includes(item.id))
+      : [];
+  const compatible = unique(
+    [...t.related, ...compatibilityFallback].map((item) => item.name),
+  ).slice(0, 2);
+  const incompatible = rotateForTopic(
+    sameCategory.map((item) => item.name),
+    t.id,
+    "compatibility",
+  )
+    .filter((name) => !compatible.includes(name))
+    .slice(0, 4 - compatible.length);
+  const compatibilityOptions = unique([
+    ...compatible,
+    ...incompatible,
+    ...otherTopics.map((item) => item.name),
+  ]).slice(0, 4);
+  const questions = [
+    withMetadata(
+      mcq(
+        "purpose",
+        `What does ${t.name} primarily do?`,
+        t.tag || t.why,
+        tagPool,
+        t.tag || t.why,
+      ),
+      "What the topic does",
+      "foundation",
+    ),
+    withMetadata(
+      mcq(
+        "popularity",
+        `What most explains why ${t.name} is popular or useful?`,
+        t.why || t.tag,
+        whyPool,
+        t.why || t.tag,
+      ),
+      "Why people use it",
+    ),
+    withMetadata(
+      mcq(
+        "problem",
+        `What problem does ${t.name} mainly solve?`,
+        problemAnswer(t),
+        problemPool,
+        problemAnswer(t),
+      ),
+      "Problem it solves",
+    ),
+    {
+      id: "compatibility",
+      kind: "multiple",
+      question: `Which reviewed companion technologies are listed for use with ${t.name}? Select all that apply.`,
+      options: compatibilityOptions,
+      answerIndex: 0,
+      answerIndices: compatible.map((_, index) => index),
+      explanation: compatible.length
+        ? `${t.name} is directly connected in the library to ${compatible.join(" and ")}.`
+        : `${t.name} has no reviewed compatibility links in the catalog yet.`,
+      skill: "Compatible technologies",
+      difficulty: "applied",
+      sources,
+    },
+    withMetadata(
+      mcq(
+        "type",
+        `What sort of technology is ${t.name}?`,
+        t.category,
+        categoryPool,
+        `${t.name} is categorized as ${t.category}.`,
+      ),
+      "Technology category",
+      "advanced",
+    ),
+  ];
+  const bank = questions
+    .slice(0, ASSESSMENT_QUESTION_COUNT)
+    .map((question, index) => ({
+      ...question,
+      id: `${t.id}-${index + 1}`,
+    }));
   const prompts = new Set(bank.map((question) => question.question));
   if (prompts.size !== bank.length)
     throw new Error(`Assessment bank for ${t.id} contains repeated prompts.`);
   for (const question of bank) {
     if (question.options.length !== 4)
-      throw new Error(`Assessment question ${question.id} does not have four options.`);
+      throw new Error(
+        `Assessment question ${question.id} does not have four options.`,
+      );
     if (/scenario \d+|best prove practical knowledge/i.test(question.question))
-      throw new Error(`Assessment question ${question.id} still uses scenario filler.`);
+      throw new Error(
+        `Assessment question ${question.id} still uses scenario filler.`,
+      );
   }
   return bank;
 }
@@ -330,7 +383,9 @@ const assessmentBanks = Object.fromEntries(
 );
 for (const [id, bank] of Object.entries(assessmentBanks)) {
   if (bank.length !== ASSESSMENT_QUESTION_COUNT)
-    throw new Error(`Assessment bank for ${id} has ${bank.length} questions; expected ${ASSESSMENT_QUESTION_COUNT}.`);
+    throw new Error(
+      `Assessment bank for ${id} has ${bank.length} questions; expected ${ASSESSMENT_QUESTION_COUNT}.`,
+    );
 }
 
 // Keep the discovery app fast on mobile; full detail lives on each static page.

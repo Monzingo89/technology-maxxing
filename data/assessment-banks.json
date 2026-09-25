@@ -1,0 +1,3206 @@
+{
+  "supervised_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "supervised_learning-numeric-target",
+        "skill": "Formulate a prediction task",
+        "difficulty": "foundation",
+        "question": "Training examples pair delivery features with actual journey times. The model must predict duration in minutes. Which formulation matches the target?",
+        "options": [
+          "Regression trained against the observed numerical durations.",
+          "Classification trained against a separate class for each duration.",
+          "Clustering trained to group deliveries by feature similarity.",
+          "Ranking trained to order deliveries without estimating their durations."
+        ],
+        "answerIndex": 0,
+        "explanation": "Regression learns a numerical target such as elapsed minutes from labeled examples. Treating each observed duration as a separate class discards the intended numerical prediction structure.",
+        "sources": [
+          {
+            "label": "scikit-learn: supervised learning",
+            "url": "https://scikit-learn.org/stable/supervised_learning.html"
+          }
+        ]
+      },
+      {
+        "id": "supervised_learning-preprocessing-leakage",
+        "skill": "Prevent preprocessing leakage",
+        "difficulty": "applied",
+        "question": "You will compare classifiers using cross-validation, with standardized features. How should the scaler be fitted to keep each validation fold independent?",
+        "options": [
+          "Fit it once on all rows before creating the folds.",
+          "Fit separate scalers on each training fold and its validation fold.",
+          "Fit it on each training fold, then transform that fold's validation rows.",
+          "Fit it on each validation fold, then transform that fold's training rows."
+        ],
+        "answerIndex": 2,
+        "explanation": "The scaler must learn its statistics from the training fold and reuse them on validation data. Fitting a separate validation scaler both uses validation information and changes the feature transformation.",
+        "sources": [
+          {
+            "label": "scikit-learn: avoiding data leakage",
+            "url": "https://scikit-learn.org/stable/common_pitfalls.html#data-leakage"
+          }
+        ]
+      },
+      {
+        "id": "supervised_learning-rare-class-recall",
+        "skill": "Interpret imbalanced classification results",
+        "difficulty": "applied",
+        "question": "Only 1% of parts are defective. A classifier predicts every part is sound, giving 99% accuracy. Which metric directly reveals that it catches none of the defects?",
+        "options": [
+          "Specificity for sound parts, which is 100%.",
+          "Recall for defective parts, which is 0%.",
+          "The observed defect prevalence, which is 1%.",
+          "The overall error rate, which is 1%."
+        ],
+        "answerIndex": 1,
+        "explanation": "Defect recall measures the fraction of actual defects detected, and none are detected here. High specificity describes correct rejection of sound parts and can coexist with completely missing defects.",
+        "sources": [
+          {
+            "label": "scikit-learn: recall definition",
+            "url": "https://scikit-learn.org/stable/modules/generated/sklearn.metrics.recall_score.html"
+          }
+        ]
+      },
+      {
+        "id": "supervised_learning-temporal-validation",
+        "skill": "Match evaluation to future deployment",
+        "difficulty": "applied",
+        "question": "You will forecast next week's demand using past weeks, and demand patterns change over time. Which validation scheme best matches deployment?",
+        "options": [
+          "Shuffle individual weeks into training and validation folds.",
+          "Use alternating weeks for training and validation across the entire history.",
+          "Train on the newest weeks and validate on the oldest weeks.",
+          "Train on earlier weeks and validate on later weeks in successive splits."
+        ],
+        "answerIndex": 3,
+        "explanation": "Successive chronological splits test prediction using only information available before each validation period. Shuffled folds can let later patterns inform predictions for earlier weeks, unlike deployment.",
+        "sources": [
+          {
+            "label": "scikit-learn: time-series cross-validation",
+            "url": "https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation-of-time-series-data"
+          }
+        ]
+      },
+      {
+        "id": "supervised_learning-selection-optimism",
+        "skill": "Separate model selection from final evaluation",
+        "difficulty": "advanced",
+        "question": "After trying 200 configurations on one validation set, you report the winner's score as expected deployment accuracy. Which change best addresses optimism introduced by this selection process?",
+        "options": [
+          "Freeze the chosen configuration and evaluate once on a previously untouched test set.",
+          "Average the winner's scores over shuffled folds of the same selection data.",
+          "Report the median validation score of the ten best configurations instead.",
+          "Average the winning validation score with that model's training accuracy."
+        ],
+        "answerIndex": 0,
+        "explanation": "Repeated selection can exploit chance advantages on the validation set, making the winning score optimistic. Reshuffling data already involved in selection does not restore the independence of a previously untouched final test set.",
+        "sources": [
+          {
+            "label": "scikit-learn: model selection and biased validation scores",
+            "url": "https://scikit-learn.org/stable/modules/learning_curve.html#validation-curve"
+          },
+          {
+            "label": "scikit-learn: nested versus non-nested cross-validation",
+            "url": "https://scikit-learn.org/stable/auto_examples/model_selection/plot_nested_cross_validation_iris.html"
+          }
+        ]
+      }
+    ]
+  },
+  "unsupervised_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "unsupervised_learning-cluster-membership",
+        "skill": "Interpret learned cluster labels",
+        "difficulty": "foundation",
+        "question": "K-means assigns unlabeled customer records to clusters 0, 1, and 2. What do those numeric labels mean before inspecting the groups?",
+        "options": [
+          "A ranking of customers from lowest to highest expected value.",
+          "The probability that each customer will make another purchase.",
+          "Group membership identifiers with no inherent ordering or business meaning.",
+          "Known customer categories recovered from labels supplied during training."
+        ],
+        "answerIndex": 2,
+        "explanation": "Cluster numbers identify memberships; their numerical order does not encode customer value or a supplied category. Assigning business meanings requires examining the groups rather than reading meaning into their IDs.",
+        "sources": [
+          {
+            "label": "scikit-learn: KMeans cluster assignments",
+            "url": "https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html"
+          }
+        ]
+      },
+      {
+        "id": "unsupervised_learning-distance-scaling",
+        "skill": "Recognize feature scale effects",
+        "difficulty": "applied",
+        "question": "K-means uses Euclidean distance on annual spending in thousands and visits from 0 to 10. Spending dominates the groups, although both features should contribute comparably. What change addresses this?",
+        "options": [
+          "Standardize the features before computing distances and fitting clusters.",
+          "Increase the cluster count while keeping the original feature scales.",
+          "Run more initializations while keeping the original feature scales.",
+          "Rename the resulting clusters according to their average visit counts."
+        ],
+        "answerIndex": 0,
+        "explanation": "Scaling changes each feature's contribution to Euclidean distance so large numerical units need not dominate. More initializations search for a better solution to the same scaled-distance problem and do not fix that imbalance.",
+        "sources": [
+          {
+            "label": "scikit-learn: feature standardization and differing variances",
+            "url": "https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html"
+          }
+        ]
+      },
+      {
+        "id": "unsupervised_learning-pca-retained-variance",
+        "skill": "Interpret dimensionality reduction",
+        "difficulty": "applied",
+        "question": "A PCA projection retains 95% of a dataset's variance. What does this tell you about the reduced representation?",
+        "options": [
+          "It preserves the original pairwise distance for 95% of observations.",
+          "It retains 95% of the predictive information for any target label.",
+          "It reconstructs 95% of original observations with zero error.",
+          "Its retained components account for 95% of total feature variance."
+        ],
+        "answerIndex": 3,
+        "explanation": "Explained variance measures variation captured by the retained principal components. It does not measure label information, so a low-variance direction could still matter for a downstream prediction task.",
+        "sources": [
+          {
+            "label": "scikit-learn: principal component analysis",
+            "url": "https://scikit-learn.org/stable/modules/decomposition.html#principal-component-analysis-pca"
+          }
+        ]
+      },
+      {
+        "id": "unsupervised_learning-density-cluster-choice",
+        "skill": "Match clustering to geometry",
+        "difficulty": "applied",
+        "question": "A scatterplot has two curved groups of similar density and several isolated points. You want curved clusters and explicit noise labels. Which starting method best matches those requirements?",
+        "options": [
+          "K-means with two centroids and nearest-centroid assignments.",
+          "DBSCAN with a suitable neighborhood radius and minimum density.",
+          "A two-component spherical Gaussian mixture with maximum-probability assignments.",
+          "Ward clustering cut at two groups without a noise-label rule."
+        ],
+        "answerIndex": 1,
+        "explanation": "DBSCAN connects dense neighborhoods into flexible shapes and can leave isolated points labeled as noise. K-means uses centroid-based partitions and assigns each point to a cluster, conflicting with these requirements.",
+        "sources": [
+          {
+            "label": "scikit-learn: DBSCAN density clusters and noise",
+            "url": "https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html"
+          }
+        ]
+      },
+      {
+        "id": "unsupervised_learning-silhouette-shape-bias",
+        "skill": "Recognize an internal metric limitation",
+        "difficulty": "advanced",
+        "question": "Two methods cluster the same curved dataset. K-means has a higher silhouette score than a density method. Which conclusion is justified by that score alone?",
+        "options": [
+          "K-means recovered the true groups more accurately.",
+          "The density method used an incorrect number of groups.",
+          "K-means scored better on that metric, whose geometry can favor convex clusters.",
+          "The density method's groups will be less stable on another sample."
+        ],
+        "answerIndex": 2,
+        "explanation": "Silhouette measures cohesion and separation using distances and tends to favor convex cluster geometry. A higher score alone does not establish that those groups match the meaningful structure of curved data.",
+        "sources": [
+          {
+            "label": "scikit-learn: silhouette coefficient limitations",
+            "url": "https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient"
+          }
+        ]
+      }
+    ]
+  },
+  "self_supervised_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "self_supervised_learning-data-derived-targets",
+        "skill": "Identify the supervision source",
+        "difficulty": "foundation",
+        "question": "A text model hides selected words and predicts their original values. Why can this training use raw sentences without separately annotated task labels?",
+        "options": [
+          "The model selects its most likely guesses as the correct targets.",
+          "The original sentence supplies the targets for the hidden positions.",
+          "Sentence similarity supplies a human-approved category for each missing word.",
+          "The loss compares sentence lengths instead of checking word predictions."
+        ],
+        "answerIndex": 1,
+        "explanation": "The original words are known before masking, so the data itself supplies the prediction targets. Treating a model's guesses as correct targets is a different mechanism and is not needed for masked-word training.",
+        "sources": [
+          {
+            "label": "BERT: masked language model objective",
+            "url": "https://arxiv.org/html/1810.04805v2"
+          }
+        ]
+      },
+      {
+        "id": "self_supervised_learning-contrastive-positive-pair",
+        "skill": "Construct a contrastive positive pair",
+        "difficulty": "applied",
+        "question": "You implement instance-based contrastive pretraining in the SimCLR style. Which pair should be marked positive for a given image?",
+        "options": [
+          "Two unrelated images selected because their current embeddings are far apart.",
+          "Two different images placed next to each other in the shuffled batch.",
+          "The image and another image sharing the same average brightness.",
+          "Two independently augmented views produced from that same source image."
+        ],
+        "answerIndex": 3,
+        "explanation": "SimCLR forms a positive pair by applying separate augmentations to one source image. Sharing brightness or a batch position does not establish that two different images are the intended positive pair.",
+        "sources": [
+          {
+            "label": "SimCLR: augmentation and positive-pair construction",
+            "url": "https://arxiv.org/html/2002.05709v3"
+          }
+        ]
+      },
+      {
+        "id": "self_supervised_learning-frozen-linear-probe",
+        "skill": "Evaluate pretrained representations",
+        "difficulty": "applied",
+        "question": "You want to measure how readily a pretrained encoder's existing features separate labeled classes, without adapting the encoder. Which evaluation matches that goal?",
+        "options": [
+          "Freeze the encoder and train a linear classifier on its features.",
+          "Fine-tune the encoder and classifier jointly using the labeled examples.",
+          "Train a fresh encoder and classifier from scratch using the labels.",
+          "Report the encoder's pretraining loss without testing class predictions."
+        ],
+        "answerIndex": 0,
+        "explanation": "A frozen linear probe tests class information accessible through a linear readout of the existing representation. Joint fine-tuning also changes the encoder, so its score measures adaptation as well as initial feature quality.",
+        "sources": [
+          {
+            "label": "DINO: frozen-feature linear evaluation",
+            "url": "https://arxiv.org/html/2104.14294v2"
+          }
+        ]
+      },
+      {
+        "id": "self_supervised_learning-task-preserving-views",
+        "skill": "Choose task-relevant augmentations",
+        "difficulty": "applied",
+        "question": "A downstream task depends on object color. An encoder was pretrained with heavy color jitter. Which comparison most directly tests whether this augmentation harmed access to the required information?",
+        "options": [
+          "Compare pretraining losses between encoders trained with different color-jitter strengths.",
+          "Compare same-image agreement before and after grayscale conversion of the evaluation images.",
+          "Compare frozen color-classification accuracy with an otherwise matched encoder pretrained without color jitter.",
+          "Compare unlabeled clustering silhouette scores between the two encoders' feature sets."
+        ],
+        "answerIndex": 2,
+        "explanation": "A matched frozen-probe comparison tests whether color labels are less recoverable from the learned representation. Pretraining loss or unlabeled clustering scores can improve while color information useful downstream is lost.",
+        "sources": [
+          {
+            "label": "What Makes for Good Views for Contrastive Learning?",
+            "url": "https://arxiv.org/abs/2005.10243"
+          },
+          {
+            "label": "DINO: frozen-feature linear evaluation",
+            "url": "https://arxiv.org/html/2104.14294v2"
+          }
+        ]
+      },
+      {
+        "id": "self_supervised_learning-collapse-prevention",
+        "skill": "Diagnose representation collapse",
+        "difficulty": "advanced",
+        "question": "An encoder minimizes disagreement between augmented views by outputting one constant vector for every image. Which additional objective directly discourages this collapse while retaining the agreement objective?",
+        "options": [
+          "Reduce disagreement between paired views with a larger agreement-loss weight.",
+          "Minimize feature variance across all images in each training batch.",
+          "Reduce embedding size while leaving the existing loss unchanged.",
+          "Penalize feature variance falling below a threshold across distinct images."
+        ],
+        "answerIndex": 3,
+        "explanation": "A minimum-variance term penalizes constant features across different examples while allowing paired views to agree. Increasing the agreement weight still rewards the constant solution and does not address its missing diversity.",
+        "sources": [
+          {
+            "label": "VICReg: variance regularization against representation collapse",
+            "url": "https://arxiv.org/abs/2105.04906"
+          }
+        ]
+      }
+    ]
+  },
+  "reinforcement_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "reinforcement_learning-policy-versus-value",
+        "skill": "Separate policy from value",
+        "difficulty": "foundation",
+        "question": "A robot has one network selecting movements and another estimating future reward. Which description is correct?",
+        "options": [
+          "The movement network is a policy; the reward estimator is a value function.",
+          "The movement network is a reward function; the estimator is a policy.",
+          "Both networks are policies because both affect the robot's learning.",
+          "Both networks are value functions because both use observations."
+        ],
+        "answerIndex": 0,
+        "explanation": "A policy selects actions; a value function estimates expected return. Predicting future reward does not itself specify which action the robot takes.",
+        "sources": [
+          {
+            "label": "Spinning Up: policies, value functions, and return",
+            "url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro.html"
+          }
+        ]
+      },
+      {
+        "id": "reinforcement_learning-discounted-return",
+        "skill": "Compare delayed rewards",
+        "difficulty": "applied",
+        "question": "Choice A yields 4 now; choice B yields 10 after two discount steps. No other rewards occur, and the discount factor is 0.5. Which has higher discounted return?",
+        "options": [
+          "B, because its total reward is 10.",
+          "B, because one discount gives a return of 5.",
+          "A, because two discounts reduce B's return to 2.5.",
+          "A, because delayed rewards are excluded from return."
+        ],
+        "answerIndex": 2,
+        "explanation": "B contributes 10 × 0.5 × 0.5 = 2.5, below A's 4. Applying one discount would miscount the two specified steps.",
+        "sources": [
+          {
+            "label": "Spinning Up: policies, value functions, and return",
+            "url": "https://spinningup.openai.com/en/latest/spinningup/rl_intro.html"
+          }
+        ]
+      },
+      {
+        "id": "reinforcement_learning-exploration",
+        "skill": "Diagnose missing exploration",
+        "difficulty": "applied",
+        "question": "An agent repeatedly chooses a familiar route and never tries an unexplored shortcut. Which change most directly helps it discover the shortcut's rewards?",
+        "options": [
+          "Increase the discount factor while keeping action choices identical.",
+          "Add controlled action exploration during training.",
+          "Train longer on the same recorded route transitions.",
+          "Increase gradient clipping strength during policy updates."
+        ],
+        "answerIndex": 1,
+        "explanation": "Exploration lets the agent collect evidence about actions it has not tried. A longer planning horizon alone does not supply missing experiences.",
+        "sources": [
+          {
+            "label": "Spinning Up: entropy and exploration in Soft Actor-Critic",
+            "url": "https://spinningup.openai.com/en/latest/algorithms/sac.html"
+          }
+        ]
+      },
+      {
+        "id": "reinforcement_learning-truncation-bootstrap",
+        "skill": "Handle interrupted episodes",
+        "difficulty": "applied",
+        "question": "A continuing task stops only because a training time limit expires. The final state is nonterminal. How should a bootstrapped value target treat this transition?",
+        "options": [
+          "Discard its immediate reward because the rollout is incomplete.",
+          "Use the immediate reward and set future value to zero.",
+          "Replace the next-state value with the reset state's value.",
+          "Use immediate reward plus discounted final-state value."
+        ],
+        "answerIndex": 3,
+        "explanation": "An external cutoff truncates data collection without ending the underlying task. Zero future value is appropriate for genuine terminal states, not this cutoff.",
+        "sources": [
+          {
+            "label": "Gymnasium: handling termination and truncation",
+            "url": "https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/"
+          }
+        ]
+      },
+      {
+        "id": "reinforcement_learning-reward-specification",
+        "skill": "Recognize reward misspecification",
+        "difficulty": "advanced",
+        "question": "A cleaning robot earns points whenever its sensor detects dirt disappearing. It learns to hide dirt from the sensor. Which change best addresses the failure?",
+        "options": [
+          "Increase training episodes under the same reward.",
+          "Increase exploration while retaining the same sensor-based reward.",
+          "Redesign rewards and evaluation around actual dirt removal.",
+          "Reduce the learning rate while preserving the sensor-only objective."
+        ],
+        "answerIndex": 2,
+        "explanation": "The measured reward permits behavior that defeats the intended objective. More optimization of that same proxy can reinforce the unwanted strategy.",
+        "sources": [
+          {
+            "label": "Concrete Problems in AI Safety",
+            "url": "https://arxiv.org/abs/1606.06565"
+          }
+        ]
+      }
+    ]
+  },
+  "rlhf": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "rlhf-human-feedback-loop",
+        "skill": "Identify the feedback loop",
+        "difficulty": "foundation",
+        "question": "In RLHF using a learned reward model, how do human comparisons influence policy training?",
+        "options": [
+          "They provide target next tokens for every policy update.",
+          "They fit a reward model whose scores guide policy optimization.",
+          "They replace policy optimization with retrieval of preferred examples.",
+          "They tune decoding temperature while leaving learned parameters unchanged."
+        ],
+        "answerIndex": 1,
+        "explanation": "Human comparisons train an estimate of preferences, which supplies rewards for policy learning. Token-by-token imitation of demonstrations is supervised fine-tuning instead.",
+        "sources": [
+          {
+            "label": "Deep reinforcement learning from human preferences",
+            "url": "https://arxiv.org/abs/1706.03741"
+          }
+        ]
+      },
+      {
+        "id": "rlhf-score-meaning",
+        "skill": "Interpret preference scores",
+        "difficulty": "applied",
+        "question": "A pairwise reward model assigns an answer a score of 8. What can you infer from that number alone?",
+        "options": [
+          "The answer is twice as helpful as one scoring 4.",
+          "The model predicts an 80 percent chance of factual accuracy.",
+          "A human would rate it 8 on a ten-point scale.",
+          "Its absolute helpfulness is unclear without a comparison and calibration."
+        ],
+        "answerIndex": 3,
+        "explanation": "Pairwise training constrains score differences and does not establish an absolute helpfulness scale. Treating 8 as a probability or a ratio of quality is unsupported.",
+        "sources": [
+          {
+            "label": "TRL reward modeling: pairwise reward loss",
+            "url": "https://huggingface.co/docs/trl/en/reward_trainer"
+          }
+        ]
+      },
+      {
+        "id": "rlhf-validation-grouping",
+        "skill": "Prevent preference-data leakage",
+        "difficulty": "applied",
+        "question": "Several response comparisons come from each customer conversation. You want to evaluate generalization to new customers. How should you split the data?",
+        "options": [
+          "Randomly split individual comparison rows across training and validation.",
+          "Put preferred answers in training and rejected answers in validation.",
+          "Keep all data from each customer in a single split.",
+          "Sort comparisons by reward and alternate them between splits."
+        ],
+        "answerIndex": 2,
+        "explanation": "Grouping by customer prevents related conversations from leaking across this evaluation boundary. A random row split can reuse customer-specific patterns in validation.",
+        "sources": [
+          {
+            "label": "InstructGPT: training and evaluation methods",
+            "url": "https://arxiv.org/html/2203.02155v1"
+          }
+        ]
+      },
+      {
+        "id": "rlhf-kl-control",
+        "skill": "Interpret policy regularization",
+        "difficulty": "applied",
+        "question": "A policy starts producing repetitive answers with high learned rewards. What is the role of a KL penalty against its supervised reference policy?",
+        "options": [
+          "Penalize excessive distribution changes while allowing reward-driven improvement.",
+          "Replace the learned reward with the reference model's next-token accuracy.",
+          "Force the reward model to match human scores in absolute units.",
+          "Make the policy sample each reference response with equal probability."
+        ],
+        "answerIndex": 0,
+        "explanation": "KL regularization discourages large departures from the reference distribution. It constrains policy change rather than calibrating the reward model's scores.",
+        "sources": [
+          {
+            "label": "InstructGPT: training and evaluation methods",
+            "url": "https://arxiv.org/html/2203.02155v1"
+          }
+        ]
+      },
+      {
+        "id": "rlhf-reward-overoptimization",
+        "skill": "Detect reward overoptimization",
+        "difficulty": "advanced",
+        "question": "More RLHF training raises reward-model scores, but humans prefer an earlier checkpoint. Which checkpoint-selection approach best addresses this conflict?",
+        "options": [
+          "Select the checkpoint with the highest held-out reward-model score.",
+          "Select the checkpoint with the smallest KL divergence from the reference.",
+          "Compare checkpoints using fresh blinded human judgments alongside reward-model scores.",
+          "Train until reward plateaus, then evaluate only the final checkpoint."
+        ],
+        "answerIndex": 2,
+        "explanation": "Optimizing an imperfect reward proxy can reduce human-rated quality before proxy scores peak. Comparing human evaluations across checkpoints detects this tradeoff better than selecting by reward alone.",
+        "sources": [
+          {
+            "label": "Scaling Laws for Reward Model Overoptimization",
+            "url": "https://arxiv.org/abs/2210.10760"
+          }
+        ]
+      }
+    ]
+  },
+  "sft": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "sft-token-objective",
+        "skill": "Identify supervised token targets",
+        "difficulty": "foundation",
+        "question": "A language model is fine-tuned on curated prompts and target answers using standard SFT. What does its main loss encourage?",
+        "options": [
+          "Higher scores for sampled answers under a learned reward model.",
+          "Larger preference margins between paired chosen and rejected answers.",
+          "More uncertain token predictions across every possible completion.",
+          "Higher likelihood of the demonstrated target tokens in context."
+        ],
+        "answerIndex": 3,
+        "explanation": "Standard SFT minimizes token cross-entropy against demonstrated outputs. Comparing chosen and rejected completions is a preference objective rather than this imitation loss.",
+        "sources": [
+          {
+            "label": "TRL SFT Trainer: supervised loss and loss masks",
+            "url": "https://huggingface.co/docs/trl/en/sft_trainer"
+          }
+        ]
+      },
+      {
+        "id": "sft-loss-masking",
+        "skill": "Choose loss targets",
+        "difficulty": "applied",
+        "question": "A conversation contains system instructions, a user request, and a desired assistant reply. You want to train only on assistant outputs. Which loss setup fits?",
+        "options": [
+          "Score every token, including system and user messages.",
+          "Score assistant tokens while retaining earlier messages as context.",
+          "Remove system and user messages before training the reply.",
+          "Score user tokens while masking the assistant reply."
+        ],
+        "answerIndex": 1,
+        "explanation": "Loss masking selects assistant tokens as targets while preserving their conditioning context. Removing the prompt instead would train a different conditional task.",
+        "sources": [
+          {
+            "label": "TRL SFT Trainer: supervised loss and loss masks",
+            "url": "https://huggingface.co/docs/trl/en/sft_trainer"
+          }
+        ]
+      },
+      {
+        "id": "sft-generated-evaluation",
+        "skill": "Distinguish training from generation",
+        "difficulty": "applied",
+        "question": "An SFT model predicts held-out answer tokens well when given correct prefixes, but drifts during free generation. What should you test next?",
+        "options": [
+          "Generate full answers from held-out prompts and score task completion.",
+          "Compute the same token loss on additional correct prefixes only.",
+          "Shorten every target answer until token accuracy rises.",
+          "Evaluate by supplying the full correct answer in each prompt."
+        ],
+        "answerIndex": 0,
+        "explanation": "During generation, earlier model errors become part of the next prediction's context. Correct-prefix token loss does not measure those accumulating errors.",
+        "sources": [
+          {
+            "label": "Scheduled Sampling: training and inference discrepancy",
+            "url": "https://arxiv.org/abs/1506.03099"
+          }
+        ]
+      },
+      {
+        "id": "sft-instruction-transfer",
+        "skill": "Evaluate transfer to new tasks",
+        "difficulty": "applied",
+        "question": "A model was instruction-tuned on summarization and translation. Which evaluation most directly tests transfer to a task type absent from fine-tuning?",
+        "options": [
+          "New documents requiring the same summarization instructions.",
+          "Paraphrases of translation examples used in training.",
+          "An unseen classification task described by instructions without demonstrations.",
+          "The training tasks with their original answers removed."
+        ],
+        "answerIndex": 2,
+        "explanation": "An unseen task type tests whether instruction-following transfers beyond the trained task families. New examples of summarization test within-task generalization instead.",
+        "sources": [
+          {
+            "label": "Finetuned Language Models Are Zero-Shot Learners",
+            "url": "https://arxiv.org/abs/2109.01652"
+          }
+        ]
+      },
+      {
+        "id": "sft-forgetting",
+        "skill": "Assess specialization tradeoffs",
+        "difficulty": "advanced",
+        "question": "Support SFT improves replies but degrades math under identical evaluation settings. Which experiment most directly tests a remedy for forgetting while measuring its cost?",
+        "options": [
+          "Increase support-only epochs and select the lowest support training loss.",
+          "Compare support-only training with mixed rehearsal, evaluating support and retained skills.",
+          "Reduce the learning rate and select checkpoints using support validation alone.",
+          "Freeze additional layers and compare only support-domain validation accuracy."
+        ],
+        "answerIndex": 1,
+        "explanation": "Rehearsal mixes earlier-task examples into training, and evaluating both skill groups measures its tradeoff. A smaller learning rate may help, but support-only evaluation misses retained capabilities.",
+        "sources": [
+          {
+            "label": "Catastrophic forgetting during continual language-model fine-tuning",
+            "url": "https://arxiv.org/abs/2308.08747"
+          },
+          {
+            "label": "Catastrophic Forgetting in Model Updates: data rehearsal",
+            "url": "https://arxiv.org/abs/2306.10181"
+          }
+        ]
+      }
+    ]
+  },
+  "dpo": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "dpo-preference-objective",
+        "skill": "Identify the DPO objective",
+        "difficulty": "foundation",
+        "question": "What does standard DPO optimize from a preferred and rejected response to the same prompt?",
+        "options": [
+          "A preference loss using policy likelihood ratios relative to a reference.",
+          "A reward predictor followed by separate on-policy reinforcement learning.",
+          "Next-token likelihood on preferred responses without using rejected responses.",
+          "A classifier that replaces the language model during answer generation."
+        ],
+        "answerIndex": 0,
+        "explanation": "DPO expresses preference learning directly through the policy and a reference model. Training only on preferred answers would omit its contrastive preference signal.",
+        "sources": [
+          {
+            "label": "Direct Preference Optimization: objective and derivation",
+            "url": "https://arxiv.org/html/2305.18290v3"
+          }
+        ]
+      },
+      {
+        "id": "dpo-relative-not-absolute",
+        "skill": "Interpret relative likelihood changes",
+        "difficulty": "applied",
+        "question": "With fixed reference and positive beta, a DPO pair's chosen and rejected likelihoods both fall, but the chosen-to-rejected ratio increases. What happens to that pair's standard DPO loss?",
+        "options": [
+          "It increases because the chosen response became less likely.",
+          "It stays constant because both likelihoods decreased.",
+          "It cannot change until a reward model is retrained.",
+          "It decreases because the preference margin improved."
+        ],
+        "answerIndex": 3,
+        "explanation": "With reference and beta fixed, a larger chosen-to-rejected ratio lowers the pair's DPO loss. The objective does not require the chosen likelihood to increase in isolation.",
+        "sources": [
+          {
+            "label": "Direct Preference Optimization: objective and derivation",
+            "url": "https://arxiv.org/html/2305.18290v3"
+          }
+        ]
+      },
+      {
+        "id": "dpo-pair-integrity",
+        "skill": "Validate preference comparisons",
+        "difficulty": "applied",
+        "question": "A DPO record combines a chosen answer to a coding prompt with a rejected answer to an unrelated travel prompt. What should happen before training?",
+        "options": [
+          "Keep it because each answer has a valid preference label.",
+          "Collect a preference comparison between answers to the same prompt.",
+          "Remove both prompts and compare unconditional answer likelihoods.",
+          "Swap chosen and rejected labels to balance the dataset."
+        ],
+        "answerIndex": 1,
+        "explanation": "DPO compares alternative completions under a shared prompt. Valid answers to different requests do not establish the required conditional preference.",
+        "sources": [
+          {
+            "label": "TRL DPO Trainer: preference dataset requirements",
+            "url": "https://huggingface.co/docs/trl/en/dpo_trainer"
+          }
+        ]
+      },
+      {
+        "id": "dpo-length-confound",
+        "skill": "Detect preference confounding",
+        "difficulty": "applied",
+        "question": "After DPO, answers are longer and a judge's win rate rises. Which check best separates improved substance from a preference for verbosity?",
+        "options": [
+          "Compare average output length with the training-set average.",
+          "Increase generation limits and repeat the same judging setup.",
+          "Evaluate factuality and usefulness while controlling for response length.",
+          "Normalize the displayed win rate by the number of prompts."
+        ],
+        "answerIndex": 2,
+        "explanation": "Length-controlled evaluation helps distinguish substantive improvement from verbosity bias. A larger unconstrained win rate can reflect longer answers rather than better content.",
+        "sources": [
+          {
+            "label": "Disentangling Length from Quality in Direct Preference Optimization",
+            "url": "https://arxiv.org/abs/2403.19159"
+          }
+        ]
+      },
+      {
+        "id": "dpo-offline-coverage",
+        "skill": "Assess limits of offline preferences",
+        "difficulty": "advanced",
+        "question": "An offline DPO dataset covers brief factual answers but no multi-step planning. Planning remains weak after repeated training. What is the most justified next step?",
+        "options": [
+          "Collect representative planning preferences and evaluate on held-out planning tasks.",
+          "Repeat the same factual pairs until their training loss approaches zero.",
+          "Increase minibatch size to stabilize the preference gradients.",
+          "Select checkpoints solely by accuracy on the factual preference pairs."
+        ],
+        "answerIndex": 0,
+        "explanation": "Offline optimization depends on the behaviors represented in its preference data. Reusing narrow data does not provide evidence about missing planning behaviors.",
+        "sources": [
+          {
+            "label": "The Importance of Online Data: preference fine-tuning and coverage",
+            "url": "https://arxiv.org/abs/2406.01462"
+          }
+        ]
+      }
+    ]
+  },
+  "llm": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "llm-causal-training-target",
+        "skill": "Identify the causal training objective",
+        "difficulty": "foundation",
+        "question": "During standard causal language-model pretraining, which prediction supplies the token-level training target?",
+        "options": [
+          "A masked token, given tokens on both sides.",
+          "The next token, given the preceding tokens.",
+          "A preference label, given two complete responses.",
+          "A topic label, given an entire document."
+        ],
+        "answerIndex": 1,
+        "explanation": "Causal pretraining learns to predict the next token from earlier tokens. Predicting a hidden token from both directions instead describes masked language modeling.",
+        "sources": [
+          {
+            "label": "Hugging Face: Causal language modeling",
+            "url": "https://huggingface.co/docs/transformers/en/tasks/language_modeling"
+          }
+        ]
+      },
+      {
+        "id": "llm-temperature-distribution",
+        "skill": "Predict temperature's effect on sampling",
+        "difficulty": "applied",
+        "question": "With sampling enabled and unequal logits unchanged, you lower temperature from 1.0 to 0.3. What happens to the next-token distribution?",
+        "options": [
+          "The highest-probability token becomes the deterministic choice.",
+          "Tokens below a fixed probability threshold become impossible.",
+          "Lower-ranked tokens gain probability relative to higher-ranked tokens.",
+          "Higher-ranked tokens gain probability relative to lower-ranked tokens."
+        ],
+        "answerIndex": 3,
+        "explanation": "Lower positive temperature sharpens the probability distribution toward higher logits. It does not turn sampling into greedy decoding or impose a probability cutoff.",
+        "sources": [
+          {
+            "label": "Hugging Face: Generation strategies",
+            "url": "https://huggingface.co/docs/transformers/en/generation_strategies"
+          },
+          {
+            "label": "Hugging Face: Generation configuration",
+            "url": "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
+          }
+        ]
+      },
+      {
+        "id": "llm-context-demonstrations",
+        "skill": "Distinguish prompting from parameter updates",
+        "difficulty": "applied",
+        "question": "A model returns labels 'A' and 'B' after seeing examples that map reviews to those labels. Removing the examples restores its previous format. What best explains this behavior?",
+        "options": [
+          "Conditioning its predictions on the labeling pattern in the current context.",
+          "Retrieving matching labeled reviews from an external search index.",
+          "Updating adapter parameters to learn the labeling convention from those reviews.",
+          "Changing sampling temperature to favor the demonstrated labels over other tokens."
+        ],
+        "answerIndex": 0,
+        "explanation": "The examples temporarily guide predictions through the context supplied with the request. Their presence does not itself create a retrieval index or change sampling settings.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "llm-context-budget",
+        "skill": "Manage the inference context budget",
+        "difficulty": "applied",
+        "question": "Conversation history plus the required answer exceeds a decoder-only model's supported context window. Which change addresses that limit without reducing the requested answer length?",
+        "options": [
+          "Lower sampling temperature while preserving the full conversation history.",
+          "Quantize model weights while preserving the full conversation history.",
+          "Shorten the prompt while reserving room for the requested answer.",
+          "Enable key-value caching while preserving the full conversation history."
+        ],
+        "answerIndex": 2,
+        "explanation": "Prompt tokens and generated tokens must fit within the supported sequence budget. Caching reduces repeated computation but does not extend that model limit.",
+        "sources": [
+          {
+            "label": "Hugging Face: Fixed-length language models",
+            "url": "https://huggingface.co/docs/transformers/en/perplexity"
+          },
+          {
+            "label": "Hugging Face: Generation length parameters",
+            "url": "https://huggingface.co/docs/transformers/en/main_classes/text_generation"
+          }
+        ]
+      },
+      {
+        "id": "llm-perplexity-comparability",
+        "skill": "Interpret perplexity comparisons",
+        "difficulty": "advanced",
+        "question": "Two models use different tokenizers. One reports lower per-token perplexity on the same text. What needs checking before treating that score as better language prediction?",
+        "options": [
+          "Whether both models were decoded at the same sampling temperature.",
+          "Whether tokenization and evaluation protocols make the scores comparable.",
+          "Whether the model with lower perplexity has more trainable parameters.",
+          "Whether both models generate the same number of output tokens."
+        ],
+        "answerIndex": 1,
+        "explanation": "Per-token perplexity depends on how text is tokenized and how context is supplied during evaluation. Matching sampling temperature would not fix incomparable token units.",
+        "sources": [
+          {
+            "label": "Hugging Face: Perplexity and tokenization",
+            "url": "https://huggingface.co/docs/transformers/en/perplexity"
+          }
+        ]
+      }
+    ]
+  },
+  "transformer_architecture": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "transformer_architecture-attention-values",
+        "skill": "Explain self-attention aggregation",
+        "difficulty": "foundation",
+        "question": "In self-attention, how does a token combine information from other allowed positions?",
+        "options": [
+          "Average their embeddings using equal weights fixed across inputs.",
+          "Pass them through a recurrent state in sequence order.",
+          "Weight their value vectors using query-key compatibility scores.",
+          "Select the nearest vocabulary embedding and discard other positions."
+        ],
+        "answerIndex": 2,
+        "explanation": "Attention uses query-key scores to calculate a weighted combination of value vectors. Equal averaging misses the input-dependent weighting that makes attention selective.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need: Scaled Dot-Product Attention",
+            "url": "https://arxiv.org/html/1706.03762v7"
+          }
+        ]
+      },
+      {
+        "id": "transformer_architecture-causal-leakage",
+        "skill": "Prevent future-token leakage",
+        "difficulty": "applied",
+        "question": "A decoder predicts each next token during training, but every position can attend to later input tokens. Which change addresses the resulting leakage?",
+        "options": [
+          "Apply a causal mask that blocks attention to later positions.",
+          "Mask padding tokens while leaving later content tokens visible.",
+          "Increase attention dropout without changing which positions are visible.",
+          "Share input and output embeddings to constrain the decoder's predictions."
+        ],
+        "answerIndex": 0,
+        "explanation": "Causal masking prevents predictions from using future tokens that would be unavailable during generation. A padding mask excludes padding but does not block future content.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need: Decoder masking",
+            "url": "https://arxiv.org/html/1706.03762v7"
+          }
+        ]
+      },
+      {
+        "id": "transformer_architecture-position-information",
+        "skill": "Diagnose missing sequence order",
+        "difficulty": "applied",
+        "question": "An encoder uses unmasked self-attention and mean pooling, without positional information. It treats 'dog bites man' like 'man bites dog.' Which change directly addresses this?",
+        "options": [
+          "Increase the hidden width of each position-wise feed-forward layer.",
+          "Train with more dropout on the existing token embeddings.",
+          "Share the token embedding matrix with an output projection.",
+          "Add position information so representations can encode token order."
+        ],
+        "answerIndex": 3,
+        "explanation": "Without position information, these layers and mean pooling cannot distinguish a permutation of the same tokens. A wider position-wise layer still provides no sequence order.",
+        "sources": [
+          {
+            "label": "TensorFlow: Transformer embedding and positional encoding",
+            "url": "https://www.tensorflow.org/text/tutorials/transformer"
+          }
+        ]
+      },
+      {
+        "id": "transformer_architecture-kv-reuse",
+        "skill": "Apply attention caching during decoding",
+        "difficulty": "applied",
+        "question": "During autoregressive inference, a decoder repeatedly recomputes earlier tokens' attention keys and values. Which change reduces this repeated work while retaining attention to the prefix?",
+        "options": [
+          "Cache vocabulary probabilities and reuse them unchanged for the next token.",
+          "Reuse past keys and values; compute new ones for the appended token.",
+          "Average previous attention scores into one fixed representation of the prefix.",
+          "Retain the latest token's key and value, discarding the earlier states."
+        ],
+        "answerIndex": 1,
+        "explanation": "A key-value cache preserves earlier attention states and appends states for new tokens. Reusing old vocabulary probabilities would ignore the newly generated context.",
+        "sources": [
+          {
+            "label": "Hugging Face: How caching works",
+            "url": "https://huggingface.co/docs/transformers/en/cache_explanation"
+          }
+        ]
+      },
+      {
+        "id": "transformer_architecture-local-attention-tradeoff",
+        "skill": "Assess sparse attention's connectivity tradeoff",
+        "difficulty": "advanced",
+        "question": "Replacing full self-attention with a fixed sliding window reduces long-sequence attention cost. What capability is lost within a single layer when no global connections are added?",
+        "options": [
+          "Sharing learned projection weights across positions in the sequence.",
+          "Assigning different attention weights to tokens inside the window.",
+          "Directly attending to a token outside the local window.",
+          "Passing information through multiple stacked layers of the network."
+        ],
+        "answerIndex": 2,
+        "explanation": "Local attention removes direct connections to positions outside its window in that layer. Stacked layers can still propagate information farther through multiple hops.",
+        "sources": [
+          {
+            "label": "Longformer: The Long-Document Transformer",
+            "url": "https://arxiv.org/abs/2004.05150"
+          }
+        ]
+      }
+    ]
+  },
+  "rag": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "rag-external-evidence",
+        "skill": "Explain retrieval's role in generation",
+        "difficulty": "foundation",
+        "question": "A company updates a policy after its language model was trained. How can a basic RAG pipeline use the update at answer time?",
+        "options": [
+          "Update the tokenizer with new policy terms before generating the answer.",
+          "Fine-tune the generator on the policy before answering each request.",
+          "Store passage vectors but generate without retrieving their associated content.",
+          "Retrieve the updated passage and include it in the generation context."
+        ],
+        "answerIndex": 3,
+        "explanation": "RAG supplies relevant external evidence to the generator for the current request. Fine-tuning changes model parameters and is a separate adaptation mechanism.",
+        "sources": [
+          {
+            "label": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+            "url": "https://arxiv.org/abs/2005.11401"
+          },
+          {
+            "label": "Microsoft: RAG and generative AI",
+            "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview"
+          }
+        ]
+      },
+      {
+        "id": "rag-retrieval-diagnosis",
+        "skill": "Locate a retrieval-stage failure",
+        "difficulty": "applied",
+        "question": "The correct policy paragraph is indexed, but absent from returned passages for failed questions. Which change targets the observed failure first?",
+        "options": [
+          "Fine-tune the generator on examples of correctly formatted responses.",
+          "Tune retrieval against labeled question-to-evidence relevance examples.",
+          "Lower generation temperature while using the same retrieved passages.",
+          "Increase the answer-token budget while retaining the same retrieved passages."
+        ],
+        "answerIndex": 1,
+        "explanation": "The evidence is missing before generation, so retrieval should be measured and improved against known relevant passages. Changing answer length would not put the missing paragraph into context.",
+        "sources": [
+          {
+            "label": "Microsoft: RAG document retrieval evaluation",
+            "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/rag-evaluators"
+          }
+        ]
+      },
+      {
+        "id": "rag-claim-grounding",
+        "skill": "Verify that evidence supports an answer",
+        "difficulty": "applied",
+        "question": "Retrieved text permits refunds within 30 days. The answer says 60 days and cites that text. Which check directly detects the error?",
+        "options": [
+          "Similarity between the user's question and the retrieved paragraph.",
+          "Presence of a citation link somewhere in the generated answer.",
+          "Support for the answer's specific claims in the cited passage.",
+          "Overlap between the answer's keywords and the user's question."
+        ],
+        "answerIndex": 2,
+        "explanation": "Groundedness checks whether the supplied evidence supports the answer's claims. A citation's presence alone does not establish that it supports the stated deadline.",
+        "sources": [
+          {
+            "label": "Microsoft: RAG groundedness evaluation",
+            "url": "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/rag-evaluators"
+          }
+        ]
+      },
+      {
+        "id": "rag-chunk-context",
+        "skill": "Preserve meaning across document chunks",
+        "difficulty": "applied",
+        "question": "A table row is retrieved without its column headings, so the generator confuses units. Which indexing change most directly prevents this context loss?",
+        "options": [
+          "Include relevant table headings and units with each indexed row chunk.",
+          "Use shorter row-only chunks to make their vectors more specific.",
+          "Remove repeated headings to reduce overlap between neighboring chunks.",
+          "Increase embedding dimensions without changing the text inside each chunk."
+        ],
+        "answerIndex": 0,
+        "explanation": "A useful chunk retains the context needed to interpret its contents, including headings and units. More embedding dimensions cannot recover headings omitted from the indexed text.",
+        "sources": [
+          {
+            "label": "Microsoft: Chunk documents and preserve semantic context",
+            "url": "https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-chunk-documents"
+          }
+        ]
+      },
+      {
+        "id": "rag-context-distraction-test",
+        "skill": "Test the tradeoff from extra retrieved context",
+        "difficulty": "advanced",
+        "question": "Adding retrieved passages reduces accuracy even though the answer-bearing passage remains present. Which controlled test best isolates the effect of the extra context?",
+        "options": [
+          "Compare larger and smaller generators while keeping the same question, passages, and decoding settings.",
+          "Compare lower and higher temperatures while keeping the same model, question, and passages.",
+          "Compare shorter and longer answer limits while keeping the same model, question, and passages.",
+          "Compare full versus minimal evidence with model, question, and decoding settings fixed."
+        ],
+        "answerIndex": 3,
+        "explanation": "Varying evidence while fixing the model, question, and decoding settings tests the effect of extra context. Comparing model sizes instead changes capacity and cannot isolate that context effect.",
+        "sources": [
+          {
+            "label": "Lost in the Middle: How Language Models Use Long Contexts",
+            "url": "https://arxiv.org/abs/2307.03172"
+          }
+        ]
+      }
+    ]
+  },
+  "attention_mechanism": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "attention_mechanism-qkv",
+        "skill": "Identify query-key-value roles",
+        "difficulty": "foundation",
+        "question": "In scaled dot-product attention, what determines how strongly one position uses another position's value?",
+        "options": [
+          "The dot-product compatibility between its query and the other position's key",
+          "The alphabetical order of the two input tokens",
+          "The value vector's length alone",
+          "The final vocabulary probability"
+        ],
+        "answerIndex": 0,
+        "explanation": "Queries are compared with keys to form weights; those weights mix the value vectors.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need",
+            "url": "https://arxiv.org/abs/1706.03762"
+          }
+        ]
+      },
+      {
+        "id": "attention_mechanism-scaling",
+        "skill": "Explain attention scaling",
+        "difficulty": "applied",
+        "question": "Why divide query-key dot products by the square root of the key dimension before softmax?",
+        "options": [
+          "To keep large dot products from pushing softmax into very small-gradient regions",
+          "To make every attention weight identical",
+          "To remove positional information",
+          "To convert causal attention into bidirectional attention"
+        ],
+        "answerIndex": 0,
+        "explanation": "Dot products grow in magnitude with dimension; scaling stabilizes the softmax and its gradients.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need",
+            "url": "https://arxiv.org/abs/1706.03762"
+          }
+        ]
+      },
+      {
+        "id": "attention_mechanism-mask",
+        "skill": "Apply a causal mask",
+        "difficulty": "applied",
+        "question": "During autoregressive training, what must a causal attention mask prevent at position t?",
+        "options": [
+          "Attending to positions after t",
+          "Attending to the first token",
+          "Using more than one attention head",
+          "Computing a value projection"
+        ],
+        "answerIndex": 0,
+        "explanation": "The mask prevents leakage from future tokens that will not exist during generation.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need",
+            "url": "https://arxiv.org/abs/1706.03762"
+          }
+        ]
+      },
+      {
+        "id": "attention_mechanism-multihead",
+        "skill": "Interpret multiple heads",
+        "difficulty": "applied",
+        "question": "What is the main architectural purpose of multi-head attention?",
+        "options": [
+          "Learn several attention projections and combine their outputs",
+          "Run the tokenizer once per head",
+          "Guarantee each head learns a human-readable relation",
+          "Average predictions from separately trained models"
+        ],
+        "answerIndex": 0,
+        "explanation": "Heads use separate learned projections, allowing different interaction patterns; interpretability is not guaranteed.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need",
+            "url": "https://arxiv.org/abs/1706.03762"
+          }
+        ]
+      },
+      {
+        "id": "attention_mechanism-complexity",
+        "skill": "Reason about sequence cost",
+        "difficulty": "advanced",
+        "question": "For standard dense self-attention with sequence length n, which component grows quadratically with n?",
+        "options": [
+          "The n by n attention score matrix",
+          "The vocabulary embedding lookup",
+          "The number of model layers",
+          "The tokenizer merge table"
+        ],
+        "answerIndex": 0,
+        "explanation": "Every query position scores every key position, producing an n by n matrix.",
+        "sources": [
+          {
+            "label": "Attention Is All You Need",
+            "url": "https://arxiv.org/abs/1706.03762"
+          }
+        ]
+      }
+    ]
+  },
+  "tokenization": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "tokenization-purpose",
+        "skill": "Explain tokenization",
+        "difficulty": "foundation",
+        "question": "What does a language-model tokenizer produce from input text?",
+        "options": [
+          "A sequence of vocabulary token IDs",
+          "A verified factual summary",
+          "A gradient for each model layer",
+          "A ranked list of documents"
+        ],
+        "answerIndex": 0,
+        "explanation": "The tokenizer maps input text to vocabulary IDs consumed by the model.",
+        "sources": [
+          {
+            "label": "Hugging Face tokenizer summary",
+            "url": "https://huggingface.co/docs/transformers/tokenizer_summary"
+          }
+        ]
+      },
+      {
+        "id": "tokenization-model-pair",
+        "skill": "Use the matching tokenizer",
+        "difficulty": "applied",
+        "question": "Why must inference normally use the tokenizer released with a model?",
+        "options": [
+          "The model's embedding rows correspond to that tokenizer's token IDs",
+          "Any tokenizer creates identical IDs for common words",
+          "The tokenizer contains the model's attention weights",
+          "It raises the model's parameter count at runtime"
+        ],
+        "answerIndex": 0,
+        "explanation": "Token IDs only have meaning relative to the vocabulary and embedding mapping used during training.",
+        "sources": [
+          {
+            "label": "Hugging Face tokenizer summary",
+            "url": "https://huggingface.co/docs/transformers/tokenizer_summary"
+          }
+        ]
+      },
+      {
+        "id": "tokenization-count",
+        "skill": "Estimate context consumption",
+        "difficulty": "applied",
+        "question": "Two texts have the same character count but different token counts. What can differ as a result?",
+        "options": [
+          "Context-window use and per-token inference cost",
+          "The model architecture stored on disk",
+          "Whether softmax is used",
+          "The number of attention layers"
+        ],
+        "answerIndex": 0,
+        "explanation": "Model limits and many API costs are measured in tokens rather than characters.",
+        "sources": [
+          {
+            "label": "Hugging Face tokenizer summary",
+            "url": "https://huggingface.co/docs/transformers/tokenizer_summary"
+          }
+        ]
+      },
+      {
+        "id": "tokenization-unknown",
+        "skill": "Contrast tokenization strategies",
+        "difficulty": "applied",
+        "question": "What advantage do byte-level or byte-fallback tokenizers provide?",
+        "options": [
+          "They can represent arbitrary input bytes without an unknown token",
+          "They always use one token per word",
+          "They remove all multilingual performance differences",
+          "They prevent prompt injection"
+        ],
+        "answerIndex": 0,
+        "explanation": "Byte coverage avoids unrepresentable strings, although sequences may become longer.",
+        "sources": [
+          {
+            "label": "Hugging Face tokenizer summary",
+            "url": "https://huggingface.co/docs/transformers/tokenizer_summary"
+          }
+        ]
+      },
+      {
+        "id": "tokenization-boundaries",
+        "skill": "Diagnose token-boundary effects",
+        "difficulty": "advanced",
+        "question": "A model struggles to copy a rare identifier exactly. Which inspection is most directly useful?",
+        "options": [
+          "Examine how the identifier is split into tokens",
+          "Count the model's training epochs only",
+          "Replace attention with clustering",
+          "Increase the display font size"
+        ],
+        "answerIndex": 0,
+        "explanation": "Rare identifiers may split into awkward fragments; inspecting IDs exposes the representation the model actually receives.",
+        "sources": [
+          {
+            "label": "Hugging Face tokenizer summary",
+            "url": "https://huggingface.co/docs/transformers/tokenizer_summary"
+          }
+        ]
+      }
+    ]
+  },
+  "byte_pair_encoding": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "byte_pair_encoding-merge",
+        "skill": "Describe the merge rule",
+        "difficulty": "foundation",
+        "question": "During standard BPE vocabulary learning, what is repeatedly added?",
+        "options": [
+          "A frequent adjacent symbol pair merged into one symbol",
+          "A random full sentence",
+          "A new attention layer",
+          "A human-assigned part-of-speech tag"
+        ],
+        "answerIndex": 0,
+        "explanation": "BPE iteratively merges frequent adjacent units.",
+        "sources": [
+          {
+            "label": "Neural Machine Translation of Rare Words with Subword Units",
+            "url": "https://arxiv.org/abs/1508.07909"
+          }
+        ]
+      },
+      {
+        "id": "byte_pair_encoding-rare",
+        "skill": "Handle rare words",
+        "difficulty": "applied",
+        "question": "How can BPE represent a rare word absent as a complete vocabulary entry?",
+        "options": [
+          "Compose it from learned subword units",
+          "Discard the entire sentence",
+          "Map every rare word to the same embedding",
+          "Retrieve its definition from a database"
+        ],
+        "answerIndex": 0,
+        "explanation": "Subword composition allows open-vocabulary coverage without storing every word.",
+        "sources": [
+          {
+            "label": "Neural Machine Translation of Rare Words with Subword Units",
+            "url": "https://arxiv.org/abs/1508.07909"
+          }
+        ]
+      },
+      {
+        "id": "byte_pair_encoding-corpus",
+        "skill": "Recognize corpus dependence",
+        "difficulty": "applied",
+        "question": "Why can two BPE tokenizers split the same word differently?",
+        "options": [
+          "Their merge tables were learned from different corpora or settings",
+          "BPE chooses new random merges on every inference",
+          "Attention heads change the tokenizer vocabulary",
+          "The word's label changed after training"
+        ],
+        "answerIndex": 0,
+        "explanation": "The learned frequency-driven merge sequence depends on the training corpus and configuration.",
+        "sources": [
+          {
+            "label": "Neural Machine Translation of Rare Words with Subword Units",
+            "url": "https://arxiv.org/abs/1508.07909"
+          }
+        ]
+      },
+      {
+        "id": "byte_pair_encoding-tradeoff",
+        "skill": "Evaluate vocabulary tradeoffs",
+        "difficulty": "applied",
+        "question": "What is a typical effect of a much larger BPE vocabulary?",
+        "options": [
+          "Shorter sequences but a larger embedding/output vocabulary",
+          "Longer sequences and fewer embedding rows",
+          "Guaranteed better reasoning",
+          "Removal of all rare-token issues"
+        ],
+        "answerIndex": 0,
+        "explanation": "More merged units can shorten sequences while increasing vocabulary-related parameters.",
+        "sources": [
+          {
+            "label": "Neural Machine Translation of Rare Words with Subword Units",
+            "url": "https://arxiv.org/abs/1508.07909"
+          }
+        ]
+      },
+      {
+        "id": "byte_pair_encoding-not-semantic",
+        "skill": "Avoid semantic assumptions",
+        "difficulty": "advanced",
+        "question": "Which conclusion about a BPE token boundary is unsafe?",
+        "options": [
+          "It necessarily marks a linguistic morpheme boundary",
+          "It follows a learned merge table",
+          "It can affect sequence length",
+          "It may differ across tokenizers"
+        ],
+        "answerIndex": 0,
+        "explanation": "BPE optimizes frequency-based merges, not linguistic correctness.",
+        "sources": [
+          {
+            "label": "Neural Machine Translation of Rare Words with Subword Units",
+            "url": "https://arxiv.org/abs/1508.07909"
+          }
+        ]
+      }
+    ]
+  },
+  "prompt_engineering": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "prompt_engineering-contract",
+        "skill": "Specify an output contract",
+        "difficulty": "foundation",
+        "question": "Which prompt most clearly requests machine-readable output?",
+        "options": [
+          "Return JSON matching this schema, with no surrounding prose",
+          "Give me something useful",
+          "Think creatively about the data",
+          "Tell me whatever seems important"
+        ],
+        "answerIndex": 0,
+        "explanation": "An explicit schema and prose constraint make the result easier to parse and validate.",
+        "sources": [
+          {
+            "label": "OpenAI prompt engineering guide",
+            "url": "https://platform.openai.com/docs/guides/prompt-engineering"
+          }
+        ]
+      },
+      {
+        "id": "prompt_engineering-context",
+        "skill": "Separate data from instructions",
+        "difficulty": "applied",
+        "question": "A prompt includes an untrusted document to summarize. What is the safest structure?",
+        "options": [
+          "Clearly delimit the document and state that text inside it is data, not instructions",
+          "Place the document before every system rule",
+          "Allow the document to redefine the task",
+          "Hide the requested output format"
+        ],
+        "answerIndex": 0,
+        "explanation": "Clear instruction hierarchy and delimiters reduce ambiguity, though application controls are still required.",
+        "sources": [
+          {
+            "label": "OpenAI prompt engineering guide",
+            "url": "https://platform.openai.com/docs/guides/prompt-engineering"
+          }
+        ]
+      },
+      {
+        "id": "prompt_engineering-examples",
+        "skill": "Use few-shot examples",
+        "difficulty": "applied",
+        "question": "When are examples especially useful in a prompt?",
+        "options": [
+          "When the desired mapping or format is hard to describe precisely",
+          "When the model must access a file it cannot see",
+          "When authorization checks should be bypassed",
+          "When a deterministic calculation must never be verified"
+        ],
+        "answerIndex": 0,
+        "explanation": "Examples demonstrate a pattern but do not grant tools or guarantee correctness.",
+        "sources": [
+          {
+            "label": "OpenAI prompt engineering guide",
+            "url": "https://platform.openai.com/docs/guides/prompt-engineering"
+          }
+        ]
+      },
+      {
+        "id": "prompt_engineering-eval",
+        "skill": "Evaluate prompt changes",
+        "difficulty": "applied",
+        "question": "How should two prompt versions be compared for a production extraction task?",
+        "options": [
+          "Run both on a representative held-out set and score the required fields",
+          "Choose the longer prompt",
+          "Use one favorable example",
+          "Select the prompt with more technical words"
+        ],
+        "answerIndex": 0,
+        "explanation": "A representative evaluation ties prompt choice to observable task performance.",
+        "sources": [
+          {
+            "label": "OpenAI prompt engineering guide",
+            "url": "https://platform.openai.com/docs/guides/prompt-engineering"
+          }
+        ]
+      },
+      {
+        "id": "prompt_engineering-limits",
+        "skill": "Recognize prompt limits",
+        "difficulty": "advanced",
+        "question": "Which requirement should remain enforced outside the prompt?",
+        "options": [
+          "Whether the signed-in user may delete a record",
+          "The preferred response tone",
+          "The requested heading order",
+          "An example of the desired summary"
+        ],
+        "answerIndex": 0,
+        "explanation": "Authorization is an application security boundary and must not depend on model compliance.",
+        "sources": [
+          {
+            "label": "OpenAI prompt engineering guide",
+            "url": "https://platform.openai.com/docs/guides/prompt-engineering"
+          }
+        ]
+      }
+    ]
+  },
+  "few_shot_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "few_shot_learning-definition",
+        "skill": "Distinguish few-shot prompting",
+        "difficulty": "foundation",
+        "question": "What changes during ordinary few-shot prompting of a deployed language model?",
+        "options": [
+          "The input context includes demonstrations; model weights stay fixed",
+          "All model weights are retrained",
+          "The tokenizer vocabulary is rebuilt",
+          "A reward model is trained"
+        ],
+        "answerIndex": 0,
+        "explanation": "In-context demonstrations condition the forward pass without parameter updates.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "few_shot_learning-coverage",
+        "skill": "Choose representative demonstrations",
+        "difficulty": "applied",
+        "question": "Which example set is most useful for a three-class support-ticket task?",
+        "options": [
+          "Correct examples covering each class and important edge cases",
+          "Five copies of one easy class",
+          "Examples with inconsistent labels",
+          "Unrelated prose with the same length"
+        ],
+        "answerIndex": 0,
+        "explanation": "Coverage and label consistency help the model infer the intended mapping.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "few_shot_learning-order",
+        "skill": "Test prompt sensitivity",
+        "difficulty": "applied",
+        "question": "Accuracy changes when the same demonstrations are reordered. What should you do?",
+        "options": [
+          "Measure order sensitivity across a held-out set",
+          "Assume the highest single run is stable",
+          "Delete the evaluation labels",
+          "Treat ordering as a weight update"
+        ],
+        "answerIndex": 0,
+        "explanation": "Order can affect in-context behavior, so robustness should be measured.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "few_shot_learning-leakage",
+        "skill": "Prevent demonstration leakage",
+        "difficulty": "applied",
+        "question": "Why exclude test examples from the few-shot demonstrations?",
+        "options": [
+          "They would reveal evaluation inputs or labels to the model",
+          "They make the context window larger than one token",
+          "They disable attention",
+          "They convert classification into clustering"
+        ],
+        "answerIndex": 0,
+        "explanation": "Test leakage produces an invalid estimate of generalization.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "few_shot_learning-compare",
+        "skill": "Separate adaptation mechanisms",
+        "difficulty": "advanced",
+        "question": "Which experiment isolates the value of few-shot demonstrations?",
+        "options": [
+          "Compare zero-shot and few-shot prompts on the same held-out examples",
+          "Compare different models on different datasets",
+          "Compare training loss with token count",
+          "Compare a prompt to its own examples"
+        ],
+        "answerIndex": 0,
+        "explanation": "Holding model and evaluation data fixed isolates the added demonstrations.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      }
+    ]
+  },
+  "zero_shot_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "zero_shot_learning-definition",
+        "skill": "Identify zero-shot evaluation",
+        "difficulty": "foundation",
+        "question": "Which setup is zero-shot for a sentiment task?",
+        "options": [
+          "Give label definitions and test inputs but no labeled sentiment examples",
+          "Include ten labeled examples in the prompt",
+          "Fine-tune on the test labels",
+          "Train a classifier on every test row"
+        ],
+        "answerIndex": 0,
+        "explanation": "Zero-shot evaluation provides task instructions or label semantics without target-task demonstrations.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "zero_shot_learning-baseline",
+        "skill": "Use a cold-start baseline",
+        "difficulty": "applied",
+        "question": "Why measure zero-shot performance before adding examples?",
+        "options": [
+          "It establishes how much demonstrations or tuning improve the same task",
+          "It guarantees the model is unbiased",
+          "It removes the need for held-out data",
+          "It changes the tokenizer"
+        ],
+        "answerIndex": 0,
+        "explanation": "A zero-shot result is a useful reference point for added adaptation.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "zero_shot_learning-labels",
+        "skill": "Describe unseen labels",
+        "difficulty": "applied",
+        "question": "A classifier must handle a newly added intent with no examples. What can help most directly?",
+        "options": [
+          "A precise natural-language description of the new intent",
+          "Hiding the intent name",
+          "Duplicating examples from an unrelated intent",
+          "Shuffling the output labels after prediction"
+        ],
+        "answerIndex": 0,
+        "explanation": "Semantic label descriptions can connect an unseen target to pretrained knowledge.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "zero_shot_learning-fairness",
+        "skill": "Compare prompting regimes",
+        "difficulty": "applied",
+        "question": "For a fair zero-shot versus few-shot comparison, what should stay fixed?",
+        "options": [
+          "Model, test set, scoring rule, and task instructions",
+          "The number of demonstrations",
+          "The predicted labels",
+          "The random errors"
+        ],
+        "answerIndex": 0,
+        "explanation": "Only the presence of demonstrations should differ.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      },
+      {
+        "id": "zero_shot_learning-limit",
+        "skill": "Recognize unsupported tasks",
+        "difficulty": "advanced",
+        "question": "A zero-shot model has never received the private database contents needed for an answer. What can prompting do?",
+        "options": [
+          "Nothing can recover unavailable facts; retrieval or access is required",
+          "A longer role prompt guarantees access",
+          "More temperature reveals the records",
+          "Label descriptions reconstruct the database"
+        ],
+        "answerIndex": 0,
+        "explanation": "Zero-shot generalization cannot supply inaccessible information.",
+        "sources": [
+          {
+            "label": "Language Models are Few-Shot Learners",
+            "url": "https://arxiv.org/abs/2005.14165"
+          }
+        ]
+      }
+    ]
+  },
+  "semantic_search": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "semantic_search-meaning",
+        "skill": "Explain semantic retrieval",
+        "difficulty": "foundation",
+        "question": "What lets semantic search retrieve a paraphrase with few shared keywords?",
+        "options": [
+          "Nearby query and document embeddings",
+          "Alphabetical sorting",
+          "Exact string equality",
+          "A larger display index"
+        ],
+        "answerIndex": 0,
+        "explanation": "Dense representations can place semantically similar text near each other.",
+        "sources": [
+          {
+            "label": "Sentence-BERT",
+            "url": "https://arxiv.org/abs/1908.10084"
+          }
+        ]
+      },
+      {
+        "id": "semantic_search-metric",
+        "skill": "Use a compatible similarity",
+        "difficulty": "applied",
+        "question": "Document embeddings were normalized before indexing. Which score commonly ranks them?",
+        "options": [
+          "Cosine similarity or equivalent dot product",
+          "Edit distance on file paths",
+          "Chronological order",
+          "HTTP status code"
+        ],
+        "answerIndex": 0,
+        "explanation": "For normalized vectors, dot product equals cosine similarity.",
+        "sources": [
+          {
+            "label": "Sentence-BERT",
+            "url": "https://arxiv.org/abs/1908.10084"
+          }
+        ]
+      },
+      {
+        "id": "semantic_search-chunks",
+        "skill": "Choose chunking",
+        "difficulty": "applied",
+        "question": "Why can indexing entire long manuals as single vectors hurt retrieval?",
+        "options": [
+          "A single vector may blur distinct sections and return too much irrelevant context",
+          "Vectors cannot represent text over one sentence",
+          "It disables lexical search permanently",
+          "It reveals answer labels"
+        ],
+        "answerIndex": 0,
+        "explanation": "Focused chunks better localize the passage relevant to a query.",
+        "sources": [
+          {
+            "label": "Sentence-BERT",
+            "url": "https://arxiv.org/abs/1908.10084"
+          }
+        ]
+      },
+      {
+        "id": "semantic_search-hybrid",
+        "skill": "Combine retrieval signals",
+        "difficulty": "applied",
+        "question": "A query contains a rare product code plus a natural-language symptom. Which design is strongest?",
+        "options": [
+          "Hybrid lexical and dense retrieval",
+          "Dense retrieval with the product code removed",
+          "Alphabetical document order",
+          "Random sampling"
+        ],
+        "answerIndex": 0,
+        "explanation": "Lexical matching preserves exact identifiers while dense retrieval handles meaning.",
+        "sources": [
+          {
+            "label": "Sentence-BERT",
+            "url": "https://arxiv.org/abs/1908.10084"
+          }
+        ]
+      },
+      {
+        "id": "semantic_search-eval",
+        "skill": "Evaluate retrieval",
+        "difficulty": "advanced",
+        "question": "Which metric directly checks whether a relevant passage appears in the first k results?",
+        "options": [
+          "Recall@k",
+          "Training loss only",
+          "Tokens per second",
+          "Vocabulary size"
+        ],
+        "answerIndex": 0,
+        "explanation": "Recall@k measures retrieval coverage among the top results.",
+        "sources": [
+          {
+            "label": "Sentence-BERT",
+            "url": "https://arxiv.org/abs/1908.10084"
+          }
+        ]
+      }
+    ]
+  },
+  "reranking": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "reranking-stage",
+        "skill": "Locate reranking in retrieval",
+        "difficulty": "foundation",
+        "question": "When does a reranker normally run?",
+        "options": [
+          "After initial retrieval, on a limited candidate set",
+          "Before documents are indexed",
+          "After final answer delivery only",
+          "Instead of receiving a query"
+        ],
+        "answerIndex": 0,
+        "explanation": "The first stage maximizes efficient recall; the reranker refines candidate order.",
+        "sources": [
+          {
+            "label": "Passage Re-ranking with BERT",
+            "url": "https://arxiv.org/abs/1901.04085"
+          }
+        ]
+      },
+      {
+        "id": "reranking-cross",
+        "skill": "Contrast a cross-encoder",
+        "difficulty": "applied",
+        "question": "Why can a cross-encoder reranker be more accurate than independent embeddings?",
+        "options": [
+          "It jointly attends over query and document tokens",
+          "It never reads the query",
+          "It scores every corpus document for free",
+          "It guarantees factual generation"
+        ],
+        "answerIndex": 0,
+        "explanation": "Joint encoding supports fine-grained interactions at higher cost.",
+        "sources": [
+          {
+            "label": "Passage Re-ranking with BERT",
+            "url": "https://arxiv.org/abs/1901.04085"
+          }
+        ]
+      },
+      {
+        "id": "reranking-recall",
+        "skill": "Recognize the ceiling",
+        "difficulty": "applied",
+        "question": "The correct document is absent from the top 100 retrieved candidates. Can a reranker place it first?",
+        "options": [
+          "No, the first-stage candidate set must contain it",
+          "Yes, by changing its score from nothing",
+          "Yes, if temperature is zero",
+          "Only if the tokenizer is byte-level"
+        ],
+        "answerIndex": 0,
+        "explanation": "Rerankers only reorder candidates they receive.",
+        "sources": [
+          {
+            "label": "Passage Re-ranking with BERT",
+            "url": "https://arxiv.org/abs/1901.04085"
+          }
+        ]
+      },
+      {
+        "id": "reranking-latency",
+        "skill": "Set candidate depth",
+        "difficulty": "applied",
+        "question": "What is the main tradeoff when increasing reranker candidate depth?",
+        "options": [
+          "Potentially higher recall but more latency and compute",
+          "Smaller corpus storage and lower recall",
+          "Fewer relevance judgments and no cost",
+          "A changed label vocabulary"
+        ],
+        "answerIndex": 0,
+        "explanation": "More candidates offer more recovery opportunities while costing more to score.",
+        "sources": [
+          {
+            "label": "Passage Re-ranking with BERT",
+            "url": "https://arxiv.org/abs/1901.04085"
+          }
+        ]
+      },
+      {
+        "id": "reranking-metric",
+        "skill": "Measure ordering quality",
+        "difficulty": "advanced",
+        "question": "Which metric rewards putting highly relevant results near the top with graded judgments?",
+        "options": [
+          "NDCG",
+          "Mean training loss",
+          "Image resolution",
+          "Parameter count"
+        ],
+        "answerIndex": 0,
+        "explanation": "Normalized discounted cumulative gain weights graded relevance by rank.",
+        "sources": [
+          {
+            "label": "Passage Re-ranking with BERT",
+            "url": "https://arxiv.org/abs/1901.04085"
+          }
+        ]
+      }
+    ]
+  },
+  "context_window": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "context_window-tokens",
+        "skill": "Define the window",
+        "difficulty": "foundation",
+        "question": "What unit normally limits a language model context window?",
+        "options": [
+          "Tokens",
+          "Database rows",
+          "Model layers",
+          "Characters in the UI"
+        ],
+        "answerIndex": 0,
+        "explanation": "The limit is defined over the model tokenizer's tokens.",
+        "sources": [
+          {
+            "label": "Lost in the Middle",
+            "url": "https://arxiv.org/abs/2307.03172"
+          }
+        ]
+      },
+      {
+        "id": "context_window-budget",
+        "skill": "Budget a request",
+        "difficulty": "applied",
+        "question": "A service has a shared input-plus-output token limit. What must the application reserve?",
+        "options": [
+          "Space for the requested output as well as the input",
+          "Only the system prompt",
+          "One token per character exactly",
+          "Extra model parameters"
+        ],
+        "answerIndex": 0,
+        "explanation": "Input and generated tokens may share the total budget, depending on the API contract.",
+        "sources": [
+          {
+            "label": "Lost in the Middle",
+            "url": "https://arxiv.org/abs/2307.03172"
+          }
+        ]
+      },
+      {
+        "id": "context_window-overflow",
+        "skill": "Handle excess context",
+        "difficulty": "applied",
+        "question": "A conversation exceeds the available window. Which response preserves relevance best?",
+        "options": [
+          "Select or summarize older material while retaining required facts",
+          "Silently remove the latest user request",
+          "Increase temperature",
+          "Repeat every message twice"
+        ],
+        "answerIndex": 0,
+        "explanation": "Managed selection or summaries are preferable to arbitrary truncation.",
+        "sources": [
+          {
+            "label": "Lost in the Middle",
+            "url": "https://arxiv.org/abs/2307.03172"
+          }
+        ]
+      },
+      {
+        "id": "context_window-long",
+        "skill": "Avoid a false assumption",
+        "difficulty": "applied",
+        "question": "A model accepts 100k tokens. What does that guarantee?",
+        "options": [
+          "Only that the request fits the supported limit, not equal recall across positions",
+          "Perfect recall of every fact",
+          "No hallucinations",
+          "Constant inference cost"
+        ],
+        "answerIndex": 0,
+        "explanation": "Capacity does not establish uniform effective use or truthfulness.",
+        "sources": [
+          {
+            "label": "Lost in the Middle",
+            "url": "https://arxiv.org/abs/2307.03172"
+          }
+        ]
+      },
+      {
+        "id": "context_window-test",
+        "skill": "Evaluate long-context use",
+        "difficulty": "advanced",
+        "question": "How should a long-context application be tested?",
+        "options": [
+          "Place needed evidence at varied positions and measure answer support",
+          "Test one short prompt only",
+          "Measure file size alone",
+          "Assume vendor maximums imply retrieval quality"
+        ],
+        "answerIndex": 0,
+        "explanation": "Position-varied, evidence-grounded tests expose lost-in-the-middle and distraction effects.",
+        "sources": [
+          {
+            "label": "Lost in the Middle",
+            "url": "https://arxiv.org/abs/2307.03172"
+          }
+        ]
+      }
+    ]
+  },
+  "hallucination": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "hallucination-definition",
+        "skill": "Identify hallucination",
+        "difficulty": "foundation",
+        "question": "Which output is a hallucination?",
+        "options": [
+          "A confident citation to a paper that does not exist",
+          "A concise answer supported by the supplied source",
+          "A refusal to guess missing data",
+          "A verbatim database result"
+        ],
+        "answerIndex": 0,
+        "explanation": "Fabricating a plausible citation is unsupported generation.",
+        "sources": [
+          {
+            "label": "Survey of Hallucination in Natural Language Generation",
+            "url": "https://arxiv.org/abs/2202.03629"
+          }
+        ]
+      },
+      {
+        "id": "hallucination-grounding",
+        "skill": "Require evidence",
+        "difficulty": "applied",
+        "question": "What is the strongest immediate control for answering from company policy documents?",
+        "options": [
+          "Retrieve passages and require claims to cite those passages",
+          "Ask the model to be confident",
+          "Raise temperature",
+          "Remove document identifiers"
+        ],
+        "answerIndex": 0,
+        "explanation": "Grounding and citations make support checkable, though citations must still be verified.",
+        "sources": [
+          {
+            "label": "Survey of Hallucination in Natural Language Generation",
+            "url": "https://arxiv.org/abs/2202.03629"
+          }
+        ]
+      },
+      {
+        "id": "hallucination-abstain",
+        "skill": "Design abstention",
+        "difficulty": "applied",
+        "question": "No retrieved passage answers the question. What should the system prefer?",
+        "options": [
+          "State that the available sources do not support an answer",
+          "Invent the most likely policy",
+          "Cite an unrelated passage",
+          "Hide retrieval scores and answer anyway"
+        ],
+        "answerIndex": 0,
+        "explanation": "Abstention is safer than unsupported completion.",
+        "sources": [
+          {
+            "label": "Survey of Hallucination in Natural Language Generation",
+            "url": "https://arxiv.org/abs/2202.03629"
+          }
+        ]
+      },
+      {
+        "id": "hallucination-metric",
+        "skill": "Evaluate factual support",
+        "difficulty": "applied",
+        "question": "Which evaluation best targets hallucination in a source-grounded task?",
+        "options": [
+          "Check whether each material claim is entailed by cited source text",
+          "Count response adjectives",
+          "Measure typing speed",
+          "Compare output length only"
+        ],
+        "answerIndex": 0,
+        "explanation": "Claim-level source support directly measures grounding.",
+        "sources": [
+          {
+            "label": "Survey of Hallucination in Natural Language Generation",
+            "url": "https://arxiv.org/abs/2202.03629"
+          }
+        ]
+      },
+      {
+        "id": "hallucination-limits",
+        "skill": "Understand mitigation limits",
+        "difficulty": "advanced",
+        "question": "A RAG response cites a retrieved page. Why can it still be wrong?",
+        "options": [
+          "The passage may be irrelevant, outdated, or misinterpreted",
+          "Retrieval mathematically guarantees truth",
+          "Citations disable generation",
+          "Every indexed document is authoritative"
+        ],
+        "answerIndex": 0,
+        "explanation": "Retrieval supplies context, not guaranteed correctness or reasoning.",
+        "sources": [
+          {
+            "label": "Survey of Hallucination in Natural Language Generation",
+            "url": "https://arxiv.org/abs/2202.03629"
+          }
+        ]
+      }
+    ]
+  },
+  "agent_memory": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "agent_memory-types",
+        "skill": "Distinguish memory types",
+        "difficulty": "foundation",
+        "question": "Which item is durable episodic memory rather than the current prompt context?",
+        "options": [
+          "A stored summary of a previous task retrieved next week",
+          "The token currently being generated",
+          "A model weight initialized at startup",
+          "A CSS session cookie"
+        ],
+        "answerIndex": 0,
+        "explanation": "Durable episodic memory persists an event for later retrieval.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2304.03442"
+          }
+        ]
+      },
+      {
+        "id": "agent_memory-scope",
+        "skill": "Enforce memory scope",
+        "difficulty": "applied",
+        "question": "What must a multi-user agent do before retrieving memories?",
+        "options": [
+          "Filter by the authorized user or tenant scope",
+          "Search every user's records",
+          "Trust the query text as authorization",
+          "Disable record ownership"
+        ],
+        "answerIndex": 0,
+        "explanation": "Retrieval must enforce the same authorization boundary as storage.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2304.03442"
+          }
+        ]
+      },
+      {
+        "id": "agent_memory-write",
+        "skill": "Control memory writes",
+        "difficulty": "applied",
+        "question": "Why should an agent not store every model statement as fact?",
+        "options": [
+          "Generated statements may be wrong and contaminate later behavior",
+          "Storage always changes model weights",
+          "Memory cannot contain text",
+          "Longer records are automatically private"
+        ],
+        "answerIndex": 0,
+        "explanation": "Memory writes need provenance and validation.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2304.03442"
+          }
+        ]
+      },
+      {
+        "id": "agent_memory-stale",
+        "skill": "Handle stale memory",
+        "difficulty": "applied",
+        "question": "A customer's address changes. Which design prevents the old value from silently winning?",
+        "options": [
+          "Version or replace the authoritative record and prefer current provenance",
+          "Keep both with no timestamps",
+          "Randomly select a memory",
+          "Increase generation temperature"
+        ],
+        "answerIndex": 0,
+        "explanation": "Freshness and authority rules are necessary for mutable facts.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2304.03442"
+          }
+        ]
+      },
+      {
+        "id": "agent_memory-eval",
+        "skill": "Evaluate memory value",
+        "difficulty": "advanced",
+        "question": "Which comparison measures whether memory helps rather than merely adds tokens?",
+        "options": [
+          "Run the same held-out tasks with memory enabled and disabled, checking correctness and leakage",
+          "Count stored records only",
+          "Inspect one successful conversation",
+          "Compare font sizes"
+        ],
+        "answerIndex": 0,
+        "explanation": "An ablation with safety checks isolates memory's effect.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2304.03442"
+          }
+        ]
+      }
+    ]
+  },
+  "multi_agent_systems": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "multi_agent_systems-definition",
+        "skill": "Identify a multi-agent design",
+        "difficulty": "foundation",
+        "question": "Which system is genuinely multi-agent?",
+        "options": [
+          "Several agents with separate state or roles exchange task messages",
+          "One model emits three paragraphs",
+          "A tokenizer splits a prompt",
+          "A database has replicas"
+        ],
+        "answerIndex": 0,
+        "explanation": "Multi-agent systems involve distinct agent processes or roles interacting.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2308.08155"
+          }
+        ]
+      },
+      {
+        "id": "multi_agent_systems-roles",
+        "skill": "Assign clear roles",
+        "difficulty": "applied",
+        "question": "Why define explicit responsibilities for planner and executor agents?",
+        "options": [
+          "To reduce duplicated or conflicting actions",
+          "To guarantee both are correct",
+          "To remove the need for permissions",
+          "To share every secret"
+        ],
+        "answerIndex": 0,
+        "explanation": "Clear roles constrain coordination and ownership.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2308.08155"
+          }
+        ]
+      },
+      {
+        "id": "multi_agent_systems-loop",
+        "skill": "Prevent coordination loops",
+        "difficulty": "applied",
+        "question": "Two agents repeatedly delegate the same task to each other. What control helps?",
+        "options": [
+          "A bounded handoff count and terminal-state rule",
+          "A larger font",
+          "More random names",
+          "Removing task IDs"
+        ],
+        "answerIndex": 0,
+        "explanation": "Bounded transitions stop infinite delegation.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2308.08155"
+          }
+        ]
+      },
+      {
+        "id": "multi_agent_systems-security",
+        "skill": "Protect delegated actions",
+        "difficulty": "applied",
+        "question": "Agent A asks Agent B to delete data. What must B verify?",
+        "options": [
+          "The authenticated authority and scope of the request",
+          "That A used polite wording",
+          "That both use the same model",
+          "That the request is long"
+        ],
+        "answerIndex": 0,
+        "explanation": "Delegation cannot bypass authorization.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2308.08155"
+          }
+        ]
+      },
+      {
+        "id": "multi_agent_systems-baseline",
+        "skill": "Justify added complexity",
+        "difficulty": "advanced",
+        "question": "What comparison should precede adopting a multi-agent workflow?",
+        "options": [
+          "Measure it against a simpler single-agent baseline on quality, cost, and reliability",
+          "Compare agent names",
+          "Assume debate always improves truth",
+          "Count messages only"
+        ],
+        "answerIndex": 0,
+        "explanation": "A simpler baseline reveals whether coordination adds value.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2308.08155"
+          }
+        ]
+      }
+    ]
+  },
+  "ai_alignment": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "ai_alignment-goal",
+        "skill": "Define alignment",
+        "difficulty": "foundation",
+        "question": "What is the central alignment problem?",
+        "options": [
+          "Making system behavior match intended goals and constraints",
+          "Increasing parameter count only",
+          "Compressing every model to one bit",
+          "Replacing evaluation with intuition"
+        ],
+        "answerIndex": 0,
+        "explanation": "Alignment concerns correspondence between intended and learned behavior.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1606.06565"
+          }
+        ]
+      },
+      {
+        "id": "ai_alignment-proxy",
+        "skill": "Recognize proxy failure",
+        "difficulty": "applied",
+        "question": "A support bot is rewarded only for short calls and starts ending unresolved cases. What failed?",
+        "options": [
+          "The proxy metric did not capture successful support",
+          "The tokenizer used subwords",
+          "The context was too colorful",
+          "The model had too few file handles"
+        ],
+        "answerIndex": 0,
+        "explanation": "Optimizing an incomplete proxy can harm the actual objective.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1606.06565"
+          }
+        ]
+      },
+      {
+        "id": "ai_alignment-shift",
+        "skill": "Test distribution shift",
+        "difficulty": "applied",
+        "question": "Why evaluate an aligned behavior on novel scenarios?",
+        "options": [
+          "Training-time compliance may not generalize out of distribution",
+          "Novel tests update weights automatically",
+          "Known examples are always wrong",
+          "It removes human oversight"
+        ],
+        "answerIndex": 0,
+        "explanation": "Alignment claims require generalization beyond familiar training cases.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1606.06565"
+          }
+        ]
+      },
+      {
+        "id": "ai_alignment-oversight",
+        "skill": "Use scalable oversight",
+        "difficulty": "applied",
+        "question": "What problem does scalable oversight address?",
+        "options": [
+          "How people can supervise outputs too complex or numerous to judge directly",
+          "How to enlarge image files",
+          "How to remove all evaluation",
+          "How to guarantee an optimizer converges"
+        ],
+        "answerIndex": 0,
+        "explanation": "It studies supervision when direct human evaluation is difficult.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1606.06565"
+          }
+        ]
+      },
+      {
+        "id": "ai_alignment-claim",
+        "skill": "Calibrate conclusions",
+        "difficulty": "advanced",
+        "question": "A model passes one harmlessness benchmark. What follows?",
+        "options": [
+          "It passed that benchmark; broad alignment still needs diverse adversarial evaluation",
+          "It is aligned in every deployment",
+          "It cannot be jailbroken",
+          "Its goals are mathematically proven"
+        ],
+        "answerIndex": 0,
+        "explanation": "A benchmark provides bounded evidence, not a universal guarantee.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1606.06565"
+          }
+        ]
+      }
+    ]
+  },
+  "adversarial_examples": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "adversarial_examples-definition",
+        "skill": "Identify an adversarial example",
+        "difficulty": "foundation",
+        "question": "What makes an input adversarial?",
+        "options": [
+          "It is intentionally changed to cause a model error under a threat model",
+          "It is merely difficult for a human",
+          "It appears in the training set",
+          "It has a large file size"
+        ],
+        "answerIndex": 0,
+        "explanation": "Adversarial status depends on purposeful attack and allowed perturbations.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1412.6572"
+          }
+        ]
+      },
+      {
+        "id": "adversarial_examples-threat",
+        "skill": "Specify a threat model",
+        "difficulty": "applied",
+        "question": "Why state an attacker's allowed perturbation norm and knowledge?",
+        "options": [
+          "Robustness results are meaningful only relative to attacker capabilities",
+          "It increases clean accuracy automatically",
+          "It changes labels into embeddings",
+          "It removes the model"
+        ],
+        "answerIndex": 0,
+        "explanation": "Different attackers define different robustness questions.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1412.6572"
+          }
+        ]
+      },
+      {
+        "id": "adversarial_examples-clean",
+        "skill": "Track clean performance",
+        "difficulty": "applied",
+        "question": "A defense improves attacked accuracy but sharply lowers clean accuracy. What should be reported?",
+        "options": [
+          "Both clean and attacked performance",
+          "Only the better number",
+          "Model size alone",
+          "The attack name without results"
+        ],
+        "answerIndex": 0,
+        "explanation": "Defenses can trade ordinary utility for robustness.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1412.6572"
+          }
+        ]
+      },
+      {
+        "id": "adversarial_examples-adaptive",
+        "skill": "Use adaptive attacks",
+        "difficulty": "applied",
+        "question": "Why test a defense with attacks adapted to that defense?",
+        "options": [
+          "A fixed attack may fail because of the implementation rather than true robustness",
+          "Adaptive attacks make all models identical",
+          "They remove perturbations",
+          "They use no gradients or queries"
+        ],
+        "answerIndex": 0,
+        "explanation": "Adaptive evaluation reduces false confidence from attack mismatch.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1412.6572"
+          }
+        ]
+      },
+      {
+        "id": "adversarial_examples-scope",
+        "skill": "Avoid overclaiming",
+        "difficulty": "advanced",
+        "question": "Robustness to one bounded pixel attack proves what?",
+        "options": [
+          "Robustness under that evaluated setting, not against every real-world attack",
+          "Universal security",
+          "No distribution shift",
+          "Perfect calibration"
+        ],
+        "answerIndex": 0,
+        "explanation": "Robustness does not automatically transfer across threat models.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1412.6572"
+          }
+        ]
+      }
+    ]
+  },
+  "federated_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "federated_learning-definition",
+        "skill": "Explain federated training",
+        "difficulty": "foundation",
+        "question": "What stays on each client in standard federated learning?",
+        "options": [
+          "Its raw training examples",
+          "The global model forever",
+          "Every other client's identity",
+          "The final metric definition"
+        ],
+        "answerIndex": 0,
+        "explanation": "Clients compute local updates without sending raw examples to a central trainer.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1602.05629"
+          }
+        ]
+      },
+      {
+        "id": "federated_learning-aggregate",
+        "skill": "Describe aggregation",
+        "difficulty": "applied",
+        "question": "What does a coordinator commonly aggregate?",
+        "options": [
+          "Client model updates or gradients",
+          "Raw passwords",
+          "Rendered UI screenshots",
+          "Tokenizer documentation"
+        ],
+        "answerIndex": 0,
+        "explanation": "The server combines local optimization results.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1602.05629"
+          }
+        ]
+      },
+      {
+        "id": "federated_learning-privacy",
+        "skill": "Avoid a privacy misconception",
+        "difficulty": "applied",
+        "question": "Why is federated learning not automatically private?",
+        "options": [
+          "Updates can leak information unless protected",
+          "Raw data is always uploaded",
+          "Aggregation disables encryption",
+          "Clients have no models"
+        ],
+        "answerIndex": 0,
+        "explanation": "Secure aggregation and differential privacy may be needed.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1602.05629"
+          }
+        ]
+      },
+      {
+        "id": "federated_learning-non-iid",
+        "skill": "Handle heterogeneous clients",
+        "difficulty": "applied",
+        "question": "Why can non-IID client data make training harder?",
+        "options": [
+          "Local updates may point toward different objectives or distributions",
+          "All clients become identical",
+          "It removes network latency",
+          "Labels become URLs"
+        ],
+        "answerIndex": 0,
+        "explanation": "Heterogeneity can destabilize or bias aggregation.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1602.05629"
+          }
+        ]
+      },
+      {
+        "id": "federated_learning-eval",
+        "skill": "Evaluate fairly",
+        "difficulty": "advanced",
+        "question": "Which evaluation exposes uneven federated performance?",
+        "options": [
+          "Report per-client or subgroup metrics as well as the global average",
+          "Report one training loss",
+          "Count devices only",
+          "Use the largest client as the test set"
+        ],
+        "answerIndex": 0,
+        "explanation": "Averages can hide poor performance for smaller client populations.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1602.05629"
+          }
+        ]
+      }
+    ]
+  },
+  "synthetic_data": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "synthetic_data-definition",
+        "skill": "Identify synthetic data",
+        "difficulty": "foundation",
+        "question": "Which dataset is synthetic?",
+        "options": [
+          "Images rendered by a simulator with generated labels",
+          "Unmodified measurements from deployed sensors",
+          "A held-out sample of customer records",
+          "A manually collected survey"
+        ],
+        "answerIndex": 0,
+        "explanation": "Simulation-generated examples are synthetic.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2204.03259"
+          }
+        ]
+      },
+      {
+        "id": "synthetic_data-rare",
+        "skill": "Use synthetic coverage",
+        "difficulty": "applied",
+        "question": "When is synthetic data especially useful?",
+        "options": [
+          "Generating controlled examples of rare but important conditions",
+          "Replacing every real validation sample",
+          "Proving deployment accuracy without tests",
+          "Hiding label definitions"
+        ],
+        "answerIndex": 0,
+        "explanation": "Synthetic generation can intentionally cover scarce conditions.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2204.03259"
+          }
+        ]
+      },
+      {
+        "id": "synthetic_data-gap",
+        "skill": "Measure domain gap",
+        "difficulty": "applied",
+        "question": "How should a synthetic-trained model be validated?",
+        "options": [
+          "On independent representative real data",
+          "Only on outputs from the same generator",
+          "Using training loss alone",
+          "By counting synthetic files"
+        ],
+        "answerIndex": 0,
+        "explanation": "Real held-out evaluation reveals simulation-to-reality gaps.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2204.03259"
+          }
+        ]
+      },
+      {
+        "id": "synthetic_data-leak",
+        "skill": "Prevent memorization leakage",
+        "difficulty": "applied",
+        "question": "A generator trained on private records emits near-copies. What risk is demonstrated?",
+        "options": [
+          "Privacy leakage through memorization",
+          "Improved calibration",
+          "Label smoothing",
+          "Token compression"
+        ],
+        "answerIndex": 0,
+        "explanation": "Synthetic does not mean non-sensitive if the generator reproduces source records.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2204.03259"
+          }
+        ]
+      },
+      {
+        "id": "synthetic_data-shortcut",
+        "skill": "Detect generator artifacts",
+        "difficulty": "advanced",
+        "question": "A classifier succeeds by recognizing a simulator watermark. What happened?",
+        "options": [
+          "It learned a synthetic shortcut unrelated to the target",
+          "It achieved causal understanding",
+          "The validation set is automatically real",
+          "The watermark increased label quality"
+        ],
+        "answerIndex": 0,
+        "explanation": "Generator-specific artifacts can create spurious predictive features.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/2204.03259"
+          }
+        ]
+      }
+    ]
+  },
+  "graph_neural_networks": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "graph_neural_networks-message",
+        "skill": "Explain message passing",
+        "difficulty": "foundation",
+        "question": "What does a message-passing GNN layer typically do?",
+        "options": [
+          "Aggregate transformed information from neighboring nodes",
+          "Sort node names alphabetically",
+          "Tokenize every edge as prose",
+          "Train one unrelated model per node"
+        ],
+        "answerIndex": 0,
+        "explanation": "Neighbor messages update each node representation.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1812.08434"
+          }
+        ]
+      },
+      {
+        "id": "graph_neural_networks-permutation",
+        "skill": "Recognize permutation invariance",
+        "difficulty": "applied",
+        "question": "Why use a sum or mean neighbor aggregator?",
+        "options": [
+          "Its output does not depend on arbitrary neighbor ordering",
+          "It guarantees unique node IDs",
+          "It removes edges",
+          "It uses labels during inference"
+        ],
+        "answerIndex": 0,
+        "explanation": "Graph neighborhoods have no inherent list order.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1812.08434"
+          }
+        ]
+      },
+      {
+        "id": "graph_neural_networks-leakage",
+        "skill": "Split graph data safely",
+        "difficulty": "applied",
+        "question": "In link prediction, what leakage must be prevented?",
+        "options": [
+          "Test edges influencing training features or message passing improperly",
+          "Nodes having more than one edge",
+          "Using sparse matrices",
+          "Computing validation metrics"
+        ],
+        "answerIndex": 0,
+        "explanation": "Held-out relationships must not be exposed through construction or features.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1812.08434"
+          }
+        ]
+      },
+      {
+        "id": "graph_neural_networks-oversmooth",
+        "skill": "Diagnose depth",
+        "difficulty": "applied",
+        "question": "What is oversmoothing in a deep GNN?",
+        "options": [
+          "Node representations become too similar across the graph",
+          "Every edge receives a unique label",
+          "The graph has too few files",
+          "Loss becomes text"
+        ],
+        "answerIndex": 0,
+        "explanation": "Repeated aggregation can erase discriminative local information.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1812.08434"
+          }
+        ]
+      },
+      {
+        "id": "graph_neural_networks-inductive",
+        "skill": "Test generalization",
+        "difficulty": "advanced",
+        "question": "Which split tests inductive node generalization?",
+        "options": [
+          "Evaluate on nodes absent from the training graph",
+          "Randomly hide labels but expose all test edges",
+          "Train and test on identical nodes and labels",
+          "Score training nodes only"
+        ],
+        "answerIndex": 0,
+        "explanation": "Unseen nodes test whether the learned aggregation generalizes.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1812.08434"
+          }
+        ]
+      }
+    ]
+  },
+  "generative_adversarial_networks": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "generative_adversarial_networks-roles",
+        "skill": "Identify GAN roles",
+        "difficulty": "foundation",
+        "question": "What does the GAN discriminator learn?",
+        "options": [
+          "Distinguish real training samples from generated samples",
+          "Encode prompts into token IDs",
+          "Retrieve documents",
+          "Set the learning rate"
+        ],
+        "answerIndex": 0,
+        "explanation": "The discriminator supplies the adversarial signal.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1406.2661"
+          }
+        ]
+      },
+      {
+        "id": "generative_adversarial_networks-generator",
+        "skill": "State the generator objective",
+        "difficulty": "applied",
+        "question": "What pressure trains the generator?",
+        "options": [
+          "Produce samples the discriminator classifies as real",
+          "Copy discriminator weights",
+          "Maximize file size",
+          "Cluster real samples only"
+        ],
+        "answerIndex": 0,
+        "explanation": "The generator improves against discriminator feedback.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1406.2661"
+          }
+        ]
+      },
+      {
+        "id": "generative_adversarial_networks-collapse",
+        "skill": "Recognize mode collapse",
+        "difficulty": "applied",
+        "question": "A GAN generates many high-quality but nearly identical faces. What failure is this?",
+        "options": [
+          "Mode collapse",
+          "Overtokenization",
+          "Teacher forcing",
+          "Data sharding"
+        ],
+        "answerIndex": 0,
+        "explanation": "Mode collapse loses diversity despite plausible individual samples.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1406.2661"
+          }
+        ]
+      },
+      {
+        "id": "generative_adversarial_networks-balance",
+        "skill": "Diagnose training balance",
+        "difficulty": "applied",
+        "question": "Why can an overwhelmingly strong discriminator stall early training?",
+        "options": [
+          "Its feedback may provide weak useful gradients to the generator",
+          "It changes image labels into text",
+          "It guarantees perfect generation",
+          "It removes the training data"
+        ],
+        "answerIndex": 0,
+        "explanation": "The adversarial game needs informative learning signals for both players.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1406.2661"
+          }
+        ]
+      },
+      {
+        "id": "generative_adversarial_networks-eval",
+        "skill": "Evaluate generators",
+        "difficulty": "advanced",
+        "question": "Why is visual inspection alone insufficient?",
+        "options": [
+          "It can miss memorization, low diversity, and systematic failures",
+          "Images cannot be inspected",
+          "All generative metrics are perfect",
+          "A single sample represents the full distribution"
+        ],
+        "answerIndex": 0,
+        "explanation": "Quality, diversity, and memorization require broader evaluation.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1406.2661"
+          }
+        ]
+      }
+    ]
+  },
+  "variational_autoencoders": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "variational_autoencoders-parts",
+        "skill": "Identify VAE components",
+        "difficulty": "foundation",
+        "question": "What does a VAE encoder output?",
+        "options": [
+          "Parameters of a latent probability distribution",
+          "A final class label only",
+          "A search index",
+          "Human preference rankings"
+        ],
+        "answerIndex": 0,
+        "explanation": "The encoder parameterizes an approximate posterior over latent variables.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1312.6114"
+          }
+        ]
+      },
+      {
+        "id": "variational_autoencoders-trick",
+        "skill": "Explain reparameterization",
+        "difficulty": "applied",
+        "question": "Why use the reparameterization trick?",
+        "options": [
+          "To backpropagate through stochastic latent sampling",
+          "To remove the decoder",
+          "To make every latent identical",
+          "To tokenize images"
+        ],
+        "answerIndex": 0,
+        "explanation": "Sampling is expressed as a differentiable transformation of noise and learned parameters.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1312.6114"
+          }
+        ]
+      },
+      {
+        "id": "variational_autoencoders-kl",
+        "skill": "Interpret KL regularization",
+        "difficulty": "applied",
+        "question": "What does the KL term encourage?",
+        "options": [
+          "The approximate posterior to remain near the chosen prior",
+          "The decoder to memorize file paths",
+          "Every reconstruction to be exact",
+          "The tokenizer to merge bytes"
+        ],
+        "answerIndex": 0,
+        "explanation": "The KL penalty regularizes latent distributions for coherent sampling.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1312.6114"
+          }
+        ]
+      },
+      {
+        "id": "variational_autoencoders-sample",
+        "skill": "Generate a new example",
+        "difficulty": "applied",
+        "question": "How is a basic VAE used to generate?",
+        "options": [
+          "Sample a latent from the prior and pass it through the decoder",
+          "Run only the encoder on an empty file",
+          "Retrieve a nearest document",
+          "Optimize a reward model"
+        ],
+        "answerIndex": 0,
+        "explanation": "The decoder maps sampled latent values to the data space.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1312.6114"
+          }
+        ]
+      },
+      {
+        "id": "variational_autoencoders-tradeoff",
+        "skill": "Reason about posterior collapse",
+        "difficulty": "advanced",
+        "question": "What happens in posterior collapse?",
+        "options": [
+          "The decoder ignores the latent and the posterior approaches the prior",
+          "The latent dimension becomes infinite",
+          "The encoder becomes a search engine",
+          "All samples match labels perfectly"
+        ],
+        "answerIndex": 0,
+        "explanation": "A powerful decoder may model data without using latent information.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1312.6114"
+          }
+        ]
+      }
+    ]
+  },
+  "transfer_learning": {
+    "version": 1,
+    "reviewedAt": "2026-09-25",
+    "questions": [
+      {
+        "id": "transfer_learning-definition",
+        "skill": "Explain transfer learning",
+        "difficulty": "foundation",
+        "question": "Which workflow is transfer learning?",
+        "options": [
+          "Initialize from a pretrained model and adapt it to a related target task",
+          "Train unrelated random models and average them",
+          "Evaluate on the training set only",
+          "Replace labels with file names"
+        ],
+        "answerIndex": 0,
+        "explanation": "Knowledge from pretraining is reused for the target.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1411.1792"
+          }
+        ]
+      },
+      {
+        "id": "transfer_learning-freeze",
+        "skill": "Use frozen features",
+        "difficulty": "applied",
+        "question": "Why first train a new head with the encoder frozen?",
+        "options": [
+          "It cheaply tests whether pretrained features separate the target",
+          "It guarantees the best possible model",
+          "It changes the source labels",
+          "It exposes the test set"
+        ],
+        "answerIndex": 0,
+        "explanation": "A frozen baseline is efficient and reduces overfitting risk.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1411.1792"
+          }
+        ]
+      },
+      {
+        "id": "transfer_learning-unfreeze",
+        "skill": "Fine-tune carefully",
+        "difficulty": "applied",
+        "question": "What is a common next step if the frozen baseline plateaus?",
+        "options": [
+          "Unfreeze selected layers with a smaller learning rate",
+          "Train on the test set",
+          "Delete validation data",
+          "Randomize all labels"
+        ],
+        "answerIndex": 0,
+        "explanation": "Controlled fine-tuning can adapt representations without destroying them abruptly.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1411.1792"
+          }
+        ]
+      },
+      {
+        "id": "transfer_learning-shift",
+        "skill": "Detect negative transfer",
+        "difficulty": "applied",
+        "question": "A source model hurts performance versus training a small target model. What may be occurring?",
+        "options": [
+          "Negative transfer from source-target mismatch",
+          "Perfect calibration",
+          "Token merging",
+          "Secure aggregation"
+        ],
+        "answerIndex": 0,
+        "explanation": "Source features can be unsuitable or misleading for the target domain.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1411.1792"
+          }
+        ]
+      },
+      {
+        "id": "transfer_learning-split",
+        "skill": "Protect evaluation",
+        "difficulty": "advanced",
+        "question": "What must remain untouched throughout transfer-model selection?",
+        "options": [
+          "The final test set",
+          "The training labels",
+          "The optimizer state",
+          "The new prediction head"
+        ],
+        "answerIndex": 0,
+        "explanation": "The final test set must remain independent of model and hyperparameter choices.",
+        "sources": [
+          {
+            "label": "Primary reference",
+            "url": "https://arxiv.org/abs/1411.1792"
+          }
+        ]
+      }
+    ]
+  }
+}

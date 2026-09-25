@@ -150,11 +150,20 @@ export function authErrorMessage(error: unknown): string {
     "auth/unauthorized-domain":
       "This address is not enabled for Google sign-in. Add this hostname to Firebase Authentication → Settings → Authorized domains, then try again.",
     "auth/operation-not-allowed":
-      "Google sign-in is not enabled for this Firebase project. Enable Google in Authentication → Sign-in method.",
+      "This sign-in method is currently unavailable. Please try another method.",
     "auth/network-request-failed":
-      "Couldn’t reach Google sign-in. Check your connection and try again.",
+      "Couldn’t connect. Check your connection and try again.",
     "auth/invalid-credential":
       "The email or password is incorrect. Try again or reset your password.",
+    "auth/wrong-password":
+      "The email or password is incorrect. Try again or reset your password.",
+    "auth/user-not-found":
+      "The email or password is incorrect. Try again or reset your password.",
+    "auth/email-already-in-use":
+      "An account already uses this email. Log in or reset your password.",
+    "auth/invalid-email": "Enter a valid email address.",
+    "auth/weak-password":
+      "Choose a stronger password with at least 12 characters.",
     "auth/too-many-requests":
       "Too many attempts. Please wait a moment before trying again.",
     "auth/account-exists-with-different-credential":

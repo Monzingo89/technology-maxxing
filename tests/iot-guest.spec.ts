@@ -79,6 +79,7 @@ test("guest quota survives a fresh browser and signup deletes the server record"
       .locator(".assessment-card")
       .filter({ hasText: `Topic ${i + 1}` })
       .click();
+    await page.getByRole("button", { name: "Start assessment" }).click();
     await page
       .locator(".answer-grid")
       .getByRole("button", { name: "Correct", exact: true })
@@ -95,7 +96,7 @@ test("guest quota survives a fresh browser and signup deletes the server record"
     );
   }
   await expect(page.getByRole("dialog")).toBeVisible();
-  await page.getByRole("button", { name: "Close signup" }).click();
+  await page.getByRole("button", { name: "Close account dialog" }).click();
   await page.locator(".assessment-card").filter({ hasText: "Topic 6" }).click();
   await expect(page.getByRole("dialog")).toBeVisible();
   expect(
@@ -115,8 +116,8 @@ test("guest quota survives a fresh browser and signup deletes the server record"
   await returning.goto(baseURL!);
   await expect(returning.locator(".quota-card strong")).toHaveText("0");
   await returning
-    .getByRole("button", { name: "Sign up free", exact: true })
-    .first()
+    .locator(".site-header")
+    .getByRole("button", { name: "Sign up", exact: true })
     .click();
   const dialog = returning.getByRole("dialog");
   await dialog.getByRole("checkbox").check();
@@ -132,7 +133,7 @@ test("guest quota survives a fresh browser and signup deletes the server record"
       response.request().method() === "POST",
   );
   await dialog
-    .getByRole("button", { name: "Sign up free", exact: true })
+    .getByRole("button", { name: "Create account", exact: true })
     .click();
   expect((await (await deleted).json()).result).toEqual({ cleared: true });
   await expect(returning.locator(".quota-card strong")).toHaveText("unlimited");
@@ -151,6 +152,7 @@ test("guest quota survives a fresh browser and signup deletes the server record"
     .locator(".assessment-card")
     .filter({ hasText: "Topic 6" })
     .click();
+  await returning.getByRole("button", { name: "Start assessment" }).click();
   await expect(returning.locator(".exam-card")).toBeVisible();
   expect(errors).toEqual([]);
   await cleanContext.close();
@@ -178,9 +180,10 @@ test("an unavailable quota service blocks guest assessments", async ({
     }),
   );
   await page.goto("/");
-  await expect(page.getByRole("alert")).toContainText(
-    "couldn’t check your guest allowance",
-  );
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Retry allowance check" }),
+  ).toHaveCount(0);
   await expect(
     page.getByRole("button", { name: "Assess", exact: true }).first(),
   ).toBeDisabled();
@@ -262,11 +265,13 @@ test("expired guest completion releases the UI for another attempt", async ({
   );
   await page.goto("/");
   await page.getByRole("button", { name: "Assess", exact: true }).click();
+  await page.getByRole("button", { name: "Start assessment" }).click();
   await page.getByRole("button", { name: "Correct", exact: true }).click();
   await expect(page.getByRole("alert")).toContainText("session expired");
   await expect(
     page.getByRole("button", { name: "Retry saving result" }),
   ).toHaveCount(0);
   await page.locator(".assessment-card").click();
+  await page.getByRole("button", { name: "Start assessment" }).click();
   await expect(page.locator(".exam-card")).toBeVisible();
 });
