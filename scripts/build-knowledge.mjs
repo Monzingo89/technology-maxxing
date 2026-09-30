@@ -136,6 +136,7 @@ const technologies = Object.entries(data.tech)
       })),
       docs,
       related,
+      crossCloudEquivalents: strings(item.crossCloudEquivalents),
       questionBank,
       learnPath: `learn/${id}/`,
     };
@@ -281,9 +282,16 @@ function buildAssessmentBank(technology, allTechnologies) {
     t.id === "webrtc"
       ? allTechnologies.filter((item) => ["js", "node"].includes(item.id))
       : [];
-  const compatible = unique(
-    [...t.related, ...compatibilityFallback].map((item) => item.name),
-  ).slice(0, 2);
+  const crossCloudEquivalentNames = unique(
+    t.crossCloudEquivalents
+      .map((id) => allTechnologies.find((item) => item.id === id)?.name)
+      .filter(Boolean),
+  );
+  const compatible = unique([
+    ...crossCloudEquivalentNames,
+    ...t.related.map((item) => item.name),
+    ...compatibilityFallback.map((item) => item.name),
+  ]).slice(0, 2);
   const incompatible = rotateForTopic(
     sameCategory.map((item) => item.name),
     t.id,
@@ -331,12 +339,16 @@ function buildAssessmentBank(technology, allTechnologies) {
     {
       id: "compatibility",
       kind: "multiple",
-      question: `Which reviewed companion technologies are listed for use with ${t.name}? Select all that apply.`,
+      question: crossCloudEquivalentNames.length
+        ? `Which services are the closest cross-cloud counterparts to ${t.name}? Select all that apply.`
+        : `Which reviewed companion technologies are listed for use with ${t.name}? Select all that apply.`,
       options: compatibilityOptions,
       answerIndex: 0,
       answerIndices: compatible.map((_, index) => index),
       explanation: compatible.length
-        ? `${t.name} is directly connected in the library to ${compatible.join(" and ")}.`
+        ? crossCloudEquivalentNames.length
+          ? `${compatible.join(" and ")} are the closest catalog counterparts; their exact features and operating models can differ.`
+          : `${t.name} is directly connected in the library to ${compatible.join(" and ")}.`
         : `${t.name} has no reviewed compatibility links in the catalog yet.`,
       skill: "Compatible technologies",
       difficulty: "applied",

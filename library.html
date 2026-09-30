@@ -528,6 +528,7 @@ async function loadAgentData(){
       historyNotes:item.extension?.historyNotes||[],
       docs:item.extension?.docs||[],
       practiceChallenges:item.extension?.practiceChallenges||[],
+      crossCloudEquivalents:item.extension?.crossCloudEquivalents||item.crossCloudEquivalents||[],
       assessment:item.extension?.assessment||null
     };
   }
@@ -542,7 +543,7 @@ async function loadAgentData(){
   for(const [id,t] of Object.entries(DATA.tech)){
     const ext=TECH_EXTENSIONS[id]||GENERATED_TECHS.find(item=>item.id===id)?.extension;
     if(ext){
-      for(const key of ["tag","latestChanges","problemItSolves","historyNotes","docs","practiceChallenges","assessment"]){
+      for(const key of ["tag","latestChanges","problemItSolves","historyNotes","docs","practiceChallenges","crossCloudEquivalents","assessment"]){
         if(ext[key]) t[key]=ext[key];
       }
       t.rel=t.rel||{};
