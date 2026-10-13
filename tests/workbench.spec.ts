@@ -57,8 +57,8 @@ test("model atlas: valid Astra settings, token estimate and benchmark evidence",
     .filter({ hasText: "Learn & connect" })
     .first()
     .click();
-  await expect(page).toHaveURL(/learn\/ai_/);
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Figma");
+  await expect(page).toHaveURL(/#login\?learn=/);
+  await expect(page.getByRole("dialog")).toContainText("Welcome back");
 });
 test("mobile and reduced motion: usable brief, full proposal and no horizontal overflow", async ({
   page,

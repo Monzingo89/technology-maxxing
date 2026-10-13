@@ -2,6 +2,52 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import { planBuild } from "../src/workstation/planner.ts";
+import {
+  pickCategories,
+  pickModels,
+} from "../src/workstation/modelRecommendations.ts";
+import { learningDestination } from "../src/services/learningGate.ts";
+test("ten requested categories each contain ten unique sourced model recommendations", () => {
+  assert.equal(pickCategories.length, 10);
+  for (const c of pickCategories) {
+    assert.equal(c.picks.length, 10, c.name);
+    assert.equal(new Set(c.picks.map((p) => p[0])).size, 10);
+    assert.ok(c.caution && c.checks);
+    for (const [key, reason] of c.picks) {
+      assert.ok(pickModels[key] && reason.length > 20);
+      const id =
+        "ai_" +
+        pickModels[key][0]
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "_")
+          .replace(/_$/, "");
+      assert.ok(
+        read("generated-technologies").some((t) => t.id === id),
+        id,
+      );
+    }
+  }
+});
+test("login destinations accept only local learning and assessment routes", () => {
+  assert.deepEqual(learningDestination("#login?learn=learn%2Fai_qwen%2F"), {
+    kind: "learn",
+    value: "learn/ai_qwen/",
+  });
+  assert.deepEqual(learningDestination("#login?assessment=ai_qwen"), {
+    kind: "assessment",
+    value: "ai_qwen",
+  });
+  for (const target of [
+    "https://evil.example",
+    "//evil.example",
+    "learn/../",
+    "javascript:alert(1)",
+  ])
+    assert.equal(
+      learningDestination("#login?learn=" + encodeURIComponent(target)),
+      null,
+    );
+});
 const read = (n) =>
   JSON.parse(
     fs.readFileSync(new URL(`../data/${n}.json`, import.meta.url), "utf8"),

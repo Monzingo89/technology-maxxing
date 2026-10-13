@@ -1,5 +1,11 @@
 # AI Workbench
 
+## Category recommendations and account entry points (October 13, 2026)
+
+The “Top 10 by category” tab provides ten distinct model picks for each of the ten requested categories (100 recommendation slots; models may recur between categories). `modelRecommendations.ts` stores editorial trial order, task-specific rationale, licensing notes, evaluation criteria and professional-use cautions. This is a curated candidate pool, not a current universal performance ranking. Publisher model cards and Hugging Face metadata were checked on October 13, 2026. Suitability within a category is explicitly an editorial inference; no benchmark score was invented.
+
+Learn/Study links and assessment entry points now route signed-out users to the existing login/create-account dialog. A restricted local destination in the hash survives switching auth modes and is resumed after authentication. Canceling clears the destination. Only `learn/<topic>/` and topic identifiers are accepted, preventing open redirects. Signed-in users proceed directly. Generated learning-page assessment CTAs, the static library index, model cards, hardware learning links and graph Learn/Assess tabs use the gate. Public learning pages remain indexable: this is a navigation gate, not server-side content authorization. Legacy guest APIs are unchanged, but the current app no longer automatically checks guest allowance when browsing. Production login requires the existing configured Firebase service.
+
 Entry point: `/#builder`. This adds a lazy-loaded workstation planning surface; it preserves the AI Space homepage, linked Knowledge Library and existing assessments.
 
 ## Run and verify

@@ -1,4 +1,12 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import {
+  lazy,
+  Suspense,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import {
   ArrowRight,
   ArrowUp,
@@ -39,15 +47,27 @@ import {
 } from "./services/guest";
 import { legalVersion, privacySections, termsSections } from "./content/legal";
 import type { Category, LeaderboardEntry } from "./services/types";
+import { learningDestination, learningLogin } from "./services/learningGate";
 
-const Workbench = lazy(() => import('./workstation/Workbench'));
+const Workbench = lazy(() => import("./workstation/Workbench"));
 type View =
-  "library" | "assessments" | "papers" | "leaderboards" | "privacy" | "terms" | "builder";
+  | "library"
+  | "assessments"
+  | "papers"
+  | "leaderboards"
+  | "privacy"
+  | "terms"
+  | "builder";
 function readView(): View {
-  const route = location.hash.slice(1).split('?')[0];
-  return ["assessments", "papers", "leaderboards", "privacy", "terms", "builder"].includes(
-    route,
-  )
+  const route = location.hash.slice(1).split("?")[0];
+  return [
+    "assessments",
+    "papers",
+    "leaderboards",
+    "privacy",
+    "terms",
+    "builder",
+  ].includes(route)
     ? (route as View)
     : "library";
 }
@@ -574,7 +594,6 @@ export default function App() {
         void removeGuestRecord();
       } else {
         setAllowance(null);
-        void refreshAllowance();
       }
     });
   }, []);
@@ -768,12 +787,6 @@ export default function App() {
     progress.guestCount,
     allowance?.completed || 0,
   );
-  const guestRemaining = user
-    ? "unlimited"
-    : !authReady || guestAccessUnavailable || (firebaseReady && !allowance)
-      ? "—"
-      : Math.max(0, GUEST_LIMIT - guestCompleted);
-
   function openAuth(mode: Mode = "login") {
     if (authBusy) return;
     setAuthMode(mode);
@@ -789,9 +802,44 @@ export default function App() {
     setPassword("");
     setAuthError("");
     setAuthMessage("");
+    if (location.hash.startsWith("#login")) {
+      history.replaceState(
+        null,
+        "",
+        `${location.pathname}${location.search}#library`,
+      );
+      updateView("library");
+    }
   }
 
+  useEffect(() => {
+    const resume = () => {
+      if (!location.hash.startsWith("#login") || !authReady) return;
+      const destination = learningDestination(location.hash);
+      if (!user) {
+        openAuth("login");
+        return;
+      }
+      if (destination?.kind === "learn") {
+        location.assign(`${import.meta.env.BASE_URL}${destination.value}`);
+      } else if (destination?.kind === "assessment") {
+        const item = technologies.find((t) => t.id === destination.value);
+        if (item) {
+          setView("assessments");
+          setPendingAssessment(item);
+        }
+      } else setView("library");
+    };
+    resume();
+    window.addEventListener("hashchange", resume);
+    return () => window.removeEventListener("hashchange", resume);
+  }, [authReady, user, technologies]);
+
   async function startAssessment(item: Technology) {
+    if (!userRef.current) {
+      location.hash = `login?assessment=${encodeURIComponent(item.id)}`;
+      return;
+    }
     if (
       guestAccessUnavailable ||
       !authReady ||
@@ -857,6 +905,10 @@ export default function App() {
   }
 
   function requestAssessment(item: Technology) {
+    if (!userRef.current) {
+      location.hash = `login?assessment=${encodeURIComponent(item.id)}`;
+      return;
+    }
     if (assessmentBusy || active || pendingCompletion) return;
     setPendingAssessment(item);
   }
@@ -1106,7 +1158,10 @@ export default function App() {
           IoT
         </a>
         <nav aria-label="Main navigation">
-          <button className={view === 'builder' ? 'active' : ''} onClick={() => setView('builder')}>
+          <button
+            className={view === "builder" ? "active" : ""}
+            onClick={() => setView("builder")}
+          >
             <Settings size={18} /> Build
           </button>
           <button
@@ -1304,7 +1359,7 @@ export default function App() {
             .
           </p>
         </article>
-      ) : view === 'builder' ? null : (
+      ) : view === "builder" ? null : (
         <section className="hero">
           <div>
             <p className="eyebrow">IoT knowledge assessments</p>
@@ -1316,30 +1371,34 @@ export default function App() {
             </p>
           </div>
           <aside className="quota-card">
-            <span>Guest assessments left</span>
-            <strong>{guestRemaining}</strong>
+            <span>{user ? "Your progress" : "Your learning account"}</span>
+            <strong>{user ? progress.overallElo : "Sign in to learn"}</strong>
             <p>
-              Overall ELO: {progress.overallElo}. Free signup unlocks more
-              attempts.
+              {user
+                ? "Overall ELO. Choose a topic to continue learning."
+                : "Create a free account or log in to open lessons and take assessments."}
             </p>
             {!user && firebaseReady ? (
               <p>
-                Five completed guest assessments per network.{" "}
+                An account is required for lessons and assessments.{" "}
                 <a href="#privacy">How we remember visits</a>
               </p>
             ) : null}
             {!firebaseReady ? (
               <p>
-                {guestAccessUnavailable
-                  ? "Guest assessments are temporarily unavailable. You can still browse the library and papers."
-                  : "Local preview: this browser’s allowance only."}
+                Sign-in is unavailable in this unconfigured preview. You can
+                still browse the catalog and papers.
               </p>
             ) : null}
           </aside>
         </section>
       )}
 
-      {view === 'builder' && <Suspense fallback={<p role="status">Loading the AI workbench…</p>}><Workbench /></Suspense>}
+      {view === "builder" && (
+        <Suspense fallback={<p role="status">Loading the AI workbench…</p>}>
+          <Workbench signedIn={!!user} />
+        </Suspense>
+      )}
       {view === "library" ? (
         <section className="panel">
           <div className="panel-head">
@@ -1383,19 +1442,24 @@ export default function App() {
                     {ASSESSMENT_QUESTION_COUNT} assessment questions
                   </small>
                   <div className="card-actions">
-                    <a href={item.learnPath}>
-                      Study
+                    <a
+                      href={
+                        user ? item.learnPath : learningLogin(item.learnPath)
+                      }
+                    >
+                      Learn
                       <ArrowRight size={16} />
                     </a>
                     <button
                       disabled={
-                        guestAccessUnavailable ||
-                        !!lock ||
-                        assessmentBusy ||
-                        !!active ||
-                        !!pendingCompletion ||
-                        !authReady ||
-                        (!user && firebaseReady && (!allowance || quotaBusy))
+                        !!user &&
+                        (guestAccessUnavailable ||
+                          !!lock ||
+                          assessmentBusy ||
+                          !!active ||
+                          !!pendingCompletion ||
+                          !authReady ||
+                          (!user && firebaseReady && (!allowance || quotaBusy)))
                       }
                       onClick={() => requestAssessment(item)}
                     >
@@ -1406,7 +1470,7 @@ export default function App() {
                         </>
                       ) : (
                         <>
-                          Assess
+                          Take assessment
                           <CheckCircle2 size={16} />
                         </>
                       )}
@@ -1624,12 +1688,13 @@ export default function App() {
                       className="assessment-card"
                       key={item.id}
                       disabled={
-                        guestAccessUnavailable ||
-                        !!lock ||
-                        assessmentBusy ||
-                        !!pendingCompletion ||
-                        !authReady ||
-                        (!user && firebaseReady && (!allowance || quotaBusy))
+                        !!user &&
+                        (guestAccessUnavailable ||
+                          !!lock ||
+                          assessmentBusy ||
+                          !!pendingCompletion ||
+                          !authReady ||
+                          (!user && firebaseReady && (!allowance || quotaBusy)))
                       }
                       onClick={() => requestAssessment(item)}
                     >

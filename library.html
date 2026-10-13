@@ -643,7 +643,13 @@ function openTech(id,fromTrail=false){
   document.body.classList.add("open");
 }
 function closeSheet(){document.body.classList.remove("open");}
-function setTab(t){curTab=t; renderSheet();}
+function setTab(t){
+  if((t==="learn"||t==="assess")&&!window.TW?.signedIn){
+    const query=t==="assess"?`assessment=${encodeURIComponent(current)}`:`learn=${encodeURIComponent(`learn/${current}/`)}`;
+    location.href=`./#login?${query}`;return;
+  }
+  curTab=t; renderSheet();
+}
 
 function renderSheet(){
   const t=DATA.tech[current], cat=DATA.cats[t.cat], cc=cat.color;
@@ -742,7 +748,9 @@ function openGuide(){
    The cloud-sync module below calls window.TW.onAuth / mergeCloudProgress.
    If cloud sync is not configured, the sign-in button simply stays hidden. */
 window.TW={
+  signedIn:false,
   onAuth(user){
+    this.signedIn=!!user;
     const b=document.getElementById("authBtn");
     if(!window.cloudSync){b.hidden=true;return}
     b.hidden=false;

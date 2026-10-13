@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { hardware } from "../src/workstation/hardware.ts";
+import { pickModels } from "../src/workstation/modelRecommendations.ts";
 const read = (name) =>
   JSON.parse(
     fs.readFileSync(new URL(`../data/${name}.json`, import.meta.url), "utf8"),
@@ -171,6 +172,19 @@ for (const h of hardware)
     [h.kind === "mac" ? "mlx_runtime" : "llama_cpp", "quantization"],
     `${h.meaning} ${h.tradeoff}`,
   );
+for (const [id, license, description] of Object.values(pickModels)) {
+  if (nodes.some((n) => n.id === slug(id))) continue;
+  add(
+    id,
+    id.split("/")[1],
+    description,
+    "Provides downloadable model weights for controlled, task-specific evaluation.",
+    "Supports local model experimentation; category recommendations are editorial, not measured rankings.",
+    `https://huggingface.co/${id}`,
+    ["model_cards", "quantization"],
+    `License: ${license}. Source checked 2026-10-13. Evaluate on your own task before use.`,
+  );
+}
 const seen = new Set();
 for (const n of nodes) {
   if (seen.has(n.id)) throw Error(`Duplicate ${n.id}`);

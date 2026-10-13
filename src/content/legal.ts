@@ -1,4 +1,4 @@
-export const legalVersion = "2026-09-19";
+export const legalVersion = "2026-10-13";
 export interface LegalSection {
   title: string;
   body: string;
@@ -11,7 +11,7 @@ export const privacySections: LegalSection[] = [
   },
   {
     title: "Five guest assessments and your IP address",
-    body: "When the connected service checks your guest allowance, it uses the IP address of your connection to recognize returning visits and limit that network to five completed guest assessments. Our application stores a protected identifier derived from the IP address using a server-held secret, a completion count, up to five random assessment identifiers to prevent duplicate counting, and a temporary assessment reservation. The quota record does not store your raw IP address, answers, email, or browsing history. The derived identifier is still treated as personal information, not anonymous data. We use it only to administer the guest allowance and prevent resets from clearing browser storage. People on a shared network may share the allowance; changing networks or IP addresses may affect recognition.",
+    body: "As of October 13, 2026, Learn and assessment entry points require sign-in. Browsing the current app no longer initiates a guest-allowance check. Earlier versions offered five guest assessments per network, and their retained records or older clients may still use the legacy service. That service stores a protected identifier derived from the connection IP using a server-held secret, a completion count, up to five random assessment identifiers, and a temporary reservation. It does not store raw IP addresses, answers, email, or browsing history in the quota record. The derived identifier remains personal information. Legacy records are retained and deleted as described below; hosting and authentication providers may separately process connection metadata.",
   },
   {
     title: "Guest record retention and deletion on registration",
@@ -46,7 +46,7 @@ export const termsSections: LegalSection[] = [
   },
   {
     title: "Guest access and accounts",
-    body: "Guests may complete up to five assessments per recognized network IP address. Returning visits and clearing browser storage do not renew that allowance on the connected service. Create a free account to continue beyond the guest allowance. Shared networks can share a limit, and an IP address does not uniquely identify a person. Accounts require you to be at least 18, provide an email you control, protect your credentials, and agree to these terms and the Privacy Policy. Do not impersonate others or use accounts, automated requests, or network changes to evade service limits. After authentication, we request deletion of our guest quota records as described in the Privacy Policy.",
+    body: "You may browse the catalog without an account. Learn and Take assessment actions require a free account or an existing sign-in. These navigation gates do not make publicly indexed learning pages private. The earlier five-assessment guest offer is no longer offered by the current interface. Accounts require you to be at least 18, provide an email you control, protect your credentials, and agree to these terms and the Privacy Policy. Do not impersonate others or use accounts or automated requests to evade service limits. After authentication, we request deletion of legacy guest quota records as described in the Privacy Policy.",
   },
   {
     title: "Assessments and fair use",

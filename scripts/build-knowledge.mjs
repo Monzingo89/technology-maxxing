@@ -452,7 +452,7 @@ for (const technology of technologies) {
       title: `${t.name}: learn, practice & connect | AI Space`,
       description,
       route: t.learnPath,
-      content,
+      content: content.replace('<a href="../../">Take an assessment', `<a href="../../#login?assessment=${encodeURIComponent(t.id)}">Take an assessment`),
       structured: {
         "@context": "https://schema.org",
         "@type": "LearningResource",
@@ -475,7 +475,7 @@ const indexContent = `<p class="eyebrow">IoT library and AI assessments</p><h1>F
         .filter((t) => t.cat === category.id)
         .map(
           (t) =>
-            `<article class="card"><h3><a href="${esc(t.id)}/">${esc(t.name)}</a></h3><p>${esc(t.tag || t.problemItSolves || t.why)}</p></article>`,
+            `<article class="card"><h3><a href="../#login?learn=${encodeURIComponent(t.learnPath)}">${esc(t.name)}</a></h3><p>${esc(t.tag || t.problemItSolves || t.why)}</p></article>`,
         )
         .join("")}</div></section>`,
   )

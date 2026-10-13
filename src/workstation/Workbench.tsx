@@ -20,8 +20,11 @@ import frontier from "../../data/frontier-models.json";
 import { hardware, money, amazonSearch } from "./hardware";
 import { planBuild, type BuildPlan, type Preferences } from "./planner";
 import "./workbench.css";
+import CategoryPicks from "./CategoryPicks";
+import { learningLogin } from "../services/learningGate";
 const DeskScene = lazy(() => import("./DeskScene"));
-type Pane = "build" | "models" | "integrations" | "hardware" | "guide";
+type Pane =
+  "build" | "models" | "integrations" | "hardware" | "guide" | "picks";
 type Model = {
   priceNote?: string;
   priceSource?: string;
@@ -84,7 +87,13 @@ const starters = [
   "Run a 70B model with image, video and audio tools on a Mac",
   "Build a private, affordable 8B assistant for my documents",
 ];
-export default function Workbench() {
+export default function Workbench({
+  signedIn = false,
+}: {
+  signedIn?: boolean;
+}) {
+  const learnLink = (id: string) =>
+    signedIn ? `learn/${slug(id)}/` : learningLogin(`learn/${slug(id)}/`);
   const params = new URLSearchParams(location.hash.split("?")[1] || "");
   const [pane, setPane] = useState<Pane>(
     params.has("compare") ? "hardware" : "build",
@@ -228,6 +237,7 @@ export default function Workbench() {
           [
             ["build", "Build a workstation", Box],
             ["models", "Model atlas", Sparkles],
+            ["picks", "Top 10 by category", Layers],
             ["integrations", "Plugins & skills", Layers],
             ["hardware", "Hardware lab", Cpu],
             ["guide", "Field guide", Monitor],
@@ -698,7 +708,7 @@ export default function Workbench() {
                 <h3>{x.name}</h3>
                 <p>{x.description}</p>
                 <div className="wb-card-footer">
-                  <a href={`learn/${slug(x.id)}/`}>Learn & connect</a>
+                  <a href={learnLink(x.id)}>Learn & connect</a>
                   <a
                     href={x.source}
                     {...external}
@@ -789,10 +799,7 @@ export default function Workbench() {
                     >
                       Versions & evidence <ChevronRight size={14} />
                     </button>
-                    <a
-                      href={`learn/${slug(m.id)}/`}
-                      aria-label={`Learn ${m.name}`}
-                    >
+                    <a href={learnLink(m.id)} aria-label={`Learn ${m.name}`}>
                       <ArrowUpRight size={18} />
                     </a>
                   </div>
@@ -819,7 +826,7 @@ export default function Workbench() {
                       {m.license}
                     </small>
                     <div className="wb-card-footer">
-                      <a href={`learn/${slug(m.id)}/`}>Learn & connect</a>
+                      <a href={learnLink(m.id)}>Learn & connect</a>
                       <a href={m.source} {...external}>
                         Model card ↗
                       </a>
@@ -908,7 +915,7 @@ export default function Workbench() {
                   <a href={amazonSearch(h.name)} {...external}>
                     Amazon search ↗
                   </a>
-                  <a href={`learn/${slug(h.id)}/`}>Learning page ↗</a>
+                  <a href={learnLink(h.id)}>Learning page ↗</a>
                 </div>
               </article>
             ))}
@@ -926,6 +933,7 @@ export default function Workbench() {
         </>
       )}
       {pane === "guide" && <FieldGuide />}
+      {pane === "picks" && <CategoryPicks signedIn={signedIn} />}
       <dialog
         ref={dialog}
         className="wb-dialog"
