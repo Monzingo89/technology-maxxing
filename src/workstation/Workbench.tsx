@@ -21,6 +21,7 @@ import { hardware, money, amazonSearch } from "./hardware";
 import { planBuild, type BuildPlan, type Preferences } from "./planner";
 import "./workbench.css";
 import CategoryPicks from "./CategoryPicks";
+import LicenseLink from "./LicenseLink";
 import { learningLogin } from "../services/learningGate";
 const DeskScene = lazy(() => import("./DeskScene"));
 type Pane =
@@ -823,7 +824,7 @@ export default function Workbench({
                     <p>{m.description}</p>
                     <small>
                       {m.publisher} · {m.downloads.toLocaleString()} downloads ·{" "}
-                      {m.license}
+                      <LicenseLink license={m.license} signedIn={signedIn} />
                     </small>
                     <div className="wb-card-footer">
                       <a href={learnLink(m.id)}>Learn & connect</a>

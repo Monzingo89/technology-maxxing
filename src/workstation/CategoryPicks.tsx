@@ -3,6 +3,7 @@ import { pickCategories, pickModels, pickSource } from "./modelRecommendations";
 import { learningLogin } from "../services/learningGate";
 import { fetchHubMetadata, type HubMetadata } from "./hubMetadata";
 import "./workbench.css";
+import LicenseLink from "./LicenseLink";
 export default function CategoryPicks({
   signedIn,
   categoryId,
@@ -48,22 +49,28 @@ export default function CategoryPicks({
     };
   }, [category.id, attempt]);
   return (
-    <section aria-label="Top 10 open models by category">
+    <section
+      className="model-picks"
+      aria-label="Top 10 open models by category"
+    >
       <p className="wb-kicker">
         10 CATEGORIES · 10 PICKS EACH · CHECKED OCT 13, 2026
       </p>
       <h2>Top 10 open models by task</h2>
-      <p>
-        Editorial trial order, not a benchmark leaderboard. We balance
-        documented capabilities, specialization and deployment size within a
-        curated candidate pool. Category suitability is our inference, not a
-        measured score. Models can appear in several lists.
-      </p>
-      <p>
-        “Open” means downloadable weights, including gated and custom-license
-        models—not necessarily unrestricted open source. Check every model card
-        and license before use.
-      </p>
+      <details className="model-methodology">
+        <summary>How these recommendations are selected</summary>
+        <p>
+          Editorial trial order, not a benchmark leaderboard. We balance
+          documented capabilities, specialization and deployment size within a
+          curated candidate pool. Category suitability is our inference, not a
+          measured score. Models can appear in several lists.
+        </p>
+        <p>
+          “Open” means downloadable weights, including gated and custom-license
+          models—not necessarily unrestricted open source. Check every model
+          card and license before use.
+        </p>
+      </details>
       {!categoryId && (
         <label>
           Choose a category{" "}
@@ -87,15 +94,23 @@ export default function CategoryPicks({
           ? "Loading current Hugging Face metadata…"
           : "Hugging Face metadata requests complete."}
       </p>
-      <p>
-        Fetched from the public Hugging Face Hub API when you choose a category;
-        successful results are cached in memory for five minutes. Your browser
-        contacts Hugging Face directly. Downloads and likes are popularity
-        signals, not category performance scores.
-      </p>
-      <button onClick={() => setAttempt((a) => a + 1)}>
-        Retry unavailable metadata
-      </button>
+      <details className="model-methodology">
+        <summary>About the live Hugging Face data</summary>
+        <p>
+          Fetched from the public Hugging Face Hub API when you choose a
+          category; successful results are cached in memory for five minutes.
+          Your browser contacts Hugging Face directly. Downloads and likes are
+          popularity signals, not category performance scores.
+        </p>
+      </details>
+      {Object.values(metadata).some((value) => typeof value === "string") && (
+        <button
+          className="metadata-retry"
+          onClick={() => setAttempt((a) => a + 1)}
+        >
+          Retry unavailable metadata
+        </button>
+      )}
       <aside className="wb-note">
         <strong>Before you use these models</strong>
         <p>{category.caution}</p>
@@ -118,7 +133,9 @@ export default function CategoryPicks({
               <h3>{id.split("/")[1]}</h3>
               <p>{why}</p>
               <p>{limit}</p>
-              <small>License: {license}</small>
+              <small>
+                License: <LicenseLink license={license} signedIn={signedIn} />
+              </small>
               {live && typeof live !== "string" ? (
                 <div className="wb-note" data-testid="hub-metadata">
                   <p>
@@ -127,7 +144,8 @@ export default function CategoryPicks({
                     Likes: {live.likes?.toLocaleString() ?? "Not supplied"}
                   </p>
                   <p>
-                    Hub task: {live.task} · Hub license: {live.license}
+                    Hub task: {live.task} · Hub license:{" "}
+                    <LicenseLink license={live.license} signedIn={signedIn} />
                   </p>
                   <small>
                     Repository updated:{" "}

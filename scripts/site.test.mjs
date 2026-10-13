@@ -3,6 +3,7 @@ import fs from "node:fs";
 import vm from "node:vm";
 import test from "node:test";
 import { validateReviewedBanks } from "./assessment-banks.mjs";
+import { standardBanks, standardTopics } from "./standards-topics.mjs";
 
 const reviewedBanks = JSON.parse(
   fs.readFileSync(
@@ -140,7 +141,7 @@ test("public assessment banks provide five focused answerable questions per topi
   }
 });
 
-test("every topic publishes the same five practical assessment dimensions", () => {
+test("authored banks are published exactly; fallback banks retain five recall dimensions", () => {
   const index = JSON.parse(
     fs.readFileSync(
       new URL("../public/knowledge-index.json", import.meta.url),
@@ -155,10 +156,19 @@ test("every topic publishes the same five practical assessment dimensions", () =
     "What the topic does",
     "Why people use it",
     "Problem it solves",
-    "Compatible technologies",
+    "Catalog connections",
     "Technology category",
   ];
   for (const [id, bank] of Object.entries(index.assessments)) {
+    const authored = standardBanks[id] || reviewedBanks[id];
+    if (authored) {
+      assert.deepEqual(
+        bank,
+        authored.questions,
+        `${id}: authored questions must not be replaced by generated recall`,
+      );
+      continue;
+    }
     assert.deepEqual(
       bank.map((question) => question.skill),
       skills,
@@ -171,9 +181,13 @@ test("every topic publishes the same five practical assessment dimensions", () =
       bank[3].answerIndices.length,
     );
     assert.equal(
-      new Set(bank.slice(0, 3).map((question) =>
-        question.options[question.answerIndex].trim().toLowerCase(),
-      )).size,
+      new Set(
+        bank
+          .slice(0, 3)
+          .map((question) =>
+            question.options[question.answerIndex].trim().toLowerCase(),
+          ),
+      ).size,
       3,
       `${id}: purpose, popularity, and problem answers must be distinct`,
     );
@@ -188,6 +202,36 @@ test("every topic publishes the same five practical assessment dimensions", () =
       assert.doesNotMatch(
         question.question,
         /which linked source|which background note|which catalog relationship/i,
+      );
+    }
+  }
+});
+
+test("standards topics have five distinct sourced checks and valid learning links", () => {
+  validateReviewedBanks(
+    standardBanks,
+    standardTopics.map((t) => t.id),
+  );
+  const index = JSON.parse(
+    fs.readFileSync(
+      new URL("../public/knowledge-index.json", import.meta.url),
+      "utf8",
+    ),
+  );
+  for (const topic of standardTopics) {
+    assert.equal(
+      index.technologies.find((t) => t.id === topic.id)?.assessmentQuality,
+      "authored",
+    );
+    assert.ok(
+      fs.existsSync(
+        new URL(`../public/learn/${topic.id}/index.html`, import.meta.url),
+      ),
+    );
+    for (const q of standardBanks[topic.id].questions) {
+      assert.ok(
+        `${q.question} ${q.options.join(" ")}`.split(/\s+/).length <= 85,
+        `${q.id}: reading budget`,
       );
     }
   }
@@ -324,11 +368,14 @@ test("bulk catalog preserves requested entries and resolves every new connection
     if ([...aiTermIds, ...secondAiTermIds].includes(id)) {
       assert.equal(entry.cat, "ai", `${id} belongs in the AI section`);
       assert.equal(index.assessments[id].length, 5, `${id} assessment size`);
-      assert.equal(
-        index.assessments[id][3].kind,
-        "multiple",
-        `${id} compatibility checkbox`,
-      );
+      if (reviewedBanks[id])
+        assert.deepEqual(index.assessments[id], reviewedBanks[id].questions);
+      else
+        assert.equal(
+          index.assessments[id][3].kind,
+          "multiple",
+          `${id} catalog connections checkbox`,
+        );
       if (secondAiTermIds.includes(id)) {
         assert.equal(
           reviewedBanks[id].questions.length,

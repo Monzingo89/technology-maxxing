@@ -3,6 +3,7 @@ import path from "node:path";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { validateReviewedBanks } from "./assessment-banks.mjs";
+import { standardBanks } from "./standards-topics.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "public");
@@ -21,7 +22,15 @@ const readData = (name) =>
   JSON.parse(fs.readFileSync(path.join(root, "data", `${name}.json`), "utf8"));
 const generated = readData("generated-technologies");
 const extensions = readData("technology-extensions");
-const reviewedBanks = readData("assessment-banks");
+for (const [id, url] of Object.entries(readData("base-documentation"))) {
+  extensions[id] = {
+    ...extensions[id],
+    docs: extensions[id]?.docs?.length
+      ? extensions[id].docs
+      : [{ label: "Official documentation / standards body", url }],
+  };
+}
+const reviewedBanks = { ...readData("assessment-banks"), ...standardBanks };
 // Only the trusted, checked-in catalog runtime is evaluated. No fetched scripts or user input.
 const context = vm.createContext({
   window: {},
@@ -341,7 +350,7 @@ function buildAssessmentBank(technology, allTechnologies) {
       kind: "multiple",
       question: crossCloudEquivalentNames.length
         ? `Which services are the closest cross-cloud counterparts to ${t.name}? Select all that apply.`
-        : `Which reviewed companion technologies are listed for use with ${t.name}? Select all that apply.`,
+        : `Which topics are directly connected to ${t.name} in this library? Select all that apply.`,
       options: compatibilityOptions,
       answerIndex: 0,
       answerIndices: compatible.map((_, index) => index),
@@ -350,7 +359,7 @@ function buildAssessmentBank(technology, allTechnologies) {
           ? `${compatible.join(" and ")} are the closest catalog counterparts; their exact features and operating models can differ.`
           : `${t.name} is directly connected in the library to ${compatible.join(" and ")}.`
         : `${t.name} has no reviewed compatibility links in the catalog yet.`,
-      skill: "Compatible technologies",
+      skill: "Catalog connections",
       difficulty: "applied",
       sources,
     },
@@ -363,7 +372,7 @@ function buildAssessmentBank(technology, allTechnologies) {
         `${t.name} is categorized as ${t.category}.`,
       ),
       "Technology category",
-      "advanced",
+      "foundation",
     ),
   ];
   const bank = questions
@@ -390,7 +399,8 @@ function buildAssessmentBank(technology, allTechnologies) {
 const assessmentBanks = Object.fromEntries(
   technologies.map((technology) => [
     technology.id,
-    buildAssessmentBank(technology, technologies),
+    reviewedBanks[technology.id]?.questions ||
+      buildAssessmentBank(technology, technologies),
   ]),
 );
 for (const [id, bank] of Object.entries(assessmentBanks)) {
@@ -412,6 +422,7 @@ fs.writeFileSync(
       challengeCount: t.challenges.length,
       assessmentCount: assessmentBanks[t.id].length,
       learnPath: t.learnPath,
+      assessmentQuality: reviewedBanks[t.id] ? "authored" : "catalog-recall",
     })),
     assessments: assessmentBanks,
   }) + "\n",
@@ -452,7 +463,10 @@ for (const technology of technologies) {
       title: `${t.name}: learn, practice & connect | AI Space`,
       description,
       route: t.learnPath,
-      content: content.replace('<a href="../../">Take an assessment', `<a href="../../#login?assessment=${encodeURIComponent(t.id)}">Take an assessment`),
+      content: content.replace(
+        '<a href="../../">Take an assessment',
+        `<a href="../../#login?assessment=${encodeURIComponent(t.id)}">Take an assessment`,
+      ),
       structured: {
         "@context": "https://schema.org",
         "@type": "LearningResource",

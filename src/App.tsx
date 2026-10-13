@@ -49,6 +49,8 @@ import { legalVersion, privacySections, termsSections } from "./content/legal";
 import type { Category, LeaderboardEntry } from "./services/types";
 import { learningDestination, learningLogin } from "./services/learningGate";
 import { pickCategories } from "./workstation/modelRecommendations";
+import { topicGroup } from "./services/topicGroups";
+const Benchmarks = lazy(() => import("./workstation/Benchmarks"));
 const CategoryPicks = lazy(() => import("./workstation/CategoryPicks"));
 
 const Workbench = lazy(() => import("./workstation/Workbench"));
@@ -60,7 +62,8 @@ type View =
   | "privacy"
   | "terms"
   | "builder"
-  | "models";
+  | "models"
+  | "benchmarks";
 function readView(): View {
   const route = location.hash.slice(1).split("?")[0];
   return [
@@ -71,6 +74,7 @@ function readView(): View {
     "terms",
     "builder",
     "models",
+    "benchmarks",
   ].includes(route)
     ? (route as View)
     : "library";
@@ -98,6 +102,7 @@ type Technology = {
   challengeCount: number;
   assessmentCount: number;
   learnPath: string;
+  assessmentQuality?: "authored" | "catalog-recall";
 };
 
 type Progress = {
@@ -436,6 +441,8 @@ function honorLabel(honor: LeaderboardHonor) {
 }
 
 export default function App() {
+  const [interest, setInterest] = useState("All");
+  const [quality, setQuality] = useState("All");
   const [modelCategory, setModelCategory] = useState(
     () =>
       new URLSearchParams(location.hash.split("?")[1]).get("category") || "",
@@ -658,10 +665,20 @@ export default function App() {
     ],
     [technologies],
   );
+  const interestCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const topic of technologies) {
+      const group = topicGroup(topic);
+      counts.set(group, (counts.get(group) || 0) + 1);
+    }
+    return [...counts].sort(([a], [b]) => a.localeCompare(b));
+  }, [technologies]);
 
   const library = useMemo(() => {
     const text = query.trim().toLowerCase();
     return technologies
+      .filter((item) => interest === "All" || topicGroup(item) === interest)
+      .filter((item) => quality === "All" || item.assessmentQuality === quality)
       .filter((item) => category === "All" || item.category === category)
       .filter((item) =>
         text
@@ -670,11 +687,11 @@ export default function App() {
               .includes(text)
           : true,
       );
-  }, [category, query, technologies]);
+  }, [category, query, technologies, interest, quality]);
 
   useEffect(() => {
     setVisibleTopics(TOPICS_PAGE_SIZE);
-  }, [category, query]);
+  }, [category, query, interest, quality]);
 
   useEffect(() => {
     const target = loadMoreRef.current;
@@ -1200,6 +1217,12 @@ export default function App() {
                 <Trophy size={18} /> Top 10 Models
               </button>
               <button
+                className={view === "benchmarks" ? "active" : ""}
+                onClick={() => setView("benchmarks")}
+              >
+                <Trophy size={18} /> Top Benchmarks
+              </button>
+              <button
                 className={view === "builder" ? "active" : ""}
                 onClick={() => setView("builder")}
               >
@@ -1402,7 +1425,9 @@ export default function App() {
             .
           </p>
         </article>
-      ) : view === "builder" || view === "models" ? null : (
+      ) : view === "builder" ||
+        view === "models" ||
+        view === "benchmarks" ? null : (
         <section className="hero">
           <div>
             <p className="eyebrow">IoT knowledge assessments</p>
@@ -1411,6 +1436,11 @@ export default function App() {
               Every assessment is a 5-question multiple-choice run from a
               focused bank. Questions are randomized per user, capped at 10
               seconds each, and failed attempts lock that topic for 5 days.
+            </p>
+            <p className="assessment-disclosure">
+              Authored checks and catalog-recall quizzes are labeled separately.
+              These are learning exercises, not professional certification;
+              timing cannot prevent outside assistance.
             </p>
           </div>
           <aside className="quota-card">
@@ -1437,6 +1467,11 @@ export default function App() {
         </section>
       )}
 
+      {view === "benchmarks" && (
+        <Suspense fallback={<p role="status">Loading benchmarks…</p>}>
+          <Benchmarks />
+        </Suspense>
+      )}
       {view === "models" && (
         <section className="workbench">
           {pickCategories.some((c) => c.id === modelCategory) ? (
@@ -1478,17 +1513,60 @@ export default function App() {
             </label>
           </div>
 
-          <div className="category-row" aria-label="Categories">
-            {categories.map((item) => (
-              <button
-                key={item}
-                className={item === category ? "selected" : ""}
-                onClick={() => setCategory(item)}
+          <div className="topic-filters">
+            <label>
+              Interest area
+              <select
+                value={interest}
+                onChange={(e) => {
+                  setInterest(e.target.value);
+                  setCategory("All");
+                }}
               >
-                {item}
-              </button>
-            ))}
+                <option value="All">All areas ({technologies.length})</option>
+                {interestCounts.map(([name, count]) => (
+                  <option key={name} value={name}>
+                    {name} ({count})
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Topic category
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                {categories.map((name) => (
+                  <option key={name}>{name}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Assessment type
+              <select
+                value={quality}
+                onChange={(e) => setQuality(e.target.value)}
+              >
+                <option value="All">All assessments</option>
+                <option value="authored">Authored knowledge checks</option>
+                <option value="catalog-recall">
+                  Catalog recall — not proficiency
+                </option>
+              </select>
+            </label>
+            <button
+              onClick={() => {
+                setInterest("All");
+                setCategory("All");
+                setQuery("");
+                setQuality("All");
+              }}
+            >
+              Reset filters
+            </button>
           </div>
+          <p role="status">{library.length} matching topics</p>
 
           {loadError ? <p className="error">{loadError}</p> : null}
 
@@ -1501,7 +1579,10 @@ export default function App() {
                   <h3>{item.name}</h3>
                   <p>{item.tag}</p>
                   <small>
-                    {ASSESSMENT_QUESTION_COUNT} assessment questions
+                    {ASSESSMENT_QUESTION_COUNT} timed questions ·{" "}
+                    {item.assessmentQuality === "authored"
+                      ? "Authored knowledge check"
+                      : "Catalog recall, not proficiency"}
                   </small>
                   <div className="card-actions">
                     <a
@@ -1997,6 +2078,12 @@ export default function App() {
               ×
             </button>
             <h2 id="assessment-warning-title">Ready for a timed assessment?</h2>
+            <p>
+              {pendingAssessment.assessmentQuality === "authored"
+                ? "Authored knowledge check."
+                : "Catalog-recall check: tests recognition of this library’s descriptions, not practical proficiency."}{" "}
+              This is a learning exercise, not a proctored exam.
+            </p>
             <p>
               Each question has a strict 10-second timer. During the final 3
               seconds, the timer turns red and pulses. If time reaches zero
