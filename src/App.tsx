@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   ArrowUp,
@@ -40,11 +40,12 @@ import {
 import { legalVersion, privacySections, termsSections } from "./content/legal";
 import type { Category, LeaderboardEntry } from "./services/types";
 
+const Workbench = lazy(() => import('./workstation/Workbench'));
 type View =
-  "library" | "assessments" | "papers" | "leaderboards" | "privacy" | "terms";
+  "library" | "assessments" | "papers" | "leaderboards" | "privacy" | "terms" | "builder";
 function readView(): View {
-  const route = location.hash.slice(1);
-  return ["assessments", "papers", "leaderboards", "privacy", "terms"].includes(
+  const route = location.hash.slice(1).split('?')[0];
+  return ["assessments", "papers", "leaderboards", "privacy", "terms", "builder"].includes(
     route,
   )
     ? (route as View)
@@ -1105,6 +1106,9 @@ export default function App() {
           IoT
         </a>
         <nav aria-label="Main navigation">
+          <button className={view === 'builder' ? 'active' : ''} onClick={() => setView('builder')}>
+            <Settings size={18} /> Build
+          </button>
           <button
             className={view === "library" ? "active" : ""}
             onClick={() => setView("library")}
@@ -1300,7 +1304,7 @@ export default function App() {
             .
           </p>
         </article>
-      ) : (
+      ) : view === 'builder' ? null : (
         <section className="hero">
           <div>
             <p className="eyebrow">IoT knowledge assessments</p>
@@ -1335,6 +1339,7 @@ export default function App() {
         </section>
       )}
 
+      {view === 'builder' && <Suspense fallback={<p role="status">Loading the AI workbench…</p>}><Workbench /></Suspense>}
       {view === "library" ? (
         <section className="panel">
           <div className="panel-head">
