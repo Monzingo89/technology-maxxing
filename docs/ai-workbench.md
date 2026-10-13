@@ -1,5 +1,11 @@
 # AI Workbench
 
+## Main-menu model discovery and live Hub metadata
+
+`/#models` replaces the main navigation buttons with ten category buttons and a Back action. Category deep links use `/#models?category=front-end` (and the other category IDs). Selecting a category requests public model metadata directly from Hugging Face, with omitted credentials, a 12-second timeout, canceled obsolete requests and five-minute in-memory caching. Downloads, likes, task, license, repository update time and retrieval time are shown separately from the saved editorial rationale. Network/rate-limit failures retain explicitly labeled saved recommendations and support retry. These requests do not run model inference or dynamically establish a benchmark ranking.
+
+No API key is needed for the public metadata used here. No token is stored in the browser or repository. If traffic later needs authenticated access, add a server-side proxy and configure a least-privilege Hugging Face token as a server-only environment variable, never a `VITE_` variable. Gated weight downloads and paid inference are separate workflows and may require permissions or credentials.
+
 ## Category recommendations and account entry points (October 13, 2026)
 
 The “Top 10 by category” tab provides ten distinct model picks for each of the ten requested categories (100 recommendation slots; models may recur between categories). `modelRecommendations.ts` stores editorial trial order, task-specific rationale, licensing notes, evaluation criteria and professional-use cautions. This is a curated candidate pool, not a current universal performance ranking. Publisher model cards and Hugging Face metadata were checked on October 13, 2026. Suitability within a category is explicitly an editorial inference; no benchmark score was invented.

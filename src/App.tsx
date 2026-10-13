@@ -48,6 +48,8 @@ import {
 import { legalVersion, privacySections, termsSections } from "./content/legal";
 import type { Category, LeaderboardEntry } from "./services/types";
 import { learningDestination, learningLogin } from "./services/learningGate";
+import { pickCategories } from "./workstation/modelRecommendations";
+const CategoryPicks = lazy(() => import("./workstation/CategoryPicks"));
 
 const Workbench = lazy(() => import("./workstation/Workbench"));
 type View =
@@ -57,7 +59,8 @@ type View =
   | "leaderboards"
   | "privacy"
   | "terms"
-  | "builder";
+  | "builder"
+  | "models";
 function readView(): View {
   const route = location.hash.slice(1).split("?")[0];
   return [
@@ -67,6 +70,7 @@ function readView(): View {
     "privacy",
     "terms",
     "builder",
+    "models",
   ].includes(route)
     ? (route as View)
     : "library";
@@ -432,6 +436,10 @@ function honorLabel(honor: LeaderboardHonor) {
 }
 
 export default function App() {
+  const [modelCategory, setModelCategory] = useState(
+    () =>
+      new URLSearchParams(location.hash.split("?")[1]).get("category") || "",
+  );
   const [view, updateView] = useState<View>(readView);
   const setView = (next: View) => {
     updateView(next);
@@ -455,6 +463,9 @@ export default function App() {
   useEffect(() => {
     const changed = () => {
       updateView(readView());
+      setModelCategory(
+        new URLSearchParams(location.hash.split("?")[1]).get("category") || "",
+      );
       setAuthOpen(false);
     };
     window.addEventListener("hashchange", changed);
@@ -1157,41 +1168,73 @@ export default function App() {
         <a className="brand" href="#library">
           IoT
         </a>
-        <nav aria-label="Main navigation">
-          <button
-            className={view === "builder" ? "active" : ""}
-            onClick={() => setView("builder")}
-          >
-            <Settings size={18} /> Build
-          </button>
-          <button
-            className={view === "library" ? "active" : ""}
-            onClick={() => setView("library")}
-          >
-            <Library size={18} />
-            Library
-          </button>
-          <button
-            className={view === "assessments" ? "active" : ""}
-            onClick={() => setView("assessments")}
-          >
-            <CheckCircle2 size={18} />
-            Assessments
-          </button>
-          <button
-            className={view === "papers" ? "active" : ""}
-            onClick={() => setView("papers")}
-          >
-            <FileText size={18} />
-            Papers
-          </button>
-          <button
-            className={view === "leaderboards" ? "active" : ""}
-            onClick={() => setView("leaderboards")}
-          >
-            <Trophy size={18} />
-            Leaderboards
-          </button>
+        <nav
+          aria-label={
+            view === "models" ? "Model categories" : "Main navigation"
+          }
+          className={view === "models" ? "model-category-menu" : undefined}
+        >
+          {view === "models" ? (
+            <>
+              <button onClick={() => setView("library")}>
+                ← Back to main menu
+              </button>
+              {pickCategories.map((c) => (
+                <button
+                  key={c.id}
+                  aria-pressed={modelCategory === c.id}
+                  className={modelCategory === c.id ? "active" : ""}
+                  onClick={() => {
+                    updateView("models");
+                    setModelCategory(c.id);
+                    location.hash = `models?category=${c.id}`;
+                  }}
+                >
+                  {c.name}
+                </button>
+              ))}
+            </>
+          ) : (
+            <>
+              <button onClick={() => setView("models")}>
+                <Trophy size={18} /> Top 10 Models
+              </button>
+              <button
+                className={view === "builder" ? "active" : ""}
+                onClick={() => setView("builder")}
+              >
+                <Settings size={18} /> Build
+              </button>
+              <button
+                className={view === "library" ? "active" : ""}
+                onClick={() => setView("library")}
+              >
+                <Library size={18} />
+                Library
+              </button>
+              <button
+                className={view === "assessments" ? "active" : ""}
+                onClick={() => setView("assessments")}
+              >
+                <CheckCircle2 size={18} />
+                Assessments
+              </button>
+              <button
+                className={view === "papers" ? "active" : ""}
+                onClick={() => setView("papers")}
+              >
+                <FileText size={18} />
+                Papers
+              </button>
+              <button
+                className={view === "leaderboards" ? "active" : ""}
+                onClick={() => setView("leaderboards")}
+              >
+                <Trophy size={18} />
+                Leaderboards
+              </button>
+            </>
+          )}
         </nav>
         <div className="account">
           {user ? (
@@ -1359,7 +1402,7 @@ export default function App() {
             .
           </p>
         </article>
-      ) : view === "builder" ? null : (
+      ) : view === "builder" || view === "models" ? null : (
         <section className="hero">
           <div>
             <p className="eyebrow">IoT knowledge assessments</p>
@@ -1394,6 +1437,25 @@ export default function App() {
         </section>
       )}
 
+      {view === "models" && (
+        <section className="workbench">
+          {pickCategories.some((c) => c.id === modelCategory) ? (
+            <Suspense
+              fallback={<p role="status">Loading model recommendations…</p>}
+            >
+              <CategoryPicks signedIn={!!user} categoryId={modelCategory} />
+            </Suspense>
+          ) : (
+            <>
+              <h1>Top 10 Models</h1>
+              <p>
+                Choose one of the ten categories above to load its
+                recommendations and current Hugging Face information.
+              </p>
+            </>
+          )}
+        </section>
+      )}
       {view === "builder" && (
         <Suspense fallback={<p role="status">Loading the AI workbench…</p>}>
           <Workbench signedIn={!!user} />

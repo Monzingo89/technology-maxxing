@@ -1,9 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { pickCategories, pickModels, pickSource } from "./modelRecommendations";
 import { learningLogin } from "../services/learningGate";
-export default function CategoryPicks({ signedIn }: { signedIn: boolean }) {
+import { fetchHubMetadata, type HubMetadata } from "./hubMetadata";
+import "./workbench.css";
+export default function CategoryPicks({
+  signedIn,
+  categoryId,
+}: {
+  signedIn: boolean;
+  categoryId?: string;
+}) {
   const [selected, setSelected] = useState(pickCategories[0].id);
-  const category = pickCategories.find((c) => c.id === selected)!;
+  const category =
+    pickCategories.find((c) => c.id === (categoryId || selected)) ||
+    pickCategories[0];
+  const [metadata, setMetadata] = useState<
+    Record<string, HubMetadata | string>
+  >({});
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+    setMetadata({});
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    const requests = category.picks.map(async ([key]) => {
+      const id = pickModels[key][0];
+      try {
+        const value = await fetchHubMetadata(id, controller.signal);
+        if (active) setMetadata((current) => ({ ...current, [id]: value }));
+      } catch (error) {
+        if (active)
+          setMetadata((current) => ({
+            ...current,
+            [id]: controller.signal.aborted
+              ? "Request timed out. Retry when connected."
+              : error instanceof Error
+                ? error.message
+                : "Metadata unavailable.",
+          }));
+      }
+    });
+    void Promise.all(requests).finally(() => clearTimeout(timeout));
+    return () => {
+      active = false;
+      clearTimeout(timeout);
+      controller.abort();
+    };
+  }, [category.id, attempt]);
   return (
     <section aria-label="Top 10 open models by category">
       <p className="wb-kicker">
@@ -21,22 +64,38 @@ export default function CategoryPicks({ signedIn }: { signedIn: boolean }) {
         models—not necessarily unrestricted open source. Check every model card
         and license before use.
       </p>
-      <label>
-        Choose a category{" "}
-        <select
-          aria-label="Model recommendation category"
-          value={selected}
-          onChange={(e) => setSelected(e.target.value)}
-        >
-          {pickCategories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
-      </label>
+      {!categoryId && (
+        <label>
+          Choose a category{" "}
+          <select
+            aria-label="Model recommendation category"
+            value={selected}
+            onChange={(e) => setSelected(e.target.value)}
+          >
+            {pickCategories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <h3>{category.name}</h3>
       <p>{category.scope}</p>
+      <p role="status">
+        {Object.keys(metadata).length < 10
+          ? "Loading current Hugging Face metadata…"
+          : "Hugging Face metadata requests complete."}
+      </p>
+      <p>
+        Fetched from the public Hugging Face Hub API when you choose a category;
+        successful results are cached in memory for five minutes. Your browser
+        contacts Hugging Face directly. Downloads and likes are popularity
+        signals, not category performance scores.
+      </p>
+      <button onClick={() => setAttempt((a) => a + 1)}>
+        Retry unavailable metadata
+      </button>
       <aside className="wb-note">
         <strong>Before you use these models</strong>
         <p>{category.caution}</p>
@@ -52,6 +111,7 @@ export default function CategoryPicks({ signedIn }: { signedIn: boolean }) {
               .replace(/[^a-z0-9]+/g, "_")
               .replace(/_$/, "");
           const learn = `learn/${path}/`;
+          const live = metadata[id];
           return (
             <article key={key} data-testid="category-model">
               <span className="wb-tag">#{index + 1} · Editorial pick</span>
@@ -59,6 +119,31 @@ export default function CategoryPicks({ signedIn }: { signedIn: boolean }) {
               <p>{why}</p>
               <p>{limit}</p>
               <small>License: {license}</small>
+              {live && typeof live !== "string" ? (
+                <div className="wb-note" data-testid="hub-metadata">
+                  <p>
+                    Downloads:{" "}
+                    {live.downloads?.toLocaleString() ?? "Not supplied"} ·
+                    Likes: {live.likes?.toLocaleString() ?? "Not supplied"}
+                  </p>
+                  <p>
+                    Hub task: {live.task} · Hub license: {live.license}
+                  </p>
+                  <small>
+                    Repository updated:{" "}
+                    {live.modified
+                      ? live.modified.slice(0, 10)
+                      : "Not supplied"}
+                    . Retrieved: {new Date(live.fetchedAt).toLocaleString()}.
+                  </small>
+                </div>
+              ) : (
+                <p>
+                  {typeof live === "string"
+                    ? `${live} Showing the saved editorial recommendation; no live metrics available.`
+                    : "Loading Hub metadata…"}
+                </p>
+              )}
               <div className="wb-card-footer">
                 <a href={signedIn ? learn : learningLogin(learn)}>Learn</a>
                 <a
