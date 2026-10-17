@@ -330,6 +330,116 @@ button:disabled {
   color: white;
   font-size: 16px;
 }
+.video-tap-surface {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  touch-action: pan-y;
+}
+.video-tap-surface:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -5px;
+}
+.video-paused-icon {
+  padding: 16px;
+  border-radius: 50%;
+  background: #080d1780;
+  fill: currentColor;
+}
+.video-overlay {
+  pointer-events: none;
+  padding: 45px 20px 28px;
+}
+.video-overlay h2 {
+  font-size: 24px;
+  margin: 5px 90px 0 0;
+}
+.video-overlay .video-topic-link,
+.video-overlay details {
+  pointer-events: auto;
+  position: absolute;
+  bottom: 22px;
+  right: 14px;
+  margin: 0;
+}
+.video-overlay .video-topic-link,
+.video-overlay summary,
+.video-feed-nav a,
+.video-feed-nav button {
+  min-width: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  color: white;
+}
+.video-overlay details {
+  right: 58px;
+}
+.video-overlay summary {
+  cursor: pointer;
+  list-style: none;
+}
+.video-overlay summary::-webkit-details-marker {
+  display: none;
+}
+.video-overlay details p {
+  position: absolute;
+  bottom: 44px;
+  right: -40px;
+  width: min(310px, calc(100vw - 50px));
+  max-height: 35dvh;
+  overflow-y: auto;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: #080d17f2;
+  line-height: 1.5;
+}
+.video-progress {
+  position: absolute;
+  bottom: max(8px, env(safe-area-inset-bottom));
+  left: 14px;
+  width: calc(100% - 28px);
+  height: 3px;
+  border: 0;
+  border-radius: 3px;
+  overflow: hidden;
+  appearance: none;
+  pointer-events: none;
+  background: #ffffff40;
+  color: white;
+}
+.video-progress::-webkit-progress-bar {
+  background: #ffffff40;
+}
+.video-progress::-webkit-progress-value {
+  background: white;
+}
+.video-progress::-moz-progress-bar {
+  background: white;
+}
+@media (max-width: 650px) {
+  .video-feed-nav a,
+  .video-feed-nav button {
+    padding: 0;
+    border: 0;
+    background: #080d1740;
+  }
+  .video-overlay .video-topic-link,
+  .video-overlay details {
+    bottom: calc(18px + env(safe-area-inset-bottom));
+  }
+}
 .video-feed:focus-visible {
   outline: 3px solid #7766dd;
   outline-offset: 3px;

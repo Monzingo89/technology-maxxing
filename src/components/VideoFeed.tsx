@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import {
+  ArrowLeft,
+  ArrowUpRight,
+  FileText,
+  Play,
+  Settings2,
+} from "lucide-react";
+import {
   collection,
   limit,
   onSnapshot,
@@ -24,9 +31,9 @@ function VideoSlide({
   root: React.RefObject<HTMLDivElement | null>;
 }) {
   const player = useRef<HTMLVideoElement>(null),
+    progress = useRef<HTMLProgressElement>(null),
     slide = useRef<HTMLElement>(null);
   const [active, setActive] = useState(false),
-    [muted, setMuted] = useState(true),
     [paused, setPaused] = useState(
       () => matchMedia("(prefers-reduced-motion: reduce)").matches,
     ),
@@ -49,15 +56,33 @@ function VideoSlide({
     return () => observer.disconnect();
   }, [root]);
   useEffect(() => {
+    let disposed = false;
     const sync = () => {
       if (active && !paused && !document.hidden)
-        void player.current?.play().catch(() => setPaused(true));
+        void player.current?.play().catch((error: DOMException) => {
+          if (!disposed && error.name !== "AbortError") setPaused(true);
+        });
       else player.current?.pause();
     };
     sync();
     document.addEventListener("visibilitychange", sync);
-    return () => document.removeEventListener("visibilitychange", sync);
+    return () => {
+      disposed = true;
+      document.removeEventListener("visibilitychange", sync);
+    };
   }, [active, paused]);
+  function togglePlayback() {
+    const media = player.current;
+    if (!media || !active) return;
+    if (media.paused) {
+      // Call play directly in the gesture so audible playback is allowed.
+      media.muted = false;
+      void media.play().catch(() => setPaused(true));
+    } else {
+      setPaused(true);
+      media.pause();
+    }
+  }
   return (
     <article
       ref={slide}
@@ -67,13 +92,29 @@ function VideoSlide({
       <video
         ref={player}
         src={active ? video.url : undefined}
-        muted={muted}
+        muted={false}
         loop
         playsInline
         preload="none"
         crossOrigin="anonymous"
-        onError={() => setFailed(true)}
-        onPlay={() => setPaused(false)}
+        onError={() => {
+          if (active) setFailed(true);
+        }}
+        onPlay={() => {
+          setPaused(false);
+          setFailed(false);
+        }}
+        onTimeUpdate={(event) => {
+          const media = event.currentTarget;
+          if (progress.current)
+            progress.current.value =
+              Number.isFinite(media.duration) && media.duration > 0
+                ? media.currentTime / media.duration
+                : 0;
+        }}
+        onEmptied={() => {
+          if (progress.current) progress.current.value = 0;
+        }}
       >
         {captions && (
           <track
@@ -85,46 +126,48 @@ function VideoSlide({
           />
         )}
       </video>
-      <div className="video-topline">
-        <span>{video.category}</span>
-        <span>30 seconds</span>
-      </div>
+      <button
+        className="video-tap-surface"
+        aria-label={`${paused ? "Play" : "Pause"} ${video.title} video`}
+        tabIndex={active ? 0 : -1}
+        onClick={togglePlayback}
+      >
+        {paused && (
+          <Play className="video-paused-icon" size={36} aria-hidden="true" />
+        )}
+      </button>
       <div className="video-overlay">
         <span className="video-eyebrow">
-          {video.generated ? "AI-generated explanation" : "Topic explanation"}
+          {video.generated ? "AI-generated" : "Topic explanation"}
         </span>
         <h2>{video.title}</h2>
         {failed && (
           <p role="alert">This video could not load. Try refreshing.</p>
         )}
-        <div className="video-buttons">
-          <button
-            onClick={() => {
-              if (player.current?.paused) {
-                setPaused(false);
-                void player.current.play().catch(() => setPaused(true));
-              } else {
-                setPaused(true);
-                player.current?.pause();
-              }
-            }}
-          >
-            {paused ? "Play" : "Pause"}
-          </button>
-          <button aria-pressed={!muted} onClick={() => setMuted(!muted)}>
-            {muted ? "Sound on" : "Mute"}
-          </button>
-          <a href={`learn/${encodeURIComponent(video.topicId)}/`}>
-            Explore topic →
-          </a>
-        </div>
+        <a
+          className="video-topic-link"
+          href={`learn/${encodeURIComponent(video.topicId)}/`}
+          aria-label={`Explore ${video.title}`}
+          title="Explore topic"
+        >
+          <ArrowUpRight size={20} aria-hidden="true" />
+        </a>
         {video.script && (
           <details>
-            <summary>Read transcript</summary>
+            <summary aria-label="Read transcript" title="Read transcript">
+              <FileText size={18} aria-hidden="true" />
+            </summary>
             <p>{video.script}</p>
           </details>
         )}
       </div>
+      <progress
+        ref={progress}
+        className="video-progress"
+        max={1}
+        value={0}
+        aria-label={`${video.title} playback progress`}
+      />
     </article>
   );
 }
@@ -282,10 +325,20 @@ export default function VideoFeed({
     >
       {!!videos.length && (
         <nav className="video-feed-nav" aria-label="Video navigation">
-          <a href="#library">← Library</a>
+          <a href="#library" aria-label="Library" title="Library">
+            <ArrowLeft size={20} aria-hidden="true" />
+          </a>
           {owner && (
-            <button onClick={() => setManage(!manage)}>
-              {manage ? "Watch videos" : "Manage videos"}
+            <button
+              onClick={() => setManage(!manage)}
+              aria-label={manage ? "Watch videos" : "Manage videos"}
+              title={manage ? "Watch videos" : "Manage videos"}
+            >
+              {manage ? (
+                <Play size={20} aria-hidden="true" />
+              ) : (
+                <Settings2 size={20} aria-hidden="true" />
+              )}
             </button>
           )}
         </nav>
@@ -321,7 +374,7 @@ export default function VideoFeed({
       ) : (
         <>
           <p className="video-scroll-hint">
-            Scroll or swipe for the next idea. Tap Sound on to listen.
+            Swipe for the next idea. Tap the video to play or pause.
           </p>
           <div
             className="video-feed"

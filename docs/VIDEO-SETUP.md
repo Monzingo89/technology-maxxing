@@ -132,7 +132,10 @@ production secret deployment mechanism. There are no real keys in the templates.
   and downloadable by design. Draft previews use authenticated Storage access.
 - Feed pages load six at a time. Only the visible clip plays, offscreen clips
   release their source, hidden tabs pause, reduced-motion users start manually,
-  and audio is muted until enabled.
+  and audio defaults on. Browsers that block audible autoplay wait for a tap;
+  the player never silently falls back to muted playback. Tap the video (or
+  focus it and press Space/Enter) to play/pause. A thin bottom progress bar
+  tracks playback; small icons provide topic, transcript and library access.
 - Abandoned reservations expire after 20 minutes; review locks last 24 hours.
   Generation workers do not retry events to avoid duplicate provider charges.
   If a worker is killed, wait for its lease to expire before retrying. Review

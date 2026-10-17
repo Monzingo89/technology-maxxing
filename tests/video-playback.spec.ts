@@ -48,6 +48,24 @@ for (const reduced of [false, true])
       await page.emulateMedia({
         reducedMotion: reduced ? "reduce" : "no-preference",
       });
+      await page.addInitScript(() => {
+        const play = HTMLMediaElement.prototype.play;
+        let interacted = false;
+        document.addEventListener(
+          "click",
+          () => {
+            interacted = true;
+          },
+          true,
+        );
+        HTMLMediaElement.prototype.play = function () {
+          if (!interacted)
+            return Promise.reject(
+              new DOMException("Gesture required", "NotAllowedError"),
+            );
+          return play.call(this);
+        };
+      });
       await page.route("**/src/services/firebase.ts", (route) =>
         route.fulfill({
           contentType: "application/javascript",
@@ -93,16 +111,21 @@ for (const reduced of [false, true])
       expect(bounds?.y).toBe(0);
       expect(bounds?.width).toBe(390);
       expect(bounds?.height).toBe(844);
-      if (reduced) {
+      {
         await expect(
-          first.getByRole("button", { name: "Play", exact: true }),
+          first.getByRole("button", {
+            name: "Play Test topic 0 video",
+            exact: true,
+          }),
         ).toBeVisible();
         expect(
           await first
             .locator("video")
             .evaluate((v: HTMLVideoElement) => v.paused),
         ).toBe(true);
-        await first.getByRole("button", { name: "Play", exact: true }).click();
+        await first
+          .getByRole("button", { name: "Play Test topic 0 video", exact: true })
+          .click();
       }
       await expect
         .poll(() =>
@@ -111,24 +134,52 @@ for (const reduced of [false, true])
             .evaluate((v: HTMLVideoElement) => v.currentTime),
         )
         .toBeGreaterThan(0);
-      await first
-        .getByRole("button", { name: "Sound on", exact: true })
-        .click();
+      await expect(
+        first.getByRole("button", { name: /^(Sound on|Mute|Play|Pause)$/ }),
+      ).toHaveCount(0);
       await expect
         .poll(() =>
           first.locator("video").evaluate((v: HTMLVideoElement) => v.muted),
         )
         .toBe(false);
-      await first.getByRole("button", { name: "Pause", exact: true }).click();
+      await expect
+        .poll(() =>
+          first
+            .locator("progress")
+            .evaluate((p: HTMLProgressElement) => p.value),
+        )
+        .toBeGreaterThan(0);
+      await first
+        .getByRole("button", { name: "Pause Test topic 0 video", exact: true })
+        .click();
       await expect
         .poll(() =>
           first.locator("video").evaluate((v: HTMLVideoElement) => v.paused),
         )
         .toBe(true);
       await expect(first.locator("track")).toHaveAttribute("src", /^blob:/);
+      await first
+        .getByRole("button", { name: "Play Test topic 0 video" })
+        .press("Space");
+      await expect
+        .poll(() =>
+          first.locator("video").evaluate((v: HTMLVideoElement) => v.paused),
+        )
+        .toBe(false);
+      await first.getByLabel("Read transcript", { exact: true }).click();
+      await expect(
+        first.getByText("Test transcript", { exact: true }),
+      ).toBeVisible();
+      await expect
+        .poll(() =>
+          first.locator("video").evaluate((v: HTMLVideoElement) => v.paused),
+        )
+        .toBe(false);
       await second.scrollIntoViewIfNeeded();
       if (reduced)
-        await second.getByRole("button", { name: "Play", exact: true }).click();
+        await second
+          .getByRole("button", { name: "Play Test topic 1 video", exact: true })
+          .click();
       await expect
         .poll(() =>
           second
@@ -137,6 +188,11 @@ for (const reduced of [false, true])
         )
         .toBeGreaterThan(0);
       await expect(first.locator("video")).not.toHaveAttribute("src", /sample/);
+      expect(
+        await second
+          .locator("video")
+          .evaluate((v: HTMLVideoElement) => v.muted),
+      ).toBe(false);
       expect(new URL(page.url()).hash).toBe("");
       await page.locator(".video-feed").evaluate((el) => {
         el.scrollTop = el.scrollHeight;
