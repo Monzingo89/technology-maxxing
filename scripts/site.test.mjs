@@ -5,6 +5,15 @@ import test from "node:test";
 import { validateReviewedBanks } from "./assessment-banks.mjs";
 import { standardBanks, standardTopics } from "./standards-topics.mjs";
 
+test('production App Check uses Enterprise without a debug bypass', () => {
+  const adapter = fs.readFileSync(new URL('../src/services/firebase.ts', import.meta.url), 'utf8');
+  assert.match(adapter, /new ReCaptchaEnterpriseProvider\(env.VITE_FIREBASE_APPCHECK_SITE_KEY\)/);
+  assert.doesNotMatch(adapter, /ReCaptchaV3Provider|FIREBASE_APPCHECK_DEBUG_TOKEN/);
+  assert.match(adapter, /isTokenAutoRefreshEnabled: true/);
+  const backend = fs.readFileSync(new URL('../functions/src/videos.js', import.meta.url), 'utf8');
+  assert.match(backend, /enforceAppCheck: process.env.FUNCTIONS_EMULATOR !== "true"/);
+});
+
 const reviewedBanks = JSON.parse(
   fs.readFileSync(
     new URL("../data/assessment-banks.json", import.meta.url),

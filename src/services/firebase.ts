@@ -1,5 +1,5 @@
 import { initializeApp, getApps } from "firebase/app";
-import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
 import {
   getAuth,
   connectAuthEmulator,
@@ -70,12 +70,19 @@ export const app = firebaseReady
       storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET,
     })
   : null;
+const useEmulators = env.DEV && env.VITE_USE_FIREBASE_EMULATORS === "true";
+// Initialize attestation before Auth/Firestore/Functions can issue requests.
+if (app && !useEmulators && configured(env.VITE_FIREBASE_APPCHECK_SITE_KEY)) {
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider(env.VITE_FIREBASE_APPCHECK_SITE_KEY),
+    isTokenAutoRefreshEnabled: true,
+  });
+}
 export const auth = app ? getAuth(app) : null;
 export const db = app ? getFirestore(app) : null;
 export const functions = app
   ? getFunctions(app, env.VITE_FIREBASE_FUNCTIONS_REGION || "us-central1")
   : null;
-const useEmulators = env.DEV && env.VITE_USE_FIREBASE_EMULATORS === "true";
 if (app && auth && db && functions) {
   if (useEmulators) {
     connectAuthEmulator(auth, "http://127.0.0.1:9099", {
@@ -83,11 +90,6 @@ if (app && auth && db && functions) {
     });
     connectFirestoreEmulator(db, "127.0.0.1", 8080);
     connectFunctionsEmulator(functions, "127.0.0.1", 5001);
-  } else if (configured(env.VITE_FIREBASE_APPCHECK_SITE_KEY)) {
-    initializeAppCheck(app, {
-      provider: new ReCaptchaV3Provider(env.VITE_FIREBASE_APPCHECK_SITE_KEY),
-      isTokenAutoRefreshEnabled: true,
-    });
   }
 }
 function needAuth() {
