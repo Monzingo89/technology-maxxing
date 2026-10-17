@@ -429,12 +429,14 @@ export default function VideoFeed({
             >
               {captions && (
                 <track
-                  key={captions}
                   kind="captions"
                   src={captions}
                   srcLang="en"
                   label="English"
                   default
+                  onLoad={(event) => {
+                    event.currentTarget.track.mode = "showing";
+                  }}
                 />
               )}
             </video>

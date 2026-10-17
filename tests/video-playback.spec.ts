@@ -91,7 +91,7 @@ for (const reduced of [false, true])
           body: `
     export const collection=()=>({});export const orderBy=()=>({});export const limit=n=>({count:n});
     export const query=(...args)=>args.find(a=>a.count);
-    export function onSnapshot(q,cb){cb({docs:Array.from({length:Math.min(q.count,7)},(_,i)=>({data:()=>({topicId:'topic-'+i,title:'Test topic '+i,category:'Test fixture',url:'/__sample.mp4?topic='+i,script:'Test transcript',captions:'WEBVTT\\n\\n00:00:00.000 --> 00:00:03.000\\nTest caption\\n',generated:true,duration:30})}))});return()=>{};}
+    export function onSnapshot(q,cb){cb({docs:Array.from({length:Math.min(q.count,7)},(_,i)=>({data:()=>({topicId:'topic-'+i,title:'Test topic '+i,category:'Test fixture',url:'/__sample.mp4?topic='+i,script:'Test transcript',captions:'WEBVTT\\n\\n00:00:00.000 --> 00:00:03.000\\nTest caption '+i+'\\n',generated:true,duration:30})}))});return()=>{};}
   `,
         }),
       );
@@ -183,6 +183,19 @@ for (const reduced of [false, true])
         second.getByRole("button", { name: "Pause Test topic 1 video" }),
       ).toBeVisible();
       await expect(mediaPlayer).toHaveAttribute("src", /topic=1$/);
+      await expect
+        .poll(() =>
+          mediaPlayer.evaluate(
+            (v: HTMLVideoElement) =>
+              (v.textTracks[0]?.cues?.[0] as VTTCue)?.text,
+          ),
+        )
+        .toBe("Test caption 1");
+      expect(
+        await mediaPlayer.evaluate(
+          (v: HTMLVideoElement) => v.textTracks.length,
+        ),
+      ).toBe(1);
       await expect
         .poll(() =>
           mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
