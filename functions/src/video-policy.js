@@ -99,7 +99,7 @@ export const STARTER_SCRIPTS = {
     analogy: "A shared school workshop",
     scenes: scenes([
       ["Databricks in 1 minute. Databricks brings data processing, analysis, and machine learning into one platform, using a shared data lakehouse.", "Data engineering, analytics and machine learning stations connect to one shared lakehouse storage foundation."],
-      ["A lakehouse combines flexible storage with reliable tables. Delta Lake protects data transactions. Teams clean and transform data before analysis.", "Incoming raw records become clean structured tables. A transaction completes atomically while processing stages transform the records."],
+      ["A lakehouse combines flexible storage with reliable tables. Delta Lake protects transactions. Teams clean and transform data before analysis.", "Incoming raw records become clean structured tables. A transaction completes atomically while processing stages transform the records."],
       ["Unity Catalog controls access to shared data and AI assets. Teams still need to manage permissions, data quality, and costs.", "A central access-control layer grants approved teams access to shared tables. Show data checks and a compute usage meter."],
       ["Now, imagine a school workshop. Materials arrive in boxes. Students sort them, build projects, and measure how well each works.", "A friendly school workshop receives boxes of materials. Students sort supplies, assemble projects and measure completed projects."],
       ["Everyone shares organized supplies instead of keeping separate piles. A teacher checks labels and decides who can use each tool.", "The same workshop has one organized supply shelf. A teacher gives students permission to use suitable tools and checks labels."],
