@@ -42,6 +42,7 @@ for (const width of [390, 1440]) {
       name: "Keep your curiosity going.",
     });
     await expect(home).toBeVisible();
+    await expect(home).toContainText("Free videos. Sign in for lessons and quizzes.");
     await expect(
       home.getByRole("button", { name: "Log in", exact: true }),
     ).toBeVisible();
@@ -56,7 +57,7 @@ for (const width of [390, 1440]) {
     ).toBeVisible();
     await page.getByRole("button", { name: "Close account dialog" }).click();
     await home
-      .getByRole("link", { name: "Watch the free video feed again →" })
+      .getByRole("link", { name: "Watch videos →" })
       .click();
     await expect(
       page.getByRole("heading", { name: "Learn in 1 minute." }),

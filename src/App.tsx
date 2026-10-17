@@ -1601,17 +1601,14 @@ export default function App() {
         view === "home" ? null : (
         <section className="hero">
           <div>
-            <p className="eyebrow">IoT knowledge assessments</p>
-            <h1>Prove what you know, topic by topic.</h1>
+            <p className="eyebrow">Learn & practice</p>
+            <h1>Test your knowledge.</h1>
             <p>
-              Every assessment is a 5-question multiple-choice run from a
-              focused bank. Questions are randomized per user, capped at 10
-              seconds each, and failed attempts lock that topic for 5 days.
+              5 questions. 10 seconds each. Retry after 5 days if you don’t pass.
             </p>
             <p className="assessment-disclosure">
-              Authored checks and catalog-recall quizzes are labeled separately.
-              These are learning exercises, not professional certification;
-              timing cannot prevent outside assistance.
+              Practice quizzes, not professional certification. Quiz types are
+              labeled; results aren’t proctored.
             </p>
           </div>
           <aside className="quota-card">
@@ -1619,12 +1616,11 @@ export default function App() {
             <strong>{user ? progress.overallElo : "Sign in to learn"}</strong>
             <p>
               {user
-                ? "Overall ELO. Choose a topic to continue learning."
-                : "Create a free account or log in to open lessons and take assessments."}
+                ? "Your overall ELO. Pick a topic to learn."
+                : "Sign in for lessons and quizzes."}
             </p>
             {!user && firebaseReady ? (
               <p>
-                An account is required for lessons and assessments.{" "}
                 <a href="#privacy">How we remember visits</a>
               </p>
             ) : null}
@@ -1669,13 +1665,12 @@ export default function App() {
       )}
       {view === "home" && (
         <section className="panel video-home" aria-labelledby="home-title">
-          <p className="eyebrow">Your next idea starts here</p>
+          <p className="eyebrow">Stay curious</p>
           <h1 id="home-title" tabIndex={-1}>
             Keep your curiosity going.
           </h1>
           <p>
-            Watch topic videos freely. Create an account to open lessons, take
-            assessments, and keep learning.
+            Free videos. Sign in for lessons and quizzes.
           </p>
           {!user ? (
             <div className="video-home-actions">
@@ -1687,9 +1682,9 @@ export default function App() {
               </button>
             </div>
           ) : (
-            <a href="#library">Continue to the library →</a>
+            <a href="#library">Explore topics →</a>
           )}
-          <a href="#videos">Watch the free video feed again →</a>
+          <a href="#videos">Watch videos →</a>
         </section>
       )}
       {view === "videos" && (

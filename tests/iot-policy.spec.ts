@@ -14,7 +14,7 @@ for (const viewport of [
     await page.goto("/#library");
     await expect(
       page.getByRole("heading", {
-        name: "Prove what you know, topic by topic.",
+        name: "Test your knowledge.",
       }),
     ).toBeVisible();
     const loginButton = page
@@ -24,7 +24,7 @@ for (const viewport of [
       .locator(".site-header")
       .getByRole("button", { name: "Sign up", exact: true });
     await expect(loginButton).toBeVisible();
-    await expect(signupButton).toBeVisible();
+    if (viewport.width > 760) await expect(signupButton).toBeVisible();
     await loginButton.click();
     const loginDialog = page.getByRole("dialog");
     await expect(
@@ -60,10 +60,11 @@ for (const viewport of [
     await page.keyboard.press("Escape");
     await expect(loginDialog).toHaveCount(0);
     await expect(loginButton).toBeFocused();
-    await page
-      .locator(".site-header")
-      .getByRole("button", { name: "Sign up", exact: true })
-      .click();
+    if (viewport.width <= 760) {
+      await page.getByRole("button", { name: "Open navigation menu" }).click();
+      await page.getByRole("dialog", { name: "Explore" }).getByRole("button", { name: "Log in / Create account", exact: true }).click();
+      await page.getByRole("button", { name: "New here? Create an account", exact: true }).click();
+    } else await signupButton.click();
     const dialog = page.getByRole("dialog");
     await expect(dialog.getByLabel("Email", { exact: true })).toHaveAttribute(
       "placeholder",
@@ -121,7 +122,10 @@ for (const viewport of [
       page.getByRole("heading", { name: "Privacy Policy", exact: true }),
     ).toBeVisible();
 
-    await page.getByRole("button", { name: "Papers", exact: true }).click();
+    if (viewport.width <= 760) {
+      await page.getByRole("button", { name: "Open navigation menu" }).click();
+      await page.getByRole("dialog", { name: "Explore" }).getByRole("button", { name: "Papers", exact: true }).click();
+    } else await page.getByRole("button", { name: "Papers", exact: true }).click();
     const paper = page.getByRole("link", {
       name: "Attention Is All You Need",
       exact: true,
