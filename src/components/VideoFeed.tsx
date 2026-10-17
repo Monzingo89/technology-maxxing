@@ -34,6 +34,7 @@ function VideoSlide({
   playbackProgress,
   onActivate,
   onToggle,
+  onSeek,
 }: {
   video: TopicVideo;
   root: React.RefObject<HTMLDivElement | null>;
@@ -44,6 +45,7 @@ function VideoSlide({
   playbackProgress: number;
   onActivate: (id: string) => void;
   onToggle: () => void;
+  onSeek: (progress: number) => void;
 }) {
   const slide = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -108,11 +110,27 @@ function VideoSlide({
           </details>
         )}
       </div>
-      <progress
+      <input
+        type="range"
         className="video-progress"
+        min={0}
         max={1}
+        step={0.001}
         value={active ? playbackProgress : 0}
-        aria-label={`${video.title} playback progress`}
+        disabled={!active || failed}
+        aria-label={`Seek ${video.title} video`}
+        aria-valuetext={`${Math.round(playbackProgress * video.duration)} of ${video.duration} seconds`}
+        style={{ "--video-progress": `${(active ? playbackProgress : 0) * 100}%` } as React.CSSProperties}
+        onChange={(event) => {
+          if (active) onSeek(Number(event.currentTarget.value));
+        }}
+        onClick={(event) => event.stopPropagation()}
+        onKeyDown={(event) => {
+          if (active && (event.key === "Home" || event.key === "End")) {
+            event.preventDefault();
+            onSeek(event.key === "Home" ? 0 : 1);
+          }
+        }}
       />
     </article>
   );
@@ -307,6 +325,14 @@ export default function VideoFeed({
       media.pause();
     }
   }
+  function seekVideo(progress: number) {
+    const media = player.current;
+    if (!media || !Number.isFinite(media.duration) || media.duration <= 0) return;
+    const next = Math.max(0, Math.min(1, progress));
+    // Do not trigger the loop boundary when scrubbing to the final frame.
+    media.currentTime = Math.min(next * media.duration, Math.max(0, media.duration - 0.05));
+    setPlaybackProgress(next);
+  }
   useEffect(() => {
     if (!db) return;
     setLoading(true);
@@ -483,6 +509,7 @@ export default function VideoFeed({
                   playbackProgress={playbackProgress}
                   onActivate={activate}
                   onToggle={togglePlayback}
+                  onSeek={seekVideo}
                 />
               ))}
               <div

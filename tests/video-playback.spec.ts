@@ -95,9 +95,17 @@ for (const reduced of [false, true])
   `,
         }),
       );
-      await page.route("**/__sample.mp4*", (route) =>
-        route.fulfill({ contentType: "video/mp4", body: media }),
-      );
+      await page.route("**/__sample.mp4*", (route) => {
+        const range = /bytes=(\d+)-(\d*)/.exec(route.request().headers().range || "");
+        const start = range ? Number(range[1]) : 0;
+        const end = range?.[2] ? Math.min(Number(range[2]), media.length - 1) : media.length - 1;
+        return route.fulfill({
+          status: range ? 206 : 200,
+          contentType: "video/mp4",
+          headers: { "accept-ranges": "bytes", ...(range ? { "content-range": `bytes ${start}-${end}/${media.length}` } : {}) },
+          body: media.subarray(start, end + 1),
+        });
+      });
       await page.route("**/__video-component.html", (route) =>
         route.fulfill({
           contentType: "text/html",
@@ -154,8 +162,8 @@ for (const reduced of [false, true])
       await expect
         .poll(() =>
           first
-            .locator("progress")
-            .evaluate((p: HTMLProgressElement) => p.value),
+            .getByRole("slider")
+            .evaluate((p: HTMLInputElement) => Number(p.value)),
         )
         .toBeGreaterThan(0);
       await first
@@ -164,6 +172,28 @@ for (const reduced of [false, true])
       await expect
         .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused))
         .toBe(true);
+      const scrubber = first.getByRole("slider", { name: "Seek Test topic 0 video" });
+      await scrubber.focus();
+      await scrubber.press("End");
+      await expect.poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime / v.duration)).toBeGreaterThan(0.95);
+      await scrubber.press("Home");
+      await expect.poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime)).toBeLessThan(0.1);
+      const bar = await scrubber.boundingBox();
+      if (!bar) throw Error("Missing video scrubber");
+      await page.mouse.move(bar.x + 6, bar.y + bar.height / 2);
+      await page.mouse.down();
+      await page.mouse.move(bar.x + bar.width * 0.7, bar.y + bar.height / 2, { steps: 8 });
+      await page.mouse.up();
+      await expect.poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime / v.duration)).toBeGreaterThan(0.6);
+      expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+      const touch = await page.context().newCDPSession(page);
+      await touch.send("Emulation.setTouchEmulationEnabled", { enabled: true });
+      await touch.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: bar.x + bar.width * 0.7, y: bar.y + bar.height / 2 }] });
+      await touch.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: bar.x + bar.width * 0.2, y: bar.y + bar.height / 2 }] });
+      await touch.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+      await expect.poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime / v.duration)).toBeLessThan(0.3);
+      expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+      await touch.detach();
       await expect(mediaPlayer.locator("track")).toHaveAttribute(
         "src",
         /^blob:/,
