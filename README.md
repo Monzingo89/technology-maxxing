@@ -1,4 +1,4 @@
-# AI Space — Learn. Laugh. Master.
+# AI Space — Learn. Laugh. Master
 
 AI Space is a React + TypeScript social learning app built around this repository’s technology catalog. Three.js renders its explorable island and customizable agents. Firebase provides the account and multiplayer backend. Capacitor projects under `ios/` and `android/` reuse the web app.
 
@@ -10,7 +10,7 @@ npm run build
 npm run dev
 ```
 
-Open **http://127.0.0.1:5173**. Choose **Take a look around** to create a local preview agent. Preview data stays on this device; it is never presented as a real account, global ranking, or live population. Empty Firebase settings intentionally keep registration disabled.
+Open **<http://127.0.0.1:5173>**. Choose **Take a look around** to create a local preview agent. Preview data stays on this device; it is never presented as a real account, global ranking, or live population. Empty Firebase settings intentionally keep registration disabled.
 
 Existing `.env` settings were preserved and new Firebase placeholders appended. `.env` is ignored by Git. [`.env.example`](.env.example) documents the public web configuration. Do not overwrite an existing `.env` or put service-account credentials in a `VITE_` variable.
 
@@ -96,7 +96,7 @@ At implementation time, the seed queue had one unused entry. Add seeds before ex
 
 ## Hosting and mobile
 
-The production frontend is configured for Vercel at **https://tech.robertjmonzingo.com/**. `vercel.json` builds the React source with `npm run build` and publishes `dist/`. Static learning pages retain their trailing slashes; the app uses hash navigation. Keep `index.html` as a source entry pointing to `/src/main.tsx`, rather than copying a built page back over it.
+The production frontend is configured for Vercel at **<https://tech.robertjmonzingo.com/>**. `vercel.json` builds the React source with `npm run build` and publishes `dist/`. Static learning pages retain their trailing slashes; the app uses hash navigation. Keep `index.html` as a source entry pointing to `/src/main.tsx`, rather than copying a built page back over it.
 
 The Vercel project is `technology-maxxing`. Configure its production and preview environments with the public `VITE_FIREBASE_*` settings, `VITE_BASE_PATH=/`, and `SITE_URL=https://tech.robertjmonzingo.com/`. `.vercelignore` excludes local environment files and unrelated local artifacts from uploads. Never import the entire local `.env`, which can contain server secrets.
 
@@ -108,4 +108,4 @@ npx cap open ios
 npx cap open android
 ```
 
-See [mobile release notes](docs/MOBILE.md) for native authentication, App Check, signing, and actual store release prerequisites. The package identifier `com.aispace.community` is provisional and should be confirmed before registering store apps.
+See [mobile release notes](docs/MOBILE.md) for native authentication, App Check, signing, and actual store release prerequisites. The package identifier `com.aispace.community` is provisional and should be confirmed before registering store applictions.
