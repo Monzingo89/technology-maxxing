@@ -542,7 +542,7 @@ export default function App() {
     setVideoOwner(false);
     setVideoAccessError("");
     setVideoJobs([]);
-    if (user?.email === "robertjmonzingo@gmail.com" && user.emailVerified) {
+    if (user?.email === "vcv@robertjmonzingo.com" && user.emailVerified) {
       void videoCall<{ owner: boolean }>("videoOwnerStatus")
         .then((result) => {
           if (!stopped) setVideoOwner(result.owner);

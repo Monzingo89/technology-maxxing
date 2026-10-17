@@ -1,4 +1,4 @@
-export const VIDEO_OWNER = "robertjmonzingo@gmail.com";
+export const VIDEO_OWNER = "vcv@robertjmonzingo.com";
 export const MAX_UPLOAD_BYTES = 40 * 1024 * 1024;
 export const JOB_LEASE_MS = 20 * 60 * 1000;
 export function isVideoOwner(token, account) {

@@ -4,7 +4,7 @@ The default `#videos` page is public. Nothing is generated on a visitor request.
 After scrolling past the last available clip, signed-out visitors go to `#home`
 with login and signup buttons. Empty or failed feeds do not redirect. Signed-in
 viewers stay at the end of the feed.
-Only the verified **robertjmonzingo@gmail.com** Google account can reserve jobs,
+Only the verified **vcv@robertjmonzingo.com** Google account can reserve jobs,
 generate, stage uploads, review drafts, or publish. Existing Firebase moderators
 do not receive this permission. Email/password login, even for that email, does
 not qualify: use **Continue with Google**.

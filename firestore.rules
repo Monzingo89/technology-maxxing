@@ -6,7 +6,7 @@ service cloud.firestore {
     function member() { return verified() && exists(/databases/$(database)/documents/profiles/$(request.auth.uid)); }
     function moderator() { return verified() && request.auth.token.moderator == true; }
     function videoOwner() {
-      return verified() && request.auth.token.email == 'robertjmonzingo@gmail.com'
+      return verified() && request.auth.token.email == 'vcv@robertjmonzingo.com'
         && request.auth.token.firebase.sign_in_provider == 'google.com';
     }
     match /topicVideos/{topic} { allow read: if true; }

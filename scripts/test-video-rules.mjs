@@ -18,14 +18,14 @@ const env = await initializeTestEnvironment({
   storage: { rules: readFileSync("storage.rules", "utf8") },
 });
 const claims = {
-  email: "robertjmonzingo@gmail.com",
+  email: "vcv@robertjmonzingo.com",
   email_verified: true,
   firebase: { sign_in_provider: "google.com" },
 };
 const owner = env.authenticatedContext("owner", claims);
 const stranger = env.authenticatedContext("stranger", {
   ...claims,
-  email: "other@gmail.com",
+  email: "robertjmonzingo@gmail.com",
 });
 const password = env.authenticatedContext("password", {
   ...claims,

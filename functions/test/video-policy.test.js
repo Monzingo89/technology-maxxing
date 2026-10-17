@@ -27,6 +27,11 @@ const account = {
   tokensValidAfterTime: new Date(1000 * 1000).toISOString(),
 };
 test("only verified Google owner with a current enabled account is authorized", () => {
+  assert.equal(VIDEO_OWNER, "vcv@robertjmonzingo.com");
+  assert.equal(isVideoOwner(
+    { ...token, email: "robertjmonzingo@gmail.com" },
+    { ...account, email: "robertjmonzingo@gmail.com" },
+  ), false);
   assert.equal(isVideoOwner(token, account), true);
   for (const bad of [
     null,

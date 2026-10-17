@@ -26,7 +26,7 @@ const {
   videoOwnerStatus,
 } = await import("../functions/src/videos.js");
 const account = await getAuth().createUser({
-  email: "robertjmonzingo@gmail.com",
+  email: "vcv@robertjmonzingo.com",
   emailVerified: true,
 });
 await getAuth().updateUser(account.uid, {
