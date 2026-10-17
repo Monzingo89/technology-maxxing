@@ -10,7 +10,19 @@ import {
   VIDEO_OWNER,
   withTopicIntro,
   storyboardCaptions,
+  videoBudgetWindow,
+  videoLimitMessage,
 } from "../src/video-policy.js";
+test("video budgets reset at the next UTC midnight, including year boundaries", () => {
+  const result = videoBudgetWindow(Date.parse("2026-12-31T23:59:59Z"));
+  assert.equal(result.day, "2026-12-31");
+  assert.equal(new Date(result.resetsAt).toISOString(), "2027-01-01T00:00:00.000Z");
+  const message = videoLimitMessage("generate", 3, result.resetsAt);
+  assert.match(message, /3 requests per UTC day/);
+  assert.match(message, /2027-01-01 00:00:00 UTC/);
+  assert.match(message, /No new video was started/);
+  assert.match(videoLimitMessage("upload", 20, result.resetsAt), /upload limit reached \(20/);
+});
 const token = {
   email: VIDEO_OWNER,
   email_verified: true,

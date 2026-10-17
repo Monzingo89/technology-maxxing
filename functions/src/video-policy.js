@@ -1,6 +1,15 @@
 export const VIDEO_OWNER = "vcv@robertjmonzingo.com";
 export const MAX_UPLOAD_BYTES = 40 * 1024 * 1024;
 export const JOB_LEASE_MS = 20 * 60 * 1000;
+export function videoBudgetWindow(now) {
+  const day = new Date(now).toISOString().slice(0, 10);
+  const resetsAt = new Date(`${day}T00:00:00.000Z`).getTime() + 86400000;
+  return { day, resetsAt };
+}
+export function videoLimitMessage(mode, limit, resetsAt) {
+  const action = mode === "generate" ? "generation" : "upload";
+  return `Daily ${action} limit reached (${limit} requests per UTC day). This is the site's spending safeguard, not a sign-in or provider-credit error. Requests reset at ${new Date(resetsAt).toISOString().replace("T", " ").replace(".000Z", " UTC")}. No new video was started. Processing attempts count even if they fail.`;
+}
 export function isVideoOwner(token, account) {
   return (
     !!token &&

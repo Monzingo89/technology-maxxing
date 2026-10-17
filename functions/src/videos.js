@@ -16,6 +16,8 @@ import {
   validTopicId,
   JOB_LEASE_MS,
   MAX_UPLOAD_BYTES,
+  videoBudgetWindow,
+  videoLimitMessage,
 } from "./video-policy.js";
 import { generateVideo, normalizeUpload, probe } from "./video-media.js";
 
@@ -79,9 +81,10 @@ export const requestTopicVideo = onCall(options, async (request) => {
     job = jobs().doc(),
     now = Date.now();
   const lock = db.collection("videoLocks").doc(topicId);
+  const { day, resetsAt } = videoBudgetWindow(now);
   const budget = db
     .collection("videoBudgets")
-    .doc(new Date().toISOString().slice(0, 10));
+    .doc(day);
   const cap = Math.min(
     20,
     Math.max(1, Number(process.env.VIDEO_DAILY_LIMIT) || 3),
@@ -98,8 +101,11 @@ export const requestTopicVideo = onCall(options, async (request) => {
         "This topic already has a video or an active job.",
       );
     const counter = mode === "generate" ? "generations" : "uploads";
-    if ((daily.data()?.[counter] || 0) >= (mode === "generate" ? cap : 20))
-      throw new HttpsError("resource-exhausted", "Daily video limit reached.");
+    const limit = mode === "generate" ? cap : 20;
+    if ((daily.data()?.[counter] || 0) >= limit)
+      throw new HttpsError("resource-exhausted", videoLimitMessage(mode, limit, resetsAt), {
+        reason: "daily-video-limit", limit, resetsAt,
+      });
     tx.set(
       budget,
       { [counter]: (daily.data()?.[counter] || 0) + 1 },
