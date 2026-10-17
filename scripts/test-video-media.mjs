@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { STARTER_SCRIPTS } from "../functions/src/video-policy.js";
 import {
   generateVideo,
   normalizeUpload,
@@ -36,10 +37,17 @@ try {
     normalizeUpload(input, path.join(dir, "bad.mp4")),
     /30 seconds/,
   );
+  let scriptCalls = 0;
   let videoCalls = 0,
     voiceCalls = 0;
   globalThis.fetch = async (url, options) => {
     const body = JSON.parse(options.body);
+    if (url.endsWith(":generateContent")) {
+      scriptCalls++;
+      assert.ok(url.includes("gemini-3.8-flash"));
+      assert.equal(body.generationConfig.thinkingConfig.thinkingLevel, "LOW");
+      return Response.json({ candidates: [{ finishReason: "STOP", content: { parts: [{ text: JSON.stringify(STARTER_SCRIPTS.react) }] } }] });
+    }
     if (url.includes("generativelanguage")) {
       videoCalls++;
       assert.equal(body.response_format.aspect_ratio, "9:16");
@@ -77,7 +85,23 @@ try {
   assert.equal(info.streams.find((s) => s.codec_type === "video").height, 1280);
   assert.equal(videoCalls, 3);
   assert.equal(voiceCalls, 3);
-  assert.ok(result.captions.includes("00:00:20.000 --> 00:00:30.000"));
+  const custom = await generateVideo({ id: "new_topic", name: "New Topic" }, dir, {
+    gemini: "test-only", eleven: "test-only",
+  });
+  assert.equal(scriptCalls, 1);
+  assert.equal(videoCalls, 6);
+  assert.equal(voiceCalls, 6);
+  assert.ok(custom.script.startsWith("Here is New Topic in 30 seconds."));
+  globalThis.fetch = async (url) => {
+    assert.ok(url.endsWith(":generateContent"), "Incomplete scripts must not start paid media generation");
+    return Response.json({ candidates: [{ finishReason: "MAX_TOKENS", content: { parts: [{ text: "{" }] } }] });
+  };
+  await assert.rejects(
+    generateVideo({ id: "truncated_topic", name: "Truncated Topic" }, dir, { gemini: "test-only", eleven: "test-only" }),
+    /Script generation did not complete/,
+  );
+  assert.ok(result.captions.includes("00:00:20.000 -->"));
+  assert.ok(result.captions.startsWith("WEBVTT"));
   await normalizeUpload(result.output, path.join(dir, "normalized.mp4"));
   assert.ok(
     Math.abs(

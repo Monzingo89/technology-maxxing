@@ -114,7 +114,7 @@ export async function generateVideo(topic, dir, keys) {
     throw Error("Invalid voice model");
   let storyboard = STARTER_SCRIPTS[topic.id];
   if (!storyboard) {
-    const model = process.env.VIDEO_SCRIPT_MODEL || "gemini-2.5-flash";
+    const model = process.env.VIDEO_SCRIPT_MODEL || "gemini-3.8-flash";
     if (!/^[a-zA-Z0-9._-]+$/.test(model)) throw Error("Invalid script model");
     const result = await request(
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
@@ -136,14 +136,17 @@ export async function generateVideo(topic, dir, keys) {
           ],
           generationConfig: {
             responseMimeType: "application/json",
-            maxOutputTokens: 1800,
+            maxOutputTokens: 8192,
+            thinkingConfig: { thinkingLevel: "LOW" },
           },
         }),
       },
     );
+    if (result.candidates?.[0]?.finishReason !== "STOP")
+      throw Error("Script generation did not complete; no video generation started");
     storyboard = JSON.parse(
       result.candidates?.[0]?.content?.parts
-        ?.filter((p) => p.text)
+        ?.filter((p) => p.text && !p.thought)
         .map((p) => p.text)
         .join("") || "{}",
     );
