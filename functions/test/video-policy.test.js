@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from 'node:fs';
 import {
   isVideoOwner,
   validTopicId,
@@ -14,6 +15,10 @@ const token = {
   firebase: { sign_in_provider: "google.com" },
   auth_time: 2000,
 };
+test('function deployment excludes local provider secrets', () => {
+  const config = JSON.parse(readFileSync(new URL('../../firebase.json', import.meta.url), 'utf8'));
+  assert.ok(config.functions.every(item => item.ignore.includes('.secret*') && item.ignore.includes('.env*')));
+});
 const account = {
   email: VIDEO_OWNER,
   emailVerified: true,
