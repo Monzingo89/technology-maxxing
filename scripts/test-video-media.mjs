@@ -35,7 +35,7 @@ try {
   await render(["-f", "lavfi", "-i", "sine=frequency=440:duration=2", audio]);
   await assert.rejects(
     normalizeUpload(input, path.join(dir, "bad.mp4")),
-    /30 seconds/,
+    /59 seconds/,
   );
   let scriptCalls = 0;
   let videoCalls = 0,
@@ -80,18 +80,18 @@ try {
     eleven: "test-only",
   });
   const info = await probe(result.output);
-  assert.ok(Math.abs(Number(info.format.duration) - 30) < 0.2);
+  assert.ok(Math.abs(Number(info.format.duration) - 59) < 0.2);
   assert.equal(info.streams.find((s) => s.codec_type === "video").width, 720);
   assert.equal(info.streams.find((s) => s.codec_type === "video").height, 1280);
-  assert.equal(videoCalls, 3);
-  assert.equal(voiceCalls, 3);
+  assert.equal(videoCalls, 6);
+  assert.equal(voiceCalls, 6);
   const custom = await generateVideo({ id: "new_topic", name: "New Topic" }, dir, {
     gemini: "test-only", eleven: "test-only",
   });
   assert.equal(scriptCalls, 1);
-  assert.equal(videoCalls, 6);
-  assert.equal(voiceCalls, 6);
-  assert.ok(custom.script.startsWith("Here is New Topic in 30 seconds."));
+  assert.equal(videoCalls, 12);
+  assert.equal(voiceCalls, 12);
+  assert.ok(custom.script.startsWith("New Topic in 1 minute."));
   globalThis.fetch = async (url) => {
     assert.ok(url.endsWith(":generateContent"), "Incomplete scripts must not start paid media generation");
     return Response.json({ candidates: [{ finishReason: "MAX_TOKENS", content: { parts: [{ text: "{" }] } }] });
@@ -106,11 +106,11 @@ try {
   assert.ok(
     Math.abs(
       Number((await probe(path.join(dir, "normalized.mp4"))).format.duration) -
-        30,
+        59,
     ) < 0.2,
   );
   console.log(
-    "Media pipeline passed: mocked providers, three narrated scenes, portrait MP4, captions, 30-second duration, valid upload normalization, invalid duration rejection. No paid calls made.",
+    "Media pipeline passed: mocked providers, six narrated scenes, portrait MP4, captions, 59-second duration, valid upload normalization, invalid duration rejection. No paid calls made.",
   );
 } finally {
   globalThis.fetch = originalFetch;

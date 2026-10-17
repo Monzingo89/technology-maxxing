@@ -12,6 +12,8 @@ import {
   storyboardCaptions,
   videoBudgetWindow,
   videoLimitMessage,
+  SCENE_DURATIONS,
+  VIDEO_DURATION,
 } from "../src/video-policy.js";
 test("video budgets reset at the next UTC midnight, including year boundaries", () => {
   const result = videoBudgetWindow(Date.parse("2026-12-31T23:59:59Z"));
@@ -87,7 +89,10 @@ test("published videos and active reservations reject duplicate generation", () 
   assert.equal(canStartVideo(false, { expiresAt: 50 }, 100), true);
   assert.equal(canStartVideo(false, null, 100), true);
 });
-test("all three starter storyboards fit the constrained narration schema", () => {
+test("all four starter storyboards fit the technical plus ELI5 schema", () => {
+  assert.equal(Object.keys(STARTER_SCRIPTS).length, 4);
+  assert.equal(SCENE_DURATIONS.reduce((a, b) => a + b), VIDEO_DURATION);
+  assert.equal(VIDEO_DURATION, 59);
   for (const script of Object.values(STARTER_SCRIPTS))
     assert.equal(validateStoryboard(script), script);
   assert.throws(() => validateStoryboard({ scenes: [] }));
@@ -105,7 +110,7 @@ test("every generated storyboard gets the exact topic opener without duplication
     const original = structuredClone(STARTER_SCRIPTS[id]);
     const result = withTopicIntro(original, name);
     assert.ok(
-      result.scenes[0].narration.startsWith(`Here is ${name} in 30 seconds.`),
+      result.scenes[0].narration.startsWith(`${name} in 1 minute.`),
     );
     assert.deepEqual(withTopicIntro(result, name), result);
     assert.deepEqual(original, STARTER_SCRIPTS[id]);
@@ -115,24 +120,27 @@ test("every generated storyboard gets the exact topic opener without duplication
     "Retrieval finds relevant documents and gives them to a model to help answer questions with evidence.";
   assert.ok(
     withTopicIntro(other, "RAG").scenes[0].narration.startsWith(
-      "Here is RAG in 30 seconds.",
+      "RAG in 1 minute.",
     ),
   );
   assert.ok(
     withTopicIntro(STARTER_SCRIPTS.react, "RAG").scenes[0].narration.startsWith(
-      "Here is RAG in 30 seconds. React builds",
+      "RAG in 1 minute. React is",
     ),
   );
   assert.throws(() => withTopicIntro(other, "<script>"));
 });
 
-test("richer narration and short caption phrases fit three ten-second scenes", () => {
+test("slower narration and caption phrases cover technical 30s plus analogy 29s", () => {
   for (const storyboard of Object.values(STARTER_SCRIPTS)) {
     const words = storyboard.scenes.flatMap((s) => s.narration.split(/\s+/));
-    assert.ok(words.length >= 85 && words.length <= 100);
-    const captions = storyboardCaptions(storyboard, [9.8, 9.8, 9.8]);
+    assert.ok(words.length >= 130 && words.length <= 150);
+    const captions = storyboardCaptions(storyboard);
     assert.ok(captions.startsWith("WEBVTT\n\n00:00:00.000 -->"));
-    assert.ok(captions.includes("00:00:29.800 line:45%"));
+    assert.ok(captions.includes("00:00:30.000 -->"));
+    assert.ok(captions.includes("00:00:59.000 line:45%"));
+    assert.match(storyboard.scenes[3].narration, /^Now, (imagine|think of)/);
+    assert.deepEqual(storyboard.scenes.map(s=>s.section), ["technical","technical","technical","eli5","eli5","eli5"]);
     const phrases = captions
       .trim()
       .split("\n\n")
@@ -145,4 +153,8 @@ test("richer narration and short caption phrases fit three ten-second scenes", (
     assert.ok(phrases.every((p) => p.length <= 22));
   }
   assert.throws(() => storyboardCaptions(STARTER_SCRIPTS.react, [11, 10, 10]));
+  assert.throws(() => storyboardCaptions(STARTER_SCRIPTS.react, [10,10,10,10,10,10]));
+  const bad = structuredClone(STARTER_SCRIPTS.react);
+  bad.scenes[3].section = "technical";
+  assert.throws(() => validateStoryboard(bad));
 });

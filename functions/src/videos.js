@@ -18,6 +18,8 @@ import {
   MAX_UPLOAD_BYTES,
   videoBudgetWindow,
   videoLimitMessage,
+  VIDEO_DURATION,
+  VIDEO_FORMAT,
 } from "./video-policy.js";
 import { generateVideo, normalizeUpload, probe } from "./video-media.js";
 
@@ -171,7 +173,7 @@ async function fail(ref) {
 }
 async function saveDraft(ref, job, output, extra = {}) {
   const info = await probe(output);
-  if (Math.abs(Number(info.format.duration) - 30) > 0.2)
+  if (Math.abs(Number(info.format.duration) - VIDEO_DURATION) > 0.2)
     throw Error("Output duration verification failed");
   const objectPath = `video-drafts/${job.uid}/${ref.id}.mp4`;
   await getStorage()
@@ -187,6 +189,8 @@ async function saveDraft(ref, job, output, extra = {}) {
     tx.update(ref, {
       status: "review",
       objectPath,
+      duration: VIDEO_DURATION,
+      format: VIDEO_FORMAT,
       ...extra,
       finishedAt: Date.now(),
     });
@@ -221,6 +225,7 @@ export const generateTopicVideo = onDocumentCreated(
       await saveDraft(ref, job, result.output, {
         script: result.script,
         captions: result.captions,
+        analogy: result.analogy,
       });
     } catch {
       await fail(ref);
@@ -333,7 +338,9 @@ export const publishTopicVideo = onCall(
           script: job.script || "",
           captions: job.captions || "",
           generated: job.mode === "generate",
-          duration: 30,
+          duration: job.duration || 30,
+          format: job.format || "legacy-30",
+          ...(job.analogy ? { analogy: job.analogy } : {}),
           publishedAt: FieldValue.serverTimestamp(),
         });
         tx.update(ref, { status: "published" });

@@ -62,7 +62,7 @@ function VideoSlide({
     <article
       ref={slide}
       className="video-slide"
-      aria-label={`${video.title}, 30-second explanation`}
+      aria-label={`${video.title}, ${video.duration}-second explanation`}
     >
       <button
         className="video-tap-surface"
@@ -416,7 +416,7 @@ export default function VideoFeed({
       <div className="video-page-heading">
         <div>
           <span className="video-eyebrow">TECHNOLOGY, ONE IDEA AT A TIME</span>
-          <h1>Learn in 30 seconds.</h1>
+          <h1>Learn in 1 minute.</h1>
         </div>
         <a href="#library">Browse all topics →</a>
       </div>
@@ -436,7 +436,7 @@ export default function VideoFeed({
               : "The first explanations are on their way."}
           </h2>
           <p>
-            React. Docker. Agentic RAG. Three ideas, brought to life in 30
+            Technical explanations and everyday analogies, brought to life in 59
             seconds each.
           </p>
           <a href="#library">Explore the library</a>
@@ -546,7 +546,7 @@ export default function VideoFeed({
         <section className="video-studio" aria-label="Owner video studio">
           <h2>Your video studio</h2>
           <p>
-            Generate or upload a 30-second portrait MP4, review it, then publish
+            Generate or upload a 59-second portrait MP4, review it, then publish
             to the feed. Generated videos use your paid API accounts.
           </p>
           <div className="video-starter-grid">

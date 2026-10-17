@@ -500,7 +500,7 @@ export default function App() {
         : view === "terms"
           ? "Terms of Service | AI Space"
           : view === "videos"
-            ? "Technology Maxxing — Learn in 30 seconds"
+            ? "Technology Maxxing — Learn in 1 minute"
             : "AI Space — IoT Library, AI Topics, Timed Assessments";
     if (view === "privacy" || view === "terms") {
       window.scrollTo(0, 0);

@@ -49,7 +49,7 @@ export async function uploadTopicVideo(topicId: string, file: File) {
     file.size === 0
   )
     throw Error(
-      "Choose an MP4 up to 40 MB, in portrait format, with audio and 30 seconds long.",
+      "Choose an MP4 up to 40 MB, in portrait format, with audio and 59 seconds long.",
     );
   const job = await videoCall<{ jobId: string; uploadPath: string }>(
     "requestTopicVideo",

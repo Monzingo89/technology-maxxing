@@ -8,7 +8,7 @@ for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");
     await expect(
-      page.getByRole("heading", { name: "Learn in 30 seconds." }),
+      page.getByRole("heading", { name: "Learn in 1 minute." }),
     ).toBeVisible();
     await expect(
       page.getByRole("button", { name: "Generate video", exact: true }),
@@ -31,7 +31,7 @@ for (const width of [390, 1440]) {
     ).toHaveCount(0);
     await page.getByRole("button", { name: "▶ Videos", exact: true }).click();
     await expect(
-      page.getByRole("heading", { name: "Learn in 30 seconds." }),
+      page.getByRole("heading", { name: "Learn in 1 minute." }),
     ).toBeVisible();
     expect(errors).toEqual([]);
     await page.goto("/#home");
@@ -56,7 +56,7 @@ for (const width of [390, 1440]) {
       .getByRole("link", { name: "Watch the free video feed again →" })
       .click();
     await expect(
-      page.getByRole("heading", { name: "Learn in 30 seconds." }),
+      page.getByRole("heading", { name: "Learn in 1 minute." }),
     ).toBeVisible();
   });
 }
