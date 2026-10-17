@@ -1,0 +1,35 @@
+import { test, expect } from '@playwright/test';
+
+for (const width of [360, 390, 760]) test(`compact mobile navigation at ${width}px`, async ({ page }) => {
+  await page.setViewportSize({ width, height: 844 });
+  await page.goto('/#library');
+  const menu = page.getByRole('button', { name: 'Open navigation menu' });
+  const dialog = page.getByRole('dialog', { name: 'Explore', exact: true });
+  await expect(menu).toBeVisible();
+  await expect(page.getByRole('navigation', { name: 'Main navigation', exact: true })).toBeHidden();
+  expect((await page.locator('.site-header').boundingBox())!.height).toBeLessThan(100);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await menu.click();
+  await expect(dialog).toBeVisible();
+  await expect(menu).toHaveAttribute('aria-expanded', 'true');
+  await expect(dialog.getByRole('button', { name: /Library/ })).toHaveAttribute('aria-current', 'page');
+  await page.keyboard.press('Escape');
+  await expect(dialog).not.toBeVisible();
+  await expect(menu).toBeFocused();
+  await menu.click();
+  await dialog.getByRole('button', { name: 'Top 10 Models', exact: true }).click();
+  await expect(page).toHaveURL(/#models$/);
+  await expect(dialog).not.toBeVisible();
+  await menu.click();
+  await dialog.getByRole('combobox', { name: 'Model category' }).selectOption({ index: 1 });
+  await expect(page).toHaveURL(/#models\?category=/);
+  await expect(dialog).not.toBeVisible();
+  await menu.click();
+  await dialog.getByRole('button', { name: /Library/ }).click();
+  await expect(page).toHaveURL(/#library$/);
+  await menu.click();
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await expect(dialog).not.toBeVisible();
+  await expect(menu).toBeHidden();
+  await expect(page.getByRole('navigation', { name: 'Main navigation', exact: true })).toBeVisible();
+});

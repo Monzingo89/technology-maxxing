@@ -19,6 +19,10 @@ import {
   Lock,
   LogIn,
   LogOut,
+  Menu,
+  X,
+  Play,
+  Home,
   Search,
   Settings,
   Trophy,
@@ -616,6 +620,20 @@ export default function App() {
   const authDialogRef = useRef<HTMLDialogElement>(null);
   const authEmailRef = useRef<HTMLInputElement>(null);
   const [accountOpen, setAccountOpen] = useState(false);
+  const mobileNav = useRef<HTMLDialogElement>(null);
+  const mobileNavTrigger = useRef<HTMLButtonElement>(null);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const closeMobileNav = () => {
+    mobileNav.current?.close();
+    setMobileNavOpen(false);
+  };
+  useEffect(() => { closeMobileNav(); }, [view]);
+  useEffect(() => {
+    const desktop = matchMedia("(min-width: 761px)");
+    const changed = () => { if (desktop.matches) closeMobileNav(); };
+    desktop.addEventListener("change", changed);
+    return () => desktop.removeEventListener("change", changed);
+  }, []);
   const [paperModalOpen, setPaperModalOpen] = useState(false);
   const [paperUrl, setPaperUrl] = useState("");
   const [paperSubmitBusy, setPaperSubmitBusy] = useState(false);
@@ -1247,6 +1265,21 @@ export default function App() {
         <a className="brand" href="#home">
           IoT
         </a>
+        <button
+          ref={mobileNavTrigger}
+          className="mobile-nav-trigger"
+          aria-label="Open navigation menu"
+          aria-haspopup="dialog"
+          aria-expanded={mobileNavOpen}
+          aria-controls="mobile-navigation"
+          onClick={() => {
+            setAccountOpen(false);
+            mobileNav.current?.showModal();
+            setMobileNavOpen(true);
+          }}
+        >
+          <Menu size={21} aria-hidden="true" /><span>Menu</span>
+        </button>
         <nav
           aria-label={
             view === "models" ? "Model categories" : "Main navigation"
@@ -1447,6 +1480,68 @@ export default function App() {
           )}
         </div>
       </header>
+      <dialog
+        id="mobile-navigation"
+        className="mobile-navigation"
+        ref={mobileNav}
+        aria-labelledby="mobile-navigation-title"
+        onClose={() => {
+          setMobileNavOpen(false);
+          if (!document.querySelector("dialog[open]")) mobileNavTrigger.current?.focus({ preventScroll: true });
+        }}
+        onClick={(event) => { if (event.target === event.currentTarget) closeMobileNav(); }}
+      >
+        <div className="mobile-navigation-content">
+          <div className="mobile-navigation-heading">
+            <div><span>TECHNOLOGY MAXXING</span><h2 id="mobile-navigation-title">Explore</h2></div>
+            <button aria-label="Close navigation menu" onClick={closeMobileNav}><X size={22} aria-hidden="true" /></button>
+          </div>
+          <nav aria-label="Mobile navigation">
+            <div className="mobile-navigation-primary">
+              {([
+                ["videos", "Videos", "Learn in one minute", Play],
+                ["library", "Library", "Find your next topic", Library],
+              ] as const).map(([destination, label, description, Icon]) => (
+                <button key={destination} aria-current={view === destination ? "page" : undefined}
+                  onClick={() => { closeMobileNav(); setView(destination); }}>
+                  <Icon size={22} aria-hidden="true" /><strong>{label}</strong><small>{description}</small>
+                </button>
+              ))}
+            </div>
+            <p className="mobile-navigation-group">DISCOVER & COMPARE</p>
+            {([
+              ["models", "Top 10 Models", Trophy],
+              ["benchmarks", "Top Benchmarks", BarChart3],
+              ["builder", "Build", Settings],
+              ["papers", "Papers", FileText],
+            ] as const).map(([destination, label, Icon]) => (
+              <button key={destination} className="mobile-navigation-link" aria-current={view === destination ? "page" : undefined}
+                onClick={() => { closeMobileNav(); setView(destination); }}><Icon size={19} aria-hidden="true" />{label}<ArrowRight size={16} aria-hidden="true" /></button>
+            ))}
+            <p className="mobile-navigation-group">YOUR LEARNING</p>
+            {([
+              ["home", "Home", Home],
+              ["assessments", "Assessments", CheckCircle2],
+              ["leaderboards", "Leaderboards", Trophy],
+            ] as const).map(([destination, label, Icon]) => (
+              <button key={destination} className="mobile-navigation-link" aria-current={view === destination ? "page" : undefined}
+                onClick={() => { closeMobileNav(); setView(destination); }}><Icon size={19} aria-hidden="true" />{label}<ArrowRight size={16} aria-hidden="true" /></button>
+            ))}
+            {view === "models" && <>
+              <p className="mobile-navigation-group">MODEL CATEGORIES</p>
+              <select aria-label="Model category" value={modelCategory} onChange={(event) => {
+                setModelCategory(event.target.value);
+                location.hash = `models?category=${event.target.value}`;
+                closeMobileNav();
+              }}>
+                <option value="">All categories</option>
+                {pickCategories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
+              </select>
+            </>}
+          </nav>
+          {!user && authReady && <button className="mobile-navigation-login" onClick={() => { closeMobileNav(); openAuth("login"); }}><LogIn size={18} aria-hidden="true" /> Log in / Create account</button>}
+        </div>
+      </dialog>
 
       {quotaError ? (
         <p className="error" role="alert">
@@ -1605,6 +1700,7 @@ export default function App() {
             </p>
           )}
           <VideoFeed
+            suspended={mobileNavOpen}
             owner={videoOwner}
             jobs={videoJobs}
             signedIn={!!user}

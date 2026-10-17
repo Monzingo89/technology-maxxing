@@ -216,12 +216,14 @@ export default function VideoFeed({
   jobs,
   signedIn = false,
   authReady = true,
+  suspended = false,
   onFeedEnd,
 }: {
   owner: boolean;
   jobs: VideoJob[];
   signedIn?: boolean;
   authReady?: boolean;
+  suspended?: boolean;
   onFeedEnd?: () => void;
 }) {
   const [videos, setVideos] = useState<TopicVideo[]>([]),
@@ -276,7 +278,7 @@ export default function VideoFeed({
       const current = media?.currentTime ?? -1;
       const delta = current - lastTime;
       if (media && !media.paused && !media.seeking && media.readyState >= 2 &&
-          inView && !document.hidden && lastTime >= 0 && delta > 0 && delta < 1)
+          inView && !suspended && !document.hidden && lastTime >= 0 && delta > 0 && delta < 1)
         watched += Math.min(delta, 0.25);
       lastTime = current;
       const key = `${id}:${new Date().toISOString().slice(0, 10)}`;
@@ -286,7 +288,7 @@ export default function VideoFeed({
       }
     }, 250);
     return () => window.clearInterval(timer);
-  }, [activeVideo?.topicId, inView]);
+  }, [activeVideo?.topicId, inView, suspended]);
   const activate = useCallback((id: string) => {
     if (selectedRef.current === id) return;
     selectedRef.current = id;
@@ -323,7 +325,7 @@ export default function VideoFeed({
     const sync = () => {
       const media = player.current;
       if (!media) return;
-      if (!paused && inView && !document.hidden) {
+      if (!paused && inView && !suspended && !document.hidden) {
         void media.play().catch((error: DOMException) => {
           if (!disposed && error.name !== "AbortError") setPaused(true);
         });
@@ -335,7 +337,7 @@ export default function VideoFeed({
       disposed = true;
       document.removeEventListener("visibilitychange", sync);
     };
-  }, [activeVideo?.url, paused, inView, unlocked]);
+  }, [activeVideo?.url, paused, inView, unlocked, suspended]);
   function togglePlayback() {
     const media = player.current;
     if (!media) return;

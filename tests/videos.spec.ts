@@ -29,7 +29,10 @@ for (const width of [390, 1440]) {
     await expect(
       page.getByRole("button", { name: "Generate video", exact: true }),
     ).toHaveCount(0);
-    await page.getByRole("button", { name: "▶ Videos", exact: true }).click();
+    if (width < 761) {
+      await page.getByRole("button", { name: "Open navigation menu" }).click();
+      await page.getByRole("dialog", { name: "Explore" }).getByRole("button", { name: /Videos/ }).click();
+    } else await page.getByRole("button", { name: "▶ Videos", exact: true }).click();
     await expect(
       page.getByRole("heading", { name: "Learn in 1 minute." }),
     ).toBeVisible();
