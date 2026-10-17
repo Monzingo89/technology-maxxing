@@ -35,7 +35,7 @@ for (const width of [1440, 390])
     await page.getByRole("button", { name: "Create an account" }).click();
     await expect(page.getByRole("dialog")).toContainText("Create your account");
     await page.keyboard.press("Escape");
-    await page.goto("/");
+    await page.goto("/#library");
     await page
       .locator(".topic-card")
       .first()

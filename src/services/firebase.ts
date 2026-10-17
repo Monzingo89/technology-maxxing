@@ -57,7 +57,7 @@ export const firebaseReady = [
   env.VITE_FIREBASE_PROJECT_ID,
   env.VITE_FIREBASE_APP_ID,
 ].every(configured);
-const app = firebaseReady
+export const app = firebaseReady
   ? getApps()[0] ||
     initializeApp({
       apiKey: env.VITE_FIREBASE_API_KEY,
@@ -71,8 +71,8 @@ const app = firebaseReady
     })
   : null;
 export const auth = app ? getAuth(app) : null;
-const db = app ? getFirestore(app) : null;
-const functions = app
+export const db = app ? getFirestore(app) : null;
+export const functions = app
   ? getFunctions(app, env.VITE_FIREBASE_FUNCTIONS_REGION || "us-central1")
   : null;
 const useEmulators = env.DEV && env.VITE_USE_FIREBASE_EMULATORS === "true";

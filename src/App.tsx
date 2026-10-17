@@ -26,6 +26,16 @@ import {
 } from "lucide-react";
 import type { User } from "firebase/auth";
 import {
+  collection,
+  onSnapshot,
+  query as firestoreQuery,
+  where,
+} from "firebase/firestore";
+import { db } from "./services/firebase";
+import { videoCall, type VideoJob } from "./services/videos";
+import TopicVideoControls from "./components/TopicVideoControls";
+const VideoFeed = lazy(() => import("./components/VideoFeed"));
+import {
   authErrorMessage,
   completeGoogleRedirect,
   firebaseReady,
@@ -55,6 +65,7 @@ const CategoryPicks = lazy(() => import("./workstation/CategoryPicks"));
 
 const Workbench = lazy(() => import("./workstation/Workbench"));
 type View =
+  | "videos"
   | "library"
   | "assessments"
   | "papers"
@@ -67,6 +78,8 @@ type View =
 function readView(): View {
   const route = location.hash.slice(1).split("?")[0];
   return [
+    "videos",
+    "library",
     "assessments",
     "papers",
     "leaderboards",
@@ -77,7 +90,7 @@ function readView(): View {
     "benchmarks",
   ].includes(route)
     ? (route as View)
-    : "library";
+    : "videos";
 }
 type Mode = "signup" | "login" | "reset";
 
@@ -484,7 +497,9 @@ export default function App() {
         ? "Privacy Policy | AI Space"
         : view === "terms"
           ? "Terms of Service | AI Space"
-          : "AI Space — IoT Library, AI Topics, Timed Assessments";
+          : view === "videos"
+            ? "Technology Maxxing — Learn in 30 seconds"
+            : "AI Space — IoT Library, AI Topics, Timed Assessments";
     if (view === "privacy" || view === "terms") {
       window.scrollTo(0, 0);
       document.getElementById("legal-title")?.focus({ preventScroll: true });
@@ -513,6 +528,47 @@ export default function App() {
     }
   }
   const [user, setUser] = useState<User | null>(null);
+  const [videoOwner, setVideoOwner] = useState(false);
+  const [videoAccessError, setVideoAccessError] = useState("");
+  const [videoJobs, setVideoJobs] = useState<VideoJob[]>([]);
+  useEffect(() => {
+    let stopped = false;
+    setVideoOwner(false);
+    setVideoAccessError("");
+    setVideoJobs([]);
+    if (user?.email === "robertjmonzingo@gmail.com" && user.emailVerified) {
+      void videoCall<{ owner: boolean }>("videoOwnerStatus")
+        .then((result) => {
+          if (!stopped) setVideoOwner(result.owner);
+        })
+        .catch(() => {
+          if (!stopped)
+            setVideoAccessError(
+              "Your video studio is unavailable. Sign in with Google and check the Firebase video setup and App Check configuration.",
+            );
+        });
+    }
+    return () => {
+      stopped = true;
+    };
+  }, [user]);
+  useEffect(() => {
+    if (!videoOwner || !user || !db) return;
+    return onSnapshot(
+      firestoreQuery(collection(db, "videoJobs"), where("uid", "==", user.uid)),
+      (snapshot) => {
+        setVideoJobs(
+          snapshot.docs
+            .map((d) => ({ ...d.data(), id: d.id }) as VideoJob)
+            .sort((a, b) => b.createdAt - a.createdAt),
+        );
+      },
+      () => {
+        setVideoOwner(false);
+        setVideoJobs([]);
+      },
+    );
+  }, [videoOwner, user]);
   const [technologies, setTechnologies] = useState<Technology[]>([]);
   const [questionBanks, setQuestionBanks] = useState<
     Record<string, Question[]>
@@ -1180,9 +1236,9 @@ export default function App() {
     : TOTAL_MINUTES;
 
   return (
-    <main className="simple-app">
+    <main className={`simple-app${view === "videos" ? " video-mode" : ""}`}>
       <header className="site-header">
-        <a className="brand" href="#library">
+        <a className="brand" href="#videos">
           IoT
         </a>
         <nav
@@ -1213,6 +1269,12 @@ export default function App() {
             </>
           ) : (
             <>
+              <button
+                className={view === "videos" ? "active" : ""}
+                onClick={() => setView("videos")}
+              >
+                ▶ Videos
+              </button>
               <button onClick={() => setView("models")}>
                 <Trophy size={18} /> Top 10 Models
               </button>
@@ -1427,7 +1489,8 @@ export default function App() {
         </article>
       ) : view === "builder" ||
         view === "models" ||
-        view === "benchmarks" ? null : (
+        view === "benchmarks" ||
+        view === "videos" ? null : (
         <section className="hero">
           <div>
             <p className="eyebrow">IoT knowledge assessments</p>
@@ -1494,6 +1557,16 @@ export default function App() {
       {view === "builder" && (
         <Suspense fallback={<p role="status">Loading the AI workbench…</p>}>
           <Workbench signedIn={!!user} />
+        </Suspense>
+      )}
+      {view === "videos" && (
+        <Suspense fallback={<p role="status">Loading videos…</p>}>
+          {videoAccessError && (
+            <p className="error" role="alert">
+              {videoAccessError}
+            </p>
+          )}
+          <VideoFeed owner={videoOwner} jobs={videoJobs} />
         </Suspense>
       )}
       {view === "library" ? (
@@ -1619,6 +1692,12 @@ export default function App() {
                       )}
                     </button>
                   </div>
+                  {videoOwner && (
+                    <TopicVideoControls
+                      topicId={item.id}
+                      job={videoJobs.find((j) => j.topicId === item.id)}
+                    />
+                  )}
                 </article>
               );
             })}

@@ -4,6 +4,12 @@ AI Space is a React + TypeScript social learning app built around this repositor
 
 ## Run locally
 
+The default landing page is now the vertical topic-video feed. The owner can
+generate, upload, review and publish videos after following [Video setup](docs/VIDEO-SETUP.md).
+Provider key placeholders are in `functions/.secret.local.example`; runtime
+settings are in `functions/.env.example`. Production keys belong in Firebase
+Secret Manager, never in the frontend.
+
 ```bash
 npm install
 npm run build

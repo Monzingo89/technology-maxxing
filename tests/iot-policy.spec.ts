@@ -11,7 +11,7 @@ for (const viewport of [
     await page.setViewportSize(viewport);
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
-    await page.goto("/");
+    await page.goto("/#library");
     await expect(
       page.getByRole("heading", {
         name: "Prove what you know, topic by topic.",

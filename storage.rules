@@ -1,0 +1,26 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function owner(uid) {
+      return request.auth != null && request.auth.uid == uid
+        && request.auth.token.email == 'robertjmonzingo@gmail.com'
+        && request.auth.token.email_verified == true
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    match /video-staging/{uid}/{filename} {
+      // Uploads require a server-created, unexpired reservation. No replacement or deletion.
+      allow create: if resource == null && owner(uid) && filename.matches('^[a-zA-Z0-9]+[.]mp4$')
+        && request.resource.size > 0 && request.resource.size <= 40 * 1024 * 1024
+        && request.resource.contentType == 'video/mp4'
+        && request.resource.metadata.keys().hasOnly(['jobId'])
+        && filename == request.resource.metadata.jobId + '.mp4'
+        && firestore.get(/databases/(default)/documents/videoJobs/$(request.resource.metadata.jobId)).data.uid == uid
+        && firestore.get(/databases/(default)/documents/videoJobs/$(request.resource.metadata.jobId)).data.mode == 'upload'
+        && firestore.get(/databases/(default)/documents/videoJobs/$(request.resource.metadata.jobId)).data.status == 'uploading'
+        && firestore.get(/databases/(default)/documents/videoJobs/$(request.resource.metadata.jobId)).data.expiresAt > request.time.toMillis();
+    }
+    match /video-drafts/{uid}/{filename} { allow read: if owner(uid); }
+    // Published playback uses server-issued download tokens. All browser writes denied.
+    match /{allPaths=**} { allow read, write: if false; }
+  }
+}

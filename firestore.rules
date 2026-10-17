@@ -5,6 +5,12 @@ service cloud.firestore {
     function verified() { return signedIn() && request.auth.token.email_verified == true; }
     function member() { return verified() && exists(/databases/$(database)/documents/profiles/$(request.auth.uid)); }
     function moderator() { return verified() && request.auth.token.moderator == true; }
+    function videoOwner() {
+      return verified() && request.auth.token.email == 'robertjmonzingo@gmail.com'
+        && request.auth.token.firebase.sign_in_provider == 'google.com';
+    }
+    match /topicVideos/{topic} { allow read: if true; }
+    match /videoJobs/{job} { allow read: if videoOwner() && resource.data.uid == request.auth.uid; }
     function teammate(team) {
       return member() && team.active == true && request.auth.uid in team.members;
     }
