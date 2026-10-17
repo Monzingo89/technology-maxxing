@@ -1,0 +1,19 @@
+{
+  "functions": [
+    {
+      "source": ".firebase/video-functions",
+      "codebase": "ai-space",
+      "runtime": "nodejs22",
+      "ignore": ["node_modules", "*.log", ".env*", ".secret*"],
+      "predeploy": [
+        "node scripts/build-video-catalog.mjs",
+        "node scripts/prepare-video-deploy.mjs"
+      ]
+    }
+  ],
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": { "rules": "storage.rules" }
+}

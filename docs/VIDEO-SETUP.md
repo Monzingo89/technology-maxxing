@@ -60,6 +60,14 @@ this backend. Never commit keys.
    processing. `ffprobe-static` supplies the media validation binary.
 7. Deploy rules and only the new video functions, using the explicit project ID:
 
+   For this project's isolated video deployment, run `npm run video:deploy`.
+   It stages a video-only entry point under ignored `.firebase/video-functions`
+   so unrelated assessment and email secrets are not required. The command
+   explicitly selects the six video functions; it does not deploy or delete
+   other functions. `functions/.env` must exist; secrets are never staged.
+   For another project, use the equivalent command below with
+   `--config firebase.video.json` added.
+
    ```sh
    firebase deploy --project YOUR_PROJECT_ID --only firestore:rules,storage,functions:ai-space:videoOwnerStatus,functions:ai-space:requestTopicVideo,functions:ai-space:generateTopicVideo,functions:ai-space:processVideoUpload,functions:ai-space:publishTopicVideo,functions:ai-space:discardTopicVideo
    ```
