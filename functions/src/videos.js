@@ -87,7 +87,7 @@ export const requestTopicVideo = onCall(options, async (request) => {
     .doc(day);
   const cap = Math.min(
     20,
-    Math.max(1, Number(process.env.VIDEO_DAILY_LIMIT) || 3),
+    Math.max(1, Number(process.env.VIDEO_DAILY_LIMIT) || 10),
   );
   await db.runTransaction(async (tx) => {
     const [published, current, daily] = await Promise.all([
