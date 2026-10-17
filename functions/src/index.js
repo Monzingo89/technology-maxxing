@@ -32,7 +32,7 @@ import { QUESTION_BANK, COURSES } from "./questions.js";
 import { authorDailyBank } from "./author.js";
 
 initializeApp();
-export { videoOwnerStatus, requestTopicVideo, generateTopicVideo, processVideoUpload, publishTopicVideo, discardTopicVideo } from './videos.js';
+export { videoOwnerStatus, requestTopicVideo, generateTopicVideo, processVideoUpload, publishTopicVideo, discardTopicVideo, recordVideoView } from './videos.js';
 const db = getFirestore();
 const options = {
   region: "us-central1",

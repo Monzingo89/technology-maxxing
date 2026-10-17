@@ -16,6 +16,7 @@ export type TopicVideo = {
   captions: string;
   generated: boolean;
   duration: number;
+  views?: number;
 };
 export type VideoJob = {
   id: string;
@@ -40,6 +41,25 @@ export async function videoCall<T>(
 ): Promise<T> {
   if (!functions) throw Error("Video services are not configured yet.");
   return (await httpsCallable<unknown, T>(functions, name)(data)).data;
+}
+export async function recordVideoView(topicId: string) {
+  // Persistent random browser ID, not an account ID or a fingerprint. If
+  // storage is disabled, skip analytics rather than interfere with playback.
+  try {
+    const key = "video-visitor-v1";
+    let visitorId = localStorage.getItem(key);
+    if (!visitorId) {
+      visitorId = crypto.randomUUID();
+      localStorage.setItem(key, visitorId);
+    }
+    const day = new Date().toISOString().slice(0, 10);
+    const receipt = `video-view-v1:${topicId}`;
+    if (localStorage.getItem(receipt) === day) return;
+    await videoCall("recordVideoView", { topicId, visitorId });
+    localStorage.setItem(receipt, day);
+  } catch {
+    // Counting must never block playback or surface a visitor-facing error.
+  }
 }
 export async function uploadTopicVideo(topicId: string, file: File) {
   if (!storage) throw Error("Video storage is not configured.");

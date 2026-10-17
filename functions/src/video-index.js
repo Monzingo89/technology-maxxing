@@ -2,6 +2,7 @@
 import { initializeApp } from "firebase-admin/app";
 initializeApp();
 export {
+  recordVideoView,
   videoOwnerStatus,
   requestTopicVideo,
   generateTopicVideo,

@@ -1,10 +1,14 @@
-export const legalVersion = "2026-10-13";
+export const legalVersion = "2026-10-17";
 export interface LegalSection {
   title: string;
   body: string;
 }
 
 export const privacySections: LegalSection[] = [
+  {
+    title: "Video view counts",
+    body: "The public video feed displays aggregate views collected from October 17, 2026 onward. After three seconds of visible playback, the browser reports the topic and a random browser identifier saved in local storage. We count at most one view per browser per video per UTC day. The server stores short-lived hashed receipts and a daily network abuse limit protected with a server-held secret; these records contain no raw IP address, browser identifier, email, or account ID. Receipts expire after two days and are removed by scheduled cleanup. Aggregate counts remain with the video. Clearing site storage resets the browser identifier; blocking storage disables view reporting without preventing playback. These counts are approximate watches, not verified unique people, and are not used for advertising or cross-site tracking.",
+  },
   {
     title: "About this policy",
     body: "IoT is a free, not-for-profit learning project offering a technology library, knowledge assessments, and links to research papers. This policy explains the information needed to operate those features. For privacy questions or requests, contact Robert at robertjmonzingo@gmail.com.",

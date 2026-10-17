@@ -9,7 +9,8 @@ import { readFileSync } from "node:fs";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash, createHmac } from "node:crypto";
+import { requestIp } from "./guest-quota.js";
 import {
   canStartVideo,
   isVideoOwner,
@@ -25,6 +26,7 @@ import { generateVideo, normalizeUpload, probe } from "./video-media.js";
 
 const gemini = defineSecret("GEMINI_API_KEY");
 const eleven = defineSecret("ELEVENLABS_API_KEY");
+const viewIpKey = defineSecret("VIDEO_VIEW_HASH_KEY");
 const options = {
   region: "us-central1",
   maxInstances: 2,
@@ -44,6 +46,38 @@ const catalog = () =>
     readFileSync(new URL("./video-catalog.json", import.meta.url), "utf8"),
   );
 const jobs = () => getFirestore().collection("videoJobs");
+// Public playback never needs sign-in. App Check and server-side deduplication
+// protect this analytics-only endpoint; clients cannot write counts or videos.
+export const recordVideoView = onCall({ ...options, secrets: [viewIpKey] }, async (request) => {
+  const { topicId, visitorId } = request.data || {};
+  if (!validTopicId(topicId) || typeof visitorId !== "string" ||
+      !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(visitorId))
+    throw new HttpsError("invalid-argument", "Invalid view.");
+  let ip;
+  try { ip = requestIp(request.rawRequest, process.env.FUNCTIONS_EMULATOR === "true"); }
+  catch { throw new HttpsError("invalid-argument", "Missing request origin."); }
+  const key = viewIpKey.value();
+  if (!key || key.length < 32) throw new HttpsError("unavailable", "View reporting unavailable.");
+  const db = getFirestore(), day = new Date().toISOString().slice(0, 10);
+  const hash = (value) => createHash("sha256").update(value).digest("hex");
+  const receipt = db.collection("videoViewReceipts").doc(`video-view-${hash(`${day}:${topicId}:${visitorId}`)}`);
+  const budget = db.collection("videoViewReceipts").doc(`video-view-ip-${createHmac("sha256", key).update(`video:${day}:${ip}`).digest("hex")}`);
+  const video = db.collection("topicVideos").doc(topicId);
+  // Firestore TTL removes expired receipts. Never persist raw IPs or browser
+  // IDs; receipts expire after two days (physical deletion is asynchronous).
+  const expiresAt = new Date(Date.now() + 2 * 86400000);
+  return db.runTransaction(async (tx) => {
+    const [published, seen, daily] = await Promise.all([tx.get(video), tx.get(receipt), tx.get(budget)]);
+    if (!published.exists) throw new HttpsError("not-found", "Video not found.");
+    if (seen.exists) return { counted: false };
+    if ((daily.data()?.count || 0) >= 200)
+      throw new HttpsError("resource-exhausted", "View reporting limit reached.");
+    tx.create(receipt, { expiresAt });
+    tx.set(budget, { count: (daily.data()?.count || 0) + 1, expiresAt });
+    tx.update(video, { views: FieldValue.increment(1) });
+    return { counted: true };
+  });
+});
 async function owner(request) {
   if (!request.auth)
     throw new HttpsError("unauthenticated", "Sign in with Google.");

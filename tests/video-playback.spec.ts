@@ -82,9 +82,13 @@ for (const reduced of [false, true])
         const body = (await response.text()).replace(
           /from "[^"]*firebase_firestore[^\"]*"/g,
           'from "/__video-firestore.js"',
-        );
+        ).replace(/from "[^"]*\/services\/videos\.ts[^\"]*"/g, 'from "/__video-service.js"');
         await route.fulfill({ response, body });
       });
+      await page.route("**/__video-service.js", (route) => route.fulfill({
+        contentType: "application/javascript",
+        body: `export const draftBlob=async()=>new Blob(); export const videoCall=async()=>({}); export const recordVideoView=async(id)=>{window.__viewEvents ||= []; window.__viewEvents.push(id);};`,
+      }));
       await page.route("**/__video-firestore.js", (route) =>
         route.fulfill({
           contentType: "application/javascript",
@@ -119,6 +123,7 @@ for (const reduced of [false, true])
       const first = page.locator(".video-slide").nth(0),
         second = page.locator(".video-slide").nth(1);
       await expect(page.locator(".video-slide")).toHaveCount(6);
+      await expect(first.locator(".video-views")).toHaveText("0 Views");
       const bounds = await page.locator(".video-feed").boundingBox();
       expect(bounds?.x).toBe(0);
       expect(bounds?.y).toBe(0);
@@ -159,6 +164,7 @@ for (const reduced of [false, true])
       await expect
         .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.muted))
         .toBe(false);
+      await expect.poll(() => page.evaluate(() => (window as any).__viewEvents || []), { timeout: 10000 }).toEqual(["topic-0"]);
       await expect
         .poll(() =>
           first

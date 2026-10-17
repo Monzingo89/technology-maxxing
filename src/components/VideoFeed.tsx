@@ -17,12 +17,14 @@ import {
 import { db } from "../services/firebase";
 import {
   draftBlob,
+  recordVideoView,
   videoCall,
   type TopicVideo,
   type VideoJob,
 } from "../services/videos";
 import TopicVideoControls from "./TopicVideoControls";
 import "./videos.css";
+const viewNumber = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
 
 function VideoSlide({
   video,
@@ -90,6 +92,9 @@ function VideoSlide({
           {video.generated ? "AI-generated" : "Topic explanation"}
         </span>
         <h2>{video.title}</h2>
+        <span className="video-views" aria-label={`${Math.max(0, video.views || 0)} views`}>
+          {viewNumber.format(Math.max(0, video.views || 0))} Views
+        </span>
         {failed && active && (
           <p role="alert">This video could not load. Try refreshing.</p>
         )}
@@ -259,6 +264,29 @@ export default function VideoFeed({
   }, [captions, syncCaption]);
   const [inView, setInView] = useState(true);
   const activeVideo = videos.find((v) => v.topicId === activeId) || videos[0];
+  const reportedViews = useRef(new Set<string>());
+  useEffect(() => {
+    const id = activeVideo?.topicId;
+    if (!id) return;
+    let watched = 0, lastTime = -1;
+    // Sample actual advancing playback, not currentTime: seeking, buffering,
+    // hidden tabs, and pauses do not qualify as three seconds of watching.
+    const timer = window.setInterval(() => {
+      const media = player.current;
+      const current = media?.currentTime ?? -1;
+      const delta = current - lastTime;
+      if (media && !media.paused && !media.seeking && media.readyState >= 2 &&
+          inView && !document.hidden && lastTime >= 0 && delta > 0 && delta < 1)
+        watched += Math.min(delta, 0.25);
+      lastTime = current;
+      const key = `${id}:${new Date().toISOString().slice(0, 10)}`;
+      if (watched >= 3 && !reportedViews.current.has(key)) {
+        reportedViews.current.add(key);
+        void recordVideoView(id);
+      }
+    }, 250);
+    return () => window.clearInterval(timer);
+  }, [activeVideo?.topicId, inView]);
   const activate = useCallback((id: string) => {
     if (selectedRef.current === id) return;
     selectedRef.current = id;

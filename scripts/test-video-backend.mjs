@@ -19,11 +19,13 @@ initializeApp({
 });
 process.env.VIDEO_GENERATION_ENABLED = "true";
 process.env.VIDEO_DAILY_LIMIT = "3";
+process.env.VIDEO_VIEW_HASH_KEY = "test-only-key-not-a-production-secret-1234567890";
 const {
   requestTopicVideo,
   publishTopicVideo,
   discardTopicVideo,
   videoOwnerStatus,
+  recordVideoView,
 } = await import("../functions/src/videos.js");
 const account = await getAuth().createUser({
   email: "vcv@robertjmonzingo.com",
@@ -110,6 +112,25 @@ const published = (
   await db.collection("topicVideos").doc("react").get()
 ).data();
 assert.ok(published.url.includes("alt=media"));
+const view = (visitorId, topicId = "react") => recordVideoView.run({
+  data: { topicId, visitorId }, rawRequest: { headers: { "x-forwarded-for": "192.0.2.1" } },
+});
+const visitorId = "00000000-0000-4000-8000-000000000001";
+const views = await Promise.all([view(visitorId), view(visitorId), view(visitorId)]);
+assert.equal(views.filter((v) => v.counted).length, 1);
+assert.equal((await db.collection("topicVideos").doc("react").get()).data().views, 1);
+await view("00000000-0000-4000-8000-000000000002");
+assert.equal((await db.collection("topicVideos").doc("react").get()).data().views, 2);
+await assert.rejects(view("bad"), { code: "invalid-argument" });
+await assert.rejects(view(visitorId, "unpublished"), { code: "not-found" });
+await assert.rejects(view(visitorId, "../react"), { code: "invalid-argument" });
+const budgets = await db.collection("videoViewReceipts").get();
+const ipBudget = budgets.docs.find((doc) => doc.id.startsWith("video-view-ip-"));
+assert.ok(ipBudget);
+await ipBudget.ref.update({ count: 200 });
+await assert.rejects(view("00000000-0000-4000-8000-000000000003"), { code: "resource-exhausted" });
+assert.deepEqual(await view(visitorId), { counted: false });
+assert.ok(budgets.docs.every((doc) => doc.data().expiresAt && !JSON.stringify(doc.data()).includes("192.0.2.1")));
 const [metadata] = await bucket
   .file(`published-videos/react/${jobId}.mp4`)
   .getMetadata();

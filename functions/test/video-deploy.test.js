@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-test("video-only deployment selects six functions and excludes credentials", () => {
+test("video-only deployment selects seven functions and excludes credentials", () => {
   const root = new URL("../", import.meta.url);
   const config = JSON.parse(
     readFileSync(new URL("../firebase.video.json", root)),
@@ -14,6 +14,6 @@ test("video-only deployment selects six functions and excludes credentials", () 
   const pkg = JSON.parse(readFileSync(new URL("../package.json", root)));
   assert.equal(
     pkg.scripts["video:deploy"].match(/functions:ai-space:/g).length,
-    6,
+    7,
   );
 });

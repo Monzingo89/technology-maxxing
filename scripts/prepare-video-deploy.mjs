@@ -9,6 +9,7 @@ for (const name of [
   "videos.js",
   "video-media.js",
   "video-policy.js",
+  "guest-quota.js",
   "video-catalog.json",
 ]) {
   await copyFile(
