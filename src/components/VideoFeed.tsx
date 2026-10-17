@@ -27,7 +27,9 @@ function VideoSlide({
     slide = useRef<HTMLElement>(null);
   const [active, setActive] = useState(false),
     [muted, setMuted] = useState(true),
-    [paused, setPaused] = useState(false),
+    [paused, setPaused] = useState(
+      () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+    ),
     [failed, setFailed] = useState(false);
   const [captions, setCaptions] = useState("");
   useEffect(() => {
@@ -48,12 +50,7 @@ function VideoSlide({
   }, [root]);
   useEffect(() => {
     const sync = () => {
-      if (
-        active &&
-        !paused &&
-        !document.hidden &&
-        !matchMedia("(prefers-reduced-motion: reduce)").matches
-      )
+      if (active && !paused && !document.hidden)
         void player.current?.play().catch(() => setPaused(true));
       else player.current?.pause();
     };
