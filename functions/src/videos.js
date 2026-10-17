@@ -297,7 +297,9 @@ export const publishTopicVideo = onCall(
       await bucket.file(job.objectPath).copy(dest);
       await dest.setMetadata({
         contentType: "video/mp4",
-        cacheControl: "public, max-age=3600",
+        // Versioned object paths are never overwritten. Watching a topic reuses
+        // this persisted asset and its browser cache, not a generation endpoint.
+        cacheControl: "public, max-age=31536000, immutable",
         metadata: { firebaseStorageDownloadTokens: token },
       });
       await db.runTransaction(async (tx) => {

@@ -88,6 +88,12 @@ production secret deployment mechanism. There are no real keys in the templates.
 
 ## Behavior and safeguards
 
+- Published MP4s are persistent per-topic assets, not generated on playback.
+  Each version has a unique storage URL and one-year immutable public browser
+  cache headers. Cache eviction may download the same MP4 again, but never calls
+  Gemini or ElevenLabs. Storage/bandwidth charges still apply. Cached public
+  downloads cannot be recalled from viewers' devices.
+
 - One published video per catalog topic. Transactions reject duplicates and
   simultaneous jobs. Daily limits include failed generations; there are no
   automatic paid retries. Three scenes are generated for each request.

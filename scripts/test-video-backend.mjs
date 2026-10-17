@@ -113,6 +113,7 @@ assert.ok(published.url.includes("alt=media"));
 const [metadata] = await bucket
   .file(`published-videos/react/${jobId}.mp4`)
   .getMetadata();
+assert.equal(metadata.cacheControl, "public, max-age=31536000, immutable");
 assert.equal(
   new URL(published.url).searchParams.get("token"),
   metadata.metadata.firebaseStorageDownloadTokens,
@@ -120,6 +121,14 @@ assert.equal(
 await assert.rejects(
   call(requestTopicVideo, { topicId: "react", mode: "upload" }),
   { code: "already-exists" },
+);
+await assert.rejects(
+  call(requestTopicVideo, { topicId: "react", mode: "generate" }),
+  { code: "already-exists" },
+);
+assert.equal(
+  (await db.collection("topicVideos").doc("react").get()).data().url,
+  published.url,
 );
 await assert.rejects(call(discardTopicVideo, { jobId }), {
   code: "permission-denied",
