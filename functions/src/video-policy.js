@@ -44,7 +44,7 @@ export const STARTER_SCRIPTS = {
     scenes: [
       {
         narration:
-          "How does a website update when you click? React builds interfaces from reusable components, like buttons, cards, and menus.",
+          "Here is React in 30 seconds. React builds interfaces from reusable components, like buttons, cards, and menus.",
         visual:
           "Colorful three-dimensional interface pieces assemble into a website. Show a button, a card and a menu clearly as separate reusable pieces.",
       },
@@ -66,7 +66,7 @@ export const STARTER_SCRIPTS = {
     scenes: [
       {
         narration:
-          "Ever heard, it works on my machine? Docker helps by packaging an application with the libraries and settings it needs.",
+          "Here is Docker in 30 seconds. Docker packages an application with the libraries and settings it needs to run consistently.",
         visual:
           "An application works on one laptop but encounters missing puzzle pieces on another. Application and dependency pieces slide together into a container image.",
       },
@@ -88,7 +88,7 @@ export const STARTER_SCRIPTS = {
     scenes: [
       {
         narration:
-          "How can AI answer using your documents? Retrieval augmented generation finds relevant information, then gives it to a model to help write an answer.",
+          "Here is Agentic RAG in 30 seconds. Retrieval augmented generation finds relevant information, then gives it to a model to help answer.",
         visual:
           "A question moves toward a library of documents. Relevant passages glow and move into a model, followed by an answer with source markers.",
       },
@@ -107,3 +107,19 @@ export const STARTER_SCRIPTS = {
     ],
   },
 };
+
+export function withTopicIntro(storyboard, topicName) {
+  validateStoryboard(storyboard);
+  if (
+    typeof topicName !== "string" ||
+    !topicName.trim() ||
+    /[<>\r\n]/.test(topicName)
+  )
+    throw Error("Invalid topic name");
+  const prefix = `Here is ${topicName.trim()} in 30 seconds.`;
+  const result = structuredClone(storyboard);
+  const first = result.scenes[0];
+  // Enforce the opener even if a script model ignores the requested format.
+  first.narration = `${prefix} ${first.narration.replace(/^Here is .*? in 30 seconds[.!?]\s*/i, "")}`;
+  return validateStoryboard(result);
+}

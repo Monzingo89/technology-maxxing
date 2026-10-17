@@ -128,6 +128,9 @@ production secret deployment mechanism. There are no real keys in the templates.
   review facts, narration, diagrams and pacing. Short generated scenes can loop
   to fill their ten-second segment. No quality claim is implied by a successful
   API response.
+- Generated narration always opens with “Here is [topic name] in 30 seconds.”
+  The generation pipeline enforces this before making paid media requests,
+  including for non-starter topics. Captions and transcripts use the same script.
 - Only reviewed media gets a public playback token. Published videos are public
   and downloadable by design. Draft previews use authenticated Storage access.
 - Feed pages load six at a time. Only the visible clip plays, offscreen clips
