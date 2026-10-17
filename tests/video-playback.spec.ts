@@ -117,6 +117,8 @@ for (const reduced of [false, true])
       expect(bounds?.width).toBe(390);
       expect(bounds?.height).toBe(844);
       const mediaPlayer = page.locator(".video-shared-player");
+      await expect(first.locator(".video-mute-prompt")).toBeVisible();
+      await expect(page.locator(".video-mute-prompt")).toHaveCount(1);
       await expect(mediaPlayer).toHaveCount(1);
       await mediaPlayer.evaluate((el) => {
         el.setAttribute("data-original-player", "true");
@@ -137,6 +139,7 @@ for (const reduced of [false, true])
       await first
         .getByRole("button", { name: "Enable sound for video feed" })
         .click();
+      await expect(page.locator(".video-mute-prompt")).toHaveCount(0);
       await expect
         .poll(() =>
           mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
@@ -183,6 +186,7 @@ for (const reduced of [false, true])
         second.getByRole("button", { name: "Pause Test topic 1 video" }),
       ).toBeVisible();
       await expect(mediaPlayer).toHaveAttribute("src", /topic=1$/);
+      await expect(page.locator(".video-mute-prompt")).toHaveCount(0);
       await expect(page.locator(".video-active-caption")).toHaveText(
         "Test caption 1",
       );

@@ -5,7 +5,7 @@ import {
   FileText,
   Play,
   Settings2,
-  Volume2,
+  VolumeX,
 } from "lucide-react";
 import {
   collection,
@@ -75,7 +75,7 @@ function VideoSlide({
         }}
       >
         {!unlocked && active ? (
-          <Volume2 className="video-paused-icon" size={28} aria-hidden="true" />
+          <VolumeX className="video-mute-prompt" size={44} aria-hidden="true" />
         ) : (
           paused &&
           active && (
