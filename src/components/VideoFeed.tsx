@@ -212,6 +212,7 @@ export default function VideoFeed({
   // Keep this media element mounted across clips: Safari grants audio permission
   // per element, not just per page. Replacing it would require another gesture.
   const player = useRef<HTMLVideoElement>(null);
+  const captionTrack = useRef<HTMLTrackElement>(null);
   const unlockedRef = useRef(false),
     selectedRef = useRef("");
   const [unlocked, setUnlocked] = useState(false);
@@ -222,6 +223,22 @@ export default function VideoFeed({
   const [failed, setFailed] = useState(false),
     [playbackProgress, setPlaybackProgress] = useState(0);
   const [captions, setCaptions] = useState("");
+  const [activeCaption, setActiveCaption] = useState("");
+  const syncCaption = useCallback(() => {
+    const cues = captionTrack.current?.track.activeCues;
+    setActiveCaption(
+      Array.from(cues || [])
+        .map((cue) => (cue as VTTCue).text)
+        .join(" "),
+    );
+  }, []);
+  useEffect(() => {
+    const track = captionTrack.current?.track;
+    if (!track) return;
+    track.mode = "hidden";
+    track.addEventListener("cuechange", syncCaption);
+    return () => track.removeEventListener("cuechange", syncCaption);
+  }, [captions, syncCaption]);
   const [inView, setInView] = useState(true);
   const activeVideo = videos.find((v) => v.topicId === activeId) || videos[0];
   const activate = useCallback((id: string) => {
@@ -244,6 +261,7 @@ export default function VideoFeed({
     return () => observer.disconnect();
   }, [!!videos.length]);
   useEffect(() => {
+    setActiveCaption("");
     if (!activeVideo?.captions) {
       setCaptions("");
       return;
@@ -429,17 +447,24 @@ export default function VideoFeed({
             >
               {captions && (
                 <track
+                  ref={captionTrack}
                   kind="captions"
                   src={captions}
                   srcLang="en"
                   label="English"
                   default
                   onLoad={(event) => {
-                    event.currentTarget.track.mode = "showing";
+                    event.currentTarget.track.mode = "hidden";
+                    syncCaption();
                   }}
                 />
               )}
             </video>
+            {activeCaption && (
+              <p className="video-active-caption" aria-hidden="true">
+                {activeCaption}
+              </p>
+            )}
             <div
               className="video-feed"
               ref={feed}

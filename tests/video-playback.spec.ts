@@ -183,6 +183,14 @@ for (const reduced of [false, true])
         second.getByRole("button", { name: "Pause Test topic 1 video" }),
       ).toBeVisible();
       await expect(mediaPlayer).toHaveAttribute("src", /topic=1$/);
+      await expect(page.locator(".video-active-caption")).toHaveText(
+        "Test caption 1",
+      );
+      expect(
+        await mediaPlayer.evaluate(
+          (v: HTMLVideoElement) => v.textTracks[0].mode,
+        ),
+      ).toBe("hidden");
       await expect
         .poll(() =>
           mediaPlayer.evaluate(
