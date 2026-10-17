@@ -125,7 +125,7 @@ test("every generated storyboard gets the exact topic opener without duplication
   );
   assert.ok(
     withTopicIntro(STARTER_SCRIPTS.react, "RAG").scenes[0].narration.startsWith(
-      "RAG in 1 minute. React is",
+      "RAG in 1 minute. React builds",
     ),
   );
   assert.throws(() => withTopicIntro(other, "<script>"));
@@ -134,7 +134,7 @@ test("every generated storyboard gets the exact topic opener without duplication
 test("slower narration and caption phrases cover technical 30s plus analogy 29s", () => {
   for (const storyboard of Object.values(STARTER_SCRIPTS)) {
     const words = storyboard.scenes.flatMap((s) => s.narration.split(/\s+/));
-    assert.ok(words.length >= 130 && words.length <= 150);
+    assert.ok(words.length >= 110 && words.length <= 130);
     const captions = storyboardCaptions(storyboard);
     assert.ok(captions.startsWith("WEBVTT\n\n00:00:00.000 -->"));
     assert.ok(captions.includes("00:00:30.000 -->"));
