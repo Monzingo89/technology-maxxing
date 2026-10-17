@@ -1609,7 +1609,7 @@ export default function App() {
             jobs={videoJobs}
             signedIn={!!user}
             authReady={authReady}
-            onGuestEnd={() => setView("home")}
+            onFeedEnd={() => setView(user ? "library" : "home")}
           />
         </Suspense>
       )}

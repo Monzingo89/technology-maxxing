@@ -204,13 +204,13 @@ export default function VideoFeed({
   jobs,
   signedIn = false,
   authReady = true,
-  onGuestEnd,
+  onFeedEnd,
 }: {
   owner: boolean;
   jobs: VideoJob[];
   signedIn?: boolean;
   authReady?: boolean;
-  onGuestEnd?: () => void;
+  onFeedEnd?: () => void;
 }) {
   const [videos, setVideos] = useState<TopicVideo[]>([]),
     [count, setCount] = useState(6),
@@ -219,6 +219,7 @@ export default function VideoFeed({
   const feed = useRef<HTMLDivElement>(null),
     sentinel = useRef<HTMLDivElement>(null);
   const endHandled = useRef(false);
+  const [manage, setManage] = useState(false);
   useEffect(() => {
     if (!db) return;
     setLoading(true);
@@ -255,28 +256,40 @@ export default function VideoFeed({
     // video is still being watched, or while auth/data is loading or unavailable.
     if (
       !authReady ||
-      signedIn ||
       loading ||
       error ||
       !videos.length ||
       videos.length >= count ||
-      !onGuestEnd
+      !onFeedEnd
     )
       return;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !endHandled.current) {
           endHandled.current = true;
-          onGuestEnd();
+          onFeedEnd();
         }
       },
       { root: feed.current, threshold: 0.65 },
     );
     if (sentinel.current) observer.observe(sentinel.current);
     return () => observer.disconnect();
-  }, [authReady, signedIn, loading, error, videos.length, count, onGuestEnd]);
+  }, [authReady, signedIn, loading, error, videos.length, count, onFeedEnd]);
   return (
-    <section className="video-page" aria-label="Topic videos">
+    <section
+      className={`video-page${videos.length && !manage ? " immersive-feed" : ""}`}
+      aria-label="Topic videos"
+    >
+      {!!videos.length && (
+        <nav className="video-feed-nav" aria-label="Video navigation">
+          <a href="#library">← Library</a>
+          {owner && (
+            <button onClick={() => setManage(!manage)}>
+              {manage ? "Watch videos" : "Manage videos"}
+            </button>
+          )}
+        </nav>
+      )}
       <div className="video-page-heading">
         <div>
           <span className="video-eyebrow">TECHNOLOGY, ONE IDEA AT A TIME</span>

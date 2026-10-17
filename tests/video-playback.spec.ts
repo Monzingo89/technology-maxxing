@@ -80,7 +80,7 @@ for (const reduced of [false, true])
           contentType: "text/html",
           body: `<html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module">
     import RefreshRuntime from '/@react-refresh';RefreshRuntime.injectIntoGlobalHook(window);window.$RefreshReg$=()=>{};window.$RefreshSig$=()=>type=>type;window.__vite_plugin_react_preamble_installed__=true;
-    const {default:React}=await import('/node_modules/.vite/deps/react.js');const {default:ReactDOM}=await import('/node_modules/.vite/deps/react-dom_client.js');const {default:VideoFeed}=await import('/src/components/VideoFeed.tsx');ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(VideoFeed,{owner:false,jobs:[],signedIn:${signedIn},onGuestEnd:()=>{location.hash='home';}}));
+    const {default:React}=await import('/node_modules/.vite/deps/react.js');const {default:ReactDOM}=await import('/node_modules/.vite/deps/react-dom_client.js');const {default:VideoFeed}=await import('/src/components/VideoFeed.tsx');document.body.classList.add('video-mode');ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(VideoFeed,{owner:false,jobs:[],signedIn:${signedIn},onFeedEnd:()=>{location.hash=${signedIn ? "'library'" : "'home'"};}}));
     </script></body></html>`,
         }),
       );
@@ -88,6 +88,11 @@ for (const reduced of [false, true])
       const first = page.locator(".video-slide").nth(0),
         second = page.locator(".video-slide").nth(1);
       await expect(page.locator(".video-slide")).toHaveCount(6);
+      const bounds = await page.locator(".video-feed").boundingBox();
+      expect(bounds?.x).toBe(0);
+      expect(bounds?.y).toBe(0);
+      expect(bounds?.width).toBe(390);
+      expect(bounds?.height).toBe(844);
       if (reduced) {
         await expect(
           first.getByRole("button", { name: "Play", exact: true }),
@@ -144,7 +149,7 @@ for (const reduced of [false, true])
         await expect(
           page.getByText("You’re caught up.", { exact: false }),
         ).toBeVisible();
-        expect(new URL(page.url()).hash).toBe("");
+        await expect(page).toHaveURL(/#library$/);
       } else {
         await expect(page).toHaveURL(/#home$/);
       }
