@@ -65,6 +65,7 @@ const CategoryPicks = lazy(() => import("./workstation/CategoryPicks"));
 
 const Workbench = lazy(() => import("./workstation/Workbench"));
 type View =
+  | "home"
   | "videos"
   | "library"
   | "assessments"
@@ -78,6 +79,7 @@ type View =
 function readView(): View {
   const route = location.hash.slice(1).split("?")[0];
   return [
+    "home",
     "videos",
     "library",
     "assessments",
@@ -503,6 +505,10 @@ export default function App() {
     if (view === "privacy" || view === "terms") {
       window.scrollTo(0, 0);
       document.getElementById("legal-title")?.focus({ preventScroll: true });
+    }
+    if (view === "home") {
+      window.scrollTo(0, 0);
+      document.getElementById("home-title")?.focus({ preventScroll: true });
     }
   }, [view]);
 
@@ -1238,7 +1244,7 @@ export default function App() {
   return (
     <main className={`simple-app${view === "videos" ? " video-mode" : ""}`}>
       <header className="site-header">
-        <a className="brand" href="#videos">
+        <a className="brand" href="#home">
           IoT
         </a>
         <nav
@@ -1269,6 +1275,12 @@ export default function App() {
             </>
           ) : (
             <>
+              <button
+                className={view === "home" ? "active" : ""}
+                onClick={() => setView("home")}
+              >
+                Home
+              </button>
               <button
                 className={view === "videos" ? "active" : ""}
                 onClick={() => setView("videos")}
@@ -1490,7 +1502,8 @@ export default function App() {
       ) : view === "builder" ||
         view === "models" ||
         view === "benchmarks" ||
-        view === "videos" ? null : (
+        view === "videos" ||
+        view === "home" ? null : (
         <section className="hero">
           <div>
             <p className="eyebrow">IoT knowledge assessments</p>
@@ -1559,6 +1572,31 @@ export default function App() {
           <Workbench signedIn={!!user} />
         </Suspense>
       )}
+      {view === "home" && (
+        <section className="panel video-home" aria-labelledby="home-title">
+          <p className="eyebrow">Your next idea starts here</p>
+          <h1 id="home-title" tabIndex={-1}>
+            Keep your curiosity going.
+          </h1>
+          <p>
+            Watch topic videos freely. Create an account to open lessons, take
+            assessments, and keep learning.
+          </p>
+          {!user ? (
+            <div className="video-home-actions">
+              <button className="primary" onClick={() => openAuth("login")}>
+                Log in
+              </button>
+              <button className="primary" onClick={() => openAuth("signup")}>
+                Create an account
+              </button>
+            </div>
+          ) : (
+            <a href="#library">Continue to the library →</a>
+          )}
+          <a href="#videos">Watch the free video feed again →</a>
+        </section>
+      )}
       {view === "videos" && (
         <Suspense fallback={<p role="status">Loading videos…</p>}>
           {videoAccessError && (
@@ -1566,7 +1604,13 @@ export default function App() {
               {videoAccessError}
             </p>
           )}
-          <VideoFeed owner={videoOwner} jobs={videoJobs} />
+          <VideoFeed
+            owner={videoOwner}
+            jobs={videoJobs}
+            signedIn={!!user}
+            authReady={authReady}
+            onGuestEnd={() => setView("home")}
+          />
         </Suspense>
       )}
       {view === "library" ? (

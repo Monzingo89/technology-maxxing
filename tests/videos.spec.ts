@@ -34,5 +34,29 @@ for (const width of [390, 1440]) {
       page.getByRole("heading", { name: "Learn in 30 seconds." }),
     ).toBeVisible();
     expect(errors).toEqual([]);
+    await page.goto("/#home");
+    const home = page.getByRole("region", {
+      name: "Keep your curiosity going.",
+    });
+    await expect(home).toBeVisible();
+    await expect(
+      home.getByRole("button", { name: "Log in", exact: true }),
+    ).toBeVisible();
+    await home
+      .getByRole("button", { name: "Create an account", exact: true })
+      .click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.getByRole("button", { name: "Close account dialog" }).click();
+    await home.getByRole("button", { name: "Log in", exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: "Welcome back" }),
+    ).toBeVisible();
+    await page.getByRole("button", { name: "Close account dialog" }).click();
+    await home
+      .getByRole("link", { name: "Watch the free video feed again →" })
+      .click();
+    await expect(
+      page.getByRole("heading", { name: "Learn in 30 seconds." }),
+    ).toBeVisible();
   });
 }

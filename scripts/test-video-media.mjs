@@ -61,8 +61,10 @@ try {
       );
     }
     voiceCalls++;
-    assert.equal(body.model_id, "eleven_v3");
-    assert.ok(body.text.length > 30);
+    assert.ok(String(url).includes("/v1/text-to-dialogue?"));
+    assert.equal(body.model_id, "eleven_v4");
+    assert.ok(body.inputs[0].text.length > 30);
+    assert.ok(body.inputs[0].voice_id);
     return new Response(await readFile(audio));
   };
   const result = await generateVideo({ id: "react", name: "React" }, dir, {

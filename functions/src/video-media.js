@@ -103,6 +103,11 @@ export async function normalizeUpload(input, output) {
   ]);
 }
 export async function generateVideo(topic, dir, keys) {
+  const voiceId = process.env.VIDEO_VOICE_ID || "JBFqnCBsd6RMkjVDRZzb";
+  const voiceModel = process.env.VIDEO_VOICE_MODEL || "eleven_v4";
+  if (!/^[a-zA-Z0-9_-]+$/.test(voiceId)) throw Error("Invalid voice");
+  if (!["eleven_v4", "eleven_v3"].includes(voiceModel))
+    throw Error("Invalid voice model");
   let storyboard = STARTER_SCRIPTS[topic.id];
   if (!storyboard) {
     const model = process.env.VIDEO_SCRIPT_MODEL || "gemini-2.5-flash";
@@ -176,12 +181,10 @@ export async function generateVideo(topic, dir, keys) {
     const raw = path.join(dir, `raw-${i}.mp4`),
       audio = path.join(dir, `voice-${i}.mp3`);
     await writeFile(raw, Buffer.from(content.data, "base64"));
-    const voiceId = process.env.VIDEO_VOICE_ID || "JBFqnCBsd6RMkjVDRZzb";
-    if (!/^[a-zA-Z0-9_-]+$/.test(voiceId)) throw Error("Invalid voice");
     await writeFile(
       audio,
       await request(
-        `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`,
+        `https://api.elevenlabs.io/v1/${voiceModel === "eleven_v4" ? "text-to-dialogue" : `text-to-speech/${voiceId}`}?output_format=mp3_44100_128`,
         {
           method: "POST",
           headers: {
@@ -189,8 +192,10 @@ export async function generateVideo(topic, dir, keys) {
             "xi-api-key": keys.eleven,
           },
           body: JSON.stringify({
-            text: scene.narration,
-            model_id: "eleven_v3",
+            ...(voiceModel === "eleven_v4"
+              ? { inputs: [{ text: scene.narration, voice_id: voiceId }] }
+              : { text: scene.narration }),
+            model_id: voiceModel,
           }),
         },
         false,

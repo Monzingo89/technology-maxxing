@@ -202,9 +202,15 @@ function ReviewJob({ job }: { job: VideoJob }) {
 export default function VideoFeed({
   owner,
   jobs,
+  signedIn = false,
+  authReady = true,
+  onGuestEnd,
 }: {
   owner: boolean;
   jobs: VideoJob[];
+  signedIn?: boolean;
+  authReady?: boolean;
+  onGuestEnd?: () => void;
 }) {
   const [videos, setVideos] = useState<TopicVideo[]>([]),
     [count, setCount] = useState(6),
@@ -212,6 +218,7 @@ export default function VideoFeed({
     [error, setError] = useState("");
   const feed = useRef<HTMLDivElement>(null),
     sentinel = useRef<HTMLDivElement>(null);
+  const endHandled = useRef(false);
   useEffect(() => {
     if (!db) return;
     setLoading(true);
@@ -243,6 +250,31 @@ export default function VideoFeed({
     if (sentinel.current) observer.observe(sentinel.current);
     return () => observer.disconnect();
   }, [loading, videos.length, count]);
+  useEffect(() => {
+    // Prefetching and finishing are separate: never redirect while the last
+    // video is still being watched, or while auth/data is loading or unavailable.
+    if (
+      !authReady ||
+      signedIn ||
+      loading ||
+      error ||
+      !videos.length ||
+      videos.length >= count ||
+      !onGuestEnd
+    )
+      return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !endHandled.current) {
+          endHandled.current = true;
+          onGuestEnd();
+        }
+      },
+      { root: feed.current, threshold: 0.65 },
+    );
+    if (sentinel.current) observer.observe(sentinel.current);
+    return () => observer.disconnect();
+  }, [authReady, signedIn, loading, error, videos.length, count, onGuestEnd]);
   return (
     <section className="video-page" aria-label="Topic videos">
       <div className="video-page-heading">
@@ -287,11 +319,26 @@ export default function VideoFeed({
             {videos.map((v) => (
               <VideoSlide key={v.topicId} video={v} root={feed} />
             ))}
-            <div ref={sentinel} className="video-feed-end" role="status">
+            <div
+              ref={sentinel}
+              className={`video-feed-end${!loading && videos.length < count ? " video-feed-finished" : ""}`}
+              role="status"
+            >
               {loading ? (
                 "Loading…"
               ) : videos.length < count ? (
-                "You’re caught up. More ideas are on their way."
+                signedIn ? (
+                  <>
+                    <h2>You’re caught up.</h2>
+                    <a href="#library">Explore more topics →</a>
+                  </>
+                ) : (
+                  <>
+                    <h2>Keep your curiosity going.</h2>
+                    <p>Head home to log in or create your free account.</p>
+                    <a href="#home">Continue to home →</a>
+                  </>
+                )
               ) : (
                 <button onClick={() => setCount((n) => n + 6)}>
                   Load more videos

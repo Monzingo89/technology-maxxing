@@ -1,6 +1,9 @@
 # Topic videos: activation and operation
 
 The default `#videos` page is public. Nothing is generated on a visitor request.
+After scrolling past the last available clip, signed-out visitors go to `#home`
+with login and signup buttons. Empty or failed feeds do not redirect. Signed-in
+viewers stay at the end of the feed.
 Only the verified **robertjmonzingo@gmail.com** Google account can reserve jobs,
 generate, stage uploads, review drafts, or publish. Existing Firebase moderators
 do not receive this permission. Email/password login, even for that email, does
@@ -98,7 +101,9 @@ production secret deployment mechanism. There are no real keys in the templates.
 - Private media is probed and transcoded with external media protocols disabled.
   Uploaded videos must be portrait, contain audio and run 29.5–30.5 seconds.
   Published output is normalized to 720×1280 H.264/AAC MP4 and 30 seconds.
-- Generated videos combine Gemini Omni visuals and Eleven v3 narration. The
+- Generated videos combine Gemini Omni visuals and Eleven v4 narration through
+  the Text to Dialogue API. Set `VIDEO_VOICE_MODEL=eleven_v3` for the older TTS
+  endpoint if needed; there is no automatic paid fallback. The
   three starter scripts are authored in source; other scripts are based on the
   server's catalog snapshot. Captions and transcript accompany generated videos.
   Uploaded videos should have captions burned in by the owner.
