@@ -9,6 +9,7 @@ import {
   STARTER_SCRIPTS,
   VIDEO_OWNER,
   withTopicIntro,
+  storyboardCaptions,
 } from "../src/video-policy.js";
 const token = {
   email: VIDEO_OWNER,
@@ -111,4 +112,25 @@ test("every generated storyboard gets the exact topic opener without duplication
     ),
   );
   assert.throws(() => withTopicIntro(other, "<script>"));
+});
+
+test("richer narration and short caption phrases fit three ten-second scenes", () => {
+  for (const storyboard of Object.values(STARTER_SCRIPTS)) {
+    const words = storyboard.scenes.flatMap((s) => s.narration.split(/\s+/));
+    assert.ok(words.length >= 85 && words.length <= 100);
+    const captions = storyboardCaptions(storyboard, [9.8, 9.8, 9.8]);
+    assert.ok(captions.startsWith("WEBVTT\n\n00:00:00.000 -->"));
+    assert.ok(captions.includes("00:00:29.800 line:45%"));
+    const phrases = captions
+      .trim()
+      .split("\n\n")
+      .slice(1)
+      .map((c) => c.split("\n")[1]);
+    assert.equal(
+      phrases.join(" "),
+      storyboard.scenes.map((s) => s.narration).join(" "),
+    );
+    assert.ok(phrases.every((p) => p.length <= 22));
+  }
+  assert.throws(() => storyboardCaptions(STARTER_SCRIPTS.react, [11, 10, 10]));
 });

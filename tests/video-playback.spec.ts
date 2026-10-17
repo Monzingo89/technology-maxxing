@@ -50,16 +50,21 @@ for (const reduced of [false, true])
       });
       await page.addInitScript(() => {
         const play = HTMLMediaElement.prototype.play;
-        let interacted = false;
+        let inGesture = false;
+        const unlocked = new WeakSet<HTMLMediaElement>();
         document.addEventListener(
           "click",
           () => {
-            interacted = true;
+            inGesture = true;
+            setTimeout(() => {
+              inGesture = false;
+            }, 0);
           },
           true,
         );
         HTMLMediaElement.prototype.play = function () {
-          if (!interacted)
+          if (inGesture) unlocked.add(this);
+          if (!this.muted && !unlocked.has(this))
             return Promise.reject(
               new DOMException("Gesture required", "NotAllowedError"),
             );
@@ -86,11 +91,11 @@ for (const reduced of [false, true])
           body: `
     export const collection=()=>({});export const orderBy=()=>({});export const limit=n=>({count:n});
     export const query=(...args)=>args.find(a=>a.count);
-    export function onSnapshot(q,cb){cb({docs:Array.from({length:Math.min(q.count,7)},(_,i)=>({data:()=>({topicId:'topic-'+i,title:'Test topic '+i,category:'Test fixture',url:'/__sample.mp4',script:'Test transcript',captions:'WEBVTT\\n\\n00:00:00.000 --> 00:00:03.000\\nTest caption\\n',generated:true,duration:30})}))});return()=>{};}
+    export function onSnapshot(q,cb){cb({docs:Array.from({length:Math.min(q.count,7)},(_,i)=>({data:()=>({topicId:'topic-'+i,title:'Test topic '+i,category:'Test fixture',url:'/__sample.mp4?topic='+i,script:'Test transcript',captions:'WEBVTT\\n\\n00:00:00.000 --> 00:00:03.000\\nTest caption\\n',generated:true,duration:30})}))});return()=>{};}
   `,
         }),
       );
-      await page.route("**/__sample.mp4", (route) =>
+      await page.route("**/__sample.mp4*", (route) =>
         route.fulfill({ contentType: "video/mp4", body: media }),
       );
       await page.route("**/__video-component.html", (route) =>
@@ -111,36 +116,37 @@ for (const reduced of [false, true])
       expect(bounds?.y).toBe(0);
       expect(bounds?.width).toBe(390);
       expect(bounds?.height).toBe(844);
-      {
-        await expect(
-          first.getByRole("button", {
-            name: "Play Test topic 0 video",
-            exact: true,
-          }),
-        ).toBeVisible();
+      const mediaPlayer = page.locator(".video-shared-player");
+      await expect(mediaPlayer).toHaveCount(1);
+      await mediaPlayer.evaluate((el) => {
+        el.setAttribute("data-original-player", "true");
+      });
+      expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.muted)).toBe(
+        true,
+      );
+      if (!reduced)
+        await expect
+          .poll(() =>
+            mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
+          )
+          .toBeGreaterThan(0);
+      else
         expect(
-          await first
-            .locator("video")
-            .evaluate((v: HTMLVideoElement) => v.paused),
+          await mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused),
         ).toBe(true);
-        await first
-          .getByRole("button", { name: "Play Test topic 0 video", exact: true })
-          .click();
-      }
+      await first
+        .getByRole("button", { name: "Enable sound for video feed" })
+        .click();
       await expect
         .poll(() =>
-          first
-            .locator("video")
-            .evaluate((v: HTMLVideoElement) => v.currentTime),
+          mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
         )
         .toBeGreaterThan(0);
       await expect(
         first.getByRole("button", { name: /^(Sound on|Mute|Play|Pause)$/ }),
       ).toHaveCount(0);
       await expect
-        .poll(() =>
-          first.locator("video").evaluate((v: HTMLVideoElement) => v.muted),
-        )
+        .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.muted))
         .toBe(false);
       await expect
         .poll(() =>
@@ -153,46 +159,54 @@ for (const reduced of [false, true])
         .getByRole("button", { name: "Pause Test topic 0 video", exact: true })
         .click();
       await expect
-        .poll(() =>
-          first.locator("video").evaluate((v: HTMLVideoElement) => v.paused),
-        )
+        .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused))
         .toBe(true);
-      await expect(first.locator("track")).toHaveAttribute("src", /^blob:/);
+      await expect(mediaPlayer.locator("track")).toHaveAttribute(
+        "src",
+        /^blob:/,
+      );
       await first
         .getByRole("button", { name: "Play Test topic 0 video" })
         .press("Space");
       await expect
-        .poll(() =>
-          first.locator("video").evaluate((v: HTMLVideoElement) => v.paused),
-        )
+        .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused))
         .toBe(false);
       await first.getByLabel("Read transcript", { exact: true }).click();
       await expect(
         first.getByText("Test transcript", { exact: true }),
       ).toBeVisible();
       await expect
-        .poll(() =>
-          first.locator("video").evaluate((v: HTMLVideoElement) => v.paused),
-        )
+        .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused))
         .toBe(false);
       await second.scrollIntoViewIfNeeded();
-      if (reduced)
-        await second
-          .getByRole("button", { name: "Play Test topic 1 video", exact: true })
-          .click();
+      await expect(
+        second.getByRole("button", { name: "Pause Test topic 1 video" }),
+      ).toBeVisible();
+      await expect(mediaPlayer).toHaveAttribute("src", /topic=1$/);
       await expect
         .poll(() =>
-          second
-            .locator("video")
-            .evaluate((v: HTMLVideoElement) => v.currentTime),
+          mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
         )
         .toBeGreaterThan(0);
-      await expect(first.locator("video")).not.toHaveAttribute("src", /sample/);
-      expect(
-        await second
-          .locator("video")
-          .evaluate((v: HTMLVideoElement) => v.muted),
-      ).toBe(false);
+      await expect(mediaPlayer).toHaveAttribute("data-original-player", "true");
+      expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.muted)).toBe(
+        false,
+      );
+      await expect
+        .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused))
+        .toBe(false);
+      await page.locator(".video-slide").nth(2).scrollIntoViewIfNeeded();
+      await expect(
+        page
+          .locator(".video-slide")
+          .nth(2)
+          .getByRole("button", { name: "Pause Test topic 2 video" }),
+      ).toBeVisible();
+      await expect
+        .poll(() =>
+          mediaPlayer.evaluate((v: HTMLVideoElement) => !v.paused && !v.muted),
+        )
+        .toBe(true);
       expect(new URL(page.url()).hash).toBe("");
       await page.locator(".video-feed").evaluate((el) => {
         el.scrollTop = el.scrollHeight;

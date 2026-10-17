@@ -133,12 +133,16 @@ production secret deployment mechanism. There are no real keys in the templates.
   including for non-starter topics. Captions and transcripts use the same script.
 - Only reviewed media gets a public playback token. Published videos are public
   and downloadable by design. Draft previews use authenticated Storage access.
-- Feed pages load six at a time. Only the visible clip plays, offscreen clips
-  release their source, hidden tabs pause, reduced-motion users start manually,
-  and audio defaults on. Browsers that block audible autoplay wait for a tap;
-  the player never silently falls back to muted playback. Tap the video (or
+- Feed pages load six at a time. One persistent media element changes sources
+  as the visible topic changes, retaining per-element audio permission. Initial
+  playback is muted; one tap enables audio for subsequent clips automatically.
+  Hidden tabs and offscreen feeds pause. Reduced-motion users start manually,
+  then that explicit playback choice carries across clips. Tap the video (or
   focus it and press Space/Enter) to play/pause. A thin bottom progress bar
   tracks playback; small icons provide topic, transcript and library access.
+- Narration targets 28–32 words per ten-second scene (roughly 180 words/minute),
+  with at least 1.15x pitch-preserving speed adjustment. Longer speech is fitted
+  into its scene without truncating words; narration over 18 seconds is rejected.
 - Abandoned reservations expire after 20 minutes; review locks last 24 hours.
   Generation workers do not retry events to avoid duplicate provider charges.
   If a worker is killed, wait for its lease to expire before retrying. Review

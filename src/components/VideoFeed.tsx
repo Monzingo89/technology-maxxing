@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowUpRight,
   FileText,
   Play,
   Settings2,
+  Volume2,
 } from "lucide-react";
 import {
   collection,
@@ -26,114 +27,60 @@ import "./videos.css";
 function VideoSlide({
   video,
   root,
+  active,
+  paused,
+  unlocked,
+  failed,
+  playbackProgress,
+  onActivate,
+  onToggle,
 }: {
   video: TopicVideo;
   root: React.RefObject<HTMLDivElement | null>;
+  active: boolean;
+  paused: boolean;
+  unlocked: boolean;
+  failed: boolean;
+  playbackProgress: number;
+  onActivate: (id: string) => void;
+  onToggle: () => void;
 }) {
-  const player = useRef<HTMLVideoElement>(null),
-    progress = useRef<HTMLProgressElement>(null),
-    slide = useRef<HTMLElement>(null);
-  const [active, setActive] = useState(false),
-    [paused, setPaused] = useState(
-      () => matchMedia("(prefers-reduced-motion: reduce)").matches,
-    ),
-    [failed, setFailed] = useState(false);
-  const [captions, setCaptions] = useState("");
-  useEffect(() => {
-    if (!video.captions) return;
-    const url = URL.createObjectURL(
-      new Blob([video.captions], { type: "text/vtt" }),
-    );
-    setCaptions(url);
-    return () => URL.revokeObjectURL(url);
-  }, [video.captions]);
+  const slide = useRef<HTMLElement>(null);
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => setActive(entries[0].isIntersecting),
+      ([entry]) => {
+        if (entry.isIntersecting) onActivate(video.topicId);
+      },
       { root: root.current, threshold: 0.65 },
     );
     if (slide.current) observer.observe(slide.current);
     return () => observer.disconnect();
-  }, [root]);
-  useEffect(() => {
-    let disposed = false;
-    const sync = () => {
-      if (active && !paused && !document.hidden)
-        void player.current?.play().catch((error: DOMException) => {
-          if (!disposed && error.name !== "AbortError") setPaused(true);
-        });
-      else player.current?.pause();
-    };
-    sync();
-    document.addEventListener("visibilitychange", sync);
-    return () => {
-      disposed = true;
-      document.removeEventListener("visibilitychange", sync);
-    };
-  }, [active, paused]);
-  function togglePlayback() {
-    const media = player.current;
-    if (!media || !active) return;
-    if (media.paused) {
-      // Call play directly in the gesture so audible playback is allowed.
-      media.muted = false;
-      void media.play().catch(() => setPaused(true));
-    } else {
-      setPaused(true);
-      media.pause();
-    }
-  }
+  }, [root, video.topicId, onActivate]);
   return (
     <article
       ref={slide}
       className="video-slide"
       aria-label={`${video.title}, 30-second explanation`}
     >
-      <video
-        ref={player}
-        src={active ? video.url : undefined}
-        muted={false}
-        loop
-        playsInline
-        preload="none"
-        crossOrigin="anonymous"
-        onError={() => {
-          if (active) setFailed(true);
-        }}
-        onPlay={() => {
-          setPaused(false);
-          setFailed(false);
-        }}
-        onTimeUpdate={(event) => {
-          const media = event.currentTarget;
-          if (progress.current)
-            progress.current.value =
-              Number.isFinite(media.duration) && media.duration > 0
-                ? media.currentTime / media.duration
-                : 0;
-        }}
-        onEmptied={() => {
-          if (progress.current) progress.current.value = 0;
-        }}
-      >
-        {captions && (
-          <track
-            kind="captions"
-            src={captions}
-            srcLang="en"
-            label="English"
-            default
-          />
-        )}
-      </video>
       <button
         className="video-tap-surface"
-        aria-label={`${paused ? "Play" : "Pause"} ${video.title} video`}
+        aria-label={
+          !unlocked
+            ? `Enable sound for video feed`
+            : `${paused ? "Play" : "Pause"} ${video.title} video`
+        }
         tabIndex={active ? 0 : -1}
-        onClick={togglePlayback}
+        onClick={() => {
+          if (active) onToggle();
+        }}
       >
-        {paused && (
-          <Play className="video-paused-icon" size={36} aria-hidden="true" />
+        {!unlocked && active ? (
+          <Volume2 className="video-paused-icon" size={28} aria-hidden="true" />
+        ) : (
+          paused &&
+          active && (
+            <Play className="video-paused-icon" size={36} aria-hidden="true" />
+          )
         )}
       </button>
       <div className="video-overlay">
@@ -141,7 +88,7 @@ function VideoSlide({
           {video.generated ? "AI-generated" : "Topic explanation"}
         </span>
         <h2>{video.title}</h2>
-        {failed && (
+        {failed && active && (
           <p role="alert">This video could not load. Try refreshing.</p>
         )}
         <a
@@ -162,10 +109,9 @@ function VideoSlide({
         )}
       </div>
       <progress
-        ref={progress}
         className="video-progress"
         max={1}
-        value={0}
+        value={active ? playbackProgress : 0}
         aria-label={`${video.title} playback progress`}
       />
     </article>
@@ -263,6 +209,86 @@ export default function VideoFeed({
     sentinel = useRef<HTMLDivElement>(null);
   const endHandled = useRef(false);
   const [manage, setManage] = useState(false);
+  // Keep this media element mounted across clips: Safari grants audio permission
+  // per element, not just per page. Replacing it would require another gesture.
+  const player = useRef<HTMLVideoElement>(null);
+  const unlockedRef = useRef(false),
+    selectedRef = useRef("");
+  const [unlocked, setUnlocked] = useState(false);
+  const [activeId, setActiveId] = useState("");
+  const [paused, setPaused] = useState(
+    () => matchMedia("(prefers-reduced-motion: reduce)").matches,
+  );
+  const [failed, setFailed] = useState(false),
+    [playbackProgress, setPlaybackProgress] = useState(0);
+  const [captions, setCaptions] = useState("");
+  const [inView, setInView] = useState(true);
+  const activeVideo = videos.find((v) => v.topicId === activeId) || videos[0];
+  const activate = useCallback((id: string) => {
+    if (selectedRef.current === id) return;
+    selectedRef.current = id;
+    setActiveId(id);
+    setPlaybackProgress(0);
+    setFailed(false);
+    setPaused(
+      !unlockedRef.current &&
+        matchMedia("(prefers-reduced-motion: reduce)").matches,
+    );
+  }, []);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { threshold: 0.25 },
+    );
+    if (feed.current) observer.observe(feed.current);
+    return () => observer.disconnect();
+  }, [!!videos.length]);
+  useEffect(() => {
+    if (!activeVideo?.captions) {
+      setCaptions("");
+      return;
+    }
+    const url = URL.createObjectURL(
+      new Blob([activeVideo.captions], { type: "text/vtt" }),
+    );
+    setCaptions(url);
+    return () => URL.revokeObjectURL(url);
+  }, [activeVideo?.captions]);
+  useEffect(() => {
+    let disposed = false;
+    const sync = () => {
+      const media = player.current;
+      if (!media) return;
+      if (!paused && inView && !document.hidden) {
+        void media.play().catch((error: DOMException) => {
+          if (!disposed && error.name !== "AbortError") setPaused(true);
+        });
+      } else media.pause();
+    };
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => {
+      disposed = true;
+      document.removeEventListener("visibilitychange", sync);
+    };
+  }, [activeVideo?.url, paused, inView, unlocked]);
+  function togglePlayback() {
+    const media = player.current;
+    if (!media) return;
+    if (!unlockedRef.current || media.paused) {
+      unlockedRef.current = true;
+      setUnlocked(true);
+      media.muted = false;
+      // Play on the same element, synchronously inside the initial gesture.
+      void media
+        .play()
+        .then(() => setPaused(false))
+        .catch(() => setPaused(true));
+    } else {
+      setPaused(true);
+      media.pause();
+    }
+  }
   useEffect(() => {
     if (!db) return;
     setLoading(true);
@@ -376,40 +402,88 @@ export default function VideoFeed({
           <p className="video-scroll-hint">
             Swipe for the next idea. Tap the video to play or pause.
           </p>
-          <div
-            className="video-feed"
-            ref={feed}
-            tabIndex={0}
-            aria-label="Swipeable video feed"
-          >
-            {videos.map((v) => (
-              <VideoSlide key={v.topicId} video={v} root={feed} />
-            ))}
-            <div
-              ref={sentinel}
-              className={`video-feed-end${!loading && videos.length < count ? " video-feed-finished" : ""}`}
-              role="status"
+          <div className="video-player-frame">
+            <video
+              ref={player}
+              className="video-shared-player"
+              src={activeVideo?.url}
+              muted={!unlocked}
+              loop
+              playsInline
+              preload="auto"
+              crossOrigin="anonymous"
+              onError={() => setFailed(true)}
+              onPlay={() => {
+                setPaused(false);
+                setFailed(false);
+              }}
+              onTimeUpdate={(event) => {
+                const media = event.currentTarget;
+                setPlaybackProgress(
+                  Number.isFinite(media.duration) && media.duration > 0
+                    ? media.currentTime / media.duration
+                    : 0,
+                );
+              }}
+              onEmptied={() => setPlaybackProgress(0)}
             >
-              {loading ? (
-                "Loading…"
-              ) : videos.length < count ? (
-                signedIn ? (
-                  <>
-                    <h2>You’re caught up.</h2>
-                    <a href="#library">Explore more topics →</a>
-                  </>
-                ) : (
-                  <>
-                    <h2>Keep your curiosity going.</h2>
-                    <p>Head home to log in or create your free account.</p>
-                    <a href="#home">Continue to home →</a>
-                  </>
-                )
-              ) : (
-                <button onClick={() => setCount((n) => n + 6)}>
-                  Load more videos
-                </button>
+              {captions && (
+                <track
+                  key={captions}
+                  kind="captions"
+                  src={captions}
+                  srcLang="en"
+                  label="English"
+                  default
+                />
               )}
+            </video>
+            <div
+              className="video-feed"
+              ref={feed}
+              tabIndex={0}
+              aria-label="Swipeable video feed"
+            >
+              {videos.map((v) => (
+                <VideoSlide
+                  key={v.topicId}
+                  video={v}
+                  root={feed}
+                  active={v.topicId === activeVideo?.topicId}
+                  paused={paused}
+                  unlocked={unlocked}
+                  failed={failed}
+                  playbackProgress={playbackProgress}
+                  onActivate={activate}
+                  onToggle={togglePlayback}
+                />
+              ))}
+              <div
+                ref={sentinel}
+                className={`video-feed-end${!loading && videos.length < count ? " video-feed-finished" : ""}`}
+                role="status"
+              >
+                {loading ? (
+                  "Loading…"
+                ) : videos.length < count ? (
+                  signedIn ? (
+                    <>
+                      <h2>You’re caught up.</h2>
+                      <a href="#library">Explore more topics →</a>
+                    </>
+                  ) : (
+                    <>
+                      <h2>Keep your curiosity going.</h2>
+                      <p>Head home to log in or create your free account.</p>
+                      <a href="#home">Continue to home →</a>
+                    </>
+                  )
+                ) : (
+                  <button onClick={() => setCount((n) => n + 6)}>
+                    Load more videos
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </>
