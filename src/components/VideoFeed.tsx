@@ -5,7 +5,6 @@ import {
   FileText,
   Play,
   Settings2,
-  VolumeX,
 } from "lucide-react";
 import {
   collection,
@@ -70,7 +69,7 @@ function VideoSlide({
         className="video-tap-surface"
         aria-label={
           !unlocked
-            ? `Enable sound for video feed`
+            ? "Learn"
             : `${paused ? "Play" : "Pause"} ${video.title} video`
         }
         tabIndex={active ? 0 : -1}
@@ -79,7 +78,7 @@ function VideoSlide({
         }}
       >
         {!unlocked && active ? (
-          <VolumeX className="video-mute-prompt" size={44} aria-hidden="true" />
+          <span className="video-learn-prompt">Learn</span>
         ) : (
           paused &&
           active && (
@@ -242,9 +241,7 @@ export default function VideoFeed({
     selectedRef = useRef("");
   const [unlocked, setUnlocked] = useState(false);
   const [activeId, setActiveId] = useState("");
-  const [paused, setPaused] = useState(
-    () => matchMedia("(prefers-reduced-motion: reduce)").matches,
-  );
+  const [paused, setPaused] = useState(true);
   const [failed, setFailed] = useState(false),
     [playbackProgress, setPlaybackProgress] = useState(0);
   const [captions, setCaptions] = useState("");
@@ -295,10 +292,7 @@ export default function VideoFeed({
     setActiveId(id);
     setPlaybackProgress(0);
     setFailed(false);
-    setPaused(
-      !unlockedRef.current &&
-        matchMedia("(prefers-reduced-motion: reduce)").matches,
-    );
+    setPaused(!unlockedRef.current);
   }, []);
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -325,7 +319,7 @@ export default function VideoFeed({
     const sync = () => {
       const media = player.current;
       if (!media) return;
-      if (!paused && inView && !suspended && !document.hidden) {
+      if (unlockedRef.current && !paused && inView && !suspended && !document.hidden) {
         void media.play().catch((error: DOMException) => {
           if (!disposed && error.name !== "AbortError") setPaused(true);
         });

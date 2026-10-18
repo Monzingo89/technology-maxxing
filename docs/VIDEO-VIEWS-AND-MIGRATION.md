@@ -44,3 +44,24 @@ launchctl print gui/501/com.monzingo.technology-minute-videos
 If generation fails, investigate the log and obtain approval before another paid
 attempt. Do not erase the cache or reset daily budget counters. The scheduled job
 starting at 7 PM does not mean the replacements finish at 7 PM.
+
+## Approved retry: October 18, 2026, 7:01 PM America/Chicago
+
+The October 17 attempt failed at 7:00:33 PM with Google's daily-quota HTTP 429.
+No published video was replaced. The user approved one retry at least 24 hours
+later. `com.monzingo.technology-minute-videos-retry` is installed locally for
+October 18 at 7:01 PM CDT (`2026-10-19T00:01:00.000Z`). The same Mac availability
+requirements and one-attempt/12-hour expiry safeguards apply.
+
+Retry artifacts: `~/Library/Application Support/TechnologyMaxxing/minute-2026-10-18-retry/`.
+Completed media and successful provider responses were copied from the original
+attempt, without its attempt lock or budget reservation. Original failure logs
+remain intact. The retry reserves the new day's budget without resetting counters.
+Quota availability is not guaranteed; another provider failure stops the job.
+
+## Learn-to-start playback
+
+The feed stays paused until the visitor taps the centered Learn control. That
+real gesture unmutes and starts the persistent player; subsequent swipes reuse
+it with sound enabled. Clips loop until the visitor scrolls, and tapping a clip
+still pauses/resumes playback. No synthetic click or autoplay-policy bypass is used.

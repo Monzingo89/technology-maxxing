@@ -130,8 +130,8 @@ for (const reduced of [false, true])
       expect(bounds?.width).toBe(390);
       expect(bounds?.height).toBe(844);
       const mediaPlayer = page.locator(".video-shared-player");
-      await expect(first.locator(".video-mute-prompt")).toBeVisible();
-      await expect(page.locator(".video-mute-prompt")).toHaveCount(1);
+      await expect(first.locator(".video-learn-prompt")).toHaveText("Learn");
+      await expect(page.locator(".video-learn-prompt")).toHaveCount(1);
       await expect(mediaPlayer).toHaveCount(1);
       await mediaPlayer.evaluate((el) => {
         el.setAttribute("data-original-player", "true");
@@ -139,20 +139,12 @@ for (const reduced of [false, true])
       expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.muted)).toBe(
         true,
       );
-      if (!reduced)
-        await expect
-          .poll(() =>
-            mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
-          )
-          .toBeGreaterThan(0);
-      else
-        expect(
-          await mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused),
-        ).toBe(true);
+      expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+      expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(0);
       await first
-        .getByRole("button", { name: "Enable sound for video feed" })
+        .getByRole("button", { name: "Learn", exact: true })
         .click();
-      await expect(page.locator(".video-mute-prompt")).toHaveCount(0);
+      await expect(page.locator(".video-learn-prompt")).toHaveCount(0);
       await expect
         .poll(() =>
           mediaPlayer.evaluate((v: HTMLVideoElement) => v.currentTime),
@@ -253,6 +245,7 @@ for (const reduced of [false, true])
       expect(await mediaPlayer.evaluate((v: HTMLVideoElement) => v.muted)).toBe(
         false,
       );
+      await expect(page.getByRole("button", { name: "Learn", exact: true })).toHaveCount(0);
       await expect
         .poll(() => mediaPlayer.evaluate((v: HTMLVideoElement) => v.paused))
         .toBe(false);
