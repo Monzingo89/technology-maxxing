@@ -13,7 +13,7 @@ test("exam flashcards reveal, remember, persist, and filter without mixing homon
     page.getByRole("combobox", { name: "Exam", exact: true }),
   ).toHaveValue("all");
   await expect(
-    page.getByRole("status").filter({ hasText: "600 matching topics" }),
+    page.getByRole("status").filter({ hasText: "900 matching topics" }),
   ).toBeVisible();
   const search = page.getByRole("searchbox", {
     name: "Search acronyms and topics",
@@ -74,12 +74,14 @@ test("CISSP, Azure, AI, batch filtering, and existing library topics are availab
     page.getByText("This exam is retired.", { exact: false }),
   ).toBeVisible();
   await exam.selectOption("all");
-  await page
-    .getByRole("combobox", { name: "Batch", exact: true })
-    .selectOption("2");
-  await expect(
-    page.getByRole("status").filter({ hasText: "100 matching topics" }),
-  ).toBeVisible();
+  for (const batch of ["2", "7", "8", "9"]) {
+    await page
+      .getByRole("combobox", { name: "Batch", exact: true })
+      .selectOption(batch);
+    await expect(
+      page.getByRole("status").filter({ hasText: "100 matching topics" }),
+    ).toBeVisible();
+  }
   await page
     .getByRole("combobox", { name: "Batch", exact: true })
     .selectOption("all");
@@ -171,8 +173,12 @@ for (const width of [390, 760, 1440])
     await page.getByRole("button", { name: "Reveal answer" }).click();
     if (width === 1440) {
       const brand = (await page.locator(".site-header .brand").boundingBox())!;
-      const nav = (await page.getByRole("navigation", { name: "Main navigation", exact: true }).boundingBox())!;
-      const account = (await page.locator(".site-header .account").boundingBox())!;
+      const nav = (await page
+        .getByRole("navigation", { name: "Main navigation", exact: true })
+        .boundingBox())!;
+      const account = (await page
+        .locator(".site-header .account")
+        .boundingBox())!;
       expect(brand.x + brand.width).toBeLessThan(nav.x);
       expect(nav.x + nav.width).toBeLessThan(account.x);
     }

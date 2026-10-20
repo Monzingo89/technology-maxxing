@@ -42,6 +42,12 @@ test("homonyms retain their independent meanings and contextual identities", () 
     ["ECC", "ECC (cryptography)"],
     ["GPT", "GPT (AI)"],
     ["ASR", "ASR (speech)"],
+    ["SAN", "SAN (certificate)"],
+    ["CA", "CA (identity)"],
+    ["DAC (electronics)", "DAC (cable)"],
+    ["PIM", "PIM (multicast)"],
+    ["DCE", "DCE (Azure)"],
+    ["DDM", "DDM (database)"],
   ]) {
     if (a === b) {
       const matches = index.technologies.filter(
@@ -92,6 +98,27 @@ test("reused authored question banks survive acronym enrichment", () => {
       index.assessments[topic.id].slice(0, 5),
       reviewed[topic.id].questions,
     );
+});
+test("service and plural aliases enrich the original topics without adding duplicates", () => {
+  for (const [term, id] of [
+    ["S3", "aws_s3"],
+    ["EBS", "aws_ebs"],
+    ["EFS (AWS)", "aws_efs"],
+    ["GAN", "generative_adversarial_networks"],
+    ["VAE", "variational_autoencoders"],
+  ]) {
+    const matches = index.technologies.filter(
+      (topic) => topic.acronymStudy?.term === term,
+    );
+    assert.equal(matches.length, 1, term);
+    assert.equal(matches[0].id, id);
+    assert.equal(matches[0].acronymStudy.reusedTopic, true);
+  }
+  assert.ok(
+    !index.technologies.some((topic) =>
+      ["acronym_ai_gan", "acronym_ai_vae"].includes(topic.id),
+    ),
+  );
 });
 test("exam relevance is many-to-many, explained, and distinguishes retired study", () => {
   const mapping = inferExamMappings({

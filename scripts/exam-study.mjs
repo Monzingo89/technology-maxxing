@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { additionalAcronymSources } from "./acronym-sources.mjs";
 
 export const researchedAt = "2026-10-20";
 const guide = (code) =>
@@ -477,6 +478,17 @@ export function readAcronyms(through = Infinity) {
 }
 
 export function matchingTopic(entry, topics) {
+  const aliases = {
+    "cloud:S3": "aws_s3",
+    "cloud:EBS": "aws_ebs",
+    "cloud:EFS (AWS)": "aws_efs",
+    "ai:GAN": "generative_adversarial_networks",
+    "ai:VAE": "variational_autoencoders",
+  };
+  const canonical = topics.find(
+    (topic) => topic.id === aliases[`${entry.area}:${entry.term}`],
+  );
+  if (canonical) return canonical;
   const normalize = (text) => text.toLowerCase().replace(/[^a-z0-9]/g, "");
   const term = normalize(entry.term);
   const full = normalize(entry.expansion);
@@ -555,6 +567,55 @@ const protocolRfcs = {
   "TLS 1.3": 8446,
   "SMTP AUTH": 4954,
   MIME: 2045,
+  MSS: 9293,
+  TTL: 791,
+  DSCP: 2474,
+  ECN: 3168,
+  RED: 2309,
+  WRED: 2309,
+  CAPWAP: 5415,
+  DANE: 6698,
+  SPF: 7208,
+  DKIM: 6376,
+  DMARC: 7489,
+  MTA: 5321,
+  MUA: 5598,
+  MDA: 5598,
+  MX: 1035,
+  PTR: 1035,
+  CNAME: 1035,
+  TXT: 1035,
+  SOA: 1035,
+  NS: 1035,
+  SRV: 2782,
+  CAA: 8659,
+  AXFR: 5936,
+  IXFR: 1995,
+  EDNS: 6891,
+  mDNS: 6762,
+  "DNS-SD": 6763,
+  AS: 1930,
+  ASN: 6793,
+  "IS-IS": 1195,
+  LSA: 2328,
+  "DR (OSPF)": 2328,
+  BDR: 2328,
+  ECMP: 2992,
+  VRF: 4364,
+  "RD (routing)": 4364,
+  "RT (routing)": 4364,
+  VTEP: 7348,
+  VXLAN: 7348,
+  EVPN: 7432,
+  "MP-BGP": 4760,
+  BFD: 5880,
+  IGMP: 3376,
+  MLD: 3810,
+  "PIM (multicast)": 7761,
+  SSM: 4607,
+  NAT64: 6146,
+  DNS64: 6147,
+  "6to4": 7526,
 };
 const wellKnownPorts = {
   FTP: "TCP 21 control; TCP 20 is commonly used for active-mode data. Passive data ports are negotiated",
@@ -586,6 +647,19 @@ const wellKnownPorts = {
   "HTTP/3": "UDP 443 commonly for HTTPS over QUIC",
   L2TP: "UDP 1701; IPsec-protected deployments also use IPsec/IKE transport",
   BGP: "TCP 179",
+  TFTP: "UDP 69 for the initial request; a selected transfer identifier is used for the transfer",
+  NFS: "TCP 2049 commonly for NFSv4; older arrangements can use additional RPC services",
+  VXLAN: "UDP 4789 by default",
+  mDNS: "UDP 5353",
+  CAPWAP: "UDP 5246 control and UDP 5247 data commonly",
+  BFD: "UDP 3784 for single-hop control; UDP 3785 for supported echo traffic",
+  "SMB 1":
+    "TCP 445 for direct-hosted SMB; older NetBIOS arrangements use additional ports",
+  "SMB 2": "TCP 445 commonly",
+  "SMB 3":
+    "TCP 445 commonly; supported alternate transports have their own requirements",
+  WinRM: "TCP 5985 for HTTP and TCP 5986 for HTTPS by default",
+  RoCE: "RoCEv2 commonly uses UDP 4791; RoCEv1 is an Ethernet-layer protocol",
 };
 
 export function acronymTopic(entry) {
@@ -701,7 +775,24 @@ export function acronymTopic(entry) {
   };
   if (specificSources[entry.term])
     docs = [source(...specificSources[entry.term])];
+  docs = additionalAcronymSources(entry) || docs;
   const extraExams = {
+    "MI (identity)": "sc300 sc900 ai103 ccsp",
+    UAMI: "sc300 ai103 ccsp",
+    SAMI: "sc300 ai103 ccsp",
+    "PE (Azure)": "az700 ai103 ccsp",
+    PLS: "az700 ccsp",
+    AGW: "az700",
+    LB: "az700",
+    ILB: "az700",
+    AMPLS: "az700",
+    AMA: "sc200",
+    NFS: "network linux cloud",
+    CMK: "az104 cissp ccsp",
+    DEK: "security cissp ccsp",
+    KEK: "security cissp ccsp",
+    BYOK: "az104 cissp ccsp",
+    RLS: "security ccsp",
     TPM: "cissp sscp ccsp",
     VPN: "network cissp az700 security",
     VNet: "az700",
