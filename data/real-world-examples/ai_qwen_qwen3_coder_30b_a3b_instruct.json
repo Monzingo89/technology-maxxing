@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_coder_30b_a3b_instruct",
+  "title": "Repository-Scale Refactoring with Qwen3-Coder",
+  "business": "Enterprise software teams managing massive legacy codebases",
+  "problem": "Developers struggle to maintain consistency across large repositories because standard models lack the context window to understand cross-file dependencies, leading to broken builds during refactoring.",
+  "solution": "Qwen3-Coder-30B-A3B-Instruct provides native support for 256K tokens, allowing the model to ingest entire repository structures to perform informed, agentic refactoring tasks.",
+  "steps": [
+    "Initialize the model using AutoModelForCausalLM with device_map set to auto to handle the 30.5B parameter footprint.",
+    "Define specific tool functions for file system operations to enable agentic interaction with the codebase.",
+    "Load the repository context into the model's 256K token window to ensure global awareness of dependencies.",
+    "Invoke the model via an OpenAI-compatible endpoint to execute refactoring commands using the defined tool schema.",
+    "Validate the generated code changes against the repository's existing unit test suite."
+  ],
+  "outcome": "Improved code consistency and reduced manual effort in navigating complex, multi-file architectural changes.",
+  "limitation": "The model requires significant VRAM because all expert weights must reside in memory; if you encounter out-of-memory (OOM) issues, consider reducing the context length to a shorter value, such as 32,768.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agentic Refactoring Workflow",
+    "description": "The flow shows how the model interacts with the codebase and tools to perform refactoring.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Initiates refactoring request"
+      },
+      {
+        "id": "b",
+        "label": "Qwen3-Coder",
+        "detail": "Processes 256K context"
+      },
+      {
+        "id": "c",
+        "label": "Tool Interface",
+        "detail": "Executes file operations"
+      },
+      {
+        "id": "d",
+        "label": "Repository",
+        "detail": "Target codebase"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calls function"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Modifies files"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Define Tools for agentic refactoring\ntools = [{\n    \"type\": \"function\",\n    \"function\": {\n        \"name\": \"update_file\",\n        \"description\": \"Updates a specific file in the repository.\",\n        \"parameters\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"path\": {\"type\": \"string\"},\n                \"content\": {\"type\": \"string\"}\n            }\n        }\n    }\n}]",
+    "explanation": "This maps to the business scenario by defining the tool schema required for the model to interact with the repository files during the refactoring process."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct",
+      "label": "Qwen/Qwen3-Coder-30B-A3B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Repository-Scale Refactoring with Qwen3-Coder, why is the model's context window critical for the business?",
+      "options": [
+        "It allows the model to ingest entire repository structures to perform informed, agentic refactoring tasks.",
+        "It eliminates the need for unit testing during the refactoring process.",
+        "It automatically reduces the number of parameters required for inference.",
+        "It enables the model to generate thinking blocks for complex logic."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states that standard models lack the context to understand cross-file dependencies, and the solution highlights the 256K token window as the fix.",
+      "evidence": "Qwen3-Coder-30B-A3B-Instruct provides native support for 256K tokens, allowing the model to ingest entire repository structures to perform informed, agentic refactoring tasks."
+    },
+    {
+      "question": "In Repository-Scale Refactoring with Qwen3-Coder, what is the primary tradeoff when using the model?",
+      "options": [
+        "The model cannot be used with OpenAI-compatible endpoints.",
+        "The model requires significant VRAM because all expert weights must reside in memory.",
+        "The model is limited to a maximum of 1,000 tokens of context.",
+        "The model requires manual activation of every expert for every token."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about memory constraints due to the expert weights.",
+      "evidence": "The model requires significant VRAM because all expert weights must reside in memory; if you encounter out-of-memory (OOM) issues, consider reducing the context length to a shorter value, such as 32,768."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:35.615Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:31.313Z"
+}

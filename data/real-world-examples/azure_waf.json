@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "azure_waf",
+  "title": "Securing Global Retail API Endpoints",
+  "business": "E-commerce retailers managing public-facing APIs for mobile applications and web storefronts.",
+  "problem": "Unprotected web endpoints are susceptible to common exploits like SQL injection and cross-site scripting, which can lead to unauthorized data access and service disruption.",
+  "solution": "Azure Web Application Firewall (WAF) provides centralized protection for web applications by inspecting incoming traffic against managed and custom rules to block malicious requests before they reach the backend.",
+  "steps": [
+    "Deploy an Azure Application Gateway or Front Door instance to serve as the entry point for web traffic.",
+    "Enable the WAF policy and associate it with the application delivery service.",
+    "Configure managed rule sets to provide baseline protection against common web vulnerabilities.",
+    "Define custom rules to address specific application logic or block traffic from known malicious IP ranges.",
+    "Monitor WAF logs in Azure Monitor to analyze blocked requests and refine rule sensitivity."
+  ],
+  "outcome": "Enhanced security posture with reduced exposure to common web-based attacks and improved visibility into malicious traffic patterns.",
+  "limitation": "Strict rule configurations can lead to false positives where legitimate user traffic is blocked; this requires ongoing tuning and testing in detection mode before enforcing block actions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "WAF Traffic Inspection Flow",
+    "description": "Visualizes the path of a request through the security layer.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "External user or bot"
+      },
+      {
+        "id": "b",
+        "label": "Azure WAF",
+        "detail": "Inspection and Rule Engine"
+      },
+      {
+        "id": "c",
+        "label": "Backend Service",
+        "detail": "Protected API or Web App"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTP/S Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Filtered Traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Global Retail API Endpoints, how does the WAF address the identified security risk?",
+      "options": [
+        "By encrypting all backend database storage",
+        "By inspecting traffic against managed and custom rules",
+        "By automatically scaling the backend compute resources",
+        "By providing a content delivery network for static assets"
+      ],
+      "answerIndex": 1,
+      "explanation": "The WAF protects applications by inspecting incoming traffic against rules to block malicious requests.",
+      "evidence": "Azure Web Application Firewall (WAF) provides centralized protection for web applications by inspecting incoming traffic against managed and custom rules to block malicious requests before they reach the backend."
+    },
+    {
+      "question": "What is a primary limitation of implementing WAF in Securing Global Retail API Endpoints?",
+      "options": [
+        "It increases the latency of all database queries",
+        "It requires a physical hardware appliance in the data center",
+        "It can cause false positives that block legitimate traffic",
+        "It is incompatible with Azure Front Door"
+      ],
+      "answerIndex": 2,
+      "explanation": "Strict rules can inadvertently block valid user traffic, necessitating careful tuning.",
+      "evidence": "Strict rule configurations can lead to false positives where legitimate user traffic is blocked; this requires ongoing tuning and testing in detection mode before enforcing block actions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:11.187Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "cot",
+  "title": "Automated Logistics Route Optimization",
+  "business": "A regional logistics firm managing complex multi-stop delivery schedules for perishable goods.",
+  "problem": "Standard prompt engineering often leads to incorrect delivery sequencing because the model fails to account for intermediate constraints like vehicle capacity, driver shift limits, and traffic windows simultaneously.",
+  "solution": "Chain-of-Thought (CoT) prompting forces the model to decompose the route planning task into a series of intermediate reasoning steps, such as calculating load weight per stop and checking time-window feasibility before finalizing the sequence.",
+  "steps": [
+    "Define a set of few-shot examples that include a complex delivery scenario and a step-by-step breakdown of the logic.",
+    "Structure the prompt to explicitly request an intermediate reasoning trace before the final route output.",
+    "Integrate constraints as individual logical steps within the reasoning chain.",
+    "Validate the output by ensuring the reasoning trace aligns with the final delivery sequence."
+  ],
+  "outcome": "Improved accuracy in complex route planning by ensuring the model explicitly considers all operational constraints during the generation process.",
+  "limitation": "Increased token consumption and latency due to the generation of intermediate reasoning text; monitor this by tracking the average completion time per request.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CoT Route Planning Workflow",
+    "description": "This diagram illustrates how the model processes a request by moving from raw input to a structured reasoning chain before producing the final route.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Input Request",
+        "detail": "Delivery locations and constraints"
+      },
+      {
+        "id": "b",
+        "label": "Reasoning Trace",
+        "detail": "Intermediate logical steps"
+      },
+      {
+        "id": "c",
+        "label": "Constraint Check",
+        "detail": "Validation of capacity/time"
+      },
+      {
+        "id": "d",
+        "label": "Final Route",
+        "detail": "Optimized delivery sequence"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "validates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "produces"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2201.11903",
+      "label": "Chain-of-Thought Prompting Elicits Reasoning in Large Language Models"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Route Optimization, why is CoT prompting used?",
+      "options": [
+        "To force the model to decompose complex constraints into intermediate reasoning steps.",
+        "To reduce the total number of tokens required for a request.",
+        "To bypass the need for few-shot examples entirely.",
+        "To increase the speed of the model response."
+      ],
+      "answerIndex": 0,
+      "explanation": "CoT prompting addresses the problem of complex reasoning by requiring the model to show its work through intermediate steps.",
+      "evidence": "Chain-of-Thought (CoT) prompting forces the model to decompose the route planning task into a series of intermediate reasoning steps"
+    },
+    {
+      "question": "In Automated Logistics Route Optimization, what is a primary trade-off of this approach?",
+      "options": [
+        "The model becomes less accurate over time.",
+        "Increased token consumption and latency due to the generation of intermediate reasoning text.",
+        "It requires a complete rewrite of the underlying model architecture.",
+        "It eliminates the need for any validation of the output."
+      ],
+      "answerIndex": 1,
+      "explanation": "Generating intermediate reasoning steps adds length to the output, which increases latency and token usage.",
+      "evidence": "Increased token consumption and latency due to the generation of intermediate reasoning text; monitor this by tracking the average completion time per request."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:07.598Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:03.973Z"
+}

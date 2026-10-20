@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "license_llama32",
+  "title": "Automated Logistics Document Processing",
+  "business": "Logistics and supply chain firms managing high volumes of international shipping manifests.",
+  "problem": "Manual data entry of handwritten shipping manifests is slow, error-prone, and creates bottlenecks in customs clearance.",
+  "solution": "Deploying Llama 3.2-11B-Vision-Instruct to automatically extract text and key-value pairs from scanned shipping documents to accelerate processing.",
+  "steps": [
+    "Verify the organization has fewer than 700 million monthly active users to comply with the Llama 3.2 Community License.",
+    "Integrate the model into the document pipeline to process scanned images of manifests.",
+    "Include the required attribution notice in a 'Notice' text file within the software distribution.",
+    "Display 'Built with Llama' prominently on the internal dashboard or public-facing service interface.",
+    "Ensure all usage adheres to the Acceptable Use Policy and local trade compliance regulations."
+  ],
+  "outcome": "Increased throughput of document processing with reduced manual intervention and higher data accuracy.",
+  "limitation": "The model may hallucinate details on low-quality scans; performance must be checked by implementing a human-in-the-loop verification step for low-confidence extractions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Processing Pipeline",
+    "description": "The flow shows how raw documents are processed by the model and validated.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scanner",
+        "detail": "Digitizes physical manifests"
+      },
+      {
+        "id": "b",
+        "label": "Llama 3.2",
+        "detail": "Extracts data from images"
+      },
+      {
+        "id": "c",
+        "label": "Validation",
+        "detail": "Human-in-the-loop check"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Stores structured manifest data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends image"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides extraction"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "commits verified data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/meta-llama/Llama-3.2-11B-Vision-Instruct/blob/main/LICENSE.txt",
+      "label": "LLAMA 3.2 COMMUNITY LICENSE AGREEMENT"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Document Processing, how does the technology address the identified bottleneck?",
+      "options": [
+        "By automating the manual data entry of shipping manifests to increase throughput.",
+        "By replacing all human staff with automated agents for customs clearance.",
+        "By increasing the monthly active users of the logistics platform.",
+        "By providing a warranty for all extracted data results."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the model's vision capabilities to extract data from documents, directly addressing the manual entry bottleneck.",
+      "evidence": "Deploying Llama 3.2-11B-Vision-Instruct to automatically extract text and key-value pairs from scanned shipping documents to accelerate processing."
+    },
+    {
+      "question": "In Automated Logistics Document Processing, what is a primary limitation and how is it managed?",
+      "options": [
+        "The license prohibits commercial use, so it must be used for research only.",
+        "The model may hallucinate on low-quality scans, requiring human-in-the-loop verification.",
+        "The model requires over 700 million users to function correctly.",
+        "The license requires removing all attribution notices from the software."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation of potential hallucinations on poor-quality inputs is mitigated by the suggested human-in-the-loop verification process.",
+      "evidence": "The model may hallucinate details on low-quality scans; performance must be checked by implementing a human-in-the-loop verification step for low-confidence extractions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:54.022Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:50.445Z"
+}

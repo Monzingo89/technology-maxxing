@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "hdfs",
+  "title": "Global Logistics Sensor Data Archival",
+  "business": "A global logistics firm managing millions of IoT sensor events from shipping containers.",
+  "problem": "The firm faces high hardware failure rates across distributed regional data centers, leading to potential loss of critical transit telemetry data.",
+  "solution": "HDFS provides a fault-tolerant, rack-aware storage architecture that replicates data blocks across commodity hardware, ensuring that even if an entire rack fails, the telemetry data remains accessible.",
+  "steps": [
+    "Configure the NameNode to manage the file system namespace and track block locations.",
+    "Deploy DataNodes across multiple physical racks to enable rack-aware replica placement.",
+    "Set the replication factor for sensor data files to ensure at least three copies exist.",
+    "Monitor DataNode heartbeats to trigger automatic re-replication upon hardware failure.",
+    "Utilize the NameNode's EditLog and FsImage to maintain metadata consistency during recovery."
+  ],
+  "outcome": "The system achieves high data availability and throughput, allowing the logistics firm to perform batch analytics on historical sensor data without manual intervention during node outages.",
+  "limitation": "The single NameNode architecture creates a potential bottleneck for metadata operations; this can be checked by monitoring NameNode memory usage and RPC queue latency.",
+  "diagram": {
+    "kind": "er",
+    "title": "HDFS Replication Entity Relationship",
+    "description": "Shows how the NameNode orchestrates block placement across distributed DataNodes.",
+    "nodes": [
+      {
+        "id": "nn",
+        "label": "NameNode",
+        "detail": "Master server managing namespace and block mapping"
+      },
+      {
+        "id": "dn1",
+        "label": "DataNode A",
+        "detail": "Storage node in Rack 1"
+      },
+      {
+        "id": "dn2",
+        "label": "DataNode B",
+        "detail": "Storage node in Rack 2"
+      },
+      {
+        "id": "blk",
+        "label": "Data Block",
+        "detail": "File segment with replication factor"
+      }
+    ],
+    "edges": [
+      {
+        "from": "nn",
+        "to": "blk",
+        "label": "manages mapping"
+      },
+      {
+        "from": "blk",
+        "to": "dn1",
+        "label": "stored on"
+      },
+      {
+        "from": "blk",
+        "to": "dn2",
+        "label": "replicated to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/HdfsDesign.html",
+      "label": "HDFS Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Sensor Data Archival, how does HDFS address the risk of hardware failure?",
+      "options": [
+        "By using a single NameNode to store all raw sensor data.",
+        "By replicating data blocks across different racks to ensure availability.",
+        "By enforcing strict POSIX compliance for all file operations.",
+        "By moving the computation to a centralized cloud server."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that HDFS uses rack-aware replication to ensure data remains accessible even if hardware or entire racks fail.",
+      "evidence": "HDFS provides a fault-tolerant, rack-aware storage architecture that replicates data blocks across commodity hardware, ensuring that even if an entire rack fails, the telemetry data remains accessible."
+    },
+    {
+      "question": "In Global Logistics Sensor Data Archival, what is a primary architectural limitation to monitor?",
+      "options": [
+        "The inability to store files larger than a few gigabytes.",
+        "The excessive network bandwidth required for local reads.",
+        "The potential bottleneck caused by the single NameNode.",
+        "The requirement for specialized, high-cost server hardware."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies the single NameNode as a potential bottleneck for metadata operations.",
+      "evidence": "The single NameNode architecture creates a potential bottleneck for metadata operations; this can be checked by monitoring NameNode memory usage and RPC queue latency."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:17.793Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:14.275Z"
+}

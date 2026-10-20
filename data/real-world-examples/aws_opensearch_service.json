@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_opensearch_service",
+  "title": "Log Aggregation for Global Retail Inventory",
+  "business": "A global retail chain managing thousands of point-of-sale terminals across multiple regions.",
+  "problem": "The retail chain faces operational blindness because logs from distributed inventory systems are siloed in local databases, making it impossible to perform cross-regional stock reconciliation or identify supply chain bottlenecks in real-time.",
+  "solution": "Amazon OpenSearch Service provides a centralized, managed search and analytics engine that ingests distributed log data, allowing the retail chain to index and query inventory events across all geographic regions from a single dashboard.",
+  "steps": [
+    "Provision an Amazon OpenSearch Service domain configured for multi-AZ deployment to ensure high availability.",
+    "Configure log shippers on regional inventory servers to stream JSON-formatted event data to the OpenSearch domain.",
+    "Define index patterns within the OpenSearch dashboard to categorize logs by region and inventory type.",
+    "Create visualization dashboards to monitor real-time stock levels and identify regional supply chain anomalies."
+  ],
+  "outcome": "The retail chain achieves unified visibility into global inventory, enabling proactive stock replenishment and rapid identification of regional distribution failures.",
+  "limitation": "A significant limitation is the potential for increased latency during cross-region data ingestion, which can be checked by monitoring the 'IndexingRate' and 'SearchLatency' metrics in the OpenSearch console.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Global Inventory Log Flow",
+    "description": "This diagram illustrates the flow of inventory logs from regional retail nodes into the centralized OpenSearch cluster.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional POS Nodes",
+        "detail": "Source of inventory event logs"
+      },
+      {
+        "id": "b",
+        "label": "Log Shipper",
+        "detail": "Agent forwarding data to OpenSearch"
+      },
+      {
+        "id": "c",
+        "label": "Amazon OpenSearch Service",
+        "detail": "Managed cluster for indexing and search"
+      },
+      {
+        "id": "d",
+        "label": "Management Dashboard",
+        "detail": "Interface for cross-regional analysis"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "emits logs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "ingests data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "queries index"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Log Aggregation for Global Retail Inventory, what is the primary problem addressed by the solution?",
+      "options": [
+        "Siloed inventory logs preventing cross-regional analysis",
+        "High cost of maintaining local database servers",
+        "Inability to scale the number of point-of-sale terminals",
+        "Lack of developer tools for building mobile applications"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that the retail chain suffers from operational blindness due to siloed logs, which the solution addresses by centralizing data.",
+      "evidence": "The retail chain faces operational blindness because logs from distributed inventory systems are siloed in local databases, making it impossible to perform cross-regional stock reconciliation or identify supply chain bottlenecks in real-time."
+    },
+    {
+      "question": "In Log Aggregation for Global Retail Inventory, how can an administrator verify the impact of the described limitation?",
+      "options": [
+        "By checking the IndexingRate and SearchLatency metrics in the OpenSearch console",
+        "By manually counting the number of regional inventory nodes",
+        "By reviewing the AWS regional infrastructure documentation",
+        "By calculating the total cost of the multi-AZ deployment"
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section identifies potential latency issues and specifies that they are monitored via specific metrics within the OpenSearch console.",
+      "evidence": "A significant limitation is the potential for increased latency during cross-region data ingestion, which can be checked by monitoring the 'IndexingRate' and 'SearchLatency' metrics in the OpenSearch console."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:09.947Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

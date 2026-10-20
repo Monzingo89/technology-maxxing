@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "array_data_structure",
+  "title": "Sequential Inventory Indexing",
+  "business": "Retail warehouse management systems requiring rapid lookups of product stock levels.",
+  "problem": "Using linked structures for inventory tracking results in high latency during random access, as the system must traverse nodes sequentially to find a specific product ID, incurring O(n) time complexity.",
+  "solution": "Implementing an array data structure allows the system to store product stock counts in a contiguous logical sequence, enabling O(1) access time via direct index calculation.",
+  "steps": [
+    "Allocate a fixed-size memory block capable of holding the maximum number of unique product identifiers.",
+    "Map each product ID to a unique integer index ranging from 0 to n-1.",
+    "Store the stock quantity value at the memory address calculated by the base address plus the index offset.",
+    "Access stock data directly using the index without traversing intermediate pointers."
+  ],
+  "outcome": "Predictable and constant-time retrieval of inventory levels, significantly reducing the latency of stock verification queries.",
+  "limitation": "The primary limitation is the fixed size of the contiguous memory block; if the number of products exceeds the allocated capacity, the array cannot grow dynamically without a costly reallocation and copy operation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Lookup Process",
+    "description": "This diagram shows how a product ID is transformed into a memory address for immediate data retrieval.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Product ID",
+        "detail": "Input key"
+      },
+      {
+        "id": "b",
+        "label": "Index Mapper",
+        "detail": "Maps ID to integer"
+      },
+      {
+        "id": "c",
+        "label": "Array Memory",
+        "detail": "Contiguous storage"
+      },
+      {
+        "id": "d",
+        "label": "Stock Value",
+        "detail": "Result"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Offset Calculation"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Direct Access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Sequential Inventory Indexing, why is an array preferred over a linked structure for inventory lookups?",
+      "options": [
+        "It provides O(1) access time via direct index calculation.",
+        "It allows for infinite growth of the inventory list.",
+        "It eliminates the need for memory allocation.",
+        "It automatically sorts products by price."
+      ],
+      "answerIndex": 0,
+      "explanation": "Arrays allow for constant time access to elements because they are stored in a contiguous logical sequence, unlike linked structures which require traversal.",
+      "evidence": "Implementing an array data structure allows the system to store product stock counts in a contiguous logical sequence, enabling O(1) access time via direct index calculation."
+    },
+    {
+      "question": "What is a primary limitation of the implementation described in Sequential Inventory Indexing?",
+      "options": [
+        "The system cannot handle integer indices.",
+        "The fixed size of the contiguous memory block makes dynamic growth difficult.",
+        "The system is too slow for large datasets.",
+        "The memory addresses are non-deterministic."
+      ],
+      "answerIndex": 1,
+      "explanation": "Arrays are typically fixed-size, meaning they cannot easily expand if the dataset grows beyond the initial allocation.",
+      "evidence": "The primary limitation is the fixed size of the contiguous memory block; if the number of products exceeds the allocated capacity, the array cannot grow dynamically without a costly reallocation and copy operation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:00.629Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

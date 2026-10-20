@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "file_parquet",
+  "title": "Optimizing Telemetry Archival for Predictive Maintenance",
+  "business": "A heavy machinery manufacturer monitoring thousands of IoT sensors across global fleets.",
+  "problem": "Storing high-frequency sensor telemetry as row-based CSV files leads to excessive I/O overhead, as analytical queries often only require specific sensor metrics rather than the entire record set.",
+  "solution": "Transitioning to the Parquet format enables columnar storage, allowing the system to read only the specific column chunks required for a query, significantly reducing data throughput.",
+  "steps": [
+    "Define a schema mapping sensor IDs to individual columns to align with the columnar storage structure.",
+    "Configure the writer to group incoming telemetry streams into row groups to balance memory usage and read performance.",
+    "Serialize the data using the Parquet binary protocol, ensuring the file metadata is appended at the end of the file.",
+    "Implement a reader that parses the trailing file metadata first to locate the specific column chunks needed for analysis."
+  ],
+  "outcome": "Analytical queries become significantly more efficient by skipping irrelevant data, allowing engineers to extract specific sensor trends without scanning entire datasets.",
+  "limitation": "Parquet is a write-once, read-many format; updating existing records requires rewriting the entire file or creating new files, which can be verified by checking the file modification timestamps and metadata versioning.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Parquet Data Retrieval Flow",
+    "description": "This diagram illustrates the sequence of reading a Parquet file for targeted data analysis.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Reader",
+        "detail": "The analytical application"
+      },
+      {
+        "id": "b",
+        "label": "File Metadata",
+        "detail": "Contains column chunk locations"
+      },
+      {
+        "id": "c",
+        "label": "Column Chunk N",
+        "detail": "Targeted sensor data"
+      },
+      {
+        "id": "d",
+        "label": "Result Set",
+        "detail": "Filtered output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Reads metadata first"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Locates specific data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Extracts relevant columns"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://parquet.apache.org/docs/file-format/",
+      "label": "File Format"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Telemetry Archival for Predictive Maintenance, why is Parquet preferred over row-based formats for analytical queries?",
+      "options": [
+        "It allows for faster row-by-row updates.",
+        "It enables reading only specific column chunks, reducing I/O.",
+        "It requires less storage space for metadata than CSV.",
+        "It supports real-time streaming updates natively."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that columnar storage allows the system to read only the specific column chunks required for a query.",
+      "evidence": "Transitioning to the Parquet format enables columnar storage, allowing the system to read only the specific column chunks required for a query, significantly reducing data throughput."
+    },
+    {
+      "question": "In Optimizing Telemetry Archival for Predictive Maintenance, what is a primary limitation of the chosen storage format?",
+      "options": [
+        "It cannot handle nested data structures.",
+        "It is inefficient for large-scale analytical reads.",
+        "It is a write-once format, making updates expensive.",
+        "It requires the metadata to be read at the start of the file."
+      ],
+      "answerIndex": 2,
+      "explanation": "Parquet is designed for efficient reading, but updating existing data requires rewriting files, which is a known trade-off.",
+      "evidence": "Parquet is a write-once, read-many format; updating existing records requires rewriting the entire file or creating new files, which can be verified by checking the file modification timestamps and metadata versioning."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:55.905Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:52.632Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_xero",
+  "title": "Streamlining Boutique Agency Cash Flow Analysis",
+  "business": "A boutique creative agency managing multiple client retainers and fluctuating freelance expenses.",
+  "problem": "The agency principal spends excessive time manually exporting CSV reports from Xero to identify overdue invoices and current cash positions, causing delays in vendor payments and client follow-ups.",
+  "solution": "By integrating the Xero connector with Claude, the principal can query real-time financial data using natural language, allowing for immediate identification of aged receivables and cash availability without navigating the full Xero interface.",
+  "steps": [
+    "Authenticate the Xero connector within the Claude interface using standard OAuth flows.",
+    "Grant read-only access to the specific Xero organization containing the agency financial records.",
+    "Invoke the get_aged_receivables tool to generate a summary of outstanding client invoices.",
+    "Use get_cash_position to verify liquid assets before approving pending contractor bills."
+  ],
+  "outcome": "The principal gains immediate visibility into financial health, enabling faster decision-making regarding resource allocation and client communication without manual report generation.",
+  "limitation": "The connector provides read-only access, meaning it cannot execute actions like marking an invoice as paid or creating new entries; users must verify data by clicking the provided links back to the Xero web application.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Financial Query Workflow",
+    "description": "This diagram illustrates how a user request flows through the Claude connector to retrieve Xero data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Agency Principal"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "AI Interface"
+      },
+      {
+        "id": "c",
+        "label": "Xero Connector",
+        "detail": "MCP Toolset"
+      },
+      {
+        "id": "d",
+        "label": "Xero API",
+        "detail": "Financial Data Source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Natural language query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calls get_aged_receivables"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetches read-only data"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Returns JSON summary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/xero",
+      "label": "Xero connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Boutique Agency Cash Flow Analysis, what is the primary problem addressed by the Xero connector?",
+      "options": [
+        "The principal spends excessive time manually exporting CSV reports to identify cash positions.",
+        "The agency lacks the technical expertise to integrate complex accounting software APIs.",
+        "The Xero connector is unable to handle multiple client retainers simultaneously.",
+        "The agency principal is unable to pay vendors due to a lack of bank integration."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that manual report generation is the bottleneck causing delays.",
+      "evidence": "The agency principal spends excessive time manually exporting CSV reports from Xero to identify overdue invoices and current cash positions, causing delays in vendor payments and client follow-ups."
+    },
+    {
+      "question": "In Streamlining Boutique Agency Cash Flow Analysis, what is a key limitation of the implementation?",
+      "options": [
+        "The connector requires a paid subscription to the Xero API developer portal.",
+        "The connector provides read-only access and cannot perform write actions like creating invoices.",
+        "The connector stores financial data between sessions for faster retrieval.",
+        "The connector is limited to only one organization per user account."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario confirm the connector is restricted to read-only operations.",
+      "evidence": "The connector provides read-only access, meaning it cannot execute actions like marking an invoice as paid or creating new entries; users must verify data by clicking the provided links back to the Xero web application."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:47.109Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:43.186Z"
+}

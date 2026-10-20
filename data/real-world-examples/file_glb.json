@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "file_glb",
+  "title": "Optimizing Asset Delivery with Binary glTF",
+  "business": "E-commerce platforms delivering interactive 3D product previews to web browsers.",
+  "problem": "High latency and parsing overhead caused by loading separate JSON and binary files for complex 3D assets.",
+  "solution": "The .glb format packages JSON metadata and binary buffers into a single container, enabling efficient streaming and reduced HTTP requests.",
+  "steps": [
+    "Define the GLB header containing the version and total file length.",
+    "Serialize the scene graph, materials, and node hierarchy into a JSON chunk.",
+    "Append the binary buffer containing geometry, animation, and texture data as a second chunk.",
+    "Ensure proper byte alignment for binary data to prevent memory access errors."
+  ],
+  "outcome": "Faster asset initialization and simplified file management for client-side 3D rendering engines.",
+  "limitation": "The monolithic structure makes partial updates difficult; any change to a single texture requires re-uploading the entire container. Check for this by comparing the file hash before and after asset modifications.",
+  "diagram": {
+    "kind": "flow",
+    "title": "GLB Container Structure",
+    "description": "The flow shows how the GLB container organizes data for the rendering engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "GLB Header",
+        "detail": "Version and total length"
+      },
+      {
+        "id": "b",
+        "label": "JSON Chunk",
+        "detail": "Scene graph and metadata"
+      },
+      {
+        "id": "c",
+        "label": "Binary Chunk",
+        "detail": "Raw buffers for geometry/textures"
+      },
+      {
+        "id": "d",
+        "label": "Renderer",
+        "detail": "Client-side engine"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "defines structure"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "parses metadata"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "streams raw data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#glb-file-format-specification",
+      "label": "glTF 2.0 Specification"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Asset Delivery with Binary glTF, why is the .glb format preferred over separate files?",
+      "options": [
+        "It reduces HTTP requests and parsing overhead by packaging data into one container.",
+        "It allows for easier editing of individual texture files.",
+        "It automatically compresses all 3D geometry data.",
+        "It is the only format supported by modern web browsers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The .glb format addresses the problem of high latency by consolidating metadata and binary data, reducing the number of requests.",
+      "evidence": "The .glb format packages JSON metadata and binary buffers into a single container, enabling efficient streaming and reduced HTTP requests."
+    },
+    {
+      "question": "In Optimizing Asset Delivery with Binary glTF, what is a primary limitation of the format?",
+      "options": [
+        "It cannot store animation data.",
+        "It requires a specific server-side database.",
+        "Partial updates are difficult because the entire container must be re-uploaded.",
+        "It is incompatible with JSON-based metadata."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because the format is a single monolithic container, modifying one part of the asset necessitates replacing the whole file.",
+      "evidence": "The monolithic structure makes partial updates difficult; any change to a single texture requires re-uploading the entire container."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:47.816Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:44.840Z"
+}

@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "redis",
+  "title": "Real-time Inventory Caching for E-commerce",
+  "business": "Online retailers managing high-traffic flash sales.",
+  "problem": "Database contention occurs when thousands of concurrent users query the primary relational database for item availability, leading to latency spikes and potential checkout failures.",
+  "solution": "Implement Redis Hashes to store inventory counts in-memory, allowing the application to check stock levels with sub-millisecond latency before hitting the primary database.",
+  "steps": [
+    "Initialize a Redis Hash key for each product ID to store fields like 'stock_count' and 'reserved_count'.",
+    "On product page load, query the Redis Hash to display real-time availability.",
+    "During checkout, use atomic operations to decrement the stock count within the Redis Hash.",
+    "Periodically synchronize the final transaction state from Redis back to the primary relational database."
+  ],
+  "outcome": "Reduced load on the primary database and a smoother, more responsive user experience during high-traffic events.",
+  "limitation": "Redis is an in-memory store, meaning data persistence depends on configured snapshotting or append-only file settings; if the server crashes before a sync, updates in memory might be lost. Check persistence status using the INFO command.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Sync Flow",
+    "description": "Shows how user requests interact with Redis to offload the primary database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Customer browsing items"
+      },
+      {
+        "id": "b",
+        "label": "App Server",
+        "detail": "Application logic"
+      },
+      {
+        "id": "c",
+        "label": "Redis Hash",
+        "detail": "In-memory inventory state"
+      },
+      {
+        "id": "d",
+        "label": "Primary DB",
+        "detail": "Persistent record of truth"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request stock"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Read/Update stock"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Async sync"
+      }
+    ]
+  },
+  "code": {
+    "language": "pseudo-code",
+    "content": "HSET product:101 stock 50 reserved 0 // Initialize product inventory\nHINCRBY product:101 stock -1 // Atomically decrement stock during purchase",
+    "explanation": "Uses Redis Hashes to manage inventory fields and atomic increments to ensure thread-safe stock updates."
+  },
+  "sources": [
+    {
+      "url": "https://redis.io/docs/latest/develop/data-types/",
+      "label": "Redis data types"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Caching for E-commerce, why is Redis used?",
+      "options": [
+        "To replace the primary database entirely",
+        "To offload read/write pressure from the primary database",
+        "To perform complex relational joins on inventory",
+        "To store long-term historical sales logs"
+      ],
+      "answerIndex": 1,
+      "explanation": "Redis acts as a high-performance cache to handle frequent stock checks, preventing the primary database from becoming a bottleneck.",
+      "evidence": "Database contention occurs when thousands of concurrent users query the primary relational database for item availability, leading to latency spikes and potential checkout failures."
+    },
+    {
+      "question": "In Real-time Inventory Caching for E-commerce, what is a primary operational risk?",
+      "options": [
+        "High latency for all read operations",
+        "Inability to use atomic operations",
+        "Potential data loss if the server crashes before persistence",
+        "Requirement to use only string data types"
+      ],
+      "answerIndex": 2,
+      "explanation": "Because Redis is in-memory, it requires specific configuration for persistence; otherwise, data in memory is volatile.",
+      "evidence": "Redis is an in-memory store, meaning data persistence depends on configured snapshotting or append-only file settings; if the server crashes before a sync, updates in memory might be lost."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:05.519Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:01.152Z"
+}

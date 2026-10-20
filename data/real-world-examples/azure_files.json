@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_files",
+  "title": "Unified Hybrid File Storage for Engineering Teams",
+  "business": "Distributed engineering firms requiring consistent file access across local workstations and cloud-based compute clusters.",
+  "problem": "Fragmented data silos between on-premises CAD workstations and cloud-based rendering services lead to excessive data transfer latency and version synchronization errors.",
+  "solution": "Azure Files provides a managed, cloud-native file share that supports standard SMB and NFS protocols, allowing both local on-premises systems and cloud-based virtual machines to mount the same storage volume concurrently.",
+  "steps": [
+    "Create an Azure Storage account configured for the required file share protocol.",
+    "Provision a File Share resource within the storage account.",
+    "Configure network access controls to permit traffic from both the on-premises gateway and the cloud virtual network.",
+    "Mount the file share on local Windows or Linux workstations using standard SMB or NFS client commands.",
+    "Mount the same share on Azure-based compute nodes to enable shared data access."
+  ],
+  "outcome": "Engineering teams achieve a single source of truth for project files, eliminating manual synchronization steps and reducing data duplication across environments.",
+  "limitation": "The service is subject to network latency between the on-premises site and the Azure region; performance can be verified by monitoring the average latency metrics in Azure Monitor.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Hybrid File Access Architecture",
+    "description": "Shows how local and cloud clients access the central Azure Files storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises Workstation",
+        "detail": "Local engineering client"
+      },
+      {
+        "id": "b",
+        "label": "Azure Files Share",
+        "detail": "Managed SMB/NFS storage"
+      },
+      {
+        "id": "c",
+        "label": "Cloud Compute Node",
+        "detail": "Azure-based rendering engine"
+      },
+      {
+        "id": "d",
+        "label": "Network Gateway",
+        "detail": "Connectivity bridge"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "SMB/NFS traffic"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Secure tunnel"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Direct mount"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Hybrid File Storage for Engineering Teams, how does the solution address the problem of fragmented data?",
+      "options": [
+        "By providing a managed file share accessible via standard protocols from both cloud and on-premises environments.",
+        "By automatically converting all local files into a proprietary database format.",
+        "By forcing all engineering teams to migrate their local workstations to the cloud.",
+        "By using an AI-based agent to synchronize files between disparate servers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages Azure Files to provide a single, mountable volume that bridges the gap between local and cloud environments.",
+      "evidence": "Azure Files provides a managed, cloud-native file share that supports standard SMB and NFS protocols, allowing both local on-premises systems and cloud-based virtual machines to mount the same storage volume concurrently."
+    },
+    {
+      "question": "In Unified Hybrid File Storage for Engineering Teams, what is a primary limitation of the implementation?",
+      "options": [
+        "The inability to use standard SMB or NFS protocols.",
+        "The requirement to use a custom API for every file operation.",
+        "The potential for network latency between the on-premises site and the Azure region.",
+        "The lack of support for Windows-based workstations."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because the solution spans hybrid environments, the physical distance and network path between the on-premises site and the cloud region introduce latency.",
+      "evidence": "The service is subject to network latency between the on-premises site and the Azure region; performance can be verified by monitoring the average latency metrics in Azure Monitor."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:48.551Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

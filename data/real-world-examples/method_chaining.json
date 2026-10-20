@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "method_chaining",
+  "title": "Fluent Logistics Routing Configuration",
+  "business": "Logistics providers managing complex, multi-stop delivery routes.",
+  "problem": "Configuration code often becomes deeply nested and difficult to read when applying multiple sequential filters or transformations to a route object, leading to maintenance overhead.",
+  "solution": "Method chaining allows developers to invoke a sequence of operations on a route object by returning the receiver instance from each method, creating a fluent, readable interface that mimics a natural language configuration flow.",
+  "steps": [
+    "Define the base Route object to hold delivery parameters.",
+    "Implement configuration methods that modify internal state.",
+    "Ensure each configuration method returns the 'this' reference to the caller.",
+    "Construct the final route by appending method calls in a single statement.",
+    "Verify the final state of the object after the chain completes."
+  ],
+  "outcome": "Improved code readability and reduced boilerplate when setting up complex delivery constraints.",
+  "limitation": "Debugging becomes more difficult because stack traces may not clearly identify which specific link in the chain failed; check this by inspecting the object state before and after the chain execution.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Fluent Route Configuration Flow",
+    "description": "Shows how a Route object passes itself through successive configuration methods.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Route Object",
+        "detail": "Initial state"
+      },
+      {
+        "id": "b",
+        "label": "Set Origin",
+        "detail": "Returns Route"
+      },
+      {
+        "id": "c",
+        "label": "Add Stop",
+        "detail": "Returns Route"
+      },
+      {
+        "id": "d",
+        "label": "Set Priority",
+        "detail": "Returns Route"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "configure"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "chain"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "chain"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Fluent Logistics Routing Configuration, what is the primary benefit of using method chaining?",
+      "options": [
+        "It eliminates the need for a database.",
+        "It creates a readable, fluent interface for configuration.",
+        "It automatically optimizes delivery routes.",
+        "It prevents all runtime errors."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that chaining creates a fluent, readable interface that mimics natural language, solving the problem of nested, hard-to-read code.",
+      "evidence": "Method chaining allows developers to invoke a sequence of operations on a route object by returning the receiver instance from each method, creating a fluent, readable interface that mimics a natural language configuration flow."
+    },
+    {
+      "question": "In Fluent Logistics Routing Configuration, what is a noted limitation of the implementation?",
+      "options": [
+        "It increases the memory footprint of the object.",
+        "It requires a specific database schema.",
+        "It makes debugging harder due to opaque stack traces.",
+        "It cannot be used with complex business logic."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that debugging is harder because stack traces may not clearly identify the failing link in the chain.",
+      "evidence": "Debugging becomes more difficult because stack traces may not clearly identify which specific link in the chain failed; check this by inspecting the object state before and after the chain execution."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:27.101Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

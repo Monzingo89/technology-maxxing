@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "open_closed_principle",
+  "title": "Modular Logistics Routing Engine",
+  "business": "A global logistics provider managing diverse delivery fleets including drones, electric vans, and cargo ships.",
+  "problem": "The core routing engine contained a massive conditional block checking vehicle types. Every time a new vehicle type was introduced, developers had to modify the stable, tested routing logic, leading to frequent regressions and deployment delays.",
+  "solution": "Applying the Open-Closed Principle, the team refactored the routing engine to accept an interface for route calculation. New vehicle types are now implemented as separate classes that satisfy the interface, allowing the core engine to remain untouched while supporting new delivery methods.",
+  "steps": [
+    "Define a common interface for all routing strategies.",
+    "Extract existing vehicle-specific logic into separate concrete classes.",
+    "Inject the required strategy into the routing engine at runtime.",
+    "Register new vehicle types through a configuration registry rather than code changes."
+  ],
+  "outcome": "The core routing engine achieves high stability, as it no longer requires modification to support new vehicle types, significantly reducing the risk of side-effect bugs in existing delivery routes.",
+  "limitation": "The primary tradeoff is increased architectural complexity due to the proliferation of small classes. To verify this, developers should monitor the number of classes in the routing package; if the count grows excessively without clear domain boundaries, it indicates an over-abstraction of the system.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Routing Engine Extension Flow",
+    "description": "This diagram illustrates how the core engine interacts with new vehicle modules without modification.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Core Engine",
+        "detail": "Stable routing logic"
+      },
+      {
+        "id": "b",
+        "label": "Routing Interface",
+        "detail": "Contract for calculations"
+      },
+      {
+        "id": "c",
+        "label": "Drone Strategy",
+        "detail": "New vehicle logic"
+      },
+      {
+        "id": "d",
+        "label": "Van Strategy",
+        "detail": "Existing vehicle logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "depends on"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "implements"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "implements"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modular Logistics Routing Engine, what is the primary benefit of using the Open-Closed Principle?",
+      "options": [
+        "It prevents the need to modify stable routing logic when adding new vehicle types.",
+        "It automatically optimizes the fuel consumption of all delivery vehicles.",
+        "It reduces the total number of lines of code in the entire repository.",
+        "It eliminates the requirement for unit testing new vehicle modules."
+      ],
+      "answerIndex": 0,
+      "explanation": "The principle focuses on making systems extendable without modifying existing stable code, which directly addresses the problem of regression risks.",
+      "evidence": "The core routing engine contained a massive conditional block checking vehicle types. Every time a new vehicle type was introduced, developers had to modify the stable, tested routing logic, leading to frequent regressions and deployment delays."
+    },
+    {
+      "question": "In Modular Logistics Routing Engine, what is a potential drawback of this implementation?",
+      "options": [
+        "The system becomes impossible to test.",
+        "The core engine must be recompiled for every new vehicle.",
+        "Increased architectural complexity due to the proliferation of small classes.",
+        "The routing interface becomes too restrictive for future use."
+      ],
+      "answerIndex": 2,
+      "explanation": "Over-abstraction can lead to a large number of small, fragmented classes, which is a known tradeoff of this design pattern.",
+      "evidence": "The primary tradeoff is increased architectural complexity due to the proliferation of small classes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:48.809Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

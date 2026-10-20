@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "cross_site_scripting",
+  "title": "Securing User-Generated Content in Collaborative Dashboards",
+  "business": "A collaborative project management platform where users share dynamic status updates and custom dashboard widgets.",
+  "problem": "Malicious actors inject unauthorized JavaScript into shared dashboard widgets, which executes in the browser of other users, leading to session hijacking or unauthorized data exfiltration.",
+  "solution": "Implement a Defense in Depth strategy by enforcing strict output encoding and utilizing a Content Security Policy (CSP) to restrict script execution to trusted origins only.",
+  "steps": [
+    "Identify all points where user-provided data is rendered in the dashboard UI.",
+    "Apply context-aware output encoding to convert special characters into their safe HTML entity equivalents before rendering.",
+    "Configure a strict Content Security Policy (CSP) header to disable inline script execution and restrict script sources to known, trusted domains.",
+    "Validate all incoming widget configurations against a strict schema to prevent structural injection."
+  ],
+  "outcome": "The platform prevents arbitrary script execution, ensuring that even if malicious data is stored, it remains inert and harmless when viewed by other users.",
+  "limitation": "Strict output encoding can sometimes break legitimate rich-text formatting if not implemented with context-awareness; verify by testing complex inputs against the rendering engine.",
+  "diagram": {
+    "kind": "flow",
+    "title": "XSS Mitigation Flow",
+    "description": "The flow shows how data moves from user input to secure rendering.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Raw data from widget config"
+      },
+      {
+        "id": "b",
+        "label": "Validation Layer",
+        "detail": "Schema check for structure"
+      },
+      {
+        "id": "c",
+        "label": "Encoding Engine",
+        "detail": "Converts to HTML entities"
+      },
+      {
+        "id": "d",
+        "label": "Browser Rendering",
+        "detail": "Safe display to end user"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sanitize"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Encode"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Render"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing User-Generated Content in Collaborative Dashboards, what is the primary goal of the solution?",
+      "options": [
+        "To prevent unauthorized JavaScript execution in other users' browsers.",
+        "To increase the performance of the dashboard widget rendering.",
+        "To ensure all users have administrative access to the platform.",
+        "To allow users to execute custom scripts for better personalization."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution addresses the problem of malicious actors injecting unauthorized JavaScript that executes in the browser of other users.",
+      "evidence": "Malicious actors inject unauthorized JavaScript into shared dashboard widgets, which executes in the browser of other users, leading to session hijacking or unauthorized data exfiltration."
+    },
+    {
+      "question": "In Securing User-Generated Content in Collaborative Dashboards, what is a potential trade-off of the proposed mitigation?",
+      "options": [
+        "It makes the application completely immune to all future security threats.",
+        "It requires users to manually approve every script execution.",
+        "It may inadvertently break legitimate rich-text formatting if not context-aware.",
+        "It increases the latency of the database queries significantly."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that strict encoding can interfere with rich-text formatting if not handled correctly.",
+      "evidence": "Strict output encoding can sometimes break legitimate rich-text formatting if not implemented with context-awareness; verify by testing complex inputs against the rendering engine."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:45.132Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

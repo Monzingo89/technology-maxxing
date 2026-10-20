@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "rlaif",
+  "title": "Automated Policy Compliance for Legal Tech",
+  "business": "A legal technology firm providing automated contract review services to global law firms.",
+  "problem": "The firm struggles to scale human feedback for fine-tuning models to detect subtle policy violations in complex legal documents, as human legal experts are expensive and slow to provide consistent preference labels.",
+  "solution": "The firm implements Reinforcement Learning from AI Feedback (RLAIF) to replace manual labeling. By defining a set of constitutional principles regarding legal clarity and risk disclosure, a secondary AI model evaluates the outputs of the primary model. This AI-generated feedback creates a preference dataset, which is then used to train a reward model that guides the primary model's reinforcement learning process, ensuring consistent adherence to legal standards without constant human intervention.",
+  "steps": [
+    "Define a constitution consisting of specific legal principles and risk-disclosure rules.",
+    "Generate multiple model responses to complex contract queries.",
+    "Use a secondary AI model to evaluate and rank these responses based on the defined constitution.",
+    "Train a reward model using the AI-generated preference rankings.",
+    "Optimize the primary model using reinforcement learning against the reward model."
+  ],
+  "outcome": "The system achieves consistent, scalable alignment with legal policy requirements, significantly reducing the bottleneck of human expert review while maintaining high-quality, compliant output.",
+  "limitation": "A primary limitation is the potential for the model to inherit biases or blind spots from the constitutional rules themselves. To check for this, developers must perform periodic manual audits of the AI-ranked preferences to ensure the constitution is not inadvertently encouraging undesirable behavior.",
+  "diagram": {
+    "kind": "flow",
+    "title": "RLAIF Pipeline for Legal Compliance",
+    "description": "The flow shows how the primary model is refined through AI-based evaluation and reinforcement.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Primary Model",
+        "detail": "Generates initial contract review drafts"
+      },
+      {
+        "id": "b",
+        "label": "Constitutional Rules",
+        "detail": "Set of principles for legal compliance"
+      },
+      {
+        "id": "c",
+        "label": "AI Evaluator",
+        "detail": "Ranks responses based on rules"
+      },
+      {
+        "id": "d",
+        "label": "Reward Model",
+        "detail": "Learns to predict preferred outputs"
+      },
+      {
+        "id": "e",
+        "label": "RL Optimizer",
+        "detail": "Updates Primary Model weights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Generates candidates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides criteria"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Creates preference dataset"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Provides reward signal"
+      },
+      {
+        "from": "e",
+        "to": "a",
+        "label": "Refines policy"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2212.08073",
+      "label": "Constitutional AI: Harmlessness from AI Feedback"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Policy Compliance for Legal Tech, why is RLAIF chosen over traditional human-in-the-loop methods?",
+      "options": [
+        "Human legal experts are expensive and slow to provide consistent preference labels.",
+        "Human experts are unable to understand complex legal documents.",
+        "RLAIF is the only method that guarantees 100% legal accuracy.",
+        "The firm wants to eliminate the need for any legal oversight."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the cost and scalability issues of human feedback as the primary bottleneck for the firm.",
+      "evidence": "The firm struggles to scale human feedback for fine-tuning models to detect subtle policy violations in complex legal documents, as human legal experts are expensive and slow to provide consistent preference labels."
+    },
+    {
+      "question": "In Automated Policy Compliance for Legal Tech, what is a key limitation of the RLAIF approach?",
+      "options": [
+        "The model will always perform better than human experts.",
+        "The model may inherit biases or blind spots from the constitutional rules.",
+        "The reward model requires more human labels than the original model.",
+        "The system cannot be audited once the reinforcement learning phase begins."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the rules themselves can introduce unintended behaviors, necessitating manual audits.",
+      "evidence": "A primary limitation is the potential for the model to inherit biases or blind spots from the constitutional rules themselves."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:15.208Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:10.478Z"
+}

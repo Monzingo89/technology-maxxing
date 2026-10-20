@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "proxy_pattern",
+  "title": "Secure Document Access Proxy",
+  "business": "A legal firm managing sensitive client case files stored in a legacy document management system.",
+  "problem": "Direct access to the legacy system is unauthenticated and resource-heavy, causing system instability when multiple associates query large document blobs simultaneously.",
+  "solution": "Implementing a Proxy pattern introduces a stand-in object that intercepts requests to the legacy system, enforcing authentication checks and managing connection pooling before delegating the call to the real service.",
+  "steps": [
+    "Define a common interface shared by both the real document service and the proxy object.",
+    "Implement the proxy class to hold a reference to the real service object.",
+    "Add logic within the proxy to validate user credentials before forwarding requests.",
+    "Incorporate lazy initialization or connection pooling within the proxy to manage resource consumption.",
+    "Replace direct client calls to the legacy service with calls to the proxy instance."
+  ],
+  "outcome": "Improved system stability and centralized security enforcement without modifying the underlying legacy document management codebase.",
+  "limitation": "The proxy introduces an additional layer of indirection, which can increase latency for every request. To check for this, monitor the time difference between the proxy receiving a request and the real service completing the operation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Proxy Access Flow",
+    "description": "This diagram shows how a client interacts with the proxy instead of the legacy system directly.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Requests document"
+      },
+      {
+        "id": "b",
+        "label": "Proxy",
+        "detail": "Validates access"
+      },
+      {
+        "id": "c",
+        "label": "Legacy System",
+        "detail": "Real data source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "calls interface"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "delegates request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Document Access Proxy, what is the primary reason for using the proxy pattern?",
+      "options": [
+        "To replace the legacy system entirely",
+        "To enforce authentication and manage resource-heavy requests",
+        "To increase the speed of the legacy system",
+        "To store all documents in a local cache"
+      ],
+      "answerIndex": 1,
+      "explanation": "The proxy acts as a gatekeeper to handle security and resource management before reaching the real service.",
+      "evidence": "Implementing a Proxy pattern introduces a stand-in object that intercepts requests to the legacy system, enforcing authentication checks and managing connection pooling before delegating the call to the real service."
+    },
+    {
+      "question": "In Secure Document Access Proxy, what is a potential trade-off of this implementation?",
+      "options": [
+        "Increased latency due to the extra layer of indirection",
+        "The legacy system becomes harder to maintain",
+        "The client must know the internal details of the legacy system",
+        "It prevents the use of connection pooling"
+      ],
+      "answerIndex": 0,
+      "explanation": "Adding a proxy layer adds a step in the execution path, which inherently introduces a small amount of latency.",
+      "evidence": "The proxy introduces an additional layer of indirection, which can increase latency for every request."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:53.647Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

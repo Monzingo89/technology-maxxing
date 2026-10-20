@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "abstract_factory_pattern",
+  "title": "Cross-Platform Logistics Dashboard Integration",
+  "business": "Global logistics firms managing multi-modal transport fleets.",
+  "problem": "The firm struggles with inconsistent UI and data formatting when switching between regional transport management systems (e.g., European rail vs. North American trucking), leading to high maintenance costs for the dashboard layer.",
+  "solution": "The Abstract Factory Pattern creates related object families through a common interface, allowing the dashboard to request UI components and data parsers from a specific regional factory without knowing the underlying implementation details of the transport system.",
+  "steps": [
+    "Define an Abstract Factory interface declaring creation methods for each required component type.",
+    "Implement Concrete Factories for each region, such as RailTransportFactory and TruckingTransportFactory.",
+    "Create abstract product interfaces for UI elements and data parsers.",
+    "Implement concrete product classes that adhere to the product interfaces for each specific region.",
+    "Configure the application to inject the appropriate factory at runtime based on the user's selected region."
+  ],
+  "outcome": "The dashboard achieves complete decoupling from regional logic, enabling the addition of new transport modes without modifying existing UI code.",
+  "limitation": "The pattern introduces significant complexity when adding new product types, as every concrete factory must be updated to support the new interface; check for this by auditing the number of factory implementations required for each new feature.",
+  "diagram": {
+    "kind": "er",
+    "title": "Abstract Factory Component Relationships",
+    "description": "Shows how the Client interacts with the Abstract Factory to produce specific products.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Dashboard UI logic"
+      },
+      {
+        "id": "b",
+        "label": "AbstractFactory",
+        "detail": "Interface for creating product families"
+      },
+      {
+        "id": "c",
+        "label": "ConcreteFactory",
+        "detail": "Regional implementation"
+      },
+      {
+        "id": "d",
+        "label": "AbstractProduct",
+        "detail": "Common interface for UI/Data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "uses"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "implements"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "creates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Platform Logistics Dashboard Integration, what is the primary benefit of using the Abstract Factory Pattern?",
+      "options": [
+        "Decoupling the dashboard from regional implementation details",
+        "Reducing the number of database queries in the system",
+        "Automatically converting all legacy data formats",
+        "Increasing the speed of the UI rendering engine"
+      ],
+      "answerIndex": 0,
+      "explanation": "The pattern allows the dashboard to request components without knowing the specific regional implementation.",
+      "evidence": "The dashboard achieves complete decoupling from regional logic, enabling the addition of new transport modes without modifying existing UI code."
+    },
+    {
+      "question": "In Cross-Platform Logistics Dashboard Integration, what is a key limitation of the pattern?",
+      "options": [
+        "It prevents the use of multiple factories simultaneously",
+        "It requires updating all concrete factories when adding new product types",
+        "It forces the use of a single global database connection",
+        "It makes the system impossible to unit test"
+      ],
+      "answerIndex": 1,
+      "explanation": "Adding new products requires modifying all existing factories, which is a known trade-off of this pattern.",
+      "evidence": "The pattern introduces significant complexity when adding new product types, as every concrete factory must be updated to support the new interface"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:11.783Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

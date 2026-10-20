@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "vite",
+  "title": "Optimizing Legacy Monorepo Frontend Iteration",
+  "business": "A mid-sized enterprise managing a complex internal dashboard suite composed of multiple legacy React modules.",
+  "problem": "The existing build pipeline relies on a monolithic bundler that requires a full re-compilation of the entire dependency graph whenever a single UI component is modified, leading to significant developer idle time during local development.",
+  "solution": "Transitioning the development environment to Vite leverages native ES modules to serve source files on-demand, bypassing the need for full-bundle regeneration during the development phase.",
+  "steps": [
+    "Initialize a Vite project within the existing monorepo structure to serve as the new development orchestrator.",
+    "Configure the Vite dev server to proxy requests to the legacy backend API endpoints.",
+    "Implement Vite-specific plugins to handle legacy module resolution and TypeScript transpilation.",
+    "Replace the legacy dev script with the Vite CLI to enable instant Hot Module Replacement for UI components."
+  ],
+  "outcome": "Developers experience near-instant feedback loops when modifying UI components, significantly reducing context switching and improving the daily development velocity.",
+  "limitation": "Vite's reliance on native ESM can lead to inconsistencies between the development environment and the production build if legacy dependencies are not properly pre-bundled or if they rely on non-standard CommonJS patterns that require specific plugin configuration to resolve.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Vite Development Workflow",
+    "description": "The flow shows how Vite intercepts requests to serve modules directly to the browser.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Modifies source code"
+      },
+      {
+        "id": "b",
+        "label": "Vite Dev Server",
+        "detail": "Handles on-demand ESM requests"
+      },
+      {
+        "id": "c",
+        "label": "Browser",
+        "detail": "Executes native ESM"
+      },
+      {
+        "id": "d",
+        "label": "Legacy API",
+        "detail": "Backend data source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers HMR"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "serves updated module"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "proxies API calls"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// vite.config.js\nimport { defineConfig } from 'vite';\n\nexport default defineConfig({\n  server: {\n    proxy: {\n      // Proxying API requests to legacy backend\n      '/api': 'http://localhost:8080'\n    }\n  }\n});",
+    "explanation": "This configuration maps the Vite dev server to the existing legacy backend, allowing the frontend to function correctly during development."
+  },
+  "sources": [
+    {
+      "url": "https://vite.dev/",
+      "label": "Vite | Next Generation Frontend Tooling"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Legacy Monorepo Frontend Iteration, what is the primary cause of developer idle time?",
+      "options": [
+        "The requirement for full re-compilation of the dependency graph.",
+        "The lack of TypeScript support in the legacy environment.",
+        "The inability to proxy requests to the backend API.",
+        "The absence of a plugin system for module resolution."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the monolithic bundler forces a full re-compilation, which is the specific bottleneck addressed by Vite.",
+      "evidence": "The existing build pipeline relies on a monolithic bundler that requires a full re-compilation of the entire dependency graph whenever a single UI component is modified, leading to significant developer idle time during local development."
+    },
+    {
+      "question": "In Optimizing Legacy Monorepo Frontend Iteration, what is a potential risk when adopting Vite?",
+      "options": [
+        "Increased production bundle size due to native ESM.",
+        "Inconsistencies between development and production due to legacy dependency patterns.",
+        "The inability to use TypeScript in the production build.",
+        "A mandatory requirement to rewrite the entire backend in JavaScript."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that reliance on native ESM can cause discrepancies if legacy dependencies are not handled correctly.",
+      "evidence": "Vite's reliance on native ESM can lead to inconsistencies between the development environment and the production build if legacy dependencies are not properly pre-bundled or if they rely on non-standard CommonJS patterns that require specific plugin configuration to resolve."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:12.361Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:08.379Z"
+}

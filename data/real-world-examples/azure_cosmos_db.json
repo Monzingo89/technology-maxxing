@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_cosmos_db",
+  "title": "Global Inventory Synchronization for Retail",
+  "business": "Global retail chains managing stock levels across multiple continents.",
+  "problem": "High latency in regional database updates leads to inventory overselling during peak traffic.",
+  "solution": "Azure Cosmos DB provides globally distributed multi-model NoSQL APIs with tunable consistency, allowing the application to replicate inventory state across regions while selecting the appropriate consistency level to balance performance and data accuracy.",
+  "steps": [
+    "Provision an Azure Cosmos DB account with multi-region write capabilities enabled.",
+    "Define the partition key based on product categories to ensure horizontal scalability.",
+    "Configure the consistency level to Session or Bounded Staleness based on regional requirements.",
+    "Implement application logic to handle cross-region data synchronization via the SDK."
+  ],
+  "outcome": "Improved user experience through reduced latency for regional read/write operations and consistent inventory visibility.",
+  "limitation": "Choosing a weaker consistency level can lead to temporary data staleness; developers must verify the consistency requirements per operation to ensure business logic remains valid.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Global Inventory Data Flow",
+    "description": "Shows how regional clients interact with the globally distributed database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional App",
+        "detail": "User interface in Asia"
+      },
+      {
+        "id": "b",
+        "label": "Regional App",
+        "detail": "User interface in Europe"
+      },
+      {
+        "id": "c",
+        "label": "Cosmos DB",
+        "detail": "Global Database Engine"
+      },
+      {
+        "id": "d",
+        "label": "Storage",
+        "detail": "Replicated Data Nodes"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Write Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Read Request"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Replicate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Synchronization for Retail, how does Azure Cosmos DB address the identified problem?",
+      "options": [
+        "By providing globally distributed multi-model NoSQL APIs with tunable consistency.",
+        "By forcing all database traffic through a single central region.",
+        "By replacing the need for partition keys in NoSQL databases.",
+        "By automatically increasing the price of database storage during peak traffic."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the global distribution and tunable consistency features of the database to manage inventory state effectively.",
+      "evidence": "Azure Cosmos DB provides globally distributed multi-model NoSQL APIs with tunable consistency, allowing the application to replicate inventory state across regions while selecting the appropriate consistency level to balance performance and data accuracy."
+    },
+    {
+      "question": "In Global Inventory Synchronization for Retail, what is a primary limitation of the implementation?",
+      "options": [
+        "The database cannot be used for retail applications.",
+        "Weaker consistency levels may cause temporary data staleness.",
+        "Partition keys are not supported in this architecture.",
+        "Global distribution is only available for SQL-based databases."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly states that choosing weaker consistency levels introduces the risk of data staleness, which requires careful management.",
+      "evidence": "Choosing a weaker consistency level can lead to temporary data staleness; developers must verify the consistency requirements per operation to ensure business logic remains valid."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:42.762Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

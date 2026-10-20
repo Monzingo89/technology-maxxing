@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "react",
+  "title": "Synchronized Inventory Dashboard",
+  "business": "Retailers managing multi-location stock levels",
+  "problem": "Inconsistent stock displays across different UI widgets lead to customer confusion and overselling.",
+  "solution": "Utilize React's state lifting pattern to maintain a single source of truth for inventory counts, ensuring all UI components reflect the same data via one-way data flow.",
+  "steps": [
+    "Identify the common parent component that encompasses all inventory display widgets.",
+    "Move the inventory count state variable from individual child components to the parent.",
+    "Define an event handler function in the parent to update the state.",
+    "Pass the current count and the handler function down to child components as props.",
+    "Update child components to read the count from props and trigger the handler on interaction."
+  ],
+  "outcome": "A unified interface where every stock widget updates simultaneously, providing a consistent user experience.",
+  "limitation": "Prop drilling can occur if state must be passed through many layers of intermediate components, which can be checked by monitoring component depth and complexity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "State Lifting Data Flow",
+    "description": "Shows how state moves from children to a parent and flows back down as props.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Parent Component",
+        "detail": "Holds state and handler"
+      },
+      {
+        "id": "b",
+        "label": "Child Widget 1",
+        "detail": "Displays count, calls handler"
+      },
+      {
+        "id": "c",
+        "label": "Child Widget 2",
+        "detail": "Displays count, calls handler"
+      }
+    ],
+    "edges": [
+      {
+        "from": "b",
+        "to": "a",
+        "label": "triggers handler"
+      },
+      {
+        "from": "a",
+        "to": "b",
+        "label": "passes props"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "passes props"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "function InventoryManager() {\n  const [stock, setStock] = useState(10); // Centralized state\n  return <Widget count={stock} onUpdate={() => setStock(stock - 1)} />;\n}\nfunction Widget({ count, onUpdate }) {\n  return <button onClick={onUpdate}>{count}</button>; // Consumes props\n}",
+    "explanation": "This demonstrates lifting state to the parent and passing it down as props to ensure consistent data across widgets."
+  },
+  "sources": [
+    {
+      "url": "https://react.dev/learn",
+      "label": "Quick Start"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronized Inventory Dashboard, why is state lifting the preferred solution?",
+      "options": [
+        "It prevents multiple components from having conflicting, independent stock values.",
+        "It automatically syncs data with the backend database without extra code.",
+        "It allows components to bypass the one-way data flow constraint.",
+        "It eliminates the need for event handlers in child components."
+      ],
+      "answerIndex": 0,
+      "explanation": "Lifting state ensures a single source of truth, preventing the inconsistency described in the problem.",
+      "evidence": "Inconsistent stock displays across different UI widgets lead to customer confusion and overselling."
+    },
+    {
+      "question": "What is a potential limitation of the implementation in Synchronized Inventory Dashboard?",
+      "options": [
+        "The browser will crash if state is updated too frequently.",
+        "Prop drilling may occur if the component tree becomes too deep.",
+        "React requires all components to share the same state.",
+        "Event handlers cannot be passed as props in React."
+      ],
+      "answerIndex": 1,
+      "explanation": "Prop drilling is a known trade-off when moving state up through multiple layers of components.",
+      "evidence": "Prop drilling can occur if state must be passed through many layers of intermediate components, which can be checked by monitoring component depth and complexity."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:57.426Z",
+  "sourceRetrievedAt": "2026-10-18T00:51:56.523Z"
+}

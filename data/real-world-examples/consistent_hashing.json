@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "consistent_hashing",
+  "title": "Dynamic Cache Scaling for Global Content Delivery",
+  "business": "A global media streaming platform that caches video fragments across distributed edge servers.",
+  "problem": "When the number of edge servers changes, traditional modulo-based hashing causes a massive remapping of keys, resulting in cache misses that overwhelm the origin server during scaling events.",
+  "solution": "Consistent hashing maps both keys and nodes onto a logical ring using a hash function. By assigning each node to multiple points on the ring, the system ensures that when a node is added or removed, only the keys in the immediate neighborhood of that node need to be remapped, rather than the entire dataset.",
+  "steps": [
+    "Map all available edge server nodes to multiple positions on a circular hash ring.",
+    "Hash each incoming content request key to a specific point on the same ring.",
+    "Traverse the ring clockwise from the key's position to find the first encountered node.",
+    "Route the request to that identified node for cache retrieval.",
+    "Update only the affected segments of the ring when a node joins or leaves the cluster."
+  ],
+  "outcome": "The platform achieves stable cache hit ratios during infrastructure scaling, preventing origin server overload.",
+  "limitation": "The primary trade-off is the potential for non-uniform distribution of keys across nodes, which can lead to hotspots; this is checked by monitoring the load variance across nodes and increasing the number of virtual nodes per physical server to improve balance.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Consistent Hashing Ring Topology",
+    "description": "Shows how keys are mapped to the nearest clockwise node on a ring.",
+    "nodes": [
+      {
+        "id": "ring",
+        "label": "Hash Ring",
+        "detail": "Logical circular space 0 to 2^n-1"
+      },
+      {
+        "id": "nodeA",
+        "label": "Node A",
+        "detail": "Physical server at position X"
+      },
+      {
+        "id": "nodeB",
+        "label": "Node B",
+        "detail": "Physical server at position Y"
+      },
+      {
+        "id": "key1",
+        "label": "Content Key",
+        "detail": "Request hash at position Z"
+      }
+    ],
+    "edges": [
+      {
+        "from": "key1",
+        "to": "nodeA",
+        "label": "maps to nearest clockwise"
+      },
+      {
+        "from": "nodeA",
+        "to": "nodeB",
+        "label": "ring progression"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Cache Scaling for Global Content Delivery, why is consistent hashing preferred over standard modulo hashing?",
+      "options": [
+        "It eliminates the need for a hash function entirely.",
+        "It minimizes key remapping when the number of nodes changes.",
+        "It guarantees that every node receives an identical number of requests.",
+        "It forces all nodes to store the same data for redundancy."
+      ],
+      "answerIndex": 1,
+      "explanation": "Consistent hashing is designed to move relatively few keys when membership changes, preventing the mass cache invalidation seen in modulo hashing.",
+      "evidence": "By assigning each node to multiple points on the ring, the system ensures that when a node is added or removed, only the keys in the immediate neighborhood of that node need to be remapped, rather than the entire dataset."
+    },
+    {
+      "question": "In Dynamic Cache Scaling for Global Content Delivery, what is a primary limitation of the implementation?",
+      "options": [
+        "The ring cannot support more than ten nodes.",
+        "It requires a central database to track every individual key.",
+        "It may result in uneven key distribution leading to hotspots.",
+        "It prevents the system from ever adding new nodes."
+      ],
+      "answerIndex": 2,
+      "explanation": "Consistent hashing can lead to uneven distribution if nodes are not placed optimally or if the hash function is not perfectly uniform, creating hotspots.",
+      "evidence": "The primary trade-off is the potential for non-uniform distribution of keys across nodes, which can lead to hotspots; this is checked by monitoring the load variance across nodes and increasing the number of virtual nodes per physical server to improve balance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:29.946Z"
+}

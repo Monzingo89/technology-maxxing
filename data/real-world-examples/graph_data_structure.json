@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "graph_data_structure",
+  "title": "Supply Chain Logistics Routing",
+  "business": "Global logistics providers managing complex distribution networks",
+  "problem": "Inefficient routing of goods across multiple transit hubs leads to excessive fuel costs and delayed delivery times due to lack of visibility into interconnected paths.",
+  "solution": "Implementing a graph data structure allows the business to model transit hubs as vertices and shipping lanes as directed edges, enabling the use of pathfinding algorithms to identify the most efficient delivery routes.",
+  "steps": [
+    "Define each distribution center as a vertex in the graph.",
+    "Create directed edges between vertices to represent available shipping lanes.",
+    "Assign weights to edges based on transit time or fuel cost.",
+    "Execute a shortest-path algorithm to calculate the optimal route between origin and destination nodes."
+  ],
+  "outcome": "Improved operational efficiency through optimized routing and reduced transit times across the network.",
+  "limitation": "The memory overhead of storing dense graphs with many edges can become significant; check this by monitoring the adjacency list size relative to the total number of possible connections.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Network Model",
+    "description": "Nodes represent physical locations, while edges represent directed shipping routes with associated costs.",
+    "nodes": [
+      {
+        "id": "hub_a",
+        "label": "Origin Hub",
+        "detail": "Primary distribution center"
+      },
+      {
+        "id": "hub_b",
+        "label": "Transit Hub",
+        "detail": "Intermediate sorting facility"
+      },
+      {
+        "id": "hub_c",
+        "label": "Destination Hub",
+        "detail": "Final delivery point"
+      }
+    ],
+    "edges": [
+      {
+        "from": "hub_a",
+        "to": "hub_b",
+        "label": "1:1 Route"
+      },
+      {
+        "from": "hub_b",
+        "to": "hub_c",
+        "label": "1:1 Route"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Logistics Routing, how does the graph structure resolve the identified problem?",
+      "options": [
+        "By modeling hubs as vertices and lanes as edges to enable pathfinding.",
+        "By replacing all existing shipping lanes with a single central hub.",
+        "By increasing the number of physical trucks in the fleet.",
+        "By ignoring transit times to focus solely on fuel costs."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on representing the network as a graph to calculate optimal routes.",
+      "evidence": "Implementing a graph data structure allows the business to model transit hubs as vertices and shipping lanes as directed edges, enabling the use of pathfinding algorithms to identify the most efficient delivery routes."
+    },
+    {
+      "question": "What is a primary limitation of the graph approach in Supply Chain Logistics Routing?",
+      "options": [
+        "The inability to represent more than two locations.",
+        "The memory overhead of storing dense graphs with many edges.",
+        "The requirement to use only undirected edges.",
+        "The lack of support for pathfinding algorithms."
+      ],
+      "answerIndex": 1,
+      "explanation": "Large graphs with many connections consume significant memory, which is a noted trade-off.",
+      "evidence": "The memory overhead of storing dense graphs with many edges can become significant; check this by monitoring the adjacency list size relative to the total number of possible connections."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:52.468Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

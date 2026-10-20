@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "aws_sqs",
+  "title": "Decoupling Order Processing for Artisan Marketplace",
+  "business": "An online artisan marketplace where independent creators list unique, handcrafted goods for global buyers.",
+  "problem": "During high-traffic seasonal sales events, the monolithic order-processing service frequently crashes because it cannot handle the sudden spike in concurrent database write requests, leading to lost orders and frustrated customers.",
+  "solution": "By implementing Amazon SQS, the marketplace decouples the front-end order submission from the back-end fulfillment logic. When a customer places an order, the web application sends a message to an SQS queue instead of attempting a direct database write. A separate worker service polls the queue to process orders at a sustainable rate, ensuring the system remains responsive even when order volume exceeds the immediate processing capacity of the database.",
+  "steps": [
+    "Provision an SQS queue configured to hold order data payloads.",
+    "Update the order submission API to transmit order details as a message to the SQS queue.",
+    "Develop a worker application that polls the queue for new messages.",
+    "Implement logic in the worker to parse the message and execute the database write operation.",
+    "Configure the worker to delete the message from the queue only after successful database persistence."
+  ],
+  "outcome": "The marketplace achieves increased system resilience, as order submissions are successfully buffered during traffic surges, preventing service outages and ensuring no order data is discarded.",
+  "limitation": "A primary limitation is the potential for message latency, as the decoupling introduces a delay between order placement and fulfillment. This can be monitored by checking the ApproximateAgeOfOldestMessage metric to ensure the worker service is keeping pace with the incoming message rate.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Order Decoupling Workflow",
+    "description": "This flow shows how order data moves from the user through the queue to the database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Customer",
+        "detail": "Initiates order submission"
+      },
+      {
+        "id": "b",
+        "label": "Order API",
+        "detail": "Receives request and sends to SQS"
+      },
+      {
+        "id": "c",
+        "label": "SQS Queue",
+        "detail": "Buffers order messages"
+      },
+      {
+        "id": "d",
+        "label": "Worker Service",
+        "detail": "Processes messages asynchronously"
+      },
+      {
+        "id": "e",
+        "label": "Database",
+        "detail": "Stores final order records"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Submits order"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Enqueues message"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Polls message"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Writes record"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Order Processing for Artisan Marketplace, how does SQS solve the problem of service crashes?",
+      "options": [
+        "By increasing the database write speed directly.",
+        "By buffering order messages to allow for sustainable processing rates.",
+        "By eliminating the need for a database entirely.",
+        "By forcing customers to wait until the database is ready."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explains that SQS acts as a buffer between the front-end and back-end, allowing the system to handle spikes without overwhelming the database.",
+      "evidence": "A separate worker service polls the queue to process orders at a sustainable rate, ensuring the system remains responsive even when order volume exceeds the immediate processing capacity of the database."
+    },
+    {
+      "question": "In Decoupling Order Processing for Artisan Marketplace, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than ten orders per hour.",
+        "The database will always crash regardless of the queue.",
+        "The introduction of message latency between order placement and fulfillment.",
+        "The queue requires manual deletion of every message by the customer."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies that decoupling introduces a delay in processing, which is a trade-off for system stability.",
+      "evidence": "A primary limitation is the potential for message latency, as the decoupling introduces a delay between order placement and fulfillment."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:18.753Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

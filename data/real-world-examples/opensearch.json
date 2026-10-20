@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "opensearch",
+  "title": "Optimizing Global Logistics Inventory Visibility",
+  "business": "A global logistics provider managing millions of SKU movements across regional distribution centers.",
+  "problem": "The company struggles with fragmented data silos where regional managers cannot perform real-time cross-region inventory analysis, leading to stock imbalances and delayed fulfillment.",
+  "solution": "By centralizing logistics logs and inventory snapshots into OpenSearch, the company can utilize indexed document search to perform complex aggregations across disparate datasets, visualizing the results through OpenSearch Dashboards for unified operational oversight.",
+  "steps": [
+    "Define index mappings to ensure SKU identifiers and location timestamps are indexed as searchable keywords.",
+    "Ingest real-time logistics event streams into the OpenSearch cluster using a unified index pattern.",
+    "Construct aggregation queries using the Query DSL to calculate inventory levels per region and category.",
+    "Create OpenSearch Dashboards visualizations to map inventory density and identify regional supply gaps.",
+    "Configure index lifecycle management to transition older logistics logs to cost-effective storage tiers."
+  ],
+  "outcome": "The logistics team achieves a unified view of global inventory, enabling proactive stock redistribution and improved fulfillment accuracy.",
+  "limitation": "The primary limitation is the resource overhead of performing deep aggregations on high-cardinality fields, which can lead to increased latency; this is checked by monitoring the search execution time in the OpenSearch slow logs.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Data Aggregation Flow",
+    "description": "This diagram illustrates how raw logistics events are transformed into actionable dashboard insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Logistics Events",
+        "detail": "Raw JSON documents containing SKU, Location, and Timestamp"
+      },
+      {
+        "id": "b",
+        "label": "OpenSearch Index",
+        "detail": "Indexed documents optimized for search and aggregation"
+      },
+      {
+        "id": "c",
+        "label": "Query DSL",
+        "detail": "Aggregation logic for grouping and calculating metrics"
+      },
+      {
+        "id": "d",
+        "label": "Dashboards",
+        "detail": "Visual representation of aggregated inventory data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion (1:N)"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Search/Aggregate (1:1)"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Visualize (1:N)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.opensearch.org/latest/about/",
+      "label": "OpenSearch and OpenSearch Dashboards | OpenSearch Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Global Logistics Inventory Visibility, what is the primary problem addressed by the solution?",
+      "options": [
+        "Fragmented data silos preventing cross-region inventory analysis.",
+        "High costs associated with physical warehouse storage.",
+        "Lack of qualified personnel to manage logistics software.",
+        "Inability to track individual SKU movements in real-time."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies fragmented data silos as the core issue preventing regional managers from performing unified analysis.",
+      "evidence": "The company struggles with fragmented data silos where regional managers cannot perform real-time cross-region inventory analysis, leading to stock imbalances and delayed fulfillment."
+    },
+    {
+      "question": "In Optimizing Global Logistics Inventory Visibility, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use Query DSL for complex calculations.",
+        "The resource overhead of performing deep aggregations on high-cardinality fields.",
+        "The requirement to use proprietary hardware for indexing.",
+        "The lack of visualization tools within the OpenSearch suite."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text notes that deep aggregations on high-cardinality fields can cause latency, which is a known trade-off.",
+      "evidence": "The primary limitation is the resource overhead of performing deep aggregations on high-cardinality fields, which can lead to increased latency; this is checked by monitoring the search execution time in the OpenSearch slow logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:55.876Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:52.081Z"
+}

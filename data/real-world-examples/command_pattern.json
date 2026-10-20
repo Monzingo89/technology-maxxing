@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "command_pattern",
+  "title": "Automated Warehouse Task Orchestrator",
+  "business": "Large-scale automated fulfillment centers managing robotic picking units.",
+  "problem": "Directly invoking hardware control methods from the user interface layer creates tight coupling, making it impossible to queue, undo, or log complex multi-step robotic movements without breaking the system architecture.",
+  "solution": "The Command Pattern encapsulates each robotic action as a discrete object. By representing a request as an object with execution semantics, the system decouples the invoker (the UI or scheduler) from the receiver (the robotic hardware). This allows the warehouse controller to store, prioritize, and replay sequences of operations independently of the specific hardware implementation.",
+  "steps": [
+    "Define a Command interface with an execute method.",
+    "Create concrete command classes for specific actions like MoveTo, PickItem, and DropOff.",
+    "Implement a Command Invoker that maintains a queue of command objects.",
+    "Pass the receiver object to the concrete command constructor to bind the action to the hardware.",
+    "Execute commands from the queue sequentially or based on priority logic."
+  ],
+  "outcome": "Improved system flexibility, allowing for robust undo operations and the ability to buffer hardware requests during peak demand periods without blocking the main application thread.",
+  "limitation": "The primary limitation is the potential for class explosion, where every minor operation requires a new class definition. You can check for this by monitoring the number of command subclasses relative to the core business logic; if the command hierarchy grows disproportionately to the actual functionality, consider consolidating similar operations into parameterized commands.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Command Execution Flow",
+    "description": "The flow shows how a request is transformed into an object and processed.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Invoker",
+        "detail": "UI or Scheduler"
+      },
+      {
+        "id": "b",
+        "label": "Command Object",
+        "detail": "Encapsulated Request"
+      },
+      {
+        "id": "c",
+        "label": "Receiver",
+        "detail": "Robotic Hardware"
+      },
+      {
+        "id": "d",
+        "label": "Execution Log",
+        "detail": "Audit Trail"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "instantiates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes action"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "records state"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Warehouse Task Orchestrator, why is the Command Pattern used to address the problem of tight coupling?",
+      "options": [
+        "It allows the system to store, prioritize, and replay sequences of operations independently.",
+        "It replaces the need for a database by storing all state in memory.",
+        "It automatically optimizes the physical speed of the robotic hardware.",
+        "It eliminates the need for a user interface layer entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The pattern decouples the invoker from the receiver, enabling the orchestration of requests as objects.",
+      "evidence": "By representing a request as an object with execution semantics, the system decouples the invoker (the UI or scheduler) from the receiver (the robotic hardware). This allows the warehouse controller to store, prioritize, and replay sequences of operations independently of the specific hardware implementation."
+    },
+    {
+      "question": "In Automated Warehouse Task Orchestrator, what is a primary limitation of the implementation?",
+      "options": [
+        "The system becomes too fast for the hardware to process.",
+        "The potential for class explosion where every minor operation requires a new class.",
+        "It prevents the use of asynchronous processing.",
+        "It requires a complete rewrite of the database schema."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that creating a class for every operation can lead to an unmanageable number of classes.",
+      "evidence": "The primary limitation is the potential for class explosion, where every minor operation requires a new class definition."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:20.962Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "node",
+  "title": "Real-time Inventory Synchronization for Distributed Retail",
+  "business": "A regional retail chain managing inventory across multiple physical storefronts and an e-commerce platform.",
+  "problem": "The business suffers from inventory drift where online orders are accepted for items already sold in physical stores, leading to customer dissatisfaction and manual reconciliation costs.",
+  "solution": "Node.js provides an event-driven, non-blocking I/O architecture that allows the central inventory system to handle thousands of concurrent status updates from various store point-of-sale systems without blocking the main execution thread.",
+  "steps": [
+    "Initialize a central Node.js server using the http module to listen for incoming inventory update requests from store terminals.",
+    "Implement an event-driven pattern using the EventEmitter class to decouple the receipt of an update from the database persistence logic.",
+    "Utilize the node:fs module or a database driver to asynchronously update the master inventory record upon receiving a validated event.",
+    "Emit a broadcast event to all connected web clients via WebSockets to ensure the e-commerce storefront reflects the new stock level immediately."
+  ],
+  "outcome": "The system achieves near-instantaneous inventory consistency across all sales channels, significantly reducing the frequency of oversold items.",
+  "limitation": "Because Node.js operates on a single-threaded event loop, CPU-intensive tasks like complex data transformation or heavy image processing can block the loop and delay inventory updates. You can check for this by monitoring the event loop lag using the perf_hooks module.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Update Event Flow",
+    "description": "This diagram illustrates how inventory changes propagate through the Node.js runtime.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "POS Terminal",
+        "detail": "Source of inventory change"
+      },
+      {
+        "id": "b",
+        "label": "Node.js Server",
+        "detail": "Event-driven runtime"
+      },
+      {
+        "id": "c",
+        "label": "Database",
+        "detail": "Persistent storage"
+      },
+      {
+        "id": "d",
+        "label": "E-commerce UI",
+        "detail": "Client-facing display"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends update request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Asynchronously writes"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Broadcasts change"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const EventEmitter = require('node:events');\nconst inventoryEmitter = new EventEmitter();\n\n// Listener for inventory changes\ninventoryEmitter.on('update', (item) => {\n  // Asynchronously update database record\n  console.log(`Updating ${item.id} to ${item.count}`);\n});\n\n// Triggering an event without blocking the main thread\ninventoryEmitter.emit('update', { id: 'SKU123', count: 5 });",
+    "explanation": "This code demonstrates the event-driven architecture used to decouple inventory updates from the main request-response cycle, allowing the server to remain responsive."
+  },
+  "sources": [
+    {
+      "url": "https://nodejs.org/api/",
+      "label": "Node.js v26.12.0 Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Synchronization for Distributed Retail, why is Node.js chosen for the inventory system?",
+      "options": [
+        "To provide a non-blocking I/O architecture for handling concurrent updates.",
+        "To replace the need for a persistent database entirely.",
+        "To eliminate the requirement for network communication.",
+        "To increase the CPU clock speed of the server hardware."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights the need to handle many concurrent updates without blocking, which is the primary strength of the Node.js event-driven model.",
+      "evidence": "Node.js provides an event-driven, non-blocking I/O architecture that allows the central inventory system to handle thousands of concurrent status updates from various store point-of-sale systems without blocking the main execution thread."
+    },
+    {
+      "question": "In Real-time Inventory Synchronization for Distributed Retail, what is a primary limitation of the implementation?",
+      "options": [
+        "The system cannot connect to more than two databases.",
+        "CPU-intensive tasks can block the event loop and delay updates.",
+        "The EventEmitter class is deprecated in modern versions.",
+        "The system requires a multi-threaded language for all operations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly warns that CPU-intensive work can block the single-threaded event loop, which is a known trade-off of the Node.js architecture.",
+      "evidence": "Because Node.js operates on a single-threaded event loop, CPU-intensive tasks like complex data transformation or heavy image processing can block the loop and delay inventory updates."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:20.430Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:16.469Z"
+}

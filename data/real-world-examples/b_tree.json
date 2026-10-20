@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "b_tree",
+  "title": "High-Latency Metadata Indexing",
+  "business": "A digital archive service managing millions of document metadata records that must be retrieved by unique identifiers.",
+  "problem": "Standard binary search trees result in excessive disk I/O because the tree height is too large, forcing multiple slow storage reads to traverse from root to leaf.",
+  "solution": "A B-Tree stores many ordered keys per node, which significantly increases the branching factor and reduces the total tree height, ensuring that metadata lookups require fewer disk accesses.",
+  "steps": [
+    "Define a node capacity that aligns with the underlying storage block size to optimize I/O.",
+    "Insert keys into nodes while maintaining sorted order within each node.",
+    "Split nodes when they reach maximum capacity to maintain balance.",
+    "Promote the median key to the parent node to facilitate efficient searching."
+  ],
+  "outcome": "Improved retrieval latency for metadata lookups due to a shallower tree structure and minimized disk seek operations.",
+  "limitation": "The primary tradeoff is increased memory usage per node and complexity in handling node splits and merges; monitor this by tracking the average node occupancy ratio.",
+  "diagram": {
+    "kind": "er",
+    "title": "B-Tree Node Hierarchy",
+    "description": "Shows how parent nodes contain multiple keys that act as separators for child nodes.",
+    "nodes": [
+      {
+        "id": "root",
+        "label": "Root Node",
+        "detail": "Contains keys [K1, K2]"
+      },
+      {
+        "id": "child1",
+        "label": "Left Child",
+        "detail": "Keys < K1"
+      },
+      {
+        "id": "child2",
+        "label": "Middle Child",
+        "detail": "K1 < Keys < K2"
+      },
+      {
+        "id": "child3",
+        "label": "Right Child",
+        "detail": "Keys > K2"
+      }
+    ],
+    "edges": [
+      {
+        "from": "root",
+        "to": "child1",
+        "label": "pointer"
+      },
+      {
+        "from": "root",
+        "to": "child2",
+        "label": "pointer"
+      },
+      {
+        "from": "root",
+        "to": "child3",
+        "label": "pointer"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Latency Metadata Indexing, why is a B-Tree preferred over a standard binary search tree?",
+      "options": [
+        "It reduces tree height and storage reads by storing many keys per node.",
+        "It eliminates the need for disk I/O entirely.",
+        "It automatically sorts data by insertion time.",
+        "It uses less memory than a binary search tree."
+      ],
+      "answerIndex": 0,
+      "explanation": "The business problem specifically identifies excessive disk I/O due to tree height, which the B-Tree solves by increasing the branching factor.",
+      "evidence": "A B-Tree stores many ordered keys per node, which significantly increases the branching factor and reduces the total tree height, ensuring that metadata lookups require fewer disk accesses."
+    },
+    {
+      "question": "In High-Latency Metadata Indexing, what is the primary tradeoff associated with the B-Tree implementation?",
+      "options": [
+        "Increased node split frequency leads to permanent data loss.",
+        "Increased memory usage per node and complex maintenance logic.",
+        "The tree height increases linearly with the number of keys.",
+        "It requires more disk I/O than a binary search tree."
+      ],
+      "answerIndex": 1,
+      "explanation": "Storing multiple keys per node requires more memory per node and logic to manage splits and merges, which is a known tradeoff.",
+      "evidence": "The primary tradeoff is increased memory usage per node and complexity in handling node splits and merges; monitor this by tracking the average node occupancy ratio."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:11.900Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

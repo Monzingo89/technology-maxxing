@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "termination_condition",
+  "title": "Automated Research Budget Guardrails",
+  "business": "Financial analysts performing automated market research using AI agents.",
+  "problem": "Unbounded agent loops can lead to excessive API costs or infinite reasoning cycles when research tasks become overly complex or ambiguous.",
+  "solution": "Implementing a MaxTurnsExceeded termination condition via the runner configuration to force-stop agents after a predefined number of interaction cycles.",
+  "steps": [
+    "Define an Agent instance with specific research instructions.",
+    "Initialize a RunConfig object with a strict max_turns integer value.",
+    "Execute the agent using the Runner class passing the custom RunConfig.",
+    "Catch the MaxTurnsExceeded exception in the application logic to handle budget-exhausted states.",
+    "Log the final state of the agent for audit and manual review."
+  ],
+  "outcome": "Predictable resource consumption and prevention of runaway agent costs during complex research tasks.",
+  "limitation": "The MaxTurnsExceeded limit is a hard stop that may interrupt valid, long-running research; developers must check if the agent reached a natural conclusion before the limit.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Termination Flow",
+    "description": "The lifecycle of an agent turn and how the runner evaluates termination.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "LLM Call",
+        "detail": "Agent generates response or tool call"
+      },
+      {
+        "id": "b",
+        "label": "Turn Counter",
+        "detail": "Runner increments current turn count"
+      },
+      {
+        "id": "c",
+        "label": "Limit Check",
+        "detail": "Compare current turn vs max_turns"
+      },
+      {
+        "id": "d",
+        "label": "Success",
+        "detail": "Agent provides final output"
+      },
+      {
+        "id": "e",
+        "label": "Failure",
+        "detail": "MaxTurnsExceeded exception raised"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "process output"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "evaluate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "within limit"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "exceeds limit"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import Agent, Runner, RunConfig\n# Define agent with research goal\nagent = Agent(name=\"Researcher\", instructions=\"Analyze market trends.\")\n# Configure max turns to prevent infinite loops\nconfig = RunConfig(max_turns=5)\n# Run with explicit limit\ntry:\n    result = await Runner.run(agent, \"Analyze sector X\", run_config=config)\nexcept MaxTurnsExceeded:\n    # Handle budget exhaustion\n    print(\"Research stopped: budget exhausted.\")",
+    "explanation": "This code demonstrates setting a hard limit on agent interactions to ensure the Automated Research Budget Guardrails are enforced."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/running_agents/",
+      "label": "Running agents - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Research Budget Guardrails, what is the primary purpose of the MaxTurnsExceeded termination condition?",
+      "options": [
+        "To force-stop agents after a predefined number of interaction cycles.",
+        "To automatically increase the research budget when tasks are complex.",
+        "To allow the agent to continue indefinitely until the research is finished.",
+        "To switch the agent to a more cost-effective model provider."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the MaxTurnsExceeded condition is used to force-stop agents to prevent unbounded costs.",
+      "evidence": "Implementing a MaxTurnsExceeded termination condition via the runner configuration to force-stop agents after a predefined number of interaction cycles."
+    },
+    {
+      "question": "In Automated Research Budget Guardrails, what is a key limitation of using a hard turn limit?",
+      "options": [
+        "It prevents the agent from ever using tools.",
+        "It may interrupt valid, long-running research that requires more turns.",
+        "It requires the developer to manually approve every single turn.",
+        "It automatically deletes the agent's memory after the limit is reached."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that a hard stop can prematurely end research that is still valid but simply requires more time.",
+      "evidence": "The MaxTurnsExceeded limit is a hard stop that may interrupt valid, long-running research; developers must check if the agent reached a natural conclusion before the limit."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:38.281Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:30.435Z"
+}

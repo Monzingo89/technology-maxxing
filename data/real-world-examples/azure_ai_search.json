@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_ai_search",
+  "title": "Unified Technical Documentation Retrieval for Engineering Teams",
+  "business": "Engineering teams managing large-scale, distributed technical documentation across multiple internal repositories.",
+  "problem": "Engineers struggle to locate specific configuration parameters or architectural patterns buried within thousands of unstructured PDF and Markdown files, leading to redundant development efforts.",
+  "solution": "Azure AI Search provides a unified context layer that ingests these disparate documents, enabling full-text and vector search capabilities to ground retrieval-augmented generation (RAG) pipelines for accurate, context-aware answers.",
+  "steps": [
+    "Define a search index schema to map document metadata and content fields.",
+    "Configure data source connections to crawl existing internal documentation repositories.",
+    "Implement an indexing pipeline to chunk text and generate vector embeddings for semantic search.",
+    "Deploy a search service endpoint to allow application agents to query the unified index."
+  ],
+  "outcome": "Engineers receive precise, grounded answers to technical queries, significantly reducing time spent searching through documentation silos.",
+  "limitation": "The quality of retrieval is strictly bounded by the effectiveness of the document chunking strategy; developers must monitor search relevance scores to identify when re-indexing or chunking adjustments are required.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Search Indexing and Retrieval Flow",
+    "description": "The flow shows how raw data is transformed into a searchable index and queried by an agent.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Data Sources",
+        "detail": "PDFs and Markdown files"
+      },
+      {
+        "id": "b",
+        "label": "Indexing Pipeline",
+        "detail": "Chunking and embedding generation"
+      },
+      {
+        "id": "c",
+        "label": "Search Index",
+        "detail": "Unified vector and text store"
+      },
+      {
+        "id": "d",
+        "label": "AI Agent",
+        "detail": "User query interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "populates"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "queries"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure AI Search"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Technical Documentation Retrieval for Engineering Teams, what is the primary problem addressed by the solution?",
+      "options": [
+        "Engineers struggle to locate specific information across large, unstructured documentation silos.",
+        "The cost of hosting documentation on local servers is too high for the engineering team.",
+        "The team lacks a version control system for their technical documentation.",
+        "The documentation is written in too many different human languages."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that engineers cannot find specific parameters or patterns in thousands of files, which Azure AI Search solves by unifying the data.",
+      "evidence": "Engineers struggle to locate specific configuration parameters or architectural patterns buried within thousands of unstructured PDF and Markdown files, leading to redundant development efforts."
+    },
+    {
+      "question": "In Unified Technical Documentation Retrieval for Engineering Teams, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than ten documents at a time.",
+        "Retrieval quality depends heavily on the chosen document chunking strategy.",
+        "The search index requires manual updates every time a document is read.",
+        "Vector embeddings are not supported for technical documentation."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly states that the effectiveness of the retrieval is bounded by the chunking strategy used during indexing.",
+      "evidence": "The quality of retrieval is strictly bounded by the effectiveness of the document chunking strategy; developers must monitor search relevance scores to identify when re-indexing or chunking adjustments are required."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:34.063Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

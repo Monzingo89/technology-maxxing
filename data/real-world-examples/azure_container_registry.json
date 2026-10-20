@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_container_registry",
+  "title": "Securing Proprietary Logistics Microservices",
+  "business": "Logistics firms managing proprietary routing algorithms in containerized microservices.",
+  "problem": "Unsecured public image repositories lead to intellectual property leakage and unauthorized access to sensitive deployment artifacts.",
+  "solution": "Azure Container Registry provides a private, managed environment to store and secure container images and OCI artifacts, ensuring only authenticated services can pull proprietary code.",
+  "steps": [
+    "Provision an Azure Container Registry instance within the private virtual network.",
+    "Configure Azure Role-Based Access Control to restrict push and pull permissions to specific service principals.",
+    "Enable content trust to ensure only signed images are deployed to the production environment.",
+    "Integrate the registry with Azure Kubernetes Service for seamless, authenticated image retrieval."
+  ],
+  "outcome": "Enhanced security posture through centralized, private storage of containerized assets with granular access control.",
+  "limitation": "Registry throughput and latency are subject to regional availability; check performance by monitoring pull duration metrics in Azure Monitor.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Registry Access Flow",
+    "description": "The flow of image artifacts from development to secure deployment.",
+    "nodes": [
+      {
+        "id": "dev",
+        "label": "Developer",
+        "detail": "Pushes images"
+      },
+      {
+        "id": "acr",
+        "label": "Azure Container Registry",
+        "detail": "Stores private images"
+      },
+      {
+        "id": "aks",
+        "label": "Azure Kubernetes Service",
+        "detail": "Pulls and runs images"
+      },
+      {
+        "id": "rbac",
+        "label": "Azure RBAC",
+        "detail": "Governs access"
+      }
+    ],
+    "edges": [
+      {
+        "from": "dev",
+        "to": "acr",
+        "label": "pushes"
+      },
+      {
+        "from": "rbac",
+        "to": "acr",
+        "label": "secures"
+      },
+      {
+        "from": "aks",
+        "to": "acr",
+        "label": "pulls"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Container Registry"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Proprietary Logistics Microservices, what is the primary business problem addressed?",
+      "options": [
+        "Unsecured public image repositories causing IP leakage",
+        "High costs associated with public container hosting",
+        "Inability to scale containerized microservices",
+        "Lack of support for OCI artifacts"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that public repositories create risks for proprietary code.",
+      "evidence": "Unsecured public image repositories lead to intellectual property leakage and unauthorized access to sensitive deployment artifacts."
+    },
+    {
+      "question": "In Securing Proprietary Logistics Microservices, what is a noted limitation of the solution?",
+      "options": [
+        "Incompatibility with Azure Kubernetes Service",
+        "Requirement for manual image signing",
+        "Registry throughput and latency depend on regional availability",
+        "Lack of role-based access control"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights regional dependency as a factor for performance.",
+      "evidence": "Registry throughput and latency are subject to regional availability; check performance by monitoring pull duration metrics in Azure Monitor."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:42.702Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

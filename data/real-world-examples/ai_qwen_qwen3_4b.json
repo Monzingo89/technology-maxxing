@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_4b",
+  "title": "Adaptive Reasoning for Technical Support",
+  "business": "Technical support teams handling mixed-complexity customer inquiries.",
+  "problem": "Support agents waste time manually filtering simple status checks from complex troubleshooting requests, leading to inconsistent response quality and latency.",
+  "solution": "Deploy Qwen3-4B to dynamically toggle between a high-reasoning 'thinking' mode for complex diagnostics and a low-latency 'non-thinking' mode for routine status updates.",
+  "steps": [
+    "Initialize Qwen3-4B using the Hugging Face transformers library.",
+    "Configure the tokenizer's apply_chat_template to default to thinking mode for complex diagnostic prompts.",
+    "Implement a soft-switch logic in the application layer to append /no_think to user prompts when the intent classifier identifies a routine query.",
+    "Set specific sampling parameters for each mode: Temperature 0.6 for thinking and 0.7 for non-thinking.",
+    "Parse the output to strip <think> tags for the final customer-facing response."
+  ],
+  "outcome": "Improved operational efficiency by matching model reasoning depth to the specific complexity of each customer interaction.",
+  "limitation": "The model may exhibit endless repetitions if greedy decoding is used; check for this by monitoring output logs and ensuring presence_penalty is set to 1.5.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Adaptive Reasoning Workflow",
+    "description": "How the system routes user input to the appropriate model mode.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Customer Input",
+        "detail": "Raw text query"
+      },
+      {
+        "id": "router",
+        "label": "Intent Classifier",
+        "detail": "Determines complexity"
+      },
+      {
+        "id": "think",
+        "label": "Thinking Mode",
+        "detail": "Complex diagnostics"
+      },
+      {
+        "id": "no_think",
+        "label": "Non-Thinking Mode",
+        "detail": "Routine status"
+      },
+      {
+        "id": "output",
+        "label": "Final Response",
+        "detail": "Cleaned text"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "router",
+        "label": "Analyze"
+      },
+      {
+        "from": "router",
+        "to": "think",
+        "label": "Complex"
+      },
+      {
+        "from": "router",
+        "to": "no_think",
+        "label": "Simple"
+      },
+      {
+        "from": "think",
+        "to": "output",
+        "label": "Parse <think>"
+      },
+      {
+        "from": "no_think",
+        "to": "output",
+        "label": "Direct"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoModelForCausalLM, AutoTokenizer\n# Initialize model\ntokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen3-4B')\n# Apply template with soft switch /no_think for routine queries\nmessages = [{'role': 'user', 'content': 'What is my order status? /no_think'}]\ntext = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True, enable_thinking=True)\n# Generate response without thinking block due to soft switch",
+    "explanation": "This snippet demonstrates using the soft switch /no_think to override the default thinking mode for a routine query, mapping directly to the Adaptive Reasoning for Technical Support scenario."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-4B",
+      "label": "Qwen/Qwen3-4B · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Adaptive Reasoning for Technical Support, how does the system handle routine status checks?",
+      "options": [
+        "It forces the model into a high-reasoning mode.",
+        "It uses a soft switch to disable thinking mode for efficiency.",
+        "It relies on greedy decoding to speed up responses.",
+        "It requires a separate model instance for simple queries."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution uses the soft switch /no_think to handle routine queries efficiently within the same model instance.",
+      "evidence": "Deploy Qwen3-4B to dynamically toggle between a high-reasoning 'thinking' mode for complex diagnostics and a low-latency 'non-thinking' mode for routine status updates."
+    },
+    {
+      "question": "What is a key limitation to monitor in Adaptive Reasoning for Technical Support?",
+      "options": [
+        "The model cannot process more than 100 languages.",
+        "The model requires a specific hardware architecture.",
+        "The model may produce endless repetitions if greedy decoding is used.",
+        "The model cannot be deployed on local infrastructure."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation explicitly warns against using greedy decoding to avoid performance degradation and endless repetitions.",
+      "evidence": "The model may exhibit endless repetitions if greedy decoding is used; check for this by monitoring output logs and ensuring presence_penalty is set to 1.5."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:30.519Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:26.683Z"
+}

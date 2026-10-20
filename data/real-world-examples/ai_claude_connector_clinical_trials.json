@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_clinical_trials",
+  "title": "Accelerating Rare Disease Patient Recruitment",
+  "business": "A patient advocacy group focused on rare neurological disorders.",
+  "problem": "The group struggles to manually cross-reference emerging clinical trial eligibility criteria against their patient registry, leading to missed enrollment opportunities for time-sensitive studies.",
+  "solution": "By integrating the Clinical Trials connector, the group enables Claude to programmatically query ClinicalTrials.gov using specific patient profile parameters, automatically filtering active studies that match the registry's inclusion criteria.",
+  "steps": [
+    "Configure the Clinical Trials connector using the provided MCP endpoint to establish a secure link to ClinicalTrials.gov.",
+    "Define the patient registry's core clinical attributes as structured input parameters for the Claude interface.",
+    "Invoke the search_by_eligibility tool to map patient profiles against active trial inclusion and exclusion criteria.",
+    "Utilize get_trial_details to extract contact information and site locations for the most relevant matches.",
+    "Review the synthesized output to generate targeted outreach summaries for patients."
+  ],
+  "outcome": "The advocacy group gains the ability to rapidly identify and communicate relevant clinical trial opportunities to their patient community, significantly reducing the administrative burden of manual screening.",
+  "limitation": "The connector relies on the accuracy of data submitted to ClinicalTrials.gov; if a study sponsor provides outdated or incomplete eligibility criteria, the search results may be misleading. Users should verify trial status directly via the provided NCT identifier.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Trial Matching Workflow",
+    "description": "This diagram illustrates the data flow from the patient registry through the Claude connector to the final trial identification.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Patient Registry",
+        "detail": "Contains anonymized clinical attributes"
+      },
+      {
+        "id": "b",
+        "label": "Claude Interface",
+        "detail": "Orchestrates the connector tools"
+      },
+      {
+        "id": "c",
+        "label": "ClinicalTrials.gov",
+        "detail": "External registry database"
+      },
+      {
+        "id": "d",
+        "label": "Outreach Summary",
+        "detail": "Actionable list for patients"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input clinical parameters"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "search_by_eligibility"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Return matching trials"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Synthesize results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/clinical-trials",
+      "label": "Clinical Trials connector"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Accelerating Rare Disease Patient Recruitment, how does the connector address the problem of manual screening?",
+      "options": [
+        "By automating the cross-referencing of patient profiles against trial eligibility criteria.",
+        "By automatically enrolling patients into clinical trials without human oversight.",
+        "By replacing the need for a patient registry entirely.",
+        "By providing direct financial incentives to clinical trial sponsors."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the connector to programmatically query the registry, replacing manual effort with automated filtering.",
+      "evidence": "By integrating the Clinical Trials connector, the group enables Claude to programmatically query ClinicalTrials.gov using specific patient profile parameters, automatically filtering active studies that match the registry's inclusion criteria."
+    },
+    {
+      "question": "In Accelerating Rare Disease Patient Recruitment, what is a primary limitation of the implementation?",
+      "options": [
+        "The connector is only available for oncology-related trials.",
+        "The connector cannot access data from ClinicalTrials.gov.",
+        "The accuracy of results is dependent on the quality of data submitted by trial sponsors.",
+        "The system requires manual coding of every trial site location."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly notes that the system is bound by the quality and currency of the data provided by the trial sponsors.",
+      "evidence": "The connector relies on the accuracy of data submitted to ClinicalTrials.gov; if a study sponsor provides outdated or incomplete eligibility criteria, the search results may be misleading."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:03.995Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:00.184Z"
+}

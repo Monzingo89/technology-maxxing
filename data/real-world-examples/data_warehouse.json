@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "data_warehouse",
+  "title": "Unified Retail Analytics Repository",
+  "business": "Global retail chains managing fragmented sales data across multiple regional transactional databases.",
+  "problem": "Operational databases suffer from performance degradation when subjected to complex, long-running analytical queries, leading to stale reporting and inconsistent regional metrics.",
+  "solution": "Implementing a centralized PostgreSQL-based data warehouse allows for the integration of curated historical data, separating analytical workloads from transactional systems through periodic data ingestion.",
+  "steps": [
+    "Define a schema in the warehouse database optimized for read-heavy analytical queries using appropriate indexing strategies.",
+    "Establish secure connectivity to regional transactional databases using PostgreSQL client interfaces.",
+    "Execute periodic ETL processes to extract, transform, and load historical records into the centralized warehouse.",
+    "Configure materialized views to pre-calculate complex aggregates for reporting dashboards.",
+    "Implement role-based access control to ensure analytical users have appropriate read-only permissions."
+  ],
+  "outcome": "Improved reporting consistency and restored performance for transactional systems by offloading heavy analytical processing to the dedicated warehouse environment.",
+  "limitation": "Data latency is an inherent tradeoff, as the warehouse only reflects the state of the source systems at the time of the last ingestion; this can be checked by comparing the timestamp of the latest record in the warehouse against the source database.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Warehouse Ingestion Flow",
+    "description": "This diagram illustrates the flow of data from operational sources to the analytical warehouse.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional DB",
+        "detail": "Source transactional data"
+      },
+      {
+        "id": "b",
+        "label": "ETL Process",
+        "detail": "Transformation and movement"
+      },
+      {
+        "id": "c",
+        "label": "Data Warehouse",
+        "detail": "Curated historical repository"
+      },
+      {
+        "id": "d",
+        "label": "BI Tools",
+        "detail": "Reporting and analytics"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Extract"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Load"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Retail Analytics Repository, what is the primary reason for implementing a separate data warehouse?",
+      "options": [
+        "To prevent performance degradation on operational databases caused by analytical queries.",
+        "To increase the speed of transactional write operations in regional databases.",
+        "To eliminate the need for SQL indexing in regional databases.",
+        "To replace the need for role-based access control in the organization."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that operational databases suffer from performance degradation when subjected to complex analytical queries, which the warehouse solves by separating these workloads.",
+      "evidence": "Operational databases suffer from performance degradation when subjected to complex, long-running analytical queries, leading to stale reporting and inconsistent regional metrics."
+    },
+    {
+      "question": "In Unified Retail Analytics Repository, what is the main limitation of the proposed solution?",
+      "options": [
+        "The inability to use SQL for data analysis.",
+        "The requirement to use proprietary hardware for the warehouse.",
+        "The inherent data latency between the source systems and the warehouse.",
+        "The lack of support for role-based access control."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that data latency is a tradeoff because the warehouse only reflects the state of source systems at the time of ingestion.",
+      "evidence": "Data latency is an inherent tradeoff, as the warehouse only reflects the state of the source systems at the time of the last ingestion"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:59.531Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

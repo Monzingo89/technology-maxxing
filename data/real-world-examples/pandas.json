@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "pandas",
+  "title": "Retail Inventory Reconciliation",
+  "business": "Regional retail managers who need to consolidate disparate inventory and sales logs.",
+  "problem": "Managers struggle with fragmented data sources where inventory counts and sales records exist in separate, non-aligned files, leading to manual reconciliation errors and stock-out risks.",
+  "solution": "Pandas provides a unified framework to ingest these heterogeneous sources into DataFrames, enabling explicit data alignment through joins and powerful split-apply-combine operations via groupby to calculate net stock levels.",
+  "steps": [
+    "Load inventory and sales CSV files into separate DataFrame objects.",
+    "Perform an outer join on the product ID column to align all available records.",
+    "Handle missing values resulting from the join using fillna to represent zero-stock scenarios.",
+    "Use groupby on the product category to aggregate total sales and remaining inventory.",
+    "Export the reconciled summary table for executive reporting."
+  ],
+  "outcome": "A clean, unified view of inventory health that allows managers to make data-driven restocking decisions without manual spreadsheet manipulation.",
+  "limitation": "Generalization often sacrifices performance; for extremely large datasets, the memory overhead of creating new objects during joins and groupby operations can become a bottleneck, which should be checked by monitoring system memory usage during execution.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Reconciliation Pipeline",
+    "description": "The flow shows how raw data sources are ingested, merged, and aggregated into a final report.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory Log",
+        "detail": "Product ID, Stock Count"
+      },
+      {
+        "id": "b",
+        "label": "Sales Log",
+        "detail": "Product ID, Units Sold"
+      },
+      {
+        "id": "c",
+        "label": "Joined DataFrame",
+        "detail": "Aligned Product ID, Stock, Sales"
+      },
+      {
+        "id": "d",
+        "label": "Grouped Summary",
+        "detail": "Category, Aggregated Metrics"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "merge"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "merge"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "groupby"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://pandas.pydata.org/docs/getting_started/overview.html",
+      "label": "Package overview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Reconciliation, what is the primary benefit of using pandas for the described problem?",
+      "options": [
+        "It automates the physical restocking of store shelves.",
+        "It provides a unified framework to ingest heterogeneous sources into DataFrames for alignment and aggregation.",
+        "It eliminates the need for any data cleaning or handling of missing values.",
+        "It guarantees that all inventory calculations will be faster than any other specialized tool."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies the core problem as fragmented data sources and the solution as using DataFrames to align and aggregate that data.",
+      "evidence": "Pandas provides a unified framework to ingest these heterogeneous sources into DataFrames, enabling explicit data alignment through joins and powerful split-apply-combine operations via groupby to calculate net stock levels."
+    },
+    {
+      "question": "In Retail Inventory Reconciliation, what is a key limitation to consider when scaling the solution?",
+      "options": [
+        "The inability to perform joins on non-numeric columns.",
+        "The risk of memory overhead due to the creation of new objects during operations.",
+        "The requirement to manually define every axis for every operation.",
+        "The lack of support for CSV file formats."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about memory overhead when performing operations like joins and groupby on large datasets.",
+      "evidence": "for extremely large datasets, the memory overhead of creating new objects during joins and groupby operations can become a bottleneck, which should be checked by monitoring system memory usage during execution."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:13.387Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:09.479Z"
+}

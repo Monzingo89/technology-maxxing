@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "database_normalization",
+  "title": "Optimizing Inventory Tracking for Artisan Coffee Roasters",
+  "business": "Small-batch coffee roasters managing complex ingredient sourcing and inventory.",
+  "problem": "The roastery currently stores supplier contact information, coffee bean origins, and batch shipment details in a single, monolithic table. This structure leads to update anomalies where changing a supplier's phone number requires modifying hundreds of historical shipment records, risking data inconsistency.",
+  "solution": "Database normalization decomposes the monolithic table into distinct, related tables. By isolating entities like Suppliers, Origins, and Shipments, we ensure that each piece of information is stored in exactly one place, reducing redundancy and ensuring that updates to supplier details propagate automatically through relational integrity.",
+  "steps": [
+    "Identify functional dependencies within the current flat file structure.",
+    "Extract supplier attributes into a dedicated Suppliers table with a unique primary key.",
+    "Create an Origins table to store geographical and varietal data linked to specific beans.",
+    "Define a Shipments table that references Suppliers and Origins using foreign keys.",
+    "Apply constraints to ensure referential integrity between the new tables."
+  ],
+  "outcome": "A streamlined database schema where data updates are localized to single rows, eliminating the risk of conflicting information across the inventory system.",
+  "limitation": "Normalization increases the complexity of read operations by requiring JOIN clauses to reconstruct data. To check for performance degradation, monitor query execution plans using EXPLAIN to ensure that indexes are effectively supporting the relational links.",
+  "diagram": {
+    "kind": "er",
+    "title": "Normalized Roastery Schema",
+    "description": "This diagram shows the relationship between entities where each table holds unique data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Suppliers",
+        "detail": "SupplierID, Name, Contact"
+      },
+      {
+        "id": "b",
+        "label": "Origins",
+        "detail": "OriginID, Region, Altitude"
+      },
+      {
+        "id": "c",
+        "label": "Shipments",
+        "detail": "ShipmentID, SupplierID, OriginID, Date"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "1:N"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "1:N"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Inventory Tracking for Artisan Coffee Roasters, what is the primary benefit of normalization?",
+      "options": [
+        "Reducing redundancy and preventing update anomalies",
+        "Increasing the speed of all read operations",
+        "Eliminating the need for SQL JOIN clauses",
+        "Automatically generating new supplier contacts"
+      ],
+      "answerIndex": 0,
+      "explanation": "Normalization specifically targets the reduction of redundant data storage to prevent inconsistencies during updates.",
+      "evidence": "Database normalization decomposes the monolithic table into distinct, related tables. By isolating entities like Suppliers, Origins, and Shipments, we ensure that each piece of information is stored in exactly one place, reducing redundancy and ensuring that updates to supplier details propagate automatically through relational integrity."
+    },
+    {
+      "question": "In Optimizing Inventory Tracking for Artisan Coffee Roasters, what is a notable trade-off of the proposed solution?",
+      "options": [
+        "It requires more storage space for indexes",
+        "It increases query complexity due to required JOINs",
+        "It makes data insertion impossible",
+        "It forces all data to be stored as strings"
+      ],
+      "answerIndex": 1,
+      "explanation": "Decomposing tables requires the database to perform JOIN operations to retrieve related data, which adds complexity compared to a single flat table.",
+      "evidence": "Normalization increases the complexity of read operations by requiring JOIN clauses to reconstruct data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:02.153Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "backpressure",
+  "title": "IoT Sensor Data Stream Stabilization",
+  "business": "A smart city infrastructure provider managing thousands of environmental sensors streaming real-time air quality metrics to a centralized processing hub.",
+  "problem": "During peak pollution events, the sudden surge of sensor data overwhelms the ingestion service, leading to memory exhaustion, dropped packets, and system instability as the consumer cannot process the incoming volume at the rate of the producers.",
+  "solution": "Backpressure provides a feedback mechanism where the consumer signals its current processing capacity to the producers. By enforcing a flow control protocol, the system forces producers to throttle their transmission rate when the consumer's internal buffers reach a critical saturation threshold, ensuring the system remains stable under heavy load.",
+  "steps": [
+    "Implement a credit-based flow control mechanism between the sensor gateway and the ingestion service.",
+    "Define a saturation threshold for the ingestion buffer that triggers a pause signal.",
+    "Configure the producer to monitor for backpressure signals and temporarily cache data locally.",
+    "Resume data transmission once the consumer signals that buffer occupancy has dropped below the safety threshold."
+  ],
+  "outcome": "The system achieves graceful degradation during traffic spikes, preventing crashes and ensuring that data is eventually processed without loss of integrity.",
+  "limitation": "A primary limitation is the introduction of increased latency for the producer, as data must be buffered at the source. To check for this, monitor the producer's local buffer growth and the time elapsed between data generation and successful ingestion acknowledgment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Backpressure Feedback Loop",
+    "description": "This diagram illustrates the flow of data and the feedback signal used to regulate throughput.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Producer",
+        "detail": "Generates environmental data"
+      },
+      {
+        "id": "b",
+        "label": "Ingestion Buffer",
+        "detail": "Holds incoming data packets"
+      },
+      {
+        "id": "c",
+        "label": "Data Consumer",
+        "detail": "Processes metrics"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Push Data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Consume"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "Backpressure Signal"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In IoT Sensor Data Stream Stabilization, what is the primary purpose of implementing backpressure?",
+      "options": [
+        "To increase the total number of sensors connected to the network.",
+        "To prevent system instability by signaling producers to slow down when the consumer is saturated.",
+        "To eliminate the need for local caching at the sensor level.",
+        "To bypass the ingestion service and write data directly to the database."
+      ],
+      "answerIndex": 1,
+      "explanation": "Backpressure is explicitly defined as a mechanism to signal producers to throttle their rate when the consumer's buffer is saturated, preventing system failure.",
+      "evidence": "Backpressure provides a feedback mechanism where the consumer signals its current processing capacity to the producers. By enforcing a flow control protocol, the system forces producers to throttle their transmission rate when the consumer's internal buffers reach a critical saturation threshold, ensuring the system remains stable under heavy load."
+    },
+    {
+      "question": "In IoT Sensor Data Stream Stabilization, what is a key trade-off associated with the implementation of backpressure?",
+      "options": [
+        "The system will always experience permanent data loss during peak events.",
+        "The consumer will process data faster than the producer can generate it.",
+        "Increased latency occurs at the producer because data must be buffered locally.",
+        "The system will require no monitoring of buffer occupancy."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that buffering at the source leads to increased latency, which is a necessary trade-off for system stability.",
+      "evidence": "A primary limitation is the introduction of increased latency for the producer, as data must be buffered at the source."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:14.894Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "file_png",
+  "title": "Lossless Asset Archiving for Digital Archives",
+  "business": "Digital heritage organizations and archival libraries",
+  "problem": "Lossy compression formats degrade historical image data over repeated save cycles, leading to permanent loss of detail in scanned documents.",
+  "solution": "Utilizing the PNG format ensures lossless storage, where filtering and compression preserve all information, allowing for bit-for-bit reconstruction of the original scanned reference image.",
+  "steps": [
+    "Convert raw high-resolution scans into the PNG reference image format.",
+    "Apply appropriate color space metadata using iCCP or sRGB chunks to ensure color fidelity.",
+    "Verify file integrity using the built-in Cyclic Redundancy Code (CRC) to detect transmission or storage corruption.",
+    "Store the resulting PNG datastream in the archival repository."
+  ],
+  "outcome": "Historical documents are preserved with exact pixel-level accuracy, ensuring that future restorations or digital displays remain faithful to the original source.",
+  "limitation": "PNG files are generally larger than lossy alternatives like JPEG, which can increase storage costs; check file size metrics against storage capacity limits.",
+  "diagram": {
+    "kind": "flow",
+    "title": "PNG Archival Pipeline",
+    "description": "The flow from physical scan to verified archival storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Scan",
+        "detail": "Raw digital input"
+      },
+      {
+        "id": "b",
+        "label": "PNG Encoder",
+        "detail": "Creates reference image"
+      },
+      {
+        "id": "c",
+        "label": "PNG Datastream",
+        "detail": "Compressed byte sequence"
+      },
+      {
+        "id": "d",
+        "label": "Archival Storage",
+        "detail": "Long-term repository"
+      },
+      {
+        "id": "e",
+        "label": "Integrity Check",
+        "detail": "CRC validation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "transformation"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generation"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "storage"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "verification"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/png/",
+      "label": "Portable Network Graphics (PNG) Specification (Third Edition)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Lossless Asset Archiving for Digital Archives, why is PNG preferred over other formats?",
+      "options": [
+        "It provides lossless compression that preserves all information bit-for-bit.",
+        "It is the only format that supports high dynamic range imagery.",
+        "It automatically corrects errors in the original source scan.",
+        "It is designed to be the smallest possible file format for web storage."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario emphasizes the need to avoid degradation, and the documentation confirms PNG is lossless, preserving all information.",
+      "evidence": "Utilizing the PNG format ensures lossless storage, where filtering and compression preserve all information, allowing for bit-for-bit reconstruction of the original scanned reference image."
+    },
+    {
+      "question": "In Lossless Asset Archiving for Digital Archives, what is a primary trade-off when using this format?",
+      "options": [
+        "The inability to store color space metadata.",
+        "The risk of data corruption during storage.",
+        "The larger file size compared to lossy formats.",
+        "The requirement for proprietary software to decode."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that PNG files are larger than lossy alternatives, impacting storage costs.",
+      "evidence": "PNG files are generally larger than lossy alternatives like JPEG, which can increase storage costs; check file size metrics against storage capacity limits."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:56.622Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:53.397Z"
+}

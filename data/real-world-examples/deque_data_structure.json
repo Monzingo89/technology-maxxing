@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "deque_data_structure",
+  "title": "Dynamic Buffer for Real-Time Log Streaming",
+  "business": "High-frequency trading platforms requiring low-latency log ingestion",
+  "problem": "Standard queues create bottlenecks when logs must be processed in arrival order but occasionally require urgent priority injection at the head or batch trimming from the tail",
+  "solution": "A Deque (Double-Ended Queue) allows O(1) insertion and removal at both ends, enabling the system to push incoming logs to the tail while allowing high-priority system alerts to be injected directly at the head",
+  "steps": [
+    "Initialize a doubly linked list or circular array to serve as the underlying storage",
+    "Implement pushFront and pushBack methods to handle data entry at either boundary",
+    "Implement popFront and popBack methods to allow flexible data retrieval",
+    "Configure a capacity threshold to prevent memory overflow during traffic spikes"
+  ],
+  "outcome": "Improved system responsiveness by decoupling log ingestion from priority event handling without reordering the entire sequence",
+  "limitation": "Memory fragmentation can occur in array-based implementations during frequent resizing; monitor heap usage to detect performance degradation",
+  "diagram": {
+    "kind": "flow",
+    "title": "Deque Log Processing Flow",
+    "description": "Shows how data enters and exits the deque structure",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Log Source",
+        "detail": "Generates incoming log events"
+      },
+      {
+        "id": "b",
+        "label": "Deque Head",
+        "detail": "Front of the sequence"
+      },
+      {
+        "id": "c",
+        "label": "Deque Tail",
+        "detail": "Back of the sequence"
+      },
+      {
+        "id": "d",
+        "label": "Processor",
+        "detail": "Consumes logs for analysis"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "pushBack (standard logs)"
+      },
+      {
+        "from": "a",
+        "to": "b",
+        "label": "pushFront (priority alerts)"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "popFront (processing)"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "popBack (cleanup)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Buffer for Real-Time Log Streaming, why is a Deque preferred over a standard queue?",
+      "options": [
+        "It allows O(1) insertion and removal at both ends, enabling priority injection at the head",
+        "It automatically sorts logs by timestamp upon insertion",
+        "It eliminates the need for memory management in the log system",
+        "It provides O(log n) access to any element in the log sequence"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that standard queues create bottlenecks and that the Deque's ability to handle both ends allows for priority alerts to be injected at the head.",
+      "evidence": "A Deque (Double-Ended Queue) allows O(1) insertion and removal at both ends, enabling the system to push incoming logs to the tail while allowing high-priority system alerts to be injected directly at the head"
+    },
+    {
+      "question": "Regarding the implementation of Dynamic Buffer for Real-Time Log Streaming, what is a primary trade-off?",
+      "options": [
+        "The structure cannot be used for high-frequency data",
+        "Memory fragmentation in array-based implementations requires monitoring",
+        "It requires O(n) time to remove elements from the tail",
+        "It prevents the use of priority alerts"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about memory fragmentation in array-based deque implementations.",
+      "evidence": "Memory fragmentation can occur in array-based implementations during frequent resizing; monitor heap usage to detect performance degradation"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:28.408Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

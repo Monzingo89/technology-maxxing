@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_m5max",
+  "title": "High-Resolution Geospatial Data Processing on Apple M5 Max",
+  "business": "Geospatial analysts and remote sensing researchers",
+  "problem": "Processing massive multi-spectral satellite imagery datasets often exceeds standard memory limits, causing system crashes or forcing expensive cloud-based offloading.",
+  "solution": "The Apple M5 Max chip provides a unified memory architecture with a maximum capacity of 128GB, allowing large-scale geospatial tensors to reside entirely in memory for rapid local processing.",
+  "steps": [
+    "Provision a MacBook Pro configured with the Apple M5 Max chip and 128GB of unified memory.",
+    "Map high-resolution satellite imagery tiles directly into the unified memory space.",
+    "Utilize the 16-core Neural Engine for accelerated feature extraction from the loaded tensors.",
+    "Leverage the dual ProRes encode and decode engines for rapid export of processed visual data.",
+    "Monitor memory pressure using system tools to ensure the 128GB ceiling is not exceeded during peak batch operations."
+  ],
+  "outcome": "Researchers achieve significantly faster iteration cycles on complex geospatial models without the latency of cloud-based data retrieval.",
+  "limitation": "The 128GB unified memory is a hard physical ceiling; exceeding this limit will trigger aggressive swap usage, drastically reducing performance. Users must monitor memory pressure to ensure active datasets fit within the physical capacity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Geospatial Data Pipeline",
+    "description": "The flow of data from storage into the M5 Max unified memory for processing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Satellite Storage",
+        "detail": "Raw multi-spectral imagery"
+      },
+      {
+        "id": "b",
+        "label": "Unified Memory",
+        "detail": "128GB capacity buffer"
+      },
+      {
+        "id": "c",
+        "label": "Neural Engine",
+        "detail": "Feature extraction"
+      },
+      {
+        "id": "d",
+        "label": "ProRes Engine",
+        "detail": "Visual export"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Load Tensors"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Compute Features"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Encode Output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.apple.com/macbook-pro/specs/",
+      "label": "MacBook Pro - Tech Specs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Resolution Geospatial Data Processing on Apple M5 Max, how does the hardware address the problem of large dataset processing?",
+      "options": [
+        "By utilizing cloud-based storage exclusively",
+        "By providing 128GB of unified memory for local tensor residency",
+        "By increasing the clock speed of the efficiency cores",
+        "By offloading all processing to external GPUs"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the M5 Max's high unified memory capacity to keep large datasets in memory.",
+      "evidence": "The Apple M5 Max chip provides a unified memory architecture with a maximum capacity of 128GB, allowing large-scale geospatial tensors to reside entirely in memory for rapid local processing."
+    },
+    {
+      "question": "In High-Resolution Geospatial Data Processing on Apple M5 Max, what is a primary implementation limitation?",
+      "options": [
+        "The Neural Engine cannot process satellite imagery",
+        "The 128GB memory limit is a hard ceiling that causes performance degradation if exceeded",
+        "ProRes engines are incompatible with geospatial data",
+        "The system requires constant internet connectivity for memory management"
+      ],
+      "answerIndex": 1,
+      "explanation": "The 128GB capacity is a physical limit; exceeding it forces the system to use swap, which is slower.",
+      "evidence": "The 128GB unified memory is a hard physical ceiling; exceeding this limit will trigger aggressive swap usage, drastically reducing performance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:54.090Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:50.559Z"
+}

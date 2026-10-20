@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_3_7_sonnet_20250219",
+  "title": "Lifecycle Management for Legacy Claude Integrations",
+  "business": "Enterprise software teams maintaining long-running automated document processing pipelines.",
+  "problem": "Applications relying on retired models like claude-3-7-sonnet-20250219 experience service failures because requests to retired models will fail.",
+  "solution": "Teams must audit API usage via the Claude Console to identify deprecated model calls and migrate workloads to active, supported models such as claude-sonnet-5-5 to maintain service continuity.",
+  "steps": [
+    "Access the Usage page in the Claude Console to export API activity logs.",
+    "Filter the CSV export to identify instances where the application is still using retired or deprecated model IDs.",
+    "Update the application codebase to reference an active, supported model identifier.",
+    "Perform thorough testing of the application with the new model to ensure output consistency before full deployment."
+  ],
+  "outcome": "Restored service reliability and alignment with current model support standards, preventing unexpected downtime from model retirement.",
+  "limitation": "Migrating to a newer model may introduce variations in output behavior; teams must perform thorough testing of your applications with the new models well before the retirement date to verify performance.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing retired model dependencies.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Usage Audit",
+        "detail": "Export CSV from Claude Console"
+      },
+      {
+        "id": "b",
+        "label": "Identification",
+        "detail": "Locate retired model IDs"
+      },
+      {
+        "id": "c",
+        "label": "Code Update",
+        "detail": "Replace model ID in API calls"
+      },
+      {
+        "id": "d",
+        "label": "Validation",
+        "detail": "Test against new model"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "extracts data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers refactor"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "verifies stability"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Lifecycle Management for Legacy Claude Integrations, what is the primary risk of continuing to use a model like claude-3-7-sonnet-20250219?",
+      "options": [
+        "The model will return lower quality results",
+        "Requests to retired models will fail",
+        "The API will charge higher rates",
+        "The model will become slower over time"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation explicitly states that requests to retired models will fail, causing service disruption.",
+      "evidence": "Applications relying on retired models like claude-3-7-sonnet-20250219 experience service failures because requests to retired models will fail."
+    },
+    {
+      "question": "In Lifecycle Management for Legacy Claude Integrations, what is the recommended approach to mitigate potential output variations during migration?",
+      "options": [
+        "Perform thorough testing of your applications with the new models well before the retirement date",
+        "Contact support to request the original model weights",
+        "Update the API key to a newer version",
+        "Ignore the migration until the retirement date passes"
+      ],
+      "answerIndex": 0,
+      "explanation": "Testing is required to ensure that the new model performs as expected for the specific application tasks.",
+      "evidence": "Migrating to a newer model may introduce variations in output behavior; teams must perform thorough testing of your applications with the new models well before the retirement date to verify performance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:33.572Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

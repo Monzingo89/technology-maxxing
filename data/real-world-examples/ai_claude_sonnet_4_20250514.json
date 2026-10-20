@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_sonnet_4_20250514",
+  "title": "Legacy Model Lifecycle Management for Financial Reporting",
+  "business": "A financial services firm automating quarterly compliance reports.",
+  "problem": "The firm's automated reporting pipeline relied on the retired claude-sonnet-4-20250514 model, causing service interruptions and failed API requests after the June 15, 2026, retirement date.",
+  "solution": "The firm must migrate its API integration to an active model like claude-sonnet-5-5, ensuring the application remains functional by aligning with current model lifecycles.",
+  "steps": [
+    "Access the Usage page in the Claude Console to export a CSV audit of API keys and model usage.",
+    "Identify all instances where the application is still using the retired claude-sonnet-4-20250514 model.",
+    "Update the application source code to replace the deprecated model identifier with the recommended replacement, claude-sonnet-5-5.",
+    "Perform thorough testing of the reporting pipeline with the new model to ensure output consistency.",
+    "Deploy the updated code to the production environment before the next reporting cycle."
+  ],
+  "outcome": "Restoration of reliable automated report generation and compliance with current API support standards.",
+  "limitation": "Newer models may exhibit different response characteristics compared to the retired version, requiring validation of output quality; check this by comparing historical outputs with new model test results.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing retired models in a production pipeline.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of usage audit data"
+      },
+      {
+        "id": "b",
+        "label": "Usage Export",
+        "detail": "CSV file identifying retired models"
+      },
+      {
+        "id": "c",
+        "label": "Codebase",
+        "detail": "Application logic using API"
+      },
+      {
+        "id": "d",
+        "label": "Active Model",
+        "detail": "Target replacement model"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Generate Audit"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify Retirement"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update Endpoint"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Model Lifecycle Management for Financial Reporting, what is the primary reason for the service failure?",
+      "options": [
+        "The firm exceeded its API rate limits.",
+        "The firm relied on the retired claude-sonnet-4-20250514 model.",
+        "The firm failed to pay its subscription fees.",
+        "The firm used an invalid API key."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that the pipeline relied on a model that reached its retirement date, causing failures.",
+      "evidence": "The firm's automated reporting pipeline relied on the retired claude-sonnet-4-20250514 model, causing service interruptions and failed API requests after the June 15, 2026, retirement date."
+    },
+    {
+      "question": "In Legacy Model Lifecycle Management for Financial Reporting, what is the identified limitation of the migration process?",
+      "options": [
+        "The migration requires a complete rewrite of the database schema.",
+        "Newer models might produce different outputs, requiring quality validation.",
+        "The migration process is only available for Enterprise customers.",
+        "The migration requires manual approval from Anthropic support."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that newer models may behave differently, necessitating output validation.",
+      "evidence": "Newer models may exhibit different response characteristics compared to the retired version, requiring validation of output quality; check this by comparing historical outputs with new model test results."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:54.236Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

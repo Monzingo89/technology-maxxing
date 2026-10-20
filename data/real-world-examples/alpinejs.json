@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "alpinejs",
+  "title": "Dynamic Inventory Filtering",
+  "business": "Small-scale e-commerce storefronts managing local product catalogs.",
+  "problem": "High latency and poor user experience caused by full-page reloads for simple list filtering tasks.",
+  "solution": "Alpine.js enables declarative, reactive UI updates directly within the HTML, allowing the browser to filter items instantly without server round-trips.",
+  "steps": [
+    "Define the product list and search state within an x-data object.",
+    "Bind the search input to the state using x-model for two-way data synchronization.",
+    "Implement a getter function in x-data to compute the filtered list based on the current search input.",
+    "Use a template tag with x-for to iterate over the computed list and render the results dynamically."
+  ],
+  "outcome": "A fluid, responsive interface where the product list updates in real-time as the user types.",
+  "limitation": "Logic complexity is limited because all code resides in the HTML; as business logic grows, it becomes difficult to maintain and debug. Check for this by monitoring the size of the x-data object; if it exceeds 20 lines, consider moving logic to a separate JavaScript file.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Reactive Filtering Flow",
+    "description": "Shows how user input triggers a reactive update in the DOM.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "HTML input field"
+      },
+      {
+        "id": "b",
+        "label": "x-model",
+        "detail": "Syncs input to search state"
+      },
+      {
+        "id": "c",
+        "label": "Getter Function",
+        "detail": "Filters product array"
+      },
+      {
+        "id": "d",
+        "label": "DOM Update",
+        "detail": "x-for renders new list"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "updates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns new array"
+      }
+    ]
+  },
+  "code": {
+    "language": "html",
+    "content": "<div x-data=\"{ search: '', items: ['A', 'B'], get filtered() { return this.items.filter(i => i.includes(this.search)) } }\">\n  <input x-model=\"search\"> <!-- Binds input to search state -->\n  <template x-for=\"item in filtered\">\n    <li x-text=\"item\"></li> <!-- Renders filtered results -->\n  </template>\n</div>",
+    "explanation": "This code maps to the Dynamic Inventory Filtering scenario by using x-model to track user input and x-for to reactively display filtered inventory items."
+  },
+  "sources": [
+    {
+      "url": "https://alpinejs.dev/start-here",
+      "label": "Alpine.js Start Here"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Inventory Filtering, how does the application avoid server-side latency during search?",
+      "options": [
+        "By using Alpine.js to handle filtering logic and DOM updates locally in the browser.",
+        "By offloading the search query to a dedicated database index.",
+        "By pre-rendering all possible search results into hidden HTML elements.",
+        "By using a background worker to fetch new HTML fragments."
+      ],
+      "answerIndex": 0,
+      "explanation": "Alpine.js enables declarative, reactive UI updates directly within the HTML, allowing the browser to filter items instantly without server round-trips.",
+      "evidence": "Alpine.js enables declarative, reactive UI updates directly within the HTML, allowing the browser to filter items instantly without server round-trips."
+    },
+    {
+      "question": "What is a primary trade-off when implementing Dynamic Inventory Filtering using Alpine.js?",
+      "options": [
+        "The inability to use standard HTML elements.",
+        "The risk of excessive browser memory consumption.",
+        "Difficulty in maintaining and debugging complex logic embedded directly in HTML.",
+        "The requirement for a backend API to support x-data."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that keeping logic in HTML makes it hard to maintain as it grows.",
+      "evidence": "Logic complexity is limited because all code resides in the HTML; as business logic grows, it becomes difficult to maintain and debug."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:54.098Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:50.306Z"
+}

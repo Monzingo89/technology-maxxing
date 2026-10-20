@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_log_analytics",
+  "title": "Centralized Log Aggregation for Distributed Microservices",
+  "business": "Organizations running distributed microservices across hybrid cloud environments that require unified visibility into system health.",
+  "problem": "Fragmented log storage across multiple virtual machines and container instances prevents rapid troubleshooting and correlation of cross-service errors.",
+  "solution": "Azure Log Analytics provides a centralized workspace to ingest, query, and analyze telemetry data from diverse sources using a unified Kusto Query Language interface.",
+  "steps": [
+    "Provision an Azure Log Analytics workspace within the target resource group.",
+    "Configure diagnostic settings on compute resources to stream platform logs to the workspace.",
+    "Deploy the Azure Monitor agent to virtual machines to collect guest-level event logs.",
+    "Execute Kusto queries within the workspace to filter, aggregate, and visualize cross-service error patterns."
+  ],
+  "outcome": "Improved mean time to resolution through unified log correlation and centralized diagnostic data access.",
+  "limitation": "Data ingestion latency can occur during high-volume traffic spikes, which is checked by monitoring the ingestion delay metric in the workspace insights.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Log Aggregation Flow",
+    "description": "Data flows from compute sources into a centralized workspace for analysis.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Microservices",
+        "detail": "Distributed compute instances"
+      },
+      {
+        "id": "b",
+        "label": "Azure Monitor Agent",
+        "detail": "Log collection service"
+      },
+      {
+        "id": "c",
+        "label": "Log Analytics Workspace",
+        "detail": "Centralized storage and query engine"
+      },
+      {
+        "id": "d",
+        "label": "Kusto Query",
+        "detail": "Analysis interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "emits logs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "streams data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "processes queries"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Centralized Log Aggregation for Distributed Microservices, what is the primary benefit of using Azure Log Analytics?",
+      "options": [
+        "It provides a centralized workspace to ingest, query, and analyze telemetry data.",
+        "It automatically fixes code errors found in microservices.",
+        "It replaces the need for virtual machines in the cloud.",
+        "It eliminates the need for diagnostic settings."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the technology provides a centralized workspace for unified analysis.",
+      "evidence": "Azure Log Analytics provides a centralized workspace to ingest, query, and analyze telemetry data from diverse sources using a unified Kusto Query Language interface."
+    },
+    {
+      "question": "Regarding the implementation of Centralized Log Aggregation for Distributed Microservices, what is a noted limitation?",
+      "options": [
+        "The system cannot store logs from virtual machines.",
+        "Data ingestion latency can occur during high-volume traffic spikes.",
+        "Kusto Query Language is not supported for analysis.",
+        "The workspace requires manual deletion of all logs daily."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies potential ingestion delays during high-volume periods.",
+      "evidence": "Data ingestion latency can occur during high-volume traffic spikes, which is checked by monitoring the ingestion delay metric in the workspace insights."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:53.673Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

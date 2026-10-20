@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "storybook",
+  "title": "Financial Dashboard UI Resilience",
+  "business": "A fintech startup building a complex multi-currency dashboard for institutional traders.",
+  "problem": "Developers struggle to manually trigger rare UI states like 'insufficient funds' or 'API timeout' during local development, leading to frequent regressions in error handling components.",
+  "solution": "Utilizing Storybook to isolate component states allows developers to render specific edge cases without navigating the full application flow. By leveraging the play function, teams can programmatically simulate user interactions and verify that error states render correctly every time a component is modified.",
+  "steps": [
+    "Define component stories using Component Story Format (CSF) to represent standard and edge-case states.",
+    "Implement the play function within each story to simulate user events like button clicks or form inputs.",
+    "Use interaction tests to assert that the UI reflects the expected state after the play function executes.",
+    "Integrate Storybook into the CI pipeline to run these interaction tests automatically on every pull request."
+  ],
+  "outcome": "A robust UI component library where edge cases are documented and automatically verified, significantly reducing the time spent on manual QA for error-handling flows.",
+  "limitation": "Interaction tests are limited to the browser environment and do not replace integration tests that require a real backend. To check if a failure is due to a missing backend dependency, developers must inspect the browser console for network errors during story execution.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Component State Verification Flow",
+    "description": "This diagram illustrates how a component moves from isolated definition to automated validation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Component Definition",
+        "detail": "Source code for the UI element"
+      },
+      {
+        "id": "b",
+        "label": "Storybook Story",
+        "detail": "Isolated state representation"
+      },
+      {
+        "id": "c",
+        "label": "Play Function",
+        "detail": "Simulated user interaction logic"
+      },
+      {
+        "id": "d",
+        "label": "Interaction Test",
+        "detail": "Automated assertion of UI state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "defines"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "contains"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "executes"
+      }
+    ]
+  },
+  "code": {
+    "language": "typescript",
+    "content": "export const InsufficientFunds = { // Defining a specific edge case state\n  play: async ({ canvasElement }) => { // Simulating user interaction\n    const button = await screen.getByRole('button');\n    await userEvent.click(button); // Triggering the state change\n    await expect(screen.getByText('Balance too low')).toBeInTheDocument(); // Asserting the result\n  }\n};",
+    "explanation": "This code demonstrates how to isolate an error state and use the play function to verify that the UI correctly displays an error message after a user interaction."
+  },
+  "sources": [
+    {
+      "url": "https://storybook.js.org/docs",
+      "label": "Get started with Storybook | Storybook docs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Financial Dashboard UI Resilience, what is the primary benefit of using Storybook for error handling?",
+      "options": [
+        "It eliminates the need for backend API development.",
+        "It allows developers to render and test rare UI states without navigating the full app.",
+        "It automatically fixes bugs found in the production environment.",
+        "It replaces the need for unit testing business logic."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that developers struggle to trigger rare states, and Storybook solves this by isolating those states for development and testing.",
+      "evidence": "Utilizing Storybook to isolate component states allows developers to render specific edge cases without navigating the full application flow."
+    },
+    {
+      "question": "In Financial Dashboard UI Resilience, what is a key limitation of the proposed interaction testing approach?",
+      "options": [
+        "It cannot be integrated into a CI pipeline.",
+        "It requires a fully functional production backend to run.",
+        "It does not replace integration tests that require a real backend.",
+        "It only works for components written in JavaScript, not TypeScript."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that interaction tests are browser-based and cannot replace full integration tests requiring a backend.",
+      "evidence": "Interaction tests are limited to the browser environment and do not replace integration tests that require a real backend."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:33.789Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:29.633Z"
+}

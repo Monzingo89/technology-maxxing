@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_monday",
+  "title": "Automated Creative Agency Campaign Intake",
+  "business": "A mid-sized creative agency managing high-volume client requests across multiple departments.",
+  "problem": "Project managers spend excessive time manually triaging incoming client emails, creating task items in monday.com, and assigning owners based on project availability, leading to delayed project kickoffs.",
+  "solution": "The Claude connector for monday.com enables an AI agent to monitor incoming request channels, extract key project parameters, and automatically create items in the agency's intake board. The agent utilizes the create_items_and_tasks tool to map client requirements to specific columns, while using update_items_owners_and_status to assign tasks to the appropriate creative lead based on current workload data retrieved from the board.",
+  "steps": [
+    "Configure the Claude connector to access the agency's primary intake board and team member availability board.",
+    "Define a prompt for the agent to parse email content into structured fields like project type, deadline, and priority.",
+    "Implement the create_items_and_tasks tool to instantiate new project rows within the monday.com workspace.",
+    "Use the update_items_owners_and_status tool to dynamically assign tasks based on the retrieved team member capacity.",
+    "Set up automated notifications via the connector to confirm receipt of the request to the client."
+  ],
+  "outcome": "The agency achieves a standardized intake process where project managers only intervene for high-complexity requests, significantly reducing manual administrative overhead.",
+  "limitation": "The connector relies on the accuracy of the board's column structure; if a user renames or deletes a mandatory column, the agent's API calls will fail. Users must verify board schema consistency in the monday.com interface before updating agent logic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agency Intake Automation Flow",
+    "description": "This diagram illustrates how the AI agent processes client requests and updates the monday.com project environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Request",
+        "detail": "Incoming email or form submission"
+      },
+      {
+        "id": "b",
+        "label": "Claude Agent",
+        "detail": "Processes input and triggers connector tools"
+      },
+      {
+        "id": "c",
+        "label": "Intake Board",
+        "detail": "Central repository for new project items"
+      },
+      {
+        "id": "d",
+        "label": "Team Board",
+        "detail": "Tracks owner availability and workload"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Parses request data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "create_items_and_tasks"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "get_board_items (availability)"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "update_items_owners_and_status"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/monday",
+      "label": "monday.com connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Creative Agency Campaign Intake, what is the primary problem the Claude connector addresses?",
+      "options": [
+        "High costs of monday.com subscription tiers.",
+        "Manual triage and task creation delays.",
+        "Inability to send emails to clients.",
+        "Lack of integration with external accounting software."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly identifies manual triage and task creation as the bottleneck causing project delays.",
+      "evidence": "Project managers spend excessive time manually triaging incoming client emails, creating task items in monday.com, and assigning owners based on project availability, leading to delayed project kickoffs."
+    },
+    {
+      "question": "In Automated Creative Agency Campaign Intake, what is a critical limitation of the implementation?",
+      "options": [
+        "The agent cannot read board data.",
+        "The agent requires a human to approve every item.",
+        "Changes to board column structure can break API calls.",
+        "The connector only works for CRM use cases."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson notes that the connector's functionality is tied to the board's schema, making it sensitive to structural changes.",
+      "evidence": "The connector relies on the accuracy of the board's column structure; if a user renames or deletes a mandatory column, the agent's API calls will fail."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:57.509Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:53.538Z"
+}

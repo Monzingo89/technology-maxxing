@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_haiku_5_5",
+  "title": "Real-time Logistics Incident Routing",
+  "business": "Global logistics providers managing millions of shipment status updates per hour.",
+  "problem": "Legacy rule-based systems fail to categorize unstructured delivery exceptions, leading to manual triage bottlenecks and delayed customer notifications.",
+  "solution": "Deploying Claude Haiku 5.5 to perform high-volume, latency-sensitive classification of incoming shipment logs, automatically routing them to the appropriate regional resolution teams.",
+  "steps": [
+    "Ingest raw shipment log streams into a high-throughput message queue.",
+    "Invoke the claude-haiku-5-5 model via the API for each log entry to classify the exception type.",
+    "Utilize the adaptive thinking capability with the effort parameter set to low to minimize latency for routine classifications.",
+    "Route the classified output to the specific downstream resolution service based on the model's structured JSON response."
+  ],
+  "outcome": "Significant reduction in manual triage time and improved accuracy in routing complex delivery exceptions to specialized support staff.",
+  "limitation": "The model's adaptive thinking depth is controlled by the effort parameter; setting it too low for highly ambiguous logs may result in classification errors, requiring a tradeoff between speed and reasoning depth.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Routing Pipeline",
+    "description": "Data flows from raw logs through the model to final resolution.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Log Stream",
+        "detail": "Raw shipment data"
+      },
+      {
+        "id": "b",
+        "label": "Claude Haiku 5.5",
+        "detail": "Classification engine"
+      },
+      {
+        "id": "c",
+        "label": "Routing Service",
+        "detail": "Logic to dispatch tasks"
+      },
+      {
+        "id": "d",
+        "label": "Resolution Team",
+        "detail": "Human or automated action"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends unstructured text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Returns classification label"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Dispatches to team"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.messages.create(model='claude-haiku-5-5', messages=[{'role': 'user', 'content': log_entry}], thinking={'type': 'enabled', 'budget_tokens': 1024}, extra_headers={'anthropic-beta': 'output-300k-2026-03-24'}) # Using adaptive thinking for classification",
+    "explanation": "This snippet demonstrates calling the model to classify a log entry while enabling thinking blocks for complex reasoning."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/haiku-5-5/overview",
+      "label": "Claude Haiku 5.5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Logistics Incident Routing, how does the technology address the problem of manual triage?",
+      "options": [
+        "By replacing all human staff with autonomous agents.",
+        "By performing high-volume, latency-sensitive classification of incoming shipment logs.",
+        "By increasing the cost of processing each individual log entry.",
+        "By ignoring unstructured data in favor of structured database queries."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution specifically leverages the model's classification capabilities to automate the triage of unstructured logs.",
+      "evidence": "Deploying Claude Haiku 5.5 to perform high-volume, latency-sensitive classification of incoming shipment logs, automatically routing them to the appropriate regional resolution teams."
+    },
+    {
+      "question": "In Real-time Logistics Incident Routing, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot process JSON output.",
+        "The model is too slow for high-volume tasks.",
+        "Setting the effort parameter too low for ambiguous logs may result in classification errors.",
+        "The model requires manual intervention for every single log entry."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson identifies the tradeoff between speed (low effort) and reasoning depth as a key limitation for classification accuracy.",
+      "evidence": "The model's adaptive thinking depth is controlled by the effort parameter; setting it too low for highly ambiguous logs may result in classification errors, requiring a tradeoff between speed and reasoning depth."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:39.619Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:35.629Z"
+}

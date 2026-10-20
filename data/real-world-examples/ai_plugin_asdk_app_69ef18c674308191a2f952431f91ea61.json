@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_69ef18c674308191a2f952431f91ea61",
+  "title": "Real-time Inventory Sync for Boutique Retailers",
+  "business": "Small boutique retailers managing inventory across physical storefronts and digital platforms.",
+  "problem": "LLMs often rely on outdated or generic information about the libraries you use, leading to hallucinated API calls when attempting to sync inventory levels between a local database and a cloud-based store like Shopify.",
+  "solution": "By utilizing the ChatGPT plugin architecture, retailers can bridge the gap between the LLM and live, authenticated store data. Instead of relying on the model's internal training data for API structures, the plugin acts as a secure conduit that fetches current schema definitions and executes operations directly against the live Shopify API.",
+  "steps": [
+    "Define a plugin manifest that explicitly maps natural language intent to specific Shopify API endpoints.",
+    "Implement an authentication layer using OAuth to ensure the plugin only accesses the specific retailer's store data.",
+    "Configure the plugin to fetch live product schema metadata before attempting any inventory updates.",
+    "Execute inventory adjustments through the verified API endpoints rather than generating code based on static training data."
+  ],
+  "outcome": "Retailers achieve accurate, real-time inventory synchronization that reflects current stock levels without the risk of using deprecated or hallucinated code patterns.",
+  "limitation": "The primary trade-off is the latency introduced by the round-trip communication between the LLM, the plugin gateway, and the external API. To check for performance degradation, developers should monitor the response time of the plugin's manifest validation and the subsequent API execution latency.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Sync Plugin Workflow",
+    "description": "This diagram illustrates the flow from user request to live data update, bypassing static training data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Natural language request to update stock"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT Plugin",
+        "detail": "Intermediary processing layer"
+      },
+      {
+        "id": "c",
+        "label": "Shopify API",
+        "detail": "Live source of truth for inventory"
+      },
+      {
+        "id": "d",
+        "label": "Inventory Database",
+        "detail": "The retailer's local stock record"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends intent"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Queries live schema"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns current data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Updates record"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Sync for Boutique Retailers, what is the primary reason for using a plugin instead of relying on the LLM's internal knowledge?",
+      "options": [
+        "To avoid hallucinated API calls based on outdated training data.",
+        "To increase the speed of the LLM's internal processing.",
+        "To bypass the need for OAuth authentication.",
+        "To reduce the number of API endpoints required."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that LLMs often hallucinate APIs because they rely on outdated information, which the plugin architecture solves by connecting to live data.",
+      "evidence": "LLMs often rely on outdated or generic information about the libraries you use, leading to hallucinated API calls when attempting to sync inventory levels between a local database and a cloud-based store like Shopify."
+    },
+    {
+      "question": "In Real-time Inventory Sync for Boutique Retailers, what is the identified limitation of the plugin approach?",
+      "options": [
+        "The inability to use OAuth for security.",
+        "The latency introduced by round-trip communication.",
+        "The requirement to manually update the plugin manifest daily.",
+        "The lack of support for Shopify API endpoints."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly states that latency is the trade-off for using this architecture and suggests monitoring response times.",
+      "evidence": "The primary trade-off is the latency introduced by the round-trip communication between the LLM, the plugin gateway, and the external API."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:36.159Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

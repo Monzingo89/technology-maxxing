@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "zero_shot_learning",
+  "title": "Automated Regulatory Compliance Tagging",
+  "business": "Global financial institutions managing thousands of incoming legal documents daily.",
+  "problem": "The firm faces a high cost and significant latency in manually classifying new, evolving regulatory documents for which no labeled training data exists, preventing timely compliance updates.",
+  "solution": "Zero-Shot Learning leverages large-scale pre-trained language models to classify documents based solely on descriptive natural language instructions, bypassing the need for task-specific fine-tuning or labeled datasets.",
+  "steps": [
+    "Define a clear, descriptive taxonomy of regulatory categories as natural language labels.",
+    "Construct a prompt template that embeds the document text alongside the classification instructions.",
+    "Submit the prompt to the pre-trained model without performing any gradient updates or weight modifications.",
+    "Parse the model's textual output to extract the assigned category for downstream compliance workflows."
+  ],
+  "outcome": "The organization achieves immediate classification capability for novel document types, significantly reducing the time-to-compliance for new regulations.",
+  "limitation": "The primary limitation is potential sensitivity to prompt phrasing, where minor variations in instruction wording can lead to inconsistent classification results; this is checked by evaluating model output stability across semantically identical prompts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Zero-Shot Classification Workflow",
+    "description": "This diagram illustrates how raw documents are processed through a pre-trained model using descriptive instructions to produce a classification without prior training.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regulatory Document",
+        "detail": "Unlabeled input text"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Template",
+        "detail": "Combines document with category instructions"
+      },
+      {
+        "id": "c",
+        "label": "Pre-trained Model",
+        "detail": "Frozen weights, no fine-tuning"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Category",
+        "detail": "Output classification"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Query"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Inference"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2005.14165",
+      "label": "Language Models are Few-Shot Learners"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Regulatory Compliance Tagging, how does the system address the lack of labeled data?",
+      "options": [
+        "By using descriptive natural language instructions to classify documents without fine-tuning.",
+        "By performing gradient updates on a small subset of the regulatory documents.",
+        "By training a new model from scratch using the existing legal corpus.",
+        "By hiring human experts to label thousands of examples before processing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on using pre-trained models to perform tasks based on instructions rather than task-specific training data.",
+      "evidence": "Zero-Shot Learning leverages large-scale pre-trained language models to classify documents based solely on descriptive natural language instructions, bypassing the need for task-specific fine-tuning or labeled datasets."
+    },
+    {
+      "question": "What is a key limitation of the approach described in Automated Regulatory Compliance Tagging?",
+      "options": [
+        "The model requires constant gradient updates to remain accurate.",
+        "The system is sensitive to prompt phrasing, which may cause inconsistent results.",
+        "The model cannot handle documents longer than a single sentence.",
+        "The approach is only effective for arithmetic tasks, not document classification."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario highlight that prompt sensitivity is a primary trade-off in zero-shot settings.",
+      "evidence": "The primary limitation is potential sensitivity to prompt phrasing, where minor variations in instruction wording can lead to inconsistent classification results; this is checked by evaluating model output stability across semantically identical prompts."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:55.448Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:26.869Z"
+}

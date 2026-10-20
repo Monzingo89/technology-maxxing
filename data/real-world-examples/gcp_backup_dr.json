@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_backup_dr",
+  "title": "Centralized Recovery for Distributed Enterprise Workloads",
+  "business": "Large enterprises managing heterogeneous workloads across multiple Google Cloud environments that require unified data protection.",
+  "problem": "Fragmented backup strategies lead to inconsistent recovery points, increased management overhead, and potential data loss during regional outages.",
+  "solution": "Google Cloud Backup and DR provides a centralized, policy-driven service to manage backups and disaster recovery for supported Google Cloud workloads, ensuring consistent recovery objectives.",
+  "steps": [
+    "Provision the Backup and DR management console within the primary Google Cloud project.",
+    "Define backup and disaster recovery policies specifying retention periods and recovery point objectives.",
+    "Assign resources such as Compute Engine instances or databases to the configured management policies.",
+    "Monitor backup status and verify recovery readiness through the centralized dashboard."
+  ],
+  "outcome": "Improved operational efficiency and reduced recovery time objectives through a single pane of glass for all enterprise data protection.",
+  "limitation": "The service is limited to supported Google Cloud workloads; users must verify compatibility via the service console to ensure specific resource types can be managed.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Backup and DR Management Flow",
+    "description": "Illustrates the relationship between the management service and protected workloads.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Backup and DR Service",
+        "detail": "Centralized management plane"
+      },
+      {
+        "id": "b",
+        "label": "Backup Policy",
+        "detail": "Configuration rules"
+      },
+      {
+        "id": "c",
+        "label": "Compute Engine",
+        "detail": "Protected workload"
+      },
+      {
+        "id": "d",
+        "label": "Database Instance",
+        "detail": "Protected workload"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "defines"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "applies to"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "applies to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Centralized Recovery for Distributed Enterprise Workloads, what is the primary benefit of using the solution?",
+      "options": [
+        "Eliminating the need for regional storage",
+        "Unified management of backups and disaster recovery",
+        "Automatic hardware upgrades for VMs",
+        "Lowering the cost of network egress"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution addresses fragmented strategies by providing a centralized, policy-driven service for data protection.",
+      "evidence": "Google Cloud Backup and DR provides a centralized, policy-driven service to manage backups and disaster recovery for supported Google Cloud workloads, ensuring consistent recovery objectives."
+    },
+    {
+      "question": "In Centralized Recovery for Distributed Enterprise Workloads, what is a key limitation to consider?",
+      "options": [
+        "It only supports on-premises hardware",
+        "It requires manual scripting for every backup",
+        "It is limited to supported Google Cloud workloads",
+        "It cannot be used with Compute Engine"
+      ],
+      "answerIndex": 2,
+      "explanation": "The service is not universal and requires verification of supported resource types.",
+      "evidence": "The service is limited to supported Google Cloud workloads; users must verify compatibility via the service console to ensure specific resource types can be managed."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:53.306Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

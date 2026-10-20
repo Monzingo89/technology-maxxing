@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_adaptllm_law_chat",
+  "title": "Legal Research Assistant Optimization",
+  "business": "Corporate legal departments managing high volumes of internal policy queries.",
+  "problem": "General-purpose LLMs often lack the specialized domain knowledge required to accurately interpret complex legal terminology, leading to inconsistent or hallucinated responses.",
+  "solution": "Implementing the law-chat model, which utilizes continued pre-training on domain-specific corpora to enrich the LLM with legal knowledge while maintaining conversational capabilities through reading comprehension techniques.",
+  "steps": [
+    "Initialize the environment using the transformers library to load the law-chat model.",
+    "Define a system prompt that aligns with the LLaMA-2-Chat structure to ensure safe and coherent responses.",
+    "Format user inputs as multi-turn conversations to fit the model's expected input structure.",
+    "Execute inference using the model to generate responses based on the provided legal context."
+  ],
+  "outcome": "Improved accuracy in handling domain-specific legal queries compared to standard general-purpose models.",
+  "limitation": "Continued pre-training can sometimes degrade the model's general prompting ability; verify performance by testing against baseline general-purpose tasks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Law-Chat Inference Pipeline",
+    "description": "The flow of data from user input to the specialized legal response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Raw legal question"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Template",
+        "detail": "Wraps input in LLaMA-2-Chat format"
+      },
+      {
+        "id": "c",
+        "label": "Law-Chat Model",
+        "detail": "Domain-adapted 7B parameters"
+      },
+      {
+        "id": "d",
+        "label": "Legal Response",
+        "detail": "Final generated output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "formatting"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "inference"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoModelForCausalLM, AutoTokenizer\nmodel = AutoModelForCausalLM.from_pretrained('AdaptLLM/law-chat') # Load model\ntokenizer = AutoTokenizer.from_pretrained('AdaptLLM/law-chat') # Load tokenizer\nprompt = '<s>[INST] <<SYS>>\\nYou are a helpful assistant.\\n<</SYS>>\\n\\nQuestion: Define ex post facto. [/INST]'\ninputs = tokenizer(prompt, return_tensors='pt').input_ids # Tokenize input\noutputs = model.generate(inputs, max_length=512) # Generate legal response",
+    "explanation": "This code demonstrates loading the law-chat model and formatting a query using the required LLaMA-2-Chat system prompt structure."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/AdaptLLM/law-chat",
+      "label": "AdaptLLM/law-chat"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legal Research Assistant Optimization, how does the model achieve better performance on legal queries?",
+      "options": [
+        "By using a larger 50B parameter architecture.",
+        "By utilizing continued pre-training on domain-specific corpora.",
+        "By removing all system prompts from the input.",
+        "By ignoring the LLaMA-2-Chat data format."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on domain-specific pre-training to enrich the model with legal knowledge.",
+      "evidence": "Implementing the law-chat model, which utilizes continued pre-training on domain-specific corpora to enrich the LLM with legal knowledge while maintaining conversational capabilities through reading comprehension techniques."
+    },
+    {
+      "question": "In Legal Research Assistant Optimization, what is a potential trade-off of the implementation?",
+      "options": [
+        "The model becomes unable to process English text.",
+        "The model's general prompting ability may be negatively impacted.",
+        "The model requires a 100B parameter GPU to run.",
+        "The model cannot be used for multi-turn conversations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and lesson note that continued pre-training can hurt general prompting ability.",
+      "evidence": "Continued pre-training can sometimes degrade the model's general prompting ability; verify performance by testing against baseline general-purpose tasks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:41.015Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:37.014Z"
+}

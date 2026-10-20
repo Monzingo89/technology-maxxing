@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "cache_invalidation",
+  "title": "Dynamic Inventory Synchronization for Global Retail",
+  "business": "A global retail platform managing real-time stock levels across multiple regional warehouses.",
+  "problem": "The system suffers from stale inventory data where customers purchase items that are already out of stock because the application layer continues to serve cached, outdated availability results.",
+  "solution": "Implementing an event-driven cache invalidation strategy where the inventory database triggers a purge command to the cache layer immediately upon a successful transaction, ensuring subsequent requests fetch the current state.",
+  "steps": [
+    "Configure a database trigger on the inventory table to detect write operations.",
+    "Develop a listener service that receives notification of inventory changes.",
+    "Execute a cache purge command targeting the specific product ID key.",
+    "Verify the cache miss on the next read request to force a database refresh."
+  ],
+  "outcome": "Customers receive accurate, real-time availability information, significantly reducing order cancellations due to overselling.",
+  "limitation": "The primary limitation is the 'cache stampede' risk, where simultaneous requests for an invalidated key overwhelm the database; this can be checked by monitoring the latency spikes during high-concurrency periods following an invalidation event.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Invalidation Flow",
+    "description": "This flow shows how a database update triggers the removal of stale cache data.",
+    "nodes": [
+      {
+        "id": "db",
+        "label": "Inventory DB",
+        "detail": "Source of truth for stock"
+      },
+      {
+        "id": "trigger",
+        "label": "Database Trigger",
+        "detail": "Detects row updates"
+      },
+      {
+        "id": "cache",
+        "label": "Cache Layer",
+        "detail": "Stores availability results"
+      },
+      {
+        "id": "app",
+        "label": "Application",
+        "detail": "Serves user requests"
+      }
+    ],
+    "edges": [
+      {
+        "from": "db",
+        "to": "trigger",
+        "label": "Data Change"
+      },
+      {
+        "from": "trigger",
+        "to": "cache",
+        "label": "Purge Key"
+      },
+      {
+        "from": "app",
+        "to": "cache",
+        "label": "Read Request"
+      },
+      {
+        "from": "cache",
+        "to": "db",
+        "label": "Cache Miss/Refresh"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Inventory Synchronization for Global Retail, why is cache invalidation necessary?",
+      "options": [
+        "To prevent customers from purchasing items that are already out of stock.",
+        "To increase the total storage capacity of the database.",
+        "To reduce the number of users accessing the website.",
+        "To permanently delete product records from the database."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that stale cached data leads to overselling, which invalidation resolves.",
+      "evidence": "The system suffers from stale inventory data where customers purchase items that are already out of stock because the application layer continues to serve cached, outdated availability results."
+    },
+    {
+      "question": "In Dynamic Inventory Synchronization for Global Retail, what is a key limitation of the proposed invalidation strategy?",
+      "options": [
+        "The system becomes too fast for the database to handle.",
+        "The risk of a cache stampede during high-concurrency periods.",
+        "The database trigger will automatically delete all product data.",
+        "The application will stop serving requests entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly mentions the cache stampede as a risk when many requests hit the database simultaneously after invalidation.",
+      "evidence": "The primary limitation is the 'cache stampede' risk, where simultaneous requests for an invalidated key overwhelm the database; this can be checked by monitoring the latency spikes during high-concurrency periods following an invalidation event."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:52.737Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

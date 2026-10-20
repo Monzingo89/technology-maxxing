@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "digital_signature",
+  "title": "Supply Chain Integrity for Automated Manufacturing",
+  "business": "Industrial manufacturing firms that distribute firmware updates to remote IoT-enabled factory equipment.",
+  "problem": "Unauthorized actors could inject malicious firmware updates into the distribution pipeline, causing equipment failure or safety hazards because the receiving devices have no way to verify the origin or integrity of the binary files.",
+  "solution": "Digital signatures provide a mechanism to authenticate data and ensure integrity. By signing firmware with a private key at the build server, the manufacturer ensures that only authentic updates are accepted. The remote device uses the corresponding public key to verify the signature, ensuring the file has not been altered and originated from a trusted source.",
+  "steps": [
+    "Generate a secure asymmetric key pair (private and public).",
+    "Compute a cryptographic hash of the firmware binary file.",
+    "Encrypt the hash using the private key to create the digital signature.",
+    "Distribute the firmware binary along with the attached signature file.",
+    "Verify the signature on the remote device by decrypting it with the public key and comparing the resulting hash against a fresh hash of the received binary."
+  ],
+  "outcome": "The manufacturing firm achieves high assurance that only verified, untampered firmware updates are executed by factory equipment, effectively mitigating the risk of malicious code injection.",
+  "limitation": "The primary limitation is key management; if the private key is compromised, an attacker can sign malicious updates that appear legitimate. To check for this, implement a robust Key Management System (KMS) and audit logs to detect unauthorized access to the signing environment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Firmware Signing and Verification Flow",
+    "description": "The flow shows the transition from a secure build environment to the remote device.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Build Server",
+        "detail": "Holds private key"
+      },
+      {
+        "id": "b",
+        "label": "Firmware Binary",
+        "detail": "The update file"
+      },
+      {
+        "id": "c",
+        "label": "Digital Signature",
+        "detail": "Encrypted hash"
+      },
+      {
+        "id": "d",
+        "label": "IoT Device",
+        "detail": "Holds public key"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "hashes"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "signs hash with private key"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "transmits binary"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "transmits signature"
+      },
+      {
+        "from": "d",
+        "to": "d",
+        "label": "verifies with public key"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Integrity for Automated Manufacturing, what is the primary purpose of using a digital signature?",
+      "options": [
+        "To encrypt the firmware so it remains confidential during transit.",
+        "To authenticate data and ensure the firmware has not been altered.",
+        "To increase the speed of firmware deployment to remote devices.",
+        "To replace the need for secure storage of the firmware binary."
+      ],
+      "answerIndex": 1,
+      "explanation": "Digital signatures are used to verify the origin and integrity of data, ensuring it hasn't been tampered with.",
+      "evidence": "Digital signatures provide a mechanism to authenticate data and ensure integrity."
+    },
+    {
+      "question": "In Supply Chain Integrity for Automated Manufacturing, what is a critical limitation of the implementation?",
+      "options": [
+        "The public key can be easily guessed by malicious actors.",
+        "The process requires the firmware to be signed by every device.",
+        "If the private key is compromised, the security of the entire system is undermined.",
+        "Digital signatures cannot be verified on IoT devices due to hardware constraints."
+      ],
+      "answerIndex": 2,
+      "explanation": "The security of the signature relies entirely on the secrecy of the private key; its compromise allows for fraudulent signatures.",
+      "evidence": "The primary limitation is key management; if the private key is compromised, an attacker can sign malicious updates that appear legitimate."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:36.090Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

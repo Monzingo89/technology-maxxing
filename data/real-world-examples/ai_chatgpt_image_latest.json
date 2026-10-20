@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_chatgpt_image_latest",
+  "title": "Legacy Asset Archive Restoration",
+  "business": "Historical archival firms managing large collections of degraded physical photographs.",
+  "problem": "Manual restoration of damaged historical images is labor-intensive, inconsistent across different restoration artists, and fails to scale when processing thousands of archival assets.",
+  "solution": "Utilize the chatgpt-image-latest model via the image edit endpoint to automate the inpainting of missing or damaged sections of digitized historical photographs based on textual descriptions of the surrounding context.",
+  "steps": [
+    "Digitize the physical photograph to create a high-resolution source image.",
+    "Define a mask layer identifying the specific damaged or missing areas requiring restoration.",
+    "Construct a prompt describing the visual characteristics of the missing content to guide the model.",
+    "Submit the source image, mask, and prompt to the v1/images/edits endpoint using the chatgpt-image-latest model.",
+    "Review the generated output for historical accuracy and consistency with the original image style."
+  ],
+  "outcome": "A standardized, repeatable workflow that accelerates the restoration process while maintaining a consistent aesthetic across diverse archival collections.",
+  "limitation": "The model may struggle with complex, non-repeating textures or highly specific historical details not present in the training data; verify results by comparing the output against original reference material to ensure fidelity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Image Restoration Pipeline",
+    "description": "The flow shows how a damaged asset is processed through the model to produce a restored version.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Digitized Asset",
+        "detail": "Source image file"
+      },
+      {
+        "id": "b",
+        "label": "Masking Tool",
+        "detail": "Defines damaged regions"
+      },
+      {
+        "id": "c",
+        "label": "chatgpt-image-latest",
+        "detail": "Inpainting engine"
+      },
+      {
+        "id": "d",
+        "label": "Restored Asset",
+        "detail": "Final output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "masked image + prompt"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/chatgpt-image-latest",
+      "label": "chatgpt-image-latest"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Asset Archive Restoration, how does the technology address the problem of manual restoration?",
+      "options": [
+        "By automating the inpainting of damaged sections using textual context.",
+        "By replacing the need for digitized source images entirely.",
+        "By manually training artists on the chatgpt-image-latest model.",
+        "By increasing the labor hours required for each photograph."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the model's inpainting capability to fill in damaged areas automatically, reducing manual effort.",
+      "evidence": "Utilize the chatgpt-image-latest model via the image edit endpoint to automate the inpainting of missing or damaged sections of digitized historical photographs based on textual descriptions of the surrounding context."
+    },
+    {
+      "question": "In Legacy Asset Archive Restoration, what is a primary limitation of the implementation?",
+      "options": [
+        "The model is unable to process images larger than 100x100 pixels.",
+        "The model may struggle with complex textures and requires verification against original material.",
+        "The model requires a live session endpoint which is not supported.",
+        "The model cannot be used for inpainting tasks."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario note that the model might not perfectly reconstruct complex details, necessitating manual verification.",
+      "evidence": "The model may struggle with complex, non-repeating textures or highly specific historical details not present in the training data; verify results by comparing the output against original reference material to ensure fidelity."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:15.177Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:11.382Z"
+}

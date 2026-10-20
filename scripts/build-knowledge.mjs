@@ -4,6 +4,8 @@ import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { validateReviewedBanks } from "./assessment-banks.mjs";
 import { standardBanks } from "./standards-topics.mjs";
+import { exams, researchedAt, inferExamMappings, acronymQuestions } from "./exam-study.mjs";
+import { validateExample, exampleQuestions, renderExample, exampleStyles } from "./real-world-examples.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "public");
@@ -47,6 +49,8 @@ const context = vm.createContext({
 vm.runInContext(source, context, { timeout: 5000 });
 await vm.runInContext("loadAgentData()", context, { timeout: 5000 });
 const data = JSON.parse(vm.runInContext("JSON.stringify(DATA)", context));
+const acronymStudies = Object.entries(extensions).flatMap(([topicId, extension]) => extension.acronymStudy ? [{ ...extension.acronymStudy, topicId }] : []);
+const studiesByTopic = new Map(acronymStudies.map((study) => [study.topicId, study]));
 const asText = (value) => (typeof value === "string" ? value : "");
 const strings = (value) =>
   Array.isArray(value) ? value.filter((item) => typeof item === "string") : [];
@@ -148,9 +152,15 @@ const technologies = Object.entries(data.tech)
       crossCloudEquivalents: strings(item.crossCloudEquivalents),
       questionBank,
       learnPath: `learn/${id}/`,
+      acronymStudy: studiesByTopic.get(id),
     };
   })
   .sort((a, b) => a.name.localeCompare(b.name));
+for (const topic of technologies) {
+  const mappings = new Map(inferExamMappings(topic).map((mapping) => [mapping.examId, mapping]));
+  for (const examId of topic.acronymStudy?.exams || []) mappings.set(examId, { examId, basis: "curated", reason: `Curated ${topic.acronymStudy.group} study relevance. Check the linked official objectives for required depth.` });
+  topic.examMappings = [...mappings.values()];
+}
 if (!technologies.length)
   throw new Error("Refusing to publish an empty knowledge catalog.");
 validateReviewedBanks(
@@ -399,14 +409,22 @@ function buildAssessmentBank(technology, allTechnologies) {
 const assessmentBanks = Object.fromEntries(
   technologies.map((technology) => [
     technology.id,
-    reviewedBanks[technology.id]?.questions ||
+    reviewedBanks[technology.id]?.questions || (technology.acronymStudy && !technology.acronymStudy.reusedTopic ? acronymQuestions(technology.acronymStudy, acronymStudies) : null) ||
       buildAssessmentBank(technology, technologies),
   ]),
 );
+const realWorldExamples = {};
+for (const topic of technologies) {
+  const file = path.join(root, 'data/real-world-examples', `${topic.id}.json`);
+  if (!fs.existsSync(file)) continue;
+  realWorldExamples[topic.id] = validateExample(JSON.parse(fs.readFileSync(file, 'utf8')), topic);
+  assessmentBanks[topic.id].push(...exampleQuestions(realWorldExamples[topic.id], topic.name));
+}
 for (const [id, bank] of Object.entries(assessmentBanks)) {
-  if (bank.length !== ASSESSMENT_QUESTION_COUNT)
+  const expected = ASSESSMENT_QUESTION_COUNT + (realWorldExamples[id] ? 2 : 0);
+  if (bank.length !== expected)
     throw new Error(
-      `Assessment bank for ${id} has ${bank.length} questions; expected ${ASSESSMENT_QUESTION_COUNT}.`,
+      `Assessment bank for ${id} has ${bank.length} questions; expected ${expected}.`,
     );
 }
 
@@ -414,6 +432,8 @@ for (const [id, bank] of Object.entries(assessmentBanks)) {
 fs.writeFileSync(
   path.join(out, "knowledge-index.json"),
   JSON.stringify({
+    exams,
+    examResearchDate: researchedAt,
     technologies: technologies.map((t) => ({
       id: t.id,
       name: t.name,
@@ -423,6 +443,8 @@ fs.writeFileSync(
       assessmentCount: assessmentBanks[t.id].length,
       learnPath: t.learnPath,
       assessmentQuality: reviewedBanks[t.id] ? "authored" : "catalog-recall",
+      acronymStudy: t.acronymStudy,
+      examMappings: t.examMappings,
     })),
     assessments: assessmentBanks,
   }) + "\n",
@@ -463,10 +485,11 @@ for (const technology of technologies) {
       title: `${t.name}: learn, practice & connect | AI Space`,
       description,
       route: t.learnPath,
-      content: content.replace(
+      content: `<style>${exampleStyles}</style>` + (t.acronymStudy ? `<section class="callout" aria-label="Acronym study"><h2>Remember ${esc(t.acronymStudy.term)}</h2><p><strong>Full name:</strong> ${esc(t.acronymStudy.expansion)}</p><p><strong>Memory aid:</strong> ${esc(t.acronymStudy.mnemonic)}</p><p>${esc(t.acronymStudy.distinction)}</p><p>Study area: ${esc(t.acronymStudy.group)} · Batch ${esc(t.acronymStudy.batch)}</p><p>Relevant study for: ${t.examMappings.map((mapping) => { const exam = exams.find((exam) => exam.id === mapping.examId); return exam ? `<a href="${esc(exam.url)}">${esc(exam.name)} ${esc(exam.code)}</a>` : ""; }).join(" · ")}</p><a href="../../#study">Practice with exam flashcards →</a></section>` : "") + content.replace(
         '<a href="../../">Take an assessment',
         `<a href="../../#login?assessment=${encodeURIComponent(t.id)}">Take an assessment`,
-      ),
+      ).replace('<aside class="callout">', `${renderExample(realWorldExamples[t.id])}<aside class="callout">`)
+        .replace('timed 5-question assessment', `timed ${assessmentBanks[t.id].length}-question assessment (20 seconds per question)`),
       structured: {
         "@context": "https://schema.org",
         "@type": "LearningResource",

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_bigquery",
+  "title": "Predictive Inventory Optimization for Global Retail",
+  "business": "A global retail chain managing thousands of SKUs across regional distribution centers.",
+  "problem": "The supply chain team struggles with manual data extraction from BigQuery to identify stock-out risks, leading to delayed replenishment orders and lost revenue during seasonal demand spikes.",
+  "solution": "By integrating the Claude BigQuery connector, the supply chain agent gains direct access to execute SQL queries against historical sales and inventory tables. The agent can perform real-time analysis of stock levels and trigger replenishment alerts based on BigQuery analytical insights without human intervention.",
+  "steps": [
+    "Configure the BigQuery MCP connector to authenticate with the specific Google Cloud project containing inventory datasets.",
+    "Grant the agent service account read-only permissions to the relevant BigQuery tables.",
+    "Define the agent's system prompt to utilize the execute_sql tool for querying inventory thresholds.",
+    "Enable the agent to interpret query results and generate actionable replenishment recommendations for the logistics team."
+  ],
+  "outcome": "The supply chain team achieves faster response times to inventory fluctuations, shifting from reactive manual reporting to proactive, automated replenishment planning.",
+  "limitation": "The agent's analytical accuracy is strictly bound by the quality and freshness of the underlying BigQuery data. To verify data integrity, users should inspect the SQL execution logs to ensure the agent is querying the correct table partitions and time ranges.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Agent Data Flow",
+    "description": "The flow of data from BigQuery to the agent for decision support.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "BigQuery Tables",
+        "detail": "Stores historical sales and current inventory levels"
+      },
+      {
+        "id": "b",
+        "label": "Claude Agent",
+        "detail": "Processes business logic and triggers tools"
+      },
+      {
+        "id": "c",
+        "label": "BigQuery Connector",
+        "detail": "Provides execute_sql interface"
+      },
+      {
+        "id": "d",
+        "label": "Logistics Team",
+        "detail": "Receives replenishment recommendations"
+      }
+    ],
+    "edges": [
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes execute_sql"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "queries data"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "returns result set"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "sends alert"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/bigquery",
+      "label": "Google Cloud BigQuery connector"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Predictive Inventory Optimization for Global Retail, how does the connector address the supply chain team's primary problem?",
+      "options": [
+        "By automating manual data extraction and enabling real-time inventory analysis.",
+        "By replacing the need for a database administrator.",
+        "By increasing the storage capacity of the BigQuery datasets.",
+        "By automatically purchasing new inventory from suppliers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution directly addresses the manual extraction bottleneck by allowing the agent to query data directly.",
+      "evidence": "By integrating the Claude BigQuery connector, the supply chain agent gains direct access to execute SQL queries against historical sales and inventory tables. The agent can perform real-time analysis of stock levels and trigger replenishment alerts based on BigQuery analytical insights without human intervention."
+    },
+    {
+      "question": "In Predictive Inventory Optimization for Global Retail, what is the primary limitation of the agent-based approach?",
+      "options": [
+        "The agent cannot execute SQL queries.",
+        "The agent's performance is limited by the quality and freshness of the underlying BigQuery data.",
+        "The agent requires manual approval for every query.",
+        "The connector only works with small datasets."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario emphasize that the agent's output is dependent on the data it queries.",
+      "evidence": "The agent's analytical accuracy is strictly bound by the quality and freshness of the underlying BigQuery data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:54.531Z",
+  "sourceRetrievedAt": "2026-10-18T01:01:51.353Z"
+}

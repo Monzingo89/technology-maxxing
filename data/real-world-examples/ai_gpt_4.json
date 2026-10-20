@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_4",
+  "title": "Automated Legal Document Summarization for Boutique Law Firms",
+  "business": "Boutique law firms handling high volumes of discovery documents.",
+  "problem": "Attorneys struggle with the cognitive load of manually reviewing hundreds of pages of case discovery to extract key arguments, leading to potential oversight of critical details.",
+  "solution": "Utilizing the GPT-4 model via the Chat Completions API, firms can automate the extraction of core legal arguments and entity relationships from text-based discovery documents, providing a structured summary for human review.",
+  "steps": [
+    "Ingest raw text discovery documents into a secure processing pipeline.",
+    "Format the text into structured prompts for the gpt-4-0613 snapshot to ensure consistent output behavior.",
+    "Send requests to the v1/chat/completions endpoint with specific instructions to identify parties and claims.",
+    "Parse the returned text output to populate a case management database for attorney review."
+  ],
+  "outcome": "Improved efficiency in document triage, allowing attorneys to focus on high-level legal strategy rather than initial data extraction.",
+  "limitation": "The 8,192 token context window limit restricts the size of individual documents that can be processed in a single request; check for truncation by monitoring the finish_reason in the API response.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Processing Workflow",
+    "description": "This diagram illustrates the flow of data from raw discovery files to the final attorney review interface.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Discovery Docs",
+        "detail": "Raw text input"
+      },
+      {
+        "id": "b",
+        "label": "API Request",
+        "detail": "GPT-4 Chat Completions"
+      },
+      {
+        "id": "c",
+        "label": "Structured Summary",
+        "detail": "Extracted arguments"
+      },
+      {
+        "id": "d",
+        "label": "Attorney Review",
+        "detail": "Final decision making"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Generation"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Validation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-4",
+      "label": "GPT-4"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Document Summarization for Boutique Law Firms, what is the primary problem being addressed?",
+      "options": [
+        "Attorneys struggle with the cognitive load of manually reviewing hundreds of pages of case discovery.",
+        "The firm lacks the budget to hire more paralegals for data entry.",
+        "The GPT-4 model is too expensive for small law firms to utilize.",
+        "Discovery documents are frequently lost during the transfer process."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the cognitive burden of manual review as the core issue.",
+      "evidence": "Attorneys struggle with the cognitive load of manually reviewing hundreds of pages of case discovery to extract key arguments, leading to potential oversight of critical details."
+    },
+    {
+      "question": "In Automated Legal Document Summarization for Boutique Law Firms, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot process text-based documents.",
+        "The 8,192 token context window limits the size of documents processed in one request.",
+        "The API only supports fine-tuning for legal documents.",
+        "The v1/chat/completions endpoint is not supported for GPT-4."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights the context window constraint inherent to the model.",
+      "evidence": "The 8,192 token context window limit restricts the size of individual documents that can be processed in a single request; check for truncation by monitoring the finish_reason in the API response."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:36.215Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:32.711Z"
+}

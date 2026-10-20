@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_virtual_network",
+  "title": "Secure Segmented VNet Architecture",
+  "business": "Enterprises requiring isolated environments for multi-tier application deployments.",
+  "problem": "Flat network architectures lead to security risks where internal application tiers are exposed to unauthorized traffic from external-facing services.",
+  "solution": "Azure Virtual Network provides the capability to create private, isolated networks with subnets that enforce granular traffic control and logical segmentation.",
+  "steps": [
+    "Create a Virtual Network with a defined private IP address space.",
+    "Define multiple subnets within the VNet to separate web, application, and database tiers.",
+    "Configure Network Security Groups to restrict traffic flow between subnets based on source and destination IP, port, and protocol.",
+    "Implement VNet Peering if connectivity between separate virtual networks is required for shared services.",
+    "Attach resources to specific subnets to ensure they inherit the defined security and routing policies."
+  ],
+  "outcome": "Improved security posture through reduced attack surface and controlled communication paths between application components.",
+  "limitation": "VNet Peering is non-transitive; if VNet A is peered with VNet B, and VNet B is peered with VNet C, VNet A cannot communicate with VNet C unless a direct peering or gateway transit is configured. Check connectivity using the Network Watcher Next Hop tool.",
+  "diagram": {
+    "kind": "flow",
+    "title": "VNet Segmentation Flow",
+    "description": "Traffic flow from external users through subnets.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Internet",
+        "detail": "External traffic source"
+      },
+      {
+        "id": "b",
+        "label": "Web Subnet",
+        "detail": "Public facing tier"
+      },
+      {
+        "id": "c",
+        "label": "App Subnet",
+        "detail": "Internal logic tier"
+      },
+      {
+        "id": "d",
+        "label": "DB Subnet",
+        "detail": "Data storage tier"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Internal API"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "SQL Query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Products Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Segmented VNet Architecture, what is the primary purpose of using subnets?",
+      "options": [
+        "To increase the total number of available public IP addresses",
+        "To enable logical segmentation and granular traffic control",
+        "To automatically scale compute resources based on demand",
+        "To bypass the need for Network Security Groups"
+      ],
+      "answerIndex": 1,
+      "explanation": "Subnets allow for the logical division of a VNet, which is essential for implementing security boundaries between different application tiers.",
+      "evidence": "Azure Virtual Network provides the capability to create private, isolated networks with subnets that enforce granular traffic control and logical segmentation."
+    },
+    {
+      "question": "In Secure Segmented VNet Architecture, what is a key limitation regarding VNet Peering?",
+      "options": [
+        "It is limited to a maximum of two VNets per region",
+        "It is inherently transitive across all connected networks",
+        "It is non-transitive, requiring direct peering for indirect connections",
+        "It requires a public IP address for all peered resources"
+      ],
+      "answerIndex": 2,
+      "explanation": "VNet Peering does not automatically propagate connectivity through intermediate networks, meaning connections must be explicitly defined.",
+      "evidence": "VNet Peering is non-transitive; if VNet A is peered with VNet B, and VNet B is peered with VNet C, VNet A cannot communicate with VNet C unless a direct peering or gateway transit is configured."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:08.027Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

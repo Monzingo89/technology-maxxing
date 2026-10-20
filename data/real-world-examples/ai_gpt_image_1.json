@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_image_1",
+  "title": "Automated Architectural Blueprint Visualization",
+  "business": "Architectural design firms needing to rapidly iterate on client floor plans.",
+  "problem": "Manual rendering of conceptual sketches into high-fidelity visual representations is time-consuming and creates bottlenecks during client feedback sessions.",
+  "solution": "The firm utilizes GPT-Image-1 to ingest raw hand-drawn architectural sketches as input images, combined with text-based style prompts, to generate high-fidelity visual renders via the image generation endpoint.",
+  "steps": [
+    "Capture high-resolution digital scans of hand-drawn floor plan sketches.",
+    "Format the input data to include the sketch image and descriptive text prompts regarding architectural style.",
+    "Submit the payload to the v1/images/generations endpoint using the gpt-image-1 model ID.",
+    "Retrieve the generated image output and integrate it into the client-facing design dashboard."
+  ],
+  "outcome": "Architects achieve a faster turnaround time for visual prototypes, allowing for more frequent design iterations without manual drafting overhead.",
+  "limitation": "The model may struggle with precise geometric adherence to complex structural constraints; architects must verify output against original blueprints to ensure scale accuracy.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Blueprint Visualization Workflow",
+    "description": "This diagram illustrates the transformation of raw design data into visual assets.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Architect",
+        "detail": "Provides hand-drawn sketch"
+      },
+      {
+        "id": "b",
+        "label": "Input Data",
+        "detail": "Sketch image + text prompt"
+      },
+      {
+        "id": "c",
+        "label": "GPT-Image-1",
+        "detail": "Model processing"
+      },
+      {
+        "id": "d",
+        "label": "Visual Render",
+        "detail": "Final output image"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "uploads"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends to endpoint"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-image-1",
+      "label": "GPT-Image-1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Blueprint Visualization, what is the primary problem addressed by the technology?",
+      "options": [
+        "Manual rendering of conceptual sketches is time-consuming.",
+        "The model cannot handle high-resolution digital scans.",
+        "Architects lack the software to create digital blueprints.",
+        "Client feedback sessions are too short."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that manual rendering processes create bottlenecks and consume excessive time.",
+      "evidence": "Manual rendering of conceptual sketches into high-fidelity visual representations is time-consuming and creates bottlenecks during client feedback sessions."
+    },
+    {
+      "question": "In Automated Architectural Blueprint Visualization, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot accept text prompts.",
+        "The model may struggle with precise geometric adherence to complex structural constraints.",
+        "The v1/images/generations endpoint is not supported.",
+        "The model is unable to process image inputs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly notes that geometric accuracy is a trade-off that requires manual verification.",
+      "evidence": "The model may struggle with precise geometric adherence to complex structural constraints; architects must verify output against original blueprints to ensure scale accuracy."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:28.305Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:24.884Z"
+}

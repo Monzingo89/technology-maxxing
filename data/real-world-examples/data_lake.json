@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "data_lake",
+  "title": "Unified Sensor Telemetry Repository",
+  "business": "An industrial manufacturing firm monitoring thousands of IoT sensors across global assembly lines.",
+  "problem": "The firm struggles with rigid relational schemas that reject incoming sensor data packets containing inconsistent metadata, leading to high data loss and expensive manual schema migrations.",
+  "solution": "Implementing a data lake allows the firm to ingest raw, unstructured sensor telemetry in its native format. By decoupling storage from schema enforcement, the firm retains all historical data for future diagnostic analysis without immediate transformation requirements.",
+  "steps": [
+    "Provision a centralized object storage bucket to act as the landing zone for raw telemetry.",
+    "Configure ingestion pipelines to stream sensor packets directly into the storage bucket without pre-processing.",
+    "Implement a cataloging service to index file metadata, enabling discovery without moving the underlying raw data.",
+    "Develop downstream analytical jobs that read raw files and apply schema-on-read logic only when specific insights are required."
+  ],
+  "outcome": "The organization achieves comprehensive data retention, enabling retrospective analysis on previously ignored sensor anomalies while eliminating the bottleneck of frequent schema updates.",
+  "limitation": "The primary trade-off is the risk of creating a data swamp where raw files become unmanageable due to lack of structure. To check for this, administrators must monitor the ratio of cataloged, accessible data versus unindexed, orphaned files in the storage layer.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Lake Ingestion Flow",
+    "description": "This diagram shows how raw sensor data moves from production environments into a persistent storage layer before being accessed by analytical tools.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IoT Sensors",
+        "detail": "Source of raw telemetry packets"
+      },
+      {
+        "id": "b",
+        "label": "Landing Zone",
+        "detail": "Object storage for raw data"
+      },
+      {
+        "id": "c",
+        "label": "Data Catalog",
+        "detail": "Index of file metadata"
+      },
+      {
+        "id": "d",
+        "label": "Analytics Engine",
+        "detail": "Schema-on-read processing"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest raw packets"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Register metadata"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Provide file location"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Read raw data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Sensor Telemetry Repository, what is the primary benefit of using a data lake over a traditional relational database?",
+      "options": [
+        "It enforces strict schema validation at the point of ingestion.",
+        "It decouples storage from schema enforcement to prevent data loss.",
+        "It automatically optimizes all queries using built-in indexes.",
+        "It requires all data to be transformed before storage."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that rigid relational schemas cause data loss, and the data lake solves this by decoupling storage from schema enforcement.",
+      "evidence": "By decoupling storage from schema enforcement, the firm retains all historical data for future diagnostic analysis without immediate transformation requirements."
+    },
+    {
+      "question": "In Unified Sensor Telemetry Repository, what is the identified limitation of the implementation?",
+      "options": [
+        "High latency during the initial ingestion phase.",
+        "The risk of creating a data swamp due to lack of structure.",
+        "Incompatibility with existing IoT sensor protocols.",
+        "Excessive costs associated with schema-on-read processing."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the risk of a data swamp as the primary trade-off for the flexibility provided by the data lake.",
+      "evidence": "The primary trade-off is the risk of creating a data swamp where raw files become unmanageable due to lack of structure."
+    }
+  ],
+  "insufficient": true,
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:57.588Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_salesforce_headless_360",
+  "title": "Automated Account Health Synthesis for Global Sales Teams",
+  "business": "Global account management teams managing high-volume enterprise portfolios.",
+  "problem": "Account executives struggle with fragmented visibility, spending excessive time manually aggregating data from disparate Salesforce objects like Opportunities, Cases, and Account history before client meetings.",
+  "solution": "The Salesforce Headless 360 MCP Server integrates directly into the Claude interface, allowing agents to query and synthesize real-time Salesforce data. By leveraging the connector, the system performs cross-object reasoning, grounding AI responses in live Customer 360 data while strictly adhering to existing Salesforce permission sets and governance models.",
+  "steps": [
+    "Configure the Salesforce Headless 360 MCP Server within the enterprise environment to establish secure connectivity.",
+    "Map specific Salesforce objects, such as Opportunity and Case, to the MCP server's discoverable tools.",
+    "Authorize the Claude interface to access the MCP server, ensuring user-level permissions are inherited from the Salesforce identity.",
+    "Execute natural language prompts to trigger cross-object reasoning, such as summarizing recent support case sentiment alongside open pipeline value."
+  ],
+  "outcome": "Sales teams achieve a unified view of account health, reducing manual preparation time and enabling more informed, data-backed client interactions.",
+  "limitation": "The connector operates as a Beta service, meaning tool availability and behavior may evolve; users must verify output accuracy against the Salesforce UI periodically to ensure data consistency.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Synthesis Flow",
+    "description": "This diagram illustrates how the Claude interface interacts with Salesforce data through the MCP server.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Account Executive"
+      },
+      {
+        "id": "b",
+        "label": "Claude Interface",
+        "detail": "AI Reasoning Engine"
+      },
+      {
+        "id": "c",
+        "label": "MCP Server",
+        "detail": "Headless 360 Connector"
+      },
+      {
+        "id": "d",
+        "label": "Salesforce",
+        "detail": "Customer 360 Data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Natural language query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Tool dispatch"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Secure API request"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Data payload"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/salesforce-headless-360",
+      "label": "Salesforce - Beta connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Account Health Synthesis for Global Sales Teams, what is the primary problem addressed by the connector?",
+      "options": [
+        "Account executives spend too much time manually aggregating data from disparate Salesforce objects.",
+        "The Salesforce UI is too slow for global teams to access.",
+        "Salesforce data is not secure enough for AI integration.",
+        "The system lacks the ability to create new campaigns automatically."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the manual aggregation of fragmented data as the core bottleneck for account executives.",
+      "evidence": "Account executives struggle with fragmented visibility, spending excessive time manually aggregating data from disparate Salesforce objects like Opportunities, Cases, and Account history before client meetings."
+    },
+    {
+      "question": "In Automated Account Health Synthesis for Global Sales Teams, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access Case objects.",
+        "The connector is a Beta service, requiring periodic verification of data consistency.",
+        "The connector does not honor existing Salesforce permissions.",
+        "The connector requires manual coding for every query."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights the Beta status and the necessity of verifying outputs against the source of truth.",
+      "evidence": "The connector operates as a Beta service, meaning tool availability and behavior may evolve; users must verify output accuracy against the Salesforce UI periodically to ensure data consistency."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:38.084Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:34.569Z"
+}

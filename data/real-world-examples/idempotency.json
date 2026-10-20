@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "idempotency",
+  "title": "Automated Inventory Restock Reconciliation",
+  "business": "A regional logistics provider managing automated warehouse restocking requests.",
+  "problem": "Network instability during API calls frequently causes duplicate restock orders when the client retries a request after a timeout, leading to physical inventory discrepancies and wasted shipping costs.",
+  "solution": "Implementing an idempotency key pattern where the client generates a unique identifier for each restock request. The server persists this key in a state store, ensuring that subsequent requests with the same key return the cached result of the initial successful operation rather than triggering a new warehouse action.",
+  "steps": [
+    "Client generates a UUID for the specific restock transaction.",
+    "Client includes the UUID in the HTTP header of the restock request.",
+    "Server checks the persistence layer for the existence of the UUID.",
+    "If the UUID exists, the server returns the original response without re-executing the restock logic.",
+    "If the UUID is new, the server processes the order and stores the result mapped to the UUID."
+  ],
+  "outcome": "The system achieves consistent state regardless of network retries, eliminating duplicate inventory deductions and ensuring that the warehouse receives exactly one instruction per unique request.",
+  "limitation": "The primary limitation is the storage overhead required for tracking idempotency keys. To check for this, developers must monitor the growth of the key-value store and implement a time-to-live (TTL) policy to prune keys after the business-defined window for retries has expired.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Idempotent Restock Request Flow",
+    "description": "This diagram illustrates how a client request is intercepted by an idempotency check before reaching the business logic.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Sends restock request with UUID"
+      },
+      {
+        "id": "b",
+        "label": "Gateway",
+        "detail": "Checks idempotency store"
+      },
+      {
+        "id": "c",
+        "label": "Store",
+        "detail": "Persistence layer for keys"
+      },
+      {
+        "id": "d",
+        "label": "Logic",
+        "detail": "Executes inventory deduction"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTP Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Lookup Key"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Found/Not Found"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Execute if new"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Restock Reconciliation, why is an idempotency key used?",
+      "options": [
+        "To prevent duplicate orders caused by network retries",
+        "To increase the speed of the database lookup",
+        "To encrypt the inventory data during transit",
+        "To allow multiple clients to share the same order"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that network instability causes duplicate orders, and the solution uses idempotency keys to ensure the server returns cached results instead of re-executing logic.",
+      "evidence": "Network instability during API calls frequently causes duplicate restock orders when the client retries a request after a timeout, leading to physical inventory discrepancies and wasted shipping costs."
+    },
+    {
+      "question": "In Automated Inventory Restock Reconciliation, what is a necessary trade-off for the idempotency implementation?",
+      "options": [
+        "Increased latency for every single request",
+        "The requirement to manage storage for keys and implement TTL policies",
+        "The loss of data integrity during the reconciliation process",
+        "The inability to retry requests if they fail"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the storage overhead and the need for a TTL policy to manage the growth of the key-value store.",
+      "evidence": "The primary limitation is the storage overhead required for tracking idempotency keys. To check for this, developers must monitor the growth of the key-value store and implement a time-to-live (TTL) policy to prune keys after the business-defined window for retries has expired."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:49.121Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

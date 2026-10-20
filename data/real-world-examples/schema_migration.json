@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "schema_migration",
+  "title": "Automated Inventory Schema Evolution",
+  "business": "Retail logistics firms managing high-frequency inventory updates across distributed regional warehouses.",
+  "problem": "Manual DDL execution leads to inconsistent database states across environments, causing application deployment failures when code expects columns that do not exist in the production schema.",
+  "solution": "Database schema migration uses versioned SQL scripts to apply structural changes incrementally. By tracking applied migrations in a dedicated metadata table, the system ensures that every database instance reaches the desired state through an idempotent, repeatable process.",
+  "steps": [
+    "Create a migration tracking table to store the version identifier of the last applied script.",
+    "Define structural changes in sequential SQL files prefixed with timestamps or version numbers.",
+    "Implement a migration runner that checks the tracking table before executing pending scripts.",
+    "Wrap each migration script in a transaction block to ensure atomicity during schema modification.",
+    "Verify the final schema state against the application requirements after all scripts execute."
+  ],
+  "outcome": "Consistent database structures across all environments, eliminating deployment drift and reducing manual intervention during release cycles.",
+  "limitation": "Large-scale schema changes, such as adding a column to a table with millions of rows, can cause table locks that block application traffic; check for lock duration using pg_stat_activity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Migration Execution Flow",
+    "description": "The process flow for applying versioned structural changes to a database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Version Control",
+        "detail": "Source of truth for SQL migration files"
+      },
+      {
+        "id": "b",
+        "label": "Migration Runner",
+        "detail": "Logic to compare current version vs target"
+      },
+      {
+        "id": "c",
+        "label": "Metadata Table",
+        "detail": "Stores current schema version"
+      },
+      {
+        "id": "d",
+        "label": "Target Database",
+        "detail": "The production or staging instance"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "fetches scripts"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "queries version"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "executes DDL"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "updates version"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "BEGIN; -- Start transaction for atomicity\nCREATE TABLE IF NOT EXISTS schema_version (version INT PRIMARY KEY);\nALTER TABLE inventory ADD COLUMN warehouse_id INT; -- Apply structural change\nINSERT INTO schema_version (version) VALUES (1); -- Record migration\nCOMMIT; -- Finalize changes",
+    "explanation": "This demonstrates wrapping a schema change in a transaction and updating a metadata table to track the migration state."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Schema Evolution, how does the migration process prevent inconsistent database states?",
+      "options": [
+        "By tracking applied migrations in a dedicated metadata table",
+        "By manually executing DDL scripts on every server",
+        "By ignoring the existing schema version",
+        "By using high-frequency inventory updates"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on a metadata table to track versions, ensuring idempotency.",
+      "evidence": "By tracking applied migrations in a dedicated metadata table, the system ensures that every database instance reaches the desired state through an idempotent, repeatable process."
+    },
+    {
+      "question": "In Automated Inventory Schema Evolution, what is a primary limitation of applying structural changes to large tables?",
+      "options": [
+        "The metadata table will become too large to query",
+        "The system cannot handle more than ten migration files",
+        "Large-scale changes can cause table locks that block application traffic",
+        "The migration runner will automatically delete all existing data"
+      ],
+      "answerIndex": 2,
+      "explanation": "Large schema changes can lock tables, impacting availability.",
+      "evidence": "Large-scale schema changes, such as adding a column to a table with millions of rows, can cause table locks that block application traffic; check for lock duration using pg_stat_activity."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:03.526Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

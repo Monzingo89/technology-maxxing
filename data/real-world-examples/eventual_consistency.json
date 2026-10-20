@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "eventual_consistency",
+  "title": "Global Inventory Synchronization for Distributed Retail",
+  "business": "A global retail chain operating regional distribution centers that must maintain high availability for local point-of-sale systems.",
+  "problem": "Synchronous updates across continents introduce unacceptable latency for local checkout processes, causing system timeouts during peak shopping hours.",
+  "solution": "Implementing eventual consistency allows local nodes to accept inventory deductions immediately, propagating updates to other regions asynchronously to ensure global convergence once traffic subsides.",
+  "steps": [
+    "Configure local database nodes to accept write operations without waiting for cross-region acknowledgment.",
+    "Implement a background synchronization process that queues update events locally.",
+    "Utilize a conflict resolution strategy, such as Last-Write-Wins or vector clocks, to merge state changes during reconciliation.",
+    "Monitor the replication lag to ensure that the divergence window remains within acceptable business thresholds."
+  ],
+  "outcome": "Local checkout operations remain fast and responsive regardless of network latency, with global inventory states eventually reaching a consistent, accurate value.",
+  "limitation": "The primary trade-off is the risk of reading stale data; users might temporarily see incorrect stock levels, which can be verified by checking the replication lag metric against the application's tolerance for staleness.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Regional Inventory Synchronization Flow",
+    "description": "Shows how local writes are accepted immediately while background processes synchronize state across regions.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "POS Terminal",
+        "detail": "Local checkout interface"
+      },
+      {
+        "id": "b",
+        "label": "Regional DB",
+        "detail": "Local write-optimized store"
+      },
+      {
+        "id": "c",
+        "label": "Sync Queue",
+        "detail": "Asynchronous event buffer"
+      },
+      {
+        "id": "d",
+        "label": "Global Inventory",
+        "detail": "Centralized view of all regions"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Write Deduction"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Enqueue Update"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Propagate State"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Synchronization for Distributed Retail, why is eventual consistency chosen over synchronous updates?",
+      "options": [
+        "To eliminate the need for any conflict resolution strategies.",
+        "To avoid latency-induced timeouts during local checkout operations.",
+        "To ensure that all regional databases are identical at every millisecond.",
+        "To prevent the system from ever allowing temporary replica divergence."
+      ],
+      "answerIndex": 1,
+      "explanation": "Synchronous updates across regions cause latency that leads to timeouts; eventual consistency prioritizes local availability.",
+      "evidence": "Synchronous updates across continents introduce unacceptable latency for local checkout processes, causing system timeouts during peak shopping hours."
+    },
+    {
+      "question": "In Global Inventory Synchronization for Distributed Retail, what is the primary trade-off when using this model?",
+      "options": [
+        "The system becomes completely unavailable during network partitions.",
+        "The risk of reading stale data while replicas are diverging.",
+        "The requirement for infinite storage capacity for the sync queue.",
+        "The inability to ever achieve global convergence."
+      ],
+      "answerIndex": 1,
+      "explanation": "Eventual consistency allows replicas to diverge, meaning a read operation might return an outdated value before synchronization completes.",
+      "evidence": "The primary trade-off is the risk of reading stale data; users might temporarily see incorrect stock levels, which can be verified by checking the replication lag metric against the application's tolerance for staleness."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:13.772Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

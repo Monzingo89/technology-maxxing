@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_text_moderation_latest",
+  "title": "Community Forum Safety Enforcement",
+  "business": "A regional hobbyist forum platform that hosts user-generated discussion threads.",
+  "problem": "The platform faces high operational costs and inconsistent enforcement when human moderators manually review thousands of daily posts for harassment or hate speech.",
+  "solution": "The platform integrates the text-moderation-latest model via the /v1/moderations endpoint to automatically flag incoming user posts against safety categories before they are published to the public feed.",
+  "steps": [
+    "Configure the application backend to intercept new post submissions before database persistence.",
+    "Send the raw text content of the post to the /v1/moderations endpoint.",
+    "Parse the JSON response to check the boolean flags for categories like hate, harassment, or self-harm.",
+    "Route posts flagged as true to a human review queue and allow non-flagged posts to proceed to the public feed."
+  ],
+  "outcome": "The platform achieves a consistent baseline for content safety, significantly reducing the volume of benign content that human moderators must manually inspect.",
+  "limitation": "The model is a text-only moderation tool, meaning it cannot analyze images or embedded media attached to posts; developers must implement separate validation logic for non-text content.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Moderation Workflow",
+    "description": "The flow of a user post through the automated moderation system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "New forum post submission"
+      },
+      {
+        "id": "b",
+        "label": "Moderation API",
+        "detail": "text-moderation-latest endpoint"
+      },
+      {
+        "id": "c",
+        "label": "Human Queue",
+        "detail": "Flagged for manual review"
+      },
+      {
+        "id": "d",
+        "label": "Public Feed",
+        "detail": "Post published to site"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "if flagged"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "if safe"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/text-moderation-latest",
+      "label": "text-moderation-latest"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Community Forum Safety Enforcement, why is the moderation model utilized?",
+      "options": [
+        "To replace all human moderators entirely",
+        "To reduce the volume of benign content requiring manual inspection",
+        "To generate new content for the forum",
+        "To translate posts into multiple languages"
+      ],
+      "answerIndex": 1,
+      "explanation": "The model acts as a filter to reduce the workload on human moderators by handling the initial screening of content.",
+      "evidence": "The platform achieves a consistent baseline for content safety, significantly reducing the volume of benign content that human moderators must manually inspect."
+    },
+    {
+      "question": "In Community Forum Safety Enforcement, what is a primary limitation of the implementation?",
+      "options": [
+        "It cannot process text input",
+        "It is unable to analyze images or embedded media",
+        "It requires a human to approve every single post",
+        "It is too expensive for small forums"
+      ],
+      "answerIndex": 1,
+      "explanation": "The model is explicitly defined as a text-only tool, which creates a gap for non-text content.",
+      "evidence": "The model is a text-only moderation tool, meaning it cannot analyze images or embedded media attached to posts; developers must implement separate validation logic for non-text content."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:13.724Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:10.488Z"
+}

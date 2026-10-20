@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "mysqlpg",
+  "title": "Inventory Integrity for Global Logistics",
+  "business": "A global logistics provider managing real-time warehouse inventory across multiple international distribution centers.",
+  "problem": "The company faces data inconsistency issues where concurrent updates to stock levels from different regional API gateways lead to race conditions and incorrect inventory counts.",
+  "solution": "PostgreSQL addresses this by utilizing ACID-compliant transaction isolation levels, specifically the Repeatable Read or Serializable modes, which ensure that concurrent transactions do not overwrite each other's changes to inventory records.",
+  "steps": [
+    "Define a schema with a dedicated inventory table using a primary key for each product SKU.",
+    "Implement a stored procedure that wraps inventory decrement logic within a single transaction block.",
+    "Set the transaction isolation level to SERIALIZABLE to force the database to detect and reject concurrent conflicting updates.",
+    "Handle serialization failure exceptions in the application layer by implementing a retry mechanism for failed transactions."
+  ],
+  "outcome": "The system achieves strict data consistency, ensuring that stock levels never drop below zero due to race conditions, providing a reliable source of truth for all regional logistics hubs.",
+  "limitation": "The primary limitation is the increased risk of transaction serialization failures under high contention, which requires robust application-level retry logic to ensure eventual success. You can check for these failures by monitoring the SQLSTATE 40001 error code in your application logs.",
+  "diagram": {
+    "kind": "er",
+    "title": "Inventory Transaction Flow",
+    "description": "This diagram illustrates how regional gateways interact with the central database to ensure consistent inventory updates.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional Gateway",
+        "detail": "API endpoint initiating stock updates"
+      },
+      {
+        "id": "b",
+        "label": "PostgreSQL Transaction",
+        "detail": "ACID-compliant container for logic"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Table",
+        "detail": "Table containing SKU and current_stock"
+      },
+      {
+        "id": "d",
+        "label": "Retry Logic",
+        "detail": "Application handler for serialization errors"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "starts transaction"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "updates stock"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "commits or fails"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "triggers on 40001"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE; -- Ensure strict consistency\nUPDATE inventory SET stock = stock - 1 WHERE sku = 'PROD-001'; -- Decrement stock\nCOMMIT; -- Finalize the atomic operation",
+    "explanation": "This code demonstrates the use of a serializable transaction block to prevent race conditions when updating inventory levels in the database."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Inventory Integrity for Global Logistics, what is the primary reason for using PostgreSQL's transaction isolation levels?",
+      "options": [
+        "To improve the speed of read-only queries across regions.",
+        "To prevent race conditions and incorrect inventory counts during concurrent updates.",
+        "To automatically scale the database across multiple physical servers.",
+        "To reduce the storage footprint of the inventory table."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies race conditions as the core problem, and the solution explains that isolation levels prevent concurrent transactions from overwriting each other.",
+      "evidence": "The company faces data inconsistency issues where concurrent updates to stock levels from different regional API gateways lead to race conditions and incorrect inventory counts."
+    },
+    {
+      "question": "In Inventory Integrity for Global Logistics, what is a known trade-off of using the SERIALIZABLE isolation level?",
+      "options": [
+        "It prevents the database from ever using indexes.",
+        "It forces all transactions to run sequentially on a single CPU core.",
+        "It increases the risk of serialization failures under high contention.",
+        "It requires the database to be restarted after every transaction."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that high contention leads to serialization failures, which must be handled by the application.",
+      "evidence": "The primary limitation is the increased risk of transaction serialization failures under high contention, which requires robust application-level retry logic to ensure eventual success."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:39.396Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:35.638Z"
+}

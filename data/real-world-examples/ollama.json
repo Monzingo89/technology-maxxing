@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ollama",
+  "title": "Hybrid Model Orchestration for Secure Legal Analysis",
+  "business": "A boutique law firm handling sensitive client contracts requiring strict data residency.",
+  "problem": "The firm needs to analyze thousands of documents for clause extraction but cannot upload sensitive legal data to public cloud providers due to strict confidentiality agreements.",
+  "solution": "The firm implements Ollama to run open-weight models locally on secure, air-gapped workstations for initial document processing, while using the Ollama API to route non-sensitive summary tasks to cloud-hosted models for advanced reasoning.",
+  "steps": [
+    "Install the Ollama runtime on local secure workstations to host open-weight models.",
+    "Configure the local application to interface with the Ollama API for local document parsing.",
+    "Define a routing logic in the application layer to distinguish between sensitive data and general query tasks.",
+    "Integrate the Ollama API client to forward non-sensitive metadata to cloud-hosted models when necessary.",
+    "Verify that sensitive document text remains strictly within the local environment."
+  ],
+  "outcome": "The firm achieves a balance between high-security local processing for sensitive data and the advanced reasoning capabilities of cloud models for general tasks, ensuring compliance with client privacy requirements.",
+  "limitation": "The primary limitation is the hardware dependency for local models; if the local workstation lacks sufficient VRAM, inference speed will degrade significantly. Developers can check this by monitoring the local process memory usage and latency during model execution.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Hybrid Model Routing Logic",
+    "description": "This flow shows how the application decides between local and cloud processing based on data sensitivity.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Input",
+        "detail": "Raw legal contract"
+      },
+      {
+        "id": "b",
+        "label": "Sensitivity Filter",
+        "detail": "Logic to classify data"
+      },
+      {
+        "id": "c",
+        "label": "Local Ollama Instance",
+        "detail": "Secure local model execution"
+      },
+      {
+        "id": "d",
+        "label": "Cloud Model API",
+        "detail": "External reasoning service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "routes data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "if sensitive"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "if non-sensitive"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.ollama.com/",
+      "label": "Ollama documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Hybrid Model Orchestration for Secure Legal Analysis, why is a hybrid approach necessary?",
+      "options": [
+        "To balance local data security with cloud-based reasoning capabilities.",
+        "To reduce the cost of running local hardware.",
+        "To eliminate the need for any cloud connectivity.",
+        "To increase the speed of local document parsing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario requires local processing for sensitive data while leveraging cloud models for advanced reasoning tasks.",
+      "evidence": "The firm achieves a balance between high-security local processing for sensitive data and the advanced reasoning capabilities of cloud models for general tasks, ensuring compliance with client privacy requirements."
+    },
+    {
+      "question": "In Hybrid Model Orchestration for Secure Legal Analysis, what is the primary technical trade-off?",
+      "options": [
+        "The risk of data leakage from the cloud.",
+        "The complexity of the routing logic.",
+        "Hardware dependency affecting local inference performance.",
+        "The lack of API support for local models."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario highlight that local models rely on local hardware, which can become a bottleneck.",
+      "evidence": "The primary limitation is the hardware dependency for local models; if the local workstation lacks sufficient VRAM, inference speed will degrade significantly."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:42.737Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:38.898Z"
+}

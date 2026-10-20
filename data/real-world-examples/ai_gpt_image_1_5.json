@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_image_1_5",
+  "title": "Architectural Visualization for Urban Planning",
+  "business": "Urban planning firms requiring rapid, high-fidelity visual representations of proposed building designs.",
+  "problem": "Manual 3D rendering workflows are prohibitively slow, preventing architects from iterating on design concepts during client meetings.",
+  "solution": "Utilizing GPT-Image-1.5 to generate high-fidelity architectural renderings from descriptive text prompts and existing site photos, enabling real-time visual feedback.",
+  "steps": [
+    "Prepare site context images and architectural design specifications as input data.",
+    "Submit image-to-image requests to the v1/images/edits endpoint to apply design changes to existing site photos.",
+    "Utilize the gpt-image-1.5-2025-12-16 snapshot to ensure consistent rendering styles across multiple design iterations.",
+    "Review generated outputs for adherence to structural constraints and prompt instructions."
+  ],
+  "outcome": "Architects achieve a streamlined design loop that allows for immediate visual exploration of site-specific modifications without waiting for full 3D renders.",
+  "limitation": "The model may struggle with precise geometric alignment in complex structural inpainting; verify results by overlaying the output on the original site blueprint to check for perspective drift.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Architectural Rendering Workflow",
+    "description": "This diagram illustrates the transformation of site data into visual renderings using GPT-Image-1.5.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Site Photo",
+        "detail": "Input image of the urban location"
+      },
+      {
+        "id": "b",
+        "label": "GPT-Image-1.5",
+        "detail": "Model processing input via v1/images/edits"
+      },
+      {
+        "id": "c",
+        "label": "Design Prompt",
+        "detail": "Textual instructions for architectural changes"
+      },
+      {
+        "id": "d",
+        "label": "Rendered Output",
+        "detail": "Final visual representation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides context"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "defines modifications"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates image"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-image-1.5",
+      "label": "GPT-Image-1.5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Visualization for Urban Planning, what is the primary benefit of using GPT-Image-1.5?",
+      "options": [
+        "It eliminates the need for human architects entirely.",
+        "It enables real-time visual feedback by replacing slow manual rendering.",
+        "It automatically calculates the structural integrity of buildings.",
+        "It provides free unlimited rendering for all urban projects."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that manual rendering is slow, and the model addresses this by providing rapid visual feedback for design iterations.",
+      "evidence": "Utilizing GPT-Image-1.5 to generate high-fidelity architectural renderings from descriptive text prompts and existing site photos, enabling real-time visual feedback."
+    },
+    {
+      "question": "In Architectural Visualization for Urban Planning, what is a key limitation to monitor during implementation?",
+      "options": [
+        "The model cannot process text prompts.",
+        "The model is only available via the v1/chat/completions endpoint.",
+        "The model may have difficulty with precise geometric alignment in inpainting.",
+        "The model requires a live session to function."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions potential issues with geometric alignment during inpainting tasks.",
+      "evidence": "The model may struggle with precise geometric alignment in complex structural inpainting; verify results by overlaying the output on the original site blueprint to check for perspective drift."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:30.658Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:27.057Z"
+}

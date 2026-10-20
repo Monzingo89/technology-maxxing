@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "go",
+  "title": "Asynchronous IoT Sensor Aggregator",
+  "business": "Industrial manufacturing firms managing thousands of remote sensors.",
+  "problem": "High-latency data ingestion bottlenecks caused by synchronous processing of incoming sensor telemetry streams.",
+  "solution": "Utilizing Go's built-in concurrency primitives, specifically goroutines and channels, to decouple network ingestion from data processing, allowing the system to handle thousands of concurrent connections without blocking.",
+  "steps": [
+    "Define a struct to represent the incoming sensor telemetry data packet.",
+    "Implement a listener using net/http to accept incoming sensor requests.",
+    "Spawn a goroutine for each incoming request to handle processing asynchronously.",
+    "Use channels to safely pass processed data to a background storage worker.",
+    "Compile the application into a single static binary for deployment to lightweight container environments."
+  ],
+  "outcome": "Improved system responsiveness and the ability to scale ingestion capacity linearly with available CPU resources.",
+  "limitation": "Goroutines are lightweight but not infinite; excessive spawning without a worker pool can lead to memory exhaustion, which is monitored by checking the runtime memory statistics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Sensor Data Ingestion Pipeline",
+    "description": "Flow of data from sensors through concurrent handlers to storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor",
+        "detail": "External IoT device"
+      },
+      {
+        "id": "b",
+        "label": "HTTP Listener",
+        "detail": "Entry point for requests"
+      },
+      {
+        "id": "c",
+        "label": "Goroutine",
+        "detail": "Concurrent request handler"
+      },
+      {
+        "id": "d",
+        "label": "Channel",
+        "detail": "Thread-safe data pipe"
+      },
+      {
+        "id": "e",
+        "label": "Storage Worker",
+        "detail": "Background persistence"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "POST request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Spawns"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Sends data"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Receives data"
+      }
+    ]
+  },
+  "code": {
+    "language": "go",
+    "content": "func handleSensor(w http.ResponseWriter, r *http.Request) {\n    go func() { // Spawn goroutine for non-blocking processing\n        data := parse(r) // Parse incoming telemetry\n        dataChan <- data // Send to background worker via channel\n    }()\n    w.WriteHeader(http.StatusAccepted) // Return immediately to sensor\n}",
+    "explanation": "This code demonstrates the asynchronous pattern where the HTTP handler spawns a goroutine to process data, allowing the main thread to return a response to the sensor immediately, preventing ingestion bottlenecks."
+  },
+  "sources": [
+    {
+      "url": "https://go.dev/",
+      "label": "The Go Programming Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Asynchronous IoT Sensor Aggregator, how does the system resolve the problem of high-latency ingestion?",
+      "options": [
+        "By using goroutines to decouple network ingestion from data processing.",
+        "By increasing the memory footprint of the static binary.",
+        "By forcing all sensors to wait for database confirmation.",
+        "By using an interpreted language to speed up development."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically leverages Go's concurrency primitives to prevent blocking during ingestion.",
+      "evidence": "Utilizing Go's built-in concurrency primitives, specifically goroutines and channels, to decouple network ingestion from data processing, allowing the system to handle thousands of concurrent connections without blocking."
+    },
+    {
+      "question": "In Asynchronous IoT Sensor Aggregator, what is a primary limitation of the implementation?",
+      "options": [
+        "The inability to compile into a single static binary.",
+        "The risk of memory exhaustion if goroutines are spawned without a worker pool.",
+        "The lack of support for standard library networking packages.",
+        "The requirement to use an external garbage collection manager."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about memory exhaustion from unbounded goroutine creation.",
+      "evidence": "Goroutines are lightweight but not infinite; excessive spawning without a worker pool can lead to memory exhaustion, which is monitored by checking the runtime memory statistics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:44.604Z",
+  "sourceRetrievedAt": "2026-10-18T01:01:41.455Z"
+}

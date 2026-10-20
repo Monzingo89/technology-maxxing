@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "testinglibrary",
+  "title": "Accessible E-commerce Checkout Validation",
+  "business": "A boutique online retailer managing a complex checkout flow.",
+  "problem": "Frequent UI refactors break brittle tests that rely on internal component state and CSS selectors, leading to high maintenance costs and false negatives.",
+  "solution": "By utilizing DOM Testing Library, the team shifts focus to user-centric queries like getByRole and getByLabelText, ensuring tests remain stable even when the underlying component structure changes.",
+  "steps": [
+    "Identify elements by their semantic role such as button or heading to ensure accessibility compliance.",
+    "Use user-event libraries to simulate realistic interactions like typing or clicking instead of triggering internal methods.",
+    "Assert the presence of visible text or state changes that a real user would perceive on the screen.",
+    "Refactor existing tests to remove reliance on internal component state or private methods."
+  ],
+  "outcome": "The test suite becomes resilient to structural refactoring, allowing developers to update component internals without breaking the verification of core checkout functionality.",
+  "limitation": "Testing Library focuses on DOM-based interactions, meaning it cannot easily verify non-visual side effects or complex internal logic that does not manifest in the DOM; check this by verifying if the test can pass while the underlying business logic is completely broken.",
+  "diagram": {
+    "kind": "flow",
+    "title": "User-Centric Testing Flow",
+    "description": "This diagram illustrates the transition from implementation-focused testing to user-centric testing using DOM queries.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Action",
+        "detail": "Simulated interaction"
+      },
+      {
+        "id": "b",
+        "label": "DOM Query",
+        "detail": "getByRole or getByLabelText"
+      },
+      {
+        "id": "c",
+        "label": "Component State",
+        "detail": "Internal implementation"
+      },
+      {
+        "id": "d",
+        "label": "Assertion",
+        "detail": "Visible UI change"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "verifies"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "ignored by"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://testing-library.com/docs/",
+      "label": "Introduction | Testing Library"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Accessible E-commerce Checkout Validation, why does the team shift to using getByRole and getByLabelText?",
+      "options": [
+        "To ensure tests remain stable even when the underlying component structure changes.",
+        "To increase the speed of the test runner execution.",
+        "To test the internal state of the component directly.",
+        "To bypass the need for JSDOM in the testing environment."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that using these queries makes tests resilient to refactoring, unlike implementation-heavy tests.",
+      "evidence": "By utilizing DOM Testing Library, the team shifts focus to user-centric queries like getByRole and getByLabelText, ensuring tests remain stable even when the underlying component structure changes."
+    },
+    {
+      "question": "In Accessible E-commerce Checkout Validation, what is a primary limitation of the testing approach?",
+      "options": [
+        "It cannot test components that use CSS.",
+        "It cannot easily verify non-visual side effects or complex internal logic that does not manifest in the DOM.",
+        "It requires a specific testing framework like Jest.",
+        "It is only compatible with React components."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that the library focuses on DOM interactions, which excludes non-visual logic.",
+      "evidence": "Testing Library focuses on DOM-based interactions, meaning it cannot easily verify non-visual side effects or complex internal logic that does not manifest in the DOM"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:10.402Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:06.360Z"
+}

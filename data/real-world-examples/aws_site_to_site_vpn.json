@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_site_to_site_vpn",
+  "title": "Secure Logistics Data Bridge",
+  "business": "A regional logistics firm operating private on-premises warehouse management systems that must securely communicate with cloud-based inventory analytics platforms.",
+  "problem": "The firm requires a persistent, encrypted connection between their local data center and the AWS VPC to synchronize sensitive inventory data without exposing traffic to the public internet.",
+  "solution": "AWS Site-to-Site VPN creates managed IPsec tunnels between the customer gateway and a virtual private gateway, ensuring that traffic is encrypted in transit and routed through a secure, private tunnel.",
+  "steps": [
+    "Create a Customer Gateway resource in the AWS console representing the on-premises router's public IP address.",
+    "Provision a Virtual Private Gateway and attach it to the target VPC.",
+    "Configure the Site-to-Site VPN connection, selecting the previously created gateway resources.",
+    "Download the vendor-specific configuration file and apply the IPsec tunnel settings to the local on-premises hardware.",
+    "Update the VPC route tables to direct traffic destined for the on-premises network through the Virtual Private Gateway."
+  ],
+  "outcome": "The logistics firm achieves a persistent, encrypted communication channel that allows internal applications to interact as if they were on the same local network, maintaining data integrity and security compliance.",
+  "limitation": "The primary limitation is that Site-to-Site VPN traffic traverses the public internet, which can introduce variable latency compared to dedicated private connections. To check for latency issues, administrators should monitor the CloudWatch metrics for tunnel state and packet loss.",
+  "diagram": {
+    "kind": "flow",
+    "title": "VPN Tunnel Connectivity",
+    "description": "The flow of traffic from the local warehouse through the encrypted tunnel to the cloud analytics platform.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse Router",
+        "detail": "On-premises Customer Gateway"
+      },
+      {
+        "id": "b",
+        "label": "Public Internet",
+        "detail": "Transport medium"
+      },
+      {
+        "id": "c",
+        "label": "Virtual Private Gateway",
+        "detail": "AWS VPN termination point"
+      },
+      {
+        "id": "d",
+        "label": "Inventory Analytics VPC",
+        "detail": "Cloud-based application network"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Encrypted IPsec Traffic"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Encrypted IPsec Traffic"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Internal VPC Routing"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Logistics Data Bridge, what is the primary purpose of implementing the VPN solution?",
+      "options": [
+        "To synchronize sensitive inventory data without exposing traffic to the public internet.",
+        "To increase the physical bandwidth of the warehouse internet connection.",
+        "To replace the need for local warehouse management systems entirely.",
+        "To provide public access to internal inventory analytics."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states the need to synchronize sensitive data securely without public exposure.",
+      "evidence": "The firm requires a persistent, encrypted connection between their local data center and the AWS VPC to synchronize sensitive inventory data without exposing traffic to the public internet."
+    },
+    {
+      "question": "In Secure Logistics Data Bridge, what is a key trade-off of using the described VPN implementation?",
+      "options": [
+        "It requires a dedicated physical fiber line to the AWS data center.",
+        "It introduces variable latency because traffic traverses the public internet.",
+        "It prevents the use of VPC route tables for traffic management.",
+        "It is incompatible with standard on-premises router hardware."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies public internet traversal as a source of variable latency.",
+      "evidence": "The primary limitation is that Site-to-Site VPN traffic traverses the public internet, which can introduce variable latency compared to dedicated private connections."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:27.384Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,120 @@
+{
+  "version": 1,
+  "topicId": "keras",
+  "title": "Cross-Framework Model Portability for Retail Analytics",
+  "business": "Retail enterprises managing diverse machine learning infrastructure across different cloud and on-premise environments.",
+  "problem": "Teams are siloed by framework choice, leading to redundant development of identical model architectures for PyTorch-based research and TensorFlow-based production environments, increasing technical debt and maintenance costs.",
+  "solution": "Keras 3 enables developers to write a single model definition using backend-agnostic APIs, allowing the same codebase to run seamlessly on JAX, TensorFlow, or PyTorch backends without modification.",
+  "steps": [
+    "Define the model architecture using only built-in Keras layers or the keras.ops namespace.",
+    "Configure the environment variable KERAS_BACKEND to target the desired framework (e.g., 'torch', 'tensorflow', or 'jax').",
+    "Utilize the standard Keras fit() or predict() routines which accept data from any source, including PyTorch DataLoaders or tf.data.Dataset.",
+    "Save the model in the framework-agnostic .keras format for deployment across different backend environments."
+  ],
+  "outcome": "Unified model development lifecycle that eliminates framework-specific code duplication and ensures consistent model logic across heterogeneous deployment environments.",
+  "limitation": "While logic is portable, random number generator behavior and floating-point implementations differ across backends, which can lead to minor numerical divergence over long training runs. Verify consistency by comparing output precision across backends.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cross-Framework Model Deployment Flow",
+    "description": "Shows how a single Keras definition targets multiple backends.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Keras Model Code",
+        "detail": "Uses keras.ops and built-in layers"
+      },
+      {
+        "id": "b",
+        "label": "JAX Backend",
+        "detail": "High-performance training"
+      },
+      {
+        "id": "c",
+        "label": "PyTorch Backend",
+        "detail": "Research integration"
+      },
+      {
+        "id": "d",
+        "label": "TensorFlow Backend",
+        "detail": "Production serving"
+      },
+      {
+        "id": "e",
+        "label": "Deployment",
+        "detail": "Unified model artifacts"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "compiles to"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "compiles to"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "compiles to"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "exports"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "exports"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "exports"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import os\nos.environ['KERAS_BACKEND'] = 'torch' # Switch backend to PyTorch\nimport keras\nfrom keras import layers\n\n# Define model once using backend-agnostic layers\nmodel = keras.Sequential([layers.Dense(64, activation='relu'), layers.Dense(10)])\n\n# Compile and train using standard Keras API\nmodel.compile(optimizer='adam', loss='mse')\n# model.fit(data_loader) # Works with PyTorch DataLoader",
+    "explanation": "Demonstrates setting the backend environment variable to PyTorch and using standard Keras layers that function regardless of the underlying framework."
+  },
+  "sources": [
+    {
+      "url": "https://keras.io/keras_3/",
+      "label": "Keras: Deep Learning for humans"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Framework Model Portability for Retail Analytics, how does Keras 3 address the problem of siloed development?",
+      "options": [
+        "By forcing all teams to migrate to a single proprietary framework.",
+        "By enabling developers to write a single model definition that runs on JAX, TensorFlow, or PyTorch.",
+        "By providing a cloud-based service that automatically converts PyTorch code to TensorFlow.",
+        "By requiring separate codebases for every framework to ensure maximum performance."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that Keras 3 allows developers to write a single model definition using backend-agnostic APIs for use across different frameworks.",
+      "evidence": "Keras 3 enables developers to write a single model definition using backend-agnostic APIs, allowing the same codebase to run seamlessly on JAX, TensorFlow, or PyTorch backends without modification."
+    },
+    {
+      "question": "In Cross-Framework Model Portability for Retail Analytics, what is a key limitation of using Keras 3 across different backends?",
+      "options": [
+        "The model cannot be saved in a framework-agnostic format.",
+        "The training loop must be rewritten for every backend.",
+        "Numerical divergence may occur due to differences in RNG and floating-point implementations.",
+        "Keras 3 only supports the TensorFlow backend for production serving."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that while logic is portable, numerical differences can arise due to backend-specific RNG and floating-point behaviors.",
+      "evidence": "While logic is portable, random number generator behavior and floating-point implementations differ across backends, which can lead to minor numerical divergence over long training runs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:19.888Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:15.661Z"
+}

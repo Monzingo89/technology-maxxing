@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "least_privilege",
+  "title": "Dynamic Database Access for Financial Reporting",
+  "business": "Financial analysts requiring temporary access to sensitive production database tables for quarterly audits.",
+  "problem": "Analysts were granted permanent read-write access to production databases, leading to excessive risk of accidental data modification or unauthorized exfiltration during non-audit periods.",
+  "solution": "Implementing a Just-In-Time (JIT) access model where analysts request temporary, read-only credentials that automatically expire after the audit window, ensuring they only hold the minimum necessary permissions for the required duration.",
+  "steps": [
+    "Define granular IAM roles restricted to read-only access for specific audit-relevant schemas.",
+    "Configure an identity provider to support time-bound session tokens for these roles.",
+    "Implement an approval workflow that triggers the issuance of temporary credentials upon request.",
+    "Automate the revocation of access tokens immediately upon the expiration of the audit task window."
+  ],
+  "outcome": "Reduced blast radius of potential credential compromise and minimized the window of opportunity for unauthorized data access.",
+  "limitation": "The primary trade-off is increased operational complexity and potential latency in access provisioning; check for this by monitoring the time elapsed between an access request and the issuance of the temporary token.",
+  "diagram": {
+    "kind": "flow",
+    "title": "JIT Access Provisioning Flow",
+    "description": "The flow shows how an analyst requests access, receives a temporary token, and is restricted by the system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Financial Analyst",
+        "detail": "User requesting access"
+      },
+      {
+        "id": "b",
+        "label": "Access Manager",
+        "detail": "Validates request and duration"
+      },
+      {
+        "id": "c",
+        "label": "Temporary Token",
+        "detail": "Short-lived read-only credential"
+      },
+      {
+        "id": "d",
+        "label": "Production DB",
+        "detail": "Restricted data store"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "requests access"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "issues limited token"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "grants read-only access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Database Access for Financial Reporting, what is the primary security benefit of the proposed solution?",
+      "options": [
+        "Eliminating the need for database passwords entirely",
+        "Reducing the blast radius and window of opportunity for unauthorized access",
+        "Increasing the speed of database queries for analysts",
+        "Removing the need for identity providers"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on limiting access to the minimum necessary permissions for a specific duration, which directly reduces the risk of long-term credential misuse.",
+      "evidence": "Reduced blast radius of potential credential compromise and minimized the window of opportunity for unauthorized data access."
+    },
+    {
+      "question": "In Dynamic Database Access for Financial Reporting, what is a key limitation of the implementation?",
+      "options": [
+        "The system becomes impossible to audit",
+        "Increased operational complexity and potential latency in provisioning",
+        "It requires permanent administrative rights for all users",
+        "It prevents all forms of data access"
+      ],
+      "answerIndex": 1,
+      "explanation": "Implementing JIT access introduces overhead in the request-approval-provisioning lifecycle, which can cause delays.",
+      "evidence": "The primary trade-off is increased operational complexity and potential latency in access provisioning; check for this by monitoring the time elapsed between an access request and the issuance of the temporary token."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:45.967Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

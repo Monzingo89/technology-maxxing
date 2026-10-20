@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_kha_white_manga_ocr_base",
+  "title": "Automated Archival of Historical Japanese Periodicals",
+  "business": "A digital humanities research institute tasked with digitizing and indexing a massive collection of 20th-century Japanese magazines.",
+  "problem": "The collection contains complex page layouts where text is frequently overlaid on intricate background illustrations, written in both vertical and horizontal orientations, and often obscured by stylized fonts that standard OCR engines fail to parse.",
+  "solution": "The institute utilizes the manga-ocr-base model, which employs a Vision Encoder Decoder framework specifically trained to handle the unique visual noise, furigana, and non-standard text positioning found in manga and similar graphic-heavy Japanese print media.",
+  "steps": [
+    "Pre-process scanned magazine pages into individual image patches containing text blocks.",
+    "Load the manga-ocr-base model using the Hugging Face Transformers library.",
+    "Pass the image patches through the model to extract raw Japanese text strings.",
+    "Store the extracted text alongside metadata in a searchable database for linguistic analysis."
+  ],
+  "outcome": "Researchers gain the ability to perform full-text searches across previously inaccessible visual archives, significantly reducing the manual labor required for document transcription.",
+  "limitation": "The model is optimized for manga-style text and may struggle with highly degraded or extremely low-resolution scans where character strokes are indistinguishable from background noise; verify by performing a visual inspection of the confidence scores against a subset of ground-truth manual transcriptions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Digitization Pipeline",
+    "description": "The flow shows the transformation of physical scans into structured text data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Physical Scan",
+        "detail": "Raw image file of magazine page"
+      },
+      {
+        "id": "b",
+        "label": "Segmentation",
+        "detail": "Extracting text-heavy regions"
+      },
+      {
+        "id": "c",
+        "label": "manga-ocr-base",
+        "detail": "Vision Encoder Decoder model"
+      },
+      {
+        "id": "d",
+        "label": "Searchable Index",
+        "detail": "Final text database"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "crops regions"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "feeds image patch"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "outputs text string"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/kha-white/manga-ocr-base",
+      "label": "kha-white/manga-ocr-base · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Archival of Historical Japanese Periodicals, why is manga-ocr-base selected over standard OCR?",
+      "options": [
+        "It is the only model that supports English language output.",
+        "It is specifically trained to handle vertical text, furigana, and text overlaid on complex backgrounds.",
+        "It requires no pre-processing of images.",
+        "It is designed exclusively for high-resolution photography."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that standard OCR fails on the complex layouts and stylized fonts found in the collection, whereas this specific model is designed for those exact challenges.",
+      "evidence": "The institute utilizes the manga-ocr-base model, which employs a Vision Encoder Decoder framework specifically trained to handle the unique visual noise, furigana, and non-standard text positioning found in manga and similar graphic-heavy Japanese print media."
+    },
+    {
+      "question": "In Automated Archival of Historical Japanese Periodicals, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot process vertical text.",
+        "The model is too slow for batch processing.",
+        "The model may struggle with extremely low-resolution scans where text is indistinguishable from noise.",
+        "The model requires manual input for every character."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario note that while robust, the model has limits regarding image quality and degradation.",
+      "evidence": "The model is optimized for manga-style text and may struggle with highly degraded or extremely low-resolution scans where character strokes are indistinguishable from background noise"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:19.090Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:14.709Z"
+}

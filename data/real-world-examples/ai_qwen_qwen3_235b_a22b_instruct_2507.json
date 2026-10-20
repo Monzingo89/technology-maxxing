@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_235b_a22b_instruct_2507",
+  "title": "Legal Discovery Document Analysis",
+  "business": "Legal firms managing massive litigation discovery datasets.",
+  "problem": "Manual review of multi-million token document sets leads to missed evidence and prohibitive labor costs.",
+  "solution": "Utilizing Qwen3-235B-A22B-Instruct-2507 with its 1M token context window and Dual Chunk Attention to ingest entire case files for automated retrieval and summarization.",
+  "steps": [
+    "Configure the model environment with the 1M token config_1m.json file.",
+    "Deploy the model using vLLM with VLLM_ATTENTION_BACKEND=DUAL_CHUNK_FLASH_ATTN to handle long-context memory requirements.",
+    "Integrate the Qwen-Agent framework to define custom retrieval tools for specific legal document types.",
+    "Execute batch processing of discovery documents using chunked prefill to maintain system stability."
+  ],
+  "outcome": "Legal teams achieve rapid identification of relevant case facts across vast document archives without manual triage.",
+  "limitation": "The 1M token context requires approximately 1000 GB of GPU memory; check for OOM errors by monitoring KV cache utilization or reducing max_num_batched_tokens.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legal Discovery Pipeline",
+    "description": "The flow of documents from storage through the long-context model to the legal analyst.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Store",
+        "detail": "Raw legal discovery files"
+      },
+      {
+        "id": "b",
+        "label": "Qwen3-235B-A22B",
+        "detail": "Model with Dual Chunk Attention"
+      },
+      {
+        "id": "c",
+        "label": "Legal Analyst",
+        "detail": "End user receiving insights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest 1M tokens"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provide case evidence"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from qwen_agent.agents import Assistant\n# Define LLM with custom endpoint\nllm_cfg = {'model': 'Qwen3-235B-A22B-Instruct-2507', 'model_server': 'http://localhost:8000/v1'}\n# Define tools for document retrieval\ntools = ['code_interpreter']\nbot = Assistant(llm=llm_cfg, function_list=tools)\n# Run analysis on long-context input\nmessages = [{'role': 'user', 'content': 'Analyze these 500k tokens of discovery...'}]\nfor responses in bot.run(messages=messages): pass",
+    "explanation": "This code demonstrates initializing the Qwen-Agent to utilize the model's tool-calling capabilities for processing large document sets."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-235B-A22B-Instruct-2507",
+      "label": "Qwen/Qwen3-235B-A22B-Instruct-2507 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legal Discovery Document Analysis, how does the model address the challenge of massive document sets?",
+      "options": [
+        "By utilizing a 1M token context window and Dual Chunk Attention.",
+        "By automatically deleting irrelevant documents to save space.",
+        "By requiring manual triage before the model processes data.",
+        "By limiting input to 256K tokens to ensure faster processing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the model's native long-context capabilities to ingest entire case files.",
+      "evidence": "Utilizing Qwen3-235B-A22B-Instruct-2507 with its 1M token context window and Dual Chunk Attention to ingest entire case files for automated retrieval and summarization."
+    },
+    {
+      "question": "In Legal Discovery Document Analysis, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot use tool-calling for document retrieval.",
+        "The model requires approximately 1000 GB of GPU memory for 1M token context.",
+        "The model is incompatible with vLLM deployment.",
+        "The model only supports non-English languages."
+      ],
+      "answerIndex": 1,
+      "explanation": "High memory overhead is a documented constraint for the 1M token context configuration.",
+      "evidence": "The 1M token context requires approximately 1000 GB of GPU memory; check for OOM errors by monitoring KV cache utilization or reducing max_num_batched_tokens."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:28.357Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:24.211Z"
+}

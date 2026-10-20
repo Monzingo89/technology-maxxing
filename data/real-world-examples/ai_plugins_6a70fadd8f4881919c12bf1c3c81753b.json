@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_plugins_6a70fadd8f4881919c12bf1c3c81753b",
+  "title": "Extending VillageSQL for Geospatial Logistics",
+  "business": "A regional logistics firm managing last-mile delivery routes.",
+  "problem": "The firm requires specialized geospatial indexing functions for route optimization that are not natively available in the base VillageSQL environment, leading to inefficient query processing.",
+  "solution": "Utilize the VillageSQL plugin to port existing PostgreSQL geospatial extensions into the environment, enabling custom indexing and spatial calculations directly within the database layer.",
+  "steps": [
+    "Identify the required PostgreSQL extension source code compatible with the VillageSQL runtime architecture.",
+    "Configure the VillageSQL development environment to map extension headers to the plugin-supported build path.",
+    "Compile the extension using the VillageSQL build toolchain to ensure binary compatibility.",
+    "Register the new extension within the VillageSQL schema to expose functions to the SQL interface."
+  ],
+  "outcome": "Improved query performance for spatial route calculations and reduced latency in delivery dispatch operations.",
+  "limitation": "Ported extensions may experience memory overhead if they rely on complex C-language hooks not fully exposed in the VillageSQL sandbox; verify stability by monitoring execution time for large datasets.",
+  "diagram": {
+    "kind": "flow",
+    "title": "VillageSQL Extension Integration Flow",
+    "description": "The process of moving a PostgreSQL extension into the VillageSQL runtime.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "PostgreSQL Source",
+        "detail": "Original C-based extension code"
+      },
+      {
+        "id": "b",
+        "label": "VillageSQL Build Tool",
+        "detail": "Compiles code for the sandbox"
+      },
+      {
+        "id": "c",
+        "label": "VillageSQL Runtime",
+        "detail": "Executes the new extension functions"
+      },
+      {
+        "id": "d",
+        "label": "Logistics App",
+        "detail": "Queries the database"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "source mapping"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "binary deployment"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "optimized spatial query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Extending VillageSQL for Geospatial Logistics, what is the primary reason for porting PostgreSQL extensions?",
+      "options": [
+        "To enable custom indexing and spatial calculations for route optimization.",
+        "To replace the base VillageSQL database engine entirely.",
+        "To increase the storage capacity of the logistics firm's servers.",
+        "To reduce the cost of the ChatGPT plugin subscription."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states the firm needs geospatial functions not natively available to improve route optimization.",
+      "evidence": "The firm requires specialized geospatial indexing functions for route optimization that are not natively available in the base VillageSQL environment"
+    },
+    {
+      "question": "In Extending VillageSQL for Geospatial Logistics, what is a key limitation of porting extensions?",
+      "options": [
+        "The extension will automatically become slower than native functions.",
+        "Memory overhead may occur if complex C-language hooks are used.",
+        "The extension will only work on Windows-based servers.",
+        "Ported extensions cannot be registered in the SQL schema."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights potential memory overhead when using complex C-language hooks in the sandbox.",
+      "evidence": "Ported extensions may experience memory overhead if they rely on complex C-language hooks not fully exposed in the VillageSQL sandbox"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:10.453Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_6_luna",
+  "title": "Automated Logistics Manifest Processing",
+  "business": "Global logistics firms processing millions of shipping manifests daily.",
+  "problem": "High-volume document ingestion incurs prohibitive costs when using high-reasoning models for routine data extraction, leading to budget overruns.",
+  "solution": "Deploy GPT-5.6 Luna to handle high-volume, structured data extraction from manifests, leveraging its optimized architecture for cost-sensitive workloads while maintaining high context window capacity.",
+  "steps": [
+    "Configure the Chat Completions API endpoint to use the gpt-5.6-luna model ID.",
+    "Enable prompt caching for recurring manifest template headers to reduce input token costs.",
+    "Implement structured_outputs to ensure the model returns consistent JSON schemas for downstream database ingestion.",
+    "Set reasoning.effort to low for routine extraction tasks to optimize latency and resource usage.",
+    "Monitor token usage per request to ensure manifests remain within the 922,000 input token limit."
+  ],
+  "outcome": "Substantial reduction in operational expenditure for document processing while maintaining the throughput required for real-time logistics tracking.",
+  "limitation": "The model may exhibit reduced reasoning depth on highly ambiguous or corrupted document scans compared to larger models; verify by comparing output confidence scores against a small validation set of complex manifests.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Processing Pipeline",
+    "description": "The flow of manifest data through the GPT-5.6 Luna processing pipeline.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Manifest Source",
+        "detail": "Raw PDF or image shipping documents"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Cache",
+        "detail": "Stores recurring template structures"
+      },
+      {
+        "id": "c",
+        "label": "GPT-5.6 Luna",
+        "detail": "Model performing extraction"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Structured JSON storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Ingest document"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Inject cached context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Write structured output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-5.6-luna', # Optimized for cost-sensitive workloads\n  messages=[{'role': 'user', 'content': manifest_data}],\n  reasoning_effort='low', # Minimize resource usage for routine tasks\n  response_format={'type': 'json_object'} # Ensure structured_outputs\n)",
+    "explanation": "This code snippet demonstrates initializing a request to GPT-5.6 Luna with low reasoning effort and structured output enforcement, mapping directly to the cost-optimization strategy for logistics manifests."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-luna",
+      "label": "GPT-5.6 Luna"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Manifest Processing, what is the primary driver for adopting GPT-5.6 Luna?",
+      "options": [
+        "To replace all human oversight in the logistics chain",
+        "To reduce costs for high-volume, routine data extraction tasks",
+        "To enable real-time video processing of shipping containers",
+        "To increase the reasoning depth beyond that of larger models"
+      ],
+      "answerIndex": 1,
+      "explanation": "The business scenario identifies that high-volume document ingestion incurs prohibitive costs, and the solution uses this model specifically for cost-sensitive workloads.",
+      "evidence": "High-volume document ingestion incurs prohibitive costs when using high-reasoning models for routine data extraction, leading to budget overruns."
+    },
+    {
+      "question": "In Automated Logistics Manifest Processing, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot process images",
+        "The model is incompatible with structured_outputs",
+        "The model may show reduced reasoning on ambiguous inputs",
+        "The model requires a minimum of 1 million tokens per request"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about reduced reasoning depth on complex or ambiguous documents.",
+      "evidence": "The model may exhibit reduced reasoning depth on highly ambiguous or corrupted document scans compared to larger models; verify by comparing output confidence scores against a small validation set of complex manifests."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:18.065Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:13.957Z"
+}

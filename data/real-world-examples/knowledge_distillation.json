@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "knowledge_distillation",
+  "title": "Edge-Device Predictive Maintenance Optimization",
+  "business": "Industrial manufacturing firms deploying predictive maintenance sensors on edge hardware.",
+  "problem": "Large, high-accuracy neural networks required for vibration analysis are too computationally expensive to run on low-power, resource-constrained edge controllers, causing latency and power consumption issues.",
+  "solution": "Knowledge distillation allows the firm to train a compact 'student' model to mimic the output probability distribution of a large, pre-trained 'teacher' ensemble, effectively compressing the complex decision boundaries into a lightweight architecture suitable for edge deployment.",
+  "steps": [
+    "Train a high-capacity teacher ensemble on historical vibration telemetry data to achieve peak classification accuracy.",
+    "Define a lightweight student model architecture with significantly fewer parameters than the teacher.",
+    "Compute a combined loss function that minimizes the difference between the student's output and the teacher's soft predictions, alongside standard ground-truth labels.",
+    "Perform backpropagation to update the student model weights based on the teacher's guidance.",
+    "Quantize the trained student model to further optimize it for specific edge hardware instruction sets."
+  ],
+  "outcome": "The student model achieves near-teacher classification accuracy while operating within the strict memory and power constraints of edge hardware, enabling real-time fault detection.",
+  "limitation": "The student model may struggle to generalize to novel failure modes not captured in the teacher's training set; this can be checked by monitoring the divergence between student and teacher predictions on out-of-distribution data.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distillation Pipeline",
+    "description": "The flow shows how the teacher guides the student during training.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Teacher Ensemble",
+        "detail": "Large pre-trained model"
+      },
+      {
+        "id": "b",
+        "label": "Input Data",
+        "detail": "Vibration telemetry"
+      },
+      {
+        "id": "c",
+        "label": "Student Model",
+        "detail": "Lightweight architecture"
+      },
+      {
+        "id": "d",
+        "label": "Loss Function",
+        "detail": "Compares student to teacher"
+      }
+    ],
+    "edges": [
+      {
+        "from": "b",
+        "to": "a",
+        "label": "inference"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "training"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "soft targets"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "predictions"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "gradient update"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1503.02531",
+      "label": "Distilling the Knowledge in a Neural Network"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge-Device Predictive Maintenance Optimization, why is knowledge distillation used?",
+      "options": [
+        "To compress complex decision boundaries into a lightweight model for edge hardware.",
+        "To increase the number of parameters in the student model for better accuracy.",
+        "To eliminate the need for historical vibration telemetry data.",
+        "To replace the teacher ensemble with a more expensive hardware controller."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that large models are too expensive for edge hardware, and distillation is the solution to compress that knowledge.",
+      "evidence": "Knowledge distillation allows the firm to train a compact 'student' model to mimic the output probability distribution of a large, pre-trained 'teacher' ensemble, effectively compressing the complex decision boundaries into a lightweight architecture suitable for edge deployment."
+    },
+    {
+      "question": "In Edge-Device Predictive Maintenance Optimization, what is a primary limitation of the student model?",
+      "options": [
+        "It is always more accurate than the teacher ensemble.",
+        "It may struggle to generalize to novel failure modes not seen in the teacher's data.",
+        "It requires more power than the teacher model to execute.",
+        "It cannot be quantized for specific hardware."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the risk of poor generalization to novel modes.",
+      "evidence": "The student model may struggle to generalize to novel failure modes not captured in the teacher's training set; this can be checked by monitoring the divergence between student and teacher predictions on out-of-distribution data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:27.474Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:23.442Z"
+}

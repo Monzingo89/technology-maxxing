@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "aws_glue",
+  "title": "Automated Inventory Reconciliation for Retail Logistics",
+  "business": "A regional logistics provider managing thousands of daily inventory updates across disparate warehouse management systems.",
+  "problem": "The company faces significant data silos where inventory records in legacy on-premises databases fail to synchronize with cloud-based order management systems, leading to frequent stock-outs and inaccurate fulfillment reporting.",
+  "solution": "AWS Glue provides a serverless data integration platform that allows the logistics provider to catalog disparate data sources and execute ETL jobs to normalize inventory schemas into a unified data lake format, ensuring consistency across systems without managing infrastructure.",
+  "steps": [
+    "Define metadata tables in the AWS Glue Data Catalog by crawling existing on-premises and cloud database endpoints.",
+    "Develop ETL scripts using the AWS Glue visual interface or Python shell to map heterogeneous source fields to a standardized schema.",
+    "Schedule Glue triggers to execute transformation jobs periodically, ensuring the data lake remains current with warehouse updates.",
+    "Configure the Glue job to write the transformed output into an Amazon S3 bucket for consumption by downstream analytics tools."
+  ],
+  "outcome": "The organization achieves a single source of truth for inventory levels, enabling real-time visibility into stock availability and reducing manual reconciliation efforts.",
+  "limitation": "AWS Glue jobs are subject to cold start latency during initial container provisioning; users can check this by monitoring the 'Job Run Time' metrics in the Glue console to determine if the overhead impacts time-sensitive synchronization requirements.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Data Integration Flow",
+    "description": "This diagram illustrates how raw inventory data is ingested, cataloged, and transformed into a unified format.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse DB",
+        "detail": "Source legacy inventory records"
+      },
+      {
+        "id": "b",
+        "label": "Glue Crawler",
+        "detail": "Metadata discovery engine"
+      },
+      {
+        "id": "c",
+        "label": "Data Catalog",
+        "detail": "Centralized schema repository"
+      },
+      {
+        "id": "d",
+        "label": "Glue ETL Job",
+        "detail": "Transformation logic execution"
+      },
+      {
+        "id": "e",
+        "label": "Data Lake",
+        "detail": "Normalized inventory storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Scans schema"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Populates tables"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Provides schema context"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Writes normalized data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely- AWS"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation for Retail Logistics, what is the primary business challenge addressed by AWS Glue?",
+      "options": [
+        "Inconsistent inventory data across siloed systems",
+        "High costs of physical warehouse storage",
+        "Lack of cloud-based web hosting",
+        "Slow network latency in regional offices"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that data silos between legacy and cloud systems cause inaccurate reporting, which AWS Glue resolves through integration.",
+      "evidence": "The company faces significant data silos where inventory records in legacy on-premises databases fail to synchronize with cloud-based order management systems, leading to frequent stock-outs and inaccurate fulfillment reporting."
+    },
+    {
+      "question": "In Automated Inventory Reconciliation for Retail Logistics, what is a noted limitation of the implementation?",
+      "options": [
+        "Inability to connect to on-premises databases",
+        "Manual infrastructure management requirements",
+        "Cold start latency during container provisioning",
+        "Lack of support for Python-based ETL scripts"
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly mentions that container provisioning latency can impact time-sensitive tasks.",
+      "evidence": "AWS Glue jobs are subject to cold start latency during initial container provisioning; users can check this by monitoring the 'Job Run Time' metrics in the Glue console to determine if the overhead impacts time-sensitive synchronization requirements."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:21.702Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

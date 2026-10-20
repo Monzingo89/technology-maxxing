@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "kustomize",
+  "title": "Unified Global Retail Configuration Management",
+  "business": "A global retail chain managing Kubernetes clusters across multiple regional data centers.",
+  "problem": "The engineering team faces significant operational overhead due to maintaining duplicated YAML manifests for each region, leading to configuration drift and manual error-prone updates when applying environment-specific patches.",
+  "solution": "Kustomize enables a template-free approach by utilizing a base directory containing common resource definitions, while regional overlays apply environment-specific patches and strategic merges without modifying the original source files.",
+  "steps": [
+    "Define a base directory containing standard deployment and service YAML files.",
+    "Create regional overlay directories for each deployment target.",
+    "Define a kustomization.yaml file in each overlay to reference the base.",
+    "Apply environment-specific patches or common labels within the overlay kustomization files.",
+    "Execute kubectl apply -k to generate and deploy the final merged configuration."
+  ],
+  "outcome": "The team achieves a single source of truth for base configurations while maintaining the flexibility to inject regional requirements, significantly reducing configuration drift and manual maintenance effort.",
+  "limitation": "Kustomize does not support complex conditional logic or looping constructs found in templating engines; verify configuration state by running kubectl kustomize to inspect the final rendered output before applying.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Kustomize Configuration Hierarchy",
+    "description": "This diagram illustrates how a base configuration is transformed into regional deployments through overlays.",
+    "nodes": [
+      {
+        "id": "base",
+        "label": "Base Manifests",
+        "detail": "Common deployment and service definitions"
+      },
+      {
+        "id": "overlay_us",
+        "label": "US Overlay",
+        "detail": "US-specific patches and labels"
+      },
+      {
+        "id": "overlay_eu",
+        "label": "EU Overlay",
+        "detail": "EU-specific patches and labels"
+      },
+      {
+        "id": "k8s_us",
+        "label": "US Cluster",
+        "detail": "Final rendered configuration"
+      },
+      {
+        "id": "k8s_eu",
+        "label": "EU Cluster",
+        "detail": "Final rendered configuration"
+      }
+    ],
+    "edges": [
+      {
+        "from": "base",
+        "to": "overlay_us",
+        "label": "inherits"
+      },
+      {
+        "from": "base",
+        "to": "overlay_eu",
+        "label": "inherits"
+      },
+      {
+        "from": "overlay_us",
+        "to": "k8s_us",
+        "label": "renders"
+      },
+      {
+        "from": "overlay_eu",
+        "to": "k8s_eu",
+        "label": "renders"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://kustomize.io/",
+      "label": "Kustomize - Kubernetes native configuration management"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Global Retail Configuration Management, how does Kustomize address the problem of configuration drift?",
+      "options": [
+        "By using template-free overlays to patch a single base configuration.",
+        "By converting all YAML files into a proprietary binary format.",
+        "By automatically rewriting the base files for every region.",
+        "By requiring a separate Git repository for every regional cluster."
+      ],
+      "answerIndex": 0,
+      "explanation": "Kustomize uses a base and overlay structure to manage configurations without modifying the original source, which prevents drift.",
+      "evidence": "Kustomize enables a template-free approach by utilizing a base directory containing common resource definitions, while regional overlays apply environment-specific patches and strategic merges without modifying the original source files."
+    },
+    {
+      "question": "In Unified Global Retail Configuration Management, what is a primary limitation of the Kustomize approach?",
+      "options": [
+        "It requires a custom plugin for every Kubernetes resource type.",
+        "It cannot handle more than two overlay layers at a time.",
+        "It lacks support for complex conditional logic or looping constructs.",
+        "It is incompatible with the kubectl apply command."
+      ],
+      "answerIndex": 2,
+      "explanation": "Kustomize is designed to be template-free and declarative, meaning it avoids the complexity of logic-heavy templating engines.",
+      "evidence": "Kustomize does not support complex conditional logic or looping constructs found in templating engines; verify configuration state by running kubectl kustomize to inspect the final rendered output before applying."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:34.051Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:30.046Z"
+}

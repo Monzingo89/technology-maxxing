@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "service_discovery",
+  "title": "Dynamic Logistics Fleet Routing",
+  "business": "A regional logistics provider managing a fleet of autonomous delivery drones that must communicate with localized charging stations and package sorting hubs.",
+  "problem": "The fleet experiences frequent connectivity failures because hardcoded IP addresses for sorting hubs become invalid whenever network segments are reconfigured or scaled to meet demand.",
+  "solution": "Implementing a service discovery mechanism allows drones to query a central registry for the current network location and metadata of active sorting hubs, ensuring they always route to available infrastructure regardless of underlying IP changes.",
+  "steps": [
+    "Deploy a centralized service registry to track active network locations and metadata for all sorting hubs.",
+    "Configure sorting hubs to register their current IP address and operational status with the registry upon startup.",
+    "Implement a discovery client within the drone firmware to query the registry for the nearest hub before initiating a delivery route.",
+    "Establish a health-check interval where the registry removes entries for hubs that fail to report their status, preventing drones from routing to offline nodes."
+  ],
+  "outcome": "Drones maintain continuous operational connectivity by dynamically resolving hub locations, significantly reducing delivery route interruptions caused by network infrastructure updates.",
+  "limitation": "The primary trade-off is the introduction of a single point of failure within the registry; if the registry is unreachable, drones cannot resolve hub locations, which can be monitored by checking the registry heartbeat status.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Service Discovery Workflow",
+    "description": "This flow illustrates how drones locate infrastructure via a central registry.",
+    "nodes": [
+      {
+        "id": "hub",
+        "label": "Sorting Hub",
+        "detail": "Registers IP and metadata"
+      },
+      {
+        "id": "reg",
+        "label": "Service Registry",
+        "detail": "Stores current network locations"
+      },
+      {
+        "id": "drone",
+        "label": "Delivery Drone",
+        "detail": "Queries registry for hub location"
+      }
+    ],
+    "edges": [
+      {
+        "from": "hub",
+        "to": "reg",
+        "label": "registers location"
+      },
+      {
+        "from": "drone",
+        "to": "reg",
+        "label": "requests hub address"
+      },
+      {
+        "from": "reg",
+        "to": "drone",
+        "label": "returns current IP"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Logistics Fleet Routing, what is the primary reason for implementing service discovery?",
+      "options": [
+        "To increase the physical speed of the delivery drones.",
+        "To eliminate the need for hardcoded IP addresses that fail during network reconfigurations.",
+        "To reduce the total number of sorting hubs required for operations.",
+        "To provide a backup power source for the drone fleet."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies hardcoded IP addresses as the root cause of connectivity failures, which service discovery resolves by enabling dynamic location lookups.",
+      "evidence": "The fleet experiences frequent connectivity failures because hardcoded IP addresses for sorting hubs become invalid whenever network segments are reconfigured or scaled to meet demand."
+    },
+    {
+      "question": "In Dynamic Logistics Fleet Routing, what is a key limitation of the proposed solution?",
+      "options": [
+        "The registry requires too much memory on the drone.",
+        "The registry introduces a single point of failure that can be monitored via heartbeat status.",
+        "The registry prevents the hubs from ever going offline.",
+        "The registry increases the cost of the drone hardware."
+      ],
+      "answerIndex": 1,
+      "explanation": "Centralized systems create a dependency; if the registry fails, the drones cannot find the hubs, which is a known trade-off of this architecture.",
+      "evidence": "The primary trade-off is the introduction of a single point of failure within the registry; if the registry is unreachable, drones cannot resolve hub locations, which can be monitored by checking the registry heartbeat status."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:58.354Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

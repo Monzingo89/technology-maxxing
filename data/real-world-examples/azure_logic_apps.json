@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_logic_apps",
+  "title": "Automated Supply Chain Inventory Synchronization",
+  "business": "Retailers managing multi-channel inventory across disparate legacy warehouse systems and modern e-commerce platforms.",
+  "problem": "Manual data entry between warehouse management systems and storefronts leads to stock discrepancies, overselling, and significant operational overhead.",
+  "solution": "Azure Logic Apps provides a serverless orchestration layer that uses managed connectors to poll legacy databases and push updates to cloud-based APIs, automating the synchronization process without requiring custom middleware infrastructure.",
+  "steps": [
+    "Configure a recurrence trigger to poll the legacy warehouse database at defined intervals.",
+    "Utilize a managed connector to query the SQL database for recent inventory changes.",
+    "Apply a data transformation action to map legacy schema fields to the target e-commerce API format.",
+    "Execute an HTTP action to push the transformed inventory data to the storefront API.",
+    "Implement a conditional branch to send an email notification if the API response indicates a failure."
+  ],
+  "outcome": "Improved inventory accuracy across channels and reduced manual administrative labor for supply chain teams.",
+  "limitation": "Logic Apps have execution duration limits for long-running workflows; complex, high-volume data processing should be offloaded to Azure Functions to avoid timeout errors.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Sync Workflow",
+    "description": "The flow shows data moving from a legacy system to a modern storefront via the Logic App orchestrator.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy DB",
+        "detail": "Source of inventory data"
+      },
+      {
+        "id": "b",
+        "label": "Logic App",
+        "detail": "Orchestration and transformation engine"
+      },
+      {
+        "id": "c",
+        "label": "Storefront API",
+        "detail": "Target system for updates"
+      },
+      {
+        "id": "d",
+        "label": "Admin Email",
+        "detail": "Error reporting endpoint"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Polls data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Pushes updates"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Sends alert on failure"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Supply Chain Inventory Synchronization, what is the primary business problem addressed?",
+      "options": [
+        "Manual data entry causing stock discrepancies and overselling",
+        "High costs associated with cloud storage infrastructure",
+        "Lack of machine learning capabilities in warehouse systems",
+        "Inability to scale database storage for large inventories"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual data entry between systems as the cause of inventory discrepancies.",
+      "evidence": "Manual data entry between warehouse management systems and storefronts leads to stock discrepancies, overselling, and significant operational overhead."
+    },
+    {
+      "question": "In Automated Supply Chain Inventory Synchronization, what is a noted limitation of the implementation?",
+      "options": [
+        "The inability to connect to legacy SQL databases",
+        "The requirement for custom middleware infrastructure",
+        "Execution duration limits for long-running workflows",
+        "The lack of conditional branching capabilities"
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson highlights that Logic Apps have execution duration limits, suggesting Azure Functions for long-running tasks.",
+      "evidence": "Logic Apps have execution duration limits for long-running workflows; complex, high-volume data processing should be offloaded to Azure Functions to avoid timeout errors."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:54.661Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

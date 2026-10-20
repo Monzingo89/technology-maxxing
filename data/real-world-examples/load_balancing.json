@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "load_balancing",
+  "title": "Optimizing Regional Logistics Portal Traffic",
+  "business": "A regional logistics firm managing a high-volume portal for real-time delivery tracking and driver dispatching.",
+  "problem": "The firm experiences service outages during peak morning dispatch hours because a single monolithic server instance cannot handle the concurrent connection spikes from thousands of mobile driver devices, leading to request timeouts and dispatch delays.",
+  "solution": "By deploying a load balancer, the firm distributes incoming traffic across a cluster of identical service instances. This ensures that no single server becomes a bottleneck, as the load balancer acts as a reverse proxy that intelligently routes requests to the least busy instance, maintaining system availability even when individual nodes are under heavy load.",
+  "steps": [
+    "Provision multiple identical service instances to host the logistics application logic.",
+    "Configure the load balancer to perform health checks on each service instance to verify responsiveness.",
+    "Update the DNS records to point the logistics portal domain to the load balancer's public IP address.",
+    "Define a distribution algorithm, such as round-robin, to cycle incoming requests through the healthy instance pool."
+  ],
+  "outcome": "The logistics portal achieves improved reliability and consistent response times for drivers, as the system gracefully handles traffic spikes by spreading the workload across the available infrastructure.",
+  "limitation": "A primary limitation is the potential for session persistence issues; if a user's state is stored locally on one server, they may lose their session if the load balancer routes them to a different instance. To check for this, monitor application logs for frequent authentication errors or session-related exceptions during peak traffic periods.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Load Balancing Traffic Flow",
+    "description": "This diagram illustrates how client requests are intercepted by the load balancer and distributed to backend servers.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "Driver Device",
+        "detail": "Sends tracking requests"
+      },
+      {
+        "id": "lb",
+        "label": "Load Balancer",
+        "detail": "Distributes incoming traffic"
+      },
+      {
+        "id": "s1",
+        "label": "Instance A",
+        "detail": "Processes request"
+      },
+      {
+        "id": "s2",
+        "label": "Instance B",
+        "detail": "Processes request"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "lb",
+        "label": "HTTP Request"
+      },
+      {
+        "from": "lb",
+        "to": "s1",
+        "label": "Route to Instance A"
+      },
+      {
+        "from": "lb",
+        "to": "s2",
+        "label": "Route to Instance B"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Regional Logistics Portal Traffic, what is the primary purpose of introducing a load balancer?",
+      "options": [
+        "To increase the processing power of a single server instance.",
+        "To distribute incoming traffic across a cluster of identical service instances.",
+        "To encrypt all incoming driver data for security compliance.",
+        "To replace the need for DNS records in the logistics portal."
+      ],
+      "answerIndex": 1,
+      "explanation": "The load balancer is used to prevent bottlenecks by spreading requests across multiple servers.",
+      "evidence": "By deploying a load balancer, the firm distributes incoming traffic across a cluster of identical service instances."
+    },
+    {
+      "question": "In Optimizing Regional Logistics Portal Traffic, what is a key limitation of using a load balancer?",
+      "options": [
+        "It prevents the use of health checks for service instances.",
+        "It automatically upgrades the hardware of the backend servers.",
+        "It may cause session persistence issues if state is stored locally on one server.",
+        "It requires the client to manually choose which server to connect to."
+      ],
+      "answerIndex": 2,
+      "explanation": "Load balancing can break local session state if the request is routed to a different server than the one that initiated the session.",
+      "evidence": "A primary limitation is the potential for session persistence issues; if a user's state is stored locally on one server, they may lose their session if the load balancer routes them to a different instance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:02.434Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

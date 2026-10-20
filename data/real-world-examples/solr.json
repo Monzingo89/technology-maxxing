@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "solr",
+  "title": "Global Archive Metadata Discovery",
+  "business": "A national historical archive managing millions of digitized document records.",
+  "problem": "Researchers struggle to locate specific documents because legacy relational databases cannot efficiently perform full-text searches across unstructured OCR transcripts while simultaneously filtering by complex metadata facets.",
+  "solution": "Apache Solr provides a distributed search platform that indexes both structured metadata fields and unstructured text content, enabling high-speed retrieval and multi-dimensional faceting.",
+  "steps": [
+    "Define a schema.xml or use Managed Schema to map document metadata fields and full-text OCR content fields.",
+    "Configure text analysis chains using tokenizers and filters to normalize OCR transcripts for accurate matching.",
+    "Ingest document records into Solr collections, ensuring distributed indexing across the cluster for reliability.",
+    "Implement query-time faceting on metadata fields like 'Century' or 'DocumentType' to allow users to refine search results dynamically.",
+    "Expose the Solr search API to the frontend application to enable real-time discovery."
+  ],
+  "outcome": "Researchers can perform rapid, intuitive searches across massive document sets, filtering results by metadata categories while maintaining full-text relevance.",
+  "limitation": "Solr requires significant memory for heap management and index caching; excessive faceting on high-cardinality fields can lead to increased memory pressure, which is monitored via the Solr Admin UI dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Discovery Workflow",
+    "description": "This diagram illustrates the flow from raw data ingestion to user-driven discovery.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Data",
+        "detail": "OCR transcripts and metadata"
+      },
+      {
+        "id": "b",
+        "label": "Solr Indexer",
+        "detail": "Processes and tokenizes content"
+      },
+      {
+        "id": "c",
+        "label": "Solr Collection",
+        "detail": "Distributed search index"
+      },
+      {
+        "id": "d",
+        "label": "Search API",
+        "detail": "Query and Facet engine"
+      },
+      {
+        "id": "e",
+        "label": "Researcher UI",
+        "detail": "Displays results and facets"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Store"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Return Results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://solr.apache.org/",
+      "label": "Welcome to Apache Solr"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Archive Metadata Discovery, why is Apache Solr chosen over a standard relational database?",
+      "options": [
+        "It provides superior full-text search and multi-dimensional faceting capabilities.",
+        "It is the only database that supports historical document storage.",
+        "It eliminates the need for any metadata schema definitions.",
+        "It is exclusively designed for geospatial data management."
+      ],
+      "answerIndex": 0,
+      "explanation": "Solr is specifically designed to handle the combination of unstructured text and structured metadata, which is the core requirement for the archive.",
+      "evidence": "Apache Solr provides a distributed search platform that indexes both structured metadata fields and unstructured text content, enabling high-speed retrieval and multi-dimensional faceting."
+    },
+    {
+      "question": "In Global Archive Metadata Discovery, what is a primary operational limitation to monitor?",
+      "options": [
+        "The inability to perform distributed indexing.",
+        "The lack of support for text analysis chains.",
+        "Memory pressure caused by high-cardinality faceting.",
+        "The requirement to use only Docker for deployment."
+      ],
+      "answerIndex": 2,
+      "explanation": "High-cardinality fields in facets consume significant memory, which is a known trade-off in Solr performance.",
+      "evidence": "excessive faceting on high-cardinality fields can lead to increased memory pressure, which is monitored via the Solr Admin UI dashboard."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:42.627Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:38.735Z"
+}

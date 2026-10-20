@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "dependency_inversion_principle",
+  "title": "Decoupling Logistics Providers in Global Shipping",
+  "business": "A global e-commerce platform that manages international shipping for thousands of third-party vendors.",
+  "problem": "The platform's order processing engine was tightly coupled to a specific legacy shipping carrier's API. When the carrier updated their authentication protocol, the entire order management system required a full redeployment, causing significant downtime and blocking new vendor onboarding.",
+  "solution": "By applying the Dependency Inversion Principle, the platform introduced an abstraction layer in the form of an interface. The high-level order processing logic now interacts only with a generic ShippingProvider interface, while concrete implementations for specific carriers are injected at runtime. This ensures that the core business logic remains agnostic of the underlying transport protocols or vendor-specific data structures.",
+  "steps": [
+    "Define a ShippingProvider interface that outlines the contract for shipping operations like calculateRate and generateLabel.",
+    "Refactor the OrderProcessor class to accept an instance of ShippingProvider via its constructor rather than instantiating a concrete carrier class.",
+    "Create concrete classes for each carrier that implement the ShippingProvider interface.",
+    "Use a dependency injection container to map the active carrier implementation to the interface at application startup."
+  ],
+  "outcome": "The platform can now integrate new shipping partners by simply adding a new class that adheres to the interface, eliminating the need to modify or redeploy the core order processing engine.",
+  "limitation": "The primary trade-off is increased architectural complexity, as developers must manage interfaces and configuration files. This can be verified by monitoring the number of abstraction layers; if the system requires excessive indirection for simple tasks, the abstraction may be over-engineered.",
+  "diagram": {
+    "kind": "er",
+    "title": "Shipping Provider Decoupling",
+    "description": "Shows how the OrderProcessor depends on an abstraction rather than concrete providers.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "OrderProcessor",
+        "detail": "High-level business logic"
+      },
+      {
+        "id": "b",
+        "label": "ShippingProvider",
+        "detail": "Interface abstraction"
+      },
+      {
+        "id": "c",
+        "label": "LegacyCarrier",
+        "detail": "Concrete low-level implementation"
+      },
+      {
+        "id": "d",
+        "label": "NewCarrier",
+        "detail": "Concrete low-level implementation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "depends on"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "implements"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "implements"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Logistics Providers in Global Shipping, what is the primary reason for implementing the Dependency Inversion Principle?",
+      "options": [
+        "To reduce the need for redeploying core logic when external dependencies change.",
+        "To increase the speed of the shipping API requests.",
+        "To allow vendors to set their own shipping prices.",
+        "To remove the need for interfaces in the codebase."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem describes how tight coupling caused downtime during external API updates; decoupling via abstraction prevents this.",
+      "evidence": "When the carrier updated their authentication protocol, the entire order management system required a full redeployment, causing significant downtime and blocking new vendor onboarding."
+    },
+    {
+      "question": "In Decoupling Logistics Providers in Global Shipping, what is a potential downside of the proposed solution?",
+      "options": [
+        "It makes the code impossible to test.",
+        "It leads to increased architectural complexity.",
+        "It prevents the use of dependency injection containers.",
+        "It forces all carriers to use the same authentication protocol."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that adding abstraction layers increases the complexity of the system.",
+      "evidence": "The primary trade-off is increased architectural complexity, as developers must manage interfaces and configuration files."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:27.079Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

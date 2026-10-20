@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "wireshark",
+  "title": "Legacy API Latency Diagnosis",
+  "business": "Enterprise application support teams managing distributed service architectures.",
+  "problem": "Intermittent latency spikes in a legacy middleware service are causing transaction timeouts, but standard application logs fail to capture the specific protocol handshake failure.",
+  "solution": "Using Wireshark to perform deep packet inspection of the raw traffic allows engineers to observe the exact protocol exchange, identifying malformed headers or unexpected TCP retransmissions that logs omit.",
+  "steps": [
+    "Identify the network interface on the server hosting the legacy middleware.",
+    "Initiate a live capture session filtered by the specific source and destination IP addresses of the failing service.",
+    "Apply display filters to isolate the relevant protocol traffic, such as http or tcp.analysis.flags.",
+    "Examine the protocol dissector output to identify the specific packet sequence leading to the timeout.",
+    "Export the relevant packet range for offline analysis by the development team."
+  ],
+  "outcome": "Clear visibility into the packet-level interaction, enabling the team to pinpoint the exact protocol violation causing the service instability.",
+  "limitation": "Wireshark is a passive measurement tool and cannot actively manipulate network traffic or act as an intrusion detection system; verify this by observing that the tool does not generate alerts for unauthorized traffic patterns.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Packet Inspection Workflow",
+    "description": "The flow shows how raw network data is transformed into actionable insights through filtering.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Network Interface",
+        "detail": "Captures raw electrical or wireless signals"
+      },
+      {
+        "id": "b",
+        "label": "Wireshark Engine",
+        "detail": "Applies protocol dissectors to raw data"
+      },
+      {
+        "id": "c",
+        "label": "Display Filter",
+        "detail": "Isolates specific packet criteria"
+      },
+      {
+        "id": "d",
+        "label": "Actionable Insight",
+        "detail": "Root cause identified"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Processes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Reveals"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.wireshark.org/docs/wsug_html_chunked/ChapterIntroduction.html",
+      "label": "Wireshark User's Guide: Introduction"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy API Latency Diagnosis, why is Wireshark chosen over standard application logs?",
+      "options": [
+        "It can automatically block malicious traffic.",
+        "It provides deep packet inspection of raw traffic to identify protocol-level failures logs omit.",
+        "It is a proprietary tool that guarantees performance metrics.",
+        "It actively modifies network packets to fix latency issues."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that logs fail to capture protocol handshake failures, whereas Wireshark allows inspection of raw traffic to see those details.",
+      "evidence": "Using Wireshark to perform deep packet inspection of the raw traffic allows engineers to observe the exact protocol exchange, identifying malformed headers or unexpected TCP retransmissions that logs omit."
+    },
+    {
+      "question": "What is a key limitation of the approach described in Legacy API Latency Diagnosis?",
+      "options": [
+        "It requires expensive proprietary hardware to function.",
+        "It cannot capture traffic from Ethernet interfaces.",
+        "It is a passive tool and cannot actively manipulate network traffic or act as an intrusion detection system.",
+        "It requires a paid license for every computer used."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that Wireshark is passive and does not function as an IDS or active traffic manipulator.",
+      "evidence": "Wireshark is a passive measurement tool and cannot actively manipulate network traffic or act as an intrusion detection system; verify this by observing that the tool does not generate alerts for unauthorized traffic patterns."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:38.671Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:35.160Z"
+}

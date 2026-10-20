@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "topicId": "adjacency_list",
+  "title": "Supply Chain Logistics Network Mapping",
+  "business": "Global logistics providers managing complex distribution centers and transport routes.",
+  "problem": "High computational overhead when querying specific neighbor connections in massive, sparse transport networks using traditional matrix representations.",
+  "solution": "An adjacency list stores each graph vertex with a collection of its neighboring edges, allowing efficient traversal of only existing routes rather than scanning empty matrix cells.",
+  "steps": [
+    "Define a vertex structure representing a distribution center.",
+    "Initialize a hash map or array where each key is a vertex ID.",
+    "Map each vertex to a linked list or dynamic array containing its direct neighbors.",
+    "Insert edges by appending the destination vertex to the source vertex's neighbor list."
+  ],
+  "outcome": "Improved performance for route discovery and pathfinding algorithms in sparse networks.",
+  "limitation": "The adjacency list structure incurs higher memory overhead for dense graphs and lacks O(1) edge existence checks, which requires scanning the neighbor list.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Network Entity Relationship",
+    "description": "Nodes represent distribution centers, and edges represent transport routes between them.",
+    "nodes": [
+      {
+        "id": "DC1",
+        "label": "Warehouse A",
+        "detail": "Primary Hub"
+      },
+      {
+        "id": "DC2",
+        "label": "Warehouse B",
+        "detail": "Regional Center"
+      },
+      {
+        "id": "DC3",
+        "label": "Warehouse C",
+        "detail": "Local Depot"
+      }
+    ],
+    "edges": [
+      {
+        "from": "DC1",
+        "to": "DC2",
+        "label": "1:N Route"
+      },
+      {
+        "from": "DC1",
+        "to": "DC3",
+        "label": "1:N Route"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Logistics Network Mapping, why is an adjacency list preferred over a matrix?",
+      "options": [
+        "It avoids scanning empty connections in sparse networks",
+        "It provides O(1) edge existence checks",
+        "It reduces memory usage for dense graphs",
+        "It is the only way to represent a graph"
+      ],
+      "answerIndex": 0,
+      "explanation": "Adjacency lists are efficient for sparse networks because they only store existing connections, unlike matrices which store all potential connections.",
+      "evidence": "An adjacency list stores each graph vertex with a collection of its neighboring edges, allowing efficient traversal of only existing routes rather than scanning empty matrix cells."
+    },
+    {
+      "question": "What is a primary trade-off when using an adjacency list for Supply Chain Logistics Network Mapping?",
+      "options": [
+        "It cannot represent directed graphs",
+        "It requires scanning a list to verify if a specific edge exists",
+        "It is slower than a matrix for all operations",
+        "It consumes less memory than a matrix in all cases"
+      ],
+      "answerIndex": 1,
+      "explanation": "Unlike an adjacency matrix which allows O(1) lookup, an adjacency list requires traversing the neighbor list to confirm an edge, which is a known limitation.",
+      "evidence": "The adjacency list structure incurs higher memory overhead for dense graphs and lacks O(1) edge existence checks, which requires scanning the neighbor list."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:18.023Z"
+}

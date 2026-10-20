@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_69aef5b699a0819184512d57743fc1cd",
+  "title": "Automated Training Load Adjustment for Cycling Coaches",
+  "business": "Endurance cycling coaches managing large rosters of athletes.",
+  "problem": "Coaches struggle to manually reconcile athlete fatigue data with upcoming training plans, leading to inefficient recovery periods or overtraining risks.",
+  "solution": "Using the Tredict plugin, coaches can programmatically query athlete workout analysis and push structured workout adjustments directly into the training calendar based on recent physiological trends.",
+  "steps": [
+    "Authenticate the Tredict plugin within the ChatGPT interface to link the coach account.",
+    "Query the athlete's recent workout analysis data to identify fatigue markers.",
+    "Generate a modified training plan based on the identified recovery needs.",
+    "Push the updated structured workouts to the Tredict platform via the plugin interface."
+  ],
+  "outcome": "Coaches achieve a more responsive training environment where plans adapt dynamically to athlete performance data without manual spreadsheet reconciliation.",
+  "limitation": "The plugin relies on the quality of uploaded workout data; if an athlete fails to sync their device, the analysis will be based on stale information, which can be verified by checking the last sync timestamp in the Tredict dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Tredict Integration Workflow",
+    "description": "The flow of data from the athlete's device to the coach's decision-making process via Tredict.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Athlete Device",
+        "detail": "Garmin/Wahoo/etc"
+      },
+      {
+        "id": "b",
+        "label": "Tredict Platform",
+        "detail": "Data storage and analysis"
+      },
+      {
+        "id": "c",
+        "label": "ChatGPT Plugin",
+        "detail": "Interface for coach"
+      },
+      {
+        "id": "d",
+        "label": "Coach",
+        "detail": "Decision maker"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Syncs raw data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides analysis"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Presents insights"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Commands adjustment"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Updates plan"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Training Load Adjustment for Cycling Coaches, what is the primary problem addressed by the solution?",
+      "options": [
+        "Coaches struggle to manually reconcile athlete fatigue data with upcoming training plans.",
+        "Athletes are unable to purchase new cycling equipment.",
+        "The Tredict platform lacks sufficient storage for workout data.",
+        "Coaches spend too much time on administrative billing tasks."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the manual reconciliation of fatigue data as the core bottleneck for coaches.",
+      "evidence": "Coaches struggle to manually reconcile athlete fatigue data with upcoming training plans, leading to inefficient recovery periods or overtraining risks."
+    },
+    {
+      "question": "In Automated Training Load Adjustment for Cycling Coaches, what is a noted limitation of the implementation?",
+      "options": [
+        "The plugin requires a paid subscription for every athlete.",
+        "The plugin cannot handle more than ten athletes at once.",
+        "The plugin relies on the quality of uploaded workout data; if an athlete fails to sync their device, the analysis will be based on stale information.",
+        "The plugin is only compatible with indoor training sessions."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights the dependency on data synchronization and how to verify it.",
+      "evidence": "The plugin relies on the quality of uploaded workout data; if an athlete fails to sync their device, the analysis will be based on stale information, which can be verified by checking the last sync timestamp in the Tredict dashboard."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:39.323Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

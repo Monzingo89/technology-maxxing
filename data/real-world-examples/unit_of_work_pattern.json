@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "unit_of_work_pattern",
+  "title": "Automated Warehouse Inventory Reconciliation",
+  "business": "Logistics companies managing high-velocity warehouse inventory systems.",
+  "problem": "When a single order requires updating multiple related records—such as decrementing stock levels, creating a shipment log, and updating customer credit—individual database commits often lead to partial failures. If the system crashes after stock is decremented but before the shipment log is created, the database enters an inconsistent state, requiring expensive manual reconciliation.",
+  "solution": "The Unit of Work pattern addresses this by tracking all changes to domain objects within a single business transaction. Instead of writing to the database immediately upon modification, the system registers the changes in a central registry. Once the business logic completes, the Unit of Work coordinates a single atomic commit, ensuring that either all related changes are persisted or none are.",
+  "steps": [
+    "Initialize a Unit of Work container at the start of the business operation.",
+    "Register every modified, new, or deleted domain object with the container during the process.",
+    "Execute the commit method to flush all tracked changes to the database within a single transaction.",
+    "Clear the container to reset the state for the next business operation."
+  ],
+  "outcome": "The system achieves atomic consistency, ensuring that complex multi-object operations either succeed entirely or fail without leaving orphaned data, thereby eliminating the need for manual state recovery.",
+  "limitation": "A significant limitation is the increased memory footprint, as the Unit of Work must hold references to all modified objects until the commit phase. To check for this, monitor the heap usage of the application during high-concurrency periods to ensure the registry does not grow excessively large.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Unit of Work Transaction Flow",
+    "description": "This diagram illustrates how the Unit of Work acts as a buffer between domain objects and the database to ensure atomicity.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Domain Objects",
+        "detail": "Entities like Stock, Shipment, Credit"
+      },
+      {
+        "id": "b",
+        "label": "Unit of Work",
+        "detail": "Registry tracking changes"
+      },
+      {
+        "id": "c",
+        "label": "Database",
+        "detail": "Persistent storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "register change"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "atomic commit"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Warehouse Inventory Reconciliation, why is the Unit of Work pattern used?",
+      "options": [
+        "To ensure all related changes are persisted as a single atomic transaction.",
+        "To increase the speed of individual database row updates.",
+        "To bypass the need for a relational database entirely.",
+        "To automatically generate unique IDs for new inventory items."
+      ],
+      "answerIndex": 0,
+      "explanation": "The pattern prevents inconsistent states by ensuring that multiple related changes are committed together.",
+      "evidence": "The Unit of Work pattern addresses this by tracking all changes to domain objects within a single business transaction. Instead of writing to the database immediately upon modification, the system registers the changes in a central registry. Once the business logic completes, the Unit of Work coordinates a single atomic commit, ensuring that either all related changes are persisted or none are."
+    },
+    {
+      "question": "In Automated Warehouse Inventory Reconciliation, what is a primary trade-off of the pattern?",
+      "options": [
+        "It requires more complex database indexing.",
+        "It increases memory usage by holding object references until commit.",
+        "It prevents the use of multiple threads in the application.",
+        "It forces all database queries to be synchronous."
+      ],
+      "answerIndex": 1,
+      "explanation": "The pattern requires keeping track of all modified objects in memory, which can impact performance if not monitored.",
+      "evidence": "A significant limitation is the increased memory footprint, as the Unit of Work must hold references to all modified objects until the commit phase."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:51.024Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

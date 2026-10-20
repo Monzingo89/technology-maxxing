@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "supervised_learning",
+  "title": "Predictive Maintenance for Industrial Robotics",
+  "business": "Manufacturing facilities utilizing automated assembly lines.",
+  "problem": "Unplanned downtime caused by sudden mechanical failures in robotic actuators leads to significant production delays and repair costs.",
+  "solution": "Supervised learning utilizes historical sensor data, such as vibration, temperature, and torque, paired with known past failure events to train a classification model that predicts the likelihood of an imminent component malfunction.",
+  "steps": [
+    "Collect historical sensor telemetry and align it with maintenance logs to create labeled training examples.",
+    "Preprocess data to normalize sensor readings and handle missing values.",
+    "Select a classification algorithm, such as a Random Forest or Support Vector Machine, to map input features to failure states.",
+    "Train the model on the labeled dataset to identify patterns preceding mechanical degradation.",
+    "Deploy the model to monitor real-time sensor streams and trigger alerts when failure probability exceeds a threshold."
+  ],
+  "outcome": "A transition from reactive repairs to proactive maintenance, reducing unexpected line stoppages.",
+  "limitation": "The model may suffer from overfitting if the training data lacks diversity or contains excessive noise, which can be checked by evaluating performance on a held-out validation set.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Predictive Maintenance Workflow",
+    "description": "The flow shows how raw sensor data is transformed into actionable maintenance insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Data",
+        "detail": "Vibration, Temp, Torque"
+      },
+      {
+        "id": "b",
+        "label": "Labeled History",
+        "detail": "Past failure timestamps"
+      },
+      {
+        "id": "c",
+        "label": "Supervised Model",
+        "detail": "Classification algorithm"
+      },
+      {
+        "id": "d",
+        "label": "Alert System",
+        "detail": "Maintenance trigger"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "input features"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "target labels"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "failure prediction"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from sklearn.ensemble import RandomForestClassifier\n# Initialize the classifier to map sensor features to failure states\nclf = RandomForestClassifier()\n# Train the model using historical sensor data (X) and known failure labels (y)\nclf.fit(X_train, y_train)\n# Predict failure probability for new incoming sensor data\npredictions = clf.predict(X_new)",
+    "explanation": "This code demonstrates the core supervised learning process: initializing a classifier, fitting it to labeled historical data, and using it to predict outcomes for new, unseen data points."
+  },
+  "sources": [
+    {
+      "url": "https://scikit-learn.org/stable/supervised_learning.html",
+      "label": "Supervised learning - scikit-learn 1.9.1 documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Predictive Maintenance for Industrial Robotics, how does the system address the problem of unplanned downtime?",
+      "options": [
+        "By using historical sensor data and known failure events to train a classification model.",
+        "By manually inspecting every robotic actuator at fixed time intervals.",
+        "By ignoring sensor data and replacing parts based on a calendar schedule.",
+        "By using unsupervised clustering to find random patterns in noise."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on using historical data and known failure events to train a model that predicts malfunctions.",
+      "evidence": "Supervised learning utilizes historical sensor data, such as vibration, temperature, and torque, paired with known past failure events to train a classification model that predicts the likelihood of an imminent component malfunction."
+    },
+    {
+      "question": "In Predictive Maintenance for Industrial Robotics, what is a primary limitation of the implementation?",
+      "options": [
+        "The model requires too much electricity to run.",
+        "The model may suffer from overfitting if the training data lacks diversity or contains excessive noise.",
+        "The model cannot be used with sensor data.",
+        "The model is limited to only one type of robotic actuator."
+      ],
+      "answerIndex": 1,
+      "explanation": "Overfitting is a common risk in supervised learning when training data is not representative or is too noisy.",
+      "evidence": "The model may suffer from overfitting if the training data lacks diversity or contains excessive noise, which can be checked by evaluating performance on a held-out validation set."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:47.726Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:43.558Z"
+}

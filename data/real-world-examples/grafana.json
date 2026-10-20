@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "grafana",
+  "title": "Unified Logistics Telemetry Aggregation",
+  "business": "A regional logistics firm managing a fleet of automated warehouse robots and delivery drones.",
+  "problem": "Operational teams struggle with fragmented visibility, as robot diagnostic logs, drone flight telemetry, and warehouse environmental sensors reside in isolated silos, preventing rapid incident response.",
+  "solution": "Grafana acts as a centralized observability layer by utilizing its data source plugin architecture to query disparate systems—Prometheus for robot metrics, Loki for drone logs, and Postgres for warehouse sensor state—into a single pane of glass.",
+  "steps": [
+    "Install Grafana OSS on a centralized management server.",
+    "Configure individual data source plugins for Prometheus, Loki, and Postgres to establish connectivity.",
+    "Create a unified dashboard using panel visualizations to correlate robot battery levels with drone flight logs.",
+    "Define alerting rules within Grafana to trigger notifications when sensor thresholds are breached.",
+    "Grant role-based access to regional managers for specific dashboard views."
+  ],
+  "outcome": "Operational teams achieve a holistic view of the supply chain, enabling faster identification of cross-system failures and reducing the time spent manually correlating data across disconnected platforms.",
+  "limitation": "The primary limitation is the potential for increased latency when querying high-cardinality data across multiple remote sources simultaneously, which can be checked by monitoring the query execution time in the Grafana Explore panel.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Aggregation Flow",
+    "description": "This diagram illustrates how Grafana pulls data from various silos to provide a unified view.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Robot Metrics",
+        "detail": "Prometheus source"
+      },
+      {
+        "id": "b",
+        "label": "Drone Logs",
+        "detail": "Loki source"
+      },
+      {
+        "id": "c",
+        "label": "Warehouse Sensors",
+        "detail": "Postgres source"
+      },
+      {
+        "id": "d",
+        "label": "Grafana OSS",
+        "detail": "Centralized Dashboard"
+      },
+      {
+        "id": "e",
+        "label": "Operations Team",
+        "detail": "End Users"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "Query via Plugin"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Query via Plugin"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query via Plugin"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Visualize and Alert"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://grafana.com/docs/grafana/latest/",
+      "label": "Grafana OSS and Enterprise | Grafana documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Telemetry Aggregation, how does Grafana resolve the issue of fragmented data silos?",
+      "options": [
+        "By migrating all raw data into a single proprietary database format.",
+        "By using data source plugins to query disparate systems into a single pane of glass.",
+        "By replacing all existing logging and metric tools with Grafana-native agents.",
+        "By automating the physical repair of warehouse robots and delivery drones."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on Grafana's ability to connect to various data sources via plugins to centralize visibility.",
+      "evidence": "Grafana acts as a centralized observability layer by utilizing its data source plugin architecture to query disparate systems—Prometheus for robot metrics, Loki for drone logs, and Postgres for warehouse sensor state—into a single pane of glass."
+    },
+    {
+      "question": "In Unified Logistics Telemetry Aggregation, what is a key limitation of the proposed implementation?",
+      "options": [
+        "The inability to create alerts based on sensor thresholds.",
+        "The requirement to use only Grafana Enterprise for data source plugins.",
+        "The potential for increased latency when querying high-cardinality data across multiple remote sources.",
+        "The lack of role-based access control for regional managers."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies query latency as a trade-off when aggregating data from multiple sources.",
+      "evidence": "The primary limitation is the potential for increased latency when querying high-cardinality data across multiple remote sources simultaneously, which can be checked by monitoring the query execution time in the Grafana Explore panel."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:50.965Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:47.131Z"
+}

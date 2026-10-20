@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_make",
+  "title": "Automated Inventory Reconciliation for Boutique Retail",
+  "business": "Boutique retail managers who maintain product catalogs across disparate digital platforms.",
+  "problem": "Manual reconciliation between warehouse data stores and storefront inventory often leads to overselling or stock discrepancies, consuming hours of administrative time.",
+  "solution": "By integrating the Make connector within Claude, managers can trigger automated inventory synchronization scenarios. Claude acts as the orchestration layer, using the Make API to query data stores, compare records, and execute update scenarios when discrepancies are detected, effectively closing the loop between inventory logs and sales channels.",
+  "steps": [
+    "Authenticate the Make connector within the Claude interface using your organization API credentials.",
+    "Use the data-stores_list tool to identify the specific inventory data store containing current stock levels.",
+    "Configure a Claude prompt to analyze the data-store-records and identify items where stock levels fall below a defined threshold.",
+    "Invoke the scenarios_run tool to trigger a pre-built Make scenario that updates the storefront inventory database.",
+    "Verify the update by calling data-store-records_get to confirm the new stock values are reflected."
+  ],
+  "outcome": "A streamlined, error-resistant inventory management process where stock adjustments are handled through natural language commands rather than manual spreadsheet updates.",
+  "limitation": "The connector relies on the existing structure of Make scenarios; if a scenario fails due to an external API timeout in the downstream service, Claude will report the failure but cannot automatically debug the external service's connectivity issues. Users must check the Make scenario execution logs directly in the Make dashboard to diagnose root causes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Reconciliation Workflow",
+    "description": "The flow of data from the inventory store through Claude's orchestration to the final update.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Data Store",
+        "detail": "Source of truth for stock"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Orchestration and analysis"
+      },
+      {
+        "id": "c",
+        "label": "Make Scenario",
+        "detail": "Execution logic"
+      },
+      {
+        "id": "d",
+        "label": "Storefront DB",
+        "detail": "Target system"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "queries records"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers execution"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "updates inventory"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/make",
+      "label": "Make connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation for Boutique Retail, what is the primary role of the Claude Make connector?",
+      "options": [
+        "To replace the need for a warehouse management system entirely.",
+        "To act as an orchestration layer that triggers and manages inventory synchronization scenarios.",
+        "To automatically generate new product designs based on sales data.",
+        "To provide real-time financial auditing of retail transactions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes Claude as the orchestration layer that uses the Make API to query and update inventory data.",
+      "evidence": "Claude acts as the orchestration layer, using the Make API to query data stores, compare records, and execute update scenarios when discrepancies are detected"
+    },
+    {
+      "question": "In Automated Inventory Reconciliation for Boutique Retail, what is a key limitation of using the connector?",
+      "options": [
+        "It cannot access data stores if they are hosted on Google Drive.",
+        "It is unable to trigger scenarios that have not been pre-built in Make.",
+        "It cannot diagnose root causes of external API timeouts occurring within a triggered scenario.",
+        "It requires manual intervention for every single record update."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section clarifies that Claude can report failures but cannot debug external service issues, requiring manual checks in the Make dashboard.",
+      "evidence": "if a scenario fails due to an external API timeout in the downstream service, Claude will report the failure but cannot automatically debug the external service's connectivity issues."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:19.263Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:14.936Z"
+}

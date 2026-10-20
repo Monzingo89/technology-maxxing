@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "quorum",
+  "title": "Global Logistics Consensus for Automated Warehouses",
+  "business": "A global logistics provider managing automated warehouse inventory across multiple regional data centers.",
+  "problem": "The system faces split-brain scenarios where network partitions cause conflicting inventory updates, leading to double-allocation of high-value goods.",
+  "solution": "Implementing a quorum-based consensus mechanism ensures that a write operation is only committed if a majority of replicas acknowledge the update, preventing conflicting states during network instability.",
+  "steps": [
+    "Define the total number of replicas (n) across geographically distributed data centers.",
+    "Establish a write quorum threshold (w) such that w > n/2 to ensure overlap between read and write sets.",
+    "Configure the application client to broadcast update requests to all nodes simultaneously.",
+    "Wait for acknowledgment from at least the defined threshold of nodes before confirming the transaction.",
+    "Handle timeouts by aborting the operation if the quorum threshold is not met within the latency window."
+  ],
+  "outcome": "The system achieves strong consistency for inventory records, ensuring that no single partition can unilaterally commit an update that contradicts the global state.",
+  "limitation": "A primary limitation is increased write latency, as the system must wait for the slowest node in the quorum to respond; this can be monitored by tracking the p99 response time of the slowest replica in the set.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Quorum Write Process",
+    "description": "This flow illustrates how a client coordinates a write across multiple replicas to reach a consensus threshold.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Initiates the inventory update request"
+      },
+      {
+        "id": "b",
+        "label": "Replica Group",
+        "detail": "Set of n distributed storage nodes"
+      },
+      {
+        "id": "c",
+        "label": "Quorum Threshold",
+        "detail": "Logical gate requiring > n/2 acknowledgments"
+      },
+      {
+        "id": "d",
+        "label": "Commit Log",
+        "detail": "Finalized state storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Broadcasts update"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends acknowledgments"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Triggers commit"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Consensus for Automated Warehouses, why is a quorum mechanism utilized?",
+      "options": [
+        "To increase the total number of physical servers in the warehouse.",
+        "To prevent conflicting inventory updates caused by network partitions.",
+        "To allow every node to commit updates independently without coordination.",
+        "To eliminate the need for network communication between data centers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that network partitions cause conflicting updates, and quorum ensures a majority must agree to prevent this.",
+      "evidence": "The system faces split-brain scenarios where network partitions cause conflicting inventory updates, leading to double-allocation of high-value goods."
+    },
+    {
+      "question": "In Global Logistics Consensus for Automated Warehouses, what is a primary trade-off of the quorum implementation?",
+      "options": [
+        "It requires all nodes to be online at all times.",
+        "It significantly reduces the amount of data stored.",
+        "It increases write latency by waiting for the slowest node in the quorum.",
+        "It makes the system impossible to scale horizontally."
+      ],
+      "answerIndex": 2,
+      "explanation": "Quorum requires waiting for a threshold of responses, which is bounded by the latency of the slowest required node.",
+      "evidence": "A primary limitation is increased write latency, as the system must wait for the slowest node in the quorum to respond"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:09.494Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

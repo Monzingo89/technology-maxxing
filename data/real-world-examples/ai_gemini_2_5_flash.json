@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "ai_gemini_2_5_flash",
+  "title": "Real-time Multimodal Logistics Dispatcher",
+  "business": "Logistics companies managing high-volume, time-sensitive delivery fleets.",
+  "problem": "Legacy systems struggle to process real-time video feeds from delivery vehicles to identify traffic obstructions, leading to delayed routing decisions and increased operational costs.",
+  "solution": "Utilizing Gemini 2.5 Flash for low-latency, high-volume multimodal reasoning allows the system to ingest video streams directly, analyze road conditions, and trigger automated rerouting without human intervention.",
+  "steps": [
+    "Configure the vehicle-mounted camera to stream video frames to the gemini-2.5-flash endpoint.",
+    "Define a system prompt that instructs the model to detect specific traffic obstructions like road closures or accidents.",
+    "Implement a callback function to receive the model's structured JSON output containing obstruction status and confidence scores.",
+    "Integrate the output with the fleet management API to update vehicle routes dynamically."
+  ],
+  "outcome": "Improved delivery efficiency through proactive, automated rerouting based on visual environmental data.",
+  "limitation": "Access to the 2.5 family is restricted to legacy users; new projects must use newer models like 3.5 Flash-Lite or 3.8 Flash, which requires verifying account eligibility before implementation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Real-time Multimodal Logistics Dispatcher Workflow",
+    "description": "A flow diagram showing how vehicle video data is processed by the Gemini model to influence fleet routing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Vehicle Camera",
+        "detail": "Captures real-time video stream"
+      },
+      {
+        "id": "b",
+        "label": "Gemini 2.5 Flash",
+        "detail": "Performs multimodal reasoning on video"
+      },
+      {
+        "id": "c",
+        "label": "Fleet API",
+        "detail": "Updates vehicle routing"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Streams video frames"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends obstruction data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/models?hl=en",
+      "label": "Models | Gemini API | Google AI for Developers"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Multimodal Logistics Dispatcher, what is the primary role of the Gemini 2.5 Flash model?",
+      "options": [
+        "To ingest video streams and perform reasoning on road conditions.",
+        "To manage the physical hardware of the delivery vehicles.",
+        "To replace the need for GPS tracking entirely.",
+        "To provide long-term archival storage for video data."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the model's ability to process video feeds to identify obstructions.",
+      "evidence": "Utilizing Gemini 2.5 Flash for low-latency, high-volume multimodal reasoning allows the system to ingest video streams directly, analyze road conditions, and trigger automated rerouting without human intervention."
+    },
+    {
+      "question": "In Real-time Multimodal Logistics Dispatcher, what is a key limitation regarding the use of the 2.5 model family?",
+      "options": [
+        "It is only available for text-to-speech tasks.",
+        "It has been deprecated and is no longer functional.",
+        "Access is restricted to users who have actively used the models in the past.",
+        "It cannot handle multimodal inputs like video."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation explicitly states that access to the 2.5 family is limited to existing users.",
+      "evidence": "Access to the 2.5 family is restricted to legacy users; new projects must use newer models like 3.5 Flash-Lite or 3.8 Flash, which requires verifying account eligibility before implementation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:56.373Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:51.373Z"
+}

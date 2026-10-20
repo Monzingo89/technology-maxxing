@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "cognitive_complexity",
+  "title": "Legacy Financial Reconciliation Refactoring",
+  "business": "A high-frequency trading firm managing complex ledger reconciliation logic.",
+  "problem": "Engineers frequently introduce regression bugs when modifying legacy reconciliation modules because the nested conditional logic is too difficult for a human to mentally model, leading to high maintenance costs and slow feature delivery.",
+  "solution": "By adopting Cognitive Complexity analysis, the team replaces deeply nested control flow structures with flattened, modularized functions, ensuring that each unit of code remains within a human-readable threshold of logical branching.",
+  "steps": [
+    "Integrate a static analysis tool that calculates the cognitive complexity score for every pull request.",
+    "Establish a maximum complexity threshold per function to trigger mandatory refactoring during code reviews.",
+    "Decompose monolithic functions containing excessive switch statements or nested loops into smaller, single-responsibility helper functions.",
+    "Use guard clauses to return early, reducing the indentation levels and the mental overhead required to track state."
+  ],
+  "outcome": "The team experiences a significant reduction in the time required for developers to onboard into legacy modules and a decrease in the frequency of logic-related production incidents.",
+  "limitation": "The primary trade-off is that aggressive flattening can sometimes lead to an explosion of small, fragmented functions that obscure the high-level business flow, which can be verified by checking the total number of function calls in the call stack.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cognitive Complexity Reduction Workflow",
+    "description": "This flow describes how code moves from a complex state to a simplified, maintainable state.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Monolith",
+        "detail": "High nesting depth"
+      },
+      {
+        "id": "b",
+        "label": "Static Analysis",
+        "detail": "Complexity calculation"
+      },
+      {
+        "id": "c",
+        "label": "Refactoring",
+        "detail": "Decomposition"
+      },
+      {
+        "id": "d",
+        "label": "Flattened Logic",
+        "detail": "Low cognitive load"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "identifies hotspots"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "produces"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Financial Reconciliation Refactoring, what is the primary reason for implementing Cognitive Complexity analysis?",
+      "options": [
+        "To reduce regression bugs caused by difficult-to-understand nested logic.",
+        "To increase the total number of lines of code in the repository.",
+        "To automate the deployment of financial ledger updates.",
+        "To improve the raw execution speed of the reconciliation engine."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that engineers struggle with nested logic, leading to bugs, which is the exact problem Cognitive Complexity addresses.",
+      "evidence": "Engineers frequently introduce regression bugs when modifying legacy reconciliation modules because the nested conditional logic is too difficult for a human to mentally model, leading to high maintenance costs and slow feature delivery."
+    },
+    {
+      "question": "In Legacy Financial Reconciliation Refactoring, what is a potential limitation of the proposed solution?",
+      "options": [
+        "It makes the code run significantly slower in production.",
+        "It requires expensive hardware upgrades for the analysis tool.",
+        "It can lead to fragmented functions that obscure the high-level business flow.",
+        "It prevents developers from using loops entirely."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that over-refactoring can fragment the code, making the overall business flow harder to follow.",
+      "evidence": "The primary trade-off is that aggressive flattening can sometimes lead to an explosion of small, fragmented functions that obscure the high-level business flow, which can be verified by checking the total number of function calls in the call stack."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:19.895Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

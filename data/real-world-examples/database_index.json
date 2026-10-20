@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "topicId": "database_index",
+  "title": "Optimizing Global Logistics Tracking",
+  "business": "A global logistics provider managing millions of container transit records.",
+  "problem": "As the transit history table grows, retrieving the status of a specific container using a unique identifier requires a full table scan, causing significant latency during peak operational hours.",
+  "solution": "Implementing a B-tree index on the container identifier column creates a searchable structure that maps keys to stored records, allowing the database engine to locate specific rows without scanning the entire dataset.",
+  "steps": [
+    "Analyze the query patterns to identify the column frequently used in WHERE clauses.",
+    "Execute the CREATE INDEX command targeting the unique container identifier column.",
+    "Verify the query execution plan to ensure the index is being utilized by the planner.",
+    "Monitor the impact on write operations to ensure the overhead remains within acceptable bounds."
+  ],
+  "outcome": "The system achieves consistent lookup times for container status queries, regardless of the total volume of historical transit data stored in the table.",
+  "limitation": "Indexes introduce a write-time penalty because every insert or update operation must also update the index structure; this can be checked by monitoring transaction commit latency during high-volume data ingestion.",
+  "diagram": {
+    "kind": "er",
+    "title": "Index-Assisted Lookup Flow",
+    "description": "This diagram illustrates how the database uses an index to bypass a full table scan when searching for a specific container.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Query Request",
+        "detail": "User searches for ContainerID"
+      },
+      {
+        "id": "b",
+        "label": "B-tree Index",
+        "detail": "Sorted map of keys to physical addresses"
+      },
+      {
+        "id": "c",
+        "label": "Table Storage",
+        "detail": "Raw data records"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Lookup key"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Retrieve record pointer"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "CREATE INDEX idx_container_id ON transit_history (container_id); -- Create index to map keys to records",
+    "explanation": "This command creates a B-tree index on the container_id column, enabling the database to map specific container identifiers directly to their physical record locations."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Global Logistics Tracking, why is a full table scan problematic for container lookups?",
+      "options": [
+        "It requires checking every row, which causes latency as the table grows.",
+        "It prevents the database from using the SQL language.",
+        "It automatically deletes historical transit data.",
+        "It forces the system to use an unsupported index type."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem description explicitly states that full table scans cause latency as the table grows, which is why indexing is required.",
+      "evidence": "As the transit history table grows, retrieving the status of a specific container using a unique identifier requires a full table scan, causing significant latency during peak operational hours."
+    },
+    {
+      "question": "In Optimizing Global Logistics Tracking, what is the primary tradeoff of implementing an index?",
+      "options": [
+        "It increases the storage size of the database indefinitely.",
+        "It requires a complete rewrite of all existing application queries.",
+        "It introduces a write-time penalty during data ingestion.",
+        "It makes the database unable to perform updates."
+      ],
+      "answerIndex": 2,
+      "explanation": "Indexes must be updated whenever data changes, which adds overhead to write operations.",
+      "evidence": "Indexes introduce a write-time penalty because every insert or update operation must also update the index structure; this can be checked by monitoring transaction commit latency during high-volume data ingestion."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:01.173Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

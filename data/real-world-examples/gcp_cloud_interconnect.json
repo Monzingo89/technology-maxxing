@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_interconnect",
+  "title": "Secure Financial Data Bridge",
+  "business": "A regional bank migrating sensitive transaction processing to Google Cloud while maintaining strict compliance requirements for private, non-internet-exposed traffic.",
+  "problem": "The bank faces high latency and security risks when routing sensitive financial data over public internet tunnels, which fails to meet their internal audit requirements for dedicated private connectivity.",
+  "solution": "Cloud Interconnect provides dedicated or partner private connectivity to Google Cloud VPC networks, allowing the bank to bypass the public internet and establish a direct, private physical connection between their on-premises data center and their VPC.",
+  "steps": [
+    "Provision a physical connection through a supported service provider or direct cross-connect at a Google colocation facility.",
+    "Configure a Cloud Router in the target VPC to manage BGP sessions for dynamic route exchange.",
+    "Establish VLAN attachments to map specific on-premises traffic to the VPC subnets.",
+    "Verify the BGP session state to ensure routes are being advertised and learned correctly."
+  ],
+  "outcome": "The bank achieves a consistent, private, and secure network path for financial transactions, ensuring compliance with internal security mandates.",
+  "limitation": "Cloud Interconnect requires physical infrastructure coordination and lead time for provisioning; verify status by checking the BGP session state and route advertisements in the Cloud Router console.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Private Connectivity Workflow",
+    "description": "Shows the path from local infrastructure to the cloud VPC.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises Data Center",
+        "detail": "Source of financial data"
+      },
+      {
+        "id": "b",
+        "label": "Service Provider",
+        "detail": "Physical link provider"
+      },
+      {
+        "id": "c",
+        "label": "Cloud Interconnect",
+        "detail": "Physical connection point"
+      },
+      {
+        "id": "d",
+        "label": "Cloud Router",
+        "detail": "BGP route exchange"
+      },
+      {
+        "id": "e",
+        "label": "VPC Network",
+        "detail": "Destination environment"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Physical Link"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Cross-connect"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "VLAN Attachment"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Route Propagation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Financial Data Bridge, why is Cloud Interconnect chosen over public internet tunnels?",
+      "options": [
+        "It provides dedicated or partner private connectivity to Google Cloud VPC networks.",
+        "It automatically encrypts all data at the application layer.",
+        "It is the only way to access Google Cloud APIs.",
+        "It eliminates the need for a VPC network."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights the need for private, non-internet-exposed traffic, which is addressed by the dedicated or partner private connectivity provided by Cloud Interconnect.",
+      "evidence": "Cloud Interconnect provides dedicated or partner private connectivity to Google Cloud VPC networks, allowing the bank to bypass the public internet and establish a direct, private physical connection between their on-premises data center and their VPC."
+    },
+    {
+      "question": "In Secure Financial Data Bridge, how can an administrator verify that the connection is correctly established?",
+      "options": [
+        "By checking the physical cable color.",
+        "By checking the BGP session state and route advertisements in the Cloud Router console.",
+        "By pinging the Google public DNS.",
+        "By restarting the on-premises server."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions verifying the connection by checking the BGP session state and route advertisements.",
+      "evidence": "Cloud Interconnect requires physical infrastructure coordination and lead time for provisioning; verify status by checking the BGP session state and route advertisements in the Cloud Router console."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:06.876Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

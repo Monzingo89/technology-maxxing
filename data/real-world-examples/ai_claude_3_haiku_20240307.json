@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_3_haiku_20240307",
+  "title": "Lifecycle Management for Claude 3 Haiku",
+  "business": "Enterprise developers maintaining legacy AI-driven customer support bots.",
+  "problem": "The application relies on the retired claude-3-haiku-20240307 model, which is no longer available for use, causing service outages.",
+  "solution": "Migrate the integration to an active, supported model like claude-haiku-4-5-20251001 to restore service and ensure long-term reliability.",
+  "steps": [
+    "Access the Usage page in the Claude Console to audit current API key and model usage.",
+    "Export the usage CSV to identify all instances where claude-3-haiku-20240307 is still invoked.",
+    "Update the application codebase to replace the retired model identifier with the recommended replacement.",
+    "Perform thorough testing with the new model to verify output consistency before full deployment."
+  ],
+  "outcome": "Restored service availability and alignment with current support standards, mitigating the risk of future request failures.",
+  "limitation": "Newer models may exhibit different response characteristics; verify behavior by testing applications with newer models well before the retirement date.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying retired models and transitioning to active ones.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of usage audit data"
+      },
+      {
+        "id": "b",
+        "label": "Usage CSV",
+        "detail": "Report of active and retired models"
+      },
+      {
+        "id": "c",
+        "label": "Codebase",
+        "detail": "Application logic using model IDs"
+      },
+      {
+        "id": "d",
+        "label": "Active Model",
+        "detail": "Target replacement model"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Export"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify retired ID"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update and Deploy"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Lifecycle Management for Claude 3 Haiku, what is the primary reason for migrating away from the retired model?",
+      "options": [
+        "The retired model is no longer available for use and causes request failures.",
+        "The retired model is too expensive for enterprise budgets.",
+        "The retired model lacks support for specific API parameters.",
+        "The retired model is incompatible with the Python SDK."
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation and scenario clarify that retired models are no longer available and requests to them will fail.",
+      "evidence": "The application relies on the retired claude-3-haiku-20240307 model, which is no longer available for use, causing service outages."
+    },
+    {
+      "question": "In Lifecycle Management for Claude 3 Haiku, what is a recommended practice to mitigate risks during model migration?",
+      "options": [
+        "Ignore model deprecation notices until the retirement date.",
+        "Test applications with newer models well before the retirement date.",
+        "Continue using the retired model until the API returns a 400 error.",
+        "Only update the code after the model has been officially retired."
+      ],
+      "answerIndex": 1,
+      "explanation": "Testing with new models before the retirement date is a core best practice to ensure application stability.",
+      "evidence": "Newer models may exhibit different response characteristics; verify behavior by testing applications with newer models well before the retirement date."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:28.088Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

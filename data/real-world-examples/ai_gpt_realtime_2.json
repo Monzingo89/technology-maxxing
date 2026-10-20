@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_realtime_2",
+  "title": "Automated Emergency Dispatch Coordination",
+  "business": "Emergency medical dispatch centers managing high-volume, time-sensitive triage calls.",
+  "problem": "Dispatchers struggle to maintain situational awareness while simultaneously querying multiple internal databases to verify patient history and resource availability, leading to cognitive overload and potential delays in critical information retrieval.",
+  "solution": "By utilizing the gpt-realtime-2 model, dispatch centers can deploy a voice-agent that uses its reasoning capabilities to interpret complex, non-linear emergency descriptions while concurrently executing tool calls to retrieve patient records and dispatch units in real-time.",
+  "steps": [
+    "Configure the gpt-realtime-2 session via the v1/realtime endpoint to enable bi-directional audio streaming.",
+    "Define specific function calling schemas for the agent to query external patient databases and unit availability systems.",
+    "Set the reasoning effort parameter to balance the need for deep analytical processing of emergency symptoms against the requirement for low-latency voice responses.",
+    "Implement the realtime event loop to handle incoming audio streams and outgoing tool call requests.",
+    "Monitor the reasoning token usage to ensure the agent maintains a fluid, conversational pace during high-stress triage scenarios."
+  ],
+  "outcome": "The system achieves a more cohesive triage process where the agent acts as a cognitive assistant, allowing human dispatchers to focus on high-level decision-making while the model handles the technical retrieval and synthesis of data.",
+  "limitation": "A primary trade-off is the latency introduced by higher reasoning effort settings; developers should monitor the time-to-first-token and total response duration to ensure the conversational flow remains acceptable for emergency contexts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Emergency Dispatch Workflow",
+    "description": "The flow shows how the model processes voice input, reasons through data, and uses tools to assist the dispatcher.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Caller",
+        "detail": "Provides emergency audio input"
+      },
+      {
+        "id": "b",
+        "label": "gpt-realtime-2",
+        "detail": "Processes audio and performs reasoning"
+      },
+      {
+        "id": "c",
+        "label": "Database Tool",
+        "detail": "Retrieves patient history"
+      },
+      {
+        "id": "d",
+        "label": "Dispatcher",
+        "detail": "Receives synthesized summary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Streams audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Executes tool call"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Provides voice summary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-2",
+      "label": "GPT-Realtime-2"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Emergency Dispatch Coordination, what is the primary benefit of using gpt-realtime-2 for dispatchers?",
+      "options": [
+        "It replaces the need for human dispatchers entirely.",
+        "It acts as a cognitive assistant to reduce cognitive overload during data retrieval.",
+        "It eliminates the need for external databases.",
+        "It provides lower-cost text processing compared to legacy models."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that dispatchers struggle with cognitive overload, and the model addresses this by acting as a cognitive assistant.",
+      "evidence": "By utilizing the gpt-realtime-2 model, dispatch centers can deploy a voice-agent that uses its reasoning capabilities to interpret complex, non-linear emergency descriptions while concurrently executing tool calls to retrieve patient records and dispatch units in real-time."
+    },
+    {
+      "question": "In Automated Emergency Dispatch Coordination, what is a key trade-off when configuring the model?",
+      "options": [
+        "Higher reasoning effort increases latency.",
+        "Lower reasoning effort increases output token costs.",
+        "Tool usage is only available at the lowest reasoning setting.",
+        "The model cannot handle audio input if reasoning is enabled."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section explicitly warns that higher reasoning effort impacts latency, which is critical in emergency scenarios.",
+      "evidence": "A primary trade-off is the latency introduced by higher reasoning effort settings; developers should monitor the time-to-first-token and total response duration to ensure the conversational flow remains acceptable for emergency contexts."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:41.820Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:37.792Z"
+}

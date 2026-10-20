@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "logical_clock",
+  "title": "Global Inventory Reconciliation for Distributed Warehouses",
+  "business": "A global retail chain operating independent regional inventory management systems that synchronize stock levels across geographic boundaries.",
+  "problem": "Physical clocks on servers in different regions drift, causing out-of-order event processing where a stock replenishment event appears to occur before the initial sale, leading to incorrect inventory counts.",
+  "solution": "Implementing Lamport logical clocks allows the system to order events by causality rather than elapsed physical time. By attaching a monotonically increasing counter to every inventory update, the system ensures that if event A causes event B, the logical timestamp of A is strictly less than B, regardless of server clock skew.",
+  "steps": [
+    "Assign a unique local counter to each inventory node starting at zero.",
+    "Increment the local counter before executing any local inventory transaction.",
+    "Attach the current counter value as a logical timestamp to all outgoing inter-node messages.",
+    "Upon receiving a message, update the local counter to be the maximum of the current local value and the received timestamp plus one.",
+    "Process events based on the logical timestamp sequence to maintain a consistent causal history."
+  ],
+  "outcome": "The system achieves a consistent causal ordering of inventory transactions, ensuring that stock depletion and replenishment events are processed in the correct logical sequence, preventing negative inventory artifacts.",
+  "limitation": "Logical clocks provide a total ordering of events but cannot determine if two events are concurrent or if one happened before another in real-time. To check for this, one must inspect the partial order of causality; if neither event's timestamp is strictly less than the other, they are concurrent.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Causal Event Ordering Flow",
+    "description": "This diagram illustrates how events propagate through nodes using logical timestamps to maintain causal order.",
+    "nodes": [
+      {
+        "id": "node_a",
+        "label": "Warehouse A",
+        "detail": "Local counter: 1"
+      },
+      {
+        "id": "event_1",
+        "label": "Stock Sale",
+        "detail": "Timestamp: 1"
+      },
+      {
+        "id": "node_b",
+        "label": "Warehouse B",
+        "detail": "Local counter: 2"
+      },
+      {
+        "id": "event_2",
+        "label": "Replenishment",
+        "detail": "Timestamp: 2"
+      }
+    ],
+    "edges": [
+      {
+        "from": "node_a",
+        "to": "event_1",
+        "label": "increments"
+      },
+      {
+        "from": "event_1",
+        "to": "node_b",
+        "label": "sends update"
+      },
+      {
+        "from": "node_b",
+        "to": "event_2",
+        "label": "syncs and increments"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Reconciliation for Distributed Warehouses, why is a logical clock preferred over physical time?",
+      "options": [
+        "Physical clocks drift, causing out-of-order events that misrepresent causality.",
+        "Logical clocks are faster to calculate than system time.",
+        "Physical clocks cannot be synchronized across different continents.",
+        "Logical clocks allow for higher throughput in database writes."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that physical clock drift leads to incorrect event ordering, which logical clocks solve by focusing on causal relationships.",
+      "evidence": "Physical clocks on servers in different regions drift, causing out-of-order event processing where a stock replenishment event appears to occur before the initial sale, leading to incorrect inventory counts."
+    },
+    {
+      "question": "What is a fundamental limitation of the approach used in Global Inventory Reconciliation for Distributed Warehouses?",
+      "options": [
+        "It requires a central server to manage all timestamps.",
+        "It cannot determine if two events are concurrent or happened in real-time.",
+        "It is incompatible with distributed database architectures.",
+        "It forces all events to be processed in a single thread."
+      ],
+      "answerIndex": 1,
+      "explanation": "Logical clocks track causality but do not map to real-world wall-clock time, meaning they cannot distinguish concurrency from real-time sequence.",
+      "evidence": "Logical clocks provide a total ordering of events but cannot determine if two events are concurrent or if one happened before another in real-time."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:06.255Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "voice_agents",
+  "title": "Automated Logistics Dispatch Voice Agents",
+  "business": "Logistics and delivery companies managing high-volume driver communications.",
+  "problem": "Dispatchers are overwhelmed by routine driver check-ins, leading to long hold times and delayed route updates.",
+  "solution": "Deploying ElevenAgents to handle real-time voice interactions, allowing drivers to report status updates via natural speech while the agent updates the backend system.",
+  "steps": [
+    "Define the conversational workflow for driver status reporting.",
+    "Configure the ElevenAgents platform to integrate with existing logistics databases.",
+    "Implement Speech to Text to transcribe driver audio inputs.",
+    "Utilize Text to Speech to provide real-time, emotive confirmation of status updates.",
+    "Monitor agent performance and reliability through the platform dashboard."
+  ],
+  "outcome": "Reduced manual workload for dispatchers and faster, more accurate data entry for logistics operations.",
+  "limitation": "Latency in speech processing can cause awkward pauses during high-speed network conditions; verify this by testing round-trip audio response times.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Voice Agent Dispatch Workflow",
+    "description": "The flow of data between the driver, the voice agent, and the logistics system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Driver",
+        "detail": "User providing verbal status"
+      },
+      {
+        "id": "b",
+        "label": "Speech to Text",
+        "detail": "Transcription engine"
+      },
+      {
+        "id": "c",
+        "label": "ElevenAgents",
+        "detail": "Conversational logic core"
+      },
+      {
+        "id": "d",
+        "label": "Logistics DB",
+        "detail": "System of record"
+      },
+      {
+        "id": "e",
+        "label": "Text to Speech",
+        "detail": "Audio synthesis engine"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Audio Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Text Payload"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update Status"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Response Text"
+      },
+      {
+        "from": "e",
+        "to": "a",
+        "label": "Audio Output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://elevenlabs.io/about",
+      "label": "ElevenLabs About Page"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Dispatch Voice Agents, what is the primary problem being addressed?",
+      "options": [
+        "High volume of routine driver check-ins causing dispatcher bottlenecks",
+        "Lack of multilingual support for international logistics",
+        "Inability to track vehicle GPS coordinates",
+        "High costs of hiring human dispatchers"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that dispatchers are overwhelmed by routine check-ins, which the voice agent solves.",
+      "evidence": "Dispatchers are overwhelmed by routine driver check-ins, leading to long hold times and delayed route updates."
+    },
+    {
+      "question": "In Automated Logistics Dispatch Voice Agents, what is a noted limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than two languages",
+        "Latency in speech processing can cause awkward pauses",
+        "The system requires manual intervention for every call",
+        "It is incompatible with existing logistics databases"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly mentions that latency is a potential issue that should be tested.",
+      "evidence": "Latency in speech processing can cause awkward pauses during high-speed network conditions; verify this by testing round-trip audio response times."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:14.394Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:54.161Z"
+}

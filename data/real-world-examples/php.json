@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "php",
+  "title": "Dynamic Inventory Catalog Generation",
+  "business": "A boutique furniture manufacturer managing a high-frequency catalog of custom wood finishes and hardware options.",
+  "problem": "The manufacturer struggles with static HTML files that fail to reflect real-time inventory availability, leading to customer frustration when items are ordered but out of stock.",
+  "solution": "By utilizing PHP as a server-side scripting language, the manufacturer can dynamically generate product pages by querying a database on every request, ensuring the displayed inventory status is always current.",
+  "steps": [
+    "Configure a web server with PHP support to process requests for product catalog pages.",
+    "Implement a database connection using PHP extensions to retrieve real-time stock levels.",
+    "Write server-side logic to iterate through product data and conditionally render HTML based on availability status.",
+    "Deploy the script to the production environment to replace static catalog pages."
+  ],
+  "outcome": "Customers receive accurate, real-time information regarding product availability, significantly reducing order cancellations and manual inventory reconciliation efforts.",
+  "limitation": "The primary limitation is the increased server load caused by executing scripts on every page request. This can be checked by monitoring the server's CPU and memory usage during peak traffic periods to ensure the infrastructure remains responsive.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Dynamic Catalog Generation Flow",
+    "description": "This diagram illustrates how a user request triggers PHP to fetch data and generate a response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Browser",
+        "detail": "Sends HTTP request for product page"
+      },
+      {
+        "id": "b",
+        "label": "Web Server",
+        "detail": "Receives request and invokes PHP interpreter"
+      },
+      {
+        "id": "c",
+        "label": "PHP Script",
+        "detail": "Executes logic to query database"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Stores current inventory levels"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTP Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Executes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Queries"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Returns Data"
+      }
+    ]
+  },
+  "code": {
+    "language": "php",
+    "content": "<?php\n// Connect to database to fetch stock\n$stock = get_inventory_level($product_id);\n// Conditionally render availability\nif ($stock > 0) {\n    echo \"<p>Available: $stock units</p>\";\n} else {\n    echo \"<p>Out of Stock</p>\";\n}\n?>",
+    "explanation": "This code demonstrates the server-side logic used in Dynamic Inventory Catalog Generation to fetch stock levels and conditionally render the product status."
+  },
+  "sources": [
+    {
+      "url": "https://www.php.net/manual/en/",
+      "label": "PHP: Preface - Manual"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Inventory Catalog Generation, why is PHP chosen to solve the inventory problem?",
+      "options": [
+        "To replace the database entirely with static files",
+        "To enable real-time inventory status updates on product pages",
+        "To increase the number of static HTML files generated",
+        "To hide the database structure from the end user"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that PHP allows for dynamic generation of pages by querying a database, which ensures inventory status is current.",
+      "evidence": "By utilizing PHP as a server-side scripting language, the manufacturer can dynamically generate product pages by querying a database on every request, ensuring the displayed inventory status is always current."
+    },
+    {
+      "question": "In Dynamic Inventory Catalog Generation, what is the primary limitation of the proposed solution?",
+      "options": [
+        "The inability to connect to a database",
+        "The requirement to use static HTML files only",
+        "Increased server load due to script execution on every request",
+        "The lack of support for server-side scripting"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies that executing scripts on every request increases server load.",
+      "evidence": "The primary limitation is the increased server load caused by executing scripts on every page request."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:25.180Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:20.914Z"
+}

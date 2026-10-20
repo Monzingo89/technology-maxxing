@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "cryptographic_hash",
+  "title": "Document Integrity Verification for Supply Chain Logistics",
+  "business": "Logistics firms managing high-volume digital manifests for international shipping.",
+  "problem": "Unauthorized tampering with digital shipping manifests during transit between disparate regional databases leads to cargo misrouting and severe financial penalties.",
+  "solution": "Cryptographic hash functions map arbitrary input data, such as a full shipping manifest, to a fixed-length digest. By storing this digest alongside the document, any subsequent modification to the manifest results in a different hash, allowing the system to detect integrity failures immediately.",
+  "steps": [
+    "Generate a unique hash digest for each shipping manifest upon initial creation.",
+    "Store the manifest and its corresponding hash in the primary database.",
+    "Transmit the manifest to the regional logistics node.",
+    "Recompute the hash of the received manifest at the destination node.",
+    "Compare the recomputed hash against the original stored hash to verify integrity."
+  ],
+  "outcome": "The system ensures that any alteration to the manifest data is detected before processing, maintaining the integrity of the logistics chain.",
+  "limitation": "Hash functions are deterministic and do not provide authentication on their own; an attacker who modifies the document could simply recompute the hash. To check for this, one must use a keyed-hash message authentication code (HMAC) or digital signatures.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Integrity Verification Flow",
+    "description": "This diagram illustrates how a document is hashed and verified across two nodes.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Manifest Source",
+        "detail": "Original document input"
+      },
+      {
+        "id": "b",
+        "label": "Hash Function",
+        "detail": "Maps input to fixed digest"
+      },
+      {
+        "id": "c",
+        "label": "Database",
+        "detail": "Stores manifest and hash"
+      },
+      {
+        "id": "d",
+        "label": "Receiver",
+        "detail": "Recomputes hash for verification"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "stores digest"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "transmits manifest"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "re-hashes"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import hashlib\n# Create a digest for the manifest\nmanifest = b\"Cargo: 500 units; Destination: Port A\"\nhash_object = hashlib.sha256(manifest)\ndigest = hash_object.hexdigest() # Fixed length output",
+    "explanation": "This demonstrates generating a fixed-length SHA-256 digest from a manifest string, which is the core mechanism for detecting unauthorized changes."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Document Integrity Verification for Supply Chain Logistics, how does the hash function address the problem of tampering?",
+      "options": [
+        "It encrypts the manifest so it cannot be read by unauthorized parties.",
+        "It maps the manifest to a fixed digest, where any change in input produces a different digest.",
+        "It automatically restores the original manifest if a modification is detected.",
+        "It prevents unauthorized users from accessing the database."
+      ],
+      "answerIndex": 1,
+      "explanation": "The hash function provides integrity by ensuring that any change to the input results in a different output, allowing for detection.",
+      "evidence": "Cryptographic hash functions map arbitrary input data, such as a full shipping manifest, to a fixed-length digest. By storing this digest alongside the document, any subsequent modification to the manifest results in a different hash, allowing the system to detect integrity failures immediately."
+    },
+    {
+      "question": "In Document Integrity Verification for Supply Chain Logistics, what is a primary limitation of using a standard hash function for security?",
+      "options": [
+        "It is too slow for high-volume logistics data.",
+        "It cannot handle documents larger than a few kilobytes.",
+        "It does not provide authentication, as an attacker could recompute the hash after tampering.",
+        "It requires a secret key to be shared between all nodes."
+      ],
+      "answerIndex": 2,
+      "explanation": "Standard hashes are not authentication mechanisms; if an attacker can modify the data and the hash, the system cannot verify the source.",
+      "evidence": "Hash functions are deterministic and do not provide authentication on their own; an attacker who modifies the document could simply recompute the hash."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:47.177Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

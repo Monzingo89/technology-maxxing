@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_adobe_marketing_agent",
+  "title": "Optimizing Cross-Channel Retail Loyalty Campaigns",
+  "business": "A mid-sized regional apparel retailer managing fragmented customer data across online and in-store touchpoints.",
+  "problem": "Marketing analysts spend excessive time manually querying Real-Time CDP and Journey Optimizer to identify high-churn segments, leading to delayed campaign responses and missed opportunities for personalized re-engagement.",
+  "solution": "The Adobe Marketing Agent connector enables analysts to use natural language within Claude to query customer segments and journey performance directly. By leveraging the connector's ability to interface with Real-Time CDP and Customer Journey Analytics, the team can instantly retrieve audience insights and trigger journey adjustments without navigating complex UI dashboards.",
+  "steps": [
+    "Configure the Adobe Marketing Agent connector within the Claude Enterprise environment using the provided endpoint.",
+    "Set the active sandbox and dataview context to ensure the agent queries the correct production environment.",
+    "Submit natural language queries to identify specific audience segments showing declining engagement patterns.",
+    "Review the retrieved insights from Customer Journey Analytics to validate the segment composition.",
+    "Execute adjustments to the target audience list within Adobe Journey Optimizer via the agent interface."
+  ],
+  "outcome": "Marketing teams achieve a more fluid workflow where data-driven segment identification and campaign refinement occur in a single conversational interface, significantly reducing the latency between insight discovery and action.",
+  "limitation": "The agent relies on the accuracy of the underlying data views and sandbox configurations; if the dataview is misaligned, the agent may return irrelevant or stale insights. Users must verify the active context by checking the core-switch_sandbox_dataview tool output before executing critical campaign changes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Adobe Marketing Agent Workflow",
+    "description": "This diagram illustrates the flow from the user query to the Adobe ecosystem via the connector.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Marketing Analyst",
+        "detail": "User providing natural language intent"
+      },
+      {
+        "id": "b",
+        "label": "Claude Enterprise",
+        "detail": "Host environment for the agent"
+      },
+      {
+        "id": "c",
+        "label": "Adobe Marketing Agent",
+        "detail": "Connector interface to Adobe APIs"
+      },
+      {
+        "id": "d",
+        "label": "Adobe Solutions",
+        "detail": "Real-Time CDP and Journey Optimizer"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submits query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes tools"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "fetches insights/updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/adobe-marketing-agent",
+      "label": "Adobe Marketing Agent connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Cross-Channel Retail Loyalty Campaigns, how does the Adobe Marketing Agent address the identified problem?",
+      "options": [
+        "By automating the creation of new retail store locations.",
+        "By allowing analysts to query segments and adjust journeys using natural language.",
+        "By replacing the need for Adobe Real-Time CDP entirely.",
+        "By providing automated financial forecasting for marketing budgets."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution specifically highlights using natural language to query segments and trigger journey adjustments to reduce manual dashboard navigation.",
+      "evidence": "The Adobe Marketing Agent connector enables analysts to use natural language within Claude to query customer segments and journey performance directly."
+    },
+    {
+      "question": "In Optimizing Cross-Channel Retail Loyalty Campaigns, what is a primary limitation of the implementation?",
+      "options": [
+        "The agent cannot connect to Adobe Journey Optimizer.",
+        "The agent requires manual coding of all SQL queries.",
+        "The agent may return irrelevant insights if the dataview context is misaligned.",
+        "The agent is limited to only one user per organization."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that incorrect sandbox or dataview configuration leads to irrelevant or stale data.",
+      "evidence": "The agent relies on the accuracy of the underlying data views and sandbox configurations; if the dataview is misaligned, the agent may return irrelevant or stale insights."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:19.306Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:15.296Z"
+}

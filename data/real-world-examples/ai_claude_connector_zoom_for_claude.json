@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_zoom_for_claude",
+  "title": "Streamlining Cross-Functional Product Syncs",
+  "business": "Product Management teams at a mid-sized software firm.",
+  "problem": "Product managers spend excessive time manually reviewing hour-long Zoom recordings to extract action items and technical requirements, leading to delayed project documentation and missed follow-ups.",
+  "solution": "The Zoom for Claude connector enables the team to query meeting transcripts and AI summaries directly within Claude. By leveraging the connector, managers can instantly retrieve specific technical decisions or action items from past meetings without re-watching recordings, ensuring that documentation remains synchronized with verbal agreements.",
+  "steps": [
+    "Authenticate the Zoom for Claude connector within the Claude interface to grant access to meeting assets.",
+    "Use the search_meetings tool to identify relevant sessions based on project keywords or date ranges.",
+    "Invoke get_meeting_assets to pull the AI summary and transcript for the selected meeting.",
+    "Utilize create_new_file_with_markdown to compile extracted action items into a structured project document.",
+    "Verify the output against the original transcript to ensure accuracy of technical requirements."
+  ],
+  "outcome": "Product managers achieve faster turnaround times for meeting recaps and higher consistency in tracking action items across cross-functional teams.",
+  "limitation": "The connector relies on the availability of Zoom AI summaries and transcripts; if a meeting recording lacks these generated assets, Claude cannot retrieve specific topic-level details. Users must check the meeting settings in Zoom to ensure recording and transcription features are enabled prior to the session.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Meeting Asset Retrieval Workflow",
+    "description": "The flow of data from Zoom meetings into actionable project documentation via Claude.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Zoom Meeting",
+        "detail": "Source of recordings and transcripts"
+      },
+      {
+        "id": "b",
+        "label": "Zoom Connector",
+        "detail": "Interface for Claude to query Zoom APIs"
+      },
+      {
+        "id": "c",
+        "label": "Claude",
+        "detail": "Processing engine for natural language analysis"
+      },
+      {
+        "id": "d",
+        "label": "Project Doc",
+        "detail": "Final markdown file with action items"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides assets"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "transfers transcript data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates markdown"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/zoom-for-claude",
+      "label": "Zoom for Claude connector"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Cross-Functional Product Syncs, what is the primary benefit of using the Zoom for Claude connector?",
+      "options": [
+        "It eliminates the need for human participation in meetings.",
+        "It allows managers to extract action items without re-watching recordings.",
+        "It automatically schedules future meetings based on past attendance.",
+        "It replaces the need for Zoom recording storage."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on retrieving information from past meetings to avoid manual review of recordings.",
+      "evidence": "By leveraging the connector, managers can instantly retrieve specific technical decisions or action items from past meetings without re-watching recordings"
+    },
+    {
+      "question": "In Streamlining Cross-Functional Product Syncs, what is a critical limitation of the integration?",
+      "options": [
+        "The connector cannot access meetings older than one week.",
+        "Claude requires a paid Zoom subscription for every participant.",
+        "It depends on the presence of Zoom-generated transcripts and summaries.",
+        "The connector only works for meetings with more than ten participants."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that the connector relies on Zoom's AI-generated assets being available.",
+      "evidence": "The connector relies on the availability of Zoom AI summaries and transcripts; if a meeting recording lacks these generated assets, Claude cannot retrieve specific topic-level details."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:59.779Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:55.412Z"
+}

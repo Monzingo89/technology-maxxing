@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "binary_search",
+  "title": "Efficient Log-Scale Inventory Lookup",
+  "business": "Warehouse management systems handling massive, sorted lists of serialized product IDs.",
+  "problem": "Linear scanning through millions of sorted product records to find a specific insertion point or range causes significant latency during real-time inventory updates.",
+  "solution": "Binary search (bisection) repeatedly halves the search interval by comparing the target value against the midpoint, reducing the search space logarithmically rather than linearly.",
+  "steps": [
+    "Ensure the inventory list is maintained in a strictly sorted order.",
+    "Use bisect_left to identify the precise index where a new product ID belongs.",
+    "Verify the target index does not exceed the list bounds.",
+    "Perform the insertion or retrieval operation at the identified index."
+  ],
+  "outcome": "Rapid identification of record positions, enabling high-frequency inventory management without full-list re-sorting.",
+  "limitation": "The bisection algorithm is not thread-safe; concurrent mutations to the list during a search result in undefined behavior, requiring external synchronization.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Bisection Search Logic",
+    "description": "The process of narrowing down the search space for a target value.",
+    "nodes": [
+      {
+        "id": "start",
+        "label": "Full List",
+        "detail": "Sorted array of size N"
+      },
+      {
+        "id": "mid",
+        "label": "Midpoint",
+        "detail": "Index = (lo + hi) // 2"
+      },
+      {
+        "id": "compare",
+        "label": "Comparison",
+        "detail": "Check target vs midpoint value"
+      },
+      {
+        "id": "end",
+        "label": "Target Found",
+        "detail": "Insertion point identified"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "mid",
+        "label": "Calculate"
+      },
+      {
+        "from": "mid",
+        "to": "compare",
+        "label": "Evaluate"
+      },
+      {
+        "from": "compare",
+        "to": "mid",
+        "label": "Halve range"
+      },
+      {
+        "from": "compare",
+        "to": "end",
+        "label": "Return index"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import bisect\n# Maintain sorted inventory IDs\ninventory = [101, 105, 110, 120]\nnew_id = 108\n# Find insertion point to keep list sorted\nidx = bisect.bisect_left(inventory, new_id)\n# Insert the new ID at the correct position\ninventory.insert(idx, new_id)",
+    "explanation": "This demonstrates using bisect_left to find the correct index for a new product ID, ensuring the list remains sorted for future binary searches."
+  },
+  "sources": [
+    {
+      "url": "https://docs.python.org/3/library/bisect.html",
+      "label": "bisect — Array bisection algorithm"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Efficient Log-Scale Inventory Lookup, how does the technology address the problem of latency?",
+      "options": [
+        "By using a hash map to store all inventory items.",
+        "By repeatedly halving the search interval to reduce search space.",
+        "By sorting the list every time a new item is added.",
+        "By performing a linear scan to ensure all items are checked."
+      ],
+      "answerIndex": 1,
+      "explanation": "Binary search improves performance by halving the search space, which is significantly faster than linear scanning for large datasets.",
+      "evidence": "Binary search (bisection) repeatedly halves the search interval by comparing the target value against the midpoint, reducing the search space logarithmically rather than linearly."
+    },
+    {
+      "question": "In Efficient Log-Scale Inventory Lookup, what is a primary limitation of the implementation?",
+      "options": [
+        "It requires the list to be unsorted.",
+        "It is not thread-safe and can lead to undefined behavior.",
+        "It cannot handle numeric IDs.",
+        "It is slower than linear search for small lists."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation explicitly states that the functions are not thread-safe and concurrent mutations lead to undefined behavior.",
+      "evidence": "The bisection algorithm is not thread-safe; concurrent mutations to the list during a search result in undefined behavior, requiring external synchronization."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:29.428Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:25.959Z"
+}

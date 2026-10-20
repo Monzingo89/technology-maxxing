@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "file_gltf",
+  "title": "Optimizing 3D Asset Delivery for E-commerce",
+  "business": "Online retailers displaying interactive 3D product models on web storefronts.",
+  "problem": "High latency and inconsistent rendering across browsers when loading complex 3D assets, leading to abandoned user sessions.",
+  "solution": "Utilizing the glTF format to decouple 3D scene structure from binary geometry data, allowing for efficient, runtime-ready asset delivery.",
+  "steps": [
+    "Define the hierarchical scene structure using the glTF JSON root object.",
+    "Store raw vertex and index data in binary buffers for rapid GPU upload.",
+    "Map buffer views to specific accessors to define data interpretation.",
+    "Reference external image files for textures to maintain modular asset management."
+  ],
+  "outcome": "Improved page load performance and consistent visual fidelity across diverse client-side graphics engines.",
+  "limitation": "The format relies on specific buffer alignment requirements; developers must validate byte offsets to prevent memory access errors during runtime parsing.",
+  "diagram": {
+    "kind": "er",
+    "title": "glTF Data Hierarchy",
+    "description": "Shows how the JSON structure references binary data for rendering.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scene",
+        "detail": "Root container"
+      },
+      {
+        "id": "b",
+        "label": "Node",
+        "detail": "Hierarchy/Transform"
+      },
+      {
+        "id": "c",
+        "label": "Mesh",
+        "detail": "Geometry definition"
+      },
+      {
+        "id": "d",
+        "label": "Accessor",
+        "detail": "Data format descriptor"
+      },
+      {
+        "id": "e",
+        "label": "BufferView",
+        "detail": "Binary memory range"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "contains (1:N)"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "references (1:1)"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "uses (1:N)"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "points to (1:1)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html",
+      "label": "glTF™ 2.0 Specification"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing 3D Asset Delivery for E-commerce, what is the primary benefit of using glTF?",
+      "options": [
+        "It provides an efficient, runtime-ready format for 3D content delivery.",
+        "It eliminates the need for binary buffers in 3D rendering.",
+        "It forces all textures to be stored inside the JSON file.",
+        "It replaces the need for GPU-based rendering entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution highlights glTF's ability to provide efficient, runtime-ready asset delivery.",
+      "evidence": "Utilizing the glTF format to decouple 3D scene structure from binary geometry data, allowing for efficient, runtime-ready asset delivery."
+    },
+    {
+      "question": "In Optimizing 3D Asset Delivery for E-commerce, what is a critical limitation to monitor?",
+      "options": [
+        "The format is incompatible with modern web browsers.",
+        "The format requires specific buffer alignment to avoid memory errors.",
+        "The format cannot support hierarchical node structures.",
+        "The format is limited to non-indexed geometry only."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the need to validate byte offsets for buffer alignment.",
+      "evidence": "The format relies on specific buffer alignment requirements; developers must validate byte offsets to prevent memory access errors during runtime parsing."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:48.505Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:45.540Z"
+}

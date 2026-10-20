@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "backward_compatibility",
+  "title": "Legacy Schema Evolution for Financial Reporting",
+  "business": "Financial institutions managing long-term audit trails that require concurrent access by both modern analytics engines and legacy reporting modules.",
+  "problem": "Upgrading a PostgreSQL database schema to utilize newer data types or optimized storage formats often breaks legacy client applications that expect the original table structure, leading to application downtime and costly manual refactoring.",
+  "solution": "By leveraging PostgreSQL Views and the Rule System, developers can expose a stable interface to legacy clients while the underlying physical tables evolve. This abstraction layer allows the database to maintain backward compatibility by mapping old column names and types to new, optimized storage formats without requiring changes to the legacy application codebase.",
+  "steps": [
+    "Rename the original production table to a private internal name to preserve existing data.",
+    "Create a View with the original table name that selects from the new, modified table structure.",
+    "Implement INSTEAD OF triggers on the View to handle INSERT, UPDATE, and DELETE operations, mapping legacy inputs to the new schema.",
+    "Grant legacy application users access only to the View, ensuring they remain unaware of the underlying physical changes."
+  ],
+  "outcome": "Legacy applications continue to function without modification while the backend benefits from modern schema optimizations, ensuring seamless system evolution.",
+  "limitation": "The primary limitation is the performance overhead introduced by the Rule System or triggers during high-frequency write operations. To check for degradation, developers should monitor the execution time of transactions hitting the View compared to direct table access using EXPLAIN ANALYZE.",
+  "diagram": {
+    "kind": "er",
+    "title": "Schema Abstraction for Compatibility",
+    "description": "This diagram illustrates how legacy clients interact with a stable View rather than the evolving physical table.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Client",
+        "detail": "Expects original schema"
+      },
+      {
+        "id": "b",
+        "label": "SQL View",
+        "detail": "Exposes original interface"
+      },
+      {
+        "id": "c",
+        "label": "INSTEAD OF Trigger",
+        "detail": "Maps data to new format"
+      },
+      {
+        "id": "d",
+        "label": "Physical Table",
+        "detail": "Contains new schema"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Queries"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Intercepts writes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Transforms and writes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Schema Evolution for Financial Reporting, how is the compatibility gap bridged?",
+      "options": [
+        "By using a View to expose the original interface while mapping data to a new physical structure.",
+        "By forcing legacy applications to update their drivers to the latest PostgreSQL version.",
+        "By renaming the database to trigger a compatibility mode in the server.",
+        "By migrating all data to a flat file format that legacy systems can read directly."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on using a View as an abstraction layer to maintain the original interface for legacy clients.",
+      "evidence": "By leveraging PostgreSQL Views and the Rule System, developers can expose a stable interface to legacy clients while the underlying physical tables evolve."
+    },
+    {
+      "question": "What is a key limitation of the approach described in Legacy Schema Evolution for Financial Reporting?",
+      "options": [
+        "It prevents the use of modern SQL features entirely.",
+        "It requires the database to be taken offline during every query.",
+        "It introduces performance overhead due to the use of triggers or rules on the View.",
+        "It makes it impossible to ever update the underlying physical table."
+      ],
+      "answerIndex": 2,
+      "explanation": "The use of triggers or rules to maintain compatibility adds a layer of processing that can impact write performance.",
+      "evidence": "The primary limitation is the performance overhead introduced by the Rule System or triggers during high-frequency write operations."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:19.067Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

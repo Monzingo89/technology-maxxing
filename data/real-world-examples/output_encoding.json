@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "output_encoding",
+  "title": "Dynamic Dashboard Injection Prevention",
+  "business": "A SaaS provider offering customizable analytics dashboards for enterprise clients.",
+  "problem": "Malicious users inject JavaScript payloads into profile fields, which execute in the browsers of other users when the dashboard renders the profile data, leading to unauthorized actions.",
+  "solution": "Output encoding transforms untrusted data into a safe form where the browser interprets the data as content rather than executable code, effectively neutralizing the injection threat.",
+  "steps": [
+    "Identify all points where user-supplied data is rendered in the HTML document.",
+    "Determine the specific context of the output, such as HTML body, attribute, or JavaScript variable.",
+    "Apply context-aware encoding functions to the data immediately before it is rendered.",
+    "Verify that the encoding library handles special characters like <, >, &, \", and ' correctly for the target context."
+  ],
+  "outcome": "The browser treats injected scripts as literal text strings, preventing unauthorized code execution while maintaining the intended display of user data.",
+  "limitation": "Encoding is context-dependent; using an HTML entity encoder for data placed inside a JavaScript string literal will not prevent execution, requiring developers to verify the correct encoder for every output location.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Output Encoding Data Flow",
+    "description": "This diagram illustrates how data moves from storage to the browser, showing where the encoding process acts as a security barrier.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Database",
+        "detail": "Stores raw user input"
+      },
+      {
+        "id": "b",
+        "label": "Application Logic",
+        "detail": "Retrieves data"
+      },
+      {
+        "id": "c",
+        "label": "Encoding Engine",
+        "detail": "Applies context-aware transformation"
+      },
+      {
+        "id": "d",
+        "label": "Browser",
+        "detail": "Renders safe output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "fetches raw data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "passes data for encoding"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "sends encoded content"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Assume 'userInput' is untrusted data from the database\nconst safeOutput = encodeForHTML(userInput); // Converts < to &lt; to prevent tag injection\ndocument.getElementById('profile-name').innerHTML = safeOutput;",
+    "explanation": "This demonstrates applying an HTML encoder to raw data before injecting it into the DOM, ensuring the browser treats the input as text."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Dashboard Injection Prevention, how does output encoding mitigate the identified security risk?",
+      "options": [
+        "It removes all user input from the database permanently.",
+        "It transforms untrusted data so the browser treats it as content rather than executable code.",
+        "It encrypts the data so that only authorized users can read it.",
+        "It validates that the user input matches a predefined allow-list of characters."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution defines output encoding as a method to ensure data is interpreted as content, preventing the browser from executing it as code.",
+      "evidence": "Output encoding transforms untrusted data into a safe form where the browser interprets the data as content rather than executable code, effectively neutralizing the injection threat."
+    },
+    {
+      "question": "Regarding the implementation of Dynamic Dashboard Injection Prevention, what is a critical limitation to consider?",
+      "options": [
+        "Encoding is context-dependent and requires selecting the correct encoder for the specific output location.",
+        "Encoding prevents the data from being stored in the database correctly.",
+        "Encoding is only effective if the user is logged in as an administrator.",
+        "Encoding automatically detects the context and applies the correct security policy without developer intervention."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section highlights that encoding is not a one-size-fits-all solution; it depends on the context (e.g., HTML vs. JS).",
+      "evidence": "Encoding is context-dependent; using an HTML entity encoder for data placed inside a JavaScript string literal will not prevent execution, requiring developers to verify the correct encoder for every output location."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:09.106Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

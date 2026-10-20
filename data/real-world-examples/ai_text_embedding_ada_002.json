@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "ai_text_embedding_ada_002",
+  "title": "Legacy Archive Semantic Discovery",
+  "business": "A historical research firm managing millions of digitized, unindexed archival documents.",
+  "problem": "Researchers struggle to find relevant documents because traditional keyword searches fail to capture the conceptual intent or thematic connections between fragmented historical records.",
+  "solution": "By utilizing text-embedding-ada-002, the firm converts unstructured text into high-dimensional vectors, enabling semantic search that retrieves documents based on conceptual similarity rather than exact keyword matching.",
+  "steps": [
+    "Pre-process archival text into clean, tokenized segments.",
+    "Send text segments to the v1/embeddings endpoint using the text-embedding-ada-002 model.",
+    "Store the resulting numerical vector arrays in a specialized vector database.",
+    "Perform cosine similarity calculations between user query vectors and stored document vectors to rank search results."
+  ],
+  "outcome": "Researchers can identify thematic patterns across disparate archives, significantly reducing the time required for deep historical investigation.",
+  "limitation": "The model produces fixed-length vectors that represent the entire input; if a document is too long, the semantic focus may become diluted, which can be checked by evaluating the retrieval precision against known ground-truth document clusters.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Semantic Retrieval Pipeline",
+    "description": "This flow illustrates the transformation of raw text into searchable vector data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Archive",
+        "detail": "Unstructured text files"
+      },
+      {
+        "id": "b",
+        "label": "Embedding API",
+        "detail": "text-embedding-ada-002"
+      },
+      {
+        "id": "c",
+        "label": "Vector Database",
+        "detail": "Storage for numerical embeddings"
+      },
+      {
+        "id": "d",
+        "label": "Query Interface",
+        "detail": "User search input"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "stores vectors"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "embeds query"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns matches"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import openai\n# Requesting vector representation for a document snippet\nresponse = openai.Embedding.create(\n    input=\"Historical document text content\",\n    model=\"text-embedding-ada-002\"\n)\n# The vector is found in response['data'][0]['embedding']",
+    "explanation": "This code demonstrates the primary interaction with the v1/embeddings endpoint to generate numerical representations for archival text."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/text-embedding-ada-002",
+      "label": "text-embedding-ada-002"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Archive Semantic Discovery, how does the model improve search capabilities?",
+      "options": [
+        "By enabling semantic search based on conceptual similarity.",
+        "By performing automated keyword indexing.",
+        "By translating historical documents into modern languages.",
+        "By summarizing long documents into short snippets."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the model enables semantic search that retrieves documents based on conceptual similarity rather than exact keyword matching.",
+      "evidence": "By utilizing text-embedding-ada-002, the firm converts unstructured text into high-dimensional vectors, enabling semantic search that retrieves documents based on conceptual similarity rather than exact keyword matching."
+    },
+    {
+      "question": "In Legacy Archive Semantic Discovery, what is a primary limitation of the embedding process?",
+      "options": [
+        "The model cannot handle English text.",
+        "The model is too expensive for large datasets.",
+        "Semantic focus can become diluted in very long documents.",
+        "The model requires manual fine-tuning for every document."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that long documents can lead to diluted semantic focus, which is a trade-off of the fixed-length vector representation.",
+      "evidence": "The model produces fixed-length vectors that represent the entire input; if a document is too long, the semantic focus may become diluted, which can be checked by evaluating the retrieval precision against known ground-truth document clusters."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:12.083Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:07.869Z"
+}

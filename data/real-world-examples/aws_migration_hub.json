@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "aws_migration_hub",
+  "title": "Unified Migration Orchestration for Global Retailers",
+  "business": "A multinational retail enterprise managing a fragmented portfolio of legacy on-premises data centers and disparate cloud-native microservices.",
+  "problem": "The IT operations team struggles with visibility, as they lack a centralized dashboard to track the progress of hundreds of individual application migrations occurring across different AWS regions and third-party partner tools.",
+  "solution": "AWS Migration Hub serves as the central control plane, aggregating status updates from AWS Application Discovery Service and AWS Application Migration Service (MGN) into a single, unified view to track migration progress across the entire portfolio.",
+  "steps": [
+    "Enable AWS Migration Hub in the home region to serve as the central repository for migration data.",
+    "Deploy AWS Application Discovery Service agents on-premises to map existing dependencies and server configurations.",
+    "Integrate third-party migration tools with the Migration Hub API to push status updates into the central dashboard.",
+    "Configure AWS Application Migration Service (MGN) to automate the replication of source servers into the target AWS environment.",
+    "Monitor the unified status dashboard to identify bottlenecks in the migration lifecycle across all integrated tools."
+  ],
+  "outcome": "The organization achieves a consolidated view of migration status, enabling stakeholders to make informed decisions and synchronize cutover activities across geographically dispersed teams.",
+  "limitation": "Migration Hub acts as a tracking and orchestration layer rather than a data migration engine; it relies on the accuracy of status reporting from integrated tools. To verify data integrity, administrators must manually reconcile the status in the Hub against the source tool logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Migration Hub Orchestration Flow",
+    "description": "This diagram illustrates how Migration Hub aggregates data from various discovery and migration services to provide a single view.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises Servers",
+        "detail": "Source environment"
+      },
+      {
+        "id": "b",
+        "label": "Discovery Service",
+        "detail": "Maps dependencies"
+      },
+      {
+        "id": "c",
+        "label": "Migration Service (MGN)",
+        "detail": "Replicates data"
+      },
+      {
+        "id": "d",
+        "label": "Migration Hub",
+        "detail": "Central dashboard"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "collects metadata"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "replicates blocks"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "reports status"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "reports progress"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Migration Orchestration for Global Retailers, what is the primary function of the Migration Hub?",
+      "options": [
+        "Aggregating status updates from various migration tools into a unified view",
+        "Automatically converting legacy code into cloud-native microservices",
+        "Providing physical hardware for on-premises data center expansion",
+        "Managing the billing and procurement of third-party SaaS applications"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution describes the Hub as a central control plane that aggregates status updates from various services.",
+      "evidence": "AWS Migration Hub serves as the central control plane, aggregating status updates from AWS Application Discovery Service and AWS Application Migration Service (MGN) into a single, unified view to track migration progress across the entire portfolio."
+    },
+    {
+      "question": "In Unified Migration Orchestration for Global Retailers, what is a key limitation of the Migration Hub?",
+      "options": [
+        "It cannot track migrations across multiple AWS regions",
+        "It is a tracking layer and does not perform the actual data migration itself",
+        "It requires all migration tools to be built by AWS",
+        "It cannot integrate with third-party partner tools"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section clarifies that the Hub tracks progress but relies on other tools for the actual migration work.",
+      "evidence": "Migration Hub acts as a tracking and orchestration layer rather than a data migration engine; it relies on the accuracy of status reporting from integrated tools."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:25.865Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

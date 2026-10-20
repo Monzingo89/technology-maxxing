@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "attack_surface",
+  "title": "Minimizing Logistics API Exposure",
+  "business": "A regional logistics provider managing a fleet of delivery drones and warehouse robots.",
+  "problem": "The company exposes a monolithic API that includes administrative endpoints, public tracking interfaces, and internal sensor telemetry, creating an unnecessarily large attack surface that invites lateral movement.",
+  "solution": "By applying the Economy of Mechanism and Least Privilege principles, the company decomposes the monolith into micro-services, ensuring each interface only exposes the minimum functionality required for its specific role, effectively shrinking the reachable attack surface.",
+  "steps": [
+    "Audit all existing API endpoints to categorize them by user role and functional necessity.",
+    "Implement an API Gateway to act as a single, hardened entry point that enforces strict routing.",
+    "Apply the principle of Least Privilege by restricting internal telemetry endpoints to local network segments only.",
+    "Remove unused legacy debugging interfaces and deprecated functions to reduce the total code complexity.",
+    "Establish a continuous monitoring process to verify that new code deployments do not introduce unauthorized reachable interfaces."
+  ],
+  "outcome": "A significantly reduced number of exposed entry points, making it harder for attackers to discover and exploit sensitive internal administrative functions.",
+  "limitation": "Aggressive compartmentalization can increase operational complexity, requiring robust service discovery and monitoring to ensure that legitimate inter-service communication is not inadvertently blocked.",
+  "diagram": {
+    "kind": "flow",
+    "title": "API Attack Surface Reduction",
+    "description": "Shows how an API Gateway restricts access to internal services.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "External User",
+        "detail": "Public internet client"
+      },
+      {
+        "id": "gateway",
+        "label": "API Gateway",
+        "detail": "Hardened entry point"
+      },
+      {
+        "id": "public",
+        "label": "Public Service",
+        "detail": "Tracking and status"
+      },
+      {
+        "id": "admin",
+        "label": "Admin Service",
+        "detail": "Internal control plane"
+      },
+      {
+        "id": "sensor",
+        "label": "Telemetry",
+        "detail": "Internal sensor data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "gateway",
+        "label": "Authorized Request"
+      },
+      {
+        "from": "gateway",
+        "to": "public",
+        "label": "Routes public traffic"
+      },
+      {
+        "from": "gateway",
+        "to": "admin",
+        "label": "Restricted access"
+      },
+      {
+        "from": "admin",
+        "to": "sensor",
+        "label": "Internal only"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Example of restricting access at the gateway level\nconst routeConfig = {\n  '/track': { public: true }, // Accessible to everyone\n  '/admin/config': { public: false, role: 'admin' } // Restricted by role\n};\n\nfunction handleRequest(req) {\n  const route = routeConfig[req.path];\n  if (!route || (!route.public && !req.user.isAdmin)) {\n    return { status: 403, message: 'Forbidden' }; // Fail safe: deny by default\n  }\n  return process(req);\n}",
+    "explanation": "This code implements a fail-safe mechanism by denying access to any route not explicitly marked as public, mapping to the principle of Least Privilege."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Minimizing Logistics API Exposure, what is the primary benefit of decomposing the monolithic API?",
+      "options": [
+        "It eliminates the need for authentication entirely.",
+        "It reduces the attack surface by limiting reachable interfaces.",
+        "It increases the total number of available public endpoints.",
+        "It ensures the system is 100% secure from all external threats."
+      ],
+      "answerIndex": 1,
+      "explanation": "Decomposition allows for the application of Least Privilege, ensuring that only necessary interfaces are exposed, which directly reduces the attack surface.",
+      "evidence": "By applying the Economy of Mechanism and Least Privilege principles, the company decomposes the monolith into micro-services, ensuring each interface only exposes the minimum functionality required for its specific role, effectively shrinking the reachable attack surface."
+    },
+    {
+      "question": "In Minimizing Logistics API Exposure, what is a noted limitation of the proposed solution?",
+      "options": [
+        "It makes the system impossible to monitor.",
+        "It requires the use of proprietary hardware.",
+        "It increases operational complexity.",
+        "It prevents the use of API Gateways."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly states that compartmentalization can lead to increased operational complexity, which must be managed.",
+      "evidence": "Aggressive compartmentalization can increase operational complexity, requiring robust service discovery and monitoring to ensure that legitimate inter-service communication is not inadvertently blocked."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:06.451Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

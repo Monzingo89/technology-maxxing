@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_sonnet_4_6",
+  "title": "Legacy Archive Processing for Historical Research",
+  "business": "A digital humanities research firm managing massive, multi-decade document repositories.",
+  "problem": "The firm struggles to ingest and summarize 1M-token-scale historical archives because newer models are optimized for current data, while their existing legacy workflows are tightly coupled to the specific behavior and knowledge cutoff of older infrastructure.",
+  "solution": "Utilizing the Claude Sonnet 4.6 model allows the firm to maintain consistency in their long-context document analysis pipelines without immediate refactoring of their legacy integration layer, leveraging its 1M token context window and August 2025 knowledge cutoff.",
+  "steps": [
+    "Identify the specific document repository requiring analysis within the 1M token limit.",
+    "Configure the API client to target the claude-sonnet-4-6 model ID.",
+    "Implement prompt caching for recurring historical context headers to optimize costs.",
+    "Execute batch processing requests to handle large-scale summarization tasks.",
+    "Validate output against established historical benchmarks to ensure consistency."
+  ],
+  "outcome": "The firm achieves stable, reproducible summarization of historical archives while deferring the technical debt of migrating to newer model architectures.",
+  "limitation": "As a legacy model, Claude Sonnet 4.6 has a knowledge cutoff of August 2025; users must verify that their research does not require information post-dating this period, which can be checked by querying the model for recent events.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Archive Processing Pipeline",
+    "description": "The flow shows how historical data is processed through the legacy model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Archive Storage",
+        "detail": "Source of historical documents"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Caching",
+        "detail": "Reduces cost for repeated context"
+      },
+      {
+        "id": "c",
+        "label": "Claude Sonnet 4.6",
+        "detail": "Processes 1M token context"
+      },
+      {
+        "id": "d",
+        "label": "Research Output",
+        "detail": "Finalized historical summary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Inject Context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generate"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.messages.create(\n    model=\"claude-sonnet-4-6\", # Targeting legacy model ID\n    max_tokens=1024,\n    messages=[{\"role\": \"user\", \"content\": \"Summarize this archive...\"}]\n)",
+    "explanation": "This demonstrates the API call structure required to invoke the specific legacy model ID for document processing."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/sonnet-4-6/overview",
+      "label": "Claude Sonnet 4.6"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Archive Processing for Historical Research, why is Claude Sonnet 4.6 selected over newer models?",
+      "options": [
+        "To maintain consistency in legacy pipelines without immediate refactoring.",
+        "Because it is the only model that supports 1M tokens.",
+        "It provides superior performance on real-time current events.",
+        "It is the cheapest model available for all tasks."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights the need to avoid refactoring existing legacy workflows while maintaining stable analysis.",
+      "evidence": "Utilizing the Claude Sonnet 4.6 model allows the firm to maintain consistency in their long-context document analysis pipelines without immediate refactoring of their legacy integration layer"
+    },
+    {
+      "question": "What is a primary limitation to consider when using Claude Sonnet 4.6 in Legacy Archive Processing for Historical Research?",
+      "options": [
+        "It lacks support for the 1M token context window.",
+        "It has a knowledge cutoff of August 2025.",
+        "It cannot be used with the Batch API.",
+        "It requires a manual effort parameter for every request."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario explicitly state the August 2025 knowledge cutoff as a limitation for legacy models.",
+      "evidence": "As a legacy model, Claude Sonnet 4.6 has a knowledge cutoff of August 2025; users must verify that their research does not require information post-dating this period"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:55.999Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:52.094Z"
+}

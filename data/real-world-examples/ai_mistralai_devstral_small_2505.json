@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_mistralai_devstral_small_2505",
+  "title": "Automated Legacy Refactoring with Devstral",
+  "business": "Enterprise software teams managing large, aging codebases.",
+  "problem": "High developer overhead when manually refactoring legacy modules, leading to slow feature velocity and inconsistent code quality.",
+  "solution": "Deploying Devstral-Small-2505 within an OpenHands agentic scaffold to autonomously explore, analyze, and refactor legacy code blocks while maintaining functional parity.",
+  "steps": [
+    "Configure a local vLLM server instance to host the Devstral-Small-2505 model.",
+    "Initialize the OpenHands docker container with the Devstral model endpoint.",
+    "Mount the legacy repository into the OpenHands sandbox environment.",
+    "Provide natural language instructions to the agent to identify and refactor specific legacy modules.",
+    "Review agent-generated pull requests for integration into the main codebase."
+  ],
+  "outcome": "Increased developer capacity to focus on high-level architecture while the agent handles repetitive refactoring tasks.",
+  "limitation": "The model is text-only; it cannot interpret visual UI mockups or hardware-level diagrams, requiring developers to provide explicit text-based specifications for complex UI changes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agentic Refactoring Workflow",
+    "description": "The flow of instructions from the developer to the agentic model and the resulting repository interaction.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Provides natural language refactoring instructions"
+      },
+      {
+        "id": "b",
+        "label": "OpenHands Scaffold",
+        "detail": "Orchestrates agent tasks and sandbox environment"
+      },
+      {
+        "id": "c",
+        "label": "Devstral-Small-2505",
+        "detail": "Agentic model performing code analysis and editing"
+      },
+      {
+        "id": "d",
+        "label": "Legacy Repository",
+        "detail": "Target codebase for refactoring"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends instructions"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Queries model"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Reads/Writes code"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/mistralai/Devstral-Small-2505",
+      "label": "Devstral Small 1.0"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Refactoring with Devstral, what is the primary benefit of using the agentic scaffold?",
+      "options": [
+        "It automates the exploration and refactoring of legacy code.",
+        "It eliminates the need for human code review.",
+        "It converts visual UI designs into functional code.",
+        "It replaces the need for a database backend."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution describes using the agentic scaffold to autonomously explore and refactor legacy code blocks.",
+      "evidence": "Deploying Devstral-Small-2505 within an OpenHands agentic scaffold to autonomously explore, analyze, and refactor legacy code blocks while maintaining functional parity."
+    },
+    {
+      "question": "What is a key limitation of the implementation described in Automated Legacy Refactoring with Devstral?",
+      "options": [
+        "The model cannot run on local hardware.",
+        "The model is text-only and cannot interpret visual inputs.",
+        "The model requires a 128k context window to function.",
+        "The model is incompatible with SQLite databases."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states the model's inability to process visual information.",
+      "evidence": "The model is text-only; it cannot interpret visual UI mockups or hardware-level diagrams, requiring developers to provide explicit text-based specifications for complex UI changes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:32.805Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:29.293Z"
+}

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "reflection_loop",
+  "title": "Automated Legal Contract Compliance Review",
+  "business": "Corporate legal departments managing high-volume vendor contract renewals.",
+  "problem": "Manual contract review is prone to oversight, leading to missed compliance clauses and inconsistent risk assessment across thousands of documents.",
+  "solution": "The Reflection Loop framework enables an AI agent to draft a compliance summary, receive environment feedback (e.g., missing mandatory clauses), and perform a self-reflective critique to refine the summary before final submission.",
+  "steps": [
+    "Generate an initial compliance summary based on the raw contract text.",
+    "Execute a validation script to check for required legal clauses and mandatory terminology.",
+    "Pass the validation error logs as linguistic feedback to the agent.",
+    "Instruct the agent to analyze the feedback and generate a revised, compliant summary.",
+    "Store the successful reflection and final summary in an episodic memory buffer for future similar contract types."
+  ],
+  "outcome": "Improved accuracy in identifying missing compliance requirements without requiring expensive model fine-tuning.",
+  "limitation": "The system may suffer from 'reflection drift' where the agent over-corrects based on feedback, potentially introducing new errors; this is checked by monitoring the delta between consecutive draft versions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Reflection Loop Process",
+    "description": "The flow shows how an agent iterates on a task using feedback.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Drafting Agent",
+        "detail": "Generates initial contract summary"
+      },
+      {
+        "id": "b",
+        "label": "Validator",
+        "detail": "Checks for missing clauses"
+      },
+      {
+        "id": "c",
+        "label": "Feedback Loop",
+        "detail": "Provides error logs to agent"
+      },
+      {
+        "id": "d",
+        "label": "Memory Buffer",
+        "detail": "Stores successful strategies"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submits draft"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "identifies errors"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "provides critique"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "saves refinement"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2303.11366",
+      "label": "Reflexion: Language Agents with Verbal Reinforcement Learning"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Contract Compliance Review, how does the agent improve its performance?",
+      "options": [
+        "By performing expensive model fine-tuning on every contract.",
+        "By using linguistic feedback to reflect on errors and refine its output.",
+        "By ignoring feedback and relying on pre-trained weights.",
+        "By replacing the human legal team entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the agent verbally reflecting on feedback signals to improve decision-making.",
+      "evidence": "The Reflection Loop framework enables an AI agent to draft a compliance summary, receive environment feedback (e.g., missing mandatory clauses), and perform a self-reflective critique to refine the summary before final submission."
+    },
+    {
+      "question": "What is a key limitation of the Automated Legal Contract Compliance Review process?",
+      "options": [
+        "The system is too fast to be monitored.",
+        "The agent cannot store past successes.",
+        "The agent may over-correct and introduce new errors.",
+        "The system requires manual weight updates."
+      ],
+      "answerIndex": 2,
+      "explanation": "Reflection drift is a known trade-off where the agent might over-correct based on feedback.",
+      "evidence": "The system may suffer from 'reflection drift' where the agent over-corrects based on feedback, potentially introducing new errors; this is checked by monitoring the delta between consecutive draft versions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:13.298Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:09.255Z"
+}

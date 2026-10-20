@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_build",
+  "title": "Automated Container Image Lifecycle for E-commerce Microservices",
+  "business": "A mid-sized e-commerce platform managing dozens of independent microservices that require rapid, consistent deployment cycles.",
+  "problem": "Manual build processes lead to inconsistent container images, environment drift, and significant developer overhead when preparing artifacts for production.",
+  "solution": "Cloud Build provides a managed platform to automate the creation of containerized build steps, ensuring that every code commit triggers a standardized, repeatable artifact production pipeline.",
+  "steps": [
+    "Define a cloudbuild.yaml configuration file in the source repository to specify build steps.",
+    "Connect the source repository to Cloud Build to trigger builds automatically upon code pushes.",
+    "Execute containerized build steps that compile code and package the application into a container image.",
+    "Push the resulting container image to a secure registry for deployment."
+  ],
+  "outcome": "A reliable, automated supply chain for software artifacts that eliminates manual configuration errors and accelerates deployment velocity.",
+  "limitation": "Cloud Build operates within ephemeral environments; persistent state between build steps must be managed via external storage or volumes, which can be verified by checking the build logs for workspace cleanup warnings.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cloud Build Artifact Pipeline",
+    "description": "The flow of source code through automated containerization to a registry.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Repo",
+        "detail": "Developer commits code"
+      },
+      {
+        "id": "b",
+        "label": "Cloud Build",
+        "detail": "Orchestrates containerized steps"
+      },
+      {
+        "id": "c",
+        "label": "Build Environment",
+        "detail": "Ephemeral container execution"
+      },
+      {
+        "id": "d",
+        "label": "Artifact Registry",
+        "detail": "Stores deployable image"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Triggers build"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Spawns steps"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Pushes image"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Container Image Lifecycle for E-commerce Microservices, what is the primary benefit of using Cloud Build?",
+      "options": [
+        "It eliminates manual build processes and ensures standardized, repeatable artifact production.",
+        "It provides a permanent storage solution for all application source code.",
+        "It replaces the need for a container registry by hosting images internally.",
+        "It automatically optimizes the application code for better performance."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that Cloud Build provides a managed platform to automate the creation of containerized build steps, ensuring that every code commit triggers a standardized, repeatable artifact production pipeline.",
+      "evidence": "Cloud Build provides a managed platform to automate the creation of containerized build steps, ensuring that every code commit triggers a standardized, repeatable artifact production pipeline."
+    },
+    {
+      "question": "In Automated Container Image Lifecycle for E-commerce Microservices, what is a key limitation of the build environment?",
+      "options": [
+        "It requires manual intervention to start every build step.",
+        "It is limited to only one build step per configuration file.",
+        "It operates in ephemeral environments, requiring external management for persistent state.",
+        "It cannot connect to external source repositories."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that Cloud Build environments are ephemeral, meaning persistent state must be handled externally.",
+      "evidence": "Cloud Build operates within ephemeral environments; persistent state between build steps must be managed via external storage or volumes"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:56.590Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

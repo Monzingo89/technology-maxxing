@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_artifact_registry",
+  "title": "Centralized Container Governance for Global Logistics",
+  "business": "A global logistics firm managing distributed microservices across multiple regions needs a unified way to store and distribute container images.",
+  "problem": "The firm faces fragmented image storage, inconsistent access controls, and security risks from using disparate, unmanaged registries that lack centralized audit trails.",
+  "solution": "Artifact Registry provides a single, secure, and managed repository for container images and language packages, enabling granular IAM controls and native integration with Google Cloud security services.",
+  "steps": [
+    "Create a standard Artifact Registry repository in a central project.",
+    "Configure IAM roles to grant developers read/write access based on the principle of least privilege.",
+    "Integrate the registry with CI/CD pipelines to automatically push validated images.",
+    "Enable vulnerability scanning to ensure only compliant images are deployed to production."
+  ],
+  "outcome": "The organization achieves a unified, secure supply chain with consistent access policies and improved visibility into software components.",
+  "limitation": "Artifact Registry storage costs scale with usage; users must monitor repository size and implement lifecycle policies to delete old or unused images to manage storage footprint.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Artifact Registry Workflow",
+    "description": "The flow shows how developers and CI systems interact with the registry to secure the deployment pipeline.",
+    "nodes": [
+      {
+        "id": "dev",
+        "label": "Developer",
+        "detail": "Pushes code"
+      },
+      {
+        "id": "cicd",
+        "label": "CI/CD Pipeline",
+        "detail": "Builds and tests"
+      },
+      {
+        "id": "ar",
+        "label": "Artifact Registry",
+        "detail": "Stores images"
+      },
+      {
+        "id": "gke",
+        "label": "GKE Cluster",
+        "detail": "Deploys images"
+      }
+    ],
+    "edges": [
+      {
+        "from": "dev",
+        "to": "cicd",
+        "label": "Triggers build"
+      },
+      {
+        "from": "cicd",
+        "to": "ar",
+        "label": "Pushes image"
+      },
+      {
+        "from": "ar",
+        "to": "gke",
+        "label": "Pulls image"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Centralized Container Governance for Global Logistics, what is the primary problem addressed by Artifact Registry?",
+      "options": [
+        "Fragmented image storage and inconsistent access controls",
+        "High latency in global network routing",
+        "Lack of support for legacy virtual machines",
+        "Inability to run serverless functions"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the firm suffers from fragmented storage and inconsistent controls, which Artifact Registry solves via centralized management.",
+      "evidence": "The firm faces fragmented image storage, inconsistent access controls, and security risks from using disparate, unmanaged registries that lack centralized audit trails."
+    },
+    {
+      "question": "In Centralized Container Governance for Global Logistics, what is a key limitation of using Artifact Registry?",
+      "options": [
+        "It cannot be integrated with CI/CD pipelines",
+        "It requires manual security patching of the underlying infrastructure",
+        "Storage costs scale with usage, requiring lifecycle management",
+        "It is limited to storing only language packages"
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson notes that storage costs scale with usage and suggests lifecycle policies as the mitigation strategy.",
+      "evidence": "Artifact Registry storage costs scale with usage; users must monitor repository size and implement lifecycle policies to delete old or unused images to manage storage footprint."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:47.738Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

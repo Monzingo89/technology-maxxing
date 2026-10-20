@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "computer_use_agents",
+  "title": "Automated Legacy Report Extraction",
+  "business": "Financial analysts managing high-volume, non-API legacy desktop applications.",
+  "problem": "Manual data extraction from proprietary desktop software is slow, error-prone, and prevents real-time reporting.",
+  "solution": "Deploy a Computer-Use Agent using a local ComputerTool implementation to automate GUI interactions, enabling the agent to navigate legacy interfaces as a human would.",
+  "steps": [
+    "Define a class implementing the AsyncComputer interface to handle mouse and keyboard events.",
+    "Initialize an Agent with the custom ComputerTool instance.",
+    "Provide system instructions detailing the GUI navigation sequence for the legacy application.",
+    "Configure human-in-the-loop approval for high-impact actions like data export.",
+    "Execute the agent within a local runtime environment to maintain access to the desktop display."
+  ],
+  "outcome": "Consistent, automated data ingestion from legacy systems into modern analytics pipelines without manual intervention.",
+  "limitation": "The agent lacks inherent sandbox isolation for local execution; security depends entirely on the permissions granted to the local process.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent GUI Interaction Workflow",
+    "description": "The flow of control from the agent to the legacy application via the local runtime.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Agent",
+        "detail": "Orchestrates task logic"
+      },
+      {
+        "id": "b",
+        "label": "ComputerTool",
+        "detail": "Translates intent to actions"
+      },
+      {
+        "id": "c",
+        "label": "Local Runtime",
+        "detail": "Executes system commands"
+      },
+      {
+        "id": "d",
+        "label": "Legacy App",
+        "detail": "Target GUI interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "interacts with"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/tools/",
+      "label": "Tools - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Report Extraction, what is the primary role of the Computer-Use Agent?",
+      "options": [
+        "To automate GUI interactions in legacy desktop software.",
+        "To replace the need for a local runtime environment.",
+        "To provide built-in sandbox isolation for all system commands.",
+        "To bypass the need for human-in-the-loop approvals."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario describes using a ComputerTool to navigate legacy interfaces, which is the core function of a computer-use agent.",
+      "evidence": "Deploy a Computer-Use Agent using a local ComputerTool implementation to automate GUI interactions, enabling the agent to navigate legacy interfaces as a human would."
+    },
+    {
+      "question": "Regarding the implementation of Automated Legacy Report Extraction, what is a critical security consideration?",
+      "options": [
+        "The SDK automatically sandboxes all local shell commands.",
+        "Security depends entirely on the permissions granted to the local process.",
+        "Local runtime tools do not require any implementation from the developer.",
+        "Approval settings are ignored when using local runtime tools."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario emphasize that local execution lacks inherent sandboxing, placing the burden of security on the developer's process permissions.",
+      "evidence": "The agent lacks inherent sandbox isolation for local execution; security depends entirely on the permissions granted to the local process."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:24.268Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:34.644Z"
+}

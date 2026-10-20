@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_compute_engine",
+  "title": "Legacy Application Migration to Compute Engine",
+  "business": "Enterprises maintaining monolithic legacy applications that require specific OS configurations and persistent storage environments.",
+  "problem": "High operational overhead and lack of flexibility when managing on-premises hardware for legacy applications that cannot be easily containerized.",
+  "solution": "Compute Engine provides customizable virtual machines that allow businesses to lift and shift legacy workloads into a managed cloud environment, retaining full control over the OS and network stack while gaining infrastructure scalability.",
+  "steps": [
+    "Assess the legacy application requirements including CPU, RAM, and disk storage needs.",
+    "Create a custom machine image or select a pre-configured OS image within Compute Engine.",
+    "Configure Virtual Private Cloud (VPC) settings to ensure secure network connectivity.",
+    "Deploy the virtual machine instance and attach persistent disks for data storage.",
+    "Verify application functionality and performance within the new virtualized environment."
+  ],
+  "outcome": "Improved infrastructure agility and reduced maintenance burden by offloading hardware lifecycle management to Google Cloud.",
+  "limitation": "Compute Engine requires manual management of the guest operating system, including patching and security updates, which can be checked by monitoring OS-level logs and security compliance reports.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compute Engine Deployment Flow",
+    "description": "The flow shows how legacy applications move from on-premises to a cloud-based VM instance.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises Server",
+        "detail": "Source of legacy application"
+      },
+      {
+        "id": "b",
+        "label": "Compute Engine VM",
+        "detail": "Customizable virtual machine"
+      },
+      {
+        "id": "c",
+        "label": "Persistent Disk",
+        "detail": "Attached block storage"
+      },
+      {
+        "id": "d",
+        "label": "VPC Network",
+        "detail": "Software-defined networking"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Migrates workload"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Mounts storage"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Connects to network"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Application Migration to Compute Engine, why is Compute Engine chosen for legacy systems?",
+      "options": [
+        "It provides customizable virtual machines that allow businesses to lift and shift legacy workloads.",
+        "It automatically converts all monolithic code into microservices.",
+        "It eliminates the need for any operating system management.",
+        "It is exclusively designed for AI and machine learning training."
+      ],
+      "answerIndex": 0,
+      "explanation": "Compute Engine is specifically highlighted as the solution for moving legacy workloads that require specific OS configurations.",
+      "evidence": "Compute Engine provides customizable virtual machines that allow businesses to lift and shift legacy workloads into a managed cloud environment, retaining full control over the OS and network stack while gaining infrastructure scalability."
+    },
+    {
+      "question": "In Legacy Application Migration to Compute Engine, what is a primary operational trade-off?",
+      "options": [
+        "The user must manage the guest operating system, including patching.",
+        "The user cannot attach persistent disks to the virtual machines.",
+        "The user is restricted to a single pre-configured machine type.",
+        "The user cannot use VPC networks for their instances."
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation notes that while Compute Engine provides control, it also requires the user to handle OS-level maintenance.",
+      "evidence": "Compute Engine requires manual management of the guest operating system, including patching and security updates, which can be checked by monitoring OS-level logs and security compliance reports."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:26.121Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_dropbox",
+  "title": "Architectural Firm Project Documentation Consolidation",
+  "business": "A mid-sized architectural firm managing thousands of project-specific PDF specifications and CAD exports stored in fragmented Dropbox folders.",
+  "problem": "Project managers spend excessive time manually searching through nested Dropbox directories to find the latest version of building codes and client requirements, leading to version control errors.",
+  "solution": "By integrating the Dropbox connector, Claude gains the ability to index and query the firm's Dropbox file metadata and content directly, allowing project managers to retrieve specific technical requirements via natural language queries without leaving the Claude interface.",
+  "steps": [
+    "Authenticate the Dropbox connector within the Claude interface to grant read access to the firm's project root directory.",
+    "Use the search tool to identify relevant project folders based on client names or site locations.",
+    "Execute the list_folder tool to verify the presence of the most recent specification documents.",
+    "Utilize the create_shared_link tool to generate secure access points for external contractors once the correct files are identified.",
+    "Save summarized project notes directly into a new Dropbox folder using the create_file tool."
+  ],
+  "outcome": "Improved project consistency and reduced administrative overhead by centralizing information retrieval and documentation workflows within a single conversational workspace.",
+  "limitation": "The connector is strictly bound by existing Dropbox permissions; if a user lacks native Dropbox access to a specific folder, Claude cannot retrieve or process those files. Verification requires checking the user's Dropbox account settings to ensure appropriate folder-level permissions are granted.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Dropbox-Claude Integration Workflow",
+    "description": "The flow of data from Dropbox storage to the Claude interface for project management.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Dropbox Storage",
+        "detail": "Central repository for architectural files"
+      },
+      {
+        "id": "b",
+        "label": "Dropbox Connector",
+        "detail": "API bridge for Claude"
+      },
+      {
+        "id": "c",
+        "label": "Claude Interface",
+        "detail": "AI workspace for project managers"
+      },
+      {
+        "id": "d",
+        "label": "Project Manager",
+        "detail": "User initiating queries"
+      }
+    ],
+    "edges": [
+      {
+        "from": "d",
+        "to": "c",
+        "label": "submits natural language query"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "invokes search/list tools"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "fetches metadata/content"
+      },
+      {
+        "from": "a",
+        "to": "b",
+        "label": "returns file data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/dropbox",
+      "label": "Dropbox connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Firm Project Documentation Consolidation, what is the primary benefit of the solution?",
+      "options": [
+        "It automates the creation of architectural CAD drawings.",
+        "It enables natural language retrieval of project files to reduce manual search time.",
+        "It replaces the need for Dropbox folder permissions entirely.",
+        "It provides real-time performance metrics for project managers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on using natural language queries to find files, directly addressing the problem of time-consuming manual searches.",
+      "evidence": "By integrating the Dropbox connector, Claude gains the ability to index and query the firm's Dropbox file metadata and content directly, allowing project managers to retrieve specific technical requirements via natural language queries without leaving the Claude interface."
+    },
+    {
+      "question": "In Architectural Firm Project Documentation Consolidation, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot create new files in Dropbox.",
+        "Claude can access any file in the Dropbox account regardless of permissions.",
+        "Access is restricted by existing Dropbox permissions, requiring manual verification.",
+        "The connector only works with PDF files."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario emphasize that Claude respects existing permissions, meaning access is not universal.",
+      "evidence": "The connector is strictly bound by existing Dropbox permissions; if a user lacks native Dropbox access to a specific folder, Claude cannot retrieve or process those files."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:52.414Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:48.384Z"
+}

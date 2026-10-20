@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_jonatasgrosman_wav2vec2_large_xlsr_53_portuguese",
+  "title": "Archiving Portuguese Legislative Debates",
+  "business": "Municipal legislative bodies managing thousands of hours of recorded audio from public sessions.",
+  "problem": "Legislative records are currently stored as raw audio files, making it impossible for citizens or staff to search for specific policy discussions, motions, or speaker mentions without manual listening.",
+  "solution": "The wav2vec2-large-xlsr-53-portuguese model provides an automated speech-to-text pipeline that converts these audio archives into searchable text transcripts, enabling keyword indexing and content discovery.",
+  "steps": [
+    "Standardize all incoming legislative audio recordings to a 16kHz sampling rate to match model requirements.",
+    "Initialize the Wav2Vec2ForCTC model and processor using the jonatasgrosman/wav2vec2-large-xlsr-53-portuguese weights.",
+    "Implement a batch processing script to iterate through audio files, converting them into numerical arrays.",
+    "Pass the processed arrays through the model to generate text transcriptions for each session.",
+    "Store the resulting text in a database linked to the original audio timestamps for retrieval."
+  ],
+  "outcome": "A fully searchable digital archive where staff can instantly locate specific legislative debates by querying keywords, significantly reducing administrative research time.",
+  "limitation": "The model requires audio input sampled at exactly 16kHz; failure to resample audio correctly will result in degraded transcription accuracy or processing errors during inference.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legislative Audio Transcription Pipeline",
+    "description": "The flow from raw audio input to searchable text output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Audio",
+        "detail": "Unstructured legislative recordings"
+      },
+      {
+        "id": "b",
+        "label": "Resampler",
+        "detail": "Converts audio to 16kHz"
+      },
+      {
+        "id": "c",
+        "label": "Wav2Vec2 Model",
+        "detail": "Inference engine for Portuguese"
+      },
+      {
+        "id": "d",
+        "label": "Searchable Text",
+        "detail": "Indexed transcriptions"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "16kHz array"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "transcription"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import librosa\nfrom transformers import Wav2Vec2ForCTC, Wav2Vec2Processor\n\n# Load model and processor\nprocessor = Wav2Vec2Processor.from_pretrained(\"jonatasgrosman/wav2vec2-large-xlsr-53-portuguese\")\nmodel = Wav2Vec2ForCTC.from_pretrained(\"jonatasgrosman/wav2vec2-large-xlsr-53-portuguese\")\n\n# Ensure audio is 16kHz as required\naudio, sr = librosa.load(\"session_recording.wav\", sr=16000)\n\n# Process and transcribe\ninputs = processor(audio, sampling_rate=16000, return_tensors=\"pt\")\nlogits = model(**inputs).logits\npredicted_ids = torch.argmax(logits, dim=-1)\ntranscription = processor.batch_decode(predicted_ids)",
+    "explanation": "This code demonstrates the essential steps: loading the specific Portuguese model, ensuring the audio is resampled to 16kHz, and performing inference to extract text."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/jonatasgrosman/wav2vec2-large-xlsr-53-portuguese",
+      "label": "jonatasgrosman/wav2vec2-large-xlsr-53-portuguese · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Archiving Portuguese Legislative Debates, what is the primary benefit of using the model?",
+      "options": [
+        "It enables keyword indexing and content discovery for audio archives.",
+        "It automatically records new legislative sessions in high definition.",
+        "It translates Portuguese audio into multiple international languages.",
+        "It compresses audio files to save storage space on servers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the problem is the inability to search audio, and the solution is to convert it to searchable text.",
+      "evidence": "The wav2vec2-large-xlsr-53-portuguese model provides an automated speech-to-text pipeline that converts these audio archives into searchable text transcripts, enabling keyword indexing and content discovery."
+    },
+    {
+      "question": "In Archiving Portuguese Legislative Debates, what is a critical technical requirement for successful inference?",
+      "options": [
+        "The model must be retrained on every new audio file.",
+        "Audio input must be sampled at exactly 16kHz.",
+        "The system must be connected to a live internet stream.",
+        "The audio must be recorded in a professional studio."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the model requires a specific sampling rate for the audio input.",
+      "evidence": "The model requires audio input sampled at exactly 16kHz; failure to resample audio correctly will result in degraded transcription accuracy or processing errors during inference."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:24.140Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:19.516Z"
+}

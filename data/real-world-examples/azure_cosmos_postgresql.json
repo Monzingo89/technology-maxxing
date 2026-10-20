@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_cosmos_postgresql",
+  "title": "Global Logistics Fleet Tracking Scaling",
+  "business": "Logistics companies managing millions of real-time IoT sensor updates from a global fleet.",
+  "problem": "A single-node PostgreSQL instance hits write-throughput bottlenecks and storage limits when processing high-velocity telemetry data from thousands of vehicles simultaneously.",
+  "solution": "Azure Cosmos DB for PostgreSQL distributes PostgreSQL tables across multiple nodes, allowing the database to scale horizontally by partitioning data based on a distribution column, such as a vehicle identifier.",
+  "steps": [
+    "Provision an Azure Cosmos DB for PostgreSQL cluster.",
+    "Select a distribution column, such as vehicle_id, to serve as the shard key.",
+    "Execute the distribution function to partition existing tables across the worker nodes.",
+    "Configure application connection strings to route queries through the coordinator node."
+  ],
+  "outcome": "The system achieves horizontal write scalability, allowing the database to handle increasing telemetry ingestion rates by adding more worker nodes to the cluster.",
+  "limitation": "Queries that do not include the distribution column in the WHERE clause may result in cross-shard communication, which increases latency; verify this by checking the query plan for distributed execution overhead.",
+  "diagram": {
+    "kind": "er",
+    "title": "Distributed Telemetry Architecture",
+    "description": "Shows how the coordinator node routes data to worker nodes based on the distribution key.",
+    "nodes": [
+      {
+        "id": "app",
+        "label": "IoT Application",
+        "detail": "Sends telemetry data"
+      },
+      {
+        "id": "coord",
+        "label": "Coordinator Node",
+        "detail": "Routes queries and manages metadata"
+      },
+      {
+        "id": "w1",
+        "label": "Worker Node 1",
+        "detail": "Stores shard A"
+      },
+      {
+        "id": "w2",
+        "label": "Worker Node 2",
+        "detail": "Stores shard B"
+      }
+    ],
+    "edges": [
+      {
+        "from": "app",
+        "to": "coord",
+        "label": "SQL Query"
+      },
+      {
+        "from": "coord",
+        "to": "w1",
+        "label": "Distributed Write"
+      },
+      {
+        "from": "coord",
+        "to": "w2",
+        "label": "Distributed Write"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Database for PostgreSQL"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Fleet Tracking Scaling, why is a distributed database approach necessary?",
+      "options": [
+        "To overcome write-throughput bottlenecks on a single node.",
+        "To reduce the cost of storage for historical logs.",
+        "To eliminate the need for a coordinator node.",
+        "To enable local execution of all SQL queries."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that a single-node instance fails to handle high-velocity telemetry data, necessitating horizontal scaling.",
+      "evidence": "A single-node PostgreSQL instance hits write-throughput bottlenecks and storage limits when processing high-velocity telemetry data from thousands of vehicles simultaneously."
+    },
+    {
+      "question": "In Global Logistics Fleet Tracking Scaling, what is a primary trade-off when querying distributed tables?",
+      "options": [
+        "The coordinator node cannot process any SQL queries.",
+        "Queries missing the distribution column may cause cross-shard latency.",
+        "Data must be manually re-partitioned every hour.",
+        "Worker nodes cannot store data locally."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that queries lacking the distribution column trigger cross-shard communication, impacting performance.",
+      "evidence": "Queries that do not include the distribution column in the WHERE clause may result in cross-shard communication, which increases latency; verify this by checking the query plan for distributed execution overhead."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:43.317Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

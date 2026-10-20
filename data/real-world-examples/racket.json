@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "racket",
+  "title": "Domain-Specific Protocol Orchestration",
+  "business": "Financial firms managing complex, high-frequency regulatory reporting pipelines.",
+  "problem": "Engineers struggle with boilerplate code when mapping diverse, evolving financial data formats to rigid internal reporting schemas, leading to maintenance bottlenecks.",
+  "solution": "Racket allows developers to create a domain-specific language (DSL) via macros that abstracts away the repetitive mapping logic, enabling domain experts to define reporting rules in a syntax tailored to their specific data structures.",
+  "steps": [
+    "Define the core syntax rules using Racket's macro system to map domain-specific keywords to underlying Racket functions.",
+    "Implement a parser to handle the specific surface syntax of the financial reporting rules.",
+    "Integrate the macro-based DSL into the existing Racket project without requiring external build tools.",
+    "Utilize DrRacket's IDE support to provide visual feedback and identifier tracking for the new language constructs."
+  ],
+  "outcome": "Reduced code duplication and improved clarity in reporting logic, allowing developers to focus on business rules rather than syntactic boilerplate.",
+  "limitation": "The primary trade-off is the cognitive overhead of mastering the macro system; developers must verify that their custom syntax correctly propagates source information to ensure the IDE remains useful for debugging.",
+  "diagram": {
+    "kind": "flow",
+    "title": "DSL Implementation Flow",
+    "description": "The transformation process from domain-specific rules to executable Racket code.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Domain Rules",
+        "detail": "Input source code written in the custom DSL"
+      },
+      {
+        "id": "b",
+        "label": "Macro Expansion",
+        "detail": "Rewriting custom syntax into Racket expressions"
+      },
+      {
+        "id": "c",
+        "label": "Racket Compiler",
+        "detail": "Standard compilation of expanded code"
+      },
+      {
+        "id": "d",
+        "label": "Executable",
+        "detail": "Final reporting application"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "syntax-parse"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "expansion"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "compilation"
+      }
+    ]
+  },
+  "code": {
+    "language": "racket",
+    "content": "(define-syntax (report-rule stx) ;; Define a macro to simplify reporting logic\n  (syntax-parse stx\n    [(_ field value) #'(set-field! field value)])) ;; Rewrite custom syntax to standard Racket",
+    "explanation": "This macro maps a domain-specific 'report-rule' command directly to the underlying field-setting function, reducing boilerplate in the financial pipeline."
+  },
+  "sources": [
+    {
+      "url": "https://racket-lang.org/",
+      "label": "Racket"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Domain-Specific Protocol Orchestration, how does Racket address the problem of maintenance bottlenecks?",
+      "options": [
+        "By providing a pre-built financial reporting library.",
+        "By enabling the creation of a DSL that abstracts repetitive mapping logic.",
+        "By automatically generating documentation for all financial schemas.",
+        "By enforcing strict typing on all incoming financial data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that Racket allows developers to create a DSL via macros to abstract away repetitive mapping logic.",
+      "evidence": "Racket allows developers to create a domain-specific language (DSL) via macros that abstracts away the repetitive mapping logic, enabling domain experts to define reporting rules in a syntax tailored to their specific data structures."
+    },
+    {
+      "question": "In Domain-Specific Protocol Orchestration, what is a key limitation of using the macro system?",
+      "options": [
+        "It requires external Makefiles for every project.",
+        "It prevents the use of DrRacket's IDE features.",
+        "It introduces cognitive overhead and requires verification of source information propagation.",
+        "It is incompatible with existing Racket libraries."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights the cognitive overhead of macros and the need to ensure source information is propagated for IDE support.",
+      "evidence": "The primary trade-off is the cognitive overhead of mastering the macro system; developers must verify that their custom syntax correctly propagates source information to ensure the IDE remains useful for debugging."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:53.842Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:49.977Z"
+}

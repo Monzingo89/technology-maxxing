@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_data_fusion",
+  "title": "Retail Inventory Integration Pipeline",
+  "business": "Retailers managing multi-source inventory data who need unified reporting without manual coding.",
+  "problem": "High operational overhead and data silos caused by disparate inventory systems, leading to inconsistent stock levels across regional warehouses.",
+  "solution": "Cloud Data Fusion provides a managed graphical data integration service built around pipelines and connectors to centralize and transform inventory data into a unified format.",
+  "steps": [
+    "Provision a Cloud Data Fusion instance within the Google Cloud project.",
+    "Configure source connectors to ingest raw inventory data from regional warehouse databases.",
+    "Utilize the graphical interface to design transformation pipelines that normalize stock units and timestamps.",
+    "Deploy the pipeline to execute data movement and transformation into the central data warehouse.",
+    "Monitor pipeline execution status and logs through the integrated dashboard."
+  ],
+  "outcome": "A streamlined, automated data flow that ensures consistent inventory visibility across all retail locations.",
+  "limitation": "The visual pipeline approach may abstract complex logic; developers should check the execution logs to identify performance bottlenecks in high-volume data transformations.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Data Integration Flow",
+    "description": "Data flows from regional sources through the Data Fusion pipeline into the central warehouse.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse DB 1",
+        "detail": "Regional SQL database"
+      },
+      {
+        "id": "b",
+        "label": "Warehouse DB 2",
+        "detail": "Regional SQL database"
+      },
+      {
+        "id": "c",
+        "label": "Data Fusion",
+        "detail": "Managed graphical integration service"
+      },
+      {
+        "id": "d",
+        "label": "Central Warehouse",
+        "detail": "Unified data repository"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Ingest"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Transform and Load"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Integration Pipeline, what is the primary role of the chosen technology?",
+      "options": [
+        "To provide a managed graphical data integration service built around pipelines and connectors.",
+        "To serve as a low-latency non-relational database for inventory storage.",
+        "To act as a machine learning platform for predicting future stock demand.",
+        "To manage virtual machine clusters for high-performance computing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies Cloud Data Fusion as the tool used to centralize and transform data via its graphical pipeline capabilities.",
+      "evidence": "Cloud Data Fusion provides a managed graphical data integration service built around pipelines and connectors to centralize and transform inventory data into a unified format."
+    },
+    {
+      "question": "In Retail Inventory Integration Pipeline, what is a recommended practice for managing pipeline limitations?",
+      "options": [
+        "Avoid using graphical interfaces for data integration entirely.",
+        "Check the execution logs to identify performance bottlenecks in high-volume data transformations.",
+        "Manually rewrite every pipeline in a low-level programming language.",
+        "Increase the number of warehouse databases to improve pipeline speed."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly suggests checking execution logs to address performance issues caused by the abstraction of the visual pipeline.",
+      "evidence": "The visual pipeline approach may abstract complex logic; developers should check the execution logs to identify performance bottlenecks in high-volume data transformations."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:58.939Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

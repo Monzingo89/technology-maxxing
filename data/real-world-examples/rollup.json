@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "rollup",
+  "title": "Optimizing Data Visualization Library Distribution",
+  "business": "A team developing a modular data visualization library for web developers.",
+  "problem": "The library contains dozens of specialized chart types, but users only need one or two. Bundling the entire library forces end-users to download massive, unused code blocks, increasing page load times.",
+  "solution": "Rollup utilizes ES module static analysis to perform tree-shaking, which identifies and excludes unused functions from the final bundle, ensuring only the necessary code is shipped.",
+  "steps": [
+    "Refactor the library codebase to use ES6 import and export statements for all internal modules.",
+    "Configure the Rollup build process to target multiple output formats, specifically ES modules for modern bundlers and CommonJS for legacy Node.js compatibility.",
+    "Define the entry point in the package.json file to point to the compiled CommonJS output.",
+    "Add a module field in package.json that points to the ES module version to enable tree-shaking for end-users.",
+    "Execute the Rollup build command to generate the optimized bundles."
+  ],
+  "outcome": "End-users receive significantly smaller bundles because Rollup strips out the unused chart components during the build process.",
+  "limitation": "Rollup's tree-shaking relies on static analysis of ES modules; dynamic imports or side-effect-heavy code can prevent the bundler from safely removing unused exports, which can be verified by inspecting the final bundle output for unexpected code remnants.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Module Bundling and Tree-Shaking Flow",
+    "description": "This diagram illustrates how Rollup processes source code into optimized formats.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "ES6 modules with many exports"
+      },
+      {
+        "id": "b",
+        "label": "Rollup Engine",
+        "detail": "Static analysis and tree-shaking"
+      },
+      {
+        "id": "c",
+        "label": "ES Module Output",
+        "detail": "Clean, tree-shakable code"
+      },
+      {
+        "id": "d",
+        "label": "CJS/UMD Output",
+        "detail": "Legacy compatible bundle"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "imports"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generates"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "compiles"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://rollupjs.org/introduction/",
+      "label": "Introduction | Rollup"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Data Visualization Library Distribution, how does Rollup address the problem of shipping unused code?",
+      "options": [
+        "By automatically minifying all variable names to reduce file size.",
+        "By statically analyzing ES modules to exclude unused functions from the final bundle.",
+        "By forcing users to manually select which modules to include in their project.",
+        "By converting all CommonJS modules into a single, monolithic file."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using tree-shaking to identify and remove unused code, which is the core mechanism Rollup uses to solve the bloat problem.",
+      "evidence": "Rollup utilizes ES module static analysis to perform tree-shaking, which identifies and excludes unused functions from the final bundle, ensuring only the necessary code is shipped."
+    },
+    {
+      "question": "In Optimizing Data Visualization Library Distribution, what is a primary limitation of the tree-shaking process?",
+      "options": [
+        "It only works if the library is written in CommonJS format.",
+        "It requires the developer to manually delete unused code before building.",
+        "Dynamic imports or side-effect-heavy code can prevent the bundler from safely removing unused exports.",
+        "It increases the complexity of the final bundle by adding extra dependencies."
+      ],
+      "answerIndex": 2,
+      "explanation": "Tree-shaking relies on static analysis; code patterns that obscure the module graph, such as dynamic imports or side effects, hinder the bundler's ability to prune the tree.",
+      "evidence": "Rollup's tree-shaking relies on static analysis of ES modules; dynamic imports or side-effect-heavy code can prevent the bundler from safely removing unused exports, which can be verified by inspecting the final bundle output for unexpected code remnants."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:27.019Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:23.088Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_audio",
+  "title": "Voice-Activated Field Maintenance Assistant",
+  "business": "Industrial field technicians who need hands-free access to technical manuals and diagnostic guidance while performing complex equipment repairs.",
+  "problem": "Technicians often wear protective gloves and operate in environments where typing on a mobile device is physically impossible or hazardous, leading to delays in accessing critical repair documentation.",
+  "solution": "The gpt-audio model allows technicians to interact with a centralized knowledge base using natural voice commands, receiving direct audio responses that guide them through repair steps without requiring manual input.",
+  "steps": [
+    "Capture raw audio input from the technician using a mobile microphone interface.",
+    "Send the audio data directly to the v1/chat/completions endpoint using the gpt-audio model ID.",
+    "Configure the request to accept audio modalities for both input and output.",
+    "Receive the synthesized audio response from the model and stream it directly to the technician's headset.",
+    "Utilize function calling to retrieve specific equipment schematics if the model requires external data context."
+  ],
+  "outcome": "Technicians achieve higher operational efficiency and safety by maintaining focus on the equipment while receiving real-time, hands-free technical support.",
+  "limitation": "The model processes audio as tokens, which can lead to latency during complex reasoning tasks; developers should monitor the response time to ensure it meets the requirements for real-time field interaction.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Voice-Activated Maintenance Workflow",
+    "description": "The flow shows how audio data moves from the field technician to the model and back as a response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Technician",
+        "detail": "Field operator providing voice input"
+      },
+      {
+        "id": "b",
+        "label": "Mobile App",
+        "detail": "Captures and transmits audio"
+      },
+      {
+        "id": "c",
+        "label": "gpt-audio Model",
+        "detail": "Processes audio and generates response"
+      },
+      {
+        "id": "d",
+        "label": "Headset",
+        "detail": "Plays audio output to technician"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "speaks query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends audio to v1/chat/completions"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "streams audio response"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-audio",
+      "label": "GPT-Audio Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Voice-Activated Field Maintenance Assistant, what is the primary benefit of using gpt-audio?",
+      "options": [
+        "It eliminates the need for manual typing in hazardous environments.",
+        "It provides faster text-based documentation than traditional models.",
+        "It automatically repairs equipment using robotic arms.",
+        "It reduces the cost of data storage for maintenance logs."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that technicians cannot type due to gloves and safety hazards, making hands-free audio interaction the primary solution.",
+      "evidence": "Technicians often wear protective gloves and operate in environments where typing on a mobile device is physically impossible or hazardous, leading to delays in accessing critical repair documentation."
+    },
+    {
+      "question": "In Voice-Activated Field Maintenance Assistant, what is a key limitation to consider during implementation?",
+      "options": [
+        "The model cannot handle function calling.",
+        "Audio processing can introduce latency during complex reasoning.",
+        "The model only supports text input.",
+        "The model requires a constant internet connection for local processing."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that audio processing as tokens can result in latency during complex reasoning tasks.",
+      "evidence": "The model processes audio as tokens, which can lead to latency during complex reasoning tasks; developers should monitor the response time to ensure it meets the requirements for real-time field interaction."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:26.361Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:22.451Z"
+}

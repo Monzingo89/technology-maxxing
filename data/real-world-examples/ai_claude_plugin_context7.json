@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_plugin_context7",
+  "title": "Legacy API Migration for FinTech Infrastructure",
+  "business": "A mid-sized financial technology firm managing a legacy payment gateway that requires frequent updates to third-party banking integration libraries.",
+  "problem": "The engineering team frequently encounters build failures and runtime errors because the LLM's training data contains deprecated API signatures for rapidly evolving banking SDKs, leading to hallucinated code patterns that do not match the current production library versions.",
+  "solution": "By integrating the Context7 MCP server, the team forces the LLM to fetch real-time, version-specific documentation directly from source repositories before generating code, ensuring that the suggested implementation aligns with the exact library version currently deployed in their environment.",
+  "steps": [
+    "Identify the specific banking SDK version currently in use within the project's dependency manifest.",
+    "Invoke the resolve-library-id tool via the Claude interface to map the SDK name to a Context7-compatible identifier.",
+    "Execute the query-docs tool by specifying the library identifier and the target version to pull the latest API signatures.",
+    "Instruct Claude to generate the integration middleware using the retrieved documentation as the primary context source."
+  ],
+  "outcome": "The engineering team achieves a higher rate of first-time-right code generation, significantly reducing the time spent debugging deprecated API calls and manual documentation cross-referencing.",
+  "limitation": "The primary limitation is the dependency on the availability and indexing speed of the source repository; if the upstream maintainers delay documentation updates, the LLM will still retrieve stale information, which can be verified by checking the 'last-updated' timestamp in the tool's metadata response.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Context7 Integration Workflow",
+    "description": "The flow of data from the source repository to the LLM context window.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer Prompt",
+        "detail": "Input containing library requirements"
+      },
+      {
+        "id": "b",
+        "label": "Context7 MCP Server",
+        "detail": "Middleware for external documentation"
+      },
+      {
+        "id": "c",
+        "label": "Source Repository",
+        "detail": "Upstream documentation and code"
+      },
+      {
+        "id": "d",
+        "label": "Claude LLM",
+        "detail": "Context-aware code generation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers resolve-library-id"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "fetches version-specific docs"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns raw documentation"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "injects context into prompt"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/plugins/context7",
+      "label": "Context7 | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy API Migration for FinTech Infrastructure, what is the primary reason for using Context7?",
+      "options": [
+        "To bypass the need for human code reviews entirely.",
+        "To prevent the LLM from using hallucinated APIs based on outdated training data.",
+        "To automate the deployment of code to production servers.",
+        "To reduce the cost of cloud computing resources."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that the team suffers from build failures caused by the LLM's reliance on stale training data, which Context7 solves by pulling current documentation.",
+      "evidence": "The engineering team frequently encounters build failures and runtime errors because the LLM's training data contains deprecated API signatures for rapidly evolving banking SDKs, leading to hallucinated code patterns that do not match the current production library versions."
+    },
+    {
+      "question": "In Legacy API Migration for FinTech Infrastructure, what is a key limitation of the implementation?",
+      "options": [
+        "The plugin cannot handle more than two libraries at once.",
+        "The LLM might still receive stale information if the upstream source repository is not updated.",
+        "The process requires manual compilation of the source code.",
+        "The tool is incompatible with banking SDKs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that the accuracy of the retrieved data is bound by the upstream maintainers' update frequency.",
+      "evidence": "The primary limitation is the dependency on the availability and indexing speed of the source repository; if the upstream maintainers delay documentation updates, the LLM will still retrieve stale information, which can be verified by checking the 'last-updated' timestamp in the tool's metadata response."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:38.379Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:34.007Z"
+}

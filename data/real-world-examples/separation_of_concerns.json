@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "separation_of_concerns",
+  "title": "Modularizing Logistics Dispatch Systems",
+  "business": "A regional logistics provider managing a fleet of delivery vehicles and a customer-facing order portal.",
+  "problem": "The monolithic codebase tightly coupled the order validation logic with the vehicle routing algorithm, causing deployment failures whenever the routing logic was updated to account for new traffic patterns.",
+  "solution": "By applying Separation of Concerns, we decouple the Order Management Service from the Routing Engine. The Order Management Service handles customer input and persistence, while the Routing Engine operates as an isolated module that consumes validated order data via a stable interface, ensuring that changes to routing logic do not impact order intake stability.",
+  "steps": [
+    "Define a clear interface contract between the Order Management Service and the Routing Engine.",
+    "Extract the routing logic into a standalone library or microservice.",
+    "Implement an event-driven communication layer to pass order data to the routing module.",
+    "Refactor the Order Management Service to treat the Routing Engine as an external dependency.",
+    "Verify that order intake remains functional even if the routing module is temporarily offline."
+  ],
+  "outcome": "The engineering team achieves greater velocity because they can iterate on routing algorithms independently of the order intake system, resulting in a more resilient and maintainable codebase.",
+  "limitation": "Increased architectural complexity introduces potential latency during inter-service communication; monitor this by tracking the round-trip time between the order submission event and the routing confirmation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics System Decoupling",
+    "description": "This diagram illustrates the flow of data from the user to the separated system components.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Order Portal",
+        "detail": "User interface for order submission"
+      },
+      {
+        "id": "b",
+        "label": "Order Management",
+        "detail": "Validates and persists order data"
+      },
+      {
+        "id": "c",
+        "label": "Message Bus",
+        "detail": "Asynchronous communication channel"
+      },
+      {
+        "id": "d",
+        "label": "Routing Engine",
+        "detail": "Calculates delivery paths"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submits order"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "publishes validated order"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "triggers routing calculation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modularizing Logistics Dispatch Systems, what is the primary reason for decoupling the order validation logic from the routing algorithm?",
+      "options": [
+        "To prevent deployment failures caused by tight coupling.",
+        "To increase the total number of orders processed per second.",
+        "To reduce the cost of cloud infrastructure hosting.",
+        "To eliminate the need for a message bus."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem description explicitly states that tight coupling caused deployment failures when updating routing logic.",
+      "evidence": "The monolithic codebase tightly coupled the order validation logic with the vehicle routing algorithm, causing deployment failures whenever the routing logic was updated to account for new traffic patterns."
+    },
+    {
+      "question": "In Modularizing Logistics Dispatch Systems, what is a primary trade-off of implementing the proposed solution?",
+      "options": [
+        "The system becomes impossible to test.",
+        "Increased architectural complexity may introduce latency.",
+        "The routing engine will no longer be able to access order data.",
+        "The order portal will require a complete rewrite."
+      ],
+      "answerIndex": 1,
+      "explanation": "Decoupling services often introduces network overhead, which is identified as a limitation in the documentation.",
+      "evidence": "Increased architectural complexity introduces potential latency during inter-service communication; monitor this by tracking the round-trip time between the order submission event and the routing confirmation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:53.235Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

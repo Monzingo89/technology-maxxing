@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "serverless",
+  "title": "Automated Inventory Image Processing for Boutique Retailers",
+  "business": "A boutique fashion retailer that receives thousands of product photos daily from various suppliers, requiring immediate standardization and cataloging.",
+  "problem": "The retailer previously relied on a dedicated server to resize and format images, which remained idle during off-peak hours while struggling to handle sudden spikes in inventory uploads during seasonal collection launches.",
+  "solution": "By adopting serverless computing, the retailer replaces the static server with event-driven execution. When a supplier uploads a photo to cloud storage, an event triggers the execution of a function that processes the image. This ensures compute resources are only consumed during the actual transformation process, eliminating the need to manage server capacity or pay for idle time.",
+  "steps": [
+    "Configure an event trigger on the cloud storage bucket to detect new file uploads.",
+    "Develop a function to handle image resizing, format conversion, and metadata extraction.",
+    "Deploy the function code to the serverless environment without provisioning underlying infrastructure.",
+    "Set appropriate execution permissions to allow the function to read from the source bucket and write to the catalog bucket."
+  ],
+  "outcome": "The retailer achieves a seamless, scalable workflow where image processing capacity automatically adjusts to the volume of incoming files, ensuring consistent catalog updates without manual server oversight.",
+  "limitation": "A primary limitation is the cold start latency, where the first execution after a period of inactivity may experience a slight delay as the environment initializes. Developers can monitor this by observing the initialization duration in execution logs to determine if provisioned concurrency is required for latency-sensitive tasks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event-Driven Image Processing Workflow",
+    "description": "This diagram illustrates the flow from file upload to processed catalog entry.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Supplier Upload",
+        "detail": "Source file arrival in storage"
+      },
+      {
+        "id": "b",
+        "label": "Event Trigger",
+        "detail": "Notification of new file"
+      },
+      {
+        "id": "c",
+        "label": "Serverless Function",
+        "detail": "Logic for image processing"
+      },
+      {
+        "id": "d",
+        "label": "Catalog Storage",
+        "detail": "Final processed image destination"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "saves"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.aws.amazon.com/lambda/",
+      "label": "AWS Lambda Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Image Processing for Boutique Retailers, what is the primary benefit of using serverless computing over a dedicated server?",
+      "options": [
+        "Eliminating the need to manage server capacity and paying only for consumed compute time.",
+        "Increasing the physical storage capacity of the boutique's local warehouse.",
+        "Reducing the total number of images that suppliers are allowed to upload.",
+        "Replacing all human staff with automated image processing algorithms."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that serverless computing removes the need to manage servers and ensures costs are only incurred during actual execution, solving the problem of idle server costs.",
+      "evidence": "By adopting serverless computing, the retailer replaces the static server with event-driven execution. When a supplier uploads a photo to cloud storage, an event triggers the execution of a function that processes the image. This ensures compute resources are only consumed during the actual transformation process, eliminating the need to manage server capacity or pay for idle time."
+    },
+    {
+      "question": "In Automated Inventory Image Processing for Boutique Retailers, what is a potential trade-off of the serverless approach?",
+      "options": [
+        "The system requires manual server patching every week.",
+        "Cold start latency may cause a slight delay for the first execution after inactivity.",
+        "The system cannot handle more than ten images per day.",
+        "The retailer must purchase additional hardware to support the event triggers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies cold start latency as a trade-off inherent to serverless execution environments.",
+      "evidence": "A primary limitation is the cold start latency, where the first execution after a period of inactivity may experience a slight delay as the environment initializes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:57.750Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:53.638Z"
+}

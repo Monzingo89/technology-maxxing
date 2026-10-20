@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "tls",
+  "title": "Securing Internal Microservice Communication",
+  "business": "Internal microservices architectures where service-to-service traffic traverses shared network infrastructure.",
+  "problem": "Unencrypted traffic between internal services is vulnerable to eavesdropping and tampering by unauthorized actors with access to the internal network fabric.",
+  "solution": "Implementing TLS 1.3 provides a secure channel between communicating peers, ensuring confidentiality and integrity of data in transit through robust handshake and record protocols.",
+  "steps": [
+    "Negotiate cryptographic parameters using the TLS 1.3 handshake protocol to establish shared keying material.",
+    "Authenticate the server using asymmetric cryptography or pre-shared keys to verify identity.",
+    "Utilize the record protocol to independently protect traffic records using established traffic keys.",
+    "Apply record padding to obscure data lengths and mitigate potential traffic analysis."
+  ],
+  "outcome": "A hardened communication environment where data remains confidential and tamper-evident even if the underlying network is compromised.",
+  "limitation": "TLS 1.3 does not hide the length of the data it transmits, which can potentially be used for traffic analysis; this can be checked by monitoring record sizes and packet timing patterns.",
+  "diagram": {
+    "kind": "flow",
+    "title": "TLS 1.3 Handshake and Data Flow",
+    "description": "The flow shows the transition from initial negotiation to secure data transfer.",
+    "nodes": [
+      {
+        "id": "c",
+        "label": "Client",
+        "detail": "Initiates connection"
+      },
+      {
+        "id": "s",
+        "label": "Server",
+        "detail": "Authenticates and provides parameters"
+      },
+      {
+        "id": "h",
+        "label": "Handshake",
+        "detail": "Negotiates keys"
+      },
+      {
+        "id": "r",
+        "label": "Record Protocol",
+        "detail": "Protects data stream"
+      }
+    ],
+    "edges": [
+      {
+        "from": "c",
+        "to": "h",
+        "label": "ClientHello"
+      },
+      {
+        "from": "h",
+        "to": "s",
+        "label": "ServerHello"
+      },
+      {
+        "from": "s",
+        "to": "r",
+        "label": "Encrypted Channel"
+      },
+      {
+        "from": "c",
+        "to": "r",
+        "label": "Encrypted Data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.rfc-editor.org/rfc/rfc8446",
+      "label": "RFC 8446: The Transport Layer Security (TLS) Protocol Version 1.3"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Internal Microservice Communication, what is the primary problem addressed by TLS 1.3?",
+      "options": [
+        "Unencrypted traffic is vulnerable to eavesdropping and tampering.",
+        "The handshake protocol is too slow for microservices.",
+        "The record protocol fails to support asymmetric cryptography.",
+        "Network infrastructure is inherently secure without encryption."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that unencrypted internal traffic is susceptible to unauthorized access and modification.",
+      "evidence": "Unencrypted traffic between internal services is vulnerable to eavesdropping and tampering by unauthorized actors with access to the internal network fabric."
+    },
+    {
+      "question": "In Securing Internal Microservice Communication, what is a known limitation of the implemented protocol?",
+      "options": [
+        "It cannot authenticate the client side.",
+        "It does not hide the length of transmitted data.",
+        "It is incompatible with modern elliptic curve algorithms.",
+        "It requires a manual key exchange for every packet."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario note that while TLS provides confidentiality, it does not obscure the length of the data records.",
+      "evidence": "TLS 1.3 does not hide the length of the data it transmits, which can potentially be used for traffic analysis; this can be checked by monitoring record sizes and packet timing patterns."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:25.089Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:21.147Z"
+}

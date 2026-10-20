@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_chembl",
+  "title": "Accelerating Lead Optimization via ChEMBL Integration",
+  "business": "A computational chemistry team at a mid-sized pharmaceutical firm focused on small-molecule drug discovery.",
+  "problem": "Researchers face significant delays when manually cross-referencing internal lead compounds against public bioactivity data, leading to redundant synthesis and missed opportunities for target-binding optimization.",
+  "solution": "By integrating the ChEMBL connector with Claude, the team enables automated querying of the ChEMBL database to retrieve quantitative binding data and ADMET profiles directly within their research workflow, bypassing manual database navigation.",
+  "steps": [
+    "Configure the ChEMBL connector using the provided MCP endpoint to grant Claude secure access to the database.",
+    "Define a research prompt that specifies the target protein and the chemical scaffold of interest.",
+    "Invoke the get_bioactivity and get_admet tools to pull quantitative binding constants and pharmacokinetic properties for structurally similar compounds.",
+    "Synthesize the retrieved data into a comparative report to prioritize lead candidates for further synthesis."
+  ],
+  "outcome": "The team achieves a more streamlined lead optimization process, allowing for faster decision-making on which chemical scaffolds to advance based on verified bioactivity data.",
+  "limitation": "The connector relies on the current state of the ChEMBL database, which may not include the most recent proprietary or unpublished research; users must verify results against internal lab notebooks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Lead Optimization Workflow",
+    "description": "This diagram illustrates the flow from research inquiry to data-driven decision making using the ChEMBL connector.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Research Team",
+        "detail": "Initiates query for lead compounds"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Processes request via MCP"
+      },
+      {
+        "id": "c",
+        "label": "ChEMBL Database",
+        "detail": "Source of bioactivity/ADMET data"
+      },
+      {
+        "id": "d",
+        "label": "Lead Candidate Report",
+        "detail": "Final output for synthesis"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submits scaffold query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes get_bioactivity"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns binding constants"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates synthesis priority"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/chembl",
+      "label": "ChEMBL connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Accelerating Lead Optimization via ChEMBL Integration, what is the primary problem addressed by the connector?",
+      "options": [
+        "Manual cross-referencing delays and redundant synthesis",
+        "Lack of internal laboratory equipment",
+        "Inability to access proprietary clinical trial data",
+        "High costs of chemical reagents"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that researchers face delays due to manual cross-referencing of public data, which the connector solves.",
+      "evidence": "Researchers face significant delays when manually cross-referencing internal lead compounds against public bioactivity data, leading to redundant synthesis and missed opportunities for target-binding optimization."
+    },
+    {
+      "question": "In Accelerating Lead Optimization via ChEMBL Integration, what is a key limitation of the implementation?",
+      "options": [
+        "The connector is incompatible with internal databases",
+        "Data may not include recent unpublished research",
+        "The connector requires manual SQL coding",
+        "It only supports ADMET data, not bioactivity"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that the database does not contain unpublished or proprietary research, requiring external verification.",
+      "evidence": "The connector relies on the current state of the ChEMBL database, which may not include the most recent proprietary or unpublished research; users must verify results against internal lab notebooks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:16.156Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:12.479Z"
+}

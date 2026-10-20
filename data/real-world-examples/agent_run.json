@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "agent_run",
+  "title": "Automated Inventory Reconciliation Agent",
+  "business": "Logistics firms managing high-frequency warehouse stock updates.",
+  "problem": "Manual reconciliation of inventory discrepancies between disparate database systems is slow and prone to human error, leading to stock-outs or over-ordering.",
+  "solution": "An Agent Run orchestrates a bounded attempt to reconcile stock by using a Runner to execute tool calls that query inventory databases, compare values, and generate summary reports within a single, controlled session.",
+  "steps": [
+    "Define an Agent with specific instructions for inventory comparison and access to database query tools.",
+    "Initialize a Runner to manage the lifecycle of the reconciliation request.",
+    "Configure a RunConfig to set max_turns, preventing infinite loops during complex data cross-referencing.",
+    "Execute the Runner to process the reconciliation logic through model turns, tool execution, and final output generation.",
+    "Capture the RunResult to verify the final reconciliation status or identify unresolved discrepancies."
+  ],
+  "outcome": "Consistent, automated inventory audits that reduce manual intervention and provide immediate visibility into stock discrepancies.",
+  "limitation": "The Runner loop terminates if max_turns is exceeded, which may occur during large-scale data reconciliation; check for MaxTurnsExceeded exceptions to determine if the process requires manual continuation or higher turn limits.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Run Reconciliation Flow",
+    "description": "The sequence of events during an Agent Run for inventory reconciliation.",
+    "nodes": [
+      {
+        "id": "start",
+        "label": "Runner.run()",
+        "detail": "Initiates the agent loop"
+      },
+      {
+        "id": "llm",
+        "label": "LLM Turn",
+        "detail": "Analyzes inventory data"
+      },
+      {
+        "id": "tools",
+        "label": "Tool Execution",
+        "detail": "Queries warehouse databases"
+      },
+      {
+        "id": "end",
+        "label": "RunResult",
+        "detail": "Final reconciliation report"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "llm",
+        "label": "triggers"
+      },
+      {
+        "from": "llm",
+        "to": "tools",
+        "label": "emits tool calls"
+      },
+      {
+        "from": "tools",
+        "to": "llm",
+        "label": "appends results"
+      },
+      {
+        "from": "llm",
+        "to": "end",
+        "label": "produces final output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import Agent, Runner, RunConfig\n# Define the agent with inventory tools\nagent = Agent(name=\"InventoryBot\", tools=[query_db, compare_stock])\n# Execute the reconciliation with a turn limit\nresult = await Runner.run(agent, \"Reconcile warehouse A and B\", run_config=RunConfig(max_turns=5))",
+    "explanation": "This code demonstrates initializing an Agent and using the Runner to perform a bounded reconciliation task with a specific turn limit."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/running_agents/",
+      "label": "Running agents - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation Agent, how does the technology address the problem of manual reconciliation?",
+      "options": [
+        "By automating data queries and comparisons through a Runner-managed agent loop.",
+        "By replacing all human warehouse staff with autonomous robots.",
+        "By increasing the number of manual databases to ensure redundancy.",
+        "By bypassing the need for database tools entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution uses a Runner to execute tool calls that query and compare databases, automating the manual process.",
+      "evidence": "An Agent Run orchestrates a bounded attempt to reconcile stock by using a Runner to execute tool calls that query inventory databases, compare values, and generate summary reports within a single, controlled session."
+    },
+    {
+      "question": "In Automated Inventory Reconciliation Agent, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot connect to any external databases.",
+        "The agent loop terminates if max_turns is exceeded, requiring error handling.",
+        "The Runner is unable to return any final output.",
+        "The system requires a human to manually trigger every tool call."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario note that exceeding max_turns raises an exception, which is a critical boundary condition.",
+      "evidence": "The Runner loop terminates if max_turns is exceeded, which may occur during large-scale data reconciliation; check for MaxTurnsExceeded exceptions to determine if the process requires manual continuation or higher turn limits."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:34.512Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:30.435Z"
+}

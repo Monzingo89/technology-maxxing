@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "leader_election",
+  "title": "Coordinating Global Inventory Synchronization",
+  "business": "A global e-commerce platform managing real-time inventory levels across multiple regional data centers.",
+  "problem": "When multiple nodes attempt to update global inventory counts simultaneously, race conditions lead to overselling items, resulting in customer dissatisfaction and manual reconciliation costs.",
+  "solution": "Leader election designates a single coordinator node to serialize inventory updates, ensuring that all state changes are processed in a consistent, linear order regardless of which regional node receives the request.",
+  "steps": [
+    "Deploy a consensus-based service to manage the election state.",
+    "Configure candidate nodes to attempt a lease acquisition for the leadership role.",
+    "Implement a heartbeat mechanism to ensure the leader remains active.",
+    "Redirect all inventory write operations to the current leader node.",
+    "Trigger a new election if the current leader fails to renew its lease."
+  ],
+  "outcome": "Inventory consistency is maintained across the global system, preventing overselling while ensuring that write operations are processed in a predictable, sequential order.",
+  "limitation": "The primary limitation is the potential for a single point of bottlenecking or latency if the leader node is geographically distant from the incoming request; this can be checked by monitoring the round-trip time between regional nodes and the elected leader.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Leader Election Process Flow",
+    "description": "This diagram illustrates the transition from candidate nodes to an elected leader and the subsequent request routing.",
+    "nodes": [
+      {
+        "id": "c1",
+        "label": "Candidate Node A",
+        "detail": "Requests leadership lease"
+      },
+      {
+        "id": "c2",
+        "label": "Candidate Node B",
+        "detail": "Requests leadership lease"
+      },
+      {
+        "id": "l",
+        "label": "Elected Leader",
+        "detail": "Processes inventory updates"
+      },
+      {
+        "id": "db",
+        "label": "Inventory Store",
+        "detail": "Centralized state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "c1",
+        "to": "l",
+        "label": "Lease Request"
+      },
+      {
+        "from": "c2",
+        "to": "l",
+        "label": "Lease Request"
+      },
+      {
+        "from": "l",
+        "to": "db",
+        "label": "Serializes Writes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Coordinating Global Inventory Synchronization, why is leader election used?",
+      "options": [
+        "To serialize inventory updates and prevent race conditions.",
+        "To increase the number of concurrent write operations.",
+        "To eliminate the need for a central inventory database.",
+        "To allow all nodes to write to the database simultaneously."
+      ],
+      "answerIndex": 0,
+      "explanation": "Leader election ensures that only one node coordinates updates, which prevents the race conditions described in the problem.",
+      "evidence": "Leader election designates a single coordinator node to serialize inventory updates, ensuring that all state changes are processed in a consistent, linear order regardless of which regional node receives the request."
+    },
+    {
+      "question": "In Coordinating Global Inventory Synchronization, what is a primary limitation of the leader election approach?",
+      "options": [
+        "The system becomes impossible to scale horizontally.",
+        "The leader node can become a latency bottleneck for distant regions.",
+        "The election process requires manual intervention.",
+        "The system cannot handle node failures."
+      ],
+      "answerIndex": 1,
+      "explanation": "The leader acts as a central coordinator, which can introduce latency for nodes located far away from the leader's data center.",
+      "evidence": "The primary limitation is the potential for a single point of bottlenecking or latency if the leader node is geographically distant from the incoming request; this can be checked by monitoring the round-trip time between regional nodes and the elected leader."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:42.755Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

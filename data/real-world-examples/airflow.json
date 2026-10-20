@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "airflow",
+  "title": "Automated Retail Inventory Reconciliation",
+  "business": "Retailers managing multi-channel inventory across physical stores and e-commerce platforms.",
+  "problem": "Manual reconciliation processes lead to data silos, delayed stock updates, and frequent overselling of out-of-stock items due to inconsistent batch processing.",
+  "solution": "Apache Airflow orchestrates the end-to-end data pipeline by defining workflows as Python code, ensuring consistent execution of extraction, transformation, and load tasks across disparate systems.",
+  "steps": [
+    "Define a DAG to encapsulate the reconciliation logic and schedule it for hourly execution.",
+    "Implement extraction tasks using Python decorators to pull inventory logs from the e-commerce API.",
+    "Utilize BashOperators to trigger local database cleanup scripts for physical store records.",
+    "Set task dependencies using the bitshift operator to ensure data is cleaned before the final sync.",
+    "Monitor the execution status and logs via the Airflow web UI to verify successful reconciliation."
+  ],
+  "outcome": "Improved inventory accuracy and reduced manual intervention through reliable, automated, and observable pipeline execution.",
+  "limitation": "Airflow is designed for batch-oriented workflows; it is not suitable for low-latency streaming requirements. Check this by verifying if the business requirement demands sub-second data propagation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Reconciliation Pipeline",
+    "description": "The flow shows the sequence of tasks from data extraction to final synchronization.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "E-commerce API",
+        "detail": "Source of truth for online sales"
+      },
+      {
+        "id": "b",
+        "label": "Extract Task",
+        "detail": "Python task to fetch logs"
+      },
+      {
+        "id": "c",
+        "label": "Cleanup Task",
+        "detail": "BashOperator for DB maintenance"
+      },
+      {
+        "id": "d",
+        "label": "Sync Task",
+        "detail": "Final update to inventory system"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "data_fetch"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers_cleanup"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "enables_sync"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from airflow.sdk import DAG, task\nfrom airflow.providers.standard.operators.bash import BashOperator\n\nwith DAG(dag_id='inventory_sync', schedule='@hourly'):\n    @task\n    def extract_online(): # Fetch e-commerce data\n        return 'data'\n    cleanup = BashOperator(task_id='db_cleanup', bash_command='rm -rf /tmp/old_logs')\n    extract_online() >> cleanup # Define dependency",
+    "explanation": "This code demonstrates defining a DAG with a Python task for extraction and a BashOperator for cleanup, linked by a dependency operator."
+  },
+  "sources": [
+    {
+      "url": "https://airflow.apache.org/docs/apache-airflow/stable/",
+      "label": "What is Airflow®?"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Retail Inventory Reconciliation, what is the primary benefit of using Airflow for the described problem?",
+      "options": [
+        "It provides a low-latency streaming engine for real-time inventory updates.",
+        "It replaces manual processes with observable, scheduled, and consistent batch-oriented pipelines.",
+        "It automatically generates inventory reports without requiring any Python code.",
+        "It eliminates the need for database cleanup scripts entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using Airflow to replace manual, siloed processes with automated, scheduled, and observable pipelines.",
+      "evidence": "Apache Airflow orchestrates the end-to-end data pipeline by defining workflows as Python code, ensuring consistent execution of extraction, transformation, and load tasks across disparate systems."
+    },
+    {
+      "question": "In Automated Retail Inventory Reconciliation, what is a key limitation of the implementation?",
+      "options": [
+        "It cannot handle more than two tasks in a single DAG.",
+        "It is not suitable for low-latency streaming requirements.",
+        "It requires a proprietary UI that is not web-based.",
+        "It cannot be version-controlled because it is written in Python."
+      ],
+      "answerIndex": 1,
+      "explanation": "Airflow is explicitly noted as being for batch-oriented workflows, making it unsuitable for streaming.",
+      "evidence": "Airflow is designed for batch-oriented workflows; it is not suitable for low-latency streaming requirements."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:29.294Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:25.012Z"
+}

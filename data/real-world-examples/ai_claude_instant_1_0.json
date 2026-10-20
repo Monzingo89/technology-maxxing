@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_instant_1_0",
+  "title": "Legacy Model Lifecycle Management",
+  "business": "Enterprises maintaining long-running AI applications that rely on specific model versions.",
+  "problem": "Applications using retired models like Claude Instant 1.0 face service failure because requests to retired models will fail.",
+  "solution": "The solution involves auditing current API usage to identify legacy models and migrating workloads to active, supported models to maintain reliability.",
+  "steps": [
+    "Access the Usage page in the Claude Console to retrieve API consumption data.",
+    "Export the usage report as a CSV file to identify specific API keys and model versions in use.",
+    "Cross-reference the identified models against the official deprecation documentation to determine retirement status.",
+    "Update application code to point to the recommended active model replacement.",
+    "Perform thorough testing with the new model to ensure task performance before the retirement date."
+  ],
+  "outcome": "A stable, supported production environment that avoids service outages caused by model retirement.",
+  "limitation": "Migrating to a newer model may introduce variations in output behavior; verify this by testing applications with newer models well before the retirement date.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing retired models.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage"
+      },
+      {
+        "id": "b",
+        "label": "Audit Report",
+        "detail": "CSV containing model usage data"
+      },
+      {
+        "id": "c",
+        "label": "Legacy Model",
+        "detail": "Model identified as retired"
+      },
+      {
+        "id": "d",
+        "label": "Active Model",
+        "detail": "Target replacement for migration"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Export"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Migrate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Model Lifecycle Management, what is the primary risk of continuing to use Claude Instant 1.0?",
+      "options": [
+        "Requests to retired models will fail",
+        "Increased latency in API responses",
+        "Higher costs per token",
+        "Incompatibility with Python SDK v1.0"
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation explicitly states that requests to retired models will fail.",
+      "evidence": "Applications using retired models like Claude Instant 1.0 face service failure because requests to retired models will fail."
+    },
+    {
+      "question": "In Legacy Model Lifecycle Management, how should a developer mitigate the risk of behavior changes during migration?",
+      "options": [
+        "Contact the support team for model weights",
+        "Test applications with newer models well before the retirement date",
+        "Use deprecated parameters to force consistency",
+        "Wait for the retirement date to switch models"
+      ],
+      "answerIndex": 1,
+      "explanation": "Testing is the recommended method to ensure performance and behavior consistency when moving to a new model.",
+      "evidence": "Migrating to a newer model may introduce variations in output behavior; verify this by testing applications with newer models well before the retirement date."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:39.524Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

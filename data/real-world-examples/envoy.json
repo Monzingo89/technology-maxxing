@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "envoy",
+  "title": "Unified Traffic Routing for Polyglot Microservices",
+  "business": "A global retail platform operating a polyglot architecture with services written in Java, Go, and Python.",
+  "problem": "The engineering team struggles with inconsistent load balancing and observability across disparate service frameworks, leading to silent failures during inter-service communication.",
+  "solution": "Deploy Envoy as a sidecar proxy alongside every application instance to provide a uniform L7 communication bus, standardizing routing, load balancing, and telemetry collection regardless of the underlying application language.",
+  "steps": [
+    "Deploy an Envoy sidecar process alongside each application container to intercept all inbound and outbound traffic.",
+    "Configure the HTTP connection manager to handle L7 routing and protocol bridging between HTTP/1.1 and HTTP/2.",
+    "Enable the outlier detection subsystem to perform passive health checking and automatically eject unhealthy upstream hosts.",
+    "Integrate the Envoy administration port with a centralized statistics sink to aggregate observability data across the entire mesh."
+  ],
+  "outcome": "A transparent communication mesh where developers focus on application logic while Envoy ensures consistent traffic management and visibility.",
+  "limitation": "The out-of-process architecture introduces a small latency overhead per hop; verify this by monitoring the Envoy-reported request duration statistics via the administration interface.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Envoy Sidecar Traffic Flow",
+    "description": "Traffic flows from the client through the local Envoy proxy to the application and then to the destination service via its own Envoy proxy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "External request source"
+      },
+      {
+        "id": "b",
+        "label": "Envoy Sidecar 1",
+        "detail": "Edge proxy handling TLS and routing"
+      },
+      {
+        "id": "c",
+        "label": "App Service A",
+        "detail": "Internal business logic"
+      },
+      {
+        "id": "d",
+        "label": "Envoy Sidecar 2",
+        "detail": "Service-to-service proxy"
+      },
+      {
+        "id": "e",
+        "label": "App Service B",
+        "detail": "Target service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Localhost"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Egress"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Localhost"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.envoyproxy.io/docs/envoy/latest/intro/what_is_envoy",
+      "label": "What is Envoy"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Traffic Routing for Polyglot Microservices, what is the primary reason for using Envoy sidecars?",
+      "options": [
+        "To replace the application logic with proxy logic",
+        "To standardize routing and observability across different languages",
+        "To eliminate the need for HTTP/2 support",
+        "To increase the complexity of the network topology"
+      ],
+      "answerIndex": 1,
+      "explanation": "Envoy provides a uniform communication bus that works across different languages, solving the problem of inconsistent management in polyglot environments.",
+      "evidence": "Deploy Envoy as a sidecar proxy alongside every application instance to provide a uniform L7 communication bus, standardizing routing, load balancing, and telemetry collection regardless of the underlying application language."
+    },
+    {
+      "question": "In Unified Traffic Routing for Polyglot Microservices, what is a known limitation of the sidecar architecture?",
+      "options": [
+        "It prevents the use of HTTP/2",
+        "It requires all services to be written in C++",
+        "It introduces a small latency overhead per hop",
+        "It cannot perform passive health checking"
+      ],
+      "answerIndex": 2,
+      "explanation": "Running an out-of-process proxy adds a network hop, which introduces a small amount of latency that must be monitored.",
+      "evidence": "The out-of-process architecture introduces a small latency overhead per hop; verify this by monitoring the Envoy-reported request duration statistics via the administration interface."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:06.247Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:02.525Z"
+}

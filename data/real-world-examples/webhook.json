@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "webhook",
+  "title": "Automated Inventory Sync for Artisan Marketplace",
+  "business": "A boutique artisan marketplace platform connecting independent craftspeople with global buyers.",
+  "problem": "The marketplace struggles with inventory synchronization; when a craftsperson sells an item on their own personal website, the marketplace platform remains unaware, leading to overselling and customer dissatisfaction.",
+  "solution": "By implementing a webhook architecture, the marketplace platform provides a secure endpoint to the craftspeople's websites. Whenever a sale occurs on a remote site, the remote site pushes an HTTP POST request to the marketplace, triggering an immediate inventory update without requiring the marketplace to poll every individual seller's database.",
+  "steps": [
+    "The marketplace generates a unique, secret-protected webhook URL for each registered seller.",
+    "The seller configures their e-commerce platform to send a JSON payload to the provided URL upon a successful checkout event.",
+    "The marketplace server validates the request signature to ensure the payload originated from the trusted seller.",
+    "The marketplace parses the payload and updates the internal database record for the specific SKU."
+  ],
+  "outcome": "The marketplace achieves near real-time inventory accuracy, significantly reducing the frequency of oversold items and improving the reliability of the platform for end-users.",
+  "limitation": "Webhooks rely on the sender's ability to successfully reach the receiver's endpoint. If the receiver's server is down or experiences a network timeout, the event notification may be lost. To check for this, developers must implement a retry mechanism with exponential backoff and maintain an event log to identify failed delivery attempts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Webhook Inventory Sync Flow",
+    "description": "This diagram illustrates the flow of data from a seller's website to the marketplace platform when a purchase occurs.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Seller Store",
+        "detail": "The external e-commerce site where the sale occurs"
+      },
+      {
+        "id": "b",
+        "label": "HTTP POST",
+        "detail": "The event payload containing SKU and quantity"
+      },
+      {
+        "id": "c",
+        "label": "Marketplace API",
+        "detail": "The secure endpoint receiving the webhook"
+      },
+      {
+        "id": "d",
+        "label": "Inventory DB",
+        "detail": "The internal database updated by the API"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "delivers payload"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "updates record"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Sync for Artisan Marketplace, why is a webhook preferred over traditional polling?",
+      "options": [
+        "It eliminates the need for the marketplace to constantly query every seller's database.",
+        "It guarantees that the seller's website will never go offline.",
+        "It allows the marketplace to set the prices for the sellers.",
+        "It removes the requirement for secure request signatures."
+      ],
+      "answerIndex": 0,
+      "explanation": "Webhooks allow for event-driven updates, removing the resource-heavy burden of polling individual seller databases.",
+      "evidence": "triggering an immediate inventory update without requiring the marketplace to poll every individual seller's database."
+    },
+    {
+      "question": "In Automated Inventory Sync for Artisan Marketplace, what is a primary limitation of the webhook implementation?",
+      "options": [
+        "The marketplace cannot verify the identity of the sender.",
+        "The system is unable to handle JSON payloads.",
+        "Notifications may be lost if the receiver's server is temporarily unreachable.",
+        "The marketplace must manually approve every inventory update."
+      ],
+      "answerIndex": 2,
+      "explanation": "Webhooks are push-based, meaning if the receiver is down, the message delivery fails, necessitating retry logic.",
+      "evidence": "If the receiver's server is down or experiences a network timeout, the event notification may be lost."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:29.942Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

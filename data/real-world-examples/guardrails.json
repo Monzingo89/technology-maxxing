@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "guardrails",
+  "title": "Secure Financial Data Extraction",
+  "business": "Financial institutions processing automated document analysis for client reports.",
+  "problem": "Unintended exposure of sensitive PII or API keys within generated reports when agents interact with external data processing tools.",
+  "solution": "Implementing tool guardrails that intercept function-tool inputs and outputs to scan for patterns like secret keys or PII, blocking the execution or redacting the output before it reaches the end user.",
+  "steps": [
+    "Define a tool_input_guardrail function to inspect tool arguments for sensitive patterns before execution.",
+    "Define a tool_output_guardrail function to scan tool results for sensitive data after execution.",
+    "Attach these guardrails to the specific FunctionTool instances used for document processing.",
+    "Configure the agent to utilize these guarded tools, ensuring all data flows are validated at the tool boundary."
+  ],
+  "outcome": "Automated prevention of data leakage, ensuring that sensitive information is never returned to the agent or the final user output.",
+  "limitation": "Tool guardrails add latency to every tool invocation because they perform synchronous inspection; verify performance impact by monitoring the time taken for tool execution cycles.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Tool Guardrail Execution Flow",
+    "description": "Shows how a tool guardrail intercepts data flow at the tool boundary.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Agent",
+        "detail": "Initiates tool call"
+      },
+      {
+        "id": "b",
+        "label": "Input Guardrail",
+        "detail": "Validates arguments"
+      },
+      {
+        "id": "c",
+        "label": "Function Tool",
+        "detail": "Executes logic"
+      },
+      {
+        "id": "d",
+        "label": "Output Guardrail",
+        "detail": "Redacts results"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "allows"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "@tool_input_guardrail\ndef block_secrets(data):\n    # Inspect tool arguments for sensitive patterns\n    args = json.loads(data.context.tool_arguments or \"{}\")\n    if \"sk-\" in json.dumps(args):\n        return ToolGuardrailFunctionOutput.reject_content(\"Remove secrets.\")\n    return ToolGuardrailFunctionOutput.allow()",
+    "explanation": "This code maps to the Secure Financial Data Extraction scenario by intercepting tool arguments to prevent sensitive keys from being processed by the tool."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/guardrails/",
+      "label": "Guardrails"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Financial Data Extraction, how does the proposed solution mitigate the risk of data exposure?",
+      "options": [
+        "By scanning tool inputs and outputs for sensitive patterns and blocking or redacting them.",
+        "By encrypting all agent memory using a secure database session.",
+        "By forcing the agent to use a slower, more expensive model for all tasks.",
+        "By disabling all external tools to prevent data from leaving the environment."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly uses tool guardrails to intercept data flows at the tool boundary to identify and block sensitive information.",
+      "evidence": "Implementing tool guardrails that intercept function-tool inputs and outputs to scan for patterns like secret keys or PII, blocking the execution or redacting the output before it reaches the end user."
+    },
+    {
+      "question": "Regarding the implementation of Secure Financial Data Extraction, what is a primary trade-off to consider?",
+      "options": [
+        "Guardrails can only be applied to the final output of the entire agent chain.",
+        "Tool guardrails increase latency due to synchronous inspection of every tool invocation.",
+        "The system will automatically delete all logs if a guardrail is triggered.",
+        "Guardrails are incompatible with custom function tools and only work with built-in tools."
+      ],
+      "answerIndex": 1,
+      "explanation": "Tool guardrails run on every invocation, which introduces a performance overhead that must be monitored.",
+      "evidence": "Tool guardrails add latency to every tool invocation because they perform synchronous inspection; verify performance impact by monitoring the time taken for tool execution cycles."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:28.556Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:24.197Z"
+}

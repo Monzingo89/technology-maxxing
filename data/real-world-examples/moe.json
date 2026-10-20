@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "moe",
+  "title": "Global Logistics Route Optimization via MoE",
+  "business": "International logistics firms managing heterogeneous supply chain data across diverse geographic regions.",
+  "problem": "Traditional dense neural networks struggle to maintain high accuracy when processing vastly different data types, such as maritime shipping logs, air freight schedules, and local customs regulations, leading to excessive compute costs for a single monolithic model.",
+  "solution": "A Mixture of Experts (MoE) architecture replaces dense layers with a collection of specialized sub-networks. A trainable gating network acts as a router, directing specific input tokens to the most relevant experts, ensuring that only a fraction of the total model parameters are active for any given inference request.",
+  "steps": [
+    "Define a set of specialized expert sub-networks, each initialized to handle specific data domains like maritime or air freight.",
+    "Implement a trainable gating network that outputs a probability distribution over the available experts for each input.",
+    "Configure the routing mechanism to select the top-k experts per input to maintain sparse activation.",
+    "Train the gating network and experts jointly to ensure the router learns to assign inputs to the most capable sub-networks.",
+    "Deploy the model on a distributed cluster where expert weights are partitioned across memory nodes."
+  ],
+  "outcome": "The system achieves high domain-specific accuracy while maintaining low latency, as the total active parameter count per inference remains constant regardless of the total model size.",
+  "limitation": "The primary trade-off is the increased memory footprint required to store all experts, even if only a few are active at once. This can be checked by monitoring the memory utilization of the model shards during inference to ensure they fit within the available hardware constraints.",
+  "diagram": {
+    "kind": "flow",
+    "title": "MoE Routing Logic",
+    "description": "The flow shows how input data is processed by a gating mechanism to select specific experts.",
+    "nodes": [
+      {
+        "id": "input",
+        "label": "Input Data",
+        "detail": "Logistics telemetry"
+      },
+      {
+        "id": "gate",
+        "label": "Gating Network",
+        "detail": "Router logic"
+      },
+      {
+        "id": "exp1",
+        "label": "Expert A",
+        "detail": "Maritime logic"
+      },
+      {
+        "id": "exp2",
+        "label": "Expert B",
+        "detail": "Air freight logic"
+      },
+      {
+        "id": "out",
+        "label": "Output",
+        "detail": "Optimized route"
+      }
+    ],
+    "edges": [
+      {
+        "from": "input",
+        "to": "gate",
+        "label": "dispatch"
+      },
+      {
+        "from": "gate",
+        "to": "exp1",
+        "label": "route_to"
+      },
+      {
+        "from": "gate",
+        "to": "exp2",
+        "label": "route_to"
+      },
+      {
+        "from": "exp1",
+        "to": "out",
+        "label": "aggregate"
+      },
+      {
+        "from": "exp2",
+        "to": "out",
+        "label": "aggregate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1701.06538",
+      "label": "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Route Optimization via MoE, how does the architecture address the problem of high compute costs?",
+      "options": [
+        "By using a gating network to activate only a sparse subset of experts per input.",
+        "By reducing the total number of parameters in the entire network.",
+        "By forcing all experts to process every input simultaneously.",
+        "By replacing neural networks with simple linear regression models."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on sparse activation where only a fraction of the model is active, reducing compute requirements.",
+      "evidence": "A trainable gating network acts as a router, directing specific input tokens to the most relevant experts, ensuring that only a fraction of the total model parameters are active for any given inference request."
+    },
+    {
+      "question": "In Global Logistics Route Optimization via MoE, what is a key limitation of the proposed implementation?",
+      "options": [
+        "The model cannot handle more than two experts.",
+        "The gating network is too slow to train.",
+        "The total memory footprint remains high because all experts must be stored.",
+        "The model accuracy is inherently lower than dense networks."
+      ],
+      "answerIndex": 2,
+      "explanation": "Even though only a few experts are active, the entire set of experts must reside in memory, creating a storage constraint.",
+      "evidence": "The primary trade-off is the increased memory footprint required to store all experts, even if only a few are active at once."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:56.907Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:52.726Z"
+}

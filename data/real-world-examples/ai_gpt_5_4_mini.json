@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_4_mini",
+  "title": "Automated Legacy Code Migration for Financial Systems",
+  "business": "Large-scale financial institutions maintaining massive, aging COBOL and Java codebases.",
+  "problem": "Manual refactoring of legacy code is prohibitively expensive and prone to human error, leading to significant technical debt and integration delays.",
+  "solution": "Utilizing GPT-5.4 Mini to act as an intelligent subagent that performs automated code analysis, generates unit tests, and applies patches to legacy modules, leveraging its specialized computer use and code interpreter capabilities.",
+  "steps": [
+    "Ingest legacy source files into the model context using the 400,000 token window.",
+    "Deploy subagents to perform static analysis and identify refactoring candidates.",
+    "Use the apply_patch tool to programmatically suggest and implement code improvements.",
+    "Validate changes by running generated unit tests within the hosted shell environment.",
+    "Commit verified patches to the version control system."
+  ],
+  "outcome": "A streamlined, repeatable pipeline for modernizing legacy systems that reduces manual intervention and accelerates deployment cycles.",
+  "limitation": "The model may occasionally hallucinate logic in highly complex, non-standard legacy syntax; verify output by checking the consistency of the applied patches against the original business logic requirements.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Migration Workflow",
+    "description": "The flow shows how the model processes legacy code through subagents to produce validated patches.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Repository",
+        "detail": "Source code storage"
+      },
+      {
+        "id": "b",
+        "label": "GPT-5.4 Mini Subagent",
+        "detail": "Analysis and generation engine"
+      },
+      {
+        "id": "c",
+        "label": "Hosted Shell",
+        "detail": "Execution and validation environment"
+      },
+      {
+        "id": "d",
+        "label": "Modernized Module",
+        "detail": "Final validated output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests code"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Executes tests"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Produces patch"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.4-mini",
+      "label": "GPT-5.4 Mini"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Code Migration for Financial Systems, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual refactoring is expensive and error-prone",
+        "The lack of cloud infrastructure for financial data",
+        "The inability to use COBOL in modern environments",
+        "High costs of data residency in regional endpoints"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual refactoring as the source of cost and error.",
+      "evidence": "Manual refactoring of legacy code is prohibitively expensive and prone to human error, leading to significant technical debt and integration delays."
+    },
+    {
+      "question": "In Automated Legacy Code Migration for Financial Systems, what is the identified limitation of the implementation?",
+      "options": [
+        "The 400,000 token window is too small for legacy files",
+        "The model may hallucinate logic in complex legacy syntax",
+        "The hosted shell environment is not supported",
+        "The model cannot use the apply_patch tool"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights the risk of logic errors in complex codebases.",
+      "evidence": "The model may occasionally hallucinate logic in highly complex, non-standard legacy syntax; verify output by checking the consistency of the applied patches against the original business logic requirements."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:11.054Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:07.411Z"
+}

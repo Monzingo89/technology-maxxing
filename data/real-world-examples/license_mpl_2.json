@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "license_mpl_2",
+  "title": "Integrating Open Source Modules into Proprietary Analytics Suites",
+  "business": "Software vendors building proprietary analytics platforms that incorporate open-source libraries.",
+  "problem": "The vendor needs to use a high-performance open-source library but fears that standard copyleft licenses might force them to open-source their entire proprietary codebase, which contains trade secrets.",
+  "solution": "The Mozilla Public License 2.0 (MPL 2.0) is a file-level copyleft license. It allows the vendor to integrate MPL-licensed code into a Larger Work while keeping the proprietary portions closed, provided that modifications to the original MPL-licensed files remain under the MPL 2.0.",
+  "steps": [
+    "Identify the specific files governed by the MPL 2.0 within the library.",
+    "Maintain the original license notices and copyright headers in all modified MPL-licensed files.",
+    "Ensure that any modifications made to the MPL-licensed files are made available in Source Code Form.",
+    "Distribute the proprietary analytics suite as a Larger Work, keeping the proprietary source code private while providing access to the modified MPL-licensed source files."
+  ],
+  "outcome": "The vendor successfully leverages external open-source innovation to enhance their analytics suite without compromising the intellectual property of their proprietary modules.",
+  "limitation": "The primary limitation is the file-level copyleft requirement. If a developer modifies an MPL-licensed file, that specific file must remain under the MPL 2.0. To verify compliance, the vendor must perform periodic audits of their build pipeline to ensure no proprietary code was accidentally merged into an MPL-licensed file.",
+  "diagram": {
+    "kind": "flow",
+    "title": "MPL 2.0 Integration Workflow",
+    "description": "Shows how proprietary and MPL code coexist in a Larger Work.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "MPL Library",
+        "detail": "Original open source code"
+      },
+      {
+        "id": "b",
+        "label": "Modified MPL File",
+        "detail": "Changes made by vendor"
+      },
+      {
+        "id": "c",
+        "label": "Proprietary Module",
+        "detail": "Closed source logic"
+      },
+      {
+        "id": "d",
+        "label": "Larger Work",
+        "detail": "The final analytics product"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "modifies"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "includes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "includes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.mozilla.org/en-US/MPL/2.0/",
+      "label": "Mozilla Public License, version 2.0"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Integrating Open Source Modules into Proprietary Analytics Suites, how does the MPL 2.0 solve the vendor's fear of forced disclosure?",
+      "options": [
+        "It allows the vendor to keep proprietary modules closed while only requiring modifications to MPL-licensed files to be shared.",
+        "It grants the vendor full ownership of the open-source library, removing all disclosure requirements.",
+        "It forces the vendor to open-source the entire analytics suite to ensure transparency.",
+        "It prevents the vendor from using the library unless they pay a royalty fee."
+      ],
+      "answerIndex": 0,
+      "explanation": "The MPL 2.0 is a file-level license that permits the creation of a Larger Work where only the modified MPL files must remain open, protecting the proprietary code.",
+      "evidence": "The Mozilla Public License 2.0 (MPL 2.0) is a file-level copyleft license. It allows the vendor to integrate MPL-licensed code into a Larger Work while keeping the proprietary portions closed, provided that modifications to the original MPL-licensed files remain under the MPL 2.0."
+    },
+    {
+      "question": "In Integrating Open Source Modules into Proprietary Analytics Suites, what is the primary limitation regarding compliance?",
+      "options": [
+        "The vendor must provide free support for all users of the library.",
+        "The vendor must open-source their proprietary modules if they use the library.",
+        "The vendor must ensure that modifications to MPL-licensed files remain under the MPL 2.0 and audit their build pipeline.",
+        "The vendor is prohibited from charging fees for the final product."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation is that modifications to MPL files must stay under the MPL 2.0, requiring the vendor to audit their code to prevent accidental mixing of proprietary and MPL code.",
+      "evidence": "The primary limitation is the file-level copyleft requirement. If a developer modifies an MPL-licensed file, that specific file must remain under the MPL 2.0. To verify compliance, the vendor must perform periodic audits of their build pipeline to ensure no proprietary code was accidentally merged into an MPL-licensed file."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:01.831Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:57.744Z"
+}

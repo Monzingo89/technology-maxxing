@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "file_gguf",
+  "title": "Unified Model Deployment for Edge Inference",
+  "business": "Edge computing providers deploying local LLMs on heterogeneous hardware.",
+  "problem": "Fragmented model formats require complex conversion pipelines and external sidecar files, leading to deployment failures and high maintenance costs.",
+  "solution": "Adopting the GGUF format enables single-file deployment, where all metadata and tensors are encapsulated in a binary structure, ensuring unambiguous loading without external dependencies.",
+  "steps": [
+    "Convert source PyTorch models into the GGUF binary format.",
+    "Verify the model using the GGUF naming convention to ensure BaseName, SizeLabel, and Version are present.",
+    "Implement a reader that parses the gguf_header_t to extract metadata key-value pairs.",
+    "Use mmap to map the model file into memory for efficient, fast loading.",
+    "Access tensor data via the offsets defined in the gguf_tensor_info_t structures."
+  ],
+  "outcome": "Simplified model distribution and reliable, consistent inference performance across diverse edge environments.",
+  "limitation": "GGUF models are typically little-endian by default; big-endian support exists but is not explicitly detectable in current versions, requiring manual verification for specific hardware architectures.",
+  "diagram": {
+    "kind": "flow",
+    "title": "GGUF Model Loading Pipeline",
+    "description": "The flow from file structure to memory-mapped inference.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "GGUF File",
+        "detail": "Binary file containing header, metadata, and tensor data"
+      },
+      {
+        "id": "b",
+        "label": "Header Parser",
+        "detail": "Reads magic number and metadata count"
+      },
+      {
+        "id": "c",
+        "label": "Tensor Info",
+        "detail": "Maps tensor names to file offsets"
+      },
+      {
+        "id": "d",
+        "label": "Memory Map",
+        "detail": "mmap maps file data to process address space"
+      },
+      {
+        "id": "e",
+        "label": "Inference Engine",
+        "detail": "Executes operations using loaded weights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "extracts header"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "defines tensor locations"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "maps binary data"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "provides weight access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://github.com/ggml-org/ggml/blob/master/docs/gguf.md",
+      "label": "GGUF Specification"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Model Deployment for Edge Inference, what is the primary advantage of using GGUF for deployment?",
+      "options": [
+        "It eliminates the need for external files by providing single-file deployment.",
+        "It automatically converts PyTorch models to big-endian format.",
+        "It uses a list of untyped values for hyperparameters.",
+        "It requires external libraries to read the model metadata."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that GGUF enables single-file deployment, removing the need for external sidecar files.",
+      "evidence": "Adopting the GGUF format enables single-file deployment, where all metadata and tensors are encapsulated in a binary structure, ensuring unambiguous loading without external dependencies."
+    },
+    {
+      "question": "In Unified Model Deployment for Edge Inference, what is a key limitation regarding hardware compatibility?",
+      "options": [
+        "The file format is limited to 32-bit architectures.",
+        "GGUF models are strictly big-endian and cannot be read on little-endian systems.",
+        "There is no way to explicitly detect if a model is big-endian, which may cause issues on certain hardware.",
+        "The metadata key-value structure is incompatible with mmap."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that while big-endian support exists, it is not explicitly detectable, creating a potential compatibility risk.",
+      "evidence": "GGUF models are typically little-endian by default; big-endian support exists but is not explicitly detectable in current versions, requiring manual verification for specific hardware architectures."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:44.820Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:41.392Z"
+}

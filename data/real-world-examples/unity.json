@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "unity",
+  "title": "Architectural Visualization for Urban Planning",
+  "business": "Urban planning firms presenting large-scale city development projects to municipal stakeholders.",
+  "problem": "Static 2D blueprints and physical models fail to convey the spatial impact of proposed high-rise developments, leading to prolonged approval cycles and stakeholder confusion regarding sunlight exposure and traffic flow.",
+  "solution": "Utilizing the Unity engine to create an interactive, real-time 3D environment that allows stakeholders to navigate proposed urban developments, toggle between different architectural designs, and simulate environmental conditions like shadow casting.",
+  "steps": [
+    "Import CAD-based building models into the Unity Editor using the FBX format to maintain structural scale.",
+    "Configure the Universal Render Pipeline to balance visual fidelity with the performance requirements of mobile or web-based presentation devices.",
+    "Implement the UI Toolkit to create an interactive overlay for toggling building variants and environmental time-of-day settings.",
+    "Utilize the Lighting system to bake or calculate real-time shadows, providing accurate visual feedback on how new structures impact existing public spaces."
+  ],
+  "outcome": "Stakeholders gain a clear, intuitive understanding of spatial relationships and environmental impacts, resulting in more informed decision-making and accelerated project approval timelines.",
+  "limitation": "The primary limitation is the trade-off between high-fidelity visual assets and runtime performance on target hardware. Developers must monitor frame rates and memory usage via the Profiler to ensure the experience remains fluid during interactive sessions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Urban Visualization Data Flow",
+    "description": "This diagram illustrates how raw architectural data is transformed into an interactive stakeholder experience.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "CAD Source",
+        "detail": "Raw architectural geometry"
+      },
+      {
+        "id": "b",
+        "label": "Unity Editor",
+        "detail": "Scene assembly and lighting setup"
+      },
+      {
+        "id": "c",
+        "label": "UI Toolkit",
+        "detail": "Interactive control layer"
+      },
+      {
+        "id": "d",
+        "label": "Stakeholder View",
+        "detail": "Final real-time interactive application"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Import"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Integrate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Expose Controls"
+      }
+    ]
+  },
+  "code": {
+    "language": "csharp",
+    "content": "using UnityEngine; // Required for core engine functionality\npublic class ShadowController : MonoBehaviour {\n    public Light sunLight; // Reference to the scene light\n    public void UpdateSunAngle(float angle) {\n        // Adjusts the rotation of the light to simulate time-of-day shadow casting\n        sunLight.transform.rotation = Quaternion.Euler(angle, 30, 0);\n    }\n}",
+    "explanation": "This script maps to the solution by allowing the user to dynamically adjust the sun's position to visualize shadow impacts on the urban environment."
+  },
+  "sources": [
+    {
+      "url": "https://docs.unity3d.com/",
+      "label": "Unity - Manual: Unity 6.6 User Manual"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Visualization for Urban Planning, what is the primary reason for using Unity instead of static blueprints?",
+      "options": [
+        "To reduce the cost of physical paper printing",
+        "To provide an interactive environment that clarifies spatial impact and environmental conditions",
+        "To automatically generate new architectural blueprints from 3D models",
+        "To replace the need for professional architects in the design process"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that static blueprints fail to convey spatial impact, and Unity addresses this by providing an interactive 3D environment.",
+      "evidence": "Utilizing the Unity engine to create an interactive, real-time 3D environment that allows stakeholders to navigate proposed urban developments, toggle between different architectural designs, and simulate environmental conditions like shadow casting."
+    },
+    {
+      "question": "In Architectural Visualization for Urban Planning, what is the main technical trade-off mentioned?",
+      "options": [
+        "The difficulty of importing CAD files into the Editor",
+        "The inability to use UI Toolkit for interactive controls",
+        "The balance between visual fidelity and runtime performance on target hardware",
+        "The lack of lighting support for shadow simulation"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that developers must balance visual quality with performance to maintain a fluid experience.",
+      "evidence": "The primary limitation is the trade-off between high-fidelity visual assets and runtime performance on target hardware."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:52.119Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:48.202Z"
+}

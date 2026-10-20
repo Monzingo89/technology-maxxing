@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "firebase",
+  "title": "Real-time Inventory Sync for Boutique Retailers",
+  "business": "Boutique retailers managing multiple pop-up locations and a centralized web storefront.",
+  "problem": "Inventory discrepancies occur when physical sales at pop-up locations are not immediately reflected in the central database, leading to overselling of limited-edition items.",
+  "solution": "Utilizing Firebase Realtime Database to maintain a synchronized state across all client devices, ensuring that every transaction triggers an instantaneous update to the global inventory count.",
+  "steps": [
+    "Initialize the Firebase SDK within the retail mobile application.",
+    "Define a structured JSON node for inventory items with unique product IDs.",
+    "Implement listeners on the client side to observe changes to specific inventory nodes.",
+    "Execute write operations upon successful point-of-sale transactions to update stock levels.",
+    "Configure security rules to ensure only authenticated staff can modify inventory data."
+  ],
+  "outcome": "A consistent view of stock levels across all sales channels, effectively eliminating the risk of overselling during high-traffic events.",
+  "limitation": "The Realtime Database uses a single JSON tree structure, which can lead to performance bottlenecks if data is not properly flattened; developers must monitor the depth of the tree to prevent inefficient data retrieval.",
+  "diagram": {
+    "kind": "er",
+    "title": "Inventory Sync Entity Relationship",
+    "description": "Shows how the central database acts as the single source of truth for distributed retail nodes.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Central Database",
+        "detail": "Firebase Realtime JSON Tree"
+      },
+      {
+        "id": "b",
+        "label": "Pop-up Client",
+        "detail": "Mobile POS Device"
+      },
+      {
+        "id": "c",
+        "label": "Web Storefront",
+        "detail": "E-commerce Interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "b",
+        "to": "a",
+        "label": "1:1 update stock"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "1:n sync state"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Reference the specific product inventory node\nconst inventoryRef = firebase.database().ref('inventory/item_001');\n// Update stock level after a sale\ninventoryRef.update({ stock: newCount });",
+    "explanation": "This code demonstrates updating a specific inventory node in the Firebase Realtime Database, which triggers an automatic sync to all connected clients."
+  },
+  "sources": [
+    {
+      "url": "https://firebase.google.com/docs",
+      "label": "Firebase Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Sync for Boutique Retailers, what is the primary purpose of using Firebase?",
+      "options": [
+        "To host static marketing images for the boutique",
+        "To maintain a synchronized state across all client devices",
+        "To replace the need for physical point-of-sale hardware",
+        "To perform complex server-side data analytics"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario focuses on solving inventory discrepancies by ensuring all devices see the same data simultaneously.",
+      "evidence": "Utilizing Firebase Realtime Database to maintain a synchronized state across all client devices, ensuring that every transaction triggers an instantaneous update to the global inventory count."
+    },
+    {
+      "question": "In Real-time Inventory Sync for Boutique Retailers, what is a key limitation of the chosen implementation?",
+      "options": [
+        "The database cannot handle more than ten concurrent users",
+        "The system requires manual refreshing of the web page",
+        "The single JSON tree structure can cause performance issues if not flattened",
+        "Firebase does not support authentication for staff members"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation-based limitation highlights that deep JSON structures in the Realtime Database can lead to performance bottlenecks.",
+      "evidence": "The Realtime Database uses a single JSON tree structure, which can lead to performance bottlenecks if data is not properly flattened; developers must monitor the depth of the tree to prevent inefficient data retrieval."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:34.841Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:31.092Z"
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_5",
+  "title": "Automated Legacy Financial Code Refactoring",
+  "business": "Large-scale financial institutions managing millions of lines of legacy COBOL and C++ codebases.",
+  "problem": "Manual refactoring of monolithic legacy systems is prone to human error, creates significant technical debt, and requires excessive developer hours to ensure compliance with modern security standards.",
+  "solution": "GPT-5.5 utilizes its high-reasoning capabilities and extensive 1,050,000 context window to ingest entire legacy modules, map dependencies, and suggest modular refactoring patterns that align with current security protocols.",
+  "steps": [
+    "Ingest the legacy codebase into the context window using the Chat Completions API.",
+    "Define structural constraints and security requirements as system instructions.",
+    "Utilize function calling to trigger automated unit testing suites for each refactored module.",
+    "Apply patches iteratively using the apply_patch tool to maintain version control integrity.",
+    "Validate the output against the original logic using the Responses API."
+  ],
+  "outcome": "A modernized, modular codebase that maintains functional parity with the original system while significantly reducing the surface area for security vulnerabilities.",
+  "limitation": "The model may experience increased latency and higher token costs when processing inputs exceeding 272K tokens; developers should monitor token usage and implement prompt caching to mitigate overhead.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Refactoring Pipeline",
+    "description": "The flow of legacy code through the GPT-5.5 processing engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Source",
+        "detail": "Monolithic codebase"
+      },
+      {
+        "id": "b",
+        "label": "GPT-5.5 Engine",
+        "detail": "Reasoning and refactoring"
+      },
+      {
+        "id": "c",
+        "label": "Test Suite",
+        "detail": "Validation logic"
+      },
+      {
+        "id": "d",
+        "label": "Modernized Code",
+        "detail": "Refactored output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Verify"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Feedback Loop"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Deploy"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-5.5-2026-04-23',\n  messages=[{'role': 'user', 'content': legacy_code_blob}],\n  reasoning_effort='high' # Use high effort for complex refactoring logic\n)",
+    "explanation": "This snippet initializes the refactoring process by sending the legacy code to the model with high reasoning effort to ensure accurate structural analysis."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.5",
+      "label": "GPT-5.5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Financial Code Refactoring, how does GPT-5.5 address the problem of manual refactoring?",
+      "options": [
+        "By ingesting large codebases to map dependencies and suggest modular patterns.",
+        "By automatically rewriting the entire database schema without human input.",
+        "By replacing all legacy developers with automated agents.",
+        "By ignoring security protocols to increase processing speed."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly mentions using the context window to ingest modules and map dependencies to suggest modular refactoring.",
+      "evidence": "GPT-5.5 utilizes its high-reasoning capabilities and extensive 1,050,000 context window to ingest entire legacy modules, map dependencies, and suggest modular refactoring patterns that align with current security protocols."
+    },
+    {
+      "question": "In Automated Legacy Financial Code Refactoring, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot handle more than 100 lines of code at once.",
+        "Increased latency and higher token costs for inputs exceeding 272K tokens.",
+        "The model requires a manual restart after every 500 tokens.",
+        "The model is incompatible with the Chat Completions API."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that large inputs trigger higher costs and latency, suggesting prompt caching as a mitigation.",
+      "evidence": "The model may experience increased latency and higher token costs when processing inputs exceeding 272K tokens; developers should monitor token usage and implement prompt caching to mitigate overhead."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:14.767Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:10.984Z"
+}

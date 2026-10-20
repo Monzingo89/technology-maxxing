@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "swc",
+  "title": "Legacy Financial Portal Modernization",
+  "business": "A regional banking institution maintaining a monolithic web portal that relies on legacy ECMAScript standards.",
+  "problem": "The development team faces extreme build-time bottlenecks when transpiling thousands of legacy JavaScript modules, leading to developer frustration and delayed deployment cycles for critical security patches.",
+  "solution": "By integrating SWC into the build pipeline, the team replaces slower, single-threaded transpilation processes with a Rust-based platform that handles compilation and minification in parallel, significantly reducing the overhead of processing modern syntax for legacy browser compatibility.",
+  "steps": [
+    "Install the core SWC packages via the project package manager to enable CLI and programmatic access.",
+    "Configure the SWC transformation rules to target specific legacy browser environments, ensuring valid output for older clients.",
+    "Integrate the SWC loader into the existing build system to intercept JavaScript and TypeScript files during the bundling phase.",
+    "Execute the build process to verify that the Rust-based engine correctly transpiles modern features into browser-compatible code."
+  ],
+  "outcome": "The development team achieves a more responsive feedback loop, allowing for frequent, smaller code deployments without the historical friction of long-running build tasks.",
+  "limitation": "SWC's extensibility relies on custom plugins which may not support every niche transformation requirement found in highly bespoke legacy codebases. Developers must verify plugin compatibility by checking the transformation output against the expected legacy browser behavior.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SWC Build Pipeline Integration",
+    "description": "This diagram illustrates how source code is processed through the SWC engine to reach the final browser-ready state.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "Modern JS/TS files"
+      },
+      {
+        "id": "b",
+        "label": "SWC Engine",
+        "detail": "Rust-based transpiler"
+      },
+      {
+        "id": "c",
+        "label": "Build Pipeline",
+        "detail": "Integration layer"
+      },
+      {
+        "id": "d",
+        "label": "Browser Output",
+        "detail": "Compatible legacy JS"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "input"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "emits"
+      }
+    ]
+  },
+  "code": {
+    "language": "bash",
+    "content": "npx swc ./src --out-dir ./dist # Transpiles all files in src to dist using SWC",
+    "explanation": "This command demonstrates the basic CLI usage of SWC to transform source files into a format suitable for the legacy browser environment described in the scenario."
+  },
+  "sources": [
+    {
+      "url": "https://swc.rs/",
+      "label": "SWC Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Financial Portal Modernization, how does SWC address the build-time bottleneck?",
+      "options": [
+        "By replacing slower, single-threaded transpilation with a Rust-based platform that handles compilation in parallel.",
+        "By automatically rewriting legacy backend database queries into modern SQL syntax.",
+        "By removing the need for any build pipeline or bundling process entirely.",
+        "By converting all JavaScript code into native Rust binaries for faster execution."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the team suffers from slow build times, and SWC addresses this by utilizing its Rust-based, parallel-processing architecture.",
+      "evidence": "By integrating SWC into the build pipeline, the team replaces slower, single-threaded transpilation processes with a Rust-based platform that handles compilation and minification in parallel, significantly reducing the overhead of processing modern syntax for legacy browser compatibility."
+    },
+    {
+      "question": "In Legacy Financial Portal Modernization, what is a primary limitation of using SWC?",
+      "options": [
+        "It cannot be used with TypeScript files.",
+        "It requires a complete rewrite of the existing legacy codebase.",
+        "Custom plugins may not support every niche transformation requirement found in bespoke legacy codebases.",
+        "It is only compatible with Apple Silicon hardware."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that while SWC is extensible, custom plugins might not cover all specific requirements of a legacy system.",
+      "evidence": "SWC's extensibility relies on custom plugins which may not support every niche transformation requirement found in highly bespoke legacy codebases."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:52.717Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:47.951Z"
+}

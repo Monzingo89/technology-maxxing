@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_clickup",
+  "title": "Automated Technical Support Ticket Triage",
+  "business": "A mid-sized software consultancy managing high-volume client support requests via ClickUp.",
+  "problem": "Support engineers spend excessive time manually categorizing incoming tickets and searching for relevant documentation, leading to delayed response times and inconsistent task prioritization.",
+  "solution": "By integrating the ClickUp connector with Claude, the consultancy can deploy an AI agent that automatically monitors new tasks, retrieves workspace hierarchy context, and updates task metadata based on content analysis.",
+  "steps": [
+    "Configure the ClickUp connector to grant Claude access to the specific support workspace.",
+    "Implement a trigger mechanism where Claude uses clickup_get_workspace_tasks to poll for unassigned, high-priority tickets.",
+    "Utilize clickup_get_task to retrieve ticket details and clickup_update_task to apply appropriate tags or status changes based on the agent's analysis.",
+    "Enable clickup_create_task_comment to provide initial diagnostic summaries directly on the ticket for the assigned engineer."
+  ],
+  "outcome": "Engineers receive pre-triaged tickets with immediate context, reducing the time spent on administrative sorting and allowing for faster resolution of client issues.",
+  "limitation": "The connector operates on a per-request basis; if the workspace structure is highly complex or deeply nested, the agent may hit token limits or latency issues when traversing the hierarchy. To check for this, monitor the response time of clickup_get_workspace_hierarchy and ensure the agent is scoped to specific lists rather than the entire workspace.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Support Ticket Triage Workflow",
+    "description": "This diagram illustrates the flow of data from a new ticket to an enriched, categorized task.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Request",
+        "detail": "New task in ClickUp"
+      },
+      {
+        "id": "b",
+        "label": "Claude Agent",
+        "detail": "AI processing layer"
+      },
+      {
+        "id": "c",
+        "label": "ClickUp Workspace",
+        "detail": "Task repository"
+      },
+      {
+        "id": "d",
+        "label": "Enriched Task",
+        "detail": "Updated task with tags/comments"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers analysis"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "calls get_task"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns task data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "calls update_task"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/clickup",
+      "label": "ClickUp connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Technical Support Ticket Triage, what is the primary problem addressed by the solution?",
+      "options": [
+        "Engineers spend too much time manually categorizing tickets and searching for context.",
+        "The ClickUp workspace is too small to handle the volume of support requests.",
+        "Clients are unable to access the ClickUp workspace directly.",
+        "The AI agent is unable to create new tasks in the workspace."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual categorization and searching as the bottleneck for support engineers.",
+      "evidence": "Support engineers spend excessive time manually categorizing incoming tickets and searching for relevant documentation, leading to delayed response times and inconsistent task prioritization."
+    },
+    {
+      "question": "In Automated Technical Support Ticket Triage, what is a noted limitation of the connector?",
+      "options": [
+        "The connector cannot update task comments.",
+        "The connector is limited to only one workspace per account.",
+        "Complex workspace hierarchies may cause latency or token limit issues.",
+        "The connector does not support task tagging."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section warns that deep hierarchies can lead to performance issues like latency or token limits.",
+      "evidence": "The connector operates on a per-request basis; if the workspace structure is highly complex or deeply nested, the agent may hit token limits or latency issues when traversing the hierarchy."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:03.647Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:59.533Z"
+}

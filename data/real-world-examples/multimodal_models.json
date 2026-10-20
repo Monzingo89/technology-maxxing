@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "multimodal_models",
+  "title": "Multimodal Industrial Inspection Assistant",
+  "business": "Manufacturing firms performing quality control on assembly lines.",
+  "problem": "Manual visual inspection of complex components is slow, error-prone, and lacks integration with historical technical documentation, leading to inconsistent defect detection.",
+  "solution": "Implement a multimodal RAG system that ingests both high-resolution component images and technical PDF manuals, allowing the model to ground visual defect analysis in authoritative engineering specifications.",
+  "steps": [
+    "Upload component images and technical manuals to Cloud Storage.",
+    "Use the Agent Platform Embeddings API to generate multimodal embeddings for both image and text data.",
+    "Index these embeddings into a Vector Search index for similarity matching.",
+    "Deploy a Cloud Run backend that retrieves relevant manual excerpts and visual reference samples based on a user query.",
+    "Synthesize the final inspection report using an LLM that processes the augmented multimodal context."
+  ],
+  "outcome": "Improved consistency in defect identification by providing inspectors with real-time, context-aware guidance derived from both visual patterns and textual standards.",
+  "limitation": "The system may experience latency spikes during high-volume visual ingestion; verify performance by monitoring query-response times in Cloud Monitoring.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Multimodal Inspection Data Flow",
+    "description": "The flow from raw data ingestion to user-facing inspection assistance.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Data Source",
+        "detail": "Images and PDF Manuals"
+      },
+      {
+        "id": "b",
+        "label": "Agent Platform",
+        "detail": "Multimodal Embedding Generation"
+      },
+      {
+        "id": "c",
+        "label": "Vector Search",
+        "detail": "Similarity Index"
+      },
+      {
+        "id": "d",
+        "label": "Cloud Run",
+        "detail": "Backend Inference Service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Index Update"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Grounding Retrieval"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/architecture/gen-ai-rag-vertex-ai-vector-search",
+      "label": "RAG infrastructure for generative AI using Agent Platform and Vector Search"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Multimodal Industrial Inspection Assistant, how is the problem of inconsistent defect detection addressed?",
+      "options": [
+        "By automating the physical repair of components.",
+        "By grounding visual analysis in authoritative engineering specifications.",
+        "By replacing all human inspectors with autonomous robots.",
+        "By removing the need for technical documentation."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on grounding visual defect analysis in technical manuals to ensure consistency.",
+      "evidence": "Implement a multimodal RAG system that ingests both high-resolution component images and technical PDF manuals, allowing the model to ground visual defect analysis in authoritative engineering specifications."
+    },
+    {
+      "question": "In Multimodal Industrial Inspection Assistant, what is the identified limitation and how should it be monitored?",
+      "options": [
+        "High storage costs; monitor via Cloud Storage billing.",
+        "Inaccurate image classification; monitor via manual audit logs.",
+        "Latency spikes during ingestion; monitor via Cloud Monitoring.",
+        "Security vulnerabilities; monitor via IAM policy changes."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation specifically mentions latency during high-volume ingestion and suggests Cloud Monitoring as the verification tool.",
+      "evidence": "The system may experience latency spikes during high-volume visual ingestion; verify performance by monitoring query-response times in Cloud Monitoring."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:05.889Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:02.247Z"
+}

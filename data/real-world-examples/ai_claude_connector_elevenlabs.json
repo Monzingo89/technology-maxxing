@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_elevenlabs",
+  "title": "Automated Dental Appointment Coordination",
+  "business": "A multi-location dental practice managing high volumes of routine check-up scheduling.",
+  "problem": "Front-desk staff are frequently interrupted by repetitive scheduling inquiries, leading to long hold times and missed patient follow-ups.",
+  "solution": "By integrating the ElevenLabs connector into Claude, the practice can deploy and refine ElevenAgents directly within the chat interface to handle voice-based appointment scheduling without manual coding or external dashboard switching.",
+  "steps": [
+    "Authenticate the ElevenLabs workspace within the Claude connector settings to enable API access.",
+    "Use the agents_create tool to define the agent's persona and scheduling logic based on practice guidelines.",
+    "Populate the agent's knowledge base using agents_create_kb_text to include current availability and office policies.",
+    "Iterate on the agent's performance by reviewing transcripts and using agents_create_branch to test different conversational flows.",
+    "Generate a shareable widget link via the connector to embed the voice agent on the practice website."
+  ],
+  "outcome": "The practice achieves a seamless transition from manual scheduling to automated voice interactions, allowing staff to focus on complex patient care while maintaining consistent, natural-sounding communication.",
+  "limitation": "The agent relies on the accuracy of the provided knowledge base; users must manually verify the agent's responses against current office schedules, as the connector does not automatically sync with live dental practice management software.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ElevenAgents Deployment Workflow",
+    "description": "This diagram illustrates the flow from initial agent creation to deployment within the Claude interface.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Interface",
+        "detail": "User environment for managing agents"
+      },
+      {
+        "id": "b",
+        "label": "ElevenLabs Connector",
+        "detail": "Bridge for API tool execution"
+      },
+      {
+        "id": "c",
+        "label": "ElevenAgents Engine",
+        "detail": "Voice agent logic and knowledge base"
+      },
+      {
+        "id": "d",
+        "label": "Patient Website",
+        "detail": "Deployment target for the widget"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Invokes agents_create"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Updates agent configuration"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Serves voice interaction"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/elevenlabs",
+      "label": "ElevenLabs connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Dental Appointment Coordination, what is the primary benefit of using the ElevenLabs connector?",
+      "options": [
+        "It eliminates the need for front-desk staff entirely.",
+        "It allows for managing voice agents directly within the chat interface.",
+        "It automatically syncs with all dental practice management software.",
+        "It provides guaranteed performance metrics for patient scheduling."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution highlights that the connector allows the practice to deploy and refine ElevenAgents directly within the chat interface.",
+      "evidence": "By integrating the ElevenLabs connector into Claude, the practice can deploy and refine ElevenAgents directly within the chat interface to handle voice-based appointment scheduling without manual coding or external dashboard switching."
+    },
+    {
+      "question": "In Automated Dental Appointment Coordination, what is a key limitation of the implementation?",
+      "options": [
+        "The agent cannot be updated after initial creation.",
+        "The agent requires manual verification of knowledge base accuracy.",
+        "The agent is limited to text-only communication.",
+        "The agent cannot be deployed on external websites."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the agent relies on the knowledge base and requires manual verification because it does not sync with live software.",
+      "evidence": "The agent relies on the accuracy of the provided knowledge base; users must manually verify the agent's responses against current office schedules, as the connector does not automatically sync with live dental practice management software."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:58.310Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:54.591Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_archive_storage",
+  "title": "Regulatory Compliance Data Retention",
+  "business": "Financial institutions requiring long-term, immutable record-keeping for audit compliance.",
+  "problem": "Rising operational costs from storing massive volumes of historical transaction logs in standard storage classes that are rarely accessed.",
+  "solution": "Utilizing Google Cloud Archive Storage to move infrequently accessed, long-term data into a low-cost storage class specifically designed for data retention.",
+  "steps": [
+    "Identify historical transaction datasets that meet the criteria for long-term retention.",
+    "Create a Cloud Storage bucket configured with the Archive storage class.",
+    "Implement Lifecycle Management policies to automatically transition objects to Archive storage after a defined period.",
+    "Verify data integrity and accessibility for infrequent audit requests."
+  ],
+  "outcome": "Significant reduction in storage expenditures while maintaining compliance with regulatory data retention mandates.",
+  "limitation": "Archive storage is optimized for data that is rarely accessed; retrieving data incurs higher costs and longer latency compared to standard classes, which can be checked by monitoring retrieval frequency and latency metrics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Lifecycle Flow",
+    "description": "The flow shows how transaction data moves from active use to long-term storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Transaction Logs",
+        "detail": "Active application data"
+      },
+      {
+        "id": "b",
+        "label": "Standard Storage",
+        "detail": "Frequent access tier"
+      },
+      {
+        "id": "c",
+        "label": "Lifecycle Policy",
+        "detail": "Automated transition rule"
+      },
+      {
+        "id": "d",
+        "label": "Archive Storage",
+        "detail": "Low-cost long-term retention"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Trigger"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Move objects"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Regulatory Compliance Data Retention, what is the primary driver for adopting Archive Storage?",
+      "options": [
+        "Rising operational costs from storing historical logs in standard classes.",
+        "The need for high-performance, low-latency data retrieval for daily operations.",
+        "A requirement to increase the frequency of data access for audit teams.",
+        "The desire to replace existing database systems with object storage."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that standard storage classes lead to high costs for data that is rarely accessed.",
+      "evidence": "Rising operational costs from storing massive volumes of historical transaction logs in standard storage classes that are rarely accessed."
+    },
+    {
+      "question": "In Regulatory Compliance Data Retention, what is a key trade-off when using Archive Storage?",
+      "options": [
+        "It is only available for small datasets.",
+        "It provides faster retrieval than standard storage.",
+        "Retrieval incurs higher costs and longer latency.",
+        "It requires manual intervention for every data access."
+      ],
+      "answerIndex": 2,
+      "explanation": "Archive storage is designed for low-cost retention, meaning it is not optimized for frequent or fast access.",
+      "evidence": "Archive storage is optimized for data that is rarely accessed; retrieving data incurs higher costs and longer latency compared to standard classes"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:50.482Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

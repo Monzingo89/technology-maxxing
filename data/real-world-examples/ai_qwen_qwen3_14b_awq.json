@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_14b_awq",
+  "title": "Optimizing Logistics Response Latency with Qwen3-14B-AWQ",
+  "business": "A regional logistics firm managing high-volume customer inquiries regarding shipment status and complex route planning.",
+  "problem": "The firm requires both high-speed, low-latency responses for simple status checks and deep, logical reasoning for complex route optimization, leading to inefficient resource allocation when using a single static model configuration.",
+  "solution": "By deploying Qwen3-14B-AWQ, the firm leverages the model's ability to switch between thinking and non-thinking modes. Simple status queries are handled in non-thinking mode for maximum efficiency, while complex route planning triggers the thinking mode to ensure logical accuracy.",
+  "steps": [
+    "Deploy Qwen3-14B-AWQ using a compatible inference engine like vLLM or SGLang.",
+    "Configure the API endpoint to support dynamic mode switching.",
+    "Implement a classification layer in the application backend to detect query complexity.",
+    "Route simple requests to the model with enable_thinking=False.",
+    "Route complex optimization requests to the model with enable_thinking=True."
+  ],
+  "outcome": "Improved operational efficiency by reducing latency for routine tasks while maintaining high-quality reasoning for complex logistics problems.",
+  "limitation": "The primary trade-off is that using thinking mode increases computational overhead and response time. This can be checked by monitoring the presence of <think> tags in the output and measuring the time-to-first-token for different request types.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inquiry Routing Logic",
+    "description": "The flow shows how incoming user queries are routed based on complexity to optimize model performance.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Customer Query",
+        "detail": "Incoming logistics inquiry"
+      },
+      {
+        "id": "router",
+        "label": "Logic Router",
+        "detail": "Classifies query complexity"
+      },
+      {
+        "id": "fast",
+        "label": "Non-Thinking Mode",
+        "detail": "Low latency, enable_thinking=False"
+      },
+      {
+        "id": "deep",
+        "label": "Thinking Mode",
+        "detail": "High reasoning, enable_thinking=True"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "router",
+        "label": "Input"
+      },
+      {
+        "from": "router",
+        "to": "fast",
+        "label": "Simple Status"
+      },
+      {
+        "from": "router",
+        "to": "deep",
+        "label": "Route Planning"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoTokenizer\n# Initialize tokenizer for Qwen3-14B-AWQ\ntokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen3-14B-AWQ')\n# Example of disabling thinking for a simple status query\nmessages = [{'role': 'user', 'content': 'Where is my package?'}]\ntext = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True, enable_thinking=False)\n# The model will now generate a response without the <think> block for efficiency",
+    "explanation": "This code demonstrates how to programmatically disable the thinking mode for simple, routine queries to reduce latency in the logistics application."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-14B-AWQ",
+      "label": "Qwen/Qwen3-14B-AWQ · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Logistics Response Latency with Qwen3-14B-AWQ, how does the model address the dual requirement for speed and reasoning?",
+      "options": [
+        "By using two separate models for different tasks.",
+        "By switching between thinking and non-thinking modes.",
+        "By only using thinking mode for all queries.",
+        "By disabling all reasoning capabilities permanently."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution leverages the model's native ability to toggle between thinking and non-thinking modes to balance efficiency and reasoning.",
+      "evidence": "By deploying Qwen3-14B-AWQ, the firm leverages the model's ability to switch between thinking and non-thinking modes."
+    },
+    {
+      "question": "In Optimizing Logistics Response Latency with Qwen3-14B-AWQ, what is the primary limitation of using thinking mode?",
+      "options": [
+        "It prevents the use of external tools.",
+        "It increases computational overhead and response time.",
+        "It requires a larger model than 14B.",
+        "It is incompatible with vLLM."
+      ],
+      "answerIndex": 1,
+      "explanation": "Thinking mode requires more computational resources to perform the reasoning steps, which inherently increases the time taken to generate a response.",
+      "evidence": "The primary trade-off is that using thinking mode increases computational overhead and response time."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:26.398Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:22.233Z"
+}

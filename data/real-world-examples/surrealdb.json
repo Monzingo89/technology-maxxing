@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "surrealdb",
+  "title": "Supply Chain Provenance Tracking",
+  "business": "Logistics companies managing complex, multi-tier supplier networks.",
+  "problem": "Traditional relational databases struggle to perform recursive lookups across deep supply chain dependencies, leading to slow visibility into the origin of raw materials.",
+  "solution": "SurrealDB uses a multi-model approach where supply chain entities are stored as records and their dependencies are defined as typed graph edges, allowing for single-query recursive traversal of the entire lineage.",
+  "steps": [
+    "Define schema-full tables for Suppliers and Components to enforce data integrity.",
+    "Create records for each entity representing a specific manufacturer or part.",
+    "Establish graph edges between records using the RELATE statement to represent supply dependencies.",
+    "Execute a single SurrealQL query using arrow syntax to traverse the graph from a finished product to its raw material origins.",
+    "Utilize ACID transactions to ensure that updates to supplier status and component relationships commit atomically."
+  ],
+  "outcome": "Real-time visibility into the complete provenance of any product, enabling rapid identification of upstream bottlenecks or quality issues.",
+  "limitation": "Deep recursive graph traversals can become computationally expensive as the depth of the supply chain increases; developers should monitor query execution time and consider indexing frequently traversed paths.",
+  "diagram": {
+    "kind": "er",
+    "title": "Supply Chain Relationship Model",
+    "description": "Nodes represent entities, and edges represent the flow of components between them.",
+    "nodes": [
+      {
+        "id": "raw",
+        "label": "Raw Material",
+        "detail": "Base level components"
+      },
+      {
+        "id": "sub",
+        "label": "Sub-Assembly",
+        "detail": "Intermediate parts"
+      },
+      {
+        "id": "prod",
+        "label": "Finished Product",
+        "detail": "Final consumer item"
+      }
+    ],
+    "edges": [
+      {
+        "from": "raw",
+        "to": "sub",
+        "label": "SUPPLIES"
+      },
+      {
+        "from": "sub",
+        "to": "prod",
+        "label": "COMPRISES"
+      }
+    ]
+  },
+  "code": {
+    "language": "surrealql",
+    "content": "-- Create a relationship between a raw material and a sub-assembly\nRELATE raw_material:iron -> supplies -> sub_assembly:chassis CONTENT {\n    quantity: 500,\n    delivery_date: '2023-10-01'\n};\n\n-- Traverse the graph to find all raw materials for a specific product\nSELECT ->supplies->raw_material FROM sub_assembly:chassis;",
+    "explanation": "This code demonstrates creating a typed edge between two records and then using arrow syntax to traverse the graph to retrieve upstream dependencies."
+  },
+  "sources": [
+    {
+      "url": "https://surrealdb.com/docs/what-is-surrealdb",
+      "label": "What is SurrealDB"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Provenance Tracking, why is a multi-model database preferred over a traditional relational database?",
+      "options": [
+        "It allows for single-query recursive traversal of complex dependencies.",
+        "It automatically generates supply chain reports in PDF format.",
+        "It eliminates the need for any schema definitions.",
+        "It provides built-in logistics routing algorithms."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that traditional relational databases struggle with recursive lookups, which SurrealDB solves by using graph edges and traversal capabilities.",
+      "evidence": "SurrealDB uses a multi-model approach where supply chain entities are stored as records and their dependencies are defined as typed graph edges, allowing for single-query recursive traversal of the entire lineage."
+    },
+    {
+      "question": "In Supply Chain Provenance Tracking, what is a primary limitation of the graph-based implementation?",
+      "options": [
+        "The inability to store data on the edges themselves.",
+        "The requirement to use separate databases for documents and graphs.",
+        "The potential for high computational costs during deep recursive traversals.",
+        "The lack of ACID transaction support for graph operations."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly warns that deep traversals can be expensive, necessitating performance monitoring.",
+      "evidence": "Deep recursive graph traversals can become computationally expensive as the depth of the supply chain increases; developers should monitor query execution time and consider indexing frequently traversed paths."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:50.419Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:45.961Z"
+}

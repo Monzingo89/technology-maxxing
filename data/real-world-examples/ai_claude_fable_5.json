@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_fable_5",
+  "title": "Legacy Archive Synthesis for Claude Fable 5",
+  "business": "Legal and historical research firms managing massive document repositories.",
+  "problem": "Researchers struggle to synthesize insights across million-token document sets due to the limited knowledge cutoff of newer models and the high cost of re-indexing legacy archives.",
+  "solution": "Utilizing the 1M token context window of Claude Fable 5 to perform deep-context analysis on static historical archives that fall within its January 2026 knowledge cutoff, avoiding the need for expensive vector database updates.",
+  "steps": [
+    "Aggregate historical case files into a single 1M token context block.",
+    "Initialize the Claude Fable 5 model via the API using the claude-fable-5 model ID.",
+    "Apply prompt caching to the static archive segments to reduce recurring input costs.",
+    "Execute synthesis queries leveraging the model's high default effort setting for complex reasoning.",
+    "Validate outputs against the January 2026 knowledge cutoff to ensure historical accuracy."
+  ],
+  "outcome": "Researchers achieve comprehensive thematic mapping across decades of data without requiring model retraining or continuous vector index maintenance.",
+  "limitation": "Claude Fable 5 has a knowledge cutoff of January 2026, meaning it cannot incorporate events or legal precedents occurring after that date; check for hallucinations by cross-referencing output dates against the model's known cutoff.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Archive Synthesis Workflow",
+    "description": "The flow shows data moving from static storage into the model context for analysis.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Archive Storage",
+        "detail": "Static historical documents"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Caching",
+        "detail": "Optimized input layer"
+      },
+      {
+        "id": "c",
+        "label": "Claude Fable 5",
+        "detail": "Processing engine"
+      },
+      {
+        "id": "d",
+        "label": "Synthesis Report",
+        "detail": "Final research output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Load Data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Inject Context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generate Analysis"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.messages.create(\n    model=\"claude-fable-5\", # Targeting the legacy model for historical consistency\n    max_tokens=1024,\n    messages=[{\"role\": \"user\", \"content\": \"Analyze these archives...\"}]\n) # High default effort is handled automatically by the model",
+    "explanation": "This demonstrates the instantiation of the Claude Fable 5 model ID to process a large context window for historical synthesis."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/fable-5/overview",
+      "label": "Claude Fable 5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Archive Synthesis for Claude Fable 5, why is this model chosen over newer alternatives?",
+      "options": [
+        "It offers a unique 1M token context window for static archives.",
+        "It is the only model that supports prompt caching.",
+        "It provides real-time access to post-2026 data.",
+        "It is significantly cheaper than all other models."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights using the 1M token context window for static archives that fit within the model's specific knowledge cutoff.",
+      "evidence": "Utilizing the 1M token context window of Claude Fable 5 to perform deep-context analysis on static historical archives that fall within its January 2026 knowledge cutoff"
+    },
+    {
+      "question": "What is a primary limitation when using Claude Fable 5 for the Legacy Archive Synthesis for Claude Fable 5 scenario?",
+      "options": [
+        "The model cannot process images.",
+        "The model's knowledge cutoff is January 2026.",
+        "The model does not support the Messages API.",
+        "The model is restricted to 10k tokens of output."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the January 2026 knowledge cutoff as a constraint for the model.",
+      "evidence": "Claude Fable 5 has a knowledge cutoff of January 2026, meaning it cannot incorporate events or legal precedents occurring after that date"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:36.142Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:32.039Z"
+}

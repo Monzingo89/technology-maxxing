@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "unreal",
+  "title": "Automated Architectural Visualization Pipeline",
+  "business": "A boutique architectural firm specializing in high-end residential design.",
+  "problem": "Manual updates to 3D models from CAD software result in inconsistent lighting and material application, causing significant delays during client review sessions.",
+  "solution": "Utilizing Unreal Engine's Datasmith and Blueprint visual scripting to automate the import and material assignment process, ensuring real-time synchronization between design changes and the rendered environment.",
+  "steps": [
+    "Configure Datasmith import settings to map CAD metadata to Unreal Engine actor tags.",
+    "Develop a Blueprint script that triggers on asset re-import to re-apply master materials to specific geometry classes.",
+    "Utilize the Rendering subsystem to bake lighting or enable Lumen for dynamic global illumination based on imported geometry.",
+    "Package the project for client review using the platform-specific deployment tools."
+  ],
+  "outcome": "A streamlined workflow where design iterations are reflected in the interactive 3D environment with minimal manual intervention, enhancing client engagement.",
+  "limitation": "The primary tradeoff is the high memory overhead of maintaining high-fidelity geometry; developers must check the Testing and Optimizing Your Content documentation to monitor performance budgets during large-scale model imports.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Automated Visualization Workflow",
+    "description": "The flow of data from design software to the final interactive client experience.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "CAD Source",
+        "detail": "External architectural model"
+      },
+      {
+        "id": "b",
+        "label": "Datasmith",
+        "detail": "Import and translation layer"
+      },
+      {
+        "id": "c",
+        "label": "Blueprint Logic",
+        "detail": "Automated material assignment"
+      },
+      {
+        "id": "d",
+        "label": "Lumen Renderer",
+        "detail": "Real-time lighting engine"
+      },
+      {
+        "id": "e",
+        "label": "Client Review",
+        "detail": "Final interactive output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "data ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers script"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "updates scene"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "renders output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dev.epicgames.com/documentation/en-us/unreal-engine",
+      "label": "Unreal Engine 5.8 Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Visualization Pipeline, what is the primary cause of delays during client review sessions?",
+      "options": [
+        "Inconsistent lighting and material application from manual updates",
+        "Lack of high-fidelity 3D assets in the CAD software",
+        "Insufficient hardware for real-time rendering",
+        "Complexity of the Blueprint visual scripting system"
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem statement explicitly identifies manual updates to 3D models as the source of inconsistency and delay.",
+      "evidence": "Manual updates to 3D models from CAD software result in inconsistent lighting and material application, causing significant delays during client review sessions."
+    },
+    {
+      "question": "In Automated Architectural Visualization Pipeline, what is the identified tradeoff when using high-fidelity geometry?",
+      "options": [
+        "Increased rendering time for static lighting",
+        "High memory overhead requiring performance monitoring",
+        "Incompatibility with Datasmith import tools",
+        "Reduced capability for Blueprint automation"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that high-fidelity geometry consumes significant memory, necessitating performance checks.",
+      "evidence": "The primary tradeoff is the high memory overhead of maintaining high-fidelity geometry; developers must check the Testing and Optimizing Your Content documentation to monitor performance budgets during large-scale model imports."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:52.120Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:48.518Z"
+}

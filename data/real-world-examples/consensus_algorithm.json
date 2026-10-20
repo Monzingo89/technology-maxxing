@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "consensus_algorithm",
+  "title": "Decentralized Energy Grid Synchronization",
+  "business": "Regional microgrid operators managing distributed battery storage units.",
+  "problem": "When multiple storage controllers attempt to update the shared grid state simultaneously, network partitions or node failures can lead to conflicting energy distribution logs, causing grid instability.",
+  "solution": "Implementing a consensus algorithm ensures that all distributed participants agree on a single, ordered sequence of state transitions, preventing split-brain scenarios where different parts of the grid operate on divergent data.",
+  "steps": [
+    "Deploy a cluster of controller nodes across distinct geographical zones.",
+    "Elect a leader node responsible for proposing the next state transition in the energy log.",
+    "Broadcast the proposed state change to all follower nodes for validation.",
+    "Commit the transition to the local state machine only after a majority of nodes acknowledge the proposal.",
+    "Replicate the finalized log entry to ensure all nodes maintain an identical history."
+  ],
+  "outcome": "The grid achieves a consistent, fault-tolerant state where all controllers operate on a unified ledger of energy transactions, even if individual nodes or network links fail.",
+  "limitation": "The primary trade-off is increased latency during the consensus round, as the system must wait for a majority of nodes to respond before finalizing a state change; this can be checked by monitoring the time elapsed between proposal and commit.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Consensus State Transition Flow",
+    "description": "This diagram illustrates how a leader node coordinates state agreement across a distributed network.",
+    "nodes": [
+      {
+        "id": "leader",
+        "label": "Leader Node",
+        "detail": "Proposes state updates"
+      },
+      {
+        "id": "follower1",
+        "label": "Follower A",
+        "detail": "Validates and acknowledges"
+      },
+      {
+        "id": "follower2",
+        "label": "Follower B",
+        "detail": "Validates and acknowledges"
+      },
+      {
+        "id": "log",
+        "label": "State Machine",
+        "detail": "Final ordered ledger"
+      }
+    ],
+    "edges": [
+      {
+        "from": "leader",
+        "to": "follower1",
+        "label": "Propose Update"
+      },
+      {
+        "from": "leader",
+        "to": "follower2",
+        "label": "Propose Update"
+      },
+      {
+        "from": "follower1",
+        "to": "leader",
+        "label": "Acknowledge"
+      },
+      {
+        "from": "follower2",
+        "to": "leader",
+        "label": "Acknowledge"
+      },
+      {
+        "from": "leader",
+        "to": "log",
+        "label": "Commit Order"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decentralized Energy Grid Synchronization, why is a consensus algorithm necessary?",
+      "options": [
+        "To prevent conflicting energy logs during network failures.",
+        "To increase the total storage capacity of the batteries.",
+        "To reduce the physical distance between grid nodes.",
+        "To eliminate the need for any leader node in the system."
+      ],
+      "answerIndex": 0,
+      "explanation": "Consensus algorithms prevent split-brain scenarios where nodes diverge due to failures, ensuring a single ordered state.",
+      "evidence": "Implementing a consensus algorithm ensures that all distributed participants agree on a single, ordered sequence of state transitions, preventing split-brain scenarios where different parts of the grid operate on divergent data."
+    },
+    {
+      "question": "What is a key limitation of the approach used in Decentralized Energy Grid Synchronization?",
+      "options": [
+        "It requires all nodes to be online at all times.",
+        "It significantly increases the cost of hardware.",
+        "It introduces latency due to the required majority acknowledgment.",
+        "It prevents the system from ever recovering from a partition."
+      ],
+      "answerIndex": 2,
+      "explanation": "The requirement for a majority of nodes to acknowledge proposals introduces a delay in processing state changes.",
+      "evidence": "The primary trade-off is increased latency during the consensus round, as the system must wait for a majority of nodes to respond before finalizing a state change"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:28.336Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "http_headers",
+  "title": "Regional Compliance via HTTP Metadata",
+  "business": "A global digital publishing platform that must serve localized content based on user geographic origin while maintaining a single unified application codebase.",
+  "problem": "The application server struggles to identify user location reliably because the underlying infrastructure strips away original connection metadata, leading to incorrect content delivery and potential regulatory non-compliance in specific jurisdictions.",
+  "solution": "By leveraging custom HTTP headers, the edge proxy layer injects geographic metadata into the request lifecycle. The application server reads these headers to determine the user's region without needing to perform expensive IP-to-location lookups at the application layer, ensuring the response metadata remains decoupled from the content representation.",
+  "steps": [
+    "Configure the edge proxy to identify the user's origin based on the incoming request IP address.",
+    "Inject a custom X-Region-Identifier header into the request forwarded to the application server.",
+    "Implement middleware in the application server to extract the X-Region-Identifier value from the request headers.",
+    "Apply conditional logic based on the header value to serve region-specific content or redirect the user.",
+    "Verify that the response headers include a Vary: X-Region-Identifier header to prevent caching incorrect regional content."
+  ],
+  "outcome": "The platform achieves consistent, compliant content delivery across all regions while reducing the computational overhead on the application server, resulting in a more maintainable and scalable architecture.",
+  "limitation": "Custom headers can be spoofed if the application server is directly accessible from the public internet. To verify this, check if the application server logs show requests containing the custom header that originated from outside the trusted edge proxy IP range.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Regional Metadata Injection Flow",
+    "description": "This diagram illustrates how request metadata is transformed by the edge proxy before reaching the application.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Sends standard HTTP request"
+      },
+      {
+        "id": "b",
+        "label": "Edge Proxy",
+        "detail": "Identifies location and injects X-Region-Identifier"
+      },
+      {
+        "id": "c",
+        "label": "App Server",
+        "detail": "Reads header to serve localized content"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Raw Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Request with X-Region-Identifier"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Regional Compliance via HTTP Metadata, why is the edge proxy used to inject headers?",
+      "options": [
+        "To perform expensive IP-to-location lookups at the application layer.",
+        "To ensure the application server can identify user location without manual IP lookups.",
+        "To replace the need for a unified application codebase.",
+        "To allow clients to spoof their geographic origin for better performance."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution uses the edge proxy to inject metadata so the application server does not have to perform the lookup itself.",
+      "evidence": "The application server reads these headers to determine the user's region without needing to perform expensive IP-to-location lookups at the application layer"
+    },
+    {
+      "question": "In Regional Compliance via HTTP Metadata, what is a primary security limitation of using custom headers?",
+      "options": [
+        "The headers are automatically stripped by the browser.",
+        "The headers increase the size of the response body.",
+        "The headers can be spoofed if the server is accessible from the public internet.",
+        "The headers prevent the use of the Vary header for caching."
+      ],
+      "answerIndex": 2,
+      "explanation": "Custom headers are not inherently secure and can be forged if the server accepts requests from untrusted sources.",
+      "evidence": "Custom headers can be spoofed if the application server is directly accessible from the public internet."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:40.802Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

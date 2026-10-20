@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "single_source_of_truth",
+  "title": "Unified Global Inventory Registry",
+  "business": "A multinational retail logistics firm managing regional warehouses.",
+  "problem": "Discrepancies between regional databases caused stock-outs and redundant procurement because no single system held the authoritative count for high-value assets.",
+  "solution": "Implementing a Single Source of Truth (SSOT) pattern where a centralized registry service acts as the exclusive authoritative representation for item availability, forcing all regional systems to read from and write to this central node rather than maintaining local state.",
+  "steps": [
+    "Identify the canonical data entity representing the physical asset state.",
+    "Deprecate local write permissions in regional databases to prevent data divergence.",
+    "Expose a centralized API layer that enforces validation rules before updating the master registry.",
+    "Implement a read-through cache strategy to maintain performance without sacrificing the authoritative nature of the registry."
+  ],
+  "outcome": "Consistent inventory visibility across all regions, eliminating conflicting reports and enabling reliable automated replenishment.",
+  "limitation": "The centralized registry introduces a potential latency bottleneck and a single point of failure; monitoring can be performed by tracking the request-to-response time latency metrics of the registry API.",
+  "diagram": {
+    "kind": "er",
+    "title": "SSOT Inventory Architecture",
+    "description": "This diagram illustrates the flow from regional requests to the authoritative registry.",
+    "nodes": [
+      {
+        "id": "reg",
+        "label": "Regional System",
+        "detail": "Read-only client"
+      },
+      {
+        "id": "api",
+        "label": "Registry API",
+        "detail": "Validation and Auth"
+      },
+      {
+        "id": "db",
+        "label": "Master Registry",
+        "detail": "Authoritative state"
+      },
+      {
+        "id": "log",
+        "label": "Audit Log",
+        "detail": "Immutable history"
+      }
+    ],
+    "edges": [
+      {
+        "from": "reg",
+        "to": "api",
+        "label": "1:n requests"
+      },
+      {
+        "from": "api",
+        "to": "db",
+        "label": "1:1 updates"
+      },
+      {
+        "from": "db",
+        "to": "log",
+        "label": "1:n records"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Global Inventory Registry, what is the primary reason for adopting a Single Source of Truth?",
+      "options": [
+        "To resolve discrepancies between regional databases and prevent stock-outs.",
+        "To increase the number of regional databases for redundancy.",
+        "To allow regional systems to maintain their own independent inventory counts.",
+        "To improve the aesthetic design of the inventory dashboard."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that regional discrepancies caused operational failures, which the SSOT pattern addresses by centralizing authority.",
+      "evidence": "Discrepancies between regional databases caused stock-outs and redundant procurement because no single system held the authoritative count for high-value assets."
+    },
+    {
+      "question": "In Unified Global Inventory Registry, what is a significant trade-off of the proposed architecture?",
+      "options": [
+        "It makes the system impossible to scale horizontally.",
+        "It creates a single point of failure and potential latency bottleneck.",
+        "It requires all regional systems to be offline during updates.",
+        "It eliminates the need for any audit logging."
+      ],
+      "answerIndex": 1,
+      "explanation": "Centralizing data creates a dependency on a single node, which introduces risks regarding availability and performance.",
+      "evidence": "The centralized registry introduces a potential latency bottleneck and a single point of failure; monitoring can be performed by tracking the request-to-response time latency metrics of the registry API."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:05.853Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

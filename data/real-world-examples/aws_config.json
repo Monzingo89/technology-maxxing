@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_config",
+  "title": "Automated Compliance for Financial Data Pipelines",
+  "business": "A regional financial services firm managing sensitive customer data across multiple AWS accounts.",
+  "problem": "Manual auditing of infrastructure changes leads to configuration drift, where unauthorized security group modifications or unencrypted storage volumes persist undetected, increasing the risk of data exposure.",
+  "solution": "AWS Config provides continuous monitoring and recording of resource configurations. By implementing managed rules, the firm can automatically evaluate resource states against security policies, triggering alerts or remediation actions the moment a non-compliant change occurs.",
+  "steps": [
+    "Enable AWS Config in the target region to start recording resource configuration changes.",
+    "Select and deploy managed rules that enforce encryption-at-rest for storage volumes.",
+    "Configure an Amazon SNS topic to receive notifications whenever a resource is marked as non-compliant.",
+    "Review the resource timeline in the AWS Config console to identify the specific IAM user who initiated the non-compliant change."
+  ],
+  "outcome": "The firm achieves a continuous compliance posture where security teams receive near real-time visibility into configuration drift, allowing for rapid remediation without manual periodic audits.",
+  "limitation": "AWS Config incurs costs based on the number of configuration items recorded and the number of rule evaluations performed; to check this, monitor the monthly billing dashboard for Config-specific line items.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Config Compliance Workflow",
+    "description": "This diagram illustrates the flow from resource modification to compliance notification.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Resource Change",
+        "detail": "User modifies an AWS resource"
+      },
+      {
+        "id": "b",
+        "label": "AWS Config Recorder",
+        "detail": "Captures the configuration state"
+      },
+      {
+        "id": "c",
+        "label": "Managed Rule",
+        "detail": "Evaluates compliance against policy"
+      },
+      {
+        "id": "d",
+        "label": "SNS Notification",
+        "detail": "Alerts the security team"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers recording"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "evaluates state"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "sends alert if non-compliant"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Compliance for Financial Data Pipelines, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual auditing leads to undetected configuration drift.",
+        "High costs associated with cloud storage.",
+        "Inability to migrate on-premises applications.",
+        "Lack of global infrastructure availability."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that manual auditing leads to configuration drift, which the solution addresses via continuous monitoring.",
+      "evidence": "Manual auditing of infrastructure changes leads to configuration drift, where unauthorized security group modifications or unencrypted storage volumes persist undetected, increasing the risk of data exposure."
+    },
+    {
+      "question": "In Automated Compliance for Financial Data Pipelines, what is a noted limitation of the implementation?",
+      "options": [
+        "The service cannot detect changes in real-time.",
+        "It is impossible to identify the user who made the change.",
+        "The service incurs costs based on recording and evaluation volume.",
+        "Managed rules are not available for storage volumes."
+      ],
+      "answerIndex": 2,
+      "explanation": "The text identifies cost as a primary limitation related to the volume of recording and rule evaluations.",
+      "evidence": "AWS Config incurs costs based on the number of configuration items recorded and the number of rule evaluations performed; to check this, monitor the monthly billing dashboard for Config-specific line items."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:17.973Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

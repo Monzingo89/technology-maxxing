@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_gke",
+  "title": "Scaling E-commerce Microservices with GKE Autopilot",
+  "business": "Retail companies managing high-traffic web applications that require consistent uptime and automated infrastructure management.",
+  "problem": "Operational overhead and manual cluster tuning lead to resource wastage and inconsistent performance during unpredictable traffic spikes.",
+  "solution": "GKE Autopilot provides a managed Kubernetes environment that automatically handles cluster infrastructure, node provisioning, and scaling, allowing teams to focus on containerized application logic.",
+  "steps": [
+    "Define the application requirements in a standard Kubernetes manifest file.",
+    "Provision a GKE cluster using the Autopilot mode to offload node management.",
+    "Deploy microservices to the cluster, letting GKE handle pod scheduling and resource allocation.",
+    "Monitor resource utilization via integrated cloud observability tools to ensure efficiency."
+  ],
+  "outcome": "Reduced operational burden and improved resource utilization through automated, policy-driven infrastructure management.",
+  "limitation": "Autopilot restricts direct access to underlying node configurations; verify compatibility by checking if your application requires specific node-level kernel tuning or custom daemonsets.",
+  "diagram": {
+    "kind": "flow",
+    "title": "GKE Autopilot Operational Flow",
+    "description": "Shows the relationship between developer input and managed infrastructure.",
+    "nodes": [
+      {
+        "id": "dev",
+        "label": "Developer",
+        "detail": "Submits container manifests"
+      },
+      {
+        "id": "api",
+        "label": "GKE Control Plane",
+        "detail": "Manages cluster state"
+      },
+      {
+        "id": "auto",
+        "label": "Autopilot Engine",
+        "detail": "Automates node provisioning"
+      },
+      {
+        "id": "pods",
+        "label": "Application Pods",
+        "detail": "Running microservices"
+      }
+    ],
+    "edges": [
+      {
+        "from": "dev",
+        "to": "api",
+        "label": "deploys"
+      },
+      {
+        "from": "api",
+        "to": "auto",
+        "label": "triggers"
+      },
+      {
+        "from": "auto",
+        "to": "pods",
+        "label": "provisions"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Scaling E-commerce Microservices with GKE Autopilot, what is the primary benefit of using Autopilot?",
+      "options": [
+        "Manual control over kernel parameters",
+        "Reduced operational overhead through automated infrastructure management",
+        "Lowering the cost of cloud storage",
+        "Eliminating the need for containerization"
+      ],
+      "answerIndex": 1,
+      "explanation": "GKE Autopilot is designed to offload node management and infrastructure tasks, reducing the operational burden on teams.",
+      "evidence": "GKE Autopilot provides a managed Kubernetes environment that automatically handles cluster infrastructure, node provisioning, and scaling, allowing teams to focus on containerized application logic."
+    },
+    {
+      "question": "In Scaling E-commerce Microservices with GKE Autopilot, what is a key limitation to consider?",
+      "options": [
+        "Inability to run containerized applications",
+        "Lack of integration with cloud observability tools",
+        "Restricted access to underlying node configurations",
+        "Requirement for manual node provisioning"
+      ],
+      "answerIndex": 2,
+      "explanation": "Autopilot manages the nodes for you, which means you cannot modify the underlying node configurations directly.",
+      "evidence": "Autopilot restricts direct access to underlying node configurations; verify compatibility by checking if your application requires specific node-level kernel tuning or custom daemonsets."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:29.209Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

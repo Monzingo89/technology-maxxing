@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_defog_sqlcoder_7b_2",
+  "title": "Retail Inventory Analytics for Non-Technical Managers",
+  "business": "Regional retail managers who need to query inventory databases without learning SQL.",
+  "problem": "Managers face a bottleneck where they must wait for IT staff to write custom SQL queries to extract daily stock levels and sales trends, leading to delayed decision-making.",
+  "solution": "SQLCoder-7B-2 acts as a specialized text-to-SQL interface that translates natural language questions into valid SQL queries, allowing managers to retrieve data directly from read-only database replicas.",
+  "steps": [
+    "Prepare a read-only database replica to ensure data security.",
+    "Extract the DDL statements from the inventory database schema.",
+    "Format the user's natural language question into the required prompt structure including the DDL.",
+    "Configure the inference parameters with do_sample=False and num_beams=4 for stable output.",
+    "Execute the generated SQL against the read-only database."
+  ],
+  "outcome": "Managers gain immediate, self-service access to inventory insights, significantly reducing the dependency on technical support teams for routine reporting.",
+  "limitation": "The model is not designed for database administration or write operations; it lacks security mechanisms to reject malicious destructive commands, so it must be restricted to read-only database access to prevent unauthorized data modification.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SQLCoder-7B-2 Implementation Flow",
+    "description": "The flow from user input to database execution.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Manager",
+        "detail": "Provides natural language question"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Builder",
+        "detail": "Combines DDL and question"
+      },
+      {
+        "id": "c",
+        "label": "SQLCoder-7B-2",
+        "detail": "Generates SQL query"
+      },
+      {
+        "id": "d",
+        "label": "Read-Only DB",
+        "detail": "Executes query and returns data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Natural Language"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Formatted Prompt"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "SQL Query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/defog/sqlcoder-7b-2",
+      "label": "defog/sqlcoder-7b-2"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Analytics for Non-Technical Managers, how does SQLCoder-7B-2 solve the reporting bottleneck?",
+      "options": [
+        "By automating database administration tasks.",
+        "By translating natural language into SQL for read-only data retrieval.",
+        "By replacing the need for a database replica.",
+        "By writing malicious queries to optimize performance."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that managers need to query data without IT help, and the solution uses the model to translate natural language into SQL for read-only access.",
+      "evidence": "SQLCoder-7B-2 acts as a specialized text-to-SQL interface that translates natural language questions into valid SQL queries, allowing managers to retrieve data directly from read-only database replicas."
+    },
+    {
+      "question": "Regarding the implementation of Retail Inventory Analytics for Non-Technical Managers, what is a critical safety limitation?",
+      "options": [
+        "The model requires a high-performance GPU for every query.",
+        "The model cannot handle joins between tables.",
+        "The model lacks safeguards against malicious write access, requiring read-only database permissions.",
+        "The model is only compatible with non-PostgreSQL databases."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly states that the model is not for admin tasks and lacks rejection mechanisms for malicious write requests, necessitating read-only access.",
+      "evidence": "The model is not designed for database administration or write operations; it lacks security mechanisms to reject malicious destructive commands, so it must be restricted to read-only database access to prevent unauthorized data modification."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:25.463Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:21.199Z"
+}

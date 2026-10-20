@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "gcp_bigquery",
+  "title": "Retail Inventory Analytics Scaling",
+  "business": "Large-scale retail enterprises managing millions of daily transaction records across thousands of store locations.",
+  "problem": "Legacy on-premises database systems struggle with high-concurrency analytical queries, leading to significant delays in inventory replenishment reporting and operational bottlenecks.",
+  "solution": "BigQuery provides a serverless data warehouse for large-scale SQL analytics, allowing the retail enterprise to decouple storage from compute and execute complex queries across massive datasets without managing infrastructure.",
+  "steps": [
+    "Provision a BigQuery dataset to serve as the centralized repository for raw transaction logs.",
+    "Configure ingestion pipelines to stream or batch load transactional data into partitioned tables.",
+    "Define SQL views to aggregate daily inventory levels per store location.",
+    "Execute analytical queries using standard SQL to identify stock-out patterns.",
+    "Monitor query execution plans to ensure optimal resource utilization."
+  ],
+  "outcome": "The organization achieves near real-time visibility into inventory status, enabling data-driven replenishment decisions without the overhead of maintaining physical database clusters.",
+  "limitation": "The primary trade-off is the cost associated with data scanning; users must monitor query usage to prevent excessive costs, which can be checked via the BigQuery job information metadata.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Data Flow",
+    "description": "The flow of transactional data from source systems into the analytical warehouse for reporting.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "POS Systems",
+        "detail": "Source of transaction logs"
+      },
+      {
+        "id": "b",
+        "label": "Ingestion Pipeline",
+        "detail": "Data movement layer"
+      },
+      {
+        "id": "c",
+        "label": "BigQuery Dataset",
+        "detail": "Serverless storage"
+      },
+      {
+        "id": "d",
+        "label": "SQL Analytics",
+        "detail": "Query processing layer"
+      },
+      {
+        "id": "e",
+        "label": "Inventory Report",
+        "detail": "Final business output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "streams data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "loads into tables"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "scans partitions"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "generates insights"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Analytics Scaling, what is the primary benefit of using BigQuery?",
+      "options": [
+        "It eliminates the need for managing infrastructure for large-scale SQL analytics.",
+        "It provides a physical database cluster for on-premises hardware.",
+        "It automatically reduces the cost of every query executed.",
+        "It replaces the need for SQL in data analysis."
+      ],
+      "answerIndex": 0,
+      "explanation": "BigQuery is a serverless data warehouse that removes the burden of managing infrastructure, which addresses the problem of legacy systems struggling with analytical workloads.",
+      "evidence": "BigQuery provides a serverless data warehouse for large-scale SQL analytics, allowing the retail enterprise to decouple storage from compute and execute complex queries across massive datasets without managing infrastructure."
+    },
+    {
+      "question": "In Retail Inventory Analytics Scaling, what is a key limitation to consider during implementation?",
+      "options": [
+        "The inability to use standard SQL for queries.",
+        "The requirement to manually scale compute nodes.",
+        "The potential for high costs due to data scanning.",
+        "The lack of support for partitioned tables."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that cost is tied to data scanning, making it a critical factor to monitor.",
+      "evidence": "The primary trade-off is the cost associated with data scanning; users must monitor query usage to prevent excessive costs, which can be checked via the BigQuery job information metadata."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:47.572Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

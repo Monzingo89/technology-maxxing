@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "fireworksai",
+  "title": "Automated Legal Document Summarization Pipeline",
+  "business": "A mid-sized boutique law firm managing high volumes of discovery documents.",
+  "problem": "The firm struggles with inconsistent manual summarization of lengthy legal filings, leading to delayed case preparation and high operational overhead for junior associates.",
+  "solution": "The firm implements a structured inference pipeline using Fireworks AI to process legal documents. By utilizing the platform's support for structured outputs and high-throughput inference, the firm automates the extraction of key case facts into standardized JSON formats, ensuring consistency across all processed filings.",
+  "steps": [
+    "Select a high-performance open-source model optimized for long-context reasoning via the Fireworks AI model catalog.",
+    "Configure the inference request to enforce structured JSON output, ensuring the model adheres to the firm's specific schema for case metadata.",
+    "Deploy the model to a dedicated GPU instance to ensure consistent latency during peak discovery periods.",
+    "Integrate the Fireworks API into the firm's internal document management system to trigger automated summarization upon file upload."
+  ],
+  "outcome": "Legal teams receive standardized, machine-readable summaries immediately upon document ingestion, allowing associates to focus on high-level legal strategy rather than rote data entry.",
+  "limitation": "The primary trade-off involves model context window constraints; if a document exceeds the maximum token limit of the chosen model, the summary may be incomplete. This can be checked by monitoring the response metadata for truncation flags or verifying input length against the model's documented context window.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legal Document Processing Workflow",
+    "description": "The flow of documents from storage to structured legal summaries.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Storage",
+        "detail": "Repository for raw legal filings"
+      },
+      {
+        "id": "b",
+        "label": "Fireworks API",
+        "detail": "Inference engine for model execution"
+      },
+      {
+        "id": "c",
+        "label": "Structured JSON",
+        "detail": "Standardized summary output"
+      },
+      {
+        "id": "d",
+        "label": "Case Management System",
+        "detail": "Final destination for legal review"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Trigger inference request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Generate structured output"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Store summary data"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import fireworks.client\n\n# Configure the client with the model and structured output requirements\nresponse = fireworks.client.ChatCompletion.create(\n  model=\"accounts/fireworks/models/llama-v3-70b-instruct\",\n  messages=[{\"role\": \"user\", \"content\": \"Summarize this legal filing: ...\"}],\n  response_format={\"type\": \"json_object\"} # Enforce JSON structure for downstream parsing\n)",
+    "explanation": "This code snippet demonstrates how to call the Fireworks AI API to generate a structured JSON response, which is essential for the firm's automated summarization pipeline."
+  },
+  "sources": [
+    {
+      "url": "https://docs.fireworks.ai/",
+      "label": "Fireworks AI Docs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Document Summarization Pipeline, how does the firm address the issue of inconsistent manual summarization?",
+      "options": [
+        "By utilizing the platform's support for structured outputs and high-throughput inference",
+        "By hiring more junior associates to handle the document load",
+        "By switching to a proprietary closed-source model provider",
+        "By manually coding every summary in a custom database"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution section explicitly states that structured outputs and high-throughput inference are used to ensure consistency.",
+      "evidence": "By utilizing the platform's support for structured outputs and high-throughput inference, the firm automates the extraction of key case facts into standardized JSON formats, ensuring consistency across all processed filings."
+    },
+    {
+      "question": "In Automated Legal Document Summarization Pipeline, what is the primary limitation regarding document processing?",
+      "options": [
+        "The API is only available during business hours",
+        "The model context window constraints may lead to incomplete summaries",
+        "The cost of dedicated GPUs is prohibitive for small firms",
+        "The JSON output format is incompatible with legal software"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies context window constraints as the primary trade-off.",
+      "evidence": "The primary trade-off involves model context window constraints; if a document exceeds the maximum token limit of the chosen model, the summary may be incomplete."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:40.749Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:36.929Z"
+}

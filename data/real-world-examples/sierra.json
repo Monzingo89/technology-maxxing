@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "sierra",
+  "title": "Unified Logistics Support Orchestration",
+  "business": "Global logistics providers managing high-volume, multi-channel shipment inquiries.",
+  "problem": "Support teams struggle with fragmented customer context across SMS, email, and voice, leading to repetitive data entry and inconsistent resolution times for complex shipment tracking issues.",
+  "solution": "Sierra enables the deployment of a single, unified AI agent that maintains persistent customer context across all channels, allowing the agent to reference historical shipment data and long-horizon planning to resolve multi-step logistics queries without human intervention.",
+  "steps": [
+    "Upload existing SOPs and historical support transcripts into the Sierra Ghostwriter to establish the agent's core knowledge base.",
+    "Configure the agent to integrate with internal logistics systems to enable real-time shipment status lookups.",
+    "Define guardrails within the Sierra platform to ensure agent responses align with company communication standards.",
+    "Deploy the unified agent across SMS, email, and voice channels to centralize customer interactions.",
+    "Utilize the Insights Explorer to monitor agent performance and refine conversation design based on actual interaction data."
+  ],
+  "outcome": "A seamless, personalized support experience where customers receive consistent, context-aware updates regardless of the channel they choose to contact.",
+  "limitation": "The agent's reliance on uploaded SOPs and system integrations means that if the underlying logistics data is outdated or incomplete, the agent may provide inaccurate status updates; this can be checked by reviewing the Observability logs for tool call outputs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Unified Logistics Agent Workflow",
+    "description": "This diagram illustrates how the Sierra agent centralizes customer data to provide unified support.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Customer",
+        "detail": "Initiates inquiry via SMS, Email, or Voice"
+      },
+      {
+        "id": "b",
+        "label": "Sierra Agent",
+        "detail": "Processes intent and maintains cross-channel memory"
+      },
+      {
+        "id": "c",
+        "label": "Logistics System",
+        "detail": "Provides real-time shipment status"
+      },
+      {
+        "id": "d",
+        "label": "Insights Explorer",
+        "detail": "Monitors agent performance and tool calls"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends inquiry"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Queries status"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Logs interaction"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://sierra.ai/",
+      "label": "Sierra AI Platform Overview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Support Orchestration, what is the primary benefit of using a single Sierra agent across channels?",
+      "options": [
+        "It eliminates the need for human support staff entirely.",
+        "It maintains persistent customer context to resolve complex, multi-step queries.",
+        "It automatically reduces the cost of logistics shipping fees.",
+        "It forces customers to use only one specific communication channel."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution highlights that the agent maintains persistent context across channels, which is essential for resolving complex, multi-step logistics issues.",
+      "evidence": "Sierra enables the deployment of a single, unified AI agent that maintains persistent customer context across all channels, allowing the agent to reference historical shipment data and long-horizon planning to resolve multi-step logistics queries without human intervention."
+    },
+    {
+      "question": "In Unified Logistics Support Orchestration, how can a user verify if the agent is providing inaccurate information due to stale data?",
+      "options": [
+        "By checking the Observability logs for tool call outputs.",
+        "By manually deleting all historical support transcripts.",
+        "By increasing the frequency of SMS notifications.",
+        "By disabling the Insights Explorer monitoring tool."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section explicitly mentions that checking Observability logs is the method to verify if tool calls are returning incorrect or outdated data.",
+      "evidence": "The agent's reliance on uploaded SOPs and system integrations means that if the underlying logistics data is outdated or incomplete, the agent may provide inaccurate status updates; this can be checked by reviewing the Observability logs for tool call outputs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:05.474Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:01.724Z"
+}

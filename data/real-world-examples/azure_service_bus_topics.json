@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_service_bus_topics",
+  "title": "Global Logistics Event Distribution",
+  "business": "Logistics companies managing diverse regional distribution centers that require real-time updates on shipment status.",
+  "problem": "Monolithic notification systems struggle to route specific shipment events to relevant regional warehouses, leading to unnecessary data processing and latency.",
+  "solution": "Azure Service Bus Topics enable a publish-subscribe pattern where a single message sent to a topic is distributed to multiple subscriptions, each using filters to receive only relevant shipment updates.",
+  "steps": [
+    "Create an Azure Service Bus Namespace and define a central Topic for shipment events.",
+    "Configure multiple Subscriptions on the Topic, one for each regional distribution center.",
+    "Apply SQL-based filters to each Subscription to isolate events by region or shipment priority.",
+    "Publish shipment messages to the Topic using a unique Correlation ID.",
+    "Implement message handlers in regional services to process filtered messages from their respective Subscriptions."
+  ],
+  "outcome": "Regional services receive only the data they need, reducing local compute overhead and ensuring durable delivery even if a regional service is temporarily offline.",
+  "limitation": "The complexity of managing numerous subscription filters can lead to maintenance overhead; verify filter effectiveness by monitoring the dead-letter queue for messages that fail to match any criteria.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Topic-Based Event Routing",
+    "description": "Shows how a single publisher sends messages to a topic, which then routes them to specific subscriptions based on defined filters.",
+    "nodes": [
+      {
+        "id": "pub",
+        "label": "Publisher",
+        "detail": "Shipment Service"
+      },
+      {
+        "id": "top",
+        "label": "Topic",
+        "detail": "ShipmentEvents"
+      },
+      {
+        "id": "sub1",
+        "label": "Subscription A",
+        "detail": "Filter: Region='North'"
+      },
+      {
+        "id": "sub2",
+        "label": "Subscription B",
+        "detail": "Filter: Region='South'"
+      }
+    ],
+    "edges": [
+      {
+        "from": "pub",
+        "to": "top",
+        "label": "Sends Message"
+      },
+      {
+        "from": "top",
+        "to": "sub1",
+        "label": "Matches Filter"
+      },
+      {
+        "from": "top",
+        "to": "sub2",
+        "label": "Matches Filter"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Event Distribution, how does the solution address the problem of inefficient notification routing?",
+      "options": [
+        "By using subscriptions with filters to ensure regional services only receive relevant data.",
+        "By replacing the monolithic system with a direct database connection for every warehouse.",
+        "By broadcasting all shipment messages to every regional center simultaneously.",
+        "By increasing the bandwidth of the central notification server."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution utilizes topic subscriptions with filters to ensure that regional services only process messages pertinent to their specific region, avoiding unnecessary data handling.",
+      "evidence": "Azure Service Bus Topics enable a publish-subscribe pattern where a single message sent to a topic is distributed to multiple subscriptions, each using filters to receive only relevant shipment updates."
+    },
+    {
+      "question": "In Global Logistics Event Distribution, what is a primary limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than two regional subscriptions.",
+        "Messages are lost if the regional service is offline during transmission.",
+        "Managing numerous subscription filters can become complex and requires monitoring.",
+        "The system requires a manual restart whenever a new region is added."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that managing many filters creates maintenance overhead and suggests monitoring the dead-letter queue to ensure filters are working as intended.",
+      "evidence": "The complexity of managing numerous subscription filters can lead to maintenance overhead; verify filter effectiveness by monitoring the dead-letter queue for messages that fail to match any criteria."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:04.597Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

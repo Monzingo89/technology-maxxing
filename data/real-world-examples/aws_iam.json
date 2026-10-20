@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_iam",
+  "title": "Secure Logistics Data Access",
+  "business": "A regional logistics firm managing sensitive shipping manifests across multiple departments.",
+  "problem": "The firm suffers from over-privileged access where temporary contractors retain permanent permissions to sensitive databases, increasing the risk of unauthorized data exposure.",
+  "solution": "Implementing AWS IAM roles allows the firm to assign temporary security credentials to contractors, ensuring that access is scoped strictly to the duration of their tasks and the specific resources required.",
+  "steps": [
+    "Define an IAM policy that specifies granular actions and resource ARNs for the shipping database.",
+    "Create an IAM role that includes the defined policy for temporary contractor access.",
+    "Configure trust relationships on the role to allow specific identity providers to assume the role.",
+    "Require contractors to assume the role via the AWS CLI or SDK to receive short-lived session tokens.",
+    "Audit access logs to verify that contractor permissions expire automatically after the session duration."
+  ],
+  "outcome": "The firm achieves a zero-trust posture where contractor access is ephemeral, reducing the attack surface by eliminating long-lived credentials.",
+  "limitation": "A significant limitation is the complexity of managing trust relationships at scale; if the trust policy is misconfigured, it may inadvertently allow unauthorized entities to assume the role. This can be checked by reviewing the IAM policy simulator and monitoring CloudTrail for unexpected AssumeRole events.",
+  "diagram": {
+    "kind": "er",
+    "title": "IAM Role Access Model",
+    "description": "This diagram illustrates the relationship between the contractor, the IAM role, and the protected resource.",
+    "nodes": [
+      {
+        "id": "contractor",
+        "label": "Contractor",
+        "detail": "External user identity"
+      },
+      {
+        "id": "role",
+        "label": "IAM Role",
+        "detail": "Temporary security container"
+      },
+      {
+        "id": "policy",
+        "label": "IAM Policy",
+        "detail": "JSON permission document"
+      },
+      {
+        "id": "db",
+        "label": "Shipping Database",
+        "detail": "Protected resource"
+      }
+    ],
+    "edges": [
+      {
+        "from": "contractor",
+        "to": "role",
+        "label": "assumes (1:1)"
+      },
+      {
+        "from": "role",
+        "to": "policy",
+        "label": "enforces (1:N)"
+      },
+      {
+        "from": "role",
+        "to": "db",
+        "label": "accesses (1:1)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Logistics Data Access, what is the primary benefit of using IAM roles for contractors?",
+      "options": [
+        "It provides permanent access to all company resources.",
+        "It assigns temporary security credentials to reduce unauthorized exposure.",
+        "It eliminates the need for any authentication.",
+        "It automatically upgrades database hardware."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that IAM roles assign temporary credentials to ensure access is scoped strictly to the duration of tasks.",
+      "evidence": "Implementing AWS IAM roles allows the firm to assign temporary security credentials to contractors, ensuring that access is scoped strictly to the duration of their tasks and the specific resources required."
+    },
+    {
+      "question": "In Secure Logistics Data Access, what is a key limitation of the proposed IAM implementation?",
+      "options": [
+        "The inability to use JSON policies.",
+        "The risk of misconfigured trust relationships leading to unauthorized access.",
+        "The requirement to use physical hardware tokens for every request.",
+        "The lack of audit logging capabilities."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that misconfigured trust policies are a risk that must be monitored.",
+      "evidence": "A significant limitation is the complexity of managing trust relationships at scale; if the trust policy is misconfigured, it may inadvertently allow unauthorized entities to assume the role."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:22.730Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

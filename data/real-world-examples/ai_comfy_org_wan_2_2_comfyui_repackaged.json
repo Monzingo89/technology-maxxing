@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_comfy_org_wan_2_2_comfyui_repackaged",
+  "title": "Automated Product Catalog Animation",
+  "business": "E-commerce retailers needing to convert static product photography into engaging video content for social media marketing.",
+  "problem": "Manual video production for thousands of individual product SKUs is prohibitively expensive and slow, creating a bottleneck in seasonal marketing campaigns.",
+  "solution": "Using the Wan 2.2 ComfyUI Repackaged model, retailers can automate the transformation of static high-resolution product images into short, fluid video clips that demonstrate product features or textures without manual filming.",
+  "steps": [
+    "Download the required Wan 2.2 I2V 14B model files and place them into the ComfyUI/models/diffusion_models directory.",
+    "Configure the ComfyUI workflow to load the UMT5 text encoder and the specific Wan 2.2 VAE for image processing.",
+    "Input the static product image and a descriptive text prompt into the I2V node to guide the animation style.",
+    "Execute the graph to generate the video clip, ensuring the VAE correctly decodes the latent representation into a video file."
+  ],
+  "outcome": "A scalable pipeline that generates consistent, high-quality video assets from existing image libraries, significantly reducing time-to-market for digital campaigns.",
+  "limitation": "The model requires substantial VRAM for the 14B parameter variant, which may lead to out-of-memory errors on consumer-grade hardware; users should check their GPU memory capacity before attempting high-resolution generation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Image-to-Video Pipeline",
+    "description": "The flow of data from static assets to final video output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Static Product Image",
+        "detail": "Input source file"
+      },
+      {
+        "id": "b",
+        "label": "Wan 2.2 I2V Model",
+        "detail": "Core animation engine"
+      },
+      {
+        "id": "c",
+        "label": "Text Prompt",
+        "detail": "Guidance for motion"
+      },
+      {
+        "id": "d",
+        "label": "Video Output",
+        "detail": "Final animated clip"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides base visual"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "defines motion style"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates frames"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged",
+      "label": "Comfy-Org/Wan_2.2_ComfyUI_Repackaged"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Product Catalog Animation, what is the primary business benefit of using the Wan 2.2 model?",
+      "options": [
+        "It eliminates the need for any human oversight in marketing.",
+        "It allows for the scalable conversion of static images into video assets.",
+        "It replaces the need for high-resolution product photography.",
+        "It provides a direct integration with e-commerce payment gateways."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that retailers need to convert static photography into video to solve the bottleneck of manual production.",
+      "evidence": "Using the Wan 2.2 ComfyUI Repackaged model, retailers can automate the transformation of static high-resolution product images into short, fluid video clips"
+    },
+    {
+      "question": "In Automated Product Catalog Animation, what is a key technical limitation to consider?",
+      "options": [
+        "The model only supports 5B parameter variants.",
+        "The model requires a specific audio encoder for all tasks.",
+        "High VRAM requirements may cause errors on limited hardware.",
+        "The model cannot process images without a text prompt."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about VRAM usage for the 14B model.",
+      "evidence": "The model requires substantial VRAM for the 14B parameter variant, which may lead to out-of-memory errors on consumer-grade hardware"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:19.157Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:15.181Z"
+}

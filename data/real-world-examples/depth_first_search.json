@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "depth_first_search",
+  "title": "Supply Chain Dependency Resolution",
+  "business": "A global electronics manufacturer managing complex multi-tier component dependencies.",
+  "problem": "When a specific raw material becomes unavailable, the manufacturer struggles to identify the full downstream impact across nested sub-assemblies, leading to production bottlenecks.",
+  "solution": "By modeling the bill of materials as a directed graph, Depth-First Search (DFS) allows the system to traverse deep into a specific component branch to map every affected sub-assembly before backtracking to evaluate other independent product lines.",
+  "steps": [
+    "Represent the bill of materials as a directed graph where nodes are components and edges represent assembly dependencies.",
+    "Select the unavailable raw material node as the starting source for the traversal.",
+    "Utilize a DFS algorithm to explore the deepest branch of the dependency tree to identify all affected sub-assemblies.",
+    "Backtrack systematically to ensure no secondary assembly paths are overlooked.",
+    "Generate a comprehensive report of all impacted final products based on the traversal order."
+  ],
+  "outcome": "The manufacturer gains a clear, granular view of production risks, allowing for proactive supply chain adjustments before a shortage halts assembly lines.",
+  "limitation": "DFS can become inefficient in extremely deep or cyclic graphs, potentially leading to stack overflow errors; monitor the recursion depth or use iterative implementations to mitigate this risk.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Component Dependency Traversal",
+    "description": "Nodes represent components; edges represent assembly requirements. The DFS explores from the raw material to the final product.",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Raw Material",
+        "detail": "Starting point of shortage"
+      },
+      {
+        "id": "B",
+        "label": "Sub-Assembly 1",
+        "detail": "First level dependency"
+      },
+      {
+        "id": "C",
+        "label": "Component X",
+        "detail": "Deepest level component"
+      },
+      {
+        "id": "D",
+        "label": "Final Product",
+        "detail": "End of assembly chain"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B",
+        "label": "requires"
+      },
+      {
+        "from": "B",
+        "to": "C",
+        "label": "requires"
+      },
+      {
+        "from": "C",
+        "to": "D",
+        "label": "integrated into"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import networkx as nx\n# G represents the bill of materials graph\n# 'source_node' is the unavailable material\n# dfs_preorder_nodes explores the branch deeply\naffected_path = list(nx.dfs_preorder_nodes(G, source=source_node))",
+    "explanation": "This code uses the NetworkX library to perform a depth-first traversal starting from a specific node to identify all downstream dependencies in the supply chain."
+  },
+  "sources": [
+    {
+      "url": "https://networkx.org/documentation/stable/reference/algorithms/traversal.html",
+      "label": "Traversal - NetworkX 3.7 documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Dependency Resolution, what is the primary benefit of using DFS?",
+      "options": [
+        "It maps every affected sub-assembly by exploring deep branches before backtracking.",
+        "It identifies the most popular components in the warehouse.",
+        "It calculates the exact cost of raw materials.",
+        "It optimizes the physical layout of the factory floor."
+      ],
+      "answerIndex": 0,
+      "explanation": "DFS is specifically suited for exploring deep dependency paths, which is necessary to identify all downstream impacts of a component shortage.",
+      "evidence": "By modeling the bill of materials as a directed graph, Depth-First Search (DFS) allows the system to traverse deep into a specific component branch to map every affected sub-assembly before backtracking to evaluate other independent product lines."
+    },
+    {
+      "question": "What is a known limitation when applying DFS in Supply Chain Dependency Resolution?",
+      "options": [
+        "It is too slow for small graphs.",
+        "It can cause stack overflow errors in very deep or cyclic graphs.",
+        "It requires a database connection for every node.",
+        "It cannot handle directed graphs."
+      ],
+      "answerIndex": 1,
+      "explanation": "Deep graphs can exceed the recursion limit of standard DFS implementations, necessitating monitoring or iterative approaches.",
+      "evidence": "DFS can become inefficient in extremely deep or cyclic graphs, potentially leading to stack overflow errors; monitor the recursion depth or use iterative implementations to mitigate this risk."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:27.817Z"
+}

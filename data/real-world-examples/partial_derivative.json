@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "partial_derivative",
+  "title": "Optimizing Thermal Yield in Chemical Synthesis",
+  "business": "Chemical process engineers managing multi-variable reactor conditions.",
+  "problem": "Inconsistent product yield caused by simultaneous fluctuations in temperature and pressure, making it impossible to isolate the impact of a single control variable on the reaction rate.",
+  "solution": "Applying partial derivatives allows engineers to isolate the sensitivity of the reaction rate to temperature while holding pressure constant, enabling precise control adjustments.",
+  "steps": [
+    "Define the reaction rate function f(T, P) based on historical sensor data.",
+    "Hold pressure (P) constant to treat it as a scalar value.",
+    "Differentiate the function with respect to temperature (T) to determine the instantaneous rate of change.",
+    "Repeat the process for pressure (P) while holding temperature (T) constant to map the full sensitivity profile."
+  ],
+  "outcome": "Predictable and stable reaction output through targeted control of independent environmental variables.",
+  "limitation": "The model assumes independent variables; if temperature and pressure are physically coupled in the reactor, the partial derivative may misrepresent the true system behavior. Check for coupling by calculating cross-partial derivatives.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Sensitivity Analysis Workflow",
+    "description": "The process of isolating variable impact in a multi-variable system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "System State",
+        "detail": "Function f(T, P)"
+      },
+      {
+        "id": "b",
+        "label": "Partial Derivative T",
+        "detail": "∂f/∂T (P constant)"
+      },
+      {
+        "id": "c",
+        "label": "Partial Derivative P",
+        "detail": "∂f/∂P (T constant)"
+      },
+      {
+        "id": "d",
+        "label": "Control Action",
+        "detail": "Adjust T or P"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Isolate T"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Isolate P"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Tune T"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Tune P"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openstax.org/books/calculus-volume-3/pages/4-3-partial-derivatives",
+      "label": "4.3 Partial Derivatives - Calculus Volume 3"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Thermal Yield in Chemical Synthesis, why is the partial derivative used?",
+      "options": [
+        "To isolate the impact of a single control variable on the reaction rate.",
+        "To calculate the total sum of all variables simultaneously.",
+        "To eliminate the need for temperature sensors.",
+        "To replace the need for chemical reaction modeling."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the problem as an inability to isolate the impact of a single variable, which the solution addresses by using partial derivatives to hold other variables constant.",
+      "evidence": "Applying partial derivatives allows engineers to isolate the sensitivity of the reaction rate to temperature while holding pressure constant"
+    },
+    {
+      "question": "What is a primary limitation of the approach in Optimizing Thermal Yield in Chemical Synthesis?",
+      "options": [
+        "It requires infinite computational power.",
+        "It assumes variables are independent, which may not hold if they are physically coupled.",
+        "It cannot be used for more than two variables.",
+        "It is only accurate for linear functions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that the model assumes independence and warns that physical coupling can lead to misrepresentation of the system.",
+      "evidence": "The model assumes independent variables; if temperature and pressure are physically coupled in the reactor, the partial derivative may misrepresent the true system behavior."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:16.532Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:12.671Z"
+}

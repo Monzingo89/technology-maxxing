@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_policy",
+  "title": "Automated Resource Governance for Regional Compliance",
+  "business": "Organizations with strict data residency requirements for cloud infrastructure.",
+  "problem": "Manual oversight fails to prevent developers from deploying resources in non-compliant regions, leading to regulatory violations.",
+  "solution": "Azure Policy enforces organizational standards by evaluating resource properties against defined rules during deployment or updates.",
+  "steps": [
+    "Define a policy definition using JSON to specify the allowed locations for resource groups.",
+    "Create a policy assignment to apply the definition to a specific subscription or management group.",
+    "Configure the effect of the policy to Deny, which prevents the creation of resources in prohibited regions.",
+    "Monitor compliance status via the Azure portal to identify existing non-compliant resources."
+  ],
+  "outcome": "Consistent adherence to regional data residency requirements without manual intervention.",
+  "limitation": "Policy evaluation is eventually consistent; there may be a short delay between resource creation and the enforcement of the policy, which can be checked via the Activity Log.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Azure Policy Enforcement Flow",
+    "description": "The lifecycle of a resource request through the Azure Policy engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Request",
+        "detail": "Developer initiates resource deployment"
+      },
+      {
+        "id": "b",
+        "label": "Azure Resource Manager",
+        "detail": "Receives deployment request"
+      },
+      {
+        "id": "c",
+        "label": "Policy Engine",
+        "detail": "Evaluates request against assigned policies"
+      },
+      {
+        "id": "d",
+        "label": "Resource Provider",
+        "detail": "Finalizes or rejects deployment"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Submit Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Evaluate Rules"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Allow or Deny"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Resource Governance for Regional Compliance, how does the technology address the problem of non-compliant deployments?",
+      "options": [
+        "By automatically migrating resources to compliant regions.",
+        "By evaluating resource properties against defined rules to prevent non-compliant deployments.",
+        "By sending email alerts to administrators after a violation occurs.",
+        "By restricting developer access to the Azure portal entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the policy engine to evaluate properties and enforce standards, specifically preventing unauthorized deployments.",
+      "evidence": "Azure Policy enforces organizational standards by evaluating resource properties against defined rules during deployment or updates."
+    },
+    {
+      "question": "Regarding the implementation and tradeoffs of Automated Resource Governance for Regional Compliance, what is a key limitation?",
+      "options": [
+        "The policy engine requires manual restarts to update rules.",
+        "Policy evaluation is eventually consistent, potentially causing a delay in enforcement.",
+        "It only supports resources deployed via the Azure CLI.",
+        "It prevents all resource deployments by default."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that policy evaluation is eventually consistent, which is a known trade-off regarding the timing of enforcement.",
+      "evidence": "Policy evaluation is eventually consistent; there may be a short delay between resource creation and the enforcement of the policy, which can be checked via the Activity Log."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:01.307Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

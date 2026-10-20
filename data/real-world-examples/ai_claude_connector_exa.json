@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_exa",
+  "title": "Automated Legacy Library Migration Assistant",
+  "business": "A specialized software consultancy firm that maintains aging enterprise applications and frequently migrates legacy codebases to modern frameworks.",
+  "problem": "Engineers spend excessive time manually searching for current documentation and updated syntax for deprecated libraries, leading to fragmented research and inconsistent migration patterns across the team.",
+  "solution": "The firm integrates the Exa MCP connector into Claude to automate the retrieval of real-time documentation and current code examples. By leveraging the web_search_exa and get_code_context_exa tools, the AI agent can synthesize up-to-date migration paths directly from GitHub repositories and technical documentation sites, ensuring that the generated code aligns with the latest library standards rather than outdated forum posts.",
+  "steps": [
+    "Configure the Exa MCP server endpoint within the Claude environment to enable secure tool access.",
+    "Define a system prompt that instructs Claude to prioritize the get_code_context_exa tool when encountering unrecognized legacy function calls.",
+    "Execute a targeted search using web_search_exa to identify the most recent official migration guides for the specific library version.",
+    "Review the synthesized code context provided by the connector to ensure it matches the project's security and architecture requirements."
+  ],
+  "outcome": "Engineers achieve a more cohesive migration process with reduced context-switching, resulting in higher quality code output and faster resolution of dependency-related blockers.",
+  "limitation": "The connector relies on external search results which may occasionally include ambiguous or low-quality documentation; users must verify the source URLs provided by the tool to ensure they originate from official project repositories.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Migration Context Retrieval Flow",
+    "description": "The flow shows how the engineer interacts with Claude and the Exa connector to resolve legacy code issues.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Engineer",
+        "detail": "Submits legacy code snippet"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Orchestrates reasoning"
+      },
+      {
+        "id": "c",
+        "label": "Exa Connector",
+        "detail": "Executes search tools"
+      },
+      {
+        "id": "d",
+        "label": "External Sources",
+        "detail": "GitHub, Docs, StackOverflow"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "requests migration"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "calls get_code_context_exa"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "fetches fresh context"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "returns documentation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/exa",
+      "label": "Exa connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Library Migration Assistant, what is the primary benefit of using the Exa connector?",
+      "options": [
+        "It automates the retrieval of real-time documentation and current code examples.",
+        "It automatically refactors the entire legacy codebase without human oversight.",
+        "It replaces the need for engineers to understand the underlying library architecture.",
+        "It guarantees that all search results are free from security vulnerabilities."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the connector addresses the problem of manual searching by providing automated access to fresh documentation and code context.",
+      "evidence": "The firm integrates the Exa MCP connector into Claude to automate the retrieval of real-time documentation and current code examples."
+    },
+    {
+      "question": "In Automated Legacy Library Migration Assistant, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access GitHub repositories.",
+        "The tool requires manual verification of source URLs due to potential ambiguity in search results.",
+        "The system is unable to process legacy code snippets.",
+        "The connector is only compatible with private internal documentation."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that search results can be ambiguous and that users must verify the source URLs.",
+      "evidence": "The connector relies on external search results which may occasionally include ambiguous or low-quality documentation; users must verify the source URLs provided by the tool to ensure they originate from official project repositories."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:16.844Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:12.457Z"
+}

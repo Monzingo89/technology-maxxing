@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_factset",
+  "title": "Automated Quarterly Earnings Synthesis for Asset Managers",
+  "business": "Institutional asset management firms conducting rapid fundamental analysis on large-cap equities.",
+  "problem": "Analysts struggle with information overload, manually aggregating disparate earnings estimates, historical fundamentals, and unstructured research notes, leading to delayed investment decisions and potential oversight of critical consensus shifts.",
+  "solution": "The FactSet AI-Ready Data connector integrates directly into the Claude environment, allowing analysts to programmatically query institutional-grade datasets such as FactSet_EstimatesConsensus and FactSet_Fundamentals. By leveraging these tools, the system automatically synthesizes structured financial metrics with unstructured research content, providing a unified view of a company's performance trajectory without manual data extraction.",
+  "steps": [
+    "Configure the FactSet connector within the Claude environment using the provided MCP endpoint.",
+    "Define the target ticker symbols and specific financial metrics required for the quarterly review.",
+    "Invoke the FactSet_EstimatesConsensus tool to retrieve current market expectations and historical revisions.",
+    "Utilize FactSet_Fundamentals to pull balance sheet and income statement data for the corresponding periods.",
+    "Instruct Claude to cross-reference these metrics against FactSet_UnstructuredContent to identify discrepancies between quantitative estimates and qualitative research insights."
+  ],
+  "outcome": "Analysts achieve a more cohesive and rapid synthesis of financial data, enabling them to focus on high-level strategic interpretation rather than manual data gathering and reconciliation.",
+  "limitation": "The connector relies on the availability and structure of the underlying FactSet API tools; if a specific data point is not exposed via the current MCP toolset, it cannot be retrieved, requiring the user to verify data coverage by checking the tool definitions in the Claude interface.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Earnings Synthesis Workflow",
+    "description": "The flow shows how an analyst triggers data retrieval from FactSet to generate an insights report.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Analyst",
+        "detail": "Initiates the research request"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Orchestrates tool calls"
+      },
+      {
+        "id": "c",
+        "label": "FactSet Connector",
+        "detail": "Interface to institutional data"
+      },
+      {
+        "id": "d",
+        "label": "FactSet Data",
+        "detail": "Estimates, Fundamentals, Unstructured"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request Analysis"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Call MCP Tools"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetch Data"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Return JSON Data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/factset",
+      "label": "FactSet AI-Ready Data connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Quarterly Earnings Synthesis for Asset Managers, what is the primary problem addressed by the FactSet connector?",
+      "options": [
+        "Analysts struggle with information overload and manual data aggregation.",
+        "The firm lacks access to real-time market trading execution.",
+        "The system is unable to process unstructured research notes.",
+        "FactSet data is too expensive for institutional asset managers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that analysts face information overload and manual aggregation issues.",
+      "evidence": "Analysts struggle with information overload, manually aggregating disparate earnings estimates, historical fundamentals, and unstructured research notes, leading to delayed investment decisions and potential oversight of critical consensus shifts."
+    },
+    {
+      "question": "In Automated Quarterly Earnings Synthesis for Asset Managers, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot handle more than ten tickers at once.",
+        "Data is only available for private equity firms.",
+        "The user must verify if the required data point is exposed via the specific MCP toolset.",
+        "The connector requires manual SQL coding for every query."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that the user must verify data coverage based on the available MCP tools.",
+      "evidence": "The connector relies on the availability and structure of the underlying FactSet API tools; if a specific data point is not exposed via the current MCP toolset, it cannot be retrieved, requiring the user to verify data coverage by checking the tool definitions in the Claude interface."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:25.322Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:21.191Z"
+}

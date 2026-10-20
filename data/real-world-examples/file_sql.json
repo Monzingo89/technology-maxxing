@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "file_sql",
+  "title": "Standardized Schema Deployment for Inventory Systems",
+  "business": "Logistics firms managing distributed warehouse inventory databases.",
+  "problem": "Manual ad-hoc database modifications lead to configuration drift, inconsistent table structures, and deployment failures across regional servers.",
+  "solution": "Using .sql script files as a declarative source of truth allows teams to version-control schema definitions and ensure idempotent, repeatable deployments.",
+  "steps": [
+    "Define table structures and constraints within a version-controlled .sql file.",
+    "Utilize transactional blocks to wrap schema changes, ensuring atomicity.",
+    "Execute scripts via a command-line interface to apply changes consistently.",
+    "Verify schema integrity by querying system catalogs post-deployment."
+  ],
+  "outcome": "A predictable, auditable deployment process that eliminates manual configuration errors and ensures structural parity across all database nodes.",
+  "limitation": "Large, monolithic .sql scripts can lead to long-running locks during schema migrations; check impact using EXPLAIN or by monitoring active transaction duration.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SQL Deployment Workflow",
+    "description": "The flow from version control to the database instance.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Git Repository",
+        "detail": "Stores versioned .sql scripts"
+      },
+      {
+        "id": "b",
+        "label": "CI/CD Pipeline",
+        "detail": "Orchestrates script execution"
+      },
+      {
+        "id": "c",
+        "label": "PostgreSQL Instance",
+        "detail": "Target database for schema application"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers deployment"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes .sql script"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/sql.html",
+      "label": "PostgreSQL: Documentation: 18: Part II. The SQL Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Standardized Schema Deployment for Inventory Systems, what is the primary benefit of using .sql script files?",
+      "options": [
+        "Enabling version-controlled, idempotent, and repeatable schema deployments.",
+        "Automatically increasing the hardware performance of the database server.",
+        "Replacing the need for database administrators to understand SQL syntax.",
+        "Eliminating the requirement for transactional integrity during updates."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that using .sql files allows teams to version-control schema definitions and ensure repeatable deployments.",
+      "evidence": "Using .sql script files as a declarative source of truth allows teams to version-control schema definitions and ensure idempotent, repeatable deployments."
+    },
+    {
+      "question": "In Standardized Schema Deployment for Inventory Systems, what is a key limitation of using large .sql scripts?",
+      "options": [
+        "They are incompatible with standard command-line interfaces.",
+        "They always require a full database backup before execution.",
+        "They can cause long-running locks during schema migrations.",
+        "They prevent the use of system catalogs for verification."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that large scripts can cause locking issues during migrations.",
+      "evidence": "Large, monolithic .sql scripts can lead to long-running locks during schema migrations; check impact using EXPLAIN or by monitoring active transaction duration."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:59.917Z",
+  "sourceRetrievedAt": "2026-10-18T00:51:56.453Z"
+}

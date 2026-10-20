@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_connector_1p_dca009ae2c848191ae14df3a47c5e7fd",
+  "title": "Streamlining Project Documentation Retrieval in SharePoint",
+  "business": "Project managers and technical leads in large organizations who rely on SharePoint for document storage.",
+  "problem": "Users struggle with fragmented information, spending excessive time manually navigating nested folder hierarchies to locate specific project requirements or status reports.",
+  "solution": "The Microsoft SharePoint app connector for ChatGPT enables natural language queries to search, retrieve, and summarize content directly from SharePoint sites, bypassing manual navigation.",
+  "steps": [
+    "Authenticate the ChatGPT session with the Microsoft SharePoint app connector using organizational credentials.",
+    "Define the specific SharePoint site URL or library scope within the connector configuration settings.",
+    "Submit natural language queries to the chat interface to identify and extract relevant project documents.",
+    "Review the retrieved document summaries or direct links provided by the AI to verify accuracy."
+  ],
+  "outcome": "Improved operational efficiency by reducing the time spent on manual document discovery and enhancing the speed of information synthesis for project stakeholders.",
+  "limitation": "The connector is limited by the configured permissions of the authenticated user; if a user lacks read access to a specific library, the AI cannot retrieve or summarize those documents, which can be verified by checking the SharePoint site's access control lists.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SharePoint Retrieval Workflow",
+    "description": "The flow of information from the user request to the SharePoint repository.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Initiates a natural language query"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT",
+        "detail": "Processes intent and triggers connector"
+      },
+      {
+        "id": "c",
+        "label": "SharePoint Connector",
+        "detail": "Authenticates and queries API"
+      },
+      {
+        "id": "d",
+        "label": "SharePoint Site",
+        "detail": "Stores documents and metadata"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Requests data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetches content"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Returns results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Project Documentation Retrieval in SharePoint, what is the primary problem addressed by the solution?",
+      "options": [
+        "Users spend excessive time navigating nested folder hierarchies to find documents.",
+        "The SharePoint server is frequently offline during peak business hours.",
+        "The AI connector is unable to summarize documents longer than ten pages.",
+        "Users lack the technical skills to configure the SharePoint API endpoints."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies manual navigation of nested folders as the core inefficiency causing lost time.",
+      "evidence": "Users struggle with fragmented information, spending excessive time manually navigating nested folder hierarchies to locate specific project requirements or status reports."
+    },
+    {
+      "question": "In Streamlining Project Documentation Retrieval in SharePoint, what is a key limitation of the connector?",
+      "options": [
+        "It can only retrieve documents created in the last 30 days.",
+        "It requires the user to have administrative rights to the entire tenant.",
+        "It is restricted by the user's existing SharePoint permissions.",
+        "It cannot provide direct links to the retrieved documents."
+      ],
+      "answerIndex": 2,
+      "explanation": "The connector respects existing security settings, meaning it cannot access what the user cannot access.",
+      "evidence": "The connector is limited by the configured permissions of the authenticated user; if a user lacks read access to a specific library, the AI cannot retrieve or summarize those documents"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:01.350Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

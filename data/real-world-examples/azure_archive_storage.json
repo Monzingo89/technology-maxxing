@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "topicId": "azure_archive_storage",
+  "title": "Optimizing Long-Term Compliance Data Retention",
+  "business": "Legal and financial firms requiring multi-year retention of closed case files.",
+  "problem": "High monthly storage costs for massive volumes of inactive, legacy case data that is rarely accessed but must be kept for regulatory compliance.",
+  "solution": "Azure Blob Archive Tier provides a cost-effective storage solution for data that is not needed for immediate operations, keeping it in an offline state until explicitly requested.",
+  "steps": [
+    "Identify inactive blobs that meet the criteria for long-term retention.",
+    "Apply a lifecycle management policy or manual update to move the target blobs to the Archive access tier.",
+    "Initiate a rehydration process when access to the archived data is required for an audit.",
+    "Wait for the rehydration process to complete, which changes the blob tier to Hot or Cool.",
+    "Access the rehydrated blob data as standard storage once the process finishes."
+  ],
+  "outcome": "Significant reduction in monthly storage expenditures while maintaining the ability to retrieve historical records for compliance audits.",
+  "limitation": "The primary trade-off is latency; archived data is offline and cannot be read immediately, requiring a rehydration process that takes time to complete before the data becomes available.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Archive Storage Lifecycle",
+    "description": "The flow shows data moving from active storage to the offline archive tier and the necessary rehydration path for retrieval.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Hot/Cool Tier",
+        "detail": "Active storage for frequent or occasional access"
+      },
+      {
+        "id": "b",
+        "label": "Archive Tier",
+        "detail": "Offline storage for long-term retention"
+      },
+      {
+        "id": "c",
+        "label": "Rehydration",
+        "detail": "Process to move data back to online state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Move to Archive"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Request Access"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "Restore to Online"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Long-Term Compliance Data Retention, what is the primary benefit of using the Archive tier?",
+      "options": [
+        "Faster read performance for active files",
+        "Reduced storage costs for inactive data",
+        "Automatic encryption of all case files",
+        "Immediate access to historical records"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies the problem as high costs for inactive data and the solution as a cost-effective storage tier for data not needed for immediate operations.",
+      "evidence": "Azure Blob Archive Tier provides a cost-effective storage solution for data that is not needed for immediate operations, keeping it in an offline state until explicitly requested."
+    },
+    {
+      "question": "In Optimizing Long-Term Compliance Data Retention, what is a key limitation of the Archive tier?",
+      "options": [
+        "Data is permanently deleted after one year",
+        "It requires manual rehydration before data access",
+        "It is only available for small file sizes",
+        "It prevents the use of lifecycle management policies"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that archived data is offline and requires a rehydration process before it can be accessed.",
+      "evidence": "The primary trade-off is latency; archived data is offline and cannot be read immediately, requiring a rehydration process that takes time to complete before the data becomes available."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:40.092Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

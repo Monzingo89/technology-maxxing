@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_unsloth_wan2_2_ti2v_5b_gguf",
+  "title": "Architectural Visualization for Urban Planning",
+  "business": "Urban planning firms creating rapid visual prototypes for city council presentations.",
+  "problem": "High-fidelity video generation often requires massive GPU clusters, leading to prohibitive costs and latency when iterating on simple site-plan concepts.",
+  "solution": "Utilizing the Wan2.2-TI2V-5B-GGUF model allows firms to run high-quality text-to-video inference on local, consumer-grade hardware by leveraging quantized weights, significantly reducing infrastructure overhead.",
+  "steps": [
+    "Select the appropriate GGUF quantization level based on available VRAM (e.g., Q4_K_M for a balance of quality and memory).",
+    "Configure the inference environment to support the specific 720P resolution requirements of 1280x704 or 704x1280.",
+    "Ensure the companion VAE (Wan2.2_VAE.safetensors) is loaded to handle the temporal compression requirements.",
+    "Input the scene description to generate the video clip, ensuring the frame count adheres to the 4k+1 constraint.",
+    "Validate the output against the architectural site plan for visual consistency."
+  ],
+  "outcome": "The firm achieves faster iteration cycles for visual mockups, allowing stakeholders to review conceptual changes in real-time without cloud-based rendering delays.",
+  "limitation": "The model is strictly limited to 720P resolution and specific aspect ratios; users must verify output dimensions and frame counts, as deviations will result in generation failures.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inference Workflow for Urban Visualization",
+    "description": "The process of transforming architectural text prompts into validated video assets.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Prompt Input",
+        "detail": "Text description of urban site"
+      },
+      {
+        "id": "b",
+        "label": "Quantized Model",
+        "detail": "Wan2.2-TI2V-5B-GGUF"
+      },
+      {
+        "id": "c",
+        "label": "VAE Processing",
+        "detail": "Temporal compression layer"
+      },
+      {
+        "id": "d",
+        "label": "Video Output",
+        "detail": "720P visual prototype"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "feeds text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "processes frames"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "renders result"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/unsloth/Wan2.2-TI2V-5B-GGUF",
+      "label": "unsloth/Wan2.2-TI2V-5B-GGUF · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Visualization for Urban Planning, why is the GGUF format preferred?",
+      "options": [
+        "It enables high-quality video generation on local, consumer-grade hardware.",
+        "It automatically upgrades the resolution to 4K for better presentations.",
+        "It eliminates the need for a VAE during the inference process.",
+        "It allows for unlimited frame counts beyond the 4k+1 constraint."
+      ],
+      "answerIndex": 0,
+      "explanation": "The business scenario highlights that quantized weights allow firms to run inference locally, reducing infrastructure costs.",
+      "evidence": "Utilizing the Wan2.2-TI2V-5B-GGUF model allows firms to run high-quality text-to-video inference on local, consumer-grade hardware by leveraging quantized weights, significantly reducing infrastructure overhead."
+    },
+    {
+      "question": "What is a critical technical limitation when implementing Architectural Visualization for Urban Planning?",
+      "options": [
+        "The model requires a minimum of 128GB of VRAM for all quantizations.",
+        "The model is restricted to specific 720P resolutions and frame count constraints.",
+        "The model only supports English language prompts for scene descriptions.",
+        "The model cannot be used with the provided companion VAE."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario specify that the model is limited to 720P and has specific frame count requirements.",
+      "evidence": "The model is strictly limited to 720P resolution and specific aspect ratios; users must verify output dimensions and frame counts, as deviations will result in generation failures."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:21.512Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:17.405Z"
+}

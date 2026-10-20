@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_2_chat_latest",
+  "title": "Automated Architectural Compliance Review",
+  "business": "Large-scale urban planning firms managing complex zoning regulations.",
+  "problem": "Manual verification of architectural blueprints against thousands of pages of municipal zoning codes is error-prone and causes significant project delays.",
+  "solution": "Utilizing the GPT-5.2 Chat model via the Chat Completions API to ingest architectural site images and textual zoning requirements, performing cross-referenced compliance checks.",
+  "steps": [
+    "Convert architectural site plans into image formats compatible with the model's input modalities.",
+    "Structure municipal zoning regulations into a text-based knowledge base for context injection.",
+    "Invoke the v1/chat/completions endpoint using the gpt-5.2-chat-latest model ID.",
+    "Enable structured_outputs to ensure the model returns compliance findings in a machine-readable format.",
+    "Implement streaming to provide immediate feedback to architects as the model analyzes specific building sections."
+  ],
+  "outcome": "Architects receive rapid, preliminary compliance assessments, allowing for iterative design adjustments before formal submission.",
+  "limitation": "The model may experience hallucinations regarding specific numerical setbacks; verify output by cross-referencing the model's cited zoning clauses against the source document.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Review Workflow",
+    "description": "The flow shows how input data is processed by the model to generate compliance feedback.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Architectural Plans",
+        "detail": "Input image data"
+      },
+      {
+        "id": "b",
+        "label": "Zoning Regulations",
+        "detail": "Input text data"
+      },
+      {
+        "id": "c",
+        "label": "GPT-5.2 Chat",
+        "detail": "Processing engine"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Report",
+        "detail": "Structured output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "image_input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "context_injection"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "structured_outputs"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-5.2-chat-latest', # Specify the model snapshot\n  messages=[{'role': 'user', 'content': [{'type': 'image_url', 'image_url': {...}}, {'type': 'text', 'text': 'Check compliance'}]}],\n  response_format={'type': 'json_object'} # Enforce structured_outputs\n)",
+    "explanation": "This snippet demonstrates calling the Chat Completions API with image and text inputs to trigger the compliance analysis defined in the scenario."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.2-chat-latest",
+      "label": "GPT-5.2 Chat"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Compliance Review, what is the primary bottleneck addressed by the solution?",
+      "options": [
+        "The high cost of architectural software licenses.",
+        "Manual verification of blueprints against municipal zoning codes.",
+        "The lack of image processing capabilities in legacy systems.",
+        "The inability to store large architectural files."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies manual verification of zoning codes as the specific failure causing delays.",
+      "evidence": "Manual verification of architectural blueprints against thousands of pages of municipal zoning codes is error-prone and causes significant project delays."
+    },
+    {
+      "question": "In Automated Architectural Compliance Review, what is the recommended method to mitigate the identified limitation?",
+      "options": [
+        "Increase the number of tokens in the context window.",
+        "Use the Realtime API for faster feedback.",
+        "Cross-reference the model's cited zoning clauses against the source document.",
+        "Switch to a different model snapshot."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section specifically suggests verifying numerical outputs against the source document to handle potential hallucinations.",
+      "evidence": "The model may experience hallucinations regarding specific numerical setbacks; verify output by cross-referencing the model's cited zoning clauses against the source document."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:06.790Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:02.714Z"
+}

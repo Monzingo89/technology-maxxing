@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "nuxt",
+  "title": "Unified Inventory API Integration",
+  "business": "E-commerce retailers managing fragmented inventory data across multiple legacy warehouse systems.",
+  "problem": "High latency and maintenance overhead caused by managing disparate API endpoints and inconsistent data formats for real-time stock lookups.",
+  "solution": "Utilizing Nitro's filesystem routing and built-in storage layer to create a unified, server-side abstraction layer that aggregates inventory data into a single, performant endpoint.",
+  "steps": [
+    "Define a new server route in the server/api directory to act as the inventory aggregator.",
+    "Implement the logic to fetch data from legacy warehouse systems using server-side utilities.",
+    "Configure the built-in storage layer to cache aggregated results, reducing redundant external API calls.",
+    "Expose the unified endpoint to the frontend, ensuring consistent data structures for the client."
+  ],
+  "outcome": "A simplified frontend architecture that interacts with a single, reliable API, resulting in faster page loads and reduced load on legacy backend systems.",
+  "limitation": "The abstraction layer creates a single point of failure; if the aggregator logic fails, all inventory lookups are blocked. This can be checked by monitoring the server-side error logs and implementing custom error handlers.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Aggregation Flow",
+    "description": "Shows how the Nitro server acts as a central hub between the client and legacy systems.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "Frontend App",
+        "detail": "Requests stock data"
+      },
+      {
+        "id": "nitro",
+        "label": "Nitro API Route",
+        "detail": "Aggregates and caches data"
+      },
+      {
+        "id": "storage",
+        "label": "KV Storage",
+        "detail": "Stores cached inventory"
+      },
+      {
+        "id": "legacy",
+        "label": "Legacy Systems",
+        "detail": "Source of truth"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "nitro",
+        "label": "GET /api/inventory"
+      },
+      {
+        "from": "nitro",
+        "to": "storage",
+        "label": "Check cache"
+      },
+      {
+        "from": "nitro",
+        "to": "legacy",
+        "label": "Fetch fresh data"
+      }
+    ]
+  },
+  "code": {
+    "language": "typescript",
+    "content": "export default defineEventHandler(async (event) => {\n  // Fetch data from legacy system via server-side utility\n  const data = await $fetch('/api/warehouse-legacy');\n  // Use storage layer to cache the result for performance\n  await useStorage().setItem('inventory:cache', data);\n  return data;\n});",
+    "explanation": "This code demonstrates creating a server-side route that fetches data from a legacy source and stores it in the built-in storage layer for subsequent requests."
+  },
+  "sources": [
+    {
+      "url": "https://nitro.unjs.io/",
+      "label": "Nitro Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Inventory API Integration, what is the primary benefit of using Nitro's storage layer?",
+      "options": [
+        "It eliminates the need for frontend state management entirely.",
+        "It reduces redundant external API calls by caching aggregated results.",
+        "It automatically converts legacy SQL databases to NoSQL.",
+        "It replaces the need for client-side JavaScript frameworks."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly mentions using the storage layer to cache results to reduce redundant external API calls.",
+      "evidence": "Configure the built-in storage layer to cache aggregated results, reducing redundant external API calls."
+    },
+    {
+      "question": "In Unified Inventory API Integration, what is the identified limitation of the proposed architecture?",
+      "options": [
+        "The server-side code is incompatible with TypeScript.",
+        "The aggregator creates a single point of failure for inventory lookups.",
+        "Nitro requires a complex configuration for every deployment target.",
+        "The storage layer cannot be used with filesystem-based routing."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that the abstraction layer creates a single point of failure for the inventory system.",
+      "evidence": "The abstraction layer creates a single point of failure; if the aggregator logic fails, all inventory lookups are blocked."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:26.070Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:22.428Z"
+}

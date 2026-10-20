@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_bigtable",
+  "title": "IoT Sensor Telemetry Ingestion",
+  "business": "A smart city infrastructure provider managing millions of connected traffic sensors.",
+  "problem": "The existing relational database fails to handle the massive write throughput of high-frequency sensor data, leading to system timeouts during peak traffic hours.",
+  "solution": "Google Cloud Bigtable provides a low-latency wide-column database for large operational and analytical workloads, allowing the city to ingest and store massive streams of sensor telemetry without performance degradation.",
+  "steps": [
+    "Define a row key schema based on sensor_id and timestamp to ensure efficient data distribution.",
+    "Provision a Bigtable instance configured for the required node count to handle the expected ingestion volume.",
+    "Implement a streaming pipeline using a service like Dataflow to write incoming sensor readings into Bigtable.",
+    "Query the data using the Bigtable client library to retrieve specific sensor history for real-time traffic analysis."
+  ],
+  "outcome": "The system achieves consistent, low-latency writes and reads, enabling real-time traffic monitoring regardless of the volume of incoming sensor data.",
+  "limitation": "Bigtable is a wide-column store and does not support multi-row transactions or complex SQL joins; developers must verify data access patterns during the schema design phase to ensure they align with the row-key structure.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Data Flow",
+    "description": "This diagram illustrates the path of sensor data from the edge to the storage layer.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IoT Sensors",
+        "detail": "Source of high-frequency telemetry"
+      },
+      {
+        "id": "b",
+        "label": "Ingestion Pipeline",
+        "detail": "Processes and buffers incoming streams"
+      },
+      {
+        "id": "c",
+        "label": "Bigtable",
+        "detail": "Wide-column storage for operational data"
+      },
+      {
+        "id": "d",
+        "label": "Analytics Dashboard",
+        "detail": "Consumes data for real-time monitoring"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends telemetry"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "writes rows"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "serves queries"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In IoT Sensor Telemetry Ingestion, why is Bigtable chosen over a traditional relational database?",
+      "options": [
+        "To enable complex multi-row SQL joins for reporting.",
+        "To handle massive write throughput for large operational workloads.",
+        "To reduce the cost of small-scale transactional storage.",
+        "To eliminate the need for a row key schema design."
+      ],
+      "answerIndex": 1,
+      "explanation": "Bigtable is specifically designed for large operational workloads that require low-latency performance, which addresses the problem of high-frequency ingestion.",
+      "evidence": "Google Cloud Bigtable provides a low-latency wide-column database for large operational and analytical workloads, allowing the city to ingest and store massive streams of sensor telemetry without performance degradation."
+    },
+    {
+      "question": "In IoT Sensor Telemetry Ingestion, what is a primary design consideration when using Bigtable?",
+      "options": [
+        "Ensuring the system supports complex multi-row transactions.",
+        "Verifying that data access patterns align with the row-key structure.",
+        "Configuring the database to automatically perform SQL joins.",
+        "Limiting the storage capacity to avoid performance degradation."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because Bigtable lacks multi-row transactions and joins, the schema design and row-key selection are critical to performance and functionality.",
+      "evidence": "Bigtable is a wide-column store and does not support multi-row transactions or complex SQL joins; developers must verify data access patterns during the schema design phase to ensure they align with the row-key structure."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:55.764Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

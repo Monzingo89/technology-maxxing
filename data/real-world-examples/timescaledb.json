@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "timescaledb",
+  "title": "Optimizing Smart Grid Energy Analytics",
+  "business": "Utility companies managing large-scale smart grid infrastructure.",
+  "problem": "Standard relational tables struggle with high-velocity time-series data, leading to slow analytical queries as historical sensor logs accumulate over time.",
+  "solution": "TimescaleDB addresses this by utilizing hypertables to automatically partition incoming sensor data into time-based chunks, enabling efficient range scans and columnar storage for high-performance analytics.",
+  "steps": [
+    "Define a standard PostgreSQL table for energy readings including a timestamp column.",
+    "Convert the table into a hypertable using the tsdb.hypertable extension.",
+    "Enable columnar storage for the hypertable to improve compression and query speed.",
+    "Implement continuous aggregates to pre-calculate hourly energy consumption metrics.",
+    "Configure a refresh policy to incrementally update these aggregates in the background."
+  ],
+  "outcome": "The utility company achieves sub-second response times for complex analytical queries across years of historical data while maintaining full SQL compatibility.",
+  "limitation": "Continuous aggregates are materialized views that refresh on a schedule; therefore, the most recent data might not be reflected in the aggregate until the next refresh cycle unless real-time aggregation is specifically configured.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Smart Grid Data Flow",
+    "description": "Shows how raw sensor data is ingested into a hypertable and transformed into optimized aggregates.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Smart Meters",
+        "detail": "IoT devices emitting energy readings"
+      },
+      {
+        "id": "b",
+        "label": "Hypertable",
+        "detail": "Partitioned time-series storage"
+      },
+      {
+        "id": "c",
+        "label": "Continuous Aggregate",
+        "detail": "Pre-computed hourly metrics"
+      },
+      {
+        "id": "d",
+        "label": "Dashboard",
+        "detail": "Analytical UI for grid operators"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Refresh Policy"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "-- Convert standard table to hypertable\nCREATE TABLE energy_readings (time TIMESTAMPTZ NOT NULL, meter_id TEXT, usage DOUBLE PRECISION) WITH (tsdb.hypertable);\n\n-- Create continuous aggregate for hourly stats\nCREATE MATERIALIZED VIEW hourly_usage WITH (timescaledb.continuous) AS \nSELECT time_bucket('1 hour', time) AS hour, meter_id, AVG(usage) FROM energy_readings GROUP BY hour, meter_id;",
+    "explanation": "This code demonstrates the creation of a hypertable to partition incoming meter data and a continuous aggregate to pre-calculate hourly averages for faster dashboard performance."
+  },
+  "sources": [
+    {
+      "url": "https://github.com/timescale/timescaledb",
+      "label": "GitHub - timescale/timescaledb: A time-series database for high-performance real-time analytics packaged as a Postgres extension"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Smart Grid Energy Analytics, how does the technology solve the performance degradation issue?",
+      "options": [
+        "By replacing SQL with a proprietary query language.",
+        "By partitioning data into time-based chunks and using columnar storage.",
+        "By deleting historical data automatically every hour.",
+        "By moving all data to an external cloud storage provider."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution leverages hypertables for time-based partitioning and columnar storage, which are core features for handling large time-series datasets efficiently.",
+      "evidence": "TimescaleDB addresses this by utilizing hypertables to automatically partition incoming sensor data into time-based chunks, enabling efficient range scans and columnar storage for high-performance analytics."
+    },
+    {
+      "question": "In Optimizing Smart Grid Energy Analytics, what is a key trade-off when using continuous aggregates?",
+      "options": [
+        "They require manual recalculation of the entire dataset.",
+        "They cannot be queried using standard SQL.",
+        "They may not reflect the most recent data until the refresh policy runs.",
+        "They consume more storage than the raw data itself."
+      ],
+      "answerIndex": 2,
+      "explanation": "Continuous aggregates refresh on a schedule, meaning there is a latency between raw data ingestion and the aggregate update.",
+      "evidence": "Continuous aggregates are materialized views that refresh on a schedule; therefore, the most recent data might not be reflected in the aggregate until the next refresh cycle unless real-time aggregation is specifically configured."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:22.019Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:17.977Z"
+}

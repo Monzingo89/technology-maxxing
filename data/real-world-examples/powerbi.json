@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "powerbi",
+  "title": "Unified Logistics Semantic Modeling",
+  "business": "Logistics managers overseeing regional distribution centers.",
+  "problem": "Fragmented data across multiple SQL databases leads to inconsistent inventory reporting and manual reconciliation errors.",
+  "solution": "Centralizing data into a Power BI semantic model allows for a single source of truth using DAX to define consistent business logic and relationships across disparate logistics tables.",
+  "steps": [
+    "Connect Power BI Desktop to regional SQL databases using Power Query to clean and shape incoming data.",
+    "Define relationships between inventory, shipment, and warehouse tables within the model view.",
+    "Create DAX measures to calculate standardized KPIs like stock turnover and transit duration.",
+    "Publish the semantic model to the Power BI service to enable shared reporting across the organization.",
+    "Configure row-level security in the service to ensure managers only access data relevant to their specific region."
+  ],
+  "outcome": "Improved decision-making through consistent, automated reporting that eliminates manual data reconciliation.",
+  "limitation": "The primary tradeoff is model complexity; as the number of tables and DAX measures grows, performance can degrade if relationships are not optimized, which can be checked using the Performance Analyzer in Power BI Desktop.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Data Model Relationship",
+    "description": "This diagram shows how disparate logistics entities are joined in a semantic model to support unified reporting.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse",
+        "detail": "Location metadata"
+      },
+      {
+        "id": "b",
+        "label": "Inventory",
+        "detail": "Stock levels"
+      },
+      {
+        "id": "c",
+        "label": "Shipment",
+        "detail": "Transit logs"
+      },
+      {
+        "id": "d",
+        "label": "Semantic Model",
+        "detail": "DAX measures and relationships"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "1:Many"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Aggregation"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Aggregation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview",
+      "label": "What is Power BI? - Power BI | Microsoft Learn"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Semantic Modeling, what is the primary benefit of using a semantic model?",
+      "options": [
+        "It provides a single source of truth using DAX to define consistent business logic.",
+        "It automatically migrates all SQL databases to Microsoft Fabric.",
+        "It replaces the need for SQL databases entirely.",
+        "It eliminates the need for row-level security."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that fragmented data causes inconsistency, and the solution is to use a semantic model to centralize and standardize logic.",
+      "evidence": "Centralizing data into a Power BI semantic model allows for a single source of truth using DAX to define consistent business logic and relationships across disparate logistics tables."
+    },
+    {
+      "question": "In Unified Logistics Semantic Modeling, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use Power Query for data transformation.",
+        "The requirement to use only one data source.",
+        "Performance degradation as model complexity increases.",
+        "The inability to publish models to the Power BI service."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that model complexity can impact performance as the number of measures and tables grows.",
+      "evidence": "The primary tradeoff is model complexity; as the number of tables and DAX measures grows, performance can degrade if relationships are not optimized, which can be checked using the Performance Analyzer in Power BI Desktop."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:42.521Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:39.631Z"
+}

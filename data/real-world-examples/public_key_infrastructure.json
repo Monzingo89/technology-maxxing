@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "public_key_infrastructure",
+  "title": "Automated IoT Device Identity Verification",
+  "business": "Industrial sensor manufacturers deploying thousands of remote devices.",
+  "problem": "Manual provisioning of static API keys leads to credential leakage and impossible rotation at scale.",
+  "solution": "Implementing Public Key Infrastructure (PKI) to bind unique device identities to cryptographic certificates, enabling automated trust chains.",
+  "steps": [
+    "Establish a private Root Certificate Authority (CA) to act as the ultimate trust anchor.",
+    "Generate unique key pairs on each IoT device hardware security module.",
+    "Submit Certificate Signing Requests (CSRs) to an Intermediate CA for identity verification.",
+    "Distribute signed certificates to devices for mutual TLS authentication.",
+    "Configure automated renewal cycles to replace expiring certificates before service interruption."
+  ],
+  "outcome": "Devices authenticate securely without shared secrets, ensuring that only verified hardware can communicate with the backend.",
+  "limitation": "Certificate revocation management is a significant operational burden; if a device is compromised, the system must check Certificate Revocation Lists (CRLs) or use OCSP, which introduces latency and potential failure points.",
+  "diagram": {
+    "kind": "flow",
+    "title": "PKI Trust Chain Flow",
+    "description": "The flow shows how a device gains trust through a hierarchical CA structure.",
+    "nodes": [
+      {
+        "id": "root",
+        "label": "Root CA",
+        "detail": "Offline trust anchor"
+      },
+      {
+        "id": "int",
+        "label": "Intermediate CA",
+        "detail": "Signs device requests"
+      },
+      {
+        "id": "dev",
+        "label": "IoT Device",
+        "detail": "Holds private key"
+      },
+      {
+        "id": "svc",
+        "label": "Backend Service",
+        "detail": "Validates trust chain"
+      }
+    ],
+    "edges": [
+      {
+        "from": "root",
+        "to": "int",
+        "label": "signs"
+      },
+      {
+        "from": "int",
+        "to": "dev",
+        "label": "issues certificate"
+      },
+      {
+        "from": "dev",
+        "to": "svc",
+        "label": "presents certificate"
+      },
+      {
+        "from": "svc",
+        "to": "root",
+        "label": "verifies chain"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated IoT Device Identity Verification, what is the primary benefit of using PKI over static API keys?",
+      "options": [
+        "It eliminates the need for any authentication.",
+        "It prevents credential leakage and simplifies rotation at scale.",
+        "It makes the system 100% secure against all attacks.",
+        "It removes the requirement for a trust anchor."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that static keys are difficult to manage and prone to leakage, whereas PKI provides automated identity binding.",
+      "evidence": "Manual provisioning of static API keys leads to credential leakage and impossible rotation at scale."
+    },
+    {
+      "question": "In Automated IoT Device Identity Verification, what is a key operational limitation of the implementation?",
+      "options": [
+        "The system cannot support more than ten devices.",
+        "Certificate revocation management is a significant operational burden.",
+        "The Root CA must be online at all times.",
+        "It requires manual intervention for every single authentication request."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies revocation (CRLs/OCSP) as a complex operational challenge.",
+      "evidence": "Certificate revocation management is a significant operational burden; if a device is compromised, the system must check Certificate Revocation Lists (CRLs) or use OCSP, which introduces latency and potential failure points."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:54.604Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

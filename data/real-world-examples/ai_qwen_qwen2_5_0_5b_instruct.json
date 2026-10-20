@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen2_5_0_5b_instruct",
+  "title": "Edge-Based Inventory Categorization",
+  "business": "Retailers managing distributed warehouse inventory systems.",
+  "problem": "High latency and bandwidth costs when sending unstructured item descriptions to centralized cloud servers for classification.",
+  "solution": "Deploying the Qwen2.5-0.5B-Instruct model locally on edge gateways to perform real-time, structured categorization of item descriptions into JSON formats.",
+  "steps": [
+    "Install the latest transformers library to ensure compatibility with the Qwen2.5 architecture.",
+    "Initialize the model using AutoModelForCausalLM with device mapping for local hardware acceleration.",
+    "Define a system prompt that enforces structured JSON output for item classification.",
+    "Use apply_chat_template to format incoming inventory logs for the model.",
+    "Execute inference locally to parse descriptions into machine-readable categories."
+  ],
+  "outcome": "Reduced dependency on external network connectivity and lower operational costs for inventory processing.",
+  "limitation": "The 0.5B parameter size may lead to reduced reasoning depth compared to larger models; verify output accuracy against a validation set of complex item descriptions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Edge Inference Workflow",
+    "description": "The flow of inventory data from local sensors to structured JSON output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory Sensor",
+        "detail": "Captures raw item text"
+      },
+      {
+        "id": "b",
+        "label": "Edge Gateway",
+        "detail": "Hosts Qwen2.5-0.5B-Instruct"
+      },
+      {
+        "id": "c",
+        "label": "Structured JSON",
+        "detail": "Categorized item data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "raw_text_input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "inference_output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoModelForCausalLM, AutoTokenizer\n# Load model locally for edge deployment\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2.5-0.5B-Instruct\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen2.5-0.5B-Instruct\")\n# Prepare input with chat template\nmessages = [{\"role\": \"system\", \"content\": \"Classify items as JSON.\"}, {\"role\": \"user\", \"content\": \"Blue cotton shirt\"}]\ntext = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)\n# Generate structured response\ninputs = tokenizer([text], return_tensors=\"pt\").to(model.device)\noutput = model.generate(**inputs, max_new_tokens=50)",
+    "explanation": "This code demonstrates initializing the model on edge hardware and using the chat template to format inputs for structured classification tasks."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct",
+      "label": "Qwen/Qwen2.5-0.5B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge-Based Inventory Categorization, what is the primary benefit of using local inference?",
+      "options": [
+        "Eliminating the need for system prompts",
+        "Reducing latency and bandwidth costs",
+        "Increasing the parameter count to 72B",
+        "Removing the requirement for transformers"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies high latency and bandwidth costs as the problem, which local deployment addresses.",
+      "evidence": "High latency and bandwidth costs when sending unstructured item descriptions to centralized cloud servers for classification."
+    },
+    {
+      "question": "In Edge-Based Inventory Categorization, what is a key limitation to consider?",
+      "options": [
+        "The model cannot generate JSON output",
+        "The model requires 128K context length",
+        "Reduced reasoning depth due to model size",
+        "The model is incompatible with transformers"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that the 0.5B size may impact reasoning depth.",
+      "evidence": "The 0.5B parameter size may lead to reduced reasoning depth compared to larger models; verify output accuracy against a validation set of complex item descriptions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:13.226Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:09.418Z"
+}

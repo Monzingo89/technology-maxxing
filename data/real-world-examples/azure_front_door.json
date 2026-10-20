@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_front_door",
+  "title": "Global Retail Content Delivery and Security",
+  "business": "Global e-commerce retailers serving customers across multiple continents.",
+  "problem": "High latency for international users and vulnerability to volumetric web attacks targeting the origin server.",
+  "solution": "Azure Front Door provides a global entry point that terminates SSL/TLS connections at the edge, accelerates HTTP traffic via the Microsoft global network, and integrates web application protection to filter malicious requests before they reach the backend.",
+  "steps": [
+    "Provision an Azure Front Door profile and define the frontend hostnames.",
+    "Configure backend pools to include origin servers across different regions.",
+    "Define routing rules to map incoming traffic to the appropriate backend pools based on path patterns.",
+    "Enable Web Application Firewall (WAF) policies and associate them with the frontend endpoints to inspect incoming traffic."
+  ],
+  "outcome": "Improved page load times for geographically distributed users and reduced exposure of origin infrastructure to direct internet threats.",
+  "limitation": "The service introduces a single point of configuration for global traffic routing; misconfigured routing rules can lead to widespread service outages. Verification requires monitoring the health probes and backend response codes in the Azure portal.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Front Door Traffic Flow",
+    "description": "Shows the path from a global user through the edge to the backend.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Global User",
+        "detail": "Client browser"
+      },
+      {
+        "id": "edge",
+        "label": "Front Door Edge",
+        "detail": "SSL termination and WAF"
+      },
+      {
+        "id": "network",
+        "label": "Microsoft Network",
+        "detail": "Global backbone"
+      },
+      {
+        "id": "origin",
+        "label": "Backend Origin",
+        "detail": "Application server"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "edge",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "edge",
+        "to": "network",
+        "label": "Optimized Routing"
+      },
+      {
+        "from": "network",
+        "to": "origin",
+        "label": "Forwarded Request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Retail Content Delivery and Security, how does the solution address the identified problem?",
+      "options": [
+        "By terminating SSL at the edge and filtering traffic via WAF.",
+        "By replacing the origin server with a static storage account.",
+        "By increasing the bandwidth of the local ISP connection.",
+        "By moving all database processing to the user's browser."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly mentions terminating SSL/TLS at the edge and using web application protection to filter requests.",
+      "evidence": "Azure Front Door provides a global entry point that terminates SSL/TLS connections at the edge, accelerates HTTP traffic via the Microsoft global network, and integrates web application protection to filter malicious requests before they reach the backend."
+    },
+    {
+      "question": "In Global Retail Content Delivery and Security, what is a primary limitation of the implementation?",
+      "options": [
+        "The service cannot handle HTTPS traffic.",
+        "It requires manual DNS updates for every single user request.",
+        "Misconfigured routing rules can cause widespread service outages.",
+        "It is only compatible with on-premises servers."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that centralized routing configuration carries the risk of global impact if misconfigured.",
+      "evidence": "The service introduces a single point of configuration for global traffic routing; misconfigured routing rules can lead to widespread service outages."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:48.584Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

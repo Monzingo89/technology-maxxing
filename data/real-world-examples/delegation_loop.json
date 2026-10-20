@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "topicId": "delegation_loop",
+  "title": "Automated Compliance Audit Orchestration",
+  "business": "Financial institutions requiring strict adherence to regulatory reporting standards.",
+  "problem": "Generalist agents often hallucinate complex compliance logic or fail to maintain the required audit trail when handling multi-step document verification.",
+  "solution": "Implement a manager agent that maintains control of the user session, utilizing specialized compliance agents as bounded tools via Agent.as_tool() to perform isolated verification tasks without losing the overall audit context.",
+  "steps": [
+    "Define a Manager Agent with high-level oversight instructions and session state management.",
+    "Create specialized agents for specific tasks like 'Tax Code Validator' and 'Identity Verifier'.",
+    "Expose these specialized agents to the Manager Agent using the Agent.as_tool() method.",
+    "Configure the Manager Agent to invoke these tools sequentially or conditionally based on document type.",
+    "Aggregate tool outputs into a final, human-readable compliance report within the Manager Agent."
+  ],
+  "outcome": "Improved accuracy in regulatory reporting and a centralized, traceable audit log managed by a single point of authority.",
+  "limitation": "The manager agent may become a bottleneck if it attempts to process too many concurrent tool calls; monitor latency by checking the time elapsed between tool invocation and result aggregation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Delegation Loop",
+    "description": "The Manager Agent orchestrates the flow by calling specialists as tools.",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "User",
+        "detail": "Provides raw financial documents"
+      },
+      {
+        "id": "B",
+        "label": "Manager Agent",
+        "detail": "Maintains session and audit state"
+      },
+      {
+        "id": "C",
+        "label": "Tax Specialist",
+        "detail": "Bounded tool for tax logic"
+      },
+      {
+        "id": "D",
+        "label": "ID Specialist",
+        "detail": "Bounded tool for identity logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B",
+        "label": "Submits request"
+      },
+      {
+        "from": "B",
+        "to": "C",
+        "label": "Invokes as tool"
+      },
+      {
+        "from": "B",
+        "to": "D",
+        "label": "Invokes as tool"
+      },
+      {
+        "from": "C",
+        "to": "B",
+        "label": "Returns verification"
+      },
+      {
+        "from": "D",
+        "to": "B",
+        "label": "Returns verification"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Define the specialist agent\ntax_agent = Agent(name=\"TaxValidator\")\n# Expose as a tool to the manager\nmanager.add_tool(tax_agent.as_tool())\n# Manager retains control of the conversation flow\nresponse = manager.run(user_input)",
+    "explanation": "This maps to the scenario by allowing the Manager Agent to treat the TaxValidator as a bounded tool, ensuring the manager retains control of the final output."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/multi_agent/",
+      "label": "Agent orchestration"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Compliance Audit Orchestration, why is the manager-as-tool pattern preferred over generalist agents?",
+      "options": [
+        "It prevents hallucination by keeping the manager in control of the audit context.",
+        "It allows specialists to take over the user-facing conversation entirely.",
+        "It eliminates the need for any specialized agents in the workflow.",
+        "It automatically reduces the cost of every API call by 50 percent."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states generalist agents hallucinate; the solution uses the manager to maintain context and control, ensuring specialists act only as bounded tools.",
+      "evidence": "Generalist agents often hallucinate complex compliance logic or fail to maintain the required audit trail when handling multi-step document verification."
+    },
+    {
+      "question": "What is a primary limitation of the implementation in Automated Compliance Audit Orchestration?",
+      "options": [
+        "The manager agent cannot call more than one tool at a time.",
+        "The manager agent may become a bottleneck if it processes too many concurrent tool calls.",
+        "Specialist agents cannot return data back to the manager.",
+        "The system requires a manual human-in-the-loop for every single tool call."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the manager becoming a bottleneck as a risk when scaling tool calls.",
+      "evidence": "The manager agent may become a bottleneck if it attempts to process too many concurrent tool calls; monitor latency by checking the time elapsed between tool invocation and result aggregation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:24.209Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_davinci_002",
+  "title": "Legacy Text Completion for Pattern Matching",
+  "business": "A legacy data processing firm managing massive archives of unstructured, non-conversational text logs.",
+  "problem": "The firm struggles with automated text completion tasks where the input is raw, non-instructional data that modern chat-optimized models often over-process or refuse to complete due to safety alignment filters.",
+  "solution": "The firm utilizes davinci-002 via the legacy Completions API to perform raw text continuation, leveraging the model's ability to handle non-instructional prompts without attempting to act as a conversational assistant.",
+  "steps": [
+    "Format legacy log data into raw text prompts without conversational prefixes.",
+    "Configure the legacy Completions API endpoint to target the davinci-002 model ID.",
+    "Adjust temperature and stop sequences to ensure the model completes the log pattern rather than generating chat responses.",
+    "Validate output consistency by comparing generated completions against historical data patterns."
+  ],
+  "outcome": "The firm achieves consistent, predictable text continuation that maintains the structural integrity of their legacy data archives without interference from conversational alignment.",
+  "limitation": "Because davinci-002 is not trained with instruction following, it may generate unexpected text if the prompt is ambiguous; check for this by monitoring the entropy of the output tokens against known log formats.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Completion Pipeline",
+    "description": "The data flow from raw logs to completed text via the legacy API.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Log Source",
+        "detail": "Unstructured text archives"
+      },
+      {
+        "id": "b",
+        "label": "Completions API",
+        "detail": "Legacy endpoint interface"
+      },
+      {
+        "id": "c",
+        "label": "davinci-002",
+        "detail": "Base model engine"
+      },
+      {
+        "id": "d",
+        "label": "Completed Log",
+        "detail": "Extended text output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends raw prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "routes to model"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns completion"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/davinci-002",
+      "label": "davinci-002"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Text Completion for Pattern Matching, why is davinci-002 preferred over chat-optimized models?",
+      "options": [
+        "It is cheaper than all other models.",
+        "It is trained specifically for instruction following.",
+        "It handles raw, non-instructional text without conversational alignment.",
+        "It supports the modern Chat Completions API."
+      ],
+      "answerIndex": 2,
+      "explanation": "The business scenario highlights that modern chat models often over-process or refuse raw data, whereas davinci-002 is a base model that does not attempt to act as a conversational assistant.",
+      "evidence": "The firm utilizes davinci-002 via the legacy Completions API to perform raw text continuation, leveraging the model's ability to handle non-instructional prompts without attempting to act as a conversational assistant."
+    },
+    {
+      "question": "In Legacy Text Completion for Pattern Matching, what is a primary limitation of using the model?",
+      "options": [
+        "It requires a specific chat-based prompt format.",
+        "It is not trained with instruction following, potentially leading to ambiguous output.",
+        "It cannot be used with the legacy Completions API.",
+        "It has a very small output token limit."
+      ],
+      "answerIndex": 1,
+      "explanation": "Since the model is a base model and not instruction-tuned, it lacks the guardrails of chat models, requiring careful prompt design.",
+      "evidence": "Because davinci-002 is not trained with instruction following, it may generate unexpected text if the prompt is ambiguous; check for this by monitoring the entropy of the output tokens against known log formats."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:09.158Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:05.042Z"
+}

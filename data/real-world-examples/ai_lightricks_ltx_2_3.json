@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "ai_lightricks_ltx_2_3",
+  "title": "Automated Product Catalog Animation for E-commerce",
+  "business": "E-commerce retailers managing large inventories of static product photography.",
+  "problem": "High production costs and long lead times associated with hiring videographers to create short, engaging product showcase clips for social media marketing.",
+  "solution": "Utilizing the LTX-2.3 DiT-based foundation model to programmatically animate existing static product images into synchronized audio-visual video clips, significantly reducing the manual effort required for content production.",
+  "steps": [
+    "Pre-process static product images to ensure dimensions are divisible by 32 for model compatibility.",
+    "Select the appropriate LTX-2.3 distilled checkpoint to balance inference speed with visual fidelity.",
+    "Define text prompts describing the desired motion or environment for the product.",
+    "Execute the inference pipeline using the ltx-pipelines package to generate the video.",
+    "Apply the spatial upscaler if higher resolution output is required for specific marketing channels."
+  ],
+  "outcome": "A scalable, automated workflow that transforms static catalogs into dynamic video assets, enhancing customer engagement without increasing headcount.",
+  "limitation": "The model may fail to generate videos that match the prompts perfectly, requiring iterative prompt engineering or validation steps to ensure the generated motion aligns with brand guidelines.",
+  "diagram": {
+    "kind": "flow",
+    "title": "LTX-2.3 Image-to-Video Pipeline",
+    "description": "The flow from static asset to final animated video.",
+    "nodes": [
+      {
+        "id": "img",
+        "label": "Static Image",
+        "detail": "Source product photo"
+      },
+      {
+        "id": "prep",
+        "label": "Preprocessing",
+        "detail": "Padding/Resizing"
+      },
+      {
+        "id": "ltx",
+        "label": "LTX-2.3 Model",
+        "detail": "DiT Inference"
+      },
+      {
+        "id": "upscale",
+        "label": "Spatial Upscaler",
+        "detail": "Resolution enhancement"
+      },
+      {
+        "id": "vid",
+        "label": "Final Video",
+        "detail": "Animated output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "img",
+        "to": "prep",
+        "label": "input"
+      },
+      {
+        "from": "prep",
+        "to": "ltx",
+        "label": "processed_latents"
+      },
+      {
+        "from": "ltx",
+        "to": "upscale",
+        "label": "raw_output"
+      },
+      {
+        "from": "upscale",
+        "to": "vid",
+        "label": "high_res_video"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Lightricks/LTX-2.3",
+      "label": "Lightricks/LTX-2.3 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Product Catalog Animation for E-commerce, what is the primary business benefit of using LTX-2.3?",
+      "options": [
+        "Eliminating the need for product photography entirely",
+        "Reducing manual effort and production costs for video content",
+        "Guaranteeing 100% factual accuracy in product descriptions",
+        "Increasing the resolution of existing static images"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on automating the creation of video clips from static images to reduce the costs and lead times associated with traditional videography.",
+      "evidence": "Utilizing the LTX-2.3 DiT-based foundation model to programmatically animate existing static product images into synchronized audio-visual video clips, significantly reducing the manual effort required for content production."
+    },
+    {
+      "question": "In Automated Product Catalog Animation for E-commerce, what is a key operational limitation to consider?",
+      "options": [
+        "The model requires a minimum of 100 frames for every output",
+        "The model may fail to generate videos that match the prompts perfectly",
+        "The model is only compatible with images larger than 4K resolution",
+        "The model cannot be used for commercial e-commerce purposes"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and the lesson highlight that prompt adherence is not guaranteed and may require iterative refinement.",
+      "evidence": "The model may fail to generate videos that match the prompts perfectly, requiring iterative prompt engineering or validation steps to ensure the generated motion aligns with brand guidelines."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:10.286Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:06.791Z"
+}

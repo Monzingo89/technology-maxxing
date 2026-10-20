@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "loose_coupling",
+  "title": "Decoupling Logistics and Inventory Services",
+  "business": "A regional e-commerce platform managing independent warehouse and shipping modules.",
+  "problem": "The shipping module requires direct access to the internal database schema of the inventory module, causing system-wide outages whenever the inventory schema changes.",
+  "solution": "Implement an asynchronous event-driven architecture where the inventory module publishes state changes to a message broker, allowing the shipping module to consume updates without direct dependency on the inventory database.",
+  "steps": [
+    "Define a stable, versioned schema for inventory update events.",
+    "Configure the inventory module to emit events to a central message bus upon stock changes.",
+    "Develop the shipping module to subscribe to the message bus rather than querying the inventory database.",
+    "Implement an adapter layer in the shipping module to map incoming events to its local data structures."
+  ],
+  "outcome": "The shipping module becomes resilient to internal schema modifications within the inventory module, enabling independent deployment cycles.",
+  "limitation": "Eventual consistency introduces a delay between inventory updates and shipping availability; check this by monitoring the latency between event emission and consumer processing timestamps.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event-Driven Decoupling Flow",
+    "description": "This diagram illustrates how the inventory module communicates with the shipping module through an intermediary broker, removing direct dependencies.",
+    "nodes": [
+      {
+        "id": "inv",
+        "label": "Inventory Module",
+        "detail": "Manages stock levels and emits events"
+      },
+      {
+        "id": "bus",
+        "label": "Message Broker",
+        "detail": "Buffers and routes event messages"
+      },
+      {
+        "id": "ship",
+        "label": "Shipping Module",
+        "detail": "Consumes events to update local state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "inv",
+        "to": "bus",
+        "label": "Publishes stock events"
+      },
+      {
+        "from": "bus",
+        "to": "ship",
+        "label": "Delivers event updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Logistics and Inventory Services, what is the primary benefit of using a message broker?",
+      "options": [
+        "It eliminates the need for database schema versioning.",
+        "It allows the shipping module to function without direct dependency on the inventory database.",
+        "It increases the speed of database queries.",
+        "It forces the inventory module to adopt the shipping module's data format."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that the broker allows the shipping module to consume updates without direct dependency on the inventory database.",
+      "evidence": "allowing the shipping module to consume updates without direct dependency on the inventory database."
+    },
+    {
+      "question": "In Decoupling Logistics and Inventory Services, what is a key trade-off of the proposed architecture?",
+      "options": [
+        "Increased coupling between modules.",
+        "The requirement for synchronous communication.",
+        "The introduction of eventual consistency.",
+        "The inability to scale the shipping module."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies that moving to an asynchronous model introduces eventual consistency, which must be monitored.",
+      "evidence": "Eventual consistency introduces a delay between inventory updates and shipping availability; check this by monitoring the latency between event emission and consumer processing timestamps."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:06.001Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

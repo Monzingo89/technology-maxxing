@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "evaluation_loop",
+  "title": "Automated Regression for Logistics Routing Agents",
+  "business": "Logistics companies managing automated delivery dispatch agents.",
+  "problem": "Agents occasionally misinterpret complex delivery constraints, leading to costly manual rerouting and delayed shipments.",
+  "solution": "Implement an evaluation loop that runs representative delivery scenarios through a deterministic test harness, scoring agent trace outcomes against expected constraints and feeding failures back into prompt refinement.",
+  "steps": [
+    "Define a suite of representative delivery scenarios as deterministic ScriptedModel sequences.",
+    "Execute agent runs within the testing harness to capture normalized interaction traces.",
+    "Compare agent tool-use outputs against expected delivery constraints using assertion logic.",
+    "Identify failed traces where agents violated routing rules or failed to call required tools.",
+    "Update system prompts or tool definitions based on the specific failure patterns identified in the traces."
+  ],
+  "outcome": "Higher reliability in complex routing decisions and reduced manual intervention for edge-case delivery scenarios.",
+  "limitation": "The evaluation loop relies on deterministic scripting; it cannot simulate the stochastic nature of real-world traffic or unpredictable API latency, requiring separate integration testing.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Evaluation Loop Process",
+    "description": "The cycle of testing agent logic against defined scenarios and using the results to improve agent performance.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scenario Repository",
+        "detail": "Collection of deterministic test cases"
+      },
+      {
+        "id": "b",
+        "label": "Agent Test Harness",
+        "detail": "Executes agent with ScriptedModel"
+      },
+      {
+        "id": "c",
+        "label": "Trace Analyzer",
+        "detail": "Compares output against constraints"
+      },
+      {
+        "id": "d",
+        "label": "Improvement Loop",
+        "detail": "Refines prompts or tool definitions"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "feeds test data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generates interaction traces"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "identifies failures"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "updates logic"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents.testing import ScriptedModel, assistant_message\n# Define a deterministic scenario for the routing agent\nmodel = ScriptedModel([[assistant_message(\"Route: Zone A to Zone B\")]])\n# The agent uses this model to simulate a specific routing decision\nagent = Agent(name=\"Router\", model=model)\n# Run the agent and assert the outcome matches the expected routing constraint\nresult = await Runner.run(agent, \"Optimize route\", run_config=RunConfig(tracing_disabled=True))\nassert result.final_output == \"Route: Zone A to Zone B\" # Validates agent logic",
+    "explanation": "This code maps to the business scenario by using ScriptedModel to enforce a specific, repeatable routing decision for the agent, allowing the developer to verify if the agent correctly follows the routing constraints."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/testing/",
+      "label": "Testing - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Regression for Logistics Routing Agents, what is the primary purpose of the evaluation loop?",
+      "options": [
+        "To replace manual dispatchers entirely",
+        "To identify and fix agent failures in routing logic",
+        "To increase the speed of the agent's model inference",
+        "To reduce the cost of API calls to the model provider"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using the loop to score traces and feed failures into improvements to address misinterpretations of constraints.",
+      "evidence": "Implement an evaluation loop that runs representative delivery scenarios through a deterministic test harness, scoring agent trace outcomes against expected constraints and feeding failures back into prompt refinement."
+    },
+    {
+      "question": "In Automated Regression for Logistics Routing Agents, what is a noted limitation of the evaluation loop implementation?",
+      "options": [
+        "It cannot handle complex tool workflows",
+        "It is too slow for real-time production use",
+        "It cannot simulate stochastic real-world conditions like traffic",
+        "It requires a live connection to the model provider"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that deterministic testing cannot account for stochastic real-world variables.",
+      "evidence": "The evaluation loop relies on deterministic scripting; it cannot simulate the stochastic nature of real-world traffic or unpredictable API latency, requiring separate integration testing."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:26.725Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:22.327Z"
+}

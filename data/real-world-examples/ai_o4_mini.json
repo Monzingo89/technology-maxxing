@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "ai_o4_mini",
+  "title": "Automated Code Review for Legacy Migration",
+  "business": "Software engineering firms managing large-scale legacy code migrations.",
+  "problem": "Manual code review for legacy systems is prohibitively expensive and slow, often leading to technical debt accumulation during migration phases.",
+  "solution": "Utilizing the o4-mini model to perform automated, reasoning-based code analysis on legacy modules, providing rapid feedback on potential refactoring needs before human intervention.",
+  "steps": [
+    "Ingest legacy source files into the application pipeline.",
+    "Format code snippets and context as text inputs for the o4-mini model.",
+    "Invoke the Chat Completions endpoint with specific reasoning instructions for refactoring.",
+    "Parse the structured output to identify high-risk code blocks.",
+    "Route identified blocks to senior engineers for final validation."
+  ],
+  "outcome": "A streamlined migration process where developers focus only on complex logic errors identified by the model, significantly reducing the initial review cycle time.",
+  "limitation": "The model may occasionally hallucinate edge-case logic errors in highly obscure legacy languages; developers must verify critical path changes using unit tests.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Code Review Pipeline",
+    "description": "The flow shows how legacy code is processed through the reasoning model to filter tasks for human review.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Repo",
+        "detail": "Source code repository"
+      },
+      {
+        "id": "b",
+        "label": "Input Processor",
+        "detail": "Formats code for API"
+      },
+      {
+        "id": "c",
+        "label": "o4-mini",
+        "detail": "Reasoning engine"
+      },
+      {
+        "id": "d",
+        "label": "Review Queue",
+        "detail": "Filtered high-risk tasks"
+      },
+      {
+        "id": "e",
+        "label": "Engineer",
+        "detail": "Final validation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "extracts"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends prompt"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "outputs analysis"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "assigns task"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/o4-mini",
+      "label": "o4-mini"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Code Review for Legacy Migration, why is o4-mini selected for the task?",
+      "options": [
+        "It provides fast, effective reasoning for coding tasks.",
+        "It is the only model that supports file uploads.",
+        "It is required for all legacy system migrations.",
+        "It offers free unlimited usage for code analysis."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario leverages the model's ability to perform reasoning-based analysis on code to speed up the migration process.",
+      "evidence": "Utilizing the o4-mini model to perform automated, reasoning-based code analysis on legacy modules, providing rapid feedback on potential refactoring needs before human intervention."
+    },
+    {
+      "question": "In Automated Code Review for Legacy Migration, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot handle text input.",
+        "The model requires manual intervention for every line of code.",
+        "The model may hallucinate errors in obscure languages, requiring unit test verification.",
+        "The model is too slow for large-scale migrations."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about potential hallucinations in obscure code and mandates unit testing as a check.",
+      "evidence": "The model may occasionally hallucinate edge-case logic errors in highly obscure legacy languages; developers must verify critical path changes using unit tests."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:35.603Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:32.186Z"
+}

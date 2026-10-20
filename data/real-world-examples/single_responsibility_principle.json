@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "single_responsibility_principle",
+  "title": "Automated Logistics Invoice Processing",
+  "business": "A regional logistics firm managing thousands of daily freight shipments.",
+  "problem": "The firm utilized a monolithic 'ShipmentManager' class that handled database persistence, PDF invoice generation, and external API communication for customs clearance. When the customs API updated its authentication protocol, developers inadvertently broke the invoice generation logic because both responsibilities were tightly coupled within the same module, leading to high regression risks.",
+  "solution": "By applying the Single Responsibility Principle, the firm refactored the monolith into distinct, decoupled services. Each module now possesses one coherent reason to change: the Persistence Service handles data storage, the Invoice Generator manages document formatting, and the Customs Client manages external communication. This isolation ensures that changes to external API requirements do not impact the internal document generation logic.",
+  "steps": [
+    "Identify distinct functional domains within the existing monolithic class.",
+    "Extract the data persistence logic into a dedicated repository class.",
+    "Move document formatting and template rendering into a separate generator module.",
+    "Isolate external API interaction logic into a standalone client service.",
+    "Update the main application controller to orchestrate these services via dependency injection."
+  ],
+  "outcome": "The codebase becomes significantly more maintainable, as developers can modify external integration logic without fear of disrupting internal document generation or database operations.",
+  "limitation": "The primary tradeoff is increased architectural complexity, as the system now requires managing multiple smaller classes and their dependencies. This can be verified by checking the number of files and the depth of the dependency graph; if the number of classes grows disproportionately to the feature set, the system may be over-engineered.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Refactoring ShipmentManager",
+    "description": "This diagram illustrates the transition from a monolithic class to a decoupled service architecture.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "ShipmentManager",
+        "detail": "Monolithic class handling all tasks"
+      },
+      {
+        "id": "b",
+        "label": "PersistenceService",
+        "detail": "Handles database operations"
+      },
+      {
+        "id": "c",
+        "label": "InvoiceGenerator",
+        "detail": "Handles PDF creation"
+      },
+      {
+        "id": "d",
+        "label": "CustomsClient",
+        "detail": "Handles external API calls"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "extracts"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "extracts"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "extracts"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Invoice Processing, why did the original monolithic design fail?",
+      "options": [
+        "It coupled unrelated responsibilities, causing side effects during updates.",
+        "It lacked sufficient database indexing for high-volume shipments.",
+        "The customs API was inherently incompatible with the programming language.",
+        "The system was too small to handle the volume of invoices."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem description highlights that coupling persistence, generation, and API logic caused changes in one area to break another.",
+      "evidence": "When the customs API updated its authentication protocol, developers inadvertently broke the invoice generation logic because both responsibilities were tightly coupled within the same module, leading to high regression risks."
+    },
+    {
+      "question": "In Automated Logistics Invoice Processing, what is the primary tradeoff of applying the Single Responsibility Principle?",
+      "options": [
+        "It forces the use of a specific database technology.",
+        "It increases architectural complexity by requiring management of multiple classes.",
+        "It eliminates the need for any unit testing.",
+        "It prevents the use of dependency injection."
+      ],
+      "answerIndex": 1,
+      "explanation": "Refactoring into smaller, single-purpose modules increases the number of components that must be managed and orchestrated.",
+      "evidence": "The primary tradeoff is increased architectural complexity, as the system now requires managing multiple smaller classes and their dependencies."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:04.906Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

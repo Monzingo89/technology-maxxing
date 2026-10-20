@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "context_window",
+  "title": "Legal Discovery Context Optimization",
+  "business": "Corporate legal departments managing massive volumes of discovery documents.",
+  "problem": "Legal teams often feed hundreds of case files into a single model request to find specific evidence. However, the model frequently fails to retrieve critical facts buried in the middle of these long documents, leading to incomplete legal summaries and missed discovery items.",
+  "solution": "By leveraging the model's context window, we implement a strategic document ordering protocol. Instead of appending files randomly, we place the most high-priority, high-probability documents at the very beginning and the very end of the prompt sequence, effectively sandwiching less critical information in the middle to mitigate retrieval degradation.",
+  "steps": [
+    "Categorize all discovery documents by relevance score using metadata analysis.",
+    "Sort the document list to place high-relevance files at the start and end of the input sequence.",
+    "Construct the prompt by concatenating the sorted documents into a single text stream.",
+    "Submit the structured prompt to the model's context window for processing.",
+    "Verify the extraction of key facts to ensure the model successfully accessed the prioritized segments."
+  ],
+  "outcome": "Improved consistency in identifying key evidence across large document sets by aligning input structure with model retrieval tendencies.",
+  "limitation": "The primary limitation is the 'Lost in the Middle' phenomenon where information density in the center of the context window remains prone to retrieval failure. To check for this, developers should perform periodic spot-checks on middle-positioned documents to ensure critical data is not being ignored.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Ordering Workflow",
+    "description": "This diagram illustrates how documents are prioritized and arranged within the context window to maximize retrieval accuracy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Pool",
+        "detail": "Unordered collection of legal files"
+      },
+      {
+        "id": "b",
+        "label": "Relevance Scorer",
+        "detail": "Assigns priority to documents"
+      },
+      {
+        "id": "c",
+        "label": "Ordered Sequence",
+        "detail": "High-priority files at ends, low in middle"
+      },
+      {
+        "id": "d",
+        "label": "Model Context",
+        "detail": "The input span processed by the LLM"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sorts"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Injects"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2307.03172",
+      "label": "Lost in the Middle: How Language Models Use Long Contexts"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legal Discovery Context Optimization, what is the primary reason for the proposed document ordering strategy?",
+      "options": [
+        "To reduce the total number of tokens processed by the model.",
+        "To account for the model's tendency to prioritize information at the beginning and end of the context.",
+        "To ensure the model ignores irrelevant documents in the middle.",
+        "To increase the speed of the model's response time."
+      ],
+      "answerIndex": 1,
+      "explanation": "The strategy addresses the known limitation where models struggle to retrieve information placed in the middle of a long context.",
+      "evidence": "we place the most high-priority, high-probability documents at the very beginning and the very end of the prompt sequence, effectively sandwiching less critical information in the middle to mitigate retrieval degradation."
+    },
+    {
+      "question": "In Legal Discovery Context Optimization, how should a developer monitor the effectiveness of the implementation?",
+      "options": [
+        "By increasing the total context window size indefinitely.",
+        "By performing spot-checks on documents placed in the middle of the context.",
+        "By removing all documents from the middle of the prompt.",
+        "By ignoring the middle section and only using the first 10% of the context."
+      ],
+      "answerIndex": 1,
+      "explanation": "Since the middle remains a weak point for retrieval, verifying that critical data is not being ignored there is essential.",
+      "evidence": "To check for this, developers should perform periodic spot-checks on middle-positioned documents to ensure critical data is not being ignored."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:36.082Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:32.414Z"
+}

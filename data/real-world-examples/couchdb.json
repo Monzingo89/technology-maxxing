@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "couchdb",
+  "title": "Field Logistics Synchronization",
+  "business": "Remote field technicians performing equipment maintenance in areas with intermittent connectivity.",
+  "problem": "Technicians frequently lose access to centralized databases, preventing them from updating service logs or retrieving historical repair data while offline.",
+  "solution": "CouchDB provides a peer-based distributed model where technicians maintain local database replicas on mobile devices, allowing for full CRUD operations while disconnected, followed by bi-directional synchronization when connectivity is restored.",
+  "steps": [
+    "Deploy a local CouchDB instance on each technician's mobile device.",
+    "Define a replication filter to synchronize only the relevant subset of equipment documents to the local device.",
+    "Perform offline updates to local JSON documents using the RESTful HTTP API.",
+    "Trigger bi-directional replication to push local changes and pull updates from the central server once the network is available."
+  ],
+  "outcome": "Technicians maintain continuous productivity and data integrity regardless of network availability, with conflicts managed deterministically by the system.",
+  "limitation": "The optimistic concurrency model requires client-side logic to handle edit conflicts; this is checked by monitoring for 409 Conflict errors when saving documents.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Replication Workflow",
+    "description": "Shows how data flows between the central server and mobile clients.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Central Server",
+        "detail": "Primary database source"
+      },
+      {
+        "id": "b",
+        "label": "Replication Filter",
+        "detail": "Logic determining subset of docs"
+      },
+      {
+        "id": "c",
+        "label": "Mobile Client",
+        "detail": "Local replica for offline work"
+      },
+      {
+        "id": "d",
+        "label": "Conflict Resolver",
+        "detail": "Agent for handling concurrent edits"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "filters data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "syncs subset"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "pushes updates"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "detects conflict"
+      }
+    ]
+  },
+  "code": {
+    "language": "http",
+    "content": "PUT /db/doc_id HTTP/1.1\nContent-Type: application/json\n\n{ \"_rev\": \"1-abc\", \"status\": \"repaired\" } // Update document with current revision",
+    "explanation": "Demonstrates a standard HTTP PUT request to update a document, which is the mechanism used by technicians to save repair status changes locally."
+  },
+  "sources": [
+    {
+      "url": "https://docs.couchdb.org/en/stable/intro/overview.html",
+      "label": "Technical Overview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Field Logistics Synchronization, how does the system address the problem of intermittent connectivity?",
+      "options": [
+        "By using local database replicas that allow offline CRUD operations and later bi-directional synchronization.",
+        "By requiring a constant VPN connection to the central server for every document update.",
+        "By caching data in a temporary memory buffer that clears upon network failure.",
+        "By forcing technicians to wait until they are back in the office to perform any data entry."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the peer-based distributed nature of CouchDB, which supports offline work through local replication.",
+      "evidence": "CouchDB provides a peer-based distributed model where technicians maintain local database replicas on mobile devices, allowing for full CRUD operations while disconnected, followed by bi-directional synchronization when connectivity is restored."
+    },
+    {
+      "question": "In Field Logistics Synchronization, what is the primary limitation of the optimistic concurrency model?",
+      "options": [
+        "It prevents multiple users from reading the same document simultaneously.",
+        "It requires the client to handle potential edit conflicts when saving documents.",
+        "It forces the database to lock documents during the entire update process.",
+        "It prevents the use of RESTful HTTP APIs for document management."
+      ],
+      "answerIndex": 1,
+      "explanation": "CouchDB uses an optimistic concurrency model, meaning the client must be prepared to resolve conflicts if another user saves changes first.",
+      "evidence": "The optimistic concurrency model requires client-side logic to handle edit conflicts; this is checked by monitoring for 409 Conflict errors when saving documents."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:32.878Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:28.795Z"
+}

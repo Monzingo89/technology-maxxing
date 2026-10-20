@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_baai_bge_base_en_v1_5",
+  "title": "Semantic Support Ticket Routing",
+  "business": "Enterprise IT support teams managing high volumes of incoming technical tickets.",
+  "problem": "Traditional keyword-based routing fails to capture the intent of complex technical queries, leading to misassigned tickets and increased resolution latency.",
+  "solution": "The bge-base-en-v1.5 model transforms unstructured ticket descriptions into high-dimensional vectors, enabling semantic similarity matching against a knowledge base of resolved issue categories.",
+  "steps": [
+    "Initialize the bge-base-en-v1.5 model using the HuggingFaceBgeEmbeddings interface.",
+    "Pre-process existing resolved support tickets into vector embeddings and store them in a vector database.",
+    "Convert incoming support tickets into vectors using the same model, optionally applying query instructions if the ticket is a short summary.",
+    "Perform a similarity search against the vector database to identify the most relevant historical resolution category.",
+    "Route the ticket to the support team associated with the highest-scoring historical category."
+  ],
+  "outcome": "Improved accuracy in ticket classification and reduced manual triage time for support staff.",
+  "limitation": "The model produces a similarity distribution typically in the range of [0.6, 1.0], meaning absolute scores are not directly interpretable as probability; developers must empirically determine a threshold based on their specific data distribution.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Semantic Ticket Routing Workflow",
+    "description": "The process of converting raw text into actionable routing decisions via vector space.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Ticket",
+        "detail": "Unstructured user input"
+      },
+      {
+        "id": "b",
+        "label": "bge-base-en-v1.5",
+        "detail": "Embedding generation"
+      },
+      {
+        "id": "c",
+        "label": "Vector Database",
+        "detail": "Stored historical embeddings"
+      },
+      {
+        "id": "d",
+        "label": "Routing Engine",
+        "detail": "Similarity threshold logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "tokenization"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "vector representation"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "similarity comparison"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from langchain.embeddings import HuggingFaceBgeEmbeddings\n\n# Initialize the model for Semantic Support Ticket Routing\nmodel = HuggingFaceBgeEmbeddings(\n    model_name=\"BAAI/bge-base-en-v1.5\",\n    encode_kwargs={'normalize_embeddings': True} # Normalize for cosine similarity\n)\n\n# Embed a new ticket\nticket_text = \"System error 503 during database sync\"\nembedding = model.embed_query(ticket_text)",
+    "explanation": "This code initializes the bge-base-en-v1.5 model to convert support ticket text into a vector, which is the foundational step for the Semantic Support Ticket Routing scenario."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/BAAI/bge-base-en-v1.5",
+      "label": "BAAI/bge-base-en-v1.5 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Semantic Support Ticket Routing, why is bge-base-en-v1.5 preferred over keyword-based systems?",
+      "options": [
+        "It captures semantic intent rather than relying on exact keyword matches.",
+        "It automatically resolves the technical issue without human intervention.",
+        "It provides a fixed probability score for every ticket category.",
+        "It requires no training data to function in any domain."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that keyword-based routing fails to capture intent, and the solution uses vector representation to address this limitation.",
+      "evidence": "Traditional keyword-based routing fails to capture the intent of complex technical queries, leading to misassigned tickets and increased resolution latency."
+    },
+    {
+      "question": "Regarding the implementation of Semantic Support Ticket Routing, what is a critical consideration for similarity scores?",
+      "options": [
+        "Scores are always between 0 and 1, representing absolute probability.",
+        "The model requires an instruction for every document processed.",
+        "The developer must determine a threshold based on the specific data distribution.",
+        "The model cannot be used with vector databases."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that absolute scores are not directly interpretable and require empirical thresholding.",
+      "evidence": "The model produces a similarity distribution typically in the range of [0.6, 1.0], meaning absolute scores are not directly interpretable as probability; developers must empirically determine a threshold based on their specific data distribution."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:23.675Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:19.370Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_connector_1p_6bcb5879c73c819196abc70016166099",
+  "title": "Automated Project Triage via Outlook Email",
+  "business": "Project managers handling high-volume client communications in Outlook.",
+  "problem": "Manual sorting and prioritization of incoming client emails leads to delayed responses and missed project requirements.",
+  "solution": "The Outlook Email plugin allows the AI to programmatically access and triage inbox contents, enabling the identification of urgent project requests and the drafting of initial responses based on email context.",
+  "steps": [
+    "Authenticate the Outlook Email plugin within the ChatGPT interface to grant necessary read/write permissions.",
+    "Invoke the plugin to fetch recent unread messages from the primary inbox folder.",
+    "Use the AI to analyze message content for keywords related to project milestones or urgent client blockers.",
+    "Generate draft replies or categorize emails into specific project folders based on the AI analysis.",
+    "Review and finalize the AI-suggested actions before sending or moving the emails."
+  ],
+  "outcome": "Improved response consistency and reduced time spent on manual inbox triage, allowing managers to focus on high-priority project tasks.",
+  "limitation": "The plugin relies on the current state of the inbox; it cannot process encrypted emails or those requiring multi-factor authentication prompts, which can be checked by verifying if the plugin returns an access error for specific protected threads.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Email Triage Workflow",
+    "description": "The flow shows how the AI interacts with the Outlook inbox to process messages.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Email",
+        "detail": "Incoming message in Outlook"
+      },
+      {
+        "id": "b",
+        "label": "Outlook Plugin",
+        "detail": "Connector API"
+      },
+      {
+        "id": "c",
+        "label": "ChatGPT AI",
+        "detail": "Analysis Engine"
+      },
+      {
+        "id": "d",
+        "label": "Action",
+        "detail": "Draft reply or move email"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "fetches"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "transmits content"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "triggers"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Project Triage via Outlook Email, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual sorting and prioritization of incoming client emails leads to delayed responses and missed project requirements.",
+        "The inability to send encrypted emails to clients.",
+        "High costs associated with maintaining an Outlook account.",
+        "The lack of integration between project management software and email."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that manual sorting is the bottleneck causing delays.",
+      "evidence": "Manual sorting and prioritization of incoming client emails leads to delayed responses and missed project requirements."
+    },
+    {
+      "question": "In Automated Project Triage via Outlook Email, what is a known limitation of the plugin?",
+      "options": [
+        "It cannot read emails from non-Outlook providers.",
+        "It cannot process encrypted emails or those requiring multi-factor authentication prompts.",
+        "It is unable to draft replies to clients.",
+        "It requires a manual refresh every five minutes."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies encrypted emails and MFA prompts as technical barriers.",
+      "evidence": "The plugin relies on the current state of the inbox; it cannot process encrypted emails or those requiring multi-factor authentication prompts, which can be checked by verifying if the plugin returns an access error for specific protected threads."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:08.472Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

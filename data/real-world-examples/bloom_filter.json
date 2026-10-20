@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "bloom_filter",
+  "title": "High-Velocity Content Filtering",
+  "business": "A digital media platform that must prevent users from seeing duplicate content recommendations they have already interacted with.",
+  "problem": "The platform has millions of users and billions of historical interactions. Querying a traditional relational database for every single interaction to check if a user has seen a specific piece of content creates unacceptable latency and excessive read load.",
+  "solution": "A Bloom Filter provides a space-efficient, probabilistic data structure that allows the system to quickly check if a user has interacted with a content ID without querying the primary database for every request, significantly reducing infrastructure overhead.",
+  "steps": [
+    "Initialize a bit array of a fixed size, setting all bits to zero.",
+    "Select multiple independent hash functions to map content IDs to positions in the bit array.",
+    "For every new interaction, hash the content ID multiple times and set the corresponding bits in the array to one.",
+    "To check membership, hash the content ID using the same functions and verify if all resulting bits are set to one."
+  ],
+  "outcome": "The system achieves near-instantaneous filtering of seen content, ensuring a seamless user experience while offloading the primary database from high-frequency membership lookups.",
+  "limitation": "The filter can return false positives, where it incorrectly indicates an interaction has occurred when it has not. This is checked by verifying the result against the primary database only when the filter indicates a match.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Bloom Filter Membership Check",
+    "description": "Shows how a content ID is processed through multiple hash functions to verify existence in the bit array.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Content ID",
+        "detail": "The input identifier for the media item"
+      },
+      {
+        "id": "b",
+        "label": "Hash Functions",
+        "detail": "Multiple independent mathematical mappings"
+      },
+      {
+        "id": "c",
+        "label": "Bit Array",
+        "detail": "A compact array of bits representing the set"
+      },
+      {
+        "id": "d",
+        "label": "Decision",
+        "detail": "Probabilistic result: Seen or Not Seen"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "maps to indices"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "check bits"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Velocity Content Filtering, why is a Bloom Filter used instead of a standard database query?",
+      "options": [
+        "To eliminate the need for any database storage",
+        "To reduce latency and read load on the primary database",
+        "To guarantee 100% accuracy in all membership checks",
+        "To replace the primary database entirely"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that querying a traditional database for billions of interactions creates unacceptable latency, which the Bloom Filter addresses by reducing infrastructure overhead.",
+      "evidence": "The platform has millions of users and billions of historical interactions. Querying a traditional relational database for every single interaction to check if a user has seen a specific piece of content creates unacceptable latency and excessive read load."
+    },
+    {
+      "question": "What is the primary trade-off when using a Bloom Filter in High-Velocity Content Filtering?",
+      "options": [
+        "It requires more memory than a standard list",
+        "It can return false positives, requiring secondary verification",
+        "It is too slow for high-velocity environments",
+        "It cannot handle multiple hash functions"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the filter can return false positives, which necessitates a check against the primary database.",
+      "evidence": "The filter can return false positives, where it incorrectly indicates an interaction has occurred when it has not. This is checked by verifying the result against the primary database only when the filter indicates a match."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:35.850Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

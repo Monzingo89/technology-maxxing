@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "file_jsonl",
+  "title": "Logistics Route Optimization Stream",
+  "business": "A regional logistics firm managing real-time fleet telemetry data.",
+  "problem": "The firm struggles with monolithic JSON files that crash memory when parsed entirely, preventing real-time monitoring of vehicle sensor logs.",
+  "solution": "Transitioning to the .jsonl format allows the system to process telemetry records one at a time, enabling continuous stream analysis without loading the entire dataset into memory.",
+  "steps": [
+    "Configure telemetry sensors to emit individual JSON objects per event.",
+    "Ensure each object is terminated by a newline character to maintain format compliance.",
+    "Implement a streaming reader that processes the file line-by-line using standard input/output pipes.",
+    "Validate that the encoding remains UTF-8 throughout the ingestion pipeline."
+  ],
+  "outcome": "Improved system stability and reduced latency in processing fleet telemetry, as the application no longer requires large memory buffers to handle incoming data.",
+  "limitation": "The format lacks a global structure, meaning the file cannot be validated as a single JSON entity; developers must verify individual lines to ensure data integrity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Processing Pipeline",
+    "description": "The flow shows how individual sensor events are serialized into a .jsonl file and then consumed by a stream processor.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor",
+        "detail": "Generates telemetry event"
+      },
+      {
+        "id": "b",
+        "label": "Buffer",
+        "detail": "Temporary .jsonl file storage"
+      },
+      {
+        "id": "c",
+        "label": "Processor",
+        "detail": "Line-by-line stream parser"
+      },
+      {
+        "id": "d",
+        "label": "Dashboard",
+        "detail": "Real-time visualization"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Writes JSON object"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Streams line-by-line"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Updates metrics"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://jsonlines.org/",
+      "label": "JSON Lines"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Route Optimization Stream, why is .jsonl preferred over standard JSON?",
+      "options": [
+        "It allows processing records one at a time to avoid memory exhaustion.",
+        "It automatically compresses data to save disk space.",
+        "It enforces a strict global schema for all lines in the file.",
+        "It supports binary data formats natively within the lines."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that monolithic files cause memory crashes, and .jsonl solves this by allowing record-by-record processing.",
+      "evidence": "Transitioning to the .jsonl format allows the system to process telemetry records one at a time, enabling continuous stream analysis without loading the entire dataset into memory."
+    },
+    {
+      "question": "In Logistics Route Optimization Stream, what is a primary limitation of the chosen format?",
+      "options": [
+        "It requires a byte order mark to be valid.",
+        "It cannot be validated as a single JSON entity.",
+        "It is incompatible with standard unix-style text processing tools.",
+        "It only supports ASCII characters."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because each line is an independent JSON value, the file as a whole is not a single valid JSON object, which complicates global validation.",
+      "evidence": "The format lacks a global structure, meaning the file cannot be validated as a single JSON entity; developers must verify individual lines to ensure data integrity."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:51.823Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:48.771Z"
+}

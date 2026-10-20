@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "istio",
+  "title": "Secure Microservice Communication for FinTech Ledger",
+  "business": "A digital banking platform managing sensitive ledger transactions between independent microservices.",
+  "problem": "The platform suffers from unauthorized lateral movement between services, as internal traffic lacks mutual TLS encryption and granular identity-based access control.",
+  "solution": "Istio provides a service mesh layer that enforces mutual TLS (mTLS) for all inter-service communication and uses AuthorizationPolicies to restrict traffic based on service identity rather than network location.",
+  "steps": [
+    "Inject the Istio sidecar proxy into the ledger namespace to intercept all inbound and outbound traffic.",
+    "Configure a PeerAuthentication policy to enforce STRICT mTLS mode across the entire mesh.",
+    "Define AuthorizationPolicy resources to explicitly allow only the API Gateway to communicate with the Ledger service.",
+    "Verify traffic flow using Istio telemetry to ensure unauthorized requests are rejected with 403 Forbidden status codes."
+  ],
+  "outcome": "The platform achieves a zero-trust network posture where every service-to-service interaction is authenticated, encrypted, and explicitly authorized.",
+  "limitation": "The sidecar proxy architecture introduces a memory and CPU overhead per pod; this can be monitored by checking the resource consumption of the istio-proxy container relative to the application container.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Service Mesh Traffic Authorization Flow",
+    "description": "Visualizes how Istio intercepts and validates traffic between services.",
+    "nodes": [
+      {
+        "id": "gateway",
+        "label": "API Gateway",
+        "detail": "Entry point for external requests"
+      },
+      {
+        "id": "proxy1",
+        "label": "Sidecar Proxy",
+        "detail": "Enforces mTLS and policy"
+      },
+      {
+        "id": "ledger",
+        "label": "Ledger Service",
+        "detail": "Internal transaction processor"
+      },
+      {
+        "id": "proxy2",
+        "label": "Sidecar Proxy",
+        "detail": "Validates incoming identity"
+      }
+    ],
+    "edges": [
+      {
+        "from": "gateway",
+        "to": "proxy1",
+        "label": "outbound request"
+      },
+      {
+        "from": "proxy1",
+        "to": "proxy2",
+        "label": "mTLS encrypted tunnel"
+      },
+      {
+        "from": "proxy2",
+        "to": "ledger",
+        "label": "authorized request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://istio.io/latest/docs/",
+      "label": "Istio Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Microservice Communication for FinTech Ledger, what is the primary mechanism used to prevent unauthorized lateral movement?",
+      "options": [
+        "Implementing mutual TLS and identity-based AuthorizationPolicies",
+        "Increasing the firewall rules on the Kubernetes nodes",
+        "Using standard Kubernetes network policies without a mesh",
+        "Hardcoding credentials into each microservice"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions using mTLS and AuthorizationPolicies to restrict traffic based on identity.",
+      "evidence": "Istio provides a service mesh layer that enforces mutual TLS (mTLS) for all inter-service communication and uses AuthorizationPolicies to restrict traffic based on service identity rather than network location."
+    },
+    {
+      "question": "In Secure Microservice Communication for FinTech Ledger, what is a known trade-off of the sidecar proxy approach?",
+      "options": [
+        "It eliminates the need for Kubernetes namespaces",
+        "It introduces resource overhead per pod that must be monitored",
+        "It automatically upgrades the application code version",
+        "It removes the requirement for network security policies"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the resource overhead of sidecars as a trade-off.",
+      "evidence": "The sidecar proxy architecture introduces a memory and CPU overhead per pod; this can be monitored by checking the resource consumption of the istio-proxy container relative to the application container."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:06.292Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:02.623Z"
+}

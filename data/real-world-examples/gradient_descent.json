@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "gradient_descent",
+  "title": "Optimizing Predictive Maintenance Thresholds",
+  "business": "Industrial manufacturing firms managing high-speed assembly lines.",
+  "problem": "Manual calibration of sensor sensitivity thresholds leads to excessive false-positive downtime alerts, incurring significant operational costs.",
+  "solution": "Gradient Descent provides an iterative method to minimize the cost function representing the error between predicted and actual equipment failure states by adjusting threshold parameters in the direction opposite the gradient.",
+  "steps": [
+    "Define a differentiable cost function that quantifies the error between predicted sensor alerts and actual maintenance events.",
+    "Calculate the gradient of the cost function with respect to the current threshold parameters.",
+    "Update the threshold parameters by moving in the direction of the negative gradient scaled by a chosen learning rate.",
+    "Repeat the iterative process until the cost function value reaches a sufficiently low level."
+  ],
+  "outcome": "A refined set of sensor thresholds that minimizes false-positive alerts while maintaining high detection accuracy for genuine equipment failures.",
+  "limitation": "The algorithm may converge to local minima that are not globally optimal; this is checked by comparing the final cost function value against different starting parameter initializations.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Gradient Descent Parameter Update Loop",
+    "description": "The process shows how parameter estimates are iteratively refined to minimize the cost function.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Current Parameters",
+        "detail": "Initial threshold values"
+      },
+      {
+        "id": "b",
+        "label": "Cost Function",
+        "detail": "Error between prediction and reality"
+      },
+      {
+        "id": "c",
+        "label": "Gradient Calculation",
+        "detail": "Slope of the cost function"
+      },
+      {
+        "id": "d",
+        "label": "Parameter Update",
+        "detail": "Adjusting values by negative gradient"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "compute derivative"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "apply negative gradient"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "iterate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.deeplearningbook.org/contents/numerical.html",
+      "label": "Numerical Computation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Predictive Maintenance Thresholds, how does the technology address the problem of excessive false-positive alerts?",
+      "options": [
+        "By iteratively minimizing a cost function that represents the error between predicted and actual failure states.",
+        "By analytically deriving a symbolic formula to eliminate all sensor errors.",
+        "By increasing the learning rate to bypass all local minima in the sensor data.",
+        "By using hill climbing to maximize the number of alerts generated per hour."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly uses Gradient Descent to minimize the cost function, which directly addresses the error in alerts.",
+      "evidence": "Gradient Descent provides an iterative method to minimize the cost function representing the error between predicted and actual equipment failure states by adjusting threshold parameters in the direction opposite the gradient."
+    },
+    {
+      "question": "In Optimizing Predictive Maintenance Thresholds, what is a primary limitation of the implementation?",
+      "options": [
+        "The algorithm cannot handle more than two threshold parameters.",
+        "The algorithm may converge to local minima that are not globally optimal.",
+        "The algorithm requires a perfectly linear cost function to function.",
+        "The algorithm is incapable of using a learning rate."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that the algorithm may get stuck in local minima, which is a common challenge in optimization.",
+      "evidence": "The algorithm may converge to local minima that are not globally optimal; this is checked by comparing the final cost function value against different starting parameter initializations."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:49.395Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:45.889Z"
+}

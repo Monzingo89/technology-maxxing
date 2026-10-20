@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "glean",
+  "title": "Unified R&D Knowledge Synthesis",
+  "business": "Global pharmaceutical firms managing siloed research data across disparate cloud storage and internal wikis.",
+  "problem": "Researchers lose significant time manually cross-referencing clinical trial results stored in legacy document repositories with current project status updates in modern collaboration tools, leading to redundant testing.",
+  "solution": "Glean provides a permission-aware enterprise search and assistant layer that indexes these disparate data sources, allowing researchers to query across boundaries while strictly enforcing existing access control lists (ACLs) to ensure sensitive clinical data remains restricted to authorized personnel.",
+  "steps": [
+    "Connect Glean to existing document repositories and collaboration platforms via native enterprise connectors.",
+    "Configure permission synchronization to ensure Glean respects the source system's original access policies.",
+    "Define specific knowledge domains within the assistant to prioritize technical research documentation over general administrative content.",
+    "Deploy the conversational assistant to allow researchers to query cross-platform project status and historical data in natural language."
+  ],
+  "outcome": "Researchers achieve faster synthesis of historical trial data and current project status, reducing redundant work through improved visibility into existing organizational knowledge.",
+  "limitation": "The system relies on the accuracy of source-system permissions; if legacy repositories have misconfigured or overly permissive access rights, Glean will reflect those same security gaps, requiring periodic audits of the underlying data source permissions.",
+  "diagram": {
+    "kind": "er",
+    "title": "Glean Permission-Aware Integration Flow",
+    "description": "This diagram illustrates how Glean acts as an intermediary between secure data sources and the end user, maintaining data integrity through permission mapping.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Data Sources",
+        "detail": "Legacy Repositories, Wikis, Cloud Storage"
+      },
+      {
+        "id": "b",
+        "label": "Glean Indexer",
+        "detail": "Permission-aware ingestion engine"
+      },
+      {
+        "id": "c",
+        "label": "Glean Assistant",
+        "detail": "Generative AI interface"
+      },
+      {
+        "id": "d",
+        "label": "End User",
+        "detail": "Researcher"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Syncs content and ACLs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides grounded context"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Submits natural language query"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Returns filtered, authorized results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.glean.com/about",
+      "label": "About Glean | Enterprise AI Platform for Work"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified R&D Knowledge Synthesis, how does the platform address the problem of redundant testing?",
+      "options": [
+        "By automating the physical laboratory experiments directly.",
+        "By indexing disparate data sources to provide visibility into existing organizational knowledge.",
+        "By replacing all legacy document repositories with a single new database.",
+        "By removing all permission restrictions to allow open access to research."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that the solution provides visibility into existing knowledge, which directly addresses the problem of redundant work caused by siloed data.",
+      "evidence": "Glean provides a permission-aware enterprise search and assistant layer that indexes these disparate data sources, allowing researchers to query across boundaries while strictly enforcing existing access control lists (ACLs) to ensure sensitive clinical data remains restricted to authorized personnel."
+    },
+    {
+      "question": "In Unified R&D Knowledge Synthesis, what is a primary limitation of the implementation?",
+      "options": [
+        "The system cannot connect to more than two data sources simultaneously.",
+        "The system is unable to process natural language queries.",
+        "The system reflects the security posture of the underlying source systems, requiring audits of those permissions.",
+        "The system requires manual input of all clinical trial results."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that the system inherits the security configuration of the source systems, necessitating audits of those sources.",
+      "evidence": "The system relies on the accuracy of source-system permissions; if legacy repositories have misconfigured or overly permissive access rights, Glean will reflect those same security gaps, requiring periodic audits of the underlying data source permissions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:38.256Z",
+  "sourceRetrievedAt": "2026-10-18T01:01:34.355Z"
+}

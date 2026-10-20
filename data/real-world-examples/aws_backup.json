@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_backup",
+  "title": "Unified Compliance for Distributed Financial Microservices",
+  "business": "A financial services firm managing a distributed architecture of microservices across multiple AWS accounts and regions.",
+  "problem": "The firm struggles with fragmented data protection, where individual teams manage their own snapshots, leading to inconsistent retention policies and audit failures during regulatory reviews.",
+  "solution": "AWS Backup centralizes policy-based data protection by allowing the firm to define a single backup plan that automatically applies to resources across accounts and regions, ensuring uniform retention and compliance.",
+  "steps": [
+    "Create a centralized Backup Vault in a primary management account to store encrypted recovery points.",
+    "Define a Backup Plan specifying frequency, backup windows, and lifecycle rules for data retention.",
+    "Assign resources to the Backup Plan using tags to ensure automated coverage of new and existing volumes.",
+    "Enable Cross-Account Management via AWS Organizations to push policies to member accounts.",
+    "Monitor compliance status through the centralized dashboard to identify non-protected resources."
+  ],
+  "outcome": "The firm achieves a standardized, audit-ready data protection posture that eliminates manual oversight and ensures consistent recovery point objectives across the entire infrastructure.",
+  "limitation": "AWS Backup does not support all AWS service types or specific third-party applications; users must verify resource compatibility in the service console and monitor for 'Unsupported' status in the backup plan dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Centralized Backup Orchestration",
+    "description": "This diagram illustrates how a central policy governs distributed resources.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Management Account",
+        "detail": "Central Backup Vault and Policy Definition"
+      },
+      {
+        "id": "b",
+        "label": "Backup Plan",
+        "detail": "Retention and Frequency Rules"
+      },
+      {
+        "id": "c",
+        "label": "Member Account A",
+        "detail": "Production Databases"
+      },
+      {
+        "id": "d",
+        "label": "Member Account B",
+        "detail": "Application Volumes"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "defines"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "enforces policy"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "enforces policy"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely- AWS"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Compliance for Distributed Financial Microservices, what is the primary driver for adopting AWS Backup?",
+      "options": [
+        "To achieve uniform retention and compliance across fragmented accounts.",
+        "To reduce the cost of storage for individual microservices.",
+        "To increase the speed of application deployment.",
+        "To replace the need for AWS Organizations."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that fragmented management leads to audit failures, which the solution addresses by centralizing policy-based protection.",
+      "evidence": "AWS Backup centralizes policy-based data protection by allowing the firm to define a single backup plan that automatically applies to resources across accounts and regions, ensuring uniform retention and compliance."
+    },
+    {
+      "question": "In Unified Compliance for Distributed Financial Microservices, what is a key limitation of the implementation?",
+      "options": [
+        "It cannot be used with cross-account management.",
+        "It requires manual snapshots for every resource.",
+        "It does not support all service types and requires compatibility verification.",
+        "It is limited to a single AWS region."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly notes that not all services are supported and users must check compatibility.",
+      "evidence": "AWS Backup does not support all AWS service types or specific third-party applications; users must verify resource compatibility in the service console and monitor for 'Unsupported' status in the backup plan dashboard."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:14.657Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "yagni_principle",
+  "title": "Modular Logistics Routing Engine",
+  "business": "A regional logistics firm managing last-mile delivery fleets.",
+  "problem": "The engineering team spent three months building a complex, multi-modal routing engine capable of integrating drone delivery and autonomous rail, despite the company only operating standard delivery vans. This speculative development led to a bloated codebase that was difficult to maintain and delayed the release of essential van-routing updates.",
+  "solution": "Applying the YAGNI principle, the team refactored the architecture to focus exclusively on van-based routing. By removing the unused abstraction layers for drones and rail, the team reduced the cognitive load on developers and ensured that every line of code directly supported current business requirements.",
+  "steps": [
+    "Audit the existing codebase to identify modules with no active callers or business requirements.",
+    "Remove speculative abstractions and interfaces that were designed for future-proofing rather than current needs.",
+    "Implement a simple, direct routing algorithm that satisfies the current van-based delivery constraints.",
+    "Establish a policy requiring a documented business requirement before adding new architectural complexity.",
+    "Monitor system complexity to ensure that future additions remain focused on immediate operational needs."
+  ],
+  "outcome": "The codebase became significantly easier to navigate, allowing the team to ship critical van-routing features faster while reducing the technical debt associated with unused, complex abstractions.",
+  "limitation": "The primary trade-off is the potential for increased refactoring costs if the business pivots rapidly to new delivery modes. To check for this, teams should perform periodic architectural reviews to ensure the current design remains aligned with the actual, rather than theoretical, business roadmap.",
+  "diagram": {
+    "kind": "flow",
+    "title": "YAGNI Decision Workflow",
+    "description": "This diagram illustrates the decision process for evaluating new feature requests against the YAGNI principle.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Feature Request",
+        "detail": "New capability proposed by stakeholders"
+      },
+      {
+        "id": "b",
+        "label": "Requirement Check",
+        "detail": "Is there a current, active business need?"
+      },
+      {
+        "id": "c",
+        "label": "Discard/Defer",
+        "detail": "Feature is speculative; do not implement"
+      },
+      {
+        "id": "d",
+        "label": "Implement",
+        "detail": "Build simple solution for current need"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Evaluate"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "No current need"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Requirement exists"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modular Logistics Routing Engine, what was the primary issue caused by speculative development?",
+      "options": [
+        "The team failed to integrate drone delivery technology.",
+        "The codebase became bloated and difficult to maintain.",
+        "The routing engine was incompatible with standard vans.",
+        "The team lacked the budget to hire more engineers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that speculative development led to a bloated codebase that was difficult to maintain.",
+      "evidence": "This speculative development led to a bloated codebase that was difficult to maintain and delayed the release of essential van-routing updates."
+    },
+    {
+      "question": "In Modular Logistics Routing Engine, what is the primary trade-off of applying YAGNI?",
+      "options": [
+        "Increased refactoring costs if the business pivots to new modes.",
+        "The inability to ever add new features to the system.",
+        "A total loss of architectural documentation.",
+        "The requirement to use only drone delivery systems."
+      ],
+      "answerIndex": 0,
+      "explanation": "YAGNI prioritizes current needs, which means future pivots may require refactoring work that was previously avoided.",
+      "evidence": "The primary trade-off is the potential for increased refactoring costs if the business pivots rapidly to new delivery modes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:50.080Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

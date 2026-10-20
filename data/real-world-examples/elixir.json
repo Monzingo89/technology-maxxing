@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "elixir",
+  "title": "Resilient Industrial Sensor Aggregation",
+  "business": "Manufacturing firms managing thousands of distributed IoT sensors across factory floors.",
+  "problem": "Traditional monolithic architectures suffer from cascading failures when a single sensor node crashes, leading to data loss and expensive downtime for the entire production line.",
+  "solution": "Elixir leverages the BEAM virtual machine to isolate sensor processes. By using immutable data structures and supervision trees, the system ensures that if one sensor process encounters an error, it is automatically restarted without affecting the rest of the network, maintaining high availability.",
+  "steps": [
+    "Define a supervisor process to manage individual sensor worker processes.",
+    "Implement sensor logic as isolated processes that handle incoming data streams.",
+    "Utilize immutable data structures to pass sensor readings between processes without risk of side effects.",
+    "Configure supervision strategies to restart failed sensor processes automatically.",
+    "Connect distributed nodes across the factory floor using Erlang distribution to aggregate data centrally."
+  ],
+  "outcome": "A self-healing system where individual sensor failures are contained and recovered instantly, ensuring continuous data flow.",
+  "limitation": "The overhead of process isolation and message passing can increase latency compared to shared-memory models; verify this by monitoring process mailbox sizes and mailbox latency under peak load.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Sensor Supervision Hierarchy",
+    "description": "Shows how a supervisor manages isolated worker processes to ensure fault tolerance.",
+    "nodes": [
+      {
+        "id": "sup",
+        "label": "Supervisor",
+        "detail": "Root process monitoring workers"
+      },
+      {
+        "id": "w1",
+        "label": "Sensor A",
+        "detail": "Isolated worker process"
+      },
+      {
+        "id": "w2",
+        "label": "Sensor B",
+        "detail": "Isolated worker process"
+      },
+      {
+        "id": "db",
+        "label": "Data Store",
+        "detail": "Centralized aggregation point"
+      }
+    ],
+    "edges": [
+      {
+        "from": "sup",
+        "to": "w1",
+        "label": "supervises"
+      },
+      {
+        "from": "sup",
+        "to": "w2",
+        "label": "supervises"
+      },
+      {
+        "from": "w1",
+        "to": "db",
+        "label": "sends data"
+      },
+      {
+        "from": "w2",
+        "to": "db",
+        "label": "sends data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://elixir-lang.org/",
+      "label": "Elixir Programming Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Resilient Industrial Sensor Aggregation, what is the primary benefit of the proposed solution?",
+      "options": [
+        "Eliminating the need for hardware sensors",
+        "Preventing cascading failures through process isolation",
+        "Reducing the cost of physical factory equipment",
+        "Increasing the clock speed of the CPU"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on using BEAM process isolation to ensure that individual sensor failures do not crash the entire system.",
+      "evidence": "Elixir leverages the BEAM virtual machine to isolate sensor processes. By using immutable data structures and supervision trees, the system ensures that if one sensor process encounters an error, it is automatically restarted without affecting the rest of the network, maintaining high availability."
+    },
+    {
+      "question": "In Resilient Industrial Sensor Aggregation, what is a potential trade-off of the implementation?",
+      "options": [
+        "Increased memory usage due to immutable data",
+        "Higher latency due to process isolation and message passing",
+        "Inability to scale across multiple nodes",
+        "Requirement for manual restarts after every error"
+      ],
+      "answerIndex": 1,
+      "explanation": "Process isolation and message passing inherently introduce overhead compared to shared-memory architectures.",
+      "evidence": "The overhead of process isolation and message passing can increase latency compared to shared-memory models; verify this by monitoring process mailbox sizes and mailbox latency under peak load."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:01.074Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:57.141Z"
+}

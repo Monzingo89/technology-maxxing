@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "graph_neural_networks",
+  "title": "Supply Chain Resilience via Graph Neural Networks",
+  "business": "Global logistics providers managing complex, multi-tier supplier networks.",
+  "problem": "Traditional linear forecasting fails to account for cascading failures where a disruption at a tertiary supplier impacts the entire production line due to hidden structural dependencies.",
+  "solution": "Graph Neural Networks (GNNs) model the supply chain as a graph where nodes represent entities and edges represent dependencies. By utilizing message passing between nodes, the GNN captures how local disruptions propagate through the network structure to predict systemic risk.",
+  "steps": [
+    "Map all supplier, warehouse, and factory entities into a graph structure where edges define material flow or contractual dependencies.",
+    "Initialize node features with historical performance data and geographic risk indicators.",
+    "Apply a graph convolutional layer to aggregate information from neighboring nodes to update the representation of each entity.",
+    "Train the model to predict the probability of node failure based on the state of its neighborhood.",
+    "Deploy the model to simulate stress tests by masking specific nodes to observe predicted downstream impacts."
+  ],
+  "outcome": "Improved visibility into hidden dependencies, allowing for proactive inventory buffering before a localized failure cascades into a systemic outage.",
+  "limitation": "The primary limitation is the over-smoothing phenomenon, where deep GNN architectures cause node representations to become indistinguishable; this can be checked by monitoring the variance of node embeddings across layers.",
+  "diagram": {
+    "kind": "er",
+    "title": "Supply Chain Dependency Graph",
+    "description": "Nodes represent physical entities, and edges represent the flow of goods or dependencies.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Material Source",
+        "detail": "Supplier of base commodities"
+      },
+      {
+        "id": "b",
+        "label": "Component Manufacturer",
+        "detail": "Processes raw materials"
+      },
+      {
+        "id": "c",
+        "label": "Assembly Plant",
+        "detail": "Final product integration"
+      },
+      {
+        "id": "d",
+        "label": "Distribution Center",
+        "detail": "Regional logistics hub"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "1:N supplies"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "1:N provides"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "1:N ships"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1812.08434",
+      "label": "Graph Neural Networks: A Review of Methods and Applications"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Resilience via Graph Neural Networks, why is a GNN preferred over linear forecasting?",
+      "options": [
+        "It captures how local disruptions propagate through the network structure to predict systemic risk.",
+        "It eliminates the need for historical performance data.",
+        "It automatically replaces all human logistics managers.",
+        "It prevents the over-smoothing phenomenon in deep networks."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that linear models fail to account for cascading failures, which GNNs address by modeling structural dependencies.",
+      "evidence": "By utilizing message passing between nodes, the GNN captures how local disruptions propagate through the network structure to predict systemic risk."
+    },
+    {
+      "question": "In Supply Chain Resilience via Graph Neural Networks, what is a specific limitation of the implementation?",
+      "options": [
+        "The model cannot handle more than three tiers of suppliers.",
+        "The over-smoothing phenomenon where node representations become indistinguishable.",
+        "The requirement for real-time satellite imagery for every node.",
+        "The inability to map edges between warehouses and factories."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly identifies over-smoothing as the primary limitation to monitor.",
+      "evidence": "The primary limitation is the over-smoothing phenomenon, where deep GNN architectures cause node representations to become indistinguishable; this can be checked by monitoring the variance of node embeddings across layers."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:55.033Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:51.071Z"
+}

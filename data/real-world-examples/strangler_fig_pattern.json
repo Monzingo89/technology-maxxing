@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "strangler_fig_pattern",
+  "title": "Modernizing the Legacy Logistics Ledger",
+  "business": "A regional logistics firm managing a monolithic, decade-old shipment tracking system.",
+  "problem": "The existing system is a monolithic codebase that has become too fragile to update, causing high maintenance costs and preventing the integration of modern real-time tracking features.",
+  "solution": "The Strangler Fig Pattern allows the firm to gradually replace the legacy system by routing specific capabilities to new, decoupled microservices, effectively strangling the old system until it can be decommissioned.",
+  "steps": [
+    "Identify a single, isolated business capability within the legacy monolith to extract.",
+    "Implement the selected capability as a new, independent service.",
+    "Deploy an intercepting proxy or API gateway to route traffic for that specific capability to the new service.",
+    "Verify the new service handles requests correctly while the legacy system remains the source of truth for other functions.",
+    "Repeat the process for remaining capabilities until the legacy monolith is empty."
+  ],
+  "outcome": "A modular, maintainable architecture that allows for continuous delivery of new features without the risk of a total system rewrite.",
+  "limitation": "The primary trade-off is the increased complexity of managing distributed systems and network latency between the proxy and services; monitor this by tracking request round-trip times at the gateway.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Strangler Fig Routing Flow",
+    "description": "Shows how the API Gateway redirects traffic from the legacy monolith to a new service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "External user or system"
+      },
+      {
+        "id": "b",
+        "label": "API Gateway",
+        "detail": "Traffic interceptor"
+      },
+      {
+        "id": "c",
+        "label": "Legacy Monolith",
+        "detail": "Original system"
+      },
+      {
+        "id": "d",
+        "label": "New Service",
+        "detail": "Modern implementation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Route legacy traffic"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Route migrated traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modernizing the Legacy Logistics Ledger, what is the primary purpose of the Strangler Fig Pattern?",
+      "options": [
+        "To perform a complete, immediate rewrite of the legacy system.",
+        "To gradually replace legacy capabilities with new implementations.",
+        "To optimize the database performance of the existing monolith.",
+        "To consolidate all business logic into a single, larger service."
+      ],
+      "answerIndex": 1,
+      "explanation": "The pattern focuses on incremental migration rather than big-bang rewrites.",
+      "evidence": "The Strangler Fig Pattern allows the firm to gradually replace the legacy system by routing specific capabilities to new, decoupled microservices, effectively strangling the old system until it can be decommissioned."
+    },
+    {
+      "question": "In Modernizing the Legacy Logistics Ledger, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use an API gateway for routing.",
+        "The requirement to decommission the monolith immediately.",
+        "Increased complexity and potential network latency.",
+        "The need to rewrite all services at the same time."
+      ],
+      "answerIndex": 2,
+      "explanation": "Distributed systems introduce network overhead and operational complexity.",
+      "evidence": "The primary trade-off is the increased complexity of managing distributed systems and network latency between the proxy and services; monitor this by tracking request round-trip times at the gateway."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:33.112Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

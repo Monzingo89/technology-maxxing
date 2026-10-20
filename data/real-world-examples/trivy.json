@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "trivy",
+  "title": "Securing Cloud-Native Financial Microservices",
+  "business": "A regional fintech firm managing high-frequency transaction microservices deployed on Kubernetes.",
+  "problem": "The development team frequently commits hardcoded API credentials and misconfigured container manifests to the internal registry, leading to potential unauthorized access and compliance violations.",
+  "solution": "Trivy provides a unified scanner that integrates into the CI/CD pipeline to perform static analysis on container images and Infrastructure-as-Code files, identifying vulnerabilities, secret leaks, and misconfigurations before deployment.",
+  "steps": [
+    "Integrate Trivy as a binary step within the CI pipeline runner.",
+    "Configure Trivy to scan the local filesystem for IaC files like Kubernetes manifests.",
+    "Define a severity threshold to fail builds containing High or Critical findings.",
+    "Output results in JSON format for ingestion by the security dashboard."
+  ],
+  "outcome": "The organization achieves a consistent security baseline where insecure configurations and exposed secrets are blocked automatically, reducing the manual audit burden on the security team.",
+  "limitation": "Trivy performs static analysis, meaning it cannot detect runtime-only vulnerabilities or misconfigurations that emerge only after environmental variables are injected at execution time; verify this by comparing static scan results against runtime security monitoring logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Trivy Security Integration Flow",
+    "description": "This diagram illustrates the flow from code commit to deployment gate.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Commits code and manifests"
+      },
+      {
+        "id": "b",
+        "label": "CI Pipeline",
+        "detail": "Automated build environment"
+      },
+      {
+        "id": "c",
+        "label": "Trivy Scanner",
+        "detail": "Static analysis engine"
+      },
+      {
+        "id": "d",
+        "label": "Registry",
+        "detail": "Container image storage"
+      },
+      {
+        "id": "e",
+        "label": "Deployment",
+        "detail": "Kubernetes Cluster"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "scans artifacts"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns findings"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "pushes if clean"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "deploys"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://trivy.dev/docs/latest/guide/",
+      "label": "Trivy User Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Cloud-Native Financial Microservices, what is the primary purpose of integrating Trivy into the CI/CD pipeline?",
+      "options": [
+        "To block insecure configurations and secrets before deployment.",
+        "To monitor runtime performance of microservices.",
+        "To automatically patch vulnerabilities in production.",
+        "To replace the need for Kubernetes manifests."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights using Trivy to identify leaks and misconfigurations before they reach the production environment.",
+      "evidence": "The organization achieves a consistent security baseline where insecure configurations and exposed secrets are blocked automatically, reducing the manual audit burden on the security team."
+    },
+    {
+      "question": "In Securing Cloud-Native Financial Microservices, what is a key limitation of the described implementation?",
+      "options": [
+        "Trivy cannot scan Kubernetes manifests.",
+        "Trivy is unable to detect runtime-only vulnerabilities.",
+        "Trivy requires manual intervention for every scan.",
+        "Trivy only supports cloud-based scanning."
+      ],
+      "answerIndex": 1,
+      "explanation": "Trivy is a static analysis tool and does not account for changes that occur during the execution phase of an application.",
+      "evidence": "Trivy performs static analysis, meaning it cannot detect runtime-only vulnerabilities or misconfigurations that emerge only after environmental variables are injected at execution time"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:43.770Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:40.755Z"
+}

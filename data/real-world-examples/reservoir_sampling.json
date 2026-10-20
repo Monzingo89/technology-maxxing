@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "reservoir_sampling",
+  "title": "Real-time Telemetry Representative Sampling",
+  "business": "IoT sensor network operators managing high-velocity data streams.",
+  "problem": "Storing every data point from millions of sensors is cost-prohibitive, yet simple truncation loses long-term trends and introduces bias toward early data.",
+  "solution": "Reservoir Sampling maintains a fixed-size representative sample of a stream of unknown length, ensuring every element has an equal probability of being selected without needing to know the total stream size in advance.",
+  "steps": [
+    "Initialize a reservoir array of fixed size k.",
+    "Fill the reservoir with the first k elements from the incoming stream.",
+    "For each subsequent element at index i (where i > k), generate a random integer j between 0 and i.",
+    "If j is less than k, replace the element at index j in the reservoir with the new element from the stream."
+  ],
+  "outcome": "A statistically unbiased subset of the total stream that allows for accurate trend analysis without the storage overhead of the full dataset.",
+  "limitation": "The primary limitation is that it assumes a uniform distribution of importance across the stream; it cannot prioritize recent data or specific event types without modifying the probability logic, which can be checked by verifying if the sample distribution matches the historical stream distribution over time.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Reservoir Sampling Process",
+    "description": "The flow shows how incoming stream elements are either accepted into the reservoir or discarded based on a probability calculation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Stream Source",
+        "detail": "Continuous flow of data"
+      },
+      {
+        "id": "b",
+        "label": "Initial Fill",
+        "detail": "First k elements"
+      },
+      {
+        "id": "c",
+        "label": "Random Selection",
+        "detail": "Probability logic (k/i)"
+      },
+      {
+        "id": "d",
+        "label": "Reservoir",
+        "detail": "Fixed-size sample storage"
+      },
+      {
+        "id": "e",
+        "label": "Discard",
+        "detail": "Rejected elements"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "First k items"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Populate"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Subsequent items"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Replace item"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Drop item"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Telemetry Representative Sampling, why is this technique used instead of simple truncation?",
+      "options": [
+        "To ensure every element has an equal probability of being selected without knowing the total stream size.",
+        "To prioritize the most recent data points over historical data.",
+        "To reduce the computational complexity of sorting the stream.",
+        "To increase the storage capacity of the IoT sensor network."
+      ],
+      "answerIndex": 0,
+      "explanation": "Reservoir Sampling is specifically designed to handle unknown stream lengths while maintaining statistical representation, which simple truncation fails to do.",
+      "evidence": "Reservoir Sampling maintains a fixed-size representative sample of a stream of unknown length, ensuring every element has an equal probability of being selected without needing to know the total stream size in advance."
+    },
+    {
+      "question": "What is a key limitation of the Real-time Telemetry Representative Sampling approach?",
+      "options": [
+        "It requires the total stream size to be known before processing starts.",
+        "It cannot handle high-velocity data streams efficiently.",
+        "It assumes a uniform distribution of importance and cannot prioritize specific data types without logic changes.",
+        "It consumes more memory than storing the full dataset."
+      ],
+      "answerIndex": 2,
+      "explanation": "The technique is inherently uniform, meaning it treats all data points equally, which is a limitation if the business needs to prioritize specific events.",
+      "evidence": "The primary limitation is that it assumes a uniform distribution of importance across the stream; it cannot prioritize recent data or specific event types without modifying the probability logic"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:22.005Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

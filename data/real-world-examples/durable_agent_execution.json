@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "durable_agent_execution",
+  "title": "Automated Supply Chain Logistics Orchestrator",
+  "business": "Global logistics providers managing multi-week freight shipments that require continuous coordination between disparate carrier APIs and customs clearance systems.",
+  "problem": "Traditional agent scripts often fail during long-running processes due to transient network outages or server restarts, forcing the entire multi-day shipment tracking process to restart from the beginning, leading to data inconsistency and manual intervention.",
+  "solution": "By leveraging Temporal's Durable Execution, the logistics agent persists its state and progress in an Event History. If a worker process crashes or a network connection drops, the agent automatically resumes from the exact point of failure rather than restarting the entire workflow.",
+  "steps": [
+    "Define the logistics workflow as a Temporal Workflow Function to encapsulate the multi-step shipment lifecycle.",
+    "Deploy Worker Processes that host the agent code and connect to the Temporal Service.",
+    "Initiate the workflow execution, which records every state transition into an immutable Event History.",
+    "Configure the Temporal Service to monitor worker health and automatically re-schedule pending tasks upon detection of a failure.",
+    "Verify that the agent resumes from the last successful checkpoint after a simulated system restart."
+  ],
+  "outcome": "The logistics agent maintains continuous operational integrity, ensuring that long-running shipment tracking workflows complete reliably without manual reconciliation or duplicate API calls.",
+  "limitation": "The primary trade-off is the requirement for deterministic code execution. Developers must ensure that workflow logic remains deterministic, as the platform replays the Event History to reconstruct state; check this by ensuring no non-deterministic operations like random number generation or un-tracked system time are used inside the workflow function.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Durable Logistics Workflow Lifecycle",
+    "description": "This diagram illustrates how the Temporal Service manages the agent state across potential failures.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Workflow Start",
+        "detail": "Initiates the shipment tracking process"
+      },
+      {
+        "id": "b",
+        "label": "Event History",
+        "detail": "Persistent record of state transitions"
+      },
+      {
+        "id": "c",
+        "label": "Worker Process",
+        "detail": "Executes the agent logic"
+      },
+      {
+        "id": "d",
+        "label": "Failure/Restart",
+        "detail": "Interruption point"
+      },
+      {
+        "id": "e",
+        "label": "Resume Execution",
+        "detail": "Continues from last event"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "triggers"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "records progress"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "encounters"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "queries state"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "replays history"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.temporal.io/temporal",
+      "label": "What is Temporal?"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Supply Chain Logistics Orchestrator, why is Durable Execution necessary?",
+      "options": [
+        "To prevent the entire multi-day shipment tracking process from restarting from the beginning after a failure.",
+        "To increase the speed of API calls to carrier systems.",
+        "To eliminate the need for any worker processes in the architecture.",
+        "To allow the agent to run on a single local machine without network access."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that traditional scripts fail and force a full restart, which Durable Execution solves by persisting progress.",
+      "evidence": "Traditional agent scripts often fail during long-running processes due to transient network outages or server restarts, forcing the entire multi-day shipment tracking process to restart from the beginning, leading to data inconsistency and manual intervention."
+    },
+    {
+      "question": "In Automated Supply Chain Logistics Orchestrator, what is a key limitation of the implementation?",
+      "options": [
+        "The agent cannot communicate with external APIs.",
+        "The workflow logic must be deterministic because the platform replays the Event History to reconstruct state.",
+        "The system requires manual reconciliation after every server restart.",
+        "The Event History cannot be stored in a database."
+      ],
+      "answerIndex": 1,
+      "explanation": "Durable execution relies on replaying history, which requires deterministic code to ensure the state is reconstructed correctly.",
+      "evidence": "The primary trade-off is the requirement for deterministic code execution. Developers must ensure that workflow logic remains deterministic, as the platform replays the Event History to reconstruct state"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:54.232Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:49.947Z"
+}

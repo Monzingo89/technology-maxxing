@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_6_sol",
+  "title": "Architectural Compliance Audit Automation",
+  "business": "Global infrastructure engineering firms managing multi-year construction projects with thousands of technical specifications.",
+  "problem": "Engineers struggle to manually cross-reference massive, evolving project documentation against local building codes, leading to costly compliance gaps and rework.",
+  "solution": "GPT-5.6 Sol leverages its 1,050,000 context window to ingest entire project specification libraries and building code repositories simultaneously, using reasoning tokens to perform deep semantic validation of architectural plans against regulatory requirements.",
+  "steps": [
+    "Upload project specification PDFs and regional building code documents to the file_search tool.",
+    "Configure the Chat Completions API with reasoning.effort set to high to ensure rigorous logical verification.",
+    "Utilize structured_outputs to enforce a specific JSON schema for compliance reports, ensuring machine-readable audit trails.",
+    "Implement prompt_caching for the static building code repository to optimize costs during iterative design reviews."
+  ],
+  "outcome": "Engineers receive comprehensive, verifiable compliance reports that highlight specific specification conflicts, significantly reducing the time spent on manual document review and minimizing regulatory risk.",
+  "limitation": "The model may experience latency or increased costs when processing inputs exceeding 272,000 tokens due to the tiered pricing structure; developers should monitor token usage via response headers to check if requests trigger the 2x input pricing multiplier.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Audit Workflow",
+    "description": "The flow shows how raw documents are processed into actionable compliance insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Project Docs",
+        "detail": "Specifications and blueprints"
+      },
+      {
+        "id": "b",
+        "label": "Building Codes",
+        "detail": "Regulatory requirements"
+      },
+      {
+        "id": "c",
+        "label": "GPT-5.6 Sol",
+        "detail": "Reasoning engine"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Report",
+        "detail": "Structured JSON output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Context ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Context ingestion"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Semantic validation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+      "label": "GPT-5.6 Sol"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Compliance Audit Automation, how does the model address the problem of manual document review?",
+      "options": [
+        "By using its large context window to ingest and reason across entire specification and code libraries simultaneously.",
+        "By automatically generating new architectural blueprints from scratch.",
+        "By translating building codes into multiple languages for global teams.",
+        "By bypassing the need for any human oversight in the construction process."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the model uses its 1,050,000 context window to ingest libraries and perform semantic validation.",
+      "evidence": "GPT-5.6 Sol leverages its 1,050,000 context window to ingest entire project specification libraries and building code repositories simultaneously, using reasoning tokens to perform deep semantic validation of architectural plans against regulatory requirements."
+    },
+    {
+      "question": "In Architectural Compliance Audit Automation, what is a key limitation to monitor during implementation?",
+      "options": [
+        "The model cannot process images of blueprints.",
+        "The model is incompatible with structured JSON outputs.",
+        "Input tokens exceeding 272,000 trigger higher pricing tiers that impact cost efficiency.",
+        "The model requires manual fine-tuning for every new project."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section warns about the cost implications of exceeding the 272,000 token threshold.",
+      "evidence": "The model may experience latency or increased costs when processing inputs exceeding 272,000 tokens due to the tiered pricing structure; developers should monitor token usage via response headers to check if requests trigger the 2x input pricing multiplier."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:18.528Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:14.845Z"
+}

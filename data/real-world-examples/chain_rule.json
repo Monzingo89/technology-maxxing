@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "topicId": "chain_rule",
+  "title": "Dynamic Thermal Load Modeling",
+  "business": "HVAC control engineers managing complex building climate systems.",
+  "problem": "Engineers struggle to calculate the instantaneous rate of change in cooling demand when the system depends on nested variables, such as external temperature affecting internal coolant pressure, which in turn affects compressor power consumption.",
+  "solution": "The chain rule allows engineers to decompose the complex, nested dependency path of climate variables into a product of simpler, differentiable functions, enabling precise real-time adjustments to compressor output.",
+  "steps": [
+    "Define the outer function representing compressor power as a function of coolant pressure.",
+    "Define the inner function representing coolant pressure as a function of external temperature.",
+    "Calculate the derivative of the outer function evaluated at the current inner function value.",
+    "Calculate the derivative of the inner function with respect to external temperature.",
+    "Multiply these derivatives to determine the total rate of change in power consumption relative to temperature shifts."
+  ],
+  "outcome": "Improved system responsiveness and energy efficiency by accurately predicting power fluctuations before they manifest as thermal instability.",
+  "limitation": "The method assumes functions are differentiable at all points in the path; if the system encounters a non-differentiable state, such as a mechanical hard-stop or sensor saturation, the model will fail to provide an accurate derivative.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Thermal Dependency Path",
+    "description": "The flow of dependencies from external environment to power consumption.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Temp (x)",
+        "detail": "External temperature input"
+      },
+      {
+        "id": "b",
+        "label": "Pressure (u)",
+        "detail": "Coolant pressure function g(x)"
+      },
+      {
+        "id": "c",
+        "label": "Power (y)",
+        "detail": "Compressor power function f(u)"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "g'(x)"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "f'(u)"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "f'(g(x)) * g'(x)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openstax.org/books/calculus-volume-1/pages/3-6-the-chain-rule",
+      "label": "3.6 The Chain Rule - Calculus Volume 1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Thermal Load Modeling, why is the chain rule used to address the problem?",
+      "options": [
+        "To decompose nested dependencies into a product of simpler, differentiable functions.",
+        "To replace the need for measuring external temperature entirely.",
+        "To calculate the total sum of all cooling demands across the building.",
+        "To eliminate the need for compressor power consumption monitoring."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the chain rule allows for decomposing nested dependency paths into simpler, differentiable functions.",
+      "evidence": "The chain rule allows engineers to decompose the complex, nested dependency path of climate variables into a product of simpler, differentiable functions"
+    },
+    {
+      "question": "What is a primary limitation of the approach described in Dynamic Thermal Load Modeling?",
+      "options": [
+        "It requires excessive computational power for simple linear systems.",
+        "It fails if the system encounters non-differentiable states like sensor saturation.",
+        "It cannot be used for more than two nested functions.",
+        "It is only applicable to trigonometric functions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that the model relies on differentiability and fails if the system hits non-differentiable states such as sensor saturation.",
+      "evidence": "if the system encounters a non-differentiable state, such as a mechanical hard-stop or sensor saturation, the model will fail to provide an accurate derivative."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:07.607Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:03.997Z"
+}

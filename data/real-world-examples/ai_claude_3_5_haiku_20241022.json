@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_3_5_haiku_20241022",
+  "title": "Lifecycle Management for Claude 3.5 Haiku",
+  "business": "Enterprises maintaining legacy AI integration layers.",
+  "problem": "Applications relying on the retired claude-3-5-haiku-20241022 model face service interruptions as requests to retired models will fail.",
+  "solution": "The organization must perform an audit of API usage to identify instances of the retired model and migrate workloads to active, supported replacements like claude-haiku-4-5-20251001.",
+  "steps": [
+    "Navigate to the Usage page in the Claude Console to audit current model deployments.",
+    "Export the usage CSV to identify all API keys and endpoints currently invoking claude-3-5-haiku-20241022.",
+    "Update application code to reference the recommended replacement model, claude-haiku-4-5-20251001.",
+    "Conduct thorough testing of the application with the new model to ensure functional parity before full production deployment."
+  ],
+  "outcome": "Restoration of service reliability and compliance with Anthropic's model lifecycle support policies.",
+  "limitation": "The primary trade-off is the potential for behavioral drift between model versions; developers must verify output consistency through regression testing after migration.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying retired models and transitioning to active ones.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage data"
+      },
+      {
+        "id": "b",
+        "label": "Audit CSV",
+        "detail": "Report containing model identifiers"
+      },
+      {
+        "id": "c",
+        "label": "Codebase",
+        "detail": "Application layer requiring updates"
+      },
+      {
+        "id": "d",
+        "label": "Active Model",
+        "detail": "Target: claude-haiku-4-5-20251001"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Export usage data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify retired model"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update API reference"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Lifecycle Management for Claude 3.5 Haiku, what is the primary risk of continuing to use the retired model?",
+      "options": [
+        "Requests to retired models will fail",
+        "Increased latency in API responses",
+        "Higher costs per token processed",
+        "Incompatibility with Python SDK v1.0"
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation and scenario state that requests to retired models will fail, necessitating a migration.",
+      "evidence": "Applications relying on the retired claude-3-5-haiku-20241022 model face service interruptions as requests to retired models will fail."
+    },
+    {
+      "question": "In Lifecycle Management for Claude 3.5 Haiku, what is the recommended approach to mitigate behavioral drift during migration?",
+      "options": [
+        "Updating the API key immediately",
+        "Conducting thorough testing of the application with the new model",
+        "Exporting the CSV usage report daily",
+        "Contacting support for model weight preservation"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that behavioral drift is a risk, and testing is the required mitigation.",
+      "evidence": "The primary trade-off is the potential for behavioral drift between model versions; developers must verify output consistency through regression testing after migration."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:30.844Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

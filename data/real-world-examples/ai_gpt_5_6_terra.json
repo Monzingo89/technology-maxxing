@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_6_terra",
+  "title": "Automated Legal Discovery for Mid-Sized Firms",
+  "business": "Mid-sized legal firms managing high-volume document discovery for litigation.",
+  "problem": "Firms struggle with the high cost of processing massive document sets while needing high-level reasoning to identify relevant evidence across thousands of pages.",
+  "solution": "GPT-5.6 Terra provides a balanced intelligence-to-cost ratio, allowing firms to utilize its 1,050,000 context window to analyze entire case files in a single pass without the overhead of premium flagship models.",
+  "steps": [
+    "Ingest raw discovery documents into a centralized repository.",
+    "Utilize the Chat Completions API with gpt-5.6-terra to perform semantic indexing of the documents.",
+    "Configure reasoning.effort to medium to ensure accurate legal classification while maintaining cost efficiency.",
+    "Implement prompt caching for recurring case-law references to reduce input token costs.",
+    "Output structured findings using structured_outputs for direct integration into case management software."
+  ],
+  "outcome": "Firms achieve comprehensive document review coverage with predictable operational costs, enabling faster case preparation without exceeding budget constraints.",
+  "limitation": "The model's performance on highly nuanced legal synthesis may degrade if reasoning.effort is set too low; verify accuracy by comparing outputs against a small human-reviewed sample set.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legal Discovery Pipeline",
+    "description": "The flow of documents through the GPT-5.6 Terra processing pipeline.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Store",
+        "detail": "Raw legal discovery files"
+      },
+      {
+        "id": "b",
+        "label": "GPT-5.6 Terra",
+        "detail": "Reasoning engine"
+      },
+      {
+        "id": "c",
+        "label": "Case Database",
+        "detail": "Structured evidence findings"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Context ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Structured output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.6-terra",
+      "label": "GPT-5.6 Terra"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Discovery for Mid-Sized Firms, why is GPT-5.6 Terra the preferred choice for document discovery?",
+      "options": [
+        "It offers a balanced intelligence-to-cost ratio for large context processing.",
+        "It is the only model that supports image generation for legal evidence.",
+        "It provides unlimited token usage for all legal firms.",
+        "It is specifically designed for real-time transcription of court proceedings."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights the need to balance cost with high-level reasoning for large document sets, which is the core value proposition of the Terra model.",
+      "evidence": "GPT-5.6 Terra provides a balanced intelligence-to-cost ratio, allowing firms to utilize its 1,050,000 context window to analyze entire case files in a single pass without the overhead of premium flagship models."
+    },
+    {
+      "question": "In Automated Legal Discovery for Mid-Sized Firms, what is the primary trade-off when configuring the model?",
+      "options": [
+        "The model cannot process structured outputs if reasoning.effort is high.",
+        "Lowering reasoning.effort may reduce accuracy in nuanced legal synthesis.",
+        "Prompt caching is incompatible with the 1,050,000 context window.",
+        "The model requires manual human intervention for every single token generated."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that performance on nuanced tasks can degrade if the reasoning effort is set too low.",
+      "evidence": "The model's performance on highly nuanced legal synthesis may degrade if reasoning.effort is set too low; verify accuracy by comparing outputs against a small human-reviewed sample set."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:18.886Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:15.222Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "prettier",
+  "title": "Automated Style Standardization for Distributed Teams",
+  "business": "A global software consultancy managing a polyglot codebase across multiple time zones.",
+  "problem": "Engineers frequently waste time during code reviews debating whitespace, indentation, and brace placement rather than focusing on architectural logic, leading to inconsistent codebases that are difficult to maintain.",
+  "solution": "Implementing Prettier as an opinionated code formatter that strips original styling and reprints code based on a strict set of rules, ensuring that all contributors produce identical output regardless of their local editor settings.",
+  "steps": [
+    "Install Prettier as a development dependency in the project root.",
+    "Create a .prettierrc configuration file to define shared project standards like print width and tab usage.",
+    "Integrate Prettier into the Git pre-commit hook workflow to ensure code is formatted before it is staged.",
+    "Add a continuous integration check to verify that all committed files adhere to the defined formatting rules."
+  ],
+  "outcome": "Code reviews shift focus from stylistic nitpicking to substantive logic, and the codebase maintains a uniform appearance that simplifies navigation for all team members.",
+  "limitation": "Prettier is strictly a formatter and does not perform linting or logic analysis; developers must verify that their code remains functionally correct, which can be checked by running the test suite after formatting.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Prettier Integration Workflow",
+    "description": "This diagram illustrates how code moves from a developer's machine through the formatting engine into the repository.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "Unformatted developer input"
+      },
+      {
+        "id": "b",
+        "label": "Prettier Engine",
+        "detail": "Parses AST and reprints code"
+      },
+      {
+        "id": "c",
+        "label": "Formatted Code",
+        "detail": "Standardized output"
+      },
+      {
+        "id": "d",
+        "label": "Git Repository",
+        "detail": "Version controlled storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "reprints"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "commit"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://prettier.io/docs/",
+      "label": "What is Prettier?"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Style Standardization for Distributed Teams, what is the primary benefit of using the formatter?",
+      "options": [
+        "It reduces time spent debating style during code reviews.",
+        "It automatically fixes logic errors in the source code.",
+        "It optimizes the performance of the compiled application.",
+        "It replaces the need for unit testing in the project."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that engineers waste time debating style, and the solution addresses this by standardizing output to focus on logic.",
+      "evidence": "Engineers frequently waste time during code reviews debating whitespace, indentation, and brace placement rather than focusing on architectural logic"
+    },
+    {
+      "question": "In Automated Style Standardization for Distributed Teams, what is a key limitation of the technology?",
+      "options": [
+        "It cannot handle JavaScript files.",
+        "It does not perform logic analysis or linting.",
+        "It requires manual intervention for every file.",
+        "It only works with specific IDEs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the tool is a formatter and does not perform linting or logic checks.",
+      "evidence": "Prettier is strictly a formatter and does not perform linting or logic analysis"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:43.856Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:40.774Z"
+}

@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "kotlin",
+  "title": "Unified Cross-Platform Inventory Logic",
+  "business": "A retail logistics firm managing inventory across mobile Android devices and web-based warehouse management systems.",
+  "problem": "The firm suffers from inconsistent stock calculation logic because separate teams maintain Java-based Android apps and JavaScript-based web services, leading to frequent inventory discrepancies.",
+  "solution": "Kotlin Multiplatform allows the team to consolidate core inventory calculation logic into a single shared module that compiles to both JVM bytecode for the backend and native code for mobile clients, ensuring identical business rules.",
+  "steps": [
+    "Define the core inventory calculation logic within a shared Kotlin Multiplatform module.",
+    "Configure the build system to target both the JVM for the backend service and native targets for mobile.",
+    "Expose the shared business logic as a library dependency for both the Android application and the web backend.",
+    "Implement platform-specific UI layers that invoke the shared logic for data processing."
+  ],
+  "outcome": "The firm achieves a single source of truth for inventory math, eliminating logic drift and reducing the time required to update stock calculation rules across all platforms.",
+  "limitation": "The primary tradeoff is the increased complexity of the build configuration and the need to manage platform-specific dependencies, which can be verified by inspecting the build output logs for unexpected target-specific compilation errors.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Shared Logic Integration",
+    "description": "This diagram illustrates how shared Kotlin logic flows into different platform targets.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Shared Module",
+        "detail": "Contains core inventory logic"
+      },
+      {
+        "id": "b",
+        "label": "JVM Backend",
+        "detail": "Consumes shared logic"
+      },
+      {
+        "id": "c",
+        "label": "Android App",
+        "detail": "Consumes shared logic"
+      },
+      {
+        "id": "d",
+        "label": "Inventory Database",
+        "detail": "Data source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "compiles to"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "compiles to"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "queries"
+      }
+    ]
+  },
+  "code": {
+    "language": "kotlin",
+    "content": "fun calculateStock(items: List<Int>): Int { // Shared logic function\n    return items.sum() // Consistent calculation across platforms\n}",
+    "explanation": "This function represents the shared inventory logic that is compiled once and used by both the JVM backend and the Android mobile application."
+  },
+  "sources": [
+    {
+      "url": "https://kotlinlang.org/docs/getting-started.html",
+      "label": "Get started with Kotlin | Kotlin Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Cross-Platform Inventory Logic, what is the primary reason for adopting Kotlin?",
+      "options": [
+        "To eliminate logic drift by using a single shared module for business rules.",
+        "To increase the speed of the inventory database queries.",
+        "To replace the need for platform-specific UI development entirely.",
+        "To reduce the cost of cloud hosting for the backend service."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that separate teams led to inconsistent logic, and Kotlin Multiplatform solves this by consolidating that logic.",
+      "evidence": "Kotlin Multiplatform allows the team to consolidate core inventory calculation logic into a single shared module that compiles to both JVM bytecode for the backend and native code for mobile clients, ensuring identical business rules."
+    },
+    {
+      "question": "In Unified Cross-Platform Inventory Logic, what is a noted limitation of the implementation?",
+      "options": [
+        "The inability to use Java libraries in the shared module.",
+        "Increased complexity in build configuration and dependency management.",
+        "The requirement to write the UI twice for every platform.",
+        "A significant decrease in execution performance on mobile devices."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly identifies build configuration complexity as the main tradeoff.",
+      "evidence": "The primary tradeoff is the increased complexity of the build configuration and the need to manage platform-specific dependencies, which can be verified by inspecting the build output logs for unexpected target-specific compilation errors."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:32.514Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:27.800Z"
+}

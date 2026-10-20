@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_4o_transcribe_diarize",
+  "title": "Automated Legal Deposition Indexing",
+  "business": "Legal firms conducting multi-party depositions.",
+  "problem": "Manual review of long-form audio recordings to identify specific speaker contributions is time-consuming and prone to human error, leading to delays in case preparation.",
+  "solution": "The GPT-4o Transcribe Diarize model automates the conversion of audio to text while simultaneously tagging segments with unique speaker identifiers, enabling structured transcripts that map dialogue to specific participants.",
+  "steps": [
+    "Capture high-fidelity audio of the deposition session.",
+    "Submit the audio file to the Transcription API using the gpt-4o-transcribe-diarize model ID.",
+    "Receive the structured output containing text segments mapped to speaker labels.",
+    "Parse the diarized output to populate a searchable database for legal review."
+  ],
+  "outcome": "Legal teams gain a searchable, chronologically accurate record of testimony that eliminates the need for manual transcription review.",
+  "limitation": "The model may struggle with overlapping speech or high-noise environments, which can be verified by reviewing the confidence scores of the speaker segments in the output.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Diarization Workflow",
+    "description": "The flow from audio input to structured legal data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Audio Source",
+        "detail": "Deposition recording"
+      },
+      {
+        "id": "b",
+        "label": "Transcription API",
+        "detail": "gpt-4o-transcribe-diarize"
+      },
+      {
+        "id": "c",
+        "label": "Diarized Transcript",
+        "detail": "Text with speaker tags"
+      },
+      {
+        "id": "d",
+        "label": "Legal Database",
+        "detail": "Searchable testimony"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Uploads audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Generates segments"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Indexes content"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-4o-transcribe-diarize",
+      "label": "GPT-4o Transcribe Diarize"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Deposition Indexing, what is the primary benefit of using the diarization feature?",
+      "options": [
+        "It eliminates the need for human legal review entirely.",
+        "It automatically maps dialogue to specific participants.",
+        "It translates the deposition into multiple languages.",
+        "It reduces the file size of the audio recording."
+      ],
+      "answerIndex": 1,
+      "explanation": "The model identifies who is speaking, which allows for mapping dialogue to specific participants.",
+      "evidence": "The GPT-4o Transcribe Diarize model automates the conversion of audio to text while simultaneously tagging segments with unique speaker identifiers, enabling structured transcripts that map dialogue to specific participants."
+    },
+    {
+      "question": "In Automated Legal Deposition Indexing, how can a user identify potential inaccuracies caused by environmental noise?",
+      "options": [
+        "By checking the confidence scores of the speaker segments.",
+        "By increasing the number of output tokens.",
+        "By using a different model snapshot.",
+        "By re-uploading the file to the Chat Completions endpoint."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section notes that noise can affect diarization, and confidence scores are the standard way to verify segment quality.",
+      "evidence": "The model may struggle with overlapping speech or high-noise environments, which can be verified by reviewing the confidence scores of the speaker segments in the output."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:54.225Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:51.061Z"
+}

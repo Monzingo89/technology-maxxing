@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "integral",
+  "title": "Cumulative Energy Consumption Analysis",
+  "business": "Industrial facility managers monitoring power grid load.",
+  "problem": "Simple instantaneous power readings fail to capture the total energy consumed over a variable production cycle, leading to inaccurate billing and capacity planning.",
+  "solution": "Applying the definite integral allows the facility to accumulate power usage over time, transforming instantaneous wattage into total energy consumption (kilowatt-hours) across a specific production interval.",
+  "steps": [
+    "Define the power consumption function f(t) based on sensor data over the production interval [a, b].",
+    "Identify the limits of integration corresponding to the start and end times of the production cycle.",
+    "Partition the time interval into smaller segments to approximate the area under the power curve using Riemann sums.",
+    "Calculate the definite integral to determine the net energy usage, accounting for fluctuations in power demand.",
+    "Apply the absolute value function to the integrand if total energy throughput is required regardless of power feedback or regeneration."
+  ],
+  "outcome": "A precise, aggregate measurement of total energy usage that accounts for all fluctuations during the production cycle.",
+  "limitation": "The accuracy of the integral depends on the sampling frequency of the power sensors; check for high-frequency noise or discontinuities that may require more sophisticated integration techniques or higher resolution data.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Energy Accumulation Process",
+    "description": "The flow shows how raw power data is transformed into total energy through integration.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Power Sensors",
+        "detail": "Collects instantaneous wattage f(t)"
+      },
+      {
+        "id": "b",
+        "label": "Time Interval",
+        "detail": "Defines limits [a, b]"
+      },
+      {
+        "id": "c",
+        "label": "Riemann Summation",
+        "detail": "Approximates area under curve"
+      },
+      {
+        "id": "d",
+        "label": "Definite Integral",
+        "detail": "Calculates total energy"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "inputs data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sets bounds"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "limit as n approaches infinity"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openstax.org/books/calculus-volume-1/pages/5-2-the-definite-integral",
+      "label": "5.2 The Definite Integral - Calculus Volume 1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cumulative Energy Consumption Analysis, why is the definite integral preferred over instantaneous readings?",
+      "options": [
+        "It provides the total energy consumed over a production interval rather than just a snapshot.",
+        "It eliminates the need for power sensors entirely.",
+        "It automatically converts power to currency.",
+        "It prevents power surges from occurring."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states that simple instantaneous readings fail to capture total energy, and the solution explains that the integral accumulates this usage over time.",
+      "evidence": "Simple instantaneous power readings fail to capture the total energy consumed over a variable production cycle, leading to inaccurate billing and capacity planning."
+    },
+    {
+      "question": "What is a primary limitation of the Cumulative Energy Consumption Analysis implementation?",
+      "options": [
+        "The integral cannot handle negative power values.",
+        "The accuracy depends on the sampling frequency of the sensors.",
+        "The calculation is only valid for constant power functions.",
+        "The limits of integration must always be zero."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that the accuracy of the result relies on the sampling frequency of the sensors.",
+      "evidence": "The accuracy of the integral depends on the sampling frequency of the power sensors; check for high-frequency noise or discontinuities that may require more sophisticated integration techniques or higher resolution data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:00.972Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:57.635Z"
+}

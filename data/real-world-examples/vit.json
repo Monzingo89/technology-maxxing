@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "vit",
+  "title": "Automated Quality Control for Precision Manufacturing",
+  "business": "High-precision electronics manufacturers requiring automated visual inspection of circuit boards.",
+  "problem": "Traditional convolutional neural networks struggle with long-range dependencies across complex board layouts, leading to high false-rejection rates for subtle defects.",
+  "solution": "Vision Transformer (ViT) processes the image as a sequence of patches, allowing the self-attention mechanism to model global relationships between distant components on the board, which improves defect detection accuracy.",
+  "steps": [
+    "Divide high-resolution circuit board images into fixed-size square patches.",
+    "Flatten patches into a sequence and prepend a learnable classification token.",
+    "Apply positional embeddings to preserve spatial information of the patches.",
+    "Pass the sequence through multiple transformer encoder layers to compute global attention.",
+    "Use the final classification token to output the defect status of the board."
+  ],
+  "outcome": "Improved consistency in defect identification across diverse board designs without requiring manual feature engineering.",
+  "limitation": "ViT models require large datasets for pre-training to achieve high performance; check for overfitting by monitoring validation loss on smaller, domain-specific datasets.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ViT Processing Pipeline",
+    "description": "The flow from raw image input to final classification output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Input Image",
+        "detail": "Raw circuit board capture"
+      },
+      {
+        "id": "b",
+        "label": "Patching",
+        "detail": "Splitting image into 16x16 segments"
+      },
+      {
+        "id": "c",
+        "label": "Transformer Encoder",
+        "detail": "Self-attention processing"
+      },
+      {
+        "id": "d",
+        "label": "Classification",
+        "detail": "Defect vs Pass decision"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "segmentation"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sequence input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "token output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2010.11929",
+      "label": "An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Quality Control for Precision Manufacturing, why is ViT preferred over traditional CNNs?",
+      "options": [
+        "It eliminates the need for image patching entirely.",
+        "It uses self-attention to model global relationships between distant components.",
+        "It is specifically designed for low-resolution images only.",
+        "It requires no pre-training data to function."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explains that ViT uses self-attention to model global relationships, which addresses the limitation of CNNs in handling complex layouts.",
+      "evidence": "Vision Transformer (ViT) processes the image as a sequence of patches, allowing the self-attention mechanism to model global relationships between distant components on the board, which improves defect detection accuracy."
+    },
+    {
+      "question": "In Automated Quality Control for Precision Manufacturing, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot process images in patches.",
+        "The model is too fast to be accurate.",
+        "The model requires large datasets for pre-training and may overfit on small sets.",
+        "The model requires manual feature engineering for every new board."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states the need for large pre-training data and the risk of overfitting on small datasets.",
+      "evidence": "ViT models require large datasets for pre-training to achieve high performance; check for overfitting by monitoring validation loss on smaller, domain-specific datasets."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:10.510Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:07.256Z"
+}

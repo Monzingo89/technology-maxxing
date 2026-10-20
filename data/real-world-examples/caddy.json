@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "caddy",
+  "title": "Automated Secure Proxy for Micro-SaaS",
+  "business": "A boutique micro-SaaS provider managing multiple independent web applications and internal microservices.",
+  "problem": "Manual certificate management and complex Nginx configurations lead to frequent downtime during certificate renewals and routing errors when scaling services.",
+  "solution": "Caddy automates HTTPS certificate provisioning via ACME protocol and simplifies routing through a declarative Caddyfile, allowing the provider to serve static assets and proxy traffic to backend services with minimal overhead.",
+  "steps": [
+    "Install the Caddy binary on the host server.",
+    "Define the domain names in the Caddyfile to trigger automatic TLS.",
+    "Use the file_server directive to serve static frontend assets.",
+    "Configure the reverse_proxy directive to route API traffic to internal ports.",
+    "Reload the configuration using the Caddy API or system service restart."
+  ],
+  "outcome": "The provider achieves zero-touch SSL management and a human-readable configuration format that reduces the risk of manual routing errors.",
+  "limitation": "Caddy performs automatic certificate management which requires port 80/443 access; if the server is behind a restrictive firewall or lacks public DNS resolution, the ACME challenge will fail, requiring manual certificate handling.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Caddy Traffic Routing Flow",
+    "description": "Shows how Caddy acts as the central gateway for incoming requests.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Web browser or API consumer"
+      },
+      {
+        "id": "b",
+        "label": "Caddy",
+        "detail": "Reverse proxy and TLS terminator"
+      },
+      {
+        "id": "c",
+        "label": "Static Files",
+        "detail": "Local disk storage"
+      },
+      {
+        "id": "d",
+        "label": "Backend Service",
+        "detail": "Internal microservice"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Serve static content"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Reverse proxy API call"
+      }
+    ]
+  },
+  "code": {
+    "language": "caddyfile",
+    "content": "example.com {\n  root * /var/www/html # Serve static files\n  file_server\n  reverse_proxy /api/* localhost:8080 # Proxy API requests\n}",
+    "explanation": "This Caddyfile maps the root path to static files and routes all /api paths to a local backend service, while Caddy automatically handles the TLS certificate for example.com."
+  },
+  "sources": [
+    {
+      "url": "https://caddyserver.com/docs/",
+      "label": "Caddy Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Secure Proxy for Micro-SaaS, what is the primary benefit of using Caddy over traditional manual configurations?",
+      "options": [
+        "It eliminates the need for any configuration files.",
+        "It automates HTTPS certificate provisioning via ACME.",
+        "It provides built-in performance benchmarking tools.",
+        "It removes the requirement for port 80/443 access."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that manual certificate management is a problem, and Caddy addresses this by automating the process.",
+      "evidence": "Caddy automates HTTPS certificate provisioning via ACME protocol and simplifies routing through a declarative Caddyfile"
+    },
+    {
+      "question": "In Automated Secure Proxy for Micro-SaaS, what is a potential limitation of the Caddy implementation?",
+      "options": [
+        "It cannot serve static files while acting as a proxy.",
+        "It requires manual intervention for every certificate renewal.",
+        "It fails if the server lacks public DNS or port access for ACME.",
+        "It is incompatible with the Go programming language."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that ACME challenges require specific network conditions to succeed.",
+      "evidence": "Caddy performs automatic certificate management which requires port 80/443 access; if the server is behind a restrictive firewall or lacks public DNS resolution, the ACME challenge will fail, requiring manual certificate handling."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:55.701Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:52.284Z"
+}

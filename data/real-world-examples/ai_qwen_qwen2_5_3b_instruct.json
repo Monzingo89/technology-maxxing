@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen2_5_3b_instruct",
+  "title": "Structured Data Extraction for Logistics",
+  "business": "A regional logistics firm managing high volumes of unstructured shipping manifests.",
+  "problem": "The firm struggles with manual data entry errors when converting unstructured shipping manifests into structured JSON formats for their database.",
+  "solution": "Qwen2.5-3B-Instruct provides improved capabilities in understanding structured data and generating structured outputs, specifically JSON, allowing for automated parsing of shipping manifests.",
+  "steps": [
+    "Install the latest transformers library to ensure compatibility with Qwen2.5 architecture.",
+    "Initialize the AutoModelForCausalLM and AutoTokenizer using the Qwen2.5-3B-Instruct model identifier.",
+    "Define a system prompt instructing the model to extract specific fields like destination and weight into a JSON format.",
+    "Apply the chat template to format the input manifest data correctly for the model.",
+    "Generate the structured output using the model's generation pipeline and parse the resulting JSON."
+  ],
+  "outcome": "The firm achieves consistent, machine-readable data extraction from shipping manifests, significantly reducing manual entry overhead.",
+  "limitation": "While the model excels at structured output, it has a fixed context length of 32,768 tokens; verify that input manifests do not exceed this limit to prevent truncation errors.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Processing Pipeline",
+    "description": "The flow of data from raw input to structured database entry.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Manifest",
+        "detail": "Unstructured text document"
+      },
+      {
+        "id": "b",
+        "label": "Qwen2.5-3B-Instruct",
+        "detail": "Inference engine"
+      },
+      {
+        "id": "c",
+        "label": "JSON Output",
+        "detail": "Structured data object"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "System of record"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Generates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Ingests"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoModelForCausalLM, AutoTokenizer\n# Load model and tokenizer\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2.5-3B-Instruct\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen2.5-3B-Instruct\")\n# Prepare prompt for structured extraction\nmessages = [{\"role\": \"system\", \"content\": \"Extract data to JSON.\"}, {\"role\": \"user\", \"content\": \"Manifest: Box 1, 5kg, NYC.\"}]\ntext = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)\n# Generate output\ninputs = tokenizer([text], return_tensors=\"pt\").to(model.device)\ngenerated = model.generate(**inputs, max_new_tokens=512)",
+    "explanation": "This code demonstrates initializing the model and using the chat template to prepare a prompt for structured data extraction as required by the logistics scenario."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen2.5-3B-Instruct",
+      "label": "Qwen/Qwen2.5-3B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Structured Data Extraction for Logistics, how does the model assist the firm?",
+      "options": [
+        "By providing improved capabilities in understanding structured data and generating structured outputs, specifically JSON.",
+        "By manually entering data into the database to ensure 100% accuracy.",
+        "By replacing the need for any database software entirely.",
+        "By automatically shipping the packages based on the manifest."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the model's ability to generate structured JSON outputs is what addresses the problem of manual data entry.",
+      "evidence": "Qwen2.5-3B-Instruct provides improved capabilities in understanding structured data and generating structured outputs, specifically JSON, allowing for automated parsing of shipping manifests."
+    },
+    {
+      "question": "In Structured Data Extraction for Logistics, what is a key limitation to monitor?",
+      "options": [
+        "The model cannot process English text.",
+        "The model requires at least 72 billion parameters to run.",
+        "The model has a fixed context length of 32,768 tokens, which could lead to truncation if exceeded.",
+        "The model is incompatible with the transformers library."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights the 32,768 token context length as a constraint that must be managed to avoid data loss.",
+      "evidence": "While the model excels at structured output, it has a fixed context length of 32,768 tokens; verify that input manifests do not exceed this limit to prevent truncation errors."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:17.081Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:12.817Z"
+}

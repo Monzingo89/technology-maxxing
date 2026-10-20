@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_glacier",
+  "title": "Archival Strategy for Media Production Houses",
+  "business": "A boutique media production house managing high-resolution raw footage for completed client projects.",
+  "problem": "The studio faces escalating storage costs by keeping all raw project files in standard S3 buckets, despite the fact that 95% of these files are never accessed after the final delivery to the client.",
+  "solution": "By implementing S3 Lifecycle policies, the studio can automatically transition older, inactive objects from S3 Standard to S3 Glacier Instant Retrieval or S3 Glacier Deep Archive, significantly reducing storage overhead while maintaining data durability.",
+  "steps": [
+    "Identify project folders that have not been modified for over 90 days.",
+    "Configure an S3 Lifecycle rule to transition objects from S3 Standard to S3 Glacier Deep Archive.",
+    "Verify that the transition occurs automatically based on the object age filter.",
+    "Implement an S3 Inventory report to track which objects have successfully moved to the archival tier."
+  ],
+  "outcome": "The studio achieves a sustainable cost structure for long-term data retention without needing to manually manage file migrations or delete historical assets.",
+  "limitation": "A primary limitation is the retrieval time and potential cost associated with accessing archived data; users must verify if the chosen class meets their specific recovery time objectives by checking the S3 storage class documentation for retrieval latency.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Media Asset Lifecycle Flow",
+    "description": "This diagram illustrates the automated transition of media assets from active storage to archival tiers based on age.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Footage",
+        "detail": "Initial upload to S3 Standard"
+      },
+      {
+        "id": "b",
+        "label": "Lifecycle Engine",
+        "detail": "Evaluates object age"
+      },
+      {
+        "id": "c",
+        "label": "S3 Glacier",
+        "detail": "Archival storage tier"
+      },
+      {
+        "id": "d",
+        "label": "Client Delivery",
+        "detail": "Final project state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "Project Completion"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Wait 90 Days"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Transition Action"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely- AWS"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Archival Strategy for Media Production Houses, what is the primary problem addressed by the solution?",
+      "options": [
+        "High latency in accessing active raw footage.",
+        "Escalating storage costs from keeping inactive files in standard S3.",
+        "Lack of durability for long-term media storage.",
+        "Inability to share files with clients globally."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that the studio faces high costs due to keeping inactive files in standard storage.",
+      "evidence": "The studio faces escalating storage costs by keeping all raw project files in standard S3 buckets, despite the fact that 95% of these files are never accessed after the final delivery to the client."
+    },
+    {
+      "question": "In Archival Strategy for Media Production Houses, what is a key limitation of using archival storage classes?",
+      "options": [
+        "The data is not durable.",
+        "The data cannot be deleted once archived.",
+        "Retrieval times and potential costs for accessing archived data.",
+        "Lifecycle policies cannot be automated."
+      ],
+      "answerIndex": 2,
+      "explanation": "Archival classes involve trade-offs regarding retrieval speed and costs, which must be considered against recovery needs.",
+      "evidence": "A primary limitation is the retrieval time and potential cost associated with accessing archived data; users must verify if the chosen class meets their specific recovery time objectives by checking the S3 storage class documentation for retrieval latency."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:16.611Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_connector_68e004f14af881919eb50893d3d9f523",
+  "title": "Corporate Travel Optimization with Expedia",
+  "business": "Mid-sized consulting firms managing frequent, distributed employee travel.",
+  "problem": "Manual travel coordination creates significant administrative overhead and prevents employees from accessing corporate member rates, leading to inconsistent travel spending.",
+  "solution": "Integrating the Expedia plugin into the internal ChatGPT interface allows employees to query real-time flight and hotel availability using natural language, while linking their corporate Expedia accounts to automatically apply member pricing and personalized recommendations.",
+  "steps": [
+    "Authorize the Expedia plugin within the ChatGPT workspace to enable account-specific data access.",
+    "Define travel parameters such as destination, dates, and budget constraints in a natural language prompt.",
+    "Review the returned list of flights and hotels, utilizing the plugin's ability to display real-time pricing and map locations.",
+    "Select the preferred itinerary and follow the deep-link redirection to the Expedia booking platform to finalize the transaction."
+  ],
+  "outcome": "Streamlined travel planning that reduces time spent on comparison shopping while ensuring employees consistently utilize negotiated corporate rates.",
+  "limitation": "The plugin acts as a research and discovery tool; final booking must occur on the Expedia website, which can be verified by checking if the user is redirected away from the chat interface during the final checkout phase.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Travel Planning Workflow",
+    "description": "The flow from user intent to final booking via the plugin.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Employee",
+        "detail": "Initiates travel request"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT Interface",
+        "detail": "Processes natural language"
+      },
+      {
+        "id": "c",
+        "label": "Expedia Plugin",
+        "detail": "Queries real-time data"
+      },
+      {
+        "id": "d",
+        "label": "Expedia Website",
+        "detail": "Finalizes booking"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submits request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers API call"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns options"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "redirects for booking"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Corporate Travel Optimization with Expedia, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual travel coordination and lack of access to member rates",
+        "The inability to book flights directly inside the chat window",
+        "High costs associated with software licensing for travel agents",
+        "Lack of international flight availability in the database"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies administrative overhead and missing member rates as the core issue.",
+      "evidence": "Manual travel coordination creates significant administrative overhead and prevents employees from accessing corporate member rates, leading to inconsistent travel spending."
+    },
+    {
+      "question": "In Corporate Travel Optimization with Expedia, what is a known limitation of the implementation?",
+      "options": [
+        "The plugin cannot display real-time pricing",
+        "Final booking must occur on the Expedia website",
+        "Users cannot link their personal accounts",
+        "The plugin does not support hotel searches"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson notes that the plugin is for research, and actual booking happens externally.",
+      "evidence": "The plugin acts as a research and discovery tool; final booking must occur on the Expedia website, which can be verified by checking if the user is redirected away from the chat interface during the final checkout phase."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:17.579Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

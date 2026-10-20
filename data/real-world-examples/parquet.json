@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "parquet",
+  "title": "Optimizing Retail Inventory Analytics with Columnar Pruning",
+  "business": "A regional retail chain managing millions of daily SKU-level inventory transactions across hundreds of store locations.",
+  "problem": "The organization stores historical inventory logs in flat, row-based formats. Analysts frequently query only specific columns, such as 'store_id' and 'stock_level', but the system is forced to perform full-file scans, reading unnecessary data like 'product_description' and 'supplier_notes', leading to excessive I/O overhead and slow query response times.",
+  "solution": "By migrating to Apache Parquet, the organization leverages the format's column-oriented architecture. Parquet stores data column-by-column, allowing the query engine to perform column pruning—reading only the required columns from the disk—and applying schema-based filtering to skip irrelevant data blocks entirely.",
+  "steps": [
+    "Define a strict schema for inventory records using the Parquet metadata definitions to ensure consistent data types across all partitions.",
+    "Convert existing row-based historical logs into Parquet files using a library like parquet-java or compatible tools.",
+    "Configure the analytical query engine to utilize column projection, ensuring only the necessary fields are requested during execution.",
+    "Partition the Parquet files by date or store_id to further narrow the scope of data retrieval during analytical processing."
+  ],
+  "outcome": "The analytical platform achieves significantly reduced I/O throughput by ignoring non-essential columns, resulting in faster retrieval of specific inventory metrics without requiring full dataset scans.",
+  "limitation": "A key limitation is that schema evolution and complex data type compatibility can vary between different Parquet implementations. Users must verify that the specific library used for writing files is fully compatible with the reader's feature support, as inconsistent implementation of the Parquet specification can lead to data access errors.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Column Pruning Workflow",
+    "description": "This diagram illustrates how a query engine interacts with a Parquet file to retrieve only specific data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Query Engine",
+        "detail": "Requests specific columns"
+      },
+      {
+        "id": "b",
+        "label": "Parquet Metadata",
+        "detail": "Defines schema and column offsets"
+      },
+      {
+        "id": "c",
+        "label": "Columnar Storage",
+        "detail": "Physical file blocks"
+      },
+      {
+        "id": "d",
+        "label": "Result Set",
+        "detail": "Filtered data output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Requests schema"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identifies column offsets"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Returns only required columns"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://parquet.apache.org/docs/overview/",
+      "label": "Overview | Parquet"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Retail Inventory Analytics with Columnar Pruning, what is the primary benefit of using Parquet for the described problem?",
+      "options": [
+        "It eliminates the need for any schema definitions.",
+        "It allows the system to read only necessary columns, reducing I/O overhead.",
+        "It converts row-based data into a proprietary, closed-source format.",
+        "It forces the system to scan all data to ensure maximum accuracy."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that Parquet's column-oriented architecture allows for column pruning, which avoids reading unnecessary data.",
+      "evidence": "Parquet stores data column-by-column, allowing the query engine to perform column pruning—reading only the required columns from the disk—and applying schema-based filtering to skip irrelevant data blocks entirely."
+    },
+    {
+      "question": "Regarding the implementation of Optimizing Retail Inventory Analytics with Columnar Pruning, what is a critical consideration for the user?",
+      "options": [
+        "Parquet files are always compatible across every possible software tool.",
+        "Schema evolution is impossible once a Parquet file is created.",
+        "Users must verify compatibility between different Parquet implementations to avoid errors.",
+        "The format requires a specific hardware architecture to function correctly."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that feature support varies across implementations, necessitating verification of compatibility.",
+      "evidence": "Users must verify that the specific library used for writing files is fully compatible with the reader's feature support, as inconsistent implementation of the Parquet specification can lead to data access errors."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:42.340Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:38.099Z"
+}

@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "aws_cloudfront",
+  "title": "Global Media Distribution for Urban Transit Maps",
+  "business": "A municipal transit authority providing real-time digital map updates to millions of commuters via mobile applications.",
+  "problem": "The central origin server experiences high latency and connection timeouts during peak morning commute hours as global users simultaneously request large, static map tile assets.",
+  "solution": "Amazon CloudFront acts as a content delivery network, caching map tiles at edge locations closer to the end-users. This offloads traffic from the origin server and serves content from the AWS edge network, ensuring that users receive map data from the nearest geographic point rather than the central server.",
+  "steps": [
+    "Create a CloudFront distribution and configure the transit authority's origin server as the primary source for map tiles.",
+    "Define cache behaviors to specify how long map tiles should remain in the edge cache before re-validating with the origin.",
+    "Configure the distribution to use HTTPS for secure delivery of map assets to mobile clients.",
+    "Update the mobile application endpoints to point to the CloudFront domain name instead of the direct origin server URL."
+  ],
+  "outcome": "Commuters experience faster map loading times and the transit authority's origin server maintains stability by serving only a fraction of the total requests.",
+  "limitation": "Cache invalidation is not instantaneous; if map data is updated, users may see stale tiles until the Time-to-Live (TTL) expires or an explicit invalidation request is processed, which can be verified by checking the 'X-Cache' header in HTTP responses.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Transit Map Delivery Flow",
+    "description": "Shows how map requests traverse the network from the user to the edge and origin.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Mobile App",
+        "detail": "User device requesting map tiles"
+      },
+      {
+        "id": "b",
+        "label": "Edge Location",
+        "detail": "CloudFront cache point"
+      },
+      {
+        "id": "c",
+        "label": "Origin Server",
+        "detail": "Central transit database"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request Tile"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Deliver Cached Tile"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Fetch Missing Tile"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Media Distribution for Urban Transit Maps, what is the primary reason for implementing CloudFront?",
+      "options": [
+        "To replace the origin server entirely",
+        "To reduce latency by serving content from edge locations",
+        "To increase the storage capacity of the origin server",
+        "To encrypt data at rest on the origin server"
+      ],
+      "answerIndex": 1,
+      "explanation": "CloudFront is used to cache assets closer to the user to solve the problem of high latency and origin server strain.",
+      "evidence": "Amazon CloudFront acts as a content delivery network, caching map tiles at edge locations closer to the end-users. This offloads traffic from the origin server and serves content from the AWS edge network"
+    },
+    {
+      "question": "In Global Media Distribution for Urban Transit Maps, what is a key limitation of the solution?",
+      "options": [
+        "The origin server cannot be updated",
+        "CloudFront requires a physical connection to the user",
+        "Cache invalidation is not instantaneous, leading to potential stale content",
+        "HTTPS is not supported for map tile delivery"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that cache invalidation is not instantaneous, which is a trade-off when using edge caching.",
+      "evidence": "Cache invalidation is not instantaneous; if map data is updated, users may see stale tiles until the Time-to-Live (TTL) expires or an explicit invalidation request is processed"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:57.614Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

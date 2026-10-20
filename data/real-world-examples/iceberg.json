@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "topicId": "iceberg",
+  "title": "Dynamic Retail Inventory Schema Evolution",
+  "business": "Retailers managing global inventory systems that require frequent schema updates to accommodate new regional product attributes without interrupting ongoing analytical reporting.",
+  "problem": "Traditional data lake formats often require full table rewrites when adding or renaming columns, leading to significant downtime and high compute costs during schema evolution.",
+  "solution": "Apache Iceberg utilizes metadata-based schema evolution, allowing structural changes like adding, renaming, or reordering columns without rewriting underlying data files, while maintaining consistent snapshots for concurrent readers.",
+  "steps": [
+    "Identify the current table schema using the catalog metadata.",
+    "Execute an ALTER TABLE command to add or rename the required product attribute column.",
+    "Verify the schema change via the Iceberg metadata layer without triggering a data rewrite.",
+    "Perform a new write operation to populate the updated schema in new data files.",
+    "Query the table using time travel to validate both historical and current data states."
+  ],
+  "outcome": "The system achieves seamless schema agility, enabling developers to evolve table structures in real-time while ensuring that long-running analytical queries remain isolated from structural changes through snapshot consistency.",
+  "limitation": "Metadata-only schema evolution can lead to increased metadata file accumulation over time, which may impact catalog performance; check this by monitoring the frequency and size of metadata file commits.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Iceberg Metadata Evolution Flow",
+    "description": "Visualizes how schema changes update the metadata pointer rather than the data files.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Metadata File v1",
+        "detail": "Points to Data Files A and B"
+      },
+      {
+        "id": "b",
+        "label": "Schema Change",
+        "detail": "ALTER TABLE operation"
+      },
+      {
+        "id": "c",
+        "label": "Metadata File v2",
+        "detail": "Points to Data Files A, B, and C"
+      },
+      {
+        "id": "d",
+        "label": "Data Files A, B",
+        "detail": "Original data"
+      },
+      {
+        "id": "e",
+        "label": "Data File C",
+        "detail": "New data with updated schema"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "references"
+      },
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "creates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "references"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "references"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "-- Add a new column for regional tax codes without rewriting existing data\nALTER TABLE inventory_data ADD COLUMN tax_code string;\n\n-- Rename an existing column to improve clarity\nALTER TABLE inventory_data RENAME COLUMN old_attr TO new_attr;\n\n-- Query a specific snapshot to ensure data consistency during evolution\nSELECT * FROM inventory_data FOR VERSION AS OF 123456789;",
+    "explanation": "This code demonstrates how Dynamic Retail Inventory Schema Evolution uses SQL commands to modify metadata pointers rather than physical data files."
+  },
+  "sources": [
+    {
+      "url": "https://iceberg.apache.org/",
+      "label": "Apache Iceberg"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Retail Inventory Schema Evolution, how does Iceberg solve the problem of high-cost schema changes?",
+      "options": [
+        "By rewriting all data files to match the new schema",
+        "By using metadata-based evolution to avoid rewriting data files",
+        "By forcing all readers to pause during schema updates",
+        "By creating a copy of the entire table for every change"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that Iceberg allows structural changes without rewriting underlying data files.",
+      "evidence": "Apache Iceberg utilizes metadata-based schema evolution, allowing structural changes like adding, renaming, or reordering columns without rewriting underlying data files"
+    },
+    {
+      "question": "What is a potential trade-off when implementing Dynamic Retail Inventory Schema Evolution?",
+      "options": [
+        "Increased storage costs for duplicate data",
+        "Inability to perform time travel queries",
+        "Potential performance impact from metadata file accumulation",
+        "Requirement to manually update all historical snapshots"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies that metadata-only evolution can lead to metadata file accumulation, impacting performance.",
+      "evidence": "Metadata-only schema evolution can lead to increased metadata file accumulation over time, which may impact catalog performance"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:37.754Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:33.123Z"
+}

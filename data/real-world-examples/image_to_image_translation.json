@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "image_to_image_translation",
+  "title": "Architectural Blueprint Restoration",
+  "business": "Historical preservation firms and urban planning agencies.",
+  "problem": "Manual digitization of hand-drawn, degraded architectural blueprints is labor-intensive, prone to human error, and fails to maintain consistent structural geometry when converting to clean, modern CAD-ready visual formats.",
+  "solution": "Image-to-image translation uses conditional adversarial networks to learn a direct mapping from raw, noisy scan inputs to clean, structured line-art representations. By training on paired datasets of degraded sketches and their corresponding clean structural layouts, the model learns to synthesize the target domain while preserving the original spatial geometry.",
+  "steps": [
+    "Curate a paired dataset consisting of raw, hand-drawn blueprints and their cleaned, digitized counterparts.",
+    "Define a conditional adversarial network architecture where the generator learns to produce the clean output conditioned on the input scan.",
+    "Train the model using a combined loss function that enforces both structural similarity to the input and visual realism in the output.",
+    "Validate the translation quality by verifying that critical structural lines and dimensions remain consistent with the source document."
+  ],
+  "outcome": "Automated generation of high-fidelity, standardized structural layouts from legacy documents, significantly reducing the manual drafting time required for restoration projects.",
+  "limitation": "The model may struggle with extreme noise or missing structural data not present in the training set, which can be checked by comparing the generated output against the source image for missing or hallucinated line segments.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Blueprint Translation Workflow",
+    "description": "The flow shows how raw inputs are transformed into clean outputs through adversarial training.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Scan",
+        "detail": "Input noisy blueprint"
+      },
+      {
+        "id": "b",
+        "label": "Generator",
+        "detail": "Learns mapping function"
+      },
+      {
+        "id": "c",
+        "label": "Discriminator",
+        "detail": "Evaluates output realism"
+      },
+      {
+        "id": "d",
+        "label": "Clean Layout",
+        "detail": "Final structural output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "feeds"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "validates"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "feedback loop"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1611.07004",
+      "label": "Image-to-Image Translation with Conditional Adversarial Networks"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Blueprint Restoration, what is the primary benefit of using conditional adversarial networks?",
+      "options": [
+        "It eliminates the need for manual drafting by learning a mapping from noisy scans to clean layouts.",
+        "It automatically generates new architectural designs from scratch without input.",
+        "It converts color photos into hand-drawn sketches for artistic purposes.",
+        "It replaces the need for high-resolution scanners in the office."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution describes using these networks to learn a direct mapping from raw, noisy scan inputs to clean, structured line-art representations.",
+      "evidence": "Image-to-image translation uses conditional adversarial networks to learn a direct mapping from raw, noisy scan inputs to clean, structured line-art representations."
+    },
+    {
+      "question": "In Architectural Blueprint Restoration, how can one identify if the model is failing to generalize?",
+      "options": [
+        "By checking if the output file size is too large.",
+        "By comparing the generated output against the source image for missing or hallucinated line segments.",
+        "By measuring the time taken to train the model on new data.",
+        "By verifying the color palette of the output."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that checking for missing or hallucinated segments is the way to identify failures.",
+      "evidence": "The model may struggle with extreme noise or missing structural data not present in the training set, which can be checked by comparing the generated output against the source image for missing or hallucinated line segments."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:53.295Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:49.144Z"
+}

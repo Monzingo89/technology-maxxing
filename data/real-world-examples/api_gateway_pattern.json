@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "api_gateway_pattern",
+  "title": "Unified Logistics Portal Integration",
+  "business": "A regional logistics provider managing a fleet of delivery vehicles and warehouse inventory systems.",
+  "problem": "The company suffers from fragmented service access where mobile drivers and warehouse staff must authenticate against five different backend microservices, leading to inconsistent security policies and high latency due to multiple round-trip handshakes.",
+  "solution": "Implementing an API Gateway provides one managed entry point that routes and governs calls to backend services, centralizing authentication, rate limiting, and request transformation before traffic reaches internal systems.",
+  "steps": [
+    "Define a single public-facing endpoint that maps to internal service routes.",
+    "Configure the gateway to handle centralized authentication and authorization tokens.",
+    "Implement request routing logic to direct traffic to specific backend services based on URL paths.",
+    "Apply cross-cutting concerns like logging and rate limiting at the gateway level.",
+    "Expose a unified interface to clients, hiding the complexity of the underlying microservice architecture."
+  ],
+  "outcome": "Clients interact with a single, secure entry point, reducing client-side complexity and ensuring uniform security enforcement across all backend services.",
+  "limitation": "The gateway can become a single point of failure or a performance bottleneck; check this by monitoring the latency and error rates of the gateway service specifically under peak load.",
+  "diagram": {
+    "kind": "flow",
+    "title": "API Gateway Request Routing",
+    "description": "Shows how the gateway acts as a central intermediary between external clients and internal services.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "Mobile/Web Client",
+        "detail": "Initiates requests"
+      },
+      {
+        "id": "gateway",
+        "label": "API Gateway",
+        "detail": "Central entry point"
+      },
+      {
+        "id": "auth",
+        "label": "Auth Service",
+        "detail": "Validates identity"
+      },
+      {
+        "id": "inventory",
+        "label": "Inventory Service",
+        "detail": "Backend data store"
+      },
+      {
+        "id": "fleet",
+        "label": "Fleet Service",
+        "detail": "Backend tracking"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "gateway",
+        "label": "Requests"
+      },
+      {
+        "from": "gateway",
+        "to": "auth",
+        "label": "Verify"
+      },
+      {
+        "from": "gateway",
+        "to": "inventory",
+        "label": "Route"
+      },
+      {
+        "from": "gateway",
+        "to": "fleet",
+        "label": "Route"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Portal Integration, what is the primary problem addressed by the API Gateway?",
+      "options": [
+        "Fragmented service access and inconsistent security policies",
+        "The need for faster database queries",
+        "Lack of a user interface for warehouse staff",
+        "The requirement to move data between objects"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that fragmented access and inconsistent security are the core issues the gateway solves.",
+      "evidence": "The company suffers from fragmented service access where mobile drivers and warehouse staff must authenticate against five different backend microservices, leading to inconsistent security policies and high latency due to multiple round-trip handshakes."
+    },
+    {
+      "question": "In Unified Logistics Portal Integration, what is a key limitation of the proposed solution?",
+      "options": [
+        "It increases the number of client-side authentication steps",
+        "It cannot be used for rate limiting",
+        "It can become a single point of failure or performance bottleneck",
+        "It requires all backend services to be written in the same language"
+      ],
+      "answerIndex": 2,
+      "explanation": "Centralizing traffic creates a dependency on the gateway, which introduces a potential bottleneck or failure point.",
+      "evidence": "The gateway can become a single point of failure or a performance bottleneck; check this by monitoring the latency and error rates of the gateway service specifically under peak load."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:45.643Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

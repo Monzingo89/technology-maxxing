@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "dart",
+  "title": "Unified Logistics Inventory Sync",
+  "business": "A logistics firm managing warehouse inventory across mobile handheld scanners and a central web-based management dashboard.",
+  "problem": "The firm struggles with code fragmentation, as their legacy stack requires separate teams to maintain Java for backend services and JavaScript for web dashboards, leading to inconsistent inventory state updates.",
+  "solution": "By adopting Dart, the firm can utilize a single language for both the mobile scanner application and the backend service, leveraging shared data models and business logic to ensure consistent state management across platforms.",
+  "steps": [
+    "Define shared data models using Dart records to ensure consistent inventory schema across client and server.",
+    "Implement core business logic in a shared library package that is imported by both the mobile scanner app and the backend service.",
+    "Utilize Dart's asynchronous programming features with async-await to handle network requests for inventory updates without blocking the UI.",
+    "Compile the mobile scanner app to native machine code for performance and the backend service to a server-side executable."
+  ],
+  "outcome": "The firm achieves a unified codebase that reduces synchronization errors between the warehouse floor and the management dashboard, resulting in more reliable inventory tracking.",
+  "limitation": "While Dart provides excellent cross-platform capabilities, developers must be mindful of memory usage in long-running backend processes; this can be checked by monitoring the isolate heap usage during high-concurrency inventory sync operations.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Data Flow",
+    "description": "Shows how shared Dart logic synchronizes data between different platforms.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Shared Model",
+        "detail": "Dart records defining inventory items"
+      },
+      {
+        "id": "b",
+        "label": "Mobile Scanner",
+        "detail": "Native app for warehouse staff"
+      },
+      {
+        "id": "c",
+        "label": "Backend Service",
+        "detail": "Server-side logic for database sync"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Central inventory storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "imports"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "imports"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends updates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "persists state"
+      }
+    ]
+  },
+  "code": {
+    "language": "dart",
+    "content": "typedef InventoryItem = ({String id, int quantity}); // Shared record type\n\nFuture<void> updateStock(InventoryItem item) async {\n  // Asynchronous logic for network sync\n  print('Syncing ${item.id} with quantity ${item.quantity}');\n}",
+    "explanation": "This code demonstrates the use of records for shared data structures and async-await for non-blocking network operations, which are central to the Unified Logistics Inventory Sync solution."
+  },
+  "sources": [
+    {
+      "url": "https://dart.dev/",
+      "label": "Dart programming language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Inventory Sync, what is the primary benefit of using Dart?",
+      "options": [
+        "It eliminates the need for a database entirely.",
+        "It allows for a single language to be used across mobile and backend platforms.",
+        "It automatically optimizes database queries for all SQL types.",
+        "It replaces the need for network communication between devices."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that the firm can use a single language for both mobile and backend, which is a core capability of Dart.",
+      "evidence": "By adopting Dart, the firm can utilize a single language for both the mobile scanner application and the backend service, leveraging shared data models and business logic to ensure consistent state management across platforms."
+    },
+    {
+      "question": "In Unified Logistics Inventory Sync, what is a key limitation to monitor?",
+      "options": [
+        "Dart cannot compile to native machine code.",
+        "The language does not support asynchronous programming.",
+        "Memory usage in long-running backend processes.",
+        "The inability to share code between different platforms."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions monitoring memory usage in long-running backend processes as a trade-off.",
+      "evidence": "While Dart provides excellent cross-platform capabilities, developers must be mindful of memory usage in long-running backend processes; this can be checked by monitoring the isolate heap usage during high-concurrency inventory sync operations."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:56.206Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:52.641Z"
+}

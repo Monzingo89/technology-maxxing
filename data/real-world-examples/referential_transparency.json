@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "referential_transparency",
+  "title": "Predictable Currency Conversion for Global Retail",
+  "business": "A global e-commerce platform managing multi-currency pricing and tax calculations.",
+  "problem": "The system suffered from intermittent pricing discrepancies because the currency conversion function relied on a global mutable state representing the current exchange rate, which changed mid-transaction, causing inconsistent order totals.",
+  "solution": "By enforcing referential transparency, the conversion function is refactored to be a pure function that accepts the exchange rate as an explicit argument. This ensures that for any given input, the output is identical regardless of the system state, allowing the expression to be replaced by its value without changing behavior.",
+  "steps": [
+    "Identify all functions that rely on external mutable state or global variables.",
+    "Refactor functions to accept all necessary data as explicit parameters, ensuring they are pure.",
+    "Replace global state lookups with dependency injection to pass values at the call site.",
+    "Verify that the function output remains constant for identical inputs across the entire application lifecycle."
+  ],
+  "outcome": "The system achieves deterministic pricing, where order totals remain stable throughout the checkout process, significantly reducing customer support inquiries related to billing errors.",
+  "limitation": "A primary limitation is the increased complexity of function signatures, as every dependency must be passed explicitly. Developers can check for this by monitoring the number of parameters in function signatures; if a function requires too many arguments, it may indicate a need for a configuration object or a state-passing pattern.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Pure Conversion Flow",
+    "description": "This diagram illustrates how a pure function replaces a state-dependent lookup.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Input Data",
+        "detail": "Base price and currency code"
+      },
+      {
+        "id": "b",
+        "label": "Exchange Rate",
+        "detail": "Explicitly passed value"
+      },
+      {
+        "id": "c",
+        "label": "Pure Function",
+        "detail": "Calculation logic"
+      },
+      {
+        "id": "d",
+        "label": "Final Price",
+        "detail": "Deterministic output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "provides data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides rate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns value"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Predictable Currency Conversion for Global Retail, why is referential transparency used to solve the pricing discrepancy?",
+      "options": [
+        "To ensure the function output is identical for given inputs regardless of system state.",
+        "To increase the speed of the currency conversion calculation.",
+        "To allow the system to automatically update exchange rates in real-time.",
+        "To reduce the memory footprint of the order processing service."
+      ],
+      "answerIndex": 0,
+      "explanation": "Referential transparency ensures that expressions can be replaced by their values without changing behavior, which prevents the inconsistency caused by mutable global state.",
+      "evidence": "This ensures that for any given input, the output is identical regardless of the system state, allowing the expression to be replaced by its value without changing behavior."
+    },
+    {
+      "question": "In Predictable Currency Conversion for Global Retail, what is a common trade-off when implementing referential transparency?",
+      "options": [
+        "The system becomes unable to handle multiple currencies simultaneously.",
+        "The function signatures become more complex due to explicit parameter passing.",
+        "The application requires more hardware resources to maintain purity.",
+        "The code becomes impossible to test in isolation."
+      ],
+      "answerIndex": 1,
+      "explanation": "Passing all dependencies explicitly increases the number of arguments, which is a known trade-off of pure functions.",
+      "evidence": "A primary limitation is the increased complexity of function signatures, as every dependency must be passed explicitly."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:09.421Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

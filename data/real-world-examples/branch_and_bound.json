@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "branch_and_bound",
+  "title": "Optimizing Logistics Route Selection",
+  "business": "A regional logistics provider managing last-mile delivery fleets.",
+  "problem": "The company faces an exponential increase in potential delivery route combinations as the number of stops per vehicle grows, making exhaustive search computationally prohibitive for real-time dispatching.",
+  "solution": "Branch and Bound prunes optimization search using bounds on the best possible descendant solution, allowing the system to discard entire sub-trees of route combinations that cannot possibly improve upon the current best-known path.",
+  "steps": [
+    "Define the state space as a tree where each node represents a partial delivery route.",
+    "Calculate a lower bound cost for each partial route using a heuristic function that estimates the remaining distance.",
+    "Explore the tree using a search strategy, maintaining a global variable for the best complete solution found so far.",
+    "Prune any branch where the lower bound exceeds the current best complete solution cost.",
+    "Terminate when all remaining branches are either pruned or fully explored to guarantee the optimal route."
+  ],
+  "outcome": "The system achieves optimal route selection significantly faster than brute force by ignoring non-viable path segments.",
+  "limitation": "The efficiency of the algorithm is highly dependent on the quality of the lower bound heuristic; a weak bound results in minimal pruning and performance degradation, which can be checked by monitoring the ratio of explored nodes versus total possible nodes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Branch and Bound Pruning Process",
+    "description": "The flow shows how the algorithm evaluates partial routes and eliminates sub-optimal paths.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Start",
+        "detail": "Initial empty route"
+      },
+      {
+        "id": "b",
+        "label": "Branch",
+        "detail": "Generate next possible stops"
+      },
+      {
+        "id": "c",
+        "label": "Bound",
+        "detail": "Calculate lower bound cost"
+      },
+      {
+        "id": "d",
+        "label": "Prune",
+        "detail": "Discard if bound > best"
+      },
+      {
+        "id": "e",
+        "label": "Update",
+        "detail": "Update best solution found"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "expand"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "evaluate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "if inferior"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "if promising"
+      },
+      {
+        "from": "e",
+        "to": "b",
+        "label": "continue search"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Logistics Route Selection, how does the technology address the problem of exponential route combinations?",
+      "options": [
+        "By discarding sub-trees that cannot improve upon the current best-known path.",
+        "By using a random selection process to pick the fastest route.",
+        "By ignoring the cost of the remaining distance for all routes.",
+        "By calculating every possible route combination to ensure accuracy."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on pruning branches that are mathematically proven to be worse than the current best solution.",
+      "evidence": "Branch and Bound prunes optimization search using bounds on the best possible descendant solution, allowing the system to discard entire sub-trees of route combinations that cannot possibly improve upon the current best-known path."
+    },
+    {
+      "question": "In Optimizing Logistics Route Selection, what is the primary limitation regarding the algorithm's performance?",
+      "options": [
+        "The algorithm requires too much memory to store the entire graph.",
+        "The efficiency depends on the quality of the lower bound heuristic.",
+        "The algorithm cannot guarantee an optimal solution.",
+        "The algorithm is only effective for small, static datasets."
+      ],
+      "answerIndex": 1,
+      "explanation": "The effectiveness of pruning is directly tied to how accurately the lower bound estimates the actual cost.",
+      "evidence": "The efficiency of the algorithm is highly dependent on the quality of the lower bound heuristic; a weak bound results in minimal pruning and performance degradation, which can be checked by monitoring the ratio of explored nodes versus total possible nodes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:40.778Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

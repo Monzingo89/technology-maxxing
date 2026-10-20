@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "semantic_search",
+  "title": "Automated Technical Documentation Retrieval for Aerospace Engineering",
+  "business": "Aerospace engineering firms managing vast repositories of legacy technical manuals and maintenance logs.",
+  "problem": "Engineers struggle to locate relevant maintenance procedures because traditional keyword-based search fails to capture the intent behind natural language queries, leading to inefficient manual browsing of thousands of documents.",
+  "solution": "By utilizing Sentence-BERT (SBERT) to transform textual documentation into fixed-length vector embeddings, the system enables semantic search. Instead of matching exact keywords, the system calculates the cosine similarity between the vector representation of a user's query and the pre-computed vectors of the document database, allowing for retrieval based on the underlying meaning of the technical request.",
+  "steps": [
+    "Pre-process the corpus of technical manuals into individual sentence segments.",
+    "Pass each segment through a Siamese BERT-network to generate high-dimensional vector embeddings.",
+    "Store these embeddings in a vector database for efficient retrieval.",
+    "Convert incoming user queries into the same vector space using the identical SBERT model.",
+    "Perform a cosine similarity search to identify the most relevant document segments."
+  ],
+  "outcome": "Engineers achieve faster access to precise maintenance instructions by querying with natural language, significantly reducing the time spent navigating legacy documentation.",
+  "limitation": "A primary limitation is the loss of nuance in highly specialized technical jargon if the model was not fine-tuned on domain-specific aerospace corpora. This can be checked by evaluating the top-k retrieval results against a gold-standard set of manually curated relevant documents to identify false positives.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Semantic Retrieval Pipeline",
+    "description": "The flow from raw text to semantic search results.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Manuals",
+        "detail": "Raw technical text"
+      },
+      {
+        "id": "b",
+        "label": "SBERT Model",
+        "detail": "Siamese network"
+      },
+      {
+        "id": "c",
+        "label": "Vector DB",
+        "detail": "Stored embeddings"
+      },
+      {
+        "id": "d",
+        "label": "User Query",
+        "detail": "Natural language input"
+      },
+      {
+        "id": "e",
+        "label": "Results",
+        "detail": "Relevant segments"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "embeds"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "indexes"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "encodes"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "cosine similarity"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1908.10084",
+      "label": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Technical Documentation Retrieval for Aerospace Engineering, why is semantic search preferred over keyword search?",
+      "options": [
+        "It captures the intent behind natural language queries.",
+        "It requires less computational power than keyword matching.",
+        "It eliminates the need for a vector database.",
+        "It guarantees 100% accuracy for all technical jargon."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states that keyword search fails to capture intent, which semantic search addresses by focusing on meaning.",
+      "evidence": "Engineers struggle to locate relevant maintenance procedures because traditional keyword-based search fails to capture the intent behind natural language queries"
+    },
+    {
+      "question": "In Automated Technical Documentation Retrieval for Aerospace Engineering, what is a potential limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than ten documents.",
+        "The model may struggle with specialized jargon if not fine-tuned.",
+        "Cosine similarity is too slow for real-time retrieval.",
+        "SBERT requires the entire document to be re-indexed for every query."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the risk of losing nuance in specialized jargon if the model lacks domain-specific training.",
+      "evidence": "A primary limitation is the loss of nuance in highly specialized technical jargon if the model was not fine-tuned on domain-specific aerospace corpora."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:50.980Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:47.318Z"
+}

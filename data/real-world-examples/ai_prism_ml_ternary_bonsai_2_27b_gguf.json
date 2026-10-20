@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_prism_ml_ternary_bonsai_2_27b_gguf",
+  "title": "Edge-Deployed Reasoning for Field Diagnostics",
+  "business": "Remote industrial maintenance teams operating in disconnected environments.",
+  "problem": "Field technicians require high-reasoning diagnostic support for complex machinery but lack high-bandwidth connectivity to cloud-based LLMs and cannot fit 54GB FP16 models on ruggedized edge hardware.",
+  "solution": "Deploying the Ternary-Bonsai-2-27B-gguf model allows technicians to run a 27B-class reasoning engine locally on portable hardware. By utilizing the PTQ1_0 ternary packing format, the model footprint is reduced to approximately 5.95 GB, enabling full diagnostic capabilities without cloud dependency.",
+  "steps": [
+    "Clone the specialized PrismML-Eng/llama.cpp fork to ensure compatibility with ternary hybrid-attention kernels.",
+    "Compile the llama.cpp binary with appropriate hardware flags (CUDA for GPU-equipped rugged tablets or Metal for Apple Silicon).",
+    "Download the Ternary-Bonsai-2-27B-PTQ1_0.gguf file to the local storage of the field device.",
+    "Configure the inference engine to use xhigh reasoning effort for complex diagnostic chains.",
+    "Execute the model via the llama-cli using the recommended sampling parameters (temperature 1.0, min_p 0.05)."
+  ],
+  "outcome": "Technicians achieve autonomous, high-quality diagnostic reasoning in the field, reducing machine downtime by eliminating the need for cloud round-trips.",
+  "limitation": "The model requires a specific llama.cpp fork; using stock versions will cause the runtime to reject the ternary weights or produce corrupted output. Verification is performed by checking that the binary correctly loads the Hadamard rotation metadata.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Field Diagnostic Inference Pipeline",
+    "description": "The flow of diagnostic data through the local edge environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Technician Input",
+        "detail": "Machine error logs and symptoms"
+      },
+      {
+        "id": "b",
+        "label": "PrismML Fork Binary",
+        "detail": "Custom llama.cpp runtime"
+      },
+      {
+        "id": "c",
+        "label": "Ternary Weights",
+        "detail": "PTQ1_0 packed model file"
+      },
+      {
+        "id": "d",
+        "label": "Diagnostic Output",
+        "detail": "Actionable repair instructions"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides context"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "loads ternary weights"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates reasoning"
+      }
+    ]
+  },
+  "code": {
+    "language": "bash",
+    "content": "# Run inference using the PTQ1_0 packed model on edge hardware\n./bin/llama-cli -m Ternary-Bonsai-2-27B-PTQ1_0.gguf \\\n  -ngl 99 -fa on -c 32768 \\\n  --temp 1.0 --top-p 0.95 --top-k 20 --min-p 0.05 \\\n  -p \"Analyze turbine vibration error code 402.\" -n 16384",
+    "explanation": "This command executes the model locally, utilizing the ternary kernels to process diagnostic queries within the memory constraints of a field device."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf",
+      "label": "prism-ml/Ternary-Bonsai-2-27B-gguf · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge-Deployed Reasoning for Field Diagnostics, how does the technology solve the connectivity and size constraints?",
+      "options": [
+        "By compressing the model to 5.95 GB using ternary weights for local execution.",
+        "By streaming only the reasoning tokens from a cloud-based 54GB FP16 model.",
+        "By using a standard llama.cpp build to run the model in the cloud.",
+        "By reducing the context length to 100 tokens to save memory."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the PTQ1_0 format to fit the model into a small footprint suitable for local edge hardware.",
+      "evidence": "By utilizing the PTQ1_0 ternary packing format, the model footprint is reduced to approximately 5.95 GB, enabling full diagnostic capabilities without cloud dependency."
+    },
+    {
+      "question": "In Edge-Deployed Reasoning for Field Diagnostics, what is a critical requirement for successful implementation?",
+      "options": [
+        "Using the stock llama.cpp repository for maximum compatibility.",
+        "Ensuring the use of the specialized PrismML-Eng/llama.cpp fork.",
+        "Converting the ternary weights back to FP16 before inference.",
+        "Disabling the Hadamard rotation to simplify the runtime."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation explicitly states that stock versions will not work and the fork is required for the ternary kernels.",
+      "evidence": "The model requires a specific llama.cpp fork; using stock versions will cause the runtime to reject the ternary weights or produce corrupted output."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:07.504Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:02.685Z"
+}

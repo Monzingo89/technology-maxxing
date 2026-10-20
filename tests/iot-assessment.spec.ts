@@ -126,11 +126,11 @@ test("a timeout is reported as unanswered and a three-of-five attempt fails", as
     .getByRole("button", { name: "Assess", exact: true })
     .click();
   await expect(page.getByRole("dialog")).toContainText(
-    "Each question has a strict 10-second timer",
+    "a strict 20-second timer each",
   );
   await page.getByRole("button", { name: "Start assessment" }).click();
   const timedOutPrompt = await page.locator(".exam-card h3").innerText();
-  await page.clock.fastForward(7_000);
+  await page.clock.fastForward(17_000);
   await expect(page.locator(".question-timer")).toHaveClass(/urgent/);
   await page.clock.fastForward(4_000);
   for (let i = 1; i < 5; i++) {

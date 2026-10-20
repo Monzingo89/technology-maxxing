@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_14b",
+  "title": "Adaptive Logic for Financial Reporting",
+  "business": "Financial analysts who require both high-speed data summarization and deep logical verification for regulatory compliance.",
+  "problem": "Standard models often fail to balance the need for rapid, low-latency document triage with the rigorous, step-by-step reasoning required for complex financial reconciliation.",
+  "solution": "Qwen3-14B provides a dual-mode architecture allowing analysts to toggle between a non-thinking mode for high-throughput document scanning and a thinking mode for complex logical validation.",
+  "steps": [
+    "Initialize the tokenizer and model with appropriate device mapping.",
+    "Configure the apply_chat_template function with enable_thinking set to True to allow dynamic mode switching.",
+    "Implement a conditional logic layer that prepends /no_think to prompts for routine data extraction tasks.",
+    "Route complex reconciliation queries to the model without the /no_think tag to trigger the <think> reasoning block.",
+    "Parse the resulting output to separate the reasoning metadata from the final financial report."
+  ],
+  "outcome": "Analysts achieve a unified workflow where routine tasks are completed with high efficiency, while critical audits benefit from the model's enhanced logical reasoning capabilities.",
+  "limitation": "The thinking mode requires specific generation parameters like Temperature=0.6 and TopP=0.95; using greedy decoding in this mode leads to performance degradation and endless repetitions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Adaptive Inference Workflow",
+    "description": "The flow shows how user input determines the model's operational mode.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Financial query or document"
+      },
+      {
+        "id": "b",
+        "label": "Mode Selector",
+        "detail": "Check for /no_think tag"
+      },
+      {
+        "id": "c",
+        "label": "Non-Thinking Mode",
+        "detail": "High-speed extraction"
+      },
+      {
+        "id": "d",
+        "label": "Thinking Mode",
+        "detail": "Deep logical reasoning"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Routes request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "If /no_think present"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "If /think or default"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-14B",
+      "label": "Qwen/Qwen3-14B · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Adaptive Logic for Financial Reporting, how does the model address the conflicting needs of speed and accuracy?",
+      "options": [
+        "By using a dual-mode architecture that toggles between high-throughput scanning and deep logical validation.",
+        "By forcing all financial reports to undergo a mandatory 32,768 token reasoning process.",
+        "By automatically deleting all financial data that does not pass a logical consistency check.",
+        "By relying exclusively on greedy decoding to ensure the fastest possible response time for all queries."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution describes using the dual-mode architecture to balance high-speed triage with rigorous reasoning.",
+      "evidence": "Qwen3-14B provides a dual-mode architecture allowing analysts to toggle between a non-thinking mode for high-throughput document scanning and a thinking mode for complex logical validation."
+    },
+    {
+      "question": "In Adaptive Logic for Financial Reporting, what is a critical constraint when using the model's thinking mode?",
+      "options": [
+        "The model must always be deployed on a cluster with at least 100 GPUs.",
+        "Users must never use /no_think tags in multi-turn conversations.",
+        "Greedy decoding must be avoided as it causes performance degradation and repetition.",
+        "The thinking mode is only compatible with Python 3.8 and below."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns against using greedy decoding in thinking mode to avoid performance issues.",
+      "evidence": "The thinking mode requires specific generation parameters like Temperature=0.6 and TopP=0.95; using greedy decoding in this mode leads to performance degradation and endless repetitions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:26.490Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:22.018Z"
+}

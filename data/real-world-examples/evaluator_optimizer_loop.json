@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "evaluator_optimizer_loop",
+  "title": "Legal Contract Clause Refinement",
+  "business": "Legal departments drafting high-volume standardized contracts.",
+  "problem": "Initial drafts often contain inconsistent terminology or missing clauses that require multiple manual reviews, causing significant delays in deal finalization.",
+  "solution": "An Evaluator-Optimizer loop automates the iterative refinement of contract clauses by using a generator LLM to draft content and an evaluator LLM to critique the draft against a predefined legal checklist, looping until the criteria are met.",
+  "steps": [
+    "Define the specific legal criteria or checklist that a compliant contract clause must satisfy.",
+    "Configure the generator LLM to produce an initial draft based on the contract requirements.",
+    "Configure the evaluator LLM to compare the draft against the checklist and output specific feedback.",
+    "Implement a loop that passes the evaluator's feedback back to the generator for revision.",
+    "Set a termination condition, such as a maximum number of iterations or a successful evaluation pass."
+  ],
+  "outcome": "Higher quality, consistent contract drafts that require minimal human intervention before final review.",
+  "limitation": "The loop can increase latency and cost; check this by monitoring the average number of iterations required to reach a 'pass' state and ensuring it stays within acceptable time bounds.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Evaluator-Optimizer Loop Process",
+    "description": "A cyclical process where a generator creates content and an evaluator provides feedback until the criteria are satisfied.",
+    "nodes": [
+      {
+        "id": "start",
+        "label": "Input Request",
+        "detail": "Contract requirements"
+      },
+      {
+        "id": "gen",
+        "label": "Generator",
+        "detail": "Drafts the clause"
+      },
+      {
+        "id": "eval",
+        "label": "Evaluator",
+        "detail": "Checks against criteria"
+      },
+      {
+        "id": "decision",
+        "label": "Pass/Fail",
+        "detail": "Check termination condition"
+      },
+      {
+        "id": "end",
+        "label": "Final Output",
+        "detail": "Refined clause"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "gen",
+        "label": "triggers"
+      },
+      {
+        "from": "gen",
+        "to": "eval",
+        "label": "sends draft"
+      },
+      {
+        "from": "eval",
+        "to": "decision",
+        "label": "provides feedback"
+      },
+      {
+        "from": "decision",
+        "to": "gen",
+        "label": "if fail, re-draft"
+      },
+      {
+        "from": "decision",
+        "to": "end",
+        "label": "if pass, finalize"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "label": "Building Effective AI Agents"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legal Contract Clause Refinement, why is the Evaluator-Optimizer loop used?",
+      "options": [
+        "To automate the iterative refinement of contract clauses against a checklist.",
+        "To replace human lawyers entirely with autonomous agents.",
+        "To reduce the number of LLM calls to exactly one.",
+        "To bypass the need for predefined legal criteria."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario describes using the loop to refine drafts based on specific criteria, which is the core purpose of this pattern.",
+      "evidence": "An Evaluator-Optimizer loop automates the iterative refinement of contract clauses by using a generator LLM to draft content and an evaluator LLM to critique the draft against a predefined legal checklist, looping until the criteria are met."
+    },
+    {
+      "question": "What is a key limitation of the Evaluator-Optimizer loop in Legal Contract Clause Refinement?",
+      "options": [
+        "It is impossible to implement without a GUI framework.",
+        "It can increase latency and cost due to multiple iterations.",
+        "It always results in lower quality drafts than a single prompt.",
+        "It requires human intervention at every single iteration."
+      ],
+      "answerIndex": 1,
+      "explanation": "Iterative loops naturally consume more tokens and time, which is a standard trade-off for higher accuracy.",
+      "evidence": "The loop can increase latency and cost; check this by monitoring the average number of iterations required to reach a 'pass' state and ensuring it stays within acceptable time bounds."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:10.273Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:28.759Z"
+}

@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_dns",
+  "title": "Global Retail DNS Resolution Strategy",
+  "business": "A global retail chain managing thousands of internal microservices and public-facing storefronts.",
+  "problem": "The organization suffers from fragmented DNS management where public storefront records and internal private microservice endpoints are managed in disparate, uncoordinated systems, leading to high operational overhead and frequent misconfiguration errors during deployments.",
+  "solution": "Cloud DNS provides a unified, programmable interface to manage both public authoritative zones and private zones within VPC networks, allowing the retail chain to centralize their naming architecture and automate record updates via API.",
+  "steps": [
+    "Create a managed public zone for the retail storefront domain.",
+    "Define a private DNS zone associated with the internal VPC network for microservice discovery.",
+    "Configure DNS peering or forwarding rules to allow resolution between internal VPCs and on-premises environments.",
+    "Use the Cloud DNS API to automate the creation of A and CNAME records during CI/CD pipeline execution.",
+    "Verify resolution consistency across global regions using the Cloud DNS monitoring tools."
+  ],
+  "outcome": "A centralized, consistent naming authority that reduces manual configuration errors and enables seamless service discovery across hybrid cloud environments.",
+  "limitation": "Cloud DNS has specific quota limits on the number of zones and records per project; administrators must monitor these limits via the Cloud Quotas service to prevent service disruption during rapid scaling.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Unified DNS Resolution Flow",
+    "description": "Shows how external and internal traffic are routed through Cloud DNS.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Public Internet",
+        "detail": "External customer traffic"
+      },
+      {
+        "id": "b",
+        "label": "Cloud DNS",
+        "detail": "Centralized management layer"
+      },
+      {
+        "id": "c",
+        "label": "Public Zone",
+        "detail": "Storefront records"
+      },
+      {
+        "id": "d",
+        "label": "Private Zone",
+        "detail": "Internal microservices"
+      },
+      {
+        "id": "e",
+        "label": "VPC Network",
+        "detail": "Internal compute resources"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "queries"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "resolves"
+      },
+      {
+        "from": "e",
+        "to": "b",
+        "label": "queries"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "resolves"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Retail DNS Resolution Strategy, what is the primary problem addressed by using Cloud DNS?",
+      "options": [
+        "High latency in global storefront loading",
+        "Fragmented management of public and private DNS records",
+        "Incompatibility with legacy on-premises hardware",
+        "Lack of support for IPv6 addressing"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that the organization suffers from fragmented DNS management across public and private systems.",
+      "evidence": "The organization suffers from fragmented DNS management where public storefront records and internal private microservice endpoints are managed in disparate, uncoordinated systems, leading to high operational overhead and frequent misconfiguration errors during deployments."
+    },
+    {
+      "question": "In Global Retail DNS Resolution Strategy, what is a key limitation of the implementation?",
+      "options": [
+        "Inability to use APIs for record management",
+        "Strict limits on the number of zones and records",
+        "Requirement to use manual CLI commands only",
+        "Lack of integration with VPC networks"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly mentions that quota limits on zones and records must be monitored to avoid service disruption.",
+      "evidence": "Cloud DNS has specific quota limits on the number of zones and records per project; administrators must monitor these limits via the Cloud Quotas service to prevent service disruption during rapid scaling."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:01.401Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

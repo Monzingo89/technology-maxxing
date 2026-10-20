@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "dynamodb",
+  "title": "Global Inventory Tracking for Retailers",
+  "business": "A regional retail chain expanding to a national footprint needs to maintain real-time inventory counts across thousands of storefronts.",
+  "problem": "Traditional relational databases struggle with high-concurrency write contention during peak sales events, leading to locking issues and latency spikes that prevent accurate stock updates.",
+  "solution": "Amazon DynamoDB provides serverless key-value and document storage with managed scaling, allowing the retailer to handle high-frequency inventory updates without managing infrastructure or worrying about connection pooling limits.",
+  "steps": [
+    "Define a partition key based on the ProductID to ensure even data distribution across the storage layer.",
+    "Configure the table to use on-demand capacity mode to automatically handle unpredictable traffic bursts during sales.",
+    "Implement conditional expressions in write operations to ensure inventory counts never drop below zero.",
+    "Enable Time to Live (TTL) on temporary transaction logs to automatically expire old records without manual cleanup."
+  ],
+  "outcome": "The system maintains consistent inventory visibility across all locations, ensuring that customers see accurate stock levels even during high-traffic promotional periods.",
+  "limitation": "DynamoDB enforces strict limits on item size, currently capped at 400KB per item. Developers must check item size during application design to avoid runtime exceptions when storing complex document structures.",
+  "diagram": {
+    "kind": "er",
+    "title": "Inventory Data Flow",
+    "description": "Shows the relationship between storefront updates and the centralized data store.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Point of Sale",
+        "detail": "Generates inventory decrement events"
+      },
+      {
+        "id": "b",
+        "label": "DynamoDB Table",
+        "detail": "Stores ProductID and CurrentStock"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Service",
+        "detail": "Validates business logic and writes to table"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "sends update request"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "executes conditional write"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Tracking for Retailers, why is DynamoDB chosen over a traditional relational database?",
+      "options": [
+        "To eliminate write contention and latency during peak sales events.",
+        "To reduce the cost of storing relational table joins.",
+        "To enable complex multi-table transaction rollbacks.",
+        "To provide a graphical interface for inventory management."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that traditional databases suffer from locking issues during high-concurrency events, which DynamoDB avoids.",
+      "evidence": "Traditional relational databases struggle with high-concurrency write contention during peak sales events, leading to locking issues and latency spikes that prevent accurate stock updates."
+    },
+    {
+      "question": "What is a primary architectural constraint to consider when implementing Global Inventory Tracking for Retailers using DynamoDB?",
+      "options": [
+        "The requirement to manually provision storage hardware.",
+        "The 400KB item size limit.",
+        "The inability to use partition keys.",
+        "The requirement to use SQL for all data retrieval."
+      ],
+      "answerIndex": 1,
+      "explanation": "DynamoDB has a specific item size limit that must be accounted for during the design phase.",
+      "evidence": "DynamoDB enforces strict limits on item size, currently capped at 400KB per item."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:00.310Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

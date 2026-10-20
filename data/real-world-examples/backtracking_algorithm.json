@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "backtracking_algorithm",
+  "title": "Automated Warehouse Slotting Optimization",
+  "business": "Logistics providers managing high-density automated storage and retrieval systems.",
+  "problem": "The system must assign thousands of unique items to storage bins while adhering to complex, overlapping constraints such as weight limits per shelf, hazardous material separation, and ergonomic height requirements, where a single poor early placement renders later items impossible to store.",
+  "solution": "Backtracking builds candidate slotting configurations incrementally. It attempts to place an item in a valid bin and proceeds to the next. If the algorithm reaches a state where no remaining items can be placed without violating constraints, it abandons the current branch, reverts the last placement, and tries an alternative bin, effectively exploring the search space to find a valid global configuration.",
+  "steps": [
+    "Define the set of items and the available storage bins as the search space.",
+    "Select an unassigned item based on a heuristic priority.",
+    "Attempt to place the item in a bin that satisfies all current weight and safety constraints.",
+    "Recursively proceed to the next item if the placement is valid.",
+    "Backtrack by removing the item if the recursive call returns no solution, then try the next available bin."
+  ],
+  "outcome": "The system identifies a valid, constraint-compliant storage layout that maximizes bin utilization without requiring manual intervention or exhaustive brute-force search.",
+  "limitation": "The primary limitation is the exponential time complexity in the worst case, as the search space grows factorially with the number of items; this is checked by monitoring the recursion depth and setting a timeout threshold for the search process.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Backtracking Slotting Logic",
+    "description": "Shows the decision process of placing items into bins and the recovery path when a constraint is violated.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Start",
+        "detail": "Initialize empty bin map"
+      },
+      {
+        "id": "b",
+        "label": "Select Item",
+        "detail": "Pick next item to place"
+      },
+      {
+        "id": "c",
+        "label": "Validate Bin",
+        "detail": "Check weight/safety constraints"
+      },
+      {
+        "id": "d",
+        "label": "Place Item",
+        "detail": "Update bin state"
+      },
+      {
+        "id": "e",
+        "label": "Backtrack",
+        "detail": "Revert last placement"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Begin"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Constraint Check"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Valid"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Invalid"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Next Item"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Warehouse Slotting Optimization, why is backtracking used to address the problem?",
+      "options": [
+        "To incrementally build configurations and abandon invalid branches",
+        "To calculate the shortest path between two warehouse locations",
+        "To sort items by weight in linear time complexity",
+        "To replace the need for any constraint validation logic"
+      ],
+      "answerIndex": 0,
+      "explanation": "Backtracking is specifically designed to explore potential solutions incrementally and revert choices that lead to constraint violations.",
+      "evidence": "Backtracking builds candidate slotting configurations incrementally. It attempts to place an item in a valid bin and proceeds to the next. If the algorithm reaches a state where no remaining items can be placed without violating constraints, it abandons the current branch, reverts the last placement, and tries an alternative bin"
+    },
+    {
+      "question": "Regarding the implementation of Automated Warehouse Slotting Optimization, what is a key limitation?",
+      "options": [
+        "The algorithm cannot handle more than two constraints",
+        "The search space can lead to exponential time complexity",
+        "It requires a predefined, static list of bins",
+        "It is only effective for small, non-hazardous items"
+      ],
+      "answerIndex": 1,
+      "explanation": "Backtracking algorithms often face exponential time complexity as the number of choices increases, which is a standard trade-off for this approach.",
+      "evidence": "The primary limitation is the exponential time complexity in the worst case, as the search space grows factorially with the number of items"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:17.130Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

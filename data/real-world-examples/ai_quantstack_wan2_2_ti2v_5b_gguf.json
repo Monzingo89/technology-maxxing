@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_quantstack_wan2_2_ti2v_5b_gguf",
+  "title": "Automated Architectural Visualization for Urban Planning",
+  "business": "Urban planning firms and architectural visualization studios.",
+  "problem": "High-fidelity video generation for urban development proposals is often bottlenecked by prohibitive GPU memory requirements, preventing local iteration on standard workstations.",
+  "solution": "The Wan2.2-TI2V-5B-GGUF model provides a quantized, memory-efficient alternative to full-precision models, allowing urban planners to generate high-quality video walkthroughs from descriptive text prompts directly on local hardware without needing massive cloud infrastructure.",
+  "steps": [
+    "Download the appropriate GGUF quantization level based on available VRAM (e.g., Q4_K_M for a balance of quality and size).",
+    "Install the ComfyUI-GGUF custom node by city96 to enable compatibility with quantized model weights.",
+    "Place the downloaded GGUF file into the ComfyUI/models/unet directory to ensure the node can locate the model architecture.",
+    "Construct a text-to-video workflow in ComfyUI using the loaded GGUF model to transform site descriptions into visual walkthroughs.",
+    "Refine the prompt parameters to match the specific architectural style and environmental conditions of the urban site."
+  ],
+  "outcome": "Planners achieve rapid, iterative visual feedback on urban design concepts, significantly reducing the time spent waiting for external rendering services.",
+  "limitation": "Quantization introduces a trade-off between model size and visual fidelity; users must verify the output for artifacts or loss of fine architectural detail by comparing results across different quantization levels.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Architectural Visualization Workflow",
+    "description": "The process of moving from urban design requirements to rendered video output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Urban Design Prompt",
+        "detail": "Textual description of the site"
+      },
+      {
+        "id": "b",
+        "label": "ComfyUI-GGUF Node",
+        "detail": "Interface for GGUF model loading"
+      },
+      {
+        "id": "c",
+        "label": "Wan2.2-TI2V-5B-GGUF",
+        "detail": "Quantized inference engine"
+      },
+      {
+        "id": "d",
+        "label": "Video Output",
+        "detail": "Generated architectural walkthrough"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Loads weights"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates frames"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/QuantStack/Wan2.2-TI2V-5B-GGUF",
+      "label": "QuantStack/Wan2.2-TI2V-5B-GGUF · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Visualization for Urban Planning, what is the primary benefit of using the GGUF format?",
+      "options": [
+        "It eliminates the need for text prompts entirely.",
+        "It enables high-quality video generation on local hardware with limited VRAM.",
+        "It automatically renders high-resolution 3D models from CAD files.",
+        "It provides cloud-based rendering for large-scale urban simulations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The business scenario highlights that the quantized model allows planners to generate video walkthroughs locally without needing massive cloud infrastructure.",
+      "evidence": "The Wan2.2-TI2V-5B-GGUF model provides a quantized, memory-efficient alternative to full-precision models, allowing urban planners to generate high-quality video walkthroughs from descriptive text prompts directly on local hardware without needing massive cloud infrastructure."
+    },
+    {
+      "question": "In Automated Architectural Visualization for Urban Planning, what is a key limitation of using quantized models?",
+      "options": [
+        "The model requires an active internet connection for every frame.",
+        "Quantization always results in a larger file size than the original model.",
+        "There is a trade-off between model size and visual fidelity that requires verification.",
+        "The model is incompatible with ComfyUI workflows."
+      ],
+      "answerIndex": 2,
+      "explanation": "Quantization reduces precision to save memory, which can impact visual quality, necessitating a check for artifacts.",
+      "evidence": "Quantization introduces a trade-off between model size and visual fidelity; users must verify the output for artifacts or loss of fine architectural detail by comparing results across different quantization levels."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:22.638Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:18.630Z"
+}

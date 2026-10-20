@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "ip_addressing",
+  "title": "Global Logistics Fleet Connectivity",
+  "business": "A multinational logistics firm managing a fleet of autonomous delivery drones across diverse international territories.",
+  "problem": "The firm faces routing failures when drones transition between regional cellular networks, as dynamic IP address assignments cause session drops in the central command-and-control server.",
+  "solution": "Implementing static IP addressing for each drone interface ensures that the central routing table maintains a persistent mapping, allowing the network layer to reliably deliver packets across interconnected networks regardless of the underlying physical access point.",
+  "steps": [
+    "Provision a dedicated subnet for the fleet within the regional gateway.",
+    "Assign a unique static IP address to each drone network interface controller.",
+    "Configure the central router to recognize these static addresses for packet destination matching.",
+    "Verify routing table updates to ensure packets are directed to the correct gateway interface."
+  ],
+  "outcome": "Improved session persistence and reduced packet loss during network handovers, leading to more stable drone telemetry streams.",
+  "limitation": "Static IP addressing creates an administrative burden and potential address exhaustion; verify this by checking the subnet occupancy rate against the total available address pool.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Packet Routing Flow",
+    "description": "This diagram illustrates how a packet traverses from the command center to the drone using static IP addressing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Command Server",
+        "detail": "Originates control packets"
+      },
+      {
+        "id": "b",
+        "label": "Regional Gateway",
+        "detail": "Routes packets based on IP"
+      },
+      {
+        "id": "c",
+        "label": "Drone Interface",
+        "detail": "Receives packets via static IP"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Forwards packet to destination IP"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Delivers packet to specific interface"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Fleet Connectivity, why is static IP addressing used?",
+      "options": [
+        "To increase the physical speed of the drone hardware.",
+        "To prevent session drops caused by dynamic IP assignment during network transitions.",
+        "To reduce the cost of cellular data plans.",
+        "To allow drones to communicate without a central server."
+      ],
+      "answerIndex": 1,
+      "explanation": "Static IPs provide a persistent mapping that prevents the connection issues inherent in dynamic assignment during network handovers.",
+      "evidence": "The firm faces routing failures when drones transition between regional cellular networks, as dynamic IP address assignments cause session drops in the central command-and-control server."
+    },
+    {
+      "question": "In Global Logistics Fleet Connectivity, what is a primary limitation of the solution?",
+      "options": [
+        "It requires expensive specialized hardware for every drone.",
+        "It increases the latency of every packet sent.",
+        "It creates administrative overhead and risks address exhaustion.",
+        "It prevents the drones from using encryption."
+      ],
+      "answerIndex": 2,
+      "explanation": "Static IP management is manually intensive and can lead to running out of available addresses in a subnet.",
+      "evidence": "Static IP addressing creates an administrative burden and potential address exhaustion; verify this by checking the subnet occupancy rate against the total available address pool."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:05.400Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "ai_ornith_ai_ornith_1_5_9b_gguf",
+  "title": "Local Codebase Analysis with Ornith-1.5-9B-GGUF",
+  "business": "Software development firms managing large, proprietary codebases that cannot be uploaded to public cloud AI services due to strict data privacy requirements.",
+  "problem": "Developers struggle to maintain context across massive repositories, leading to high cognitive load and slow resolution of cross-module bugs, while cloud-based AI tools are prohibited by security policies.",
+  "solution": "Deploying the Ornith-1.5-9B-GGUF model locally using an OpenAI-compatible server allows developers to query their entire codebase within a secure, air-gapped environment while leveraging the model's reasoning capabilities.",
+  "steps": [
+    "Download the Ornith-1.5-9B-GGUF model weights to a local GPU-enabled workstation.",
+    "Launch an OpenAI-compatible server using llama-server or vLLM with the model path and a 262,144 token context window.",
+    "Configure the local development environment or coding CLI to point to the local server URL.",
+    "Execute agentic coding tasks by routing queries through the local endpoint to analyze repository files."
+  ],
+  "outcome": "Developers gain an automated, private reasoning assistant capable of navigating large codebases, resulting in faster bug identification and reduced manual documentation overhead.",
+  "limitation": "Enabling YaRN RoPE scaling for extremely long contexts can slightly degrade model performance on ordinary-length inputs, requiring careful selection of the scaling factor based on actual workload needs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Reasoning Workflow",
+    "description": "The flow of data from the local repository to the reasoning model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Local Repository",
+        "detail": "Proprietary code files"
+      },
+      {
+        "id": "b",
+        "label": "Coding CLI",
+        "detail": "Agentic interface"
+      },
+      {
+        "id": "c",
+        "label": "Ornith-1.5-9B-GGUF",
+        "detail": "Local reasoning model"
+      },
+      {
+        "id": "d",
+        "label": "Developer",
+        "detail": "User"
+      }
+    ],
+    "edges": [
+      {
+        "from": "d",
+        "to": "b",
+        "label": "submits query"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "reads context"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends prompt"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns reasoning"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from openai import OpenAI\n# Connect to the locally hosted Ornith-1.5-9B-GGUF server\nclient = OpenAI(base_url=\"http://localhost:8000/v1\", api_key=\"EMPTY\")\nresponse = client.chat.completions.create(\n    model=\"Ornith-1.5-9B\",\n    messages=[{\"role\": \"user\", \"content\": \"Explain this module's logic.\"}]\n)\n# Access the reasoning trace and final answer\nprint(response.choices[0].message.reasoning_content)",
+    "explanation": "This code demonstrates how to interface with the local Ornith-1.5-9B-GGUF server using the standard OpenAI client, mapping the business need for private code analysis to the model's reasoning output."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-9B-GGUF",
+      "label": "ornith-ai/Ornith-1.5-9B-GGUF · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Local Codebase Analysis with Ornith-1.5-9B-GGUF, how does the model address the problem of data privacy?",
+      "options": [
+        "By running locally in an air-gapped environment",
+        "By encrypting all code before sending to the cloud",
+        "By using a proprietary cloud-based API key",
+        "By automatically deleting code after analysis"
+      ],
+      "answerIndex": 0,
+      "explanation": "The business scenario specifies that the model is deployed locally to avoid cloud-based AI tools prohibited by security policies.",
+      "evidence": "Deploying the Ornith-1.5-9B-GGUF model locally using an OpenAI-compatible server allows developers to query their entire codebase within a secure, air-gapped environment"
+    },
+    {
+      "question": "In Local Codebase Analysis with Ornith-1.5-9B-GGUF, what is a primary trade-off when extending the context window?",
+      "options": [
+        "Increased latency for all requests",
+        "Potential quality degradation on ordinary-length inputs",
+        "Incompatibility with OpenAI-compatible clients",
+        "Higher memory usage than the base model"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario note that using RoPE scaling (YaRN) can negatively impact performance for standard tasks.",
+      "evidence": "Enabling YaRN RoPE scaling for extremely long contexts can slightly degrade model performance on ordinary-length inputs"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:06.690Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:02.441Z"
+}

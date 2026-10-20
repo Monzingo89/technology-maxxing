@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "ai_model_cards",
+  "title": "Standardizing Model Governance for Enterprise Compliance",
+  "business": "Enterprise AI teams and compliance officers",
+  "problem": "Internal teams struggle to track model lineage, licensing, and intended use cases, leading to unauthorized deployments and regulatory risk.",
+  "solution": "Implementing mandatory Model Cards as YAML-based metadata headers in model repositories to enforce discoverability, license transparency, and evaluation context.",
+  "steps": [
+    "Define a standard YAML template including license, base_model, and pipeline_tag fields.",
+    "Integrate the metadata update process into the CI/CD pipeline for model uploads.",
+    "Populate the model-index section with structured evaluation results for auditability.",
+    "Review the human-readable Markdown section for ethical considerations and limitations."
+  ],
+  "outcome": "Improved model discoverability and automated compliance auditing across the organization.",
+  "limitation": "Metadata is static and does not automatically update when underlying model weights or training datasets change; manual verification is required to ensure the card remains accurate.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Card Governance Workflow",
+    "description": "The flow from model development to compliant repository hosting.",
+    "nodes": [
+      {
+        "id": "dev",
+        "label": "Model Developer",
+        "detail": "Creates model and documentation"
+      },
+      {
+        "id": "yaml",
+        "label": "YAML Metadata",
+        "detail": "Structured license and task data"
+      },
+      {
+        "id": "md",
+        "label": "Markdown Body",
+        "detail": "Human-readable limitations and context"
+      },
+      {
+        "id": "hub",
+        "label": "Model Hub",
+        "detail": "Centralized repository hosting"
+      },
+      {
+        "id": "audit",
+        "label": "Compliance Audit",
+        "detail": "Automated verification of metadata"
+      }
+    ],
+    "edges": [
+      {
+        "from": "dev",
+        "to": "yaml",
+        "label": "defines"
+      },
+      {
+        "from": "dev",
+        "to": "md",
+        "label": "writes"
+      },
+      {
+        "from": "yaml",
+        "to": "hub",
+        "label": "configures"
+      },
+      {
+        "from": "md",
+        "to": "hub",
+        "label": "documents"
+      },
+      {
+        "from": "hub",
+        "to": "audit",
+        "label": "enables"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/docs/hub/model-cards",
+      "label": "Model Cards · Hugging Face Hub documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Standardizing Model Governance for Enterprise Compliance, how does the proposed solution address the problem of regulatory risk?",
+      "options": [
+        "By enforcing discoverability, license transparency, and evaluation context via YAML-based metadata.",
+        "By automatically deleting models that do not meet performance benchmarks.",
+        "By encrypting the model weights to prevent unauthorized access.",
+        "By replacing human developers with automated documentation agents."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly uses YAML-based metadata in model cards to ensure that critical information like licenses and evaluation context is standardized and discoverable.",
+      "evidence": "Implementing mandatory Model Cards as YAML-based metadata headers in model repositories to enforce discoverability, license transparency, and evaluation context."
+    },
+    {
+      "question": "In Standardizing Model Governance for Enterprise Compliance, what is the primary limitation of the implementation?",
+      "options": [
+        "The metadata is too complex for developers to understand.",
+        "The system requires expensive cloud storage for every model card.",
+        "Metadata is static and does not automatically update when underlying model weights or training datasets change.",
+        "The Hub does not support YAML formatting for model cards."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario highlight that metadata is a static file that requires manual updates, creating a risk of drift if the model changes.",
+      "evidence": "Metadata is static and does not automatically update when underlying model weights or training datasets change; manual verification is required to ensure the card remains accurate."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:48.846Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:44.906Z"
+}

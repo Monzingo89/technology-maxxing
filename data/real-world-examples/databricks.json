@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "topicId": "databricks",
+  "title": "Unified Inventory Forecasting for Global Retail",
+  "business": "Global retail enterprises managing fragmented supply chain data across disparate regional warehouses.",
+  "problem": "Data silos between regional inventory databases and central demand planning systems prevent accurate, real-time stock replenishment, leading to frequent stockouts and overstocking.",
+  "solution": "Utilize the Databricks Lakehouse platform to ingest raw regional inventory logs into a unified Delta Lake architecture, enabling collaborative data engineering and machine learning model development on a single source of truth.",
+  "steps": [
+    "Configure Unity Catalog to centralize access control and define metadata schemas for regional inventory datasets.",
+    "Develop ETL pipelines using Databricks notebooks to ingest and clean raw inventory logs into bronze, silver, and gold Delta tables.",
+    "Train demand forecasting models using MLflow to track experiments and model versions across global regions.",
+    "Deploy the final model as a SQL-accessible function within Databricks SQL for real-time inventory replenishment dashboards."
+  ],
+  "outcome": "A unified view of global inventory levels that allows supply chain managers to execute data-driven replenishment strategies without moving data between isolated systems.",
+  "limitation": "The platform relies on the consistency of the underlying cloud object storage; users must monitor storage latency and throughput limits to ensure that high-frequency ingestion does not degrade query performance for downstream BI dashboards.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Unified Inventory Data Flow",
+    "description": "This diagram illustrates the transformation of raw regional data into actionable business insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional Logs",
+        "detail": "Raw inventory transaction data"
+      },
+      {
+        "id": "b",
+        "label": "Unity Catalog",
+        "detail": "Governance and metadata management"
+      },
+      {
+        "id": "c",
+        "label": "Delta Lake",
+        "detail": "Unified storage layer"
+      },
+      {
+        "id": "d",
+        "label": "MLflow",
+        "detail": "Model training and tracking"
+      },
+      {
+        "id": "e",
+        "label": "BI Dashboard",
+        "detail": "Final replenishment insights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "ETL Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Governs access"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Model training input"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Forecast output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Read raw inventory data from cloud storage\ndf = spark.read.format(\"delta\").load(\"/mnt/inventory/raw\")\n# Clean and write to silver table for downstream consumption\ndf.filter(\"stock_level >= 0\").write.format(\"delta\").mode(\"overwrite\").save(\"/mnt/inventory/silver\")",
+    "explanation": "This code demonstrates the ingestion process where raw inventory logs are filtered and persisted into a Delta table, serving as the foundation for the unified inventory view."
+  },
+  "sources": [
+    {
+      "url": "https://docs.databricks.com/",
+      "label": "Databricks documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Inventory Forecasting for Global Retail, what is the primary business problem addressed by the Lakehouse platform?",
+      "options": [
+        "High costs of cloud storage for regional warehouses",
+        "Data silos preventing accurate, real-time stock replenishment",
+        "Lack of SQL support for legacy inventory databases",
+        "Inability to train machine learning models on local machines"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly identifies data silos between regional systems as the barrier to effective inventory management.",
+      "evidence": "Data silos between regional inventory databases and central demand planning systems prevent accurate, real-time stock replenishment, leading to frequent stockouts and overstocking."
+    },
+    {
+      "question": "In Unified Inventory Forecasting for Global Retail, what is a noted limitation of the implementation?",
+      "options": [
+        "The platform cannot handle large-scale data ingestion",
+        "Unity Catalog does not support metadata management",
+        "Storage latency and throughput limits can impact query performance",
+        "MLflow is incompatible with Delta Lake tables"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that the platform's performance is tied to the underlying cloud storage and requires monitoring.",
+      "evidence": "The platform relies on the consistency of the underlying cloud object storage; users must monitor storage latency and throughput limits to ensure that high-frequency ingestion does not degrade query performance for downstream BI dashboards."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:18.221Z",
+  "sourceRetrievedAt": "2026-10-18T00:51:56.432Z"
+}

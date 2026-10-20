@@ -1,0 +1,115 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_8b_awq",
+  "title": "Dynamic Reasoning Control for Financial Reporting",
+  "business": "Financial analysts generating complex quarterly reports who require both deep logical verification and rapid, concise summaries.",
+  "problem": "Standard models often force a heavy reasoning overhead on simple tasks, increasing latency and cost, or fail to provide sufficient logical depth for complex financial calculations.",
+  "solution": "Qwen3-8B-AWQ allows for seamless switching between a thinking mode for complex logical reasoning and a non-thinking mode for efficient, general-purpose dialogue, enabling analysts to toggle behavior based on the specific task complexity.",
+  "steps": [
+    "Deploy Qwen3-8B-AWQ using a compatible inference server like vLLM or SGLang.",
+    "Configure the application to default to enable_thinking=True for complex financial modeling tasks.",
+    "Implement a soft-switch mechanism in the user interface allowing analysts to append /no_think for routine, high-speed status updates.",
+    "Parse the model output to extract and display the <think> block only when reasoning is required."
+  ],
+  "outcome": "Improved operational efficiency by reducing unnecessary reasoning latency for simple queries while maintaining high accuracy for complex financial analysis.",
+  "limitation": "The model's performance can degrade if greedy decoding is used in thinking mode; users must ensure temperature and top-p settings are correctly adjusted for the chosen mode to avoid repetitive outputs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Task-Driven Reasoning Workflow",
+    "description": "This diagram illustrates how user input determines the activation of the reasoning engine.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Financial Analyst",
+        "detail": "Provides input prompt"
+      },
+      {
+        "id": "switch",
+        "label": "Mode Selector",
+        "detail": "Checks for /no_think or /think tags"
+      },
+      {
+        "id": "think",
+        "label": "Thinking Mode",
+        "detail": "Generates <think> block for complex logic"
+      },
+      {
+        "id": "fast",
+        "label": "Non-Thinking Mode",
+        "detail": "Direct generation for efficiency"
+      },
+      {
+        "id": "out",
+        "label": "Final Report",
+        "detail": "Delivers output to user"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "switch",
+        "label": "sends prompt"
+      },
+      {
+        "from": "switch",
+        "to": "think",
+        "label": "if complex or default"
+      },
+      {
+        "from": "switch",
+        "to": "fast",
+        "label": "if /no_think detected"
+      },
+      {
+        "from": "think",
+        "to": "out",
+        "label": "returns reasoned response"
+      },
+      {
+        "from": "fast",
+        "to": "out",
+        "label": "returns direct response"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Using apply_chat_template to toggle mode\n# enable_thinking=False disables the reasoning block for efficiency\ntext = tokenizer.apply_chat_template(\n    messages, \n    tokenize=False, \n    add_generation_prompt=True, \n    enable_thinking=False \n)",
+    "explanation": "This snippet demonstrates how to programmatically disable the reasoning engine in the Qwen3-8B-AWQ model to prioritize speed for routine tasks within the Dynamic Reasoning Control for Financial Reporting scenario."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-8B-AWQ",
+      "label": "Qwen/Qwen3-8B-AWQ · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Reasoning Control for Financial Reporting, how does the model address the balance between latency and logical depth?",
+      "options": [
+        "By allowing seamless switching between thinking and non-thinking modes.",
+        "By automatically increasing the parameter count for complex tasks.",
+        "By forcing all financial reports to use the <think> block.",
+        "By disabling all tool-calling capabilities during high-speed tasks."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario describes using the model's ability to toggle between thinking and non-thinking modes to handle different task complexities efficiently.",
+      "evidence": "Qwen3-8B-AWQ allows for seamless switching between a thinking mode for complex logical reasoning and a non-thinking mode for efficient, general-purpose dialogue, enabling analysts to toggle behavior based on the specific task complexity."
+    },
+    {
+      "question": "What is a primary limitation to consider when implementing Dynamic Reasoning Control for Financial Reporting?",
+      "options": [
+        "The model cannot process more than 1,000 tokens in non-thinking mode.",
+        "Greedy decoding can lead to performance degradation and repetitive outputs in thinking mode.",
+        "The /no_think tag is only compatible with the SGLang server.",
+        "Thinking mode is incompatible with the AWQ 4-bit quantization format."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and lesson note that greedy decoding should be avoided in thinking mode to prevent quality issues.",
+      "evidence": "The model's performance can degrade if greedy decoding is used in thinking mode; users must ensure temperature and top-p settings are correctly adjusted for the chosen mode to avoid repetitive outputs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:34.794Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:30.630Z"
+}

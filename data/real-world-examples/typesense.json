@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "typesense",
+  "title": "Global Inventory Faceted Search",
+  "business": "E-commerce retailers managing large, multi-category product catalogs.",
+  "problem": "Customers struggle to find specific items due to rigid database queries that fail on minor typos and lack intuitive filtering, leading to high bounce rates.",
+  "solution": "Typesense provides an in-memory, typo-tolerant search engine that enables instant, faceted navigation, allowing users to slice and dice product results by attributes like category, price, or brand.",
+  "steps": [
+    "Provision a Typesense cluster via Docker or Typesense Cloud.",
+    "Define a collection schema specifying fields for search and faceting.",
+    "Import product data into the collection.",
+    "Configure search parameters to enable typo tolerance and facet counts.",
+    "Implement the search UI to query the REST API and render faceted filters."
+  ],
+  "outcome": "Users experience a fluid, forgiving search interface that surfaces relevant products even with imprecise queries, significantly improving conversion rates.",
+  "limitation": "Because Typesense operates primarily in-memory for speed, large datasets require careful RAM planning; check memory usage via the metrics endpoint to ensure the cluster size matches the index footprint.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Faceted Search Data Flow",
+    "description": "The flow from user input to filtered product results.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Inputs search query"
+      },
+      {
+        "id": "b",
+        "label": "Client App",
+        "detail": "Sends REST API request"
+      },
+      {
+        "id": "c",
+        "label": "Typesense Engine",
+        "detail": "Performs typo-tolerant search and facet aggregation"
+      },
+      {
+        "id": "d",
+        "label": "Results UI",
+        "detail": "Displays products and facet filters"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "API call"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "JSON response"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "refined search"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Define collection with facet fields\nconst schema = {\n  'name': 'products',\n  'fields': [\n    {'name': 'title', 'type': 'string'},\n    {'name': 'category', 'type': 'string', 'facet': true} // Enable faceting\n  ]\n};\n// Search with typo tolerance enabled by default\nclient.collections('products').documents().search({\n  'q': 'ipone', // Typo in query\n  'query_by': 'title',\n  'facet_by': 'category'\n});",
+    "explanation": "This code demonstrates creating a collection with a facet-enabled field and performing a search that automatically corrects the typo 'ipone' to 'iphone' while returning category counts."
+  },
+  "sources": [
+    {
+      "url": "https://typesense.org/",
+      "label": "Typesense | Open Source Alternative to Algolia + Pinecone"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Faceted Search, how does the technology address the problem of rigid database queries?",
+      "options": [
+        "By providing an in-memory, typo-tolerant search engine that enables instant, faceted navigation.",
+        "By replacing the database entirely with a hard-coded file system.",
+        "By using manual indexing to force users to type exact product names.",
+        "By relying on external cloud-based AI to rewrite every query."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions using an in-memory, typo-tolerant engine to allow users to slice and dice results.",
+      "evidence": "Typesense provides an in-memory, typo-tolerant search engine that enables instant, faceted navigation, allowing users to slice and dice product results by attributes like category, price, or brand."
+    },
+    {
+      "question": "In Global Inventory Faceted Search, what is a primary limitation to monitor during implementation?",
+      "options": [
+        "The inability to use REST APIs for data ingestion.",
+        "The requirement to use only one facet per collection.",
+        "The need to manage RAM usage because the engine operates in-memory.",
+        "The lack of support for typo tolerance in large datasets."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that memory planning is essential because the engine is in-memory.",
+      "evidence": "Because Typesense operates primarily in-memory for speed, large datasets require careful RAM planning; check memory usage via the metrics endpoint to ensure the cluster size matches the index footprint."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:47.925Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:44.345Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "flux",
+  "title": "Automated Multi-Cluster Configuration Synchronization",
+  "business": "Platform engineers managing global Kubernetes fleets across diverse cloud environments.",
+  "problem": "Manual configuration drift occurs when cluster operators apply changes inconsistently across staging and production environments, leading to environment-specific failures and high operational overhead.",
+  "solution": "Flux enables declarative delivery by treating Git as the single source of truth, where custom controllers automatically reconcile the cluster state with defined Git repository configurations, ensuring consistency through continuous automated synchronization.",
+  "steps": [
+    "Bootstrap the Flux controllers into the management cluster using the Flux CLI.",
+    "Define a GitRepository custom resource to point to the source of truth configuration.",
+    "Create a Kustomization resource to specify the target path and synchronization interval for the cluster state.",
+    "Configure Kubernetes RBAC to restrict the reconciliation permissions for the specific cluster namespaces.",
+    "Monitor the reconciliation health via Flux event notifications sent to external alerting systems."
+  ],
+  "outcome": "A reliable, version-controlled delivery pipeline where cluster state is automatically maintained without manual intervention, significantly reducing configuration drift.",
+  "limitation": "Flux relies on the Git repository as the source of truth; if the repository becomes unreachable or contains malformed manifests, reconciliation will stall, which can be checked by inspecting the status field of the Kustomization resource.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Flux Reconciliation Flow",
+    "description": "The flow shows how Flux bridges Git sources to actual cluster state.",
+    "nodes": [
+      {
+        "id": "git",
+        "label": "Git Repository",
+        "detail": "Source of truth for manifests"
+      },
+      {
+        "id": "source",
+        "label": "Source Controller",
+        "detail": "Fetches artifacts from Git"
+      },
+      {
+        "id": "kustom",
+        "label": "Kustomization Controller",
+        "detail": "Applies manifests to cluster"
+      },
+      {
+        "id": "cluster",
+        "label": "Kubernetes Cluster",
+        "detail": "Target environment"
+      }
+    ],
+    "edges": [
+      {
+        "from": "git",
+        "to": "source",
+        "label": "pulls"
+      },
+      {
+        "from": "source",
+        "to": "kustom",
+        "label": "provides artifact"
+      },
+      {
+        "from": "kustom",
+        "to": "cluster",
+        "label": "reconciles state"
+      }
+    ]
+  },
+  "code": {
+    "language": "yaml",
+    "content": "apiVersion: source.toolkit.fluxcd.io/v1\nkind: GitRepository\nmetadata:\n  name: cluster-config\n  namespace: flux-system\nspec:\n  interval: 1m # How often to check for changes\n  url: https://github.com/org/repo # Source location\n---\napiVersion: kustomize.toolkit.fluxcd.io/v1\nkind: Kustomization\nmetadata:\n  name: app-sync\n  namespace: flux-system\nspec:\n  path: ./deployments # Path to manifests\n  prune: true # Remove resources not in Git",
+    "explanation": "This maps to the scenario by defining the GitRepository source and the Kustomization controller to enforce the desired state defined in the repository."
+  },
+  "sources": [
+    {
+      "url": "https://fluxcd.io/flux/",
+      "label": "Flux Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Multi-Cluster Configuration Synchronization, what is the primary role of Flux in solving configuration drift?",
+      "options": [
+        "It acts as a manual approval gate for all cluster changes.",
+        "It treats Git as the single source of truth and automatically reconciles cluster state.",
+        "It replaces Kubernetes RBAC with a proprietary security model.",
+        "It provides a dashboard to manually push updates to clusters."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on Flux's ability to use Git as the source of truth to automate reconciliation.",
+      "evidence": "Flux enables declarative delivery by treating Git as the single source of truth, where custom controllers automatically reconcile the cluster state with defined Git repository configurations, ensuring consistency through continuous automated synchronization."
+    },
+    {
+      "question": "In Automated Multi-Cluster Configuration Synchronization, what is a limitation of the Flux reconciliation process?",
+      "options": [
+        "It cannot handle more than two Kubernetes clusters.",
+        "It requires manual intervention for every synchronization cycle.",
+        "It may stall if the Git repository is unreachable or contains malformed manifests.",
+        "It is incompatible with Kustomize or Helm configurations."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies repository reachability and manifest validity as points of failure.",
+      "evidence": "Flux relies on the Git repository as the source of truth; if the repository becomes unreachable or contains malformed manifests, reconciliation will stall, which can be checked by inspecting the status field of the Kustomization resource."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:45.114Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:41.421Z"
+}

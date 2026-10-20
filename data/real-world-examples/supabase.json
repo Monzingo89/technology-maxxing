@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "supabase",
+  "title": "Real-time Inventory Sync for Boutique Retail",
+  "business": "A boutique retail chain managing high-turnover inventory across multiple physical locations and a web storefront.",
+  "problem": "The business suffers from overselling items because their legacy database lacks a mechanism to push stock updates to client devices instantly, leading to manual reconciliation costs and customer dissatisfaction.",
+  "solution": "Supabase provides a managed Postgres database with built-in Realtime functionality, allowing the application to broadcast database changes directly to connected client sessions without polling.",
+  "steps": [
+    "Initialize the project using the Supabase CLI to establish the local development environment.",
+    "Define the inventory table schema within the Postgres database.",
+    "Enable Realtime on the inventory table to track row-level changes.",
+    "Implement a client-side subscription in the storefront application to listen for inventory updates.",
+    "Apply Row Level Security policies to ensure only authorized staff can modify stock levels."
+  ],
+  "outcome": "The storefront reflects accurate, live inventory counts across all user sessions, effectively eliminating the risk of overselling popular items.",
+  "limitation": "Realtime subscriptions consume database connection slots and memory; developers must monitor the number of active channels to ensure the database remains performant under heavy concurrent load.",
+  "diagram": {
+    "kind": "er",
+    "title": "Inventory Sync Architecture",
+    "description": "This diagram illustrates how database changes propagate to the client.",
+    "nodes": [
+      {
+        "id": "db",
+        "label": "Postgres DB",
+        "detail": "Stores inventory rows"
+      },
+      {
+        "id": "rt",
+        "label": "Realtime Engine",
+        "detail": "Listens for DB changes"
+      },
+      {
+        "id": "client",
+        "label": "Storefront App",
+        "detail": "Displays live stock"
+      },
+      {
+        "id": "admin",
+        "label": "POS System",
+        "detail": "Updates inventory"
+      }
+    ],
+    "edges": [
+      {
+        "from": "admin",
+        "to": "db",
+        "label": "writes update"
+      },
+      {
+        "from": "db",
+        "to": "rt",
+        "label": "triggers change event"
+      },
+      {
+        "from": "rt",
+        "to": "client",
+        "label": "broadcasts update"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const channel = supabase.channel('inventory-updates')\n  .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'inventory' }, payload => {\n    console.log('Stock changed:', payload.new) // Update UI state dynamically\n  })\n  .subscribe()",
+    "explanation": "This code demonstrates subscribing to database changes in the Real-time Inventory Sync for Boutique Retail scenario to update the UI instantly when stock levels change."
+  },
+  "sources": [
+    {
+      "url": "https://supabase.com/docs",
+      "label": "Supabase Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Sync for Boutique Retail, what is the primary technical reason for implementing Supabase?",
+      "options": [
+        "To replace the need for a relational database entirely",
+        "To enable instant broadcast of database changes to clients",
+        "To automate the physical shipping of inventory items",
+        "To reduce the cost of cloud storage for images"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights the need to push stock updates to client devices instantly to prevent overselling, which is solved by Supabase's Realtime functionality.",
+      "evidence": "Supabase provides a managed Postgres database with built-in Realtime functionality, allowing the application to broadcast database changes directly to connected client sessions without polling."
+    },
+    {
+      "question": "Regarding the implementation of Real-time Inventory Sync for Boutique Retail, what is a critical operational limitation?",
+      "options": [
+        "The inability to use standard SQL queries",
+        "The requirement to use only mobile devices",
+        "The consumption of database connection slots and memory",
+        "The mandatory use of external identity providers"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that Realtime subscriptions consume database resources, which must be monitored.",
+      "evidence": "Realtime subscriptions consume database connection slots and memory; developers must monitor the number of active channels to ensure the database remains performant under heavy concurrent load."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:38.926Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:35.025Z"
+}

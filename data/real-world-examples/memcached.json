@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "memcached",
+  "title": "Optimizing Catalog Retrieval for E-commerce",
+  "business": "An online retailer with a high-traffic product catalog that requires frequent database lookups for static item descriptions.",
+  "problem": "Database latency spikes during peak shopping hours due to redundant queries for identical product data across multiple web server nodes.",
+  "solution": "Memcached provides a distributed memory object caching system that creates a unified virtual pool of memory, allowing all web servers to retrieve frequently accessed product data from a shared cache instead of the primary database.",
+  "steps": [
+    "Provision a dedicated cluster of Memcached server nodes to act as the shared memory layer.",
+    "Configure web application nodes to connect to the Memcached cluster using a consistent hashing client library.",
+    "Implement a cache-aside pattern where the application checks Memcached before querying the database.",
+    "Update the application logic to write retrieved database results into Memcached with an appropriate expiration time.",
+    "Monitor cache hit rates to ensure the distributed memory pool is effectively reducing backend database load."
+  ],
+  "outcome": "Reduced database CPU utilization and faster response times for end-users as product data is served from memory.",
+  "limitation": "Because Memcached is an ephemeral cache, data is not persistent; if a node fails or the cache is cleared, the application must be able to gracefully fall back to the primary database to repopulate the missing items.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distributed Cache Architecture",
+    "description": "Shows how multiple web servers interact with a shared Memcached pool to reduce database load.",
+    "nodes": [
+      {
+        "id": "web1",
+        "label": "Web Server A",
+        "detail": "Application node"
+      },
+      {
+        "id": "web2",
+        "label": "Web Server B",
+        "detail": "Application node"
+      },
+      {
+        "id": "mem",
+        "label": "Memcached Cluster",
+        "detail": "Shared virtual memory pool"
+      },
+      {
+        "id": "db",
+        "label": "Database",
+        "detail": "Primary persistent storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "web1",
+        "to": "mem",
+        "label": "read/write cache"
+      },
+      {
+        "from": "web2",
+        "to": "mem",
+        "label": "read/write cache"
+      },
+      {
+        "from": "mem",
+        "to": "db",
+        "label": "fallback on miss"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.memcached.org/about",
+      "label": "memcached - a distributed memory object caching system"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Catalog Retrieval for E-commerce, why is a distributed cache used?",
+      "options": [
+        "To replace the database entirely for all transactions",
+        "To provide a unified virtual pool of memory to reduce database load",
+        "To ensure permanent storage of product descriptions",
+        "To increase the number of web server nodes required"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that redundant database queries cause latency, and the solution uses a distributed cache to share memory across nodes, alleviating that specific load.",
+      "evidence": "Memcached provides a distributed memory object caching system that creates a unified virtual pool of memory, allowing all web servers to retrieve frequently accessed product data from a shared cache instead of the primary database."
+    },
+    {
+      "question": "In Optimizing Catalog Retrieval for E-commerce, what is a primary limitation of the implementation?",
+      "options": [
+        "The cache is too slow for high-traffic environments",
+        "Data is not persistent and requires a fallback mechanism",
+        "It prevents the database from ever being updated",
+        "It requires a single, non-distributed server node"
+      ],
+      "answerIndex": 1,
+      "explanation": "Memcached is ephemeral, meaning it does not store data permanently, requiring the application to handle cache misses by querying the database.",
+      "evidence": "Because Memcached is an ephemeral cache, data is not persistent; if a node fails or the cache is cleared, the application must be able to gracefully fall back to the primary database to repopulate the missing items."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:23.262Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:19.761Z"
+}

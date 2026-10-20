@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "tekton",
+  "title": "Automated Microservice Build Orchestration",
+  "business": "A cloud-native fintech startup managing dozens of independent microservices.",
+  "problem": "Manual build scripts and inconsistent CI environments lead to deployment drift and frequent integration failures during the release cycle.",
+  "solution": "Implementing Tekton Pipelines allows the team to define reusable, version-controlled build steps as Kubernetes custom resources, ensuring that every microservice follows a standardized, immutable build process within the cluster.",
+  "steps": [
+    "Define individual build steps as Task resources to encapsulate specific logic like unit testing or container image building.",
+    "Compose these Tasks into a Pipeline resource to define the sequential execution order for the microservice build.",
+    "Configure a PipelineRun to trigger the execution of the defined Pipeline against a specific source code repository.",
+    "Utilize the Tekton Catalog to pull pre-verified, reusable Task definitions for common operations like Git cloning or image pushing."
+  ],
+  "outcome": "Standardized build artifacts and reduced configuration drift across the microservice architecture, leading to more reliable and predictable deployment cycles.",
+  "limitation": "Tekton resources are stored as Kubernetes objects, which can lead to cluster state bloat if old PipelineRuns are not pruned; check this by monitoring the count of completed PipelineRun resources in the namespace.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Tekton Pipeline Execution Flow",
+    "description": "This diagram illustrates the flow from source code to a completed build artifact using Tekton components.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "Git repository containing microservice code"
+      },
+      {
+        "id": "b",
+        "label": "Task",
+        "detail": "Reusable unit of work like testing"
+      },
+      {
+        "id": "c",
+        "label": "Pipeline",
+        "detail": "Orchestration of multiple Tasks"
+      },
+      {
+        "id": "d",
+        "label": "PipelineRun",
+        "detail": "The execution instance of a Pipeline"
+      },
+      {
+        "id": "e",
+        "label": "Artifact",
+        "detail": "Final container image"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "triggers"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "executes"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "produces"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://tekton.dev/docs/",
+      "label": "Tekton Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Microservice Build Orchestration, what is the primary benefit of using Tekton Pipelines?",
+      "options": [
+        "Eliminating the need for Kubernetes clusters",
+        "Ensuring standardized, immutable build processes",
+        "Automatically generating business metrics",
+        "Replacing the need for Git version control"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution highlights that Tekton ensures every microservice follows a standardized, immutable build process.",
+      "evidence": "Implementing Tekton Pipelines allows the team to define reusable, version-controlled build steps as Kubernetes custom resources, ensuring that every microservice follows a standardized, immutable build process within the cluster."
+    },
+    {
+      "question": "In Automated Microservice Build Orchestration, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use the Tekton Catalog",
+        "The requirement to write all scripts in YAML",
+        "The potential for cluster state bloat from old PipelineRuns",
+        "The lack of support for container image building"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about cluster state bloat caused by unpruned PipelineRuns.",
+      "evidence": "Tekton resources are stored as Kubernetes objects, which can lead to cluster state bloat if old PipelineRuns are not pruned; check this by monitoring the count of completed PipelineRun resources in the namespace."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:03.029Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:59.084Z"
+}

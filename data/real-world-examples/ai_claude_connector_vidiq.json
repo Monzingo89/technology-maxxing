@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_vidiq",
+  "title": "Cross-Platform Content Strategy Alignment",
+  "business": "A mid-sized digital media agency managing diverse creator accounts across YouTube, Instagram, and TikTok.",
+  "problem": "The agency struggles with fragmented content research, where teams manually pivot between platforms to identify trending topics, leading to inconsistent messaging and missed opportunities for cross-platform content repurposing.",
+  "solution": "By integrating the vidIQ connector into Claude, the agency centralizes its research workflow. Claude uses vidIQ tools to query YouTube transcripts and outlier data alongside Instagram and TikTok trend insights, allowing the agency to synthesize a unified content strategy that adapts the same core narrative for different platform formats.",
+  "steps": [
+    "Authenticate the vidIQ connector within the Claude interface to enable access to creator intelligence tools.",
+    "Use vidiq_youtube_search and vidiq_outliers to identify high-performing topics across the agency's niche.",
+    "Extract relevant transcripts using vidiq_video_transcript to identify key talking points and narrative hooks.",
+    "Cross-reference findings with Instagram and TikTok trend data to tailor the script for short-form video formats.",
+    "Generate platform-specific titles and descriptions using the synthesized research data."
+  ],
+  "outcome": "The agency achieves a cohesive content calendar where video narratives are strategically aligned across platforms, reducing research time and increasing the relevance of repurposed content.",
+  "limitation": "Instagram data is not sourced through Meta’s official API, meaning the insights rely on third-party collection methods; users should verify critical engagement trends against native platform dashboards to ensure data accuracy.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cross-Platform Research Workflow",
+    "description": "This flow illustrates how Claude acts as a central hub to process multi-platform data into a unified strategy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Interface",
+        "detail": "Central orchestration layer"
+      },
+      {
+        "id": "b",
+        "label": "vidIQ Connector",
+        "detail": "Tool execution layer"
+      },
+      {
+        "id": "c",
+        "label": "Platform Data",
+        "detail": "YouTube, Instagram, TikTok"
+      },
+      {
+        "id": "d",
+        "label": "Strategy Output",
+        "detail": "Unified content calendar"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes tools"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "fetches trends"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns raw data"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "provides insights"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "generates strategy"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/vidiq",
+      "label": "vidIQ connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Platform Content Strategy Alignment, how does the integration address the agency's research challenges?",
+      "options": [
+        "By centralizing research across platforms to create a unified content strategy.",
+        "By automating the direct upload of videos to Instagram and TikTok.",
+        "By replacing the need for human creative input in script writing.",
+        "By providing exclusive access to Meta's internal advertising metrics."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the connector to synthesize research from multiple platforms into a single, cohesive strategy.",
+      "evidence": "By integrating the vidIQ connector into Claude, the agency centralizes its research workflow. Claude uses vidIQ tools to query YouTube transcripts and outlier data alongside Instagram and TikTok trend insights, allowing the agency to synthesize a unified content strategy that adapts the same core narrative for different platform formats."
+    },
+    {
+      "question": "In Cross-Platform Content Strategy Alignment, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access YouTube transcript data.",
+        "Instagram data is not sourced through Meta’s official API, requiring verification.",
+        "The connector is incompatible with TikTok trend research.",
+        "Claude cannot process the data returned by the vidIQ tools."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario explicitly note that Instagram data is not official and should be verified.",
+      "evidence": "Instagram data is not sourced through Meta’s official API, meaning the insights rely on third-party collection methods; users should verify critical engagement trends against native platform dashboards to ensure data accuracy."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:08.167Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:04.517Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_key_vault_keys",
+  "title": "Securing Financial Transaction Signing Keys",
+  "business": "A regional fintech firm managing high-frequency payment processing.",
+  "problem": "The firm struggles with insecure local storage of cryptographic keys, creating a single point of failure where a compromised server exposes all transaction signing capabilities.",
+  "solution": "Azure Key Vault Keys centralizes the lifecycle management of cryptographic keys, offloading the protection to a hardened, cloud-based vault that supports both software and hardware-backed security modules.",
+  "steps": [
+    "Provision an Azure Key Vault instance within the secure production resource group.",
+    "Define an Access Policy or RBAC role granting the application service principal permission to perform cryptographic operations.",
+    "Generate a new RSA or EC key within the vault, ensuring the key usage is restricted to signing and verification.",
+    "Integrate the application code to call the Key Vault API for signing operations rather than handling raw private keys locally."
+  ],
+  "outcome": "The application performs cryptographic signing operations without ever exposing the private key material to the application memory or local disk.",
+  "limitation": "Latency overhead is introduced by network calls to the vault for every signing operation, which can be checked by monitoring the Key Vault service latency metrics in Azure Monitor.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Key Vault Signing Workflow",
+    "description": "Shows how an application requests a signature from the vault.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Application",
+        "detail": "Service requesting signature"
+      },
+      {
+        "id": "b",
+        "label": "Azure Key Vault",
+        "detail": "Hardened key storage"
+      },
+      {
+        "id": "c",
+        "label": "Cryptographic Key",
+        "detail": "Stored key material"
+      },
+      {
+        "id": "d",
+        "label": "Signed Data",
+        "detail": "Result returned to app"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends hash for signing"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Uses key to sign"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Returns digital signature"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Financial Transaction Signing Keys, how does the solution mitigate the risk of key exposure?",
+      "options": [
+        "By offloading cryptographic operations to a hardened vault so keys are never exposed to application memory.",
+        "By encrypting the local disk where the keys are stored using standard operating system tools.",
+        "By rotating the keys every hour to ensure that a compromise is only temporary.",
+        "By moving all transaction processing to an on-premises hardware security module."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the application performs operations without exposing private key material to application memory or local disk.",
+      "evidence": "The application performs cryptographic signing operations without ever exposing the private key material to the application memory or local disk."
+    },
+    {
+      "question": "In Securing Financial Transaction Signing Keys, what is a primary operational tradeoff of using the vault?",
+      "options": [
+        "The vault requires manual key rotation every week.",
+        "Network latency is introduced by API calls for each signing operation.",
+        "The vault cannot support RSA keys, only elliptic curve keys.",
+        "The application must store the master key locally to unlock the vault."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that network latency is a byproduct of offloading operations to the cloud vault.",
+      "evidence": "Latency overhead is introduced by network calls to the vault for every signing operation, which can be checked by monitoring the Key Vault service latency metrics in Azure Monitor."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:50.705Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

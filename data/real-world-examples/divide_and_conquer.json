@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "divide_and_conquer",
+  "title": "Logistics Route Optimization",
+  "business": "Global logistics firms managing complex delivery networks.",
+  "problem": "High computational overhead when calculating optimal delivery paths across thousands of regional hubs simultaneously.",
+  "solution": "Divide and Conquer decomposes the massive global network into smaller, independent regional sub-graphs, solves the routing for each independently, and merges the results into a global schedule.",
+  "steps": [
+    "Partition the global delivery map into distinct geographical sectors.",
+    "Assign each sector to an independent processing node to calculate local optimal paths.",
+    "Aggregate the local path solutions into a unified master route plan.",
+    "Validate the combined route against global constraints to ensure connectivity."
+  ],
+  "outcome": "Reduced processing time and improved scalability for route planning without requiring a single monolithic calculation.",
+  "limitation": "The overhead of merging sub-solutions can become a bottleneck if the subproblems are not truly independent; check this by measuring the time spent in the merge phase relative to the solve phase.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Divide and Conquer Routing Flow",
+    "description": "Shows the transformation from a large problem into solved sub-units and the final merge.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Global Map",
+        "detail": "Input: Full delivery network"
+      },
+      {
+        "id": "b",
+        "label": "Partitioning",
+        "detail": "Split into sub-regions"
+      },
+      {
+        "id": "c",
+        "label": "Regional Solver",
+        "detail": "Independent path calculation"
+      },
+      {
+        "id": "d",
+        "label": "Merge Engine",
+        "detail": "Combine regional results"
+      },
+      {
+        "id": "e",
+        "label": "Master Route",
+        "detail": "Output: Global schedule"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Decompose"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Distribute"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Collect"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Finalize"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Route Optimization, how does the technology address the problem of high computational overhead?",
+      "options": [
+        "By decomposing the global network into independent sub-graphs for parallel processing.",
+        "By using a single monolithic calculation to ensure perfect global accuracy.",
+        "By ignoring regional constraints to simplify the mathematical model.",
+        "By replacing all delivery paths with a random selection algorithm."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the technology addresses overhead by decomposing the network into smaller, independent sub-graphs.",
+      "evidence": "Divide and Conquer decomposes the massive global network into smaller, independent regional sub-graphs, solves the routing for each independently, and merges the results into a global schedule."
+    },
+    {
+      "question": "In Logistics Route Optimization, what is a primary limitation of the Divide and Conquer approach?",
+      "options": [
+        "The algorithm cannot handle more than ten delivery hubs.",
+        "The merge phase can become a bottleneck if subproblems are not truly independent.",
+        "It requires significantly more memory than a brute force approach.",
+        "It is impossible to validate the final route against global constraints."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies the merge phase as a potential bottleneck when subproblems lack independence.",
+      "evidence": "The overhead of merging sub-solutions can become a bottleneck if the subproblems are not truly independent; check this by measuring the time spent in the merge phase relative to the solve phase."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:42.200Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

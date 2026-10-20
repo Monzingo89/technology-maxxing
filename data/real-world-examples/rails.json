@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "rails",
+  "title": "Streamlining Subscription Management for Boutique SaaS",
+  "business": "A boutique SaaS provider managing recurring billing for niche software tools.",
+  "problem": "Manual database schema management and fragmented controller logic lead to inconsistent billing states and high maintenance costs when adding new subscription tiers.",
+  "solution": "Ruby on Rails utilizes the Active Record pattern to encapsulate business logic directly within models, ensuring that state transitions for subscriptions are consistent and automatically mapped to the underlying database schema.",
+  "steps": [
+    "Define the Subscription model using Active Record to encapsulate billing state logic.",
+    "Configure routes to map subscription endpoints to the SubscriptionController.",
+    "Implement controller actions to process incoming subscription requests and parameters.",
+    "Use model callbacks to trigger asynchronous background jobs for billing updates.",
+    "Render subscription views using Action View to display current status to users."
+  ],
+  "outcome": "A unified, maintainable codebase where business rules are centralized, reducing the risk of data corruption during subscription lifecycle changes.",
+  "limitation": "The tight coupling of business logic to models can lead to 'fat models' that become difficult to test as the application grows; verify this by monitoring the cyclomatic complexity of model methods.",
+  "diagram": {
+    "kind": "er",
+    "title": "Subscription Management Entity Relationship",
+    "description": "Shows the relationship between users, their subscriptions, and the billing events triggered by model changes.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "User",
+        "detail": "id, name, email"
+      },
+      {
+        "id": "sub",
+        "label": "Subscription",
+        "detail": "id, status, user_id"
+      },
+      {
+        "id": "job",
+        "label": "DeliveryJob",
+        "detail": "id, subscription_id, status"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "sub",
+        "label": "has_many (1:N)"
+      },
+      {
+        "from": "sub",
+        "to": "job",
+        "label": "triggers (1:N)"
+      }
+    ]
+  },
+  "code": {
+    "language": "ruby",
+    "content": "class Subscription < ApplicationRecord\n  belongs_to :user\n  # Encapsulates state logic within the model\n  after_save_commit :process_billing, if: :active?\n\n  def process_billing\n    BillingJob.perform_later(self)\n  end\nend",
+    "explanation": "This code demonstrates how Rails encapsulates business logic within the model, using callbacks to trigger background jobs automatically when a subscription state changes."
+  },
+  "sources": [
+    {
+      "url": "https://rubyonrails.org/",
+      "label": "Ruby on Rails"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Subscription Management for Boutique SaaS, how does the framework address the problem of inconsistent billing states?",
+      "options": [
+        "By centralizing business logic within Active Record models.",
+        "By moving all logic into the view layer for better visibility.",
+        "By requiring manual SQL queries for every database interaction.",
+        "By eliminating the need for controllers entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that Rails uses the Active Record pattern to encapsulate business logic within models to ensure consistency.",
+      "evidence": "Ruby on Rails utilizes the Active Record pattern to encapsulate business logic directly within models, ensuring that state transitions for subscriptions are consistent and automatically mapped to the underlying database schema."
+    },
+    {
+      "question": "What is a primary limitation of the implementation approach described in Streamlining Subscription Management for Boutique SaaS?",
+      "options": [
+        "The framework does not support background jobs.",
+        "Models can become 'fat' and difficult to test as logic grows.",
+        "Database schema management is entirely manual.",
+        "The framework cannot handle multiple subscription tiers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that tight coupling of logic to models leads to 'fat models' that are harder to maintain.",
+      "evidence": "The tight coupling of business logic to models can lead to 'fat models' that become difficult to test as the application grows; verify this by monitoring the cyclomatic complexity of model methods."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:30.462Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:27.180Z"
+}

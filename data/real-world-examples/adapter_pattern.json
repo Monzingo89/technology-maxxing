@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "adapter_pattern",
+  "title": "Legacy Logistics Integration",
+  "business": "A modern logistics platform that needs to integrate with a legacy warehouse management system.",
+  "problem": "The modern platform expects a standardized JSON-based API for inventory updates, but the legacy warehouse system only provides a proprietary XML-based file export service that cannot be modified.",
+  "solution": "The Adapter pattern introduces an intermediary component that translates the legacy XML data structure into the JSON format required by the modern platform, allowing the two systems to communicate without changing their internal logic.",
+  "steps": [
+    "Identify the target interface required by the modern logistics platform.",
+    "Analyze the legacy XML schema provided by the warehouse system.",
+    "Create an Adapter class that implements the target interface.",
+    "Implement the translation logic within the Adapter to map XML tags to JSON fields.",
+    "Inject the Adapter into the logistics platform to process incoming data."
+  ],
+  "outcome": "The logistics platform gains the ability to ingest inventory data from the legacy system seamlessly, ensuring consistent stock levels without requiring expensive rewrites of the warehouse software.",
+  "limitation": "The primary limitation is the overhead of maintaining translation logic; if the legacy system updates its XML schema, the Adapter must be manually updated to reflect those changes, which can be checked by monitoring integration test failures.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Adapter Pattern Data Flow",
+    "description": "This diagram shows how the Adapter bridges the gap between the legacy source and the modern client.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy System",
+        "detail": "Source of XML data"
+      },
+      {
+        "id": "b",
+        "label": "Adapter",
+        "detail": "Translates XML to JSON"
+      },
+      {
+        "id": "c",
+        "label": "Modern Platform",
+        "detail": "Client expecting JSON"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends XML"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides JSON"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Logistics Integration, what is the primary reason for using an Adapter?",
+      "options": [
+        "To replace the legacy system entirely.",
+        "To translate incompatible data formats between two systems.",
+        "To improve the performance of the modern platform.",
+        "To store session state in a database."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes a mismatch between a JSON-based platform and an XML-based legacy system, which the Adapter resolves through translation.",
+      "evidence": "The Adapter pattern introduces an intermediary component that translates the legacy XML data structure into the JSON format required by the modern platform"
+    },
+    {
+      "question": "In Legacy Logistics Integration, what is a key trade-off of the implementation?",
+      "options": [
+        "The Adapter requires constant hardware upgrades.",
+        "The Adapter cannot handle large amounts of data.",
+        "The Adapter requires manual updates if the legacy schema changes.",
+        "The Adapter prevents the modern platform from using JSON."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that the translation logic is fragile and requires maintenance whenever the source system's schema changes.",
+      "evidence": "if the legacy system updates its XML schema, the Adapter must be manually updated to reflect those changes"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:15.014Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

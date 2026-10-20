@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "prompt_engineering",
+  "title": "Automated Legal Compliance Summarization",
+  "business": "Legal tech firms managing high volumes of regulatory filings.",
+  "problem": "Inconsistent summarization of complex legal documents leading to manual review bottlenecks and increased operational costs.",
+  "solution": "Implementing structured prompt engineering by separating system-level instructions from user-provided document content to ensure consistent, role-based output formatting.",
+  "steps": [
+    "Define a developer role message containing specific summarization constraints and output style guidelines.",
+    "Inject the raw regulatory text into a user role message to isolate data from logic.",
+    "Pin the application to a specific model snapshot to ensure consistent behavior across deployments.",
+    "Integrate evaluation suites to measure prompt performance before pushing updates to production."
+  ],
+  "outcome": "Standardized, predictable summaries that reduce the cognitive load on legal analysts during the review process.",
+  "limitation": "Non-deterministic output generation; check this by maintaining representative fixtures and running automated evaluation suites to monitor performance as you iterate.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Prompt Engineering Data Flow",
+    "description": "The flow shows how developer instructions and user data are combined to produce a compliant output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer Message",
+        "detail": "System rules and constraints"
+      },
+      {
+        "id": "b",
+        "label": "User Message",
+        "detail": "Raw regulatory input"
+      },
+      {
+        "id": "c",
+        "label": "Responses API",
+        "detail": "Model processing"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Summary",
+        "detail": "Final structured output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "defines logic"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const response = await client.responses.create({\n  model: \"gpt-6-astra\",\n  input: [\n    { role: \"developer\", content: \"Summarize legal text into 3 bullet points.\" }, // Defines logic\n    { role: \"user\", content: \"[Regulatory Document Text]\" } // Provides input data\n  ],\n});",
+    "explanation": "This maps to the scenario by separating the developer's summarization instructions from the user's specific regulatory document content."
+  },
+  "sources": [
+    {
+      "url": "https://platform.openai.com/docs/guides/prompt-engineering",
+      "label": "Prompt engineering"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Compliance Summarization, how does the proposed solution address the problem of inconsistent summarization?",
+      "options": [
+        "By separating system-level instructions from user-provided document content to ensure consistent, role-based output formatting.",
+        "By using a single prompt containing both instructions and data to simplify the API call structure.",
+        "By relying on the model's inherent ability to guess the desired legal tone without explicit guidance.",
+        "By removing the need for human review through fully autonomous regulatory decision-making."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that separating instructions from content ensures consistency.",
+      "evidence": "Implementing structured prompt engineering by separating system-level instructions from user-provided document content to ensure consistent, role-based output formatting."
+    },
+    {
+      "question": "In Automated Legal Compliance Summarization, what is a primary limitation of the approach and how should it be managed?",
+      "options": [
+        "The model is too fast, so you must add artificial delays to the API calls.",
+        "The model is non-deterministic, so you must use evaluation suites and fixtures to monitor performance.",
+        "The model cannot handle long documents, so you must truncate all input text to 100 words.",
+        "The model requires a paid subscription, so you must implement a local caching layer for all requests."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights non-determinism and the need for evaluation suites.",
+      "evidence": "Non-deterministic output generation; check this by maintaining representative fixtures and running automated evaluation suites to monitor performance as you iterate."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:51.384Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:47.361Z"
+}

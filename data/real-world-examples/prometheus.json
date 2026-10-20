@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "prometheus",
+  "title": "Dynamic Microservice Traffic Observability",
+  "business": "A logistics firm managing a fleet of autonomous delivery drones that rely on a distributed microservice architecture to coordinate routing and battery management.",
+  "problem": "The engineering team struggles to identify which specific microservice instance is experiencing latency spikes during peak delivery hours, leading to delayed routing updates and potential drone battery depletion.",
+  "solution": "Prometheus provides a multi-dimensional data model that allows the team to attach labels to metrics, such as instance IDs and service versions, enabling precise identification of problematic nodes via PromQL queries.",
+  "steps": [
+    "Instrument the drone routing microservices using Prometheus client libraries to expose HTTP endpoints for metrics.",
+    "Configure the Prometheus server with service discovery to automatically detect new drone routing instances as they scale.",
+    "Define scraping intervals in the Prometheus configuration to pull metrics from the discovered service endpoints.",
+    "Develop PromQL queries to aggregate request latency across specific service versions and instance labels.",
+    "Set up Alertmanager to notify the operations team when latency thresholds are breached for specific service clusters."
+  ],
+  "outcome": "The operations team gains granular visibility into service performance, allowing them to isolate and restart specific failing instances without impacting the entire delivery network.",
+  "limitation": "Prometheus is designed for reliability rather than absolute data accuracy; it is unsuitable for per-request billing because samples may be missed during scrape intervals. To check for data gaps, monitor the 'scrape_series_added' and 'scrape_samples_scraped' metrics to ensure expected ingestion rates.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Prometheus Metrics Collection Flow",
+    "description": "This diagram shows how Prometheus interacts with microservices to collect and visualize data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Service Discovery",
+        "detail": "Identifies active drone routing instances"
+      },
+      {
+        "id": "b",
+        "label": "Prometheus Server",
+        "detail": "Scrapes and stores time series data"
+      },
+      {
+        "id": "c",
+        "label": "Microservice Instance",
+        "detail": "Exposes metrics via HTTP"
+      },
+      {
+        "id": "d",
+        "label": "Visualization Tool",
+        "detail": "Queries Prometheus for dashboards"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "updates target list"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "pulls metrics over HTTP"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "queries via PromQL"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://prometheus.io/docs/introduction/overview/",
+      "label": "Overview | Prometheus"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Microservice Traffic Observability, how does the solution address the problem of latency spikes?",
+      "options": [
+        "By using labels to identify specific service instances and versions.",
+        "By implementing a centralized billing system for drone requests.",
+        "By replacing the microservice architecture with a single monolithic server.",
+        "By pushing metrics to a gateway to ensure 100% data accuracy."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages Prometheus's multi-dimensional data model to tag metrics with instance-specific information, allowing for precise isolation of issues.",
+      "evidence": "Prometheus provides a multi-dimensional data model that allows the team to attach labels to metrics, such as instance IDs and service versions, enabling precise identification of problematic nodes via PromQL queries."
+    },
+    {
+      "question": "In Dynamic Microservice Traffic Observability, what is a key limitation of the monitoring approach?",
+      "options": [
+        "It cannot monitor microservices that use HTTP.",
+        "It is not suitable for per-request billing due to potential data gaps.",
+        "It requires a distributed storage backend to function.",
+        "It cannot be used for alerting during system failures."
+      ],
+      "answerIndex": 1,
+      "explanation": "Prometheus prioritizes reliability over 100% data accuracy, making it inappropriate for use cases like billing where every single request must be accounted for.",
+      "evidence": "Prometheus is designed for reliability rather than absolute data accuracy; it is unsuitable for per-request billing because samples may be missed during scrape intervals."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:49.622Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:46.124Z"
+}

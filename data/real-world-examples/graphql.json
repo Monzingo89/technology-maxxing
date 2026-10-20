@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "graphql",
+  "title": "Unified Logistics Schema Integration",
+  "business": "A global logistics provider managing diverse shipping, warehousing, and customs data across disparate legacy microservices.",
+  "problem": "The engineering team struggles with over-fetching and under-fetching data because existing REST endpoints return rigid, bloated payloads that require multiple sequential network requests to assemble a single shipment view.",
+  "solution": "Implementing a GraphQL layer allows the frontend to request exactly the fields needed for a shipment dashboard in a single round trip, using a strongly typed schema to map relationships between disparate services.",
+  "steps": [
+    "Define a unified schema using GraphQL types to represent core entities like Shipments, Warehouses, and CustomsDocs.",
+    "Implement resolvers that fetch data from underlying legacy REST APIs and aggregate the results.",
+    "Expose a single HTTP endpoint that validates incoming queries against the schema before execution.",
+    "Enable introspection to allow frontend developers to discover available fields and relationships dynamically."
+  ],
+  "outcome": "Developers achieve higher frontend velocity by reducing the number of network requests and eliminating the need for client-side data transformation logic.",
+  "limitation": "The primary trade-off is the complexity of the N+1 problem, where a single query for a list of shipments could trigger excessive backend requests; this is checked by monitoring resolver execution patterns and implementing data loaders.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Schema Relationship",
+    "description": "Shows how the GraphQL layer acts as a unified interface over distributed services.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Requests specific fields"
+      },
+      {
+        "id": "b",
+        "label": "GraphQL Server",
+        "detail": "Validates and resolves"
+      },
+      {
+        "id": "c",
+        "label": "Shipment Service",
+        "detail": "Legacy REST API"
+      },
+      {
+        "id": "d",
+        "label": "Customs Service",
+        "detail": "Legacy REST API"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Resolve Shipment"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Resolve Customs"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const resolvers = { Query: { shipment: (_, { id }) => fetchShipment(id) } }; // Resolvers map schema fields to backend data sources",
+    "explanation": "This demonstrates how a resolver function connects a GraphQL query field to the actual data fetching logic for a shipment."
+  },
+  "sources": [
+    {
+      "url": "https://graphql.org/learn/",
+      "label": "Learn | GraphQL"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Schema Integration, why is GraphQL chosen over existing REST endpoints?",
+      "options": [
+        "To eliminate over-fetching and under-fetching by requesting exact data needs",
+        "To increase the number of network requests for better security",
+        "To force the frontend to handle complex data transformation logic",
+        "To replace all legacy microservices with a single database"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that REST endpoints cause over-fetching and under-fetching, which GraphQL solves by allowing precise data requests.",
+      "evidence": "The engineering team struggles with over-fetching and under-fetching data because existing REST endpoints return rigid, bloated payloads that require multiple sequential network requests to assemble a single shipment view."
+    },
+    {
+      "question": "In Unified Logistics Schema Integration, what is a primary limitation of the implementation?",
+      "options": [
+        "The inability to use HTTP for transport",
+        "The risk of the N+1 problem during resolver execution",
+        "The requirement to use only one microservice",
+        "The lack of schema validation"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly mentions the N+1 problem as a trade-off when using resolvers to aggregate data.",
+      "evidence": "The primary trade-off is the complexity of the N+1 problem, where a single query for a list of shipments could trigger excessive backend requests; this is checked by monitoring resolver execution patterns and implementing data loaders."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:55.658Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:51.942Z"
+}

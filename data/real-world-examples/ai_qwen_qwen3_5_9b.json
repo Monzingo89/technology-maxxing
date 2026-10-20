@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_5_9b",
+  "title": "Automated Logistics Manifest Verification",
+  "business": "Logistics and freight companies handling high-volume paper-based shipping documentation.",
+  "problem": "Manual data entry from scanned shipping manifests is error-prone and creates significant operational bottlenecks during peak transit periods.",
+  "solution": "Utilize the Qwen3.5-9B image-text-to-text model to ingest scanned manifest images and extract structured data directly into logistics management systems, bypassing manual transcription.",
+  "steps": [
+    "Configure the chat template to support multi-modal input for image processing.",
+    "Define a system prompt that instructs the model to identify specific fields like tracking IDs, weight, and destination.",
+    "Pass the scanned manifest image along with the text prompt to the model inference endpoint.",
+    "Parse the structured output returned by the model to update the internal database."
+  ],
+  "outcome": "Increased throughput of manifest processing and reduced human-in-the-loop verification requirements.",
+  "limitation": "The model may struggle with low-resolution or heavily skewed scans; verify accuracy by comparing extracted values against checksums or secondary validation fields.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Processing Pipeline",
+    "description": "The flow of data from physical scan to database entry.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scanner",
+        "detail": "Captures physical document as image"
+      },
+      {
+        "id": "b",
+        "label": "Qwen3.5-9B",
+        "detail": "Performs image-text-to-text extraction"
+      },
+      {
+        "id": "c",
+        "label": "Logistics DB",
+        "detail": "Stores structured manifest data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends image payload"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Writes extracted fields"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3.5-9B",
+      "label": "Qwen/Qwen3.5-9B · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Manifest Verification, how does the model address the identified bottleneck?",
+      "options": [
+        "By automating the transcription of scanned manifests into structured data.",
+        "By physically sorting the packages based on the scanned images.",
+        "By manually verifying every entry against a paper ledger.",
+        "By increasing the speed of the physical scanners."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the model's ability to perform image-text-to-text extraction to replace manual data entry.",
+      "evidence": "Utilize the Qwen3.5-9B image-text-to-text model to ingest scanned manifest images and extract structured data directly into logistics management systems, bypassing manual transcription."
+    },
+    {
+      "question": "In Automated Logistics Manifest Verification, what is a primary limitation to consider during implementation?",
+      "options": [
+        "The model cannot handle text in any language.",
+        "The model requires a dedicated physical server for every scan.",
+        "Low-resolution or skewed scans may impact extraction accuracy.",
+        "The model is unable to output structured data formats."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that image quality, such as low resolution or skew, can hinder the model's performance.",
+      "evidence": "The model may struggle with low-resolution or heavily skewed scans; verify accuracy by comparing extracted values against checksums or secondary validation fields."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:42.372Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:39.418Z"
+}

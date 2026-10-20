@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_app_runner",
+  "title": "Automated Logistics Dashboard Deployment",
+  "business": "A regional logistics firm managing real-time fleet tracking software.",
+  "problem": "The engineering team spends excessive time managing infrastructure patches and scaling configurations for their containerized web services, leading to delayed feature releases.",
+  "solution": "AWS App Runner provides a fully managed environment that abstracts the underlying compute and orchestration, allowing the team to deploy container images directly from their registry without manual server management.",
+  "steps": [
+    "Connect the container registry to the App Runner service.",
+    "Configure the service to trigger automatic deployments upon new image pushes.",
+    "Define the port and environment variables required by the logistics application.",
+    "Enable automatic scaling settings to handle fluctuating fleet tracking traffic."
+  ],
+  "outcome": "The team achieves faster deployment cycles and reduced operational overhead by delegating infrastructure maintenance to the managed service.",
+  "limitation": "App Runner is optimized for web-facing services and lacks support for persistent file systems or complex networking configurations required by legacy stateful applications. You can verify this by checking the service configuration limits in the AWS console.",
+  "diagram": {
+    "kind": "flow",
+    "title": "App Runner Deployment Pipeline",
+    "description": "This diagram shows the flow from code to a running web service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Pushes code to repository"
+      },
+      {
+        "id": "b",
+        "label": "Container Registry",
+        "detail": "Stores application images"
+      },
+      {
+        "id": "c",
+        "label": "AWS App Runner",
+        "detail": "Managed compute environment"
+      },
+      {
+        "id": "d",
+        "label": "End User",
+        "detail": "Accesses web application"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Builds and pushes image"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Triggers deployment"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Serves traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Dashboard Deployment, what is the primary benefit of using AWS App Runner?",
+      "options": [
+        "It eliminates the need for manual server management and infrastructure patching.",
+        "It provides persistent file storage for legacy stateful applications.",
+        "It allows for complex custom networking configurations.",
+        "It replaces the need for a container registry."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explains that App Runner abstracts compute and orchestration, removing the burden of manual infrastructure management.",
+      "evidence": "AWS App Runner provides a fully managed environment that abstracts the underlying compute and orchestration, allowing the team to deploy container images directly from their registry without manual server management."
+    },
+    {
+      "question": "In Automated Logistics Dashboard Deployment, what is a key limitation of the service?",
+      "options": [
+        "It cannot handle web-facing traffic.",
+        "It is not suitable for applications requiring persistent file systems.",
+        "It requires manual scaling for every traffic spike.",
+        "It cannot be integrated with container registries."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the lack of support for persistent file systems as a trade-off.",
+      "evidence": "App Runner is optimized for web-facing services and lacks support for persistent file systems or complex networking configurations required by legacy stateful applications."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:12.507Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

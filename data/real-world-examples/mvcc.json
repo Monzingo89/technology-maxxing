@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "mvcc",
+  "title": "Global Inventory Snapshot Consistency",
+  "business": "A multinational retail logistics provider managing real-time stock levels across thousands of warehouses.",
+  "problem": "The system faces severe contention when long-running analytical reports attempt to read inventory levels while high-frequency warehouse updates are simultaneously modifying row data, leading to blocking and application timeouts.",
+  "solution": "Multi-Version Concurrency Control (MVCC) allows the database to maintain multiple versions of a row simultaneously. When an analytical query begins, it is assigned a snapshot of the database state. This ensures the reader sees a consistent version of the data as it existed at the start of the transaction, while writers create new row versions without blocking the reader.",
+  "steps": [
+    "Configure the database to support MVCC-based transaction isolation levels.",
+    "Initiate a long-running analytical transaction to capture a stable data snapshot.",
+    "Perform concurrent write operations that generate new row versions in the underlying storage.",
+    "Allow the reader to continue processing the snapshot while writers commit new versions independently.",
+    "Execute periodic vacuuming processes to reclaim storage space from obsolete row versions."
+  ],
+  "outcome": "Analytical reports complete without being blocked by incoming warehouse updates, and write operations proceed without waiting for long-running read queries to finish, ensuring high system availability.",
+  "limitation": "The primary trade-off is storage bloat caused by the accumulation of dead row versions. This can be checked by monitoring the age of transactions and the accumulation of tuples that are no longer visible to any active transaction, which may require tuning the autovacuum process.",
+  "diagram": {
+    "kind": "flow",
+    "title": "MVCC Versioning Flow",
+    "description": "Shows how readers access snapshots while writers create new versions.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Original Row",
+        "detail": "Version 1"
+      },
+      {
+        "id": "b",
+        "label": "Reader Snapshot",
+        "detail": "Reads Version 1"
+      },
+      {
+        "id": "c",
+        "label": "Writer Transaction",
+        "detail": "Creates Version 2"
+      },
+      {
+        "id": "d",
+        "label": "Storage",
+        "detail": "Holds V1 and V2"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "reads"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "writes new version"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "persists"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Snapshot Consistency, how does MVCC resolve the problem of read-write contention?",
+      "options": [
+        "By forcing writers to wait until all readers finish their tasks.",
+        "By allowing readers to access a consistent snapshot while writers create new row versions.",
+        "By locking the entire table during write operations to ensure data integrity.",
+        "By rejecting all incoming write requests while a report is running."
+      ],
+      "answerIndex": 1,
+      "explanation": "MVCC allows readers to access a snapshot of the data as it existed at the start of the transaction, preventing them from being blocked by concurrent writers.",
+      "evidence": "This ensures the reader sees a consistent version of the data as it existed at the start of the transaction, while writers create new row versions without blocking the reader."
+    },
+    {
+      "question": "In Global Inventory Snapshot Consistency, what is a primary limitation of the MVCC implementation?",
+      "options": [
+        "The system becomes unable to perform any write operations.",
+        "The database requires a full restart to clear old row versions.",
+        "Storage bloat occurs due to the accumulation of obsolete row versions.",
+        "Readers are always forced to see stale data from the previous day."
+      ],
+      "answerIndex": 2,
+      "explanation": "MVCC maintains multiple versions of rows, which consumes extra storage space until those versions are cleaned up.",
+      "evidence": "The primary trade-off is storage bloat caused by the accumulation of dead row versions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:04.240Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

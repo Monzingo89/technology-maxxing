@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "file_svg",
+  "title": "Responsive Icon System for Global Retail",
+  "business": "Global e-commerce platforms requiring consistent branding across diverse screen resolutions.",
+  "problem": "Raster images like PNGs suffer from pixelation on high-density displays and require multiple file versions, increasing storage costs and load times.",
+  "solution": "Implementing Scalable Vector Graphics (SVG) allows for resolution-independent rendering, where a single file scales perfectly to any display size without quality loss.",
+  "steps": [
+    "Define the visual assets using XML-based vector paths to ensure mathematical precision.",
+    "Embed the SVG code directly into the HTML document or reference it as an external resource.",
+    "Apply CSS styling to the SVG elements to handle hover states or color themes dynamically.",
+    "Sanitize the SVG input to remove embedded scripts or malicious tags before rendering."
+  ],
+  "outcome": "A unified visual identity that maintains crisp edges on all devices while reducing the total number of assets managed in the content delivery network.",
+  "limitation": "Complex SVG files with excessive path data can increase parsing time; monitor the DOM complexity to ensure the browser does not experience layout thrashing.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SVG Asset Lifecycle",
+    "description": "The flow from design source to final browser rendering.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Vector Source",
+        "detail": "Design file"
+      },
+      {
+        "id": "b",
+        "label": "SVG Optimizer",
+        "detail": "Clean XML code"
+      },
+      {
+        "id": "c",
+        "label": "Security Filter",
+        "detail": "Remove scripts"
+      },
+      {
+        "id": "d",
+        "label": "Browser Engine",
+        "detail": "Render output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "export"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "validate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "render"
+      }
+    ]
+  },
+  "code": {
+    "language": "xml",
+    "content": "<svg viewBox='0 0 100 100'> <!-- Define coordinate system --> <circle cx='50' cy='50' r='40' fill='blue' /> <!-- Vector path geometry --> </svg>",
+    "explanation": "This code defines a simple vector circle that scales infinitely based on the viewBox attribute, mapping to the solution of resolution-independent rendering."
+  },
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/SVG2/",
+      "label": "Scalable Vector Graphics (SVG) 2"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Responsive Icon System for Global Retail, why is SVG preferred over raster formats?",
+      "options": [
+        "It provides resolution-independent rendering for all screen sizes.",
+        "It is the only format supported by legacy web browsers.",
+        "It automatically compresses all images to zero bytes.",
+        "It prevents the need for any CSS styling."
+      ],
+      "answerIndex": 0,
+      "explanation": "SVG allows for resolution-independent rendering, which solves the problem of pixelation on high-density displays.",
+      "evidence": "Implementing Scalable Vector Graphics (SVG) allows for resolution-independent rendering, where a single file scales perfectly to any display size without quality loss."
+    },
+    {
+      "question": "In Responsive Icon System for Global Retail, what is a primary trade-off when using SVG?",
+      "options": [
+        "The file format is not based on XML.",
+        "Complex path data can increase browser parsing time.",
+        "SVG files cannot be styled with CSS.",
+        "SVG files are always larger than PNG files."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson notes that complex files can impact performance, requiring monitoring of DOM complexity.",
+      "evidence": "Complex SVG files with excessive path data can increase parsing time; monitor the DOM complexity to ensure the browser does not experience layout thrashing."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:03.283Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:59.125Z"
+}

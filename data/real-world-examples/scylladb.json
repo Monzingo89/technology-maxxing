@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "scylladb",
+  "title": "Optimizing IoT Sensor Data Ingestion",
+  "business": "Industrial IoT providers managing millions of sensor streams.",
+  "problem": "Traditional relational databases struggle with high-velocity write throughput and horizontal scaling when handling time-series sensor data, leading to write latency spikes.",
+  "solution": "ScyllaDB utilizes a partition-oriented architecture where data is distributed across a cluster based on partition keys, allowing for linear scaling and high-performance ingestion of time-series data using CQL.",
+  "steps": [
+    "Define a table schema using a partition key that groups related sensor data, such as device_id.",
+    "Use clustering columns to order data within each partition by timestamp for efficient range queries.",
+    "Configure the replication factor to ensure high availability across nodes.",
+    "Utilize CQL drivers to perform asynchronous writes, distributing the load across the cluster shards."
+  ],
+  "outcome": "The system achieves consistent write performance and low-latency data retrieval, enabling real-time monitoring of industrial assets without bottlenecking.",
+  "limitation": "A primary limitation is the risk of creating 'hot partitions' if the partition key is poorly chosen, such as using a key that directs too much traffic to a single node; this can be checked by monitoring node-level CPU and disk utilization via ScyllaDB metrics.",
+  "diagram": {
+    "kind": "er",
+    "title": "IoT Sensor Data Partitioning",
+    "description": "Shows how sensor data is mapped to specific partitions for efficient storage.",
+    "nodes": [
+      {
+        "id": "sensor",
+        "label": "Sensor Device",
+        "detail": "Source of data"
+      },
+      {
+        "id": "part",
+        "label": "Partition Key (device_id)",
+        "detail": "Determines node placement"
+      },
+      {
+        "id": "cluster",
+        "label": "Clustering Column (timestamp)",
+        "detail": "Orders data in partition"
+      },
+      {
+        "id": "node",
+        "label": "ScyllaDB Node",
+        "detail": "Physical storage unit"
+      }
+    ],
+    "edges": [
+      {
+        "from": "sensor",
+        "to": "part",
+        "label": "routes to"
+      },
+      {
+        "from": "part",
+        "to": "node",
+        "label": "resides on"
+      },
+      {
+        "from": "part",
+        "to": "cluster",
+        "label": "sorts within"
+      }
+    ]
+  },
+  "code": {
+    "language": "cql",
+    "content": "CREATE TABLE sensor_readings (\n  device_id uuid,\n  ts timestamp,\n  value double,\n  PRIMARY KEY (device_id, ts)\n) WITH CLUSTERING ORDER BY (ts DESC); -- Efficiently stores and retrieves latest readings",
+    "explanation": "Maps the device_id as the partition key to distribute data across the cluster, while the timestamp clustering column ensures ordered retrieval."
+  },
+  "sources": [
+    {
+      "url": "https://docs.scylladb.com/manual/stable/",
+      "label": "ScyllaDB Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing IoT Sensor Data Ingestion, why is ScyllaDB chosen over traditional relational databases?",
+      "options": [
+        "To enable linear scaling and high-performance ingestion of time-series data.",
+        "To eliminate the need for partition keys in data modeling.",
+        "To provide ACID transactions for every single write operation.",
+        "To reduce the complexity of the SQL syntax required for queries."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that ScyllaDB's partition-oriented architecture addresses the write throughput and scaling limitations of traditional databases.",
+      "evidence": "ScyllaDB utilizes a partition-oriented architecture where data is distributed across a cluster based on partition keys, allowing for linear scaling and high-performance ingestion of time-series data using CQL."
+    },
+    {
+      "question": "In Optimizing IoT Sensor Data Ingestion, what is a potential risk when implementing the partition strategy?",
+      "options": [
+        "Excessive use of clustering columns slowing down writes.",
+        "Creating 'hot partitions' that overload a single node.",
+        "Inability to use CQL for data manipulation.",
+        "Automatic data deletion due to TTL settings."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about hot partitions caused by poor partition key selection.",
+      "evidence": "A primary limitation is the risk of creating 'hot partitions' if the partition key is poorly chosen, such as using a key that directs too much traffic to a single node"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:45.661Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:42.204Z"
+}

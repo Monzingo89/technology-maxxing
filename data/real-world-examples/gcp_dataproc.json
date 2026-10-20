@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "gcp_dataproc",
+  "title": "Retail Inventory Batch Processing with Dataproc",
+  "business": "Large-scale retail enterprises managing massive daily transaction logs across thousands of physical store locations.",
+  "problem": "Legacy on-premises Hadoop clusters struggle with rigid capacity constraints, leading to delayed inventory reconciliation and stock-out risks during peak shopping seasons.",
+  "solution": "Google Cloud Dataproc provides a managed environment to run Spark and Hadoop jobs, allowing the retailer to decouple storage from compute and dynamically scale clusters based on the volume of daily transaction logs.",
+  "steps": [
+    "Provision a Dataproc cluster using managed Spark and Hadoop components.",
+    "Configure Cloud Storage as the primary data lake to store raw transaction logs.",
+    "Submit Spark jobs to the cluster to perform distributed aggregation and inventory reconciliation.",
+    "Scale the cluster worker nodes horizontally to handle spikes in transaction volume.",
+    "Terminate the cluster after job completion to optimize resource utilization."
+  ],
+  "outcome": "The retailer achieves faster inventory insights and consistent processing times regardless of daily transaction volume, without maintaining permanent hardware.",
+  "limitation": "Dataproc clusters incur costs while running; users must monitor cluster uptime and job scheduling to avoid unnecessary expenses, which can be checked via Cloud Billing reports.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Dataproc Processing Pipeline",
+    "description": "Flow of data from storage through processing to final inventory reports.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Cloud Storage",
+        "detail": "Raw transaction logs"
+      },
+      {
+        "id": "b",
+        "label": "Dataproc Cluster",
+        "detail": "Managed Spark/Hadoop compute"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Database",
+        "detail": "Reconciled stock levels"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Reads logs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Writes results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product List"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Batch Processing with Dataproc, what is the primary benefit of using this technology?",
+      "options": [
+        "Eliminating the need for any data storage",
+        "Decoupling storage from compute to handle variable transaction volumes",
+        "Replacing all SQL databases with Hadoop",
+        "Automatically increasing product prices"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution highlights the ability to decouple storage from compute to manage massive transaction logs efficiently.",
+      "evidence": "Google Cloud Dataproc provides a managed environment to run Spark and Hadoop jobs, allowing the retailer to decouple storage from compute and dynamically scale clusters based on the volume of daily transaction logs."
+    },
+    {
+      "question": "In Retail Inventory Batch Processing with Dataproc, what is a key operational limitation?",
+      "options": [
+        "The cluster cannot process Spark jobs",
+        "The cluster must be deleted manually every hour",
+        "Clusters incur costs while running, requiring monitoring of uptime",
+        "Data cannot be stored in Cloud Storage"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that clusters incur costs while active and require monitoring.",
+      "evidence": "Dataproc clusters incur costs while running; users must monitor cluster uptime and job scheduling to avoid unnecessary expenses, which can be checked via Cloud Billing reports."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:59.821Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

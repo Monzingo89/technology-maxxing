@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "ai_ornith_ai_ornith_1_5_35b_a3b_gguf",
+  "title": "Autonomous Codebase Maintenance with Ornith-1.5",
+  "business": "Enterprise software teams managing massive, legacy code repositories.",
+  "problem": "Manual refactoring and bug fixing in large codebases are time-consuming, often leading to developer burnout and high operational costs for routine maintenance.",
+  "solution": "Deploying Ornith-1.5-35B-A3B-GGUF as a local agentic coding assistant allows teams to automate complex repository-wide tasks while keeping sensitive code within their own infrastructure.",
+  "steps": [
+    "Provision a local server with sufficient VRAM to host the 35B parameter model.",
+    "Launch the model using an OpenAI-compatible server like llama-server to enable tool-calling.",
+    "Configure an agentic coding CLI to point to the local server endpoint.",
+    "Define specific repository tasks for the agent to execute autonomously."
+  ],
+  "outcome": "Increased developer velocity by offloading repetitive maintenance tasks to an agent that understands large-scale code context.",
+  "limitation": "The use of YaRN for context window extension can slightly hurt quality on ordinary-length inputs, requiring users to verify performance when switching between short and long-context tasks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Agentic Coding Workflow",
+    "description": "The flow of a coding task from the developer to the local model and back to the repository.",
+    "nodes": [
+      {
+        "id": "dev",
+        "label": "Developer",
+        "detail": "Initiates maintenance task"
+      },
+      {
+        "id": "cli",
+        "label": "Coding CLI",
+        "detail": "Orchestrates agentic steps"
+      },
+      {
+        "id": "model",
+        "label": "Ornith-1.5-35B",
+        "detail": "Processes logic and tools"
+      },
+      {
+        "id": "repo",
+        "label": "Codebase",
+        "detail": "Target for modifications"
+      }
+    ],
+    "edges": [
+      {
+        "from": "dev",
+        "to": "cli",
+        "label": "submits request"
+      },
+      {
+        "from": "cli",
+        "to": "model",
+        "label": "sends prompt/context"
+      },
+      {
+        "from": "model",
+        "to": "cli",
+        "label": "returns tool calls"
+      },
+      {
+        "from": "cli",
+        "to": "repo",
+        "label": "applies changes"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Example of initializing the client for local agentic tasks\nfrom openai import OpenAI\n\n# Point to the local server running the GGUF model\nclient = OpenAI(base_url=\"http://localhost:8000/v1\", api_key=\"EMPTY\")\n\n# Requesting an agentic task\nresponse = client.chat.completions.create(\n    model=\"Ornith-1.5-35B-A3B\",\n    messages=[{\"role\": \"user\", \"content\": \"Refactor the legacy auth module.\"}]\n)",
+    "explanation": "This code demonstrates how to connect an OpenAI-compatible client to a locally deployed Ornith-1.5 instance to trigger agentic coding workflows."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.5-35B-A3B-GGUF",
+      "label": "ornith-ai/Ornith-1.5-35B-A3B-GGUF · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Autonomous Codebase Maintenance with Ornith-1.5, how does the technology address the problem of high operational costs for routine maintenance?",
+      "options": [
+        "By automating complex repository-wide tasks locally.",
+        "By providing a cloud-based SaaS platform for refactoring.",
+        "By replacing all human developers with autonomous agents.",
+        "By reducing the size of the codebase to improve speed."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that deploying the model as a local agentic coding assistant allows teams to automate complex repository-wide tasks.",
+      "evidence": "Deploying Ornith-1.5-35B-A3B-GGUF as a local agentic coding assistant allows teams to automate complex repository-wide tasks while keeping sensitive code within their own infrastructure."
+    },
+    {
+      "question": "In Autonomous Codebase Maintenance with Ornith-1.5, what is a key trade-off when using the model for long-context tasks?",
+      "options": [
+        "The model requires 1TB of RAM for every request.",
+        "The model cannot perform tool-calling when context is extended.",
+        "The use of YaRN can slightly hurt quality on ordinary-length inputs.",
+        "The model is incompatible with standard OpenAI SDKs."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that using YaRN for long-context windows can negatively impact quality for shorter inputs.",
+      "evidence": "The use of YaRN for context window extension can slightly hurt quality on ordinary-length inputs, requiring users to verify performance when switching between short and long-context tasks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:04.579Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:00.490Z"
+}

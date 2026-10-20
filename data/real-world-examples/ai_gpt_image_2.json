@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_image_2",
+  "title": "Automated Architectural Visualization Refinement",
+  "business": "Architecture and interior design firms managing high-volume client feedback loops.",
+  "problem": "Manual redlining of architectural renderings is time-consuming, leading to bottlenecks when clients request minor aesthetic adjustments to existing floor plans or facade concepts.",
+  "solution": "Utilizing the GPT-Image-2 model's inpainting capabilities allows firms to programmatically mask specific areas of a high-fidelity rendering and regenerate only the modified elements, such as changing furniture styles or exterior materials, while maintaining the structural integrity of the original design.",
+  "steps": [
+    "Upload the original high-fidelity architectural rendering to the image generation service.",
+    "Define the specific region of the image requiring modification using a binary mask.",
+    "Submit the masked image and a descriptive text prompt to the v1/images/edits endpoint.",
+    "Validate the generated output against the original architectural constraints to ensure spatial consistency.",
+    "Archive the specific model snapshot version to ensure future iterations remain visually consistent."
+  ],
+  "outcome": "A streamlined design iteration process where aesthetic adjustments are generated in seconds rather than hours, allowing architects to focus on structural integrity rather than manual image editing.",
+  "limitation": "The model may struggle with maintaining strict geometric precision in complex structural elements during inpainting; verify results by overlaying the output with the original wireframe to check for unintended spatial distortions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inpainting Workflow for Architectural Edits",
+    "description": "This diagram illustrates the transformation of an original rendering into a refined version using masking and model processing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Original Rendering",
+        "detail": "Input high-fidelity image"
+      },
+      {
+        "id": "b",
+        "label": "Binary Mask",
+        "detail": "Defines area to be edited"
+      },
+      {
+        "id": "c",
+        "label": "GPT-Image-2",
+        "detail": "Processing engine"
+      },
+      {
+        "id": "d",
+        "label": "Refined Rendering",
+        "detail": "Final output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "provides base visual"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "restricts edit area"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates new pixels"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-image-2",
+      "label": "GPT-Image-2 Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Visualization Refinement, how does the technology address the bottleneck of manual redlining?",
+      "options": [
+        "By automating the creation of floor plans from scratch",
+        "By using inpainting to regenerate only specific modified elements",
+        "By replacing the need for high-fidelity renderings entirely",
+        "By outsourcing the editing process to external human designers"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution leverages the model's inpainting capability to modify specific parts of an image rather than recreating the entire scene.",
+      "evidence": "Utilizing the GPT-Image-2 model's inpainting capabilities allows firms to programmatically mask specific areas of a high-fidelity rendering and regenerate only the modified elements"
+    },
+    {
+      "question": "In Automated Architectural Visualization Refinement, what is a primary limitation and how should it be verified?",
+      "options": [
+        "High latency; verify by checking request timestamps",
+        "Inconsistent lighting; verify by checking color histograms",
+        "Geometric distortion; verify by overlaying with the original wireframe",
+        "Cost overruns; verify by checking the pricing calculator"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation of the limitation specifically mentions potential geometric issues and suggests a wireframe overlay as the validation method.",
+      "evidence": "The model may struggle with maintaining strict geometric precision in complex structural elements during inpainting; verify results by overlaying the output with the original wireframe to check for unintended spatial distortions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:30.718Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:27.191Z"
+}

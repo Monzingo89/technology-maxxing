@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "domain_name_system",
+  "title": "Global Logistics Routing Optimization",
+  "business": "A global logistics firm managing a fleet of autonomous delivery drones that must connect to regional command centers based on their current geographic location.",
+  "problem": "The firm faces high latency and connection failures when drones attempt to reach a centralized server, as the hardcoded IP addresses fail to account for regional network outages or server maintenance.",
+  "solution": "By implementing a hierarchical DNS structure, the firm maps human-readable domain names to dynamic IP records, allowing the infrastructure to update routing paths without reconfiguring individual drone firmware.",
+  "steps": [
+    "Define a zone file containing A records for each regional command center.",
+    "Configure a primary DNS server to manage the authoritative records for the logistics domain.",
+    "Set low Time-to-Live (TTL) values on records to ensure rapid propagation of IP address changes.",
+    "Update the drone client configuration to query the local DNS resolver instead of a static IP.",
+    "Monitor resolution logs to verify that drones are receiving the geographically closest server IP."
+  ],
+  "outcome": "The system achieves increased resilience, as traffic is automatically rerouted to healthy command centers when primary nodes become unreachable, improving overall fleet uptime.",
+  "limitation": "The primary limitation is DNS caching, where intermediate resolvers or client devices store outdated IP mappings, potentially causing drones to attempt connections to decommissioned servers. This can be checked by inspecting the TTL field in the DNS response header.",
+  "diagram": {
+    "kind": "flow",
+    "title": "DNS Resolution Workflow",
+    "description": "This diagram illustrates how a drone resolves a command center address through the DNS hierarchy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Drone Client",
+        "detail": "Initiates request for command.logistics.internal"
+      },
+      {
+        "id": "b",
+        "label": "Recursive Resolver",
+        "detail": "Queries authoritative servers on behalf of client"
+      },
+      {
+        "id": "c",
+        "label": "Authoritative DNS",
+        "detail": "Holds the zone file with current IP records"
+      },
+      {
+        "id": "d",
+        "label": "Command Server",
+        "detail": "Target destination for drone communication"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "DNS Query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Lookup Record"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Return IP Address"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Provide Resolution"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "Connect to IP"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Routing Optimization, why is a hierarchical DNS structure preferred over hardcoded IP addresses?",
+      "options": [
+        "It allows for dynamic routing updates without firmware changes.",
+        "It eliminates the need for any network infrastructure.",
+        "It increases the physical speed of the drone hardware.",
+        "It prevents all unauthorized access to the command center."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that hardcoded IPs fail during maintenance, whereas DNS allows infrastructure updates without reconfiguring drone firmware.",
+      "evidence": "By implementing a hierarchical DNS structure, the firm maps human-readable domain names to dynamic IP records, allowing the infrastructure to update routing paths without reconfiguring individual drone firmware."
+    },
+    {
+      "question": "In Global Logistics Routing Optimization, what is the primary risk associated with DNS caching?",
+      "options": [
+        "The DNS server might run out of memory.",
+        "Drones might attempt to connect to decommissioned servers.",
+        "The recursive resolver will stop responding to queries.",
+        "The zone file will be deleted automatically."
+      ],
+      "answerIndex": 1,
+      "explanation": "Caching stores old records, which leads to drones trying to reach servers that are no longer active.",
+      "evidence": "The primary limitation is DNS caching, where intermediate resolvers or client devices store outdated IP mappings, potentially causing drones to attempt connections to decommissioned servers."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:45.818Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

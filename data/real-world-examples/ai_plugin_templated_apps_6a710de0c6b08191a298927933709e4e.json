@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_templated_apps_6a710de0c6b08191a298927933709e4e",
+  "title": "Automated dbt Lineage and Metric Governance",
+  "business": "Data engineering teams managing complex dbt projects with frequent schema changes.",
+  "problem": "Manual documentation of dbt model dependencies and metric definitions is error-prone, leading to broken downstream dashboards and inconsistent business reporting.",
+  "solution": "Using the dbt MCP Server within ChatGPT, teams can programmatically inspect project lineage and query semantic layer metrics to ensure documentation matches the actual codebase without leaving the chat interface.",
+  "steps": [
+    "Connect the dbt MCP Server to the project repository to index model metadata.",
+    "Use the ChatGPT plugin interface to query the dbt Semantic Layer for current metric definitions.",
+    "Generate boilerplate documentation for new models based on existing lineage patterns.",
+    "Review model lineage graphs directly in the chat to identify potential breaking changes before deployment."
+  ],
+  "outcome": "Improved consistency in data documentation and reduced time spent manually tracing dependencies during schema migrations.",
+  "limitation": "The plugin relies on the current state of the dbt project; it cannot predict future schema changes that have not yet been committed to the repository, requiring users to verify the latest branch state manually.",
+  "diagram": {
+    "kind": "flow",
+    "title": "dbt Governance Workflow",
+    "description": "The flow shows how the dbt MCP Server bridges the gap between raw dbt code and human-readable documentation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "dbt Project",
+        "detail": "Source code and SQL models"
+      },
+      {
+        "id": "b",
+        "label": "dbt MCP Server",
+        "detail": "Interface for inspection and queries"
+      },
+      {
+        "id": "c",
+        "label": "ChatGPT Interface",
+        "detail": "User interaction layer"
+      },
+      {
+        "id": "d",
+        "label": "Documentation",
+        "detail": "Generated boilerplate and lineage reports"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "exposes metadata"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated dbt Lineage and Metric Governance, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual documentation of dbt model dependencies and metric definitions is error-prone.",
+        "The dbt project is too large to be stored in a standard repository.",
+        "The dbt Semantic Layer is incompatible with existing BI tools.",
+        "ChatGPT cannot access the internet to fetch dbt documentation."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual documentation errors as the core issue causing reporting inconsistencies.",
+      "evidence": "Manual documentation of dbt model dependencies and metric definitions is error-prone, leading to broken downstream dashboards and inconsistent business reporting."
+    },
+    {
+      "question": "What is a key limitation of the approach in Automated dbt Lineage and Metric Governance?",
+      "options": [
+        "It requires manual coding of every SQL model.",
+        "It cannot predict future schema changes not yet committed to the repository.",
+        "It is only compatible with cloud-based dbt deployments.",
+        "It prevents developers from using the dbt CLI."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the tool is bound by the current state of the repository and cannot foresee uncommitted changes.",
+      "evidence": "The plugin relies on the current state of the dbt project; it cannot predict future schema changes that have not yet been committed to the repository, requiring users to verify the latest branch state manually."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:11.312Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

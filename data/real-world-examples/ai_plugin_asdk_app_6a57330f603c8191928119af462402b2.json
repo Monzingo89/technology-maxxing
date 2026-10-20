@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_6a57330f603c8191928119af462402b2",
+  "title": "Optimizing ClickHouse Cloud Database Health for E-commerce Analytics",
+  "business": "E-commerce platform operators managing high-volume transaction data in ClickHouse Cloud.",
+  "problem": "Operators struggle with fragmented visibility into database performance and table health, leading to delayed identification of inefficient queries or storage bottlenecks during peak traffic.",
+  "solution": "The ClickHouse ChatGPT plugin provides a centralized interface to inspect service status, run read-only diagnostic SQL queries, and monitor table metadata directly within the chat environment, enabling rapid troubleshooting without context switching.",
+  "steps": [
+    "Authenticate the ClickHouse plugin with your organization credentials.",
+    "Use the plugin to list active services and identify the specific database instance showing high latency.",
+    "Execute read-only SQL queries via the plugin to inspect system tables for long-running processes.",
+    "Review table-level metadata to identify potential storage fragmentation or missing indices.",
+    "Synthesize findings to adjust application-side query patterns or request infrastructure scaling."
+  ],
+  "outcome": "Improved operational agility and reduced mean time to resolution for database performance anomalies.",
+  "limitation": "The plugin is restricted to read-only operations, meaning it cannot execute DDL or DML commands to fix issues directly; users must apply remediation steps through the ClickHouse Cloud console or CLI.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Database Diagnostic Workflow",
+    "description": "The flow shows how an operator uses the plugin to bridge the gap between performance symptoms and actionable insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Operator",
+        "detail": "User identifying performance lag"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT Plugin",
+        "detail": "Interface for ClickHouse Cloud"
+      },
+      {
+        "id": "c",
+        "label": "ClickHouse Cloud",
+        "detail": "Production data environment"
+      },
+      {
+        "id": "d",
+        "label": "Diagnostic Report",
+        "detail": "Output for operator review"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends diagnostic query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Fetches metadata/status"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns read-only data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Displays findings"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing ClickHouse Cloud Database Health for E-commerce Analytics, what is the primary problem addressed by the plugin?",
+      "options": [
+        "Inability to process payments during peak traffic",
+        "Fragmented visibility into database performance and table health",
+        "High cost of cloud storage for transaction logs",
+        "Lack of integration with external marketing tools"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that operators struggle with fragmented visibility into database performance and table health.",
+      "evidence": "Operators struggle with fragmented visibility into database performance and table health, leading to delayed identification of inefficient queries or storage bottlenecks during peak traffic."
+    },
+    {
+      "question": "In Optimizing ClickHouse Cloud Database Health for E-commerce Analytics, what is a key limitation of the plugin?",
+      "options": [
+        "It cannot connect to ClickHouse Cloud services",
+        "It is restricted to read-only operations",
+        "It requires manual installation of database drivers",
+        "It only works with Managed Postgres diagnostics"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario emphasize that the plugin is limited to read-only SQL queries and cannot perform DDL or DML.",
+      "evidence": "The plugin is restricted to read-only operations, meaning it cannot execute DDL or DML commands to fix issues directly; users must apply remediation steps through the ClickHouse Cloud console or CLI."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:01.594Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

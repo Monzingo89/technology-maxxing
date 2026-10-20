@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "cycle_consistency",
+  "title": "Automated Architectural Blueprint Restoration",
+  "business": "Historical architecture firms digitizing hand-drawn blueprints.",
+  "problem": "Firms possess thousands of hand-drawn blueprints but lack the digital CAD-ready vector files required for modern renovation projects. Manually redrawing every blueprint is prohibitively expensive and prone to human error, while standard image-to-image translation models often hallucinate structural details that do not exist in the original sketches.",
+  "solution": "Cycle consistency enforces a structural constraint where the model must translate a hand-drawn sketch to a digital CAD format and then successfully reconstruct the original sketch from that digital version. This ensures that the generated CAD file retains the exact geometric properties of the source drawing, preventing the model from inventing non-existent architectural features during the translation process.",
+  "steps": [
+    "Define two domains: X (hand-drawn sketches) and Y (digital CAD blueprints).",
+    "Train a forward generator G to map X to Y and an inverse generator F to map Y to X.",
+    "Calculate the cycle consistency loss by measuring the difference between the original input X and the reconstructed output F(G(X)).",
+    "Update model weights to minimize both the adversarial loss and the cycle consistency loss simultaneously.",
+    "Validate the model by checking if the reconstructed image maintains the original line weight and spatial orientation."
+  ],
+  "outcome": "The firm achieves high-fidelity digital representations of historical blueprints that remain faithful to the original structural intent without requiring paired training data.",
+  "limitation": "The model may struggle with extreme perspective distortions or missing data in the original sketches. This is checked by monitoring the reconstruction error; if the error is high, the model is failing to preserve structural integrity during the translation cycle.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cycle Consistency Workflow",
+    "description": "The flow shows how an input image is translated to a target domain and reconstructed back to the source to ensure consistency.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Sketch (X)",
+        "detail": "Hand-drawn blueprint"
+      },
+      {
+        "id": "b",
+        "label": "Generator G",
+        "detail": "X to Y mapping"
+      },
+      {
+        "id": "c",
+        "label": "CAD Blueprint (Y)",
+        "detail": "Digital output"
+      },
+      {
+        "id": "d",
+        "label": "Generator F",
+        "detail": "Y to X mapping"
+      },
+      {
+        "id": "e",
+        "label": "Reconstructed Sketch",
+        "detail": "F(G(X))"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "translate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "inverse"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "reconstruct"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1703.10593",
+      "label": "Unpaired Image-to-Image Translation using Cycle-Consistent Adversarial Networks"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Blueprint Restoration, why is cycle consistency necessary?",
+      "options": [
+        "To prevent the model from hallucinating features during translation.",
+        "To increase the speed of the rendering process.",
+        "To allow the system to work with paired training data.",
+        "To reduce the storage requirements of the CAD files."
+      ],
+      "answerIndex": 0,
+      "explanation": "Cycle consistency ensures the model preserves the original structural intent, preventing the invention of non-existent features.",
+      "evidence": "This ensures that the generated CAD file retains the exact geometric properties of the source drawing, preventing the model from inventing non-existent architectural features during the translation process."
+    },
+    {
+      "question": "In Automated Architectural Blueprint Restoration, how is a failure in the model's consistency detected?",
+      "options": [
+        "By measuring the reconstruction error of the cycle.",
+        "By checking the file size of the output.",
+        "By comparing the CAD file to a manual drawing.",
+        "By increasing the number of training epochs."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section explicitly states that high reconstruction error indicates the model is failing to preserve structural integrity.",
+      "evidence": "This is checked by monitoring the reconstruction error; if the error is high, the model is failing to preserve structural integrity during the translation cycle."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:51.205Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:47.649Z"
+}

@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen2_5_32b_instruct",
+  "title": "Legal Document Synthesis for Qwen2.5-32B-Instruct",
+  "business": "Legal firms managing high-volume contract review and synthesis.",
+  "problem": "Manual extraction of key clauses from lengthy, multi-page legal documents is error-prone and consumes significant billable hours.",
+  "solution": "Leverage Qwen2.5-32B-Instruct to process long-context legal documents, utilizing its ability to handle up to 128K tokens and generate structured, accurate summaries of specific contractual obligations.",
+  "steps": [
+    "Load the Qwen2.5-32B-Instruct model using the latest Hugging Face transformers library.",
+    "Configure the system prompt to define the role of a specialized legal assistant for structured output.",
+    "Apply the chat template to format the long-form contract text as a user message.",
+    "Enable YaRN scaling in the model configuration if the input document exceeds 32,768 tokens.",
+    "Execute inference to generate a JSON-formatted summary of identified clauses."
+  ],
+  "outcome": "Improved consistency in clause identification and reduced time spent on initial document triage.",
+  "limitation": "The use of static YaRN scaling for long-context processing can potentially impact performance on shorter texts, requiring developers to toggle the configuration only when necessary.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legal Synthesis Pipeline",
+    "description": "The flow of document processing from raw input to structured legal output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Contract",
+        "detail": "Input text file"
+      },
+      {
+        "id": "b",
+        "label": "Qwen2.5-32B",
+        "detail": "Inference engine"
+      },
+      {
+        "id": "c",
+        "label": "Structured JSON",
+        "detail": "Extracted clauses"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "tokenization"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "summarization"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen2.5-32B-Instruct",
+      "label": "Qwen/Qwen2.5-32B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legal Document Synthesis for Qwen2.5-32B-Instruct, how does the model address the inefficiency of manual contract review?",
+      "options": [
+        "By automating the extraction of key clauses from lengthy documents.",
+        "By replacing all human legal staff with automated agents.",
+        "By automatically rewriting contracts into simpler language.",
+        "By reducing the total number of tokens in the training set."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the model is used to process long-context documents to generate structured summaries of contractual obligations.",
+      "evidence": "Leverage Qwen2.5-32B-Instruct to process long-context legal documents, utilizing its ability to handle up to 128K tokens and generate structured, accurate summaries of specific contractual obligations."
+    },
+    {
+      "question": "What is a primary limitation when implementing long-context processing in Legal Document Synthesis for Qwen2.5-32B-Instruct?",
+      "options": [
+        "The model cannot output JSON format.",
+        "Static YaRN scaling may negatively affect performance on shorter texts.",
+        "The model requires a minimum of 128K tokens for every input.",
+        "The model is incompatible with Hugging Face transformers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that static YaRN scaling, used for long contexts, can impact performance on shorter inputs.",
+      "evidence": "The use of static YaRN scaling for long-context processing can potentially impact performance on shorter texts, requiring developers to toggle the configuration only when necessary."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:15.031Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:11.615Z"
+}

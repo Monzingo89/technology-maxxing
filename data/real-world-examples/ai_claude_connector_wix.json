@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_wix",
+  "title": "Automated Headless Site Provisioning for Boutique Agencies",
+  "business": "A boutique web development agency managing hundreds of client landing pages.",
+  "problem": "The agency faces significant operational overhead when manually configuring new Wix Headless sites, leading to inconsistent site structures and delayed project handoffs.",
+  "solution": "By utilizing the Wix MCP connector within Claude, the agency can programmatically trigger site creation and configuration workflows, ensuring that every new site adheres to the agency's internal design system and architectural standards.",
+  "steps": [
+    "Authenticate the Wix MCP connector within the Claude interface to grant access to the agency's Wix account.",
+    "Invoke the ListWixSites tool to audit existing site configurations and identify naming conventions.",
+    "Use the BuildAppsDocumentation and WixHeadlessDocumentation tools to retrieve the required schema for new site instantiation.",
+    "Execute the CallWixSiteAPI to provision a new headless site instance with predefined settings.",
+    "Verify the site creation by querying the site metadata through the connector to ensure successful deployment."
+  ],
+  "outcome": "The agency achieves standardized site architecture and significantly reduces the time required for initial environment setup, allowing developers to focus on custom feature implementation rather than repetitive boilerplate tasks.",
+  "limitation": "The connector relies on the current state of the Wix Headless API; if the API schema updates, the Claude-generated calls may fail. Users must verify the schema version regularly by using the ReadFullDocsMethodSchema tool to ensure compatibility.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Automated Site Provisioning Workflow",
+    "description": "This diagram illustrates the flow from the agency developer to the Wix infrastructure via Claude.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Initiates request in Claude"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Processes intent via Wix MCP"
+      },
+      {
+        "id": "c",
+        "label": "Wix MCP",
+        "detail": "Interface for Wix APIs"
+      },
+      {
+        "id": "d",
+        "label": "Wix Headless",
+        "detail": "Target infrastructure"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Tool Call"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "API Request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/wix",
+      "label": "Wix connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Headless Site Provisioning for Boutique Agencies, what is the primary benefit of using the Wix MCP connector?",
+      "options": [
+        "It automates the configuration of new sites to ensure architectural consistency.",
+        "It provides direct access to client financial records for billing.",
+        "It replaces the need for the Wix Design System entirely.",
+        "It automatically optimizes site performance metrics."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the connector helps the agency standardize site architecture and reduce setup overhead.",
+      "evidence": "By utilizing the Wix MCP connector within Claude, the agency can programmatically trigger site creation and configuration workflows, ensuring that every new site adheres to the agency's internal design system and architectural standards."
+    },
+    {
+      "question": "In Automated Headless Site Provisioning for Boutique Agencies, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot create sites, only read them.",
+        "The connector requires manual coding of every API endpoint.",
+        "The connector relies on the current Wix Headless API schema, which may change.",
+        "The connector is limited to blog sites only."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions the dependency on the Wix Headless API schema and the need for regular verification.",
+      "evidence": "The connector relies on the current state of the Wix Headless API; if the API schema updates, the Claude-generated calls may fail."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:42.815Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:39.033Z"
+}

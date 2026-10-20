@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_tasks",
+  "title": "Asynchronous Inventory Synchronization",
+  "business": "E-commerce platforms managing high-volume inventory updates across distributed microservices.",
+  "problem": "Synchronous API calls between the Order Service and the Inventory Service cause request timeouts and cascading failures when the Inventory Service experiences latency spikes during peak traffic.",
+  "solution": "Cloud Tasks decouples the services by offloading inventory update requests into a managed queue, allowing the Order Service to return an immediate success response while the Inventory Service processes updates at its own pace with built-in retry logic.",
+  "steps": [
+    "Define a Cloud Tasks queue to act as the buffer between the Order and Inventory services.",
+    "Configure the target HTTP endpoint on the Inventory Service to receive task payloads.",
+    "Modify the Order Service to create a task containing the inventory update details instead of calling the Inventory API directly.",
+    "Set retry parameters on the queue to handle transient failures during inventory updates.",
+    "Monitor the queue depth and task execution status to ensure consistency."
+  ],
+  "outcome": "Improved system resilience and reduced latency for end-users, as the Order Service is no longer blocked by downstream inventory processing delays.",
+  "limitation": "Cloud Tasks introduces eventual consistency; check the queue status or task logs to verify if a specific update has been successfully processed or if it has exhausted its retry limit.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Update Flow",
+    "description": "The Order Service pushes tasks to the Cloud Tasks queue, which then dispatches them to the Inventory Service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Order Service",
+        "detail": "Initiates inventory update"
+      },
+      {
+        "id": "b",
+        "label": "Cloud Tasks Queue",
+        "detail": "Buffers and schedules tasks"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Service",
+        "detail": "Processes HTTP task target"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Enqueue Task"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "HTTP Dispatch"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Asynchronous Inventory Synchronization, why is Cloud Tasks used?",
+      "options": [
+        "To eliminate the need for an Inventory Service",
+        "To prevent Order Service timeouts caused by downstream latency",
+        "To increase the processing speed of the Order Service database",
+        "To replace the need for HTTP targets"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that synchronous calls cause timeouts, and the solution uses Cloud Tasks to decouple services to avoid this.",
+      "evidence": "Synchronous API calls between the Order Service and the Inventory Service cause request timeouts and cascading failures when the Inventory Service experiences latency spikes during peak traffic."
+    },
+    {
+      "question": "In Asynchronous Inventory Synchronization, what is a key trade-off of the implementation?",
+      "options": [
+        "The system becomes strictly consistent immediately",
+        "The Order Service must wait for the Inventory Service to finish",
+        "The system operates with eventual consistency",
+        "Retry logic is not supported for HTTP targets"
+      ],
+      "answerIndex": 2,
+      "explanation": "Asynchronous processing inherently means the system is eventually consistent, requiring verification of task status.",
+      "evidence": "Cloud Tasks introduces eventual consistency; check the queue status or task logs to verify if a specific update has been successfully processed or if it has exhausted its retry limit."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:20.956Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

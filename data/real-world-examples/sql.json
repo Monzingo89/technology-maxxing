@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "topicId": "sql",
+  "title": "Optimizing Inventory Retrieval in Retail Logistics",
+  "business": "Logistics managers overseeing regional distribution centers.",
+  "problem": "Inefficient query performance when scanning millions of inventory records to identify low-stock items across specific warehouse zones.",
+  "solution": "In PostgreSQL, a partial index can target low-stock inventory records and reduce the records examined for matching queries. This is a PostgreSQL implementation example, not syntax supported by every SQL database.",
+  "steps": [
+    "Define the inventory schema with appropriate data types for stock levels and location IDs.",
+    "Identify the specific subset of data that requires frequent access, such as items with stock levels below a defined threshold.",
+    "Create a partial index using the CREATE INDEX command with a WHERE clause to filter for the relevant subset.",
+    "Execute queries using the filtered criteria to ensure the database engine utilizes the partial index for faster retrieval."
+  ],
+  "outcome": "Reduced query latency and lower I/O overhead for inventory monitoring tasks, enabling real-time stock replenishment decisions.",
+  "limitation": "Partial indexes are only effective if the query predicates match the index definition; verify usage with the EXPLAIN command to ensure the planner selects the index.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Indexing Strategy",
+    "description": "Shows how the partial index filters the main inventory table for efficient lookups.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "InventoryTable",
+        "detail": "Contains all stock records"
+      },
+      {
+        "id": "b",
+        "label": "PartialIndex",
+        "detail": "Indexes only stock < 10"
+      },
+      {
+        "id": "c",
+        "label": "QueryEngine",
+        "detail": "Processes user requests"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "filters"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "scans"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "accesses"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "-- Create a partial index for low stock items\nCREATE INDEX idx_low_stock ON inventory (item_id)\nWHERE stock_level < 10; -- Only index rows meeting this condition",
+    "explanation": "This code implements a partial index to speed up queries for items with low stock, directly addressing the performance bottleneck in the retail logistics scenario."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/sql.html",
+      "label": "PostgreSQL: Documentation: 18: Part II. The SQL Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Inventory Retrieval in Retail Logistics, what is the primary benefit of the proposed solution?",
+      "options": [
+        "Reducing the scan surface area for specific inventory queries",
+        "Increasing the total number of rows in the database",
+        "Automating the deletion of expired inventory records",
+        "Converting all numeric types to character types"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution focuses on using partial indexes to target specific subsets of data, which reduces the amount of data the database must scan.",
+      "evidence": "In PostgreSQL, a partial index can target low-stock inventory records and reduce the records examined for matching queries."
+    },
+    {
+      "question": "In Optimizing Inventory Retrieval in Retail Logistics, how can a user verify that a partial index is being used effectively?",
+      "options": [
+        "By running the EXPLAIN command",
+        "By checking the table schema definition",
+        "By increasing the stock threshold",
+        "By deleting the primary key"
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation and the limitation section suggest using the EXPLAIN command to verify that the query planner is utilizing the index as expected.",
+      "evidence": "Partial indexes are only effective if the query predicates match the index definition; verify usage with the EXPLAIN command to ensure the planner selects the index."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:17.570Z",
+  "sourceRetrievedAt": "2026-10-18T00:51:56.453Z"
+}

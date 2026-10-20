@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "http2",
+  "title": "Optimizing Real-Time Dashboard Synchronization",
+  "business": "A financial analytics firm providing high-frequency market data dashboards to institutional traders.",
+  "problem": "The existing HTTP/1.1 infrastructure suffers from head-of-line blocking, where a single slow request for historical chart data stalls the delivery of critical, time-sensitive price updates, causing UI lag.",
+  "solution": "Implementing HTTP/2 allows the application to multiplex multiple binary-framed streams over a single persistent TCP connection, ensuring that small, urgent price updates are not queued behind larger, non-urgent data requests.",
+  "steps": [
+    "Configure the application load balancer to support the HTTP/2 protocol upgrade.",
+    "Enable binary framing at the application server layer to encapsulate data into independent streams.",
+    "Implement stream prioritization logic to ensure price update frames receive higher processing priority.",
+    "Update client-side fetch logic to utilize persistent connections for concurrent stream management."
+  ],
+  "outcome": "Traders experience smoother dashboard updates with reduced latency jitter, as critical data flows independently of heavy background assets.",
+  "limitation": "The primary trade-off is the complexity of debugging binary-framed traffic compared to plain-text HTTP/1.1; developers must use specialized protocol inspection tools to verify stream integrity and identify potential frame-level errors.",
+  "diagram": {
+    "kind": "flow",
+    "title": "HTTP/2 Multiplexing Logic",
+    "description": "This diagram illustrates how a single TCP connection carries multiple independent streams.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "Trader Dashboard",
+        "detail": "Initiates requests"
+      },
+      {
+        "id": "tcp",
+        "label": "TCP Connection",
+        "detail": "Single persistent pipe"
+      },
+      {
+        "id": "stream1",
+        "label": "Stream 1",
+        "detail": "Price Updates"
+      },
+      {
+        "id": "stream2",
+        "label": "Stream 2",
+        "detail": "Historical Data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "tcp",
+        "label": "Multiplexes"
+      },
+      {
+        "from": "tcp",
+        "to": "stream1",
+        "label": "Carries"
+      },
+      {
+        "from": "tcp",
+        "to": "stream2",
+        "label": "Carries"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Real-Time Dashboard Synchronization, what is the primary benefit of using HTTP/2 over HTTP/1.1?",
+      "options": [
+        "Eliminating head-of-line blocking via multiplexed binary streams.",
+        "Increasing the total number of TCP connections allowed.",
+        "Converting all data into plain-text for easier debugging.",
+        "Reducing the size of the initial handshake request."
+      ],
+      "answerIndex": 0,
+      "explanation": "HTTP/2 solves the head-of-line blocking problem inherent in HTTP/1.1 by using multiplexing.",
+      "evidence": "The existing HTTP/1.1 infrastructure suffers from head-of-line blocking, where a single slow request for historical chart data stalls the delivery of critical, time-sensitive price updates, causing UI lag."
+    },
+    {
+      "question": "In Optimizing Real-Time Dashboard Synchronization, what is the main operational trade-off when adopting HTTP/2?",
+      "options": [
+        "The need for more TCP connections.",
+        "Increased difficulty in debugging binary-framed traffic.",
+        "Higher server-side memory usage for every request.",
+        "Incompatibility with modern load balancers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The binary framing layer makes traditional text-based inspection difficult, requiring specialized tools.",
+      "evidence": "The primary trade-off is the complexity of debugging binary-framed traffic compared to plain-text HTTP/1.1; developers must use specialized protocol inspection tools to verify stream integrity and identify potential frame-level errors."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:35.990Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

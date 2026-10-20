@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "distributed_lock",
+  "title": "Automated Inventory Reservation System",
+  "business": "Global e-commerce platforms managing high-velocity inventory across multiple regional data centers.",
+  "problem": "When two independent service instances attempt to reserve the last remaining unit of a high-demand product simultaneously, a race condition occurs. Without coordination, both instances may confirm the reservation, leading to overselling and inventory discrepancies that require manual reconciliation.",
+  "solution": "A distributed lock provides a mechanism to ensure mutual exclusion across networked processes. By requiring a service to acquire a lease on a specific resource key before modifying inventory state, the system forces sequential access. Only one process can hold the lock at any given time, effectively serializing the reservation logic and preventing conflicting updates.",
+  "steps": [
+    "Define a unique resource identifier for the specific inventory item.",
+    "Attempt to acquire a distributed lock from a centralized coordination service using the resource ID.",
+    "Verify lock acquisition success; if failed, retry or reject the request.",
+    "Execute the inventory decrement operation within the protected critical section.",
+    "Release the lock immediately after the transaction completes to allow other processes to proceed."
+  ],
+  "outcome": "The system achieves consistent inventory states where overselling is programmatically prevented, ensuring that each unit is reserved by exactly one customer process.",
+  "limitation": "A primary limitation is the risk of a deadlocked resource if a process crashes while holding the lock. To check for this, monitor the lock lease duration and ensure the coordination service supports automatic expiration or TTL-based cleanup to prevent permanent resource unavailability.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distributed Lock Acquisition Flow",
+    "description": "This diagram illustrates the interaction between service instances and the lock coordinator.",
+    "nodes": [
+      {
+        "id": "s1",
+        "label": "Service Instance A",
+        "detail": "Requesting process"
+      },
+      {
+        "id": "s2",
+        "label": "Service Instance B",
+        "detail": "Concurrent process"
+      },
+      {
+        "id": "lc",
+        "label": "Lock Coordinator",
+        "detail": "Centralized state store"
+      },
+      {
+        "id": "db",
+        "label": "Inventory DB",
+        "detail": "Shared data store"
+      }
+    ],
+    "edges": [
+      {
+        "from": "s1",
+        "to": "lc",
+        "label": "Acquire Lock"
+      },
+      {
+        "from": "lc",
+        "to": "s1",
+        "label": "Grant Access"
+      },
+      {
+        "from": "s1",
+        "to": "db",
+        "label": "Update Inventory"
+      },
+      {
+        "from": "s2",
+        "to": "lc",
+        "label": "Request Lock (Blocked)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reservation System, why is a distributed lock necessary?",
+      "options": [
+        "To increase the total number of inventory items available.",
+        "To prevent race conditions that lead to overselling.",
+        "To improve the network latency of database queries.",
+        "To replace the need for a persistent database."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that simultaneous reservation attempts cause race conditions and overselling, which a distributed lock prevents by enforcing mutual exclusion.",
+      "evidence": "When two independent service instances attempt to reserve the last remaining unit of a high-demand product simultaneously, a race condition occurs. Without coordination, both instances may confirm the reservation, leading to overselling and inventory discrepancies that require manual reconciliation."
+    },
+    {
+      "question": "In Automated Inventory Reservation System, what is a key risk of using distributed locks?",
+      "options": [
+        "The system becomes too fast to process requests.",
+        "Resource unavailability if a process crashes while holding a lock.",
+        "The database will automatically delete all inventory records.",
+        "The lock coordinator will always grant access to all processes."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that a process crashing while holding a lock can lead to a deadlock, requiring mechanisms like TTLs to recover.",
+      "evidence": "A primary limitation is the risk of a deadlocked resource if a process crashes while holding the lock."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:39.551Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

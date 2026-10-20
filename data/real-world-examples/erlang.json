@@ -1,0 +1,95 @@
+{
+  "version": 1,
+  "topicId": "erlang",
+  "title": "Distributed Sensor Aggregation for Smart Grids",
+  "business": "A regional smart grid operator managing thousands of remote energy sensors.",
+  "problem": "Individual sensor nodes frequently lose connectivity or crash due to environmental interference, causing cascading failures in the central monitoring system.",
+  "solution": "Utilizing Erlang/OTP processes, the system isolates each sensor connection into a lightweight, independent process. By employing supervision trees, the system detects process termination and automatically restarts failed handlers, ensuring that a single sensor crash does not impact the broader grid monitoring capability.",
+  "steps": [
+    "Define a supervisor process to monitor worker processes assigned to specific sensor IDs.",
+    "Implement worker processes using gen_server to handle incoming telemetry data via asynchronous message passing.",
+    "Configure restart strategies within the supervisor to handle transient network errors.",
+    "Use link or monitor primitives to establish fault-tolerant relationships between the supervisor and worker nodes."
+  ],
+  "outcome": "The monitoring system achieves high availability where individual sensor failures are contained and recovered without manual intervention or system-wide downtime.",
+  "limitation": "The primary trade-off is memory overhead; while Erlang processes are lightweight, spawning millions of processes for high-frequency granular data can lead to significant heap consumption. You can check this by monitoring the process count and memory usage via the erlang:memory/0 function.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Supervision Tree for Sensor Monitoring",
+    "description": "This diagram illustrates how a supervisor manages individual sensor workers to ensure system stability.",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Supervisor",
+        "detail": "Root process managing worker lifecycle"
+      },
+      {
+        "id": "B",
+        "label": "Worker 1",
+        "detail": "Handles Sensor A telemetry"
+      },
+      {
+        "id": "C",
+        "label": "Worker 2",
+        "detail": "Handles Sensor B telemetry"
+      },
+      {
+        "id": "D",
+        "label": "Sensor A",
+        "detail": "External data source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B",
+        "label": "supervises"
+      },
+      {
+        "from": "A",
+        "to": "C",
+        "label": "supervises"
+      },
+      {
+        "from": "D",
+        "to": "B",
+        "label": "sends data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.erlang.org/about",
+      "label": "About - Erlang/OTP"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Distributed Sensor Aggregation for Smart Grids, how does the system prevent cascading failures?",
+      "options": [
+        "By using a centralized database to lock all sensor records.",
+        "By isolating each sensor connection into an independent process managed by a supervisor.",
+        "By forcing all sensors to synchronize their state via a global clock.",
+        "By disabling all sensors when one node reports a connectivity error."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on process isolation and supervision trees to contain failures.",
+      "evidence": "Utilizing Erlang/OTP processes, the system isolates each sensor connection into a lightweight, independent process. By employing supervision trees, the system detects process termination and automatically restarts failed handlers"
+    },
+    {
+      "question": "In Distributed Sensor Aggregation for Smart Grids, what is a potential limitation of the proposed architecture?",
+      "options": [
+        "The system cannot handle more than ten sensors simultaneously.",
+        "Excessive memory usage if too many processes are spawned for granular data.",
+        "The system requires manual restarts for every sensor failure.",
+        "Erlang processes are too heavy to be used for network communication."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that while processes are lightweight, excessive spawning can impact memory.",
+      "evidence": "The primary trade-off is memory overhead; while Erlang processes are lightweight, spawning millions of processes for high-frequency granular data can lead to significant heap consumption."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:09.078Z"
+}

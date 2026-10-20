@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "content_security_policy",
+  "title": "Securing the Retail Dashboard Portal",
+  "business": "E-commerce platform administrators managing third-party analytics and marketing scripts.",
+  "problem": "The portal frequently suffers from unauthorized script injection where malicious third-party dependencies attempt to exfiltrate session tokens or manipulate the DOM, bypassing standard input sanitization.",
+  "solution": "Content Security Policy (CSP) acts as a declarative security layer that restricts the browser to only executing scripts from trusted, pre-approved domains. By defining a strict whitelist, the browser automatically blocks any inline scripts or external resources not explicitly authorized in the policy header, effectively neutralizing unauthorized injection attempts.",
+  "steps": [
+    "Audit all existing third-party scripts to identify required domains for analytics and tracking.",
+    "Draft a CSP header using the Content-Security-Policy directive to define script-src and connect-src sources.",
+    "Deploy the policy in report-only mode to monitor for legitimate traffic violations without breaking functionality.",
+    "Analyze report logs to refine the whitelist and remove unnecessary domains.",
+    "Enforce the policy by switching the header to active mode to block unauthorized execution."
+  ],
+  "outcome": "A hardened browser environment where unauthorized scripts are blocked by default, significantly reducing the risk of cross-site scripting and data exfiltration.",
+  "limitation": "A overly restrictive policy can break legitimate application features, such as dynamic script loading or third-party widgets. To check for this, developers must monitor the browser console for CSP violation reports and verify that all essential application features remain functional after enforcement.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CSP Enforcement Flow",
+    "description": "The flow illustrates how the browser validates incoming resources against the defined policy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Web Server",
+        "detail": "Sends HTTP response with CSP header"
+      },
+      {
+        "id": "b",
+        "label": "Browser",
+        "detail": "Receives policy and enforces constraints"
+      },
+      {
+        "id": "c",
+        "label": "Trusted Script",
+        "detail": "Source matches the whitelist"
+      },
+      {
+        "id": "d",
+        "label": "Malicious Script",
+        "detail": "Source is not in the whitelist"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "defines policy"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "blocks"
+      }
+    ]
+  },
+  "code": {
+    "language": "http",
+    "content": "Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted.analytics.com; connect-src 'self';",
+    "explanation": "This header restricts script execution to the origin domain and a specific trusted analytics provider, mapping to the solution of whitelisting domains."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing the Retail Dashboard Portal, how does CSP address the problem of unauthorized script injection?",
+      "options": [
+        "By whitelisting trusted domains and blocking unauthorized script execution.",
+        "By encrypting all data sent between the browser and the server.",
+        "By automatically sanitizing all user input fields on the page.",
+        "By requiring multi-factor authentication for all script loaders."
+      ],
+      "answerIndex": 0,
+      "explanation": "CSP functions by defining a whitelist of sources, ensuring only approved scripts execute.",
+      "evidence": "By defining a strict whitelist, the browser automatically blocks any inline scripts or external resources not explicitly authorized in the policy header, effectively neutralizing unauthorized injection attempts."
+    },
+    {
+      "question": "In Securing the Retail Dashboard Portal, what is a primary limitation of implementing CSP?",
+      "options": [
+        "It increases the latency of all network requests.",
+        "It requires a complete rewrite of the backend database schema.",
+        "It can break legitimate features if the policy is too restrictive.",
+        "It prevents the use of HTTPS for secure communication."
+      ],
+      "answerIndex": 2,
+      "explanation": "Overly restrictive policies can block necessary application functionality, requiring careful testing.",
+      "evidence": "A overly restrictive policy can break legitimate application features, such as dynamic script loading or third-party widgets."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:32.941Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

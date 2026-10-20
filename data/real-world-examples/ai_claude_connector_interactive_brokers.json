@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_interactive_brokers",
+  "title": "Automated Portfolio Rebalancing for Boutique Wealth Managers",
+  "business": "Boutique wealth management firms managing diversified portfolios across global markets.",
+  "problem": "Manual reconciliation of portfolio allocations against target models is time-consuming and prone to human error when adjusting for shifting market conditions.",
+  "solution": "The Claude Interactive Brokers connector enables natural language queries to retrieve current portfolio allocations and generate structured trade instructions for review, bridging the gap between analytical intent and execution.",
+  "steps": [
+    "Authenticate the IBKR connector within the Claude environment to establish secure read-access to account data.",
+    "Query current portfolio allocations using the get_portfolio_allocation tool to identify deviations from the firm's target model.",
+    "Request Claude to draft trade instructions based on identified imbalances using the get_order_instructions tool.",
+    "Review the generated trade instructions within the IBKR platform interface, ensuring all parameters align with compliance requirements before final submission."
+  ],
+  "outcome": "Wealth managers achieve a more responsive rebalancing workflow, allowing for rapid adjustment of holdings based on real-time data without manual spreadsheet calculations.",
+  "limitation": "The connector acts as an intermediary for drafting, not execution; Claude never submits orders directly to the market, requiring a manual review step for every transaction.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Portfolio Rebalancing Workflow",
+    "description": "This diagram illustrates the flow from data retrieval to manual trade approval.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IBKR Account",
+        "detail": "Source of truth for positions and balances"
+      },
+      {
+        "id": "b",
+        "label": "Claude Connector",
+        "detail": "Processes natural language queries"
+      },
+      {
+        "id": "c",
+        "label": "Wealth Manager",
+        "detail": "Reviews and approves trades"
+      },
+      {
+        "id": "d",
+        "label": "Market Execution",
+        "detail": "Final order submission"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "get_portfolio_allocation"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "drafts instructions"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "manual approval"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/interactive-brokers",
+      "label": "Interactive Brokers (IBKR) connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Portfolio Rebalancing for Boutique Wealth Managers, what is the primary role of the Claude connector in addressing the problem of manual reconciliation?",
+      "options": [
+        "It executes trades automatically without human oversight.",
+        "It retrieves allocation data and drafts trade instructions for review.",
+        "It replaces the need for an IBKR account entirely.",
+        "It performs high-frequency trading based on market sentiment."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the connector to bridge analytical intent by drafting instructions based on retrieved data, which the manager then reviews.",
+      "evidence": "The Claude Interactive Brokers connector enables natural language queries to retrieve current portfolio allocations and generate structured trade instructions for review"
+    },
+    {
+      "question": "In Automated Portfolio Rebalancing for Boutique Wealth Managers, what is a key operational limitation of the implementation?",
+      "options": [
+        "The system cannot access historical market data.",
+        "Claude submits orders directly to the market without review.",
+        "The connector requires manual review because Claude never submits orders directly.",
+        "The system is unable to retrieve account balances."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario emphasize that Claude does not execute trades directly, necessitating a manual step.",
+      "evidence": "Claude never submits orders directly to the market, requiring a manual review step for every transaction."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:01.610Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:58.097Z"
+}

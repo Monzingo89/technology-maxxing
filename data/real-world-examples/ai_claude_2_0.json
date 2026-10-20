@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_2_0",
+  "title": "Legacy Model Lifecycle Management",
+  "business": "Enterprise software teams maintaining long-running AI integrations",
+  "problem": "Applications relying on retired models like Claude 2.0 face service failure because requests to retired models will fail, causing downtime in production workflows.",
+  "solution": "Implementing a proactive model lifecycle audit and migration strategy to transition workloads from legacy or deprecated models to active, supported replacements.",
+  "steps": [
+    "Navigate to the Usage page in the Claude Console to export API usage data.",
+    "Review the CSV export to identify specific API keys and model identifiers currently in use.",
+    "Cross-reference identified models against the official model deprecation documentation to confirm their lifecycle status.",
+    "Update application code to point to the recommended replacement model.",
+    "Conduct thorough testing of the application with the new model before the official retirement date."
+  ],
+  "outcome": "Continuous service availability and alignment with supported, high-reliability model versions.",
+  "limitation": "Testing applications with newer models may reveal behavioral differences; verify this by running parallel evaluations of output quality before full deployment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing legacy models to prevent service failure.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage data"
+      },
+      {
+        "id": "b",
+        "label": "Audit CSV",
+        "detail": "List of active and legacy model calls"
+      },
+      {
+        "id": "c",
+        "label": "Migration Logic",
+        "detail": "Update code to target active models"
+      },
+      {
+        "id": "d",
+        "label": "Production",
+        "detail": "Stable service environment"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Export usage data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify legacy models"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Deploy replacement"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Model Lifecycle Management, what is the primary risk of continuing to use a model like Claude 2.0?",
+      "options": [
+        "Requests to retired models will fail",
+        "Increased latency in API responses",
+        "Higher costs per token",
+        "Incompatibility with Python SDK v1.0"
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation and scenario clarify that once a model is retired, requests will fail, leading to service disruption.",
+      "evidence": "Applications relying on retired models like Claude 2.0 face service failure because requests to retired models will fail, causing downtime in production workflows."
+    },
+    {
+      "question": "In Legacy Model Lifecycle Management, what is the recommended approach to mitigate behavioral differences when migrating to a new model?",
+      "options": [
+        "Update the API key immediately",
+        "Conduct thorough testing of the application with the new model",
+        "Omit temperature and top_p parameters",
+        "Contact Anthropic support for model weights"
+      ],
+      "answerIndex": 1,
+      "explanation": "Testing is the standard practice to ensure the new model performs as expected before the retirement date of the old one.",
+      "evidence": "Conduct thorough testing of the application with the new model before the official retirement date."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:26.441Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

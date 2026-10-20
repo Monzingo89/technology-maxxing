@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_api_gateway",
+  "title": "Unified Logistics API Gateway Integration",
+  "business": "A regional logistics firm managing a fleet of delivery drones and ground vehicles that need to report telemetry data to a centralized tracking system.",
+  "problem": "The firm struggles with fragmented endpoint management where disparate microservices for drone telemetry and truck location tracking lack a unified authentication layer, leading to security vulnerabilities and inconsistent data formatting.",
+  "solution": "Amazon API Gateway acts as a centralized front door for the logistics fleet, providing a single entry point that handles request routing, authentication, and protocol transformation for both REST and WebSocket traffic.",
+  "steps": [
+    "Define a REST API resource structure that maps incoming telemetry requests to specific backend microservices.",
+    "Configure an Authorizer to validate incoming tokens from drone and vehicle hardware before forwarding requests.",
+    "Deploy a WebSocket API to enable bidirectional communication for real-time drone control commands.",
+    "Implement request validation to ensure telemetry payloads conform to expected JSON schemas before reaching the backend.",
+    "Enable stage-based deployment to manage different versions of the logistics API for testing and production environments."
+  ],
+  "outcome": "The logistics firm achieves a standardized, secure interface for all fleet communications, reducing the complexity of managing individual microservice endpoints while ensuring consistent security policies across the infrastructure.",
+  "limitation": "API Gateway introduces a potential single point of failure and additional latency for every request; developers must monitor the CloudWatch metrics for 5XX errors and latency spikes to ensure the gateway is not bottlenecking traffic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics API Gateway Architecture",
+    "description": "Flow of telemetry data from fleet vehicles through the API Gateway to backend services.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Fleet Devices",
+        "detail": "Drones and trucks sending telemetry"
+      },
+      {
+        "id": "b",
+        "label": "API Gateway",
+        "detail": "Centralized routing and auth"
+      },
+      {
+        "id": "c",
+        "label": "Telemetry Service",
+        "detail": "REST backend for data storage"
+      },
+      {
+        "id": "d",
+        "label": "Command Service",
+        "detail": "WebSocket backend for real-time control"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS/WSS Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "REST Routing"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "WebSocket Forwarding"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics API Gateway Integration, what is the primary problem addressed by the solution?",
+      "options": [
+        "High latency in drone telemetry data transmission",
+        "Lack of a unified authentication and endpoint management layer",
+        "Inability to scale the number of delivery vehicles",
+        "Excessive costs associated with backend microservices"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that the firm struggles with fragmented endpoint management and lack of a unified authentication layer.",
+      "evidence": "The firm struggles with fragmented endpoint management where disparate microservices for drone telemetry and truck location tracking lack a unified authentication layer, leading to security vulnerabilities and inconsistent data formatting."
+    },
+    {
+      "question": "In Unified Logistics API Gateway Integration, what is a noted limitation of using the API Gateway?",
+      "options": [
+        "It cannot handle WebSocket traffic",
+        "It requires manual deployment for every request",
+        "It acts as a potential single point of failure and adds latency",
+        "It is incompatible with REST-based microservices"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies that the gateway can become a bottleneck and a point of failure, requiring monitoring of latency and error rates.",
+      "evidence": "API Gateway introduces a potential single point of failure and additional latency for every request; developers must monitor the CloudWatch metrics for 5XX errors and latency spikes to ensure the gateway is not bottlenecking traffic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:54.765Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

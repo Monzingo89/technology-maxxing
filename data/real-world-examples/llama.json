@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "llama",
+  "title": "Secure On-Premise Regulatory Compliance Analysis",
+  "business": "Financial institutions requiring strict data residency for document analysis.",
+  "problem": "High latency and data privacy concerns when sending sensitive client financial records to third-party cloud-hosted AI APIs.",
+  "solution": "Deploying Llama models locally within a private data center using the official Llama CLI and model weights to ensure data never leaves the secure perimeter.",
+  "steps": [
+    "Accept the Meta Llama license and request access to model weights via the official portal.",
+    "Install the Llama Models CLI using pip install llama-models in the secure environment.",
+    "Authenticate and download the desired model ID using llama-model download --source meta.",
+    "Configure the local inference environment with necessary dependencies including torch.",
+    "Execute the model using torchrun to manage multi-GPU parallelization for high-throughput document processing."
+  ],
+  "outcome": "Full control over data processing pipelines with zero external network dependency for inference tasks.",
+  "limitation": "Hardware resource requirements; local deployment necessitates significant GPU memory, which can be checked by monitoring VRAM usage during inference.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Llama Deployment Workflow",
+    "description": "The flow from model acquisition to secure local inference.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Meta Portal",
+        "detail": "License acceptance and weight access"
+      },
+      {
+        "id": "b",
+        "label": "Llama CLI",
+        "detail": "Tooling for download and verification"
+      },
+      {
+        "id": "c",
+        "label": "Local GPU Cluster",
+        "detail": "Compute environment for inference"
+      },
+      {
+        "id": "d",
+        "label": "Secure App",
+        "detail": "Internal document analysis service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides signed URL"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "deploys model weights"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "serves local inference"
+      }
+    ]
+  },
+  "code": {
+    "language": "bash",
+    "content": "# Run inference with FP8 quantization to optimize memory usage\nMODE=fp8_mixed\nCHECKPOINT_DIR=~/.llama/checkpoints/Llama-4-Scout-17B-16E-Instruct\n# Use torchrun to distribute the model across available GPUs\ntorchrun --nproc_per_node=2 -m models.llama4.scripts.chat_completion $CHECKPOINT_DIR --quantization-mode $MODE",
+    "explanation": "This script demonstrates how to run a Llama model locally using the provided CLI utilities and quantization flags to manage hardware constraints."
+  },
+  "sources": [
+    {
+      "url": "https://github.com/meta-llama/llama-models",
+      "label": "GitHub - meta-llama/llama-models: Utilities intended for use with Llama models."
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure On-Premise Regulatory Compliance Analysis, what is the primary benefit of the proposed solution?",
+      "options": [
+        "Eliminating the need for GPU hardware",
+        "Ensuring data never leaves the secure perimeter",
+        "Reducing the cost of cloud API subscriptions",
+        "Automatically updating model weights daily"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario focuses on financial institutions that must keep data within a private data center, which is achieved by hosting the model locally.",
+      "evidence": "Deploying Llama models locally within a private data center using the official Llama CLI and model weights to ensure data never leaves the secure perimeter."
+    },
+    {
+      "question": "In Secure On-Premise Regulatory Compliance Analysis, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use Python for inference",
+        "The requirement for internet access during every inference call",
+        "Significant GPU memory requirements for local execution",
+        "The lack of support for quantization modes"
+      ],
+      "answerIndex": 2,
+      "explanation": "Local deployment of large models requires substantial hardware resources, specifically GPU memory, which is a noted trade-off.",
+      "evidence": "Hardware resource requirements; local deployment necessitates significant GPU memory, which can be checked by monitoring VRAM usage during inference."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:50.446Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:46.746Z"
+}

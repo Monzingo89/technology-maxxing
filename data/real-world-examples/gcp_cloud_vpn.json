@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_vpn",
+  "title": "Secure Hybrid Connectivity for Legacy Inventory Systems",
+  "business": "Retail organizations maintaining legacy on-premises inventory databases that require real-time synchronization with cloud-native analytics platforms.",
+  "problem": "The organization faces data silos and security risks when attempting to expose private on-premises database endpoints over the public internet for cloud integration.",
+  "solution": "Cloud VPN establishes a secure, encrypted IPsec tunnel between the on-premises peer network and the Google Cloud VPC, allowing private communication without exposing services to the public internet.",
+  "steps": [
+    "Define a Cloud Router in the target VPC to manage dynamic BGP routing.",
+    "Create a VPN Gateway resource within the Google Cloud console.",
+    "Configure the peer VPN gateway on-premises with matching encryption and authentication settings.",
+    "Establish the IPsec tunnel between the Cloud VPN gateway and the peer gateway.",
+    "Verify route propagation via BGP to ensure traffic flows securely between the VPC and the local network."
+  ],
+  "outcome": "A secure, private communication channel that enables seamless data synchronization between legacy on-premises systems and cloud analytics services.",
+  "limitation": "Cloud VPN tunnels are subject to bandwidth limitations per tunnel; verify throughput requirements by monitoring traffic metrics in the Network Intelligence Center.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cloud VPN Connectivity Flow",
+    "description": "Shows the path of data from the on-premises network through the encrypted tunnel into the Google Cloud VPC.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises Network",
+        "detail": "Legacy inventory database"
+      },
+      {
+        "id": "b",
+        "label": "Peer VPN Gateway",
+        "detail": "Customer-managed hardware"
+      },
+      {
+        "id": "c",
+        "label": "Cloud VPN Gateway",
+        "detail": "Google-managed IPsec endpoint"
+      },
+      {
+        "id": "d",
+        "label": "Google Cloud VPC",
+        "detail": "Analytics platform"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Local traffic"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Encrypted IPsec Tunnel"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Internal VPC routing"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Hybrid Connectivity for Legacy Inventory Systems, how does Cloud VPN resolve the identified security risk?",
+      "options": [
+        "By exposing the database to a public load balancer.",
+        "By encrypting traffic through an IPsec tunnel to avoid public internet exposure.",
+        "By migrating the entire database to a public cloud storage bucket.",
+        "By using a standard firewall to allow all incoming traffic."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that Cloud VPN allows private communication without exposing services to the public internet.",
+      "evidence": "Cloud VPN establishes a secure, encrypted IPsec tunnel between the on-premises peer network and the Google Cloud VPC, allowing private communication without exposing services to the public internet."
+    },
+    {
+      "question": "In Secure Hybrid Connectivity for Legacy Inventory Systems, what is a primary limitation to consider during implementation?",
+      "options": [
+        "The requirement for a physical fiber connection.",
+        "The inability to use BGP for routing.",
+        "Bandwidth limitations per tunnel that require monitoring.",
+        "The lack of support for IPsec encryption."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that tunnels have bandwidth constraints and suggests monitoring via the Network Intelligence Center.",
+      "evidence": "Cloud VPN tunnels are subject to bandwidth limitations per tunnel; verify throughput requirements by monitoring traffic metrics in the Network Intelligence Center."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:24.335Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_stream_analytics",
+  "title": "Real-time Logistics Fleet Monitoring",
+  "business": "Logistics companies managing large fleets of delivery vehicles.",
+  "problem": "Delayed visibility into vehicle status leads to inefficient routing and missed delivery windows when unexpected traffic or mechanical issues occur.",
+  "solution": "Azure Stream Analytics processes incoming telemetry data from vehicle IoT sensors in real-time using SQL-like queries to identify anomalies or route deviations instantly.",
+  "steps": [
+    "Configure an Event Hub to ingest telemetry data streams from vehicle sensors.",
+    "Define an Azure Stream Analytics job to consume the Event Hub input.",
+    "Write a SQL-like query to aggregate sensor data over sliding time windows to detect patterns.",
+    "Route the processed insights to an output sink like Azure SQL Database or Power BI for immediate visualization."
+  ],
+  "outcome": "Improved operational agility through immediate detection of fleet disruptions and proactive route adjustment.",
+  "limitation": "The service requires careful management of input throughput; if the incoming data rate exceeds the provisioned streaming units, processing latency increases, which can be monitored via Azure Monitor metrics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Fleet Telemetry Data Pipeline",
+    "description": "Flow of vehicle data from sensors through processing to actionable insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IoT Sensors",
+        "detail": "Vehicle telemetry source"
+      },
+      {
+        "id": "b",
+        "label": "Event Hub",
+        "detail": "Ingestion buffer"
+      },
+      {
+        "id": "c",
+        "label": "Stream Analytics",
+        "detail": "SQL-like processing engine"
+      },
+      {
+        "id": "d",
+        "label": "SQL Database",
+        "detail": "Historical and alert storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "streams data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "ingests events"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "writes insights"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Stream Analytics"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Logistics Fleet Monitoring, what is the primary business problem addressed?",
+      "options": [
+        "High cost of vehicle maintenance",
+        "Delayed visibility into vehicle status",
+        "Lack of historical data storage",
+        "Inability to hire enough drivers"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that delayed visibility into vehicle status leads to operational inefficiencies.",
+      "evidence": "Delayed visibility into vehicle status leads to inefficient routing and missed delivery windows when unexpected traffic or mechanical issues occur."
+    },
+    {
+      "question": "In Real-time Logistics Fleet Monitoring, what is a potential limitation of the implementation?",
+      "options": [
+        "The service cannot connect to Event Hubs",
+        "SQL-like queries are not supported",
+        "Excessive throughput can increase processing latency",
+        "It requires physical hardware installation"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that exceeding streaming units causes increased latency.",
+      "evidence": "The service requires careful management of input throughput; if the incoming data rate exceeds the provisioned streaming units, processing latency increases, which can be monitored via Azure Monitor metrics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:05.042Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

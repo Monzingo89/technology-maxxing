@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "lamport_timestamp",
+  "title": "Global Event Ordering in Distributed Inventory Systems",
+  "business": "A global retail chain managing distributed inventory across multiple regional data centers.",
+  "problem": "Without a shared physical clock, concurrent updates to stock levels across different regions lead to race conditions where the system cannot determine which transaction occurred first, resulting in inconsistent inventory counts.",
+  "solution": "Lamport Timestamps provide a logical clock mechanism that assigns a monotonically increasing counter to every event. By attaching this counter to messages between nodes, the system establishes a partial ordering of events that respects causality, ensuring that if event A causes event B, A is guaranteed to have a lower timestamp than B.",
+  "steps": [
+    "Initialize a local counter to zero on every inventory node.",
+    "Increment the local counter before executing any local inventory update.",
+    "Attach the current counter value to any inter-node synchronization message.",
+    "Upon receiving a message, update the local counter to be the maximum of the current local value and the received timestamp plus one.",
+    "Use the combined (timestamp, node_id) tuple to break ties and establish a total ordering for all inventory operations."
+  ],
+  "outcome": "The system achieves a consistent causal history of inventory changes, allowing the application to resolve conflicts by identifying the true sequence of operations regardless of physical clock drift.",
+  "limitation": "Lamport Timestamps establish causality but do not provide information about real-time duration or absolute time. A limitation is that they cannot determine if two events are concurrent or simply unrelated in time; this can be checked by verifying if the timestamps of two events are incomparable in the partial order.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Lamport Timestamp Propagation",
+    "description": "Shows how nodes increment counters and synchronize timestamps during communication.",
+    "nodes": [
+      {
+        "id": "n1",
+        "label": "Node A",
+        "detail": "Regional Inventory Server"
+      },
+      {
+        "id": "n2",
+        "label": "Node B",
+        "detail": "Regional Inventory Server"
+      },
+      {
+        "id": "n3",
+        "label": "Sync Event",
+        "detail": "Message with Timestamp T"
+      }
+    ],
+    "edges": [
+      {
+        "from": "n1",
+        "to": "n3",
+        "label": "Attach T=1"
+      },
+      {
+        "from": "n3",
+        "to": "n2",
+        "label": "Update local clock to max(local, T)+1"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Event Ordering in Distributed Inventory Systems, how do Lamport Timestamps resolve the problem of inconsistent inventory counts?",
+      "options": [
+        "By synchronizing all server clocks to a single atomic time source.",
+        "By assigning a logical counter that respects the happened-before relationship.",
+        "By using physical hardware sensors to measure exact latency.",
+        "By rejecting all concurrent updates that arrive at the same time."
+      ],
+      "answerIndex": 1,
+      "explanation": "Lamport Timestamps use logical counters to order events based on causality rather than physical time.",
+      "evidence": "Lamport Timestamps provide a logical clock mechanism that assigns a monotonically increasing counter to every event."
+    },
+    {
+      "question": "What is a primary limitation of the implementation described in Global Event Ordering in Distributed Inventory Systems?",
+      "options": [
+        "The counters grow too large to be stored in memory.",
+        "They require a centralized server to issue timestamps.",
+        "They cannot provide information about real-time duration or absolute time.",
+        "They fail to establish any ordering between nodes."
+      ],
+      "answerIndex": 2,
+      "explanation": "Logical clocks track causality but lack the ability to map events to real-world wall-clock time.",
+      "evidence": "A limitation is that they cannot determine if two events are concurrent or simply unrelated in time; this can be checked by verifying if the timestamps of two events are incomparable in the partial order."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:35.075Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

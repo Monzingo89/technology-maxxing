@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "replication",
+  "title": "Regional Inventory Synchronization for Global Retail",
+  "business": "A global retail chain managing inventory across multiple geographically distributed warehouses needs to ensure that stock levels remain consistent for online orders.",
+  "problem": "If a single warehouse node fails or experiences network partitioning, the central system loses visibility into local stock, leading to overselling or inventory discrepancies that disrupt customer fulfillment.",
+  "solution": "Data replication maintains copies of data across multiple nodes, ensuring that if one node becomes unavailable, the system can route requests to a replica that holds the current state of inventory records.",
+  "steps": [
+    "Identify the primary node responsible for accepting write operations for specific inventory regions.",
+    "Configure follower nodes to asynchronously pull log updates from the primary node to maintain local copies.",
+    "Implement a consensus-based protocol to ensure that replicas acknowledge the receipt of data updates.",
+    "Set up automated failover mechanisms that promote a follower node to primary status if the original primary node stops responding."
+  ],
+  "outcome": "The system achieves higher availability and fault tolerance, allowing the retail chain to process orders even if a specific regional warehouse server is temporarily offline.",
+  "limitation": "The primary limitation is the potential for replication lag, where follower nodes may temporarily hold stale data; this can be checked by monitoring the time difference between the latest log entry on the primary and the last applied entry on the replica.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Replication Flow",
+    "description": "This diagram illustrates how a primary node propagates inventory updates to multiple follower nodes to ensure data redundancy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Primary Node",
+        "detail": "Accepts inventory writes"
+      },
+      {
+        "id": "b",
+        "label": "Follower Node 1",
+        "detail": "Maintains data copy"
+      },
+      {
+        "id": "c",
+        "label": "Follower Node 2",
+        "detail": "Maintains data copy"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Replicates log"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Replicates log"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Regional Inventory Synchronization for Global Retail, what is the primary reason for implementing data replication?",
+      "options": [
+        "To increase the total number of warehouses",
+        "To ensure system availability if a node fails",
+        "To reduce the cost of hardware maintenance",
+        "To eliminate the need for network connections"
+      ],
+      "answerIndex": 1,
+      "explanation": "Replication ensures that if one node fails, the system can continue to operate using the copies stored on other nodes.",
+      "evidence": "Data replication maintains copies of data across multiple nodes, ensuring that if one node becomes unavailable, the system can route requests to a replica that holds the current state of inventory records."
+    },
+    {
+      "question": "In Regional Inventory Synchronization for Global Retail, how can an engineer verify the limitation of replication lag?",
+      "options": [
+        "By measuring the physical distance between warehouses",
+        "By checking the number of nodes in the cluster",
+        "By monitoring the time difference between the primary's latest log and the replica's last applied entry",
+        "By upgrading the primary node's processor speed"
+      ],
+      "answerIndex": 2,
+      "explanation": "Replication lag is a temporal discrepancy between nodes, which is identified by comparing the log progression of the primary against the follower.",
+      "evidence": "The primary limitation is the potential for replication lag, where follower nodes may temporarily hold stale data; this can be checked by monitoring the time difference between the latest log entry on the primary and the last applied entry on the replica."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:57.589Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

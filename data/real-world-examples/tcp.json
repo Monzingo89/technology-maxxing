@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "tcp",
+  "title": "Reliable Log Aggregation for Distributed Sensors",
+  "business": "A remote environmental monitoring firm collecting critical sensor data from isolated weather stations.",
+  "problem": "Unreliable network links cause packet loss and out-of-order delivery, leading to corrupted data logs that prevent accurate climate modeling.",
+  "solution": "Implementing TCP ensures that every byte of sensor data is delivered in the correct sequence, using flow control to prevent overwhelming the central server and congestion control to adapt to fluctuating network bandwidth.",
+  "steps": [
+    "Establish a three-way handshake between the sensor node and the central server to synchronize sequence numbers.",
+    "Segment the raw sensor data stream into manageable packets for transmission.",
+    "Utilize sequence numbers and acknowledgments to ensure the server reconstructs the byte stream in the exact order it was sent.",
+    "Apply sliding window mechanisms to dynamically adjust the data flow rate based on the server's processing capacity.",
+    "Perform a graceful connection termination once the log transmission is complete."
+  ],
+  "outcome": "The central server receives a complete, perfectly ordered log file, eliminating the need for manual data reconciliation or error correction at the application layer.",
+  "limitation": "The overhead of maintaining connection state and waiting for acknowledgments increases latency; monitor the retransmission timeout (RTO) metrics to identify if the network is too unstable for TCP's strict reliability requirements.",
+  "diagram": {
+    "kind": "flow",
+    "title": "TCP Data Transmission Flow",
+    "description": "This diagram illustrates the progression of a reliable data stream from a sensor to a server.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Node",
+        "detail": "Initiates connection"
+      },
+      {
+        "id": "b",
+        "label": "TCP Stack",
+        "detail": "Manages sequencing and ACKs"
+      },
+      {
+        "id": "c",
+        "label": "Network Path",
+        "detail": "Subject to congestion"
+      },
+      {
+        "id": "d",
+        "label": "Central Server",
+        "detail": "Reconstructs byte stream"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Segments data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Transmits packets"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Delivers ordered stream"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Sends acknowledgments"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Reliable Log Aggregation for Distributed Sensors, why is TCP preferred over a connectionless protocol?",
+      "options": [
+        "It provides an ordered reliable byte stream with congestion and flow control.",
+        "It eliminates the need for any network bandwidth management.",
+        "It allows for faster transmission by ignoring packet loss.",
+        "It automatically encrypts all sensor data at the hardware level."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario requires reliable delivery and ordering to prevent data corruption, which TCP provides through its core mechanisms.",
+      "evidence": "Implementing TCP ensures that every byte of sensor data is delivered in the correct sequence, using flow control to prevent overwhelming the central server and congestion control to adapt to fluctuating network bandwidth."
+    },
+    {
+      "question": "In Reliable Log Aggregation for Distributed Sensors, what is a primary trade-off when using TCP?",
+      "options": [
+        "The protocol cannot handle large files.",
+        "The overhead of maintaining connection state and waiting for acknowledgments increases latency.",
+        "It requires the server to manually reorder every packet.",
+        "It is incompatible with modern environmental sensors."
+      ],
+      "answerIndex": 1,
+      "explanation": "TCP's reliability features, such as acknowledgments and state management, introduce latency that must be monitored.",
+      "evidence": "The overhead of maintaining connection state and waiting for acknowledgments increases latency; monitor the retransmission timeout (RTO) metrics to identify if the network is too unstable for TCP's strict reliability requirements."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:37.279Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

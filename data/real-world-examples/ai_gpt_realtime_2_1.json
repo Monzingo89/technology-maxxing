@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_realtime_2_1",
+  "title": "Automated Emergency Dispatch Voice Triage",
+  "business": "Emergency medical dispatch centers handling high volumes of inbound distress calls.",
+  "problem": "Human dispatchers struggle to maintain composure and accuracy during complex, multi-step triage protocols while simultaneously documenting patient symptoms in real-time.",
+  "solution": "The GPT-Realtime-2.1 model leverages its reasoning capabilities and tool use to conduct voice-based triage, guiding callers through standardized medical protocols while executing database lookups to verify patient history or local hospital capacity.",
+  "steps": [
+    "Establish a persistent connection via the v1/realtime endpoint to enable low-latency, bidirectional audio streaming.",
+    "Define custom function tools that allow the model to query external medical databases for patient records.",
+    "Configure the model's reasoning effort parameter to balance the depth of clinical analysis against the need for immediate, conversational response.",
+    "Implement interruption handling to allow the model to pause its current instruction if the caller provides urgent, clarifying information.",
+    "Stream the final triage summary to the dispatch console via tool output, ensuring the human dispatcher receives structured data."
+  ],
+  "outcome": "Improved consistency in triage protocol adherence and reduced cognitive load on dispatchers, allowing them to focus on high-level coordination rather than manual data entry.",
+  "limitation": "Configurable reasoning effort can introduce latency; if the model is set to high reasoning, the conversational flow may experience delays that are unsuitable for critical, time-sensitive emergency interactions. This can be checked by monitoring the time-to-first-token during high-stress simulation scenarios.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Realtime Triage Workflow",
+    "description": "The flow shows how audio input is processed through the model's reasoning engine to trigger external tools.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Caller",
+        "detail": "Provides audio input"
+      },
+      {
+        "id": "b",
+        "label": "GPT-Realtime-2.1",
+        "detail": "Processes audio and reasoning"
+      },
+      {
+        "id": "c",
+        "label": "Medical DB",
+        "detail": "External tool for records"
+      },
+      {
+        "id": "d",
+        "label": "Dispatcher",
+        "detail": "Receives structured summary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "streams audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes tool call"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "sends summary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1",
+      "label": "GPT-Realtime-2.1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Emergency Dispatch Voice Triage, how does the model address the problem of dispatcher cognitive load?",
+      "options": [
+        "By automating the triage protocol and data entry via tool use.",
+        "By replacing the human dispatcher entirely with an automated system.",
+        "By increasing the reasoning effort to eliminate all human oversight.",
+        "By using image generation to visualize patient symptoms."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution states the model uses reasoning and tool use to conduct triage and document symptoms, reducing the manual burden on the dispatcher.",
+      "evidence": "The GPT-Realtime-2.1 model leverages its reasoning capabilities and tool use to conduct voice-based triage, guiding callers through standardized medical protocols while executing database lookups to verify patient history or local hospital capacity."
+    },
+    {
+      "question": "In Automated Emergency Dispatch Voice Triage, what is the primary tradeoff associated with using configurable reasoning effort?",
+      "options": [
+        "Higher reasoning effort can increase latency, potentially impacting time-sensitive interactions.",
+        "Higher reasoning effort always decreases the accuracy of the triage protocol.",
+        "Higher reasoning effort prevents the use of external database tools.",
+        "Higher reasoning effort requires a shift from audio to text-only output."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section explicitly warns that higher reasoning effort can increase latency, which is a critical concern for emergency scenarios.",
+      "evidence": "Configurable reasoning effort can introduce latency; if the model is set to high reasoning, the conversational flow may experience delays that are unsuitable for critical, time-sensitive emergency interactions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:43.767Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:39.969Z"
+}

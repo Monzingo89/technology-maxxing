@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "write_ahead_log",
+  "title": "Ensuring Transaction Durability in Logistics Tracking",
+  "business": "A regional logistics firm managing real-time package routing and fleet telemetry.",
+  "problem": "The system faces potential data loss during unexpected power outages or server crashes, where in-memory modifications to package status are lost before they can be persisted to the main data files on disk.",
+  "solution": "The Write-Ahead Log (WAL) ensures that all changes to data pages are first recorded in a sequential, durable log file before the actual data pages are updated. This allows the system to reconstruct the state of the database by replaying the log entries after a crash, ensuring that no committed transaction is lost.",
+  "steps": [
+    "Configure the database to enable WAL logging to a dedicated storage volume.",
+    "Perform a transaction that modifies package location status.",
+    "The database engine appends the change to the WAL buffer and flushes it to persistent storage.",
+    "The engine asynchronously updates the actual data pages in the background.",
+    "Upon a crash, the system reads the WAL files to re-apply any missing changes to the data pages."
+  ],
+  "outcome": "The system achieves high reliability, ensuring that once a transaction is acknowledged as committed, the data remains intact even if the server experiences a sudden hardware failure.",
+  "limitation": "The primary trade-off is increased disk I/O overhead, as every transaction requires a sequential write to the log before completion. Administrators can monitor this by checking the WAL write latency and ensuring the log volume has sufficient throughput to prevent transaction stalls.",
+  "diagram": {
+    "kind": "flow",
+    "title": "WAL Transaction Flow",
+    "description": "The sequence of events from a client request to final disk persistence.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Application sending update"
+      },
+      {
+        "id": "b",
+        "label": "WAL Buffer",
+        "detail": "In-memory log staging"
+      },
+      {
+        "id": "c",
+        "label": "WAL File",
+        "detail": "Durable sequential storage"
+      },
+      {
+        "id": "d",
+        "label": "Data Pages",
+        "detail": "Main database storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends transaction"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Flushes log entry"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Updates data pages"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Ensuring Transaction Durability in Logistics Tracking, what is the primary purpose of the WAL?",
+      "options": [
+        "To record changes durably before modified data pages are written",
+        "To increase the speed of complex analytical queries",
+        "To provide a backup of the entire database schema",
+        "To manage user authentication and role permissions"
+      ],
+      "answerIndex": 0,
+      "explanation": "The WAL is designed to ensure durability by logging changes before they are applied to the main data files.",
+      "evidence": "The Write-Ahead Log (WAL) ensures that all changes to data pages are first recorded in a sequential, durable log file before the actual data pages are updated."
+    },
+    {
+      "question": "In Ensuring Transaction Durability in Logistics Tracking, what is the main trade-off when using WAL?",
+      "options": [
+        "Increased CPU usage for encryption",
+        "Increased disk I/O overhead",
+        "Higher memory consumption for the buffer",
+        "Slower network latency for remote clients"
+      ],
+      "answerIndex": 1,
+      "explanation": "Writing to the log for every transaction adds overhead to the disk I/O subsystem.",
+      "evidence": "The primary trade-off is increased disk I/O overhead, as every transaction requires a sequential write to the log before completion."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:45.981Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

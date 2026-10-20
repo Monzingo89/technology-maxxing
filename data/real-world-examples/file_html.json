@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "file_html",
+  "title": "HTML Document Integrity for Content Management",
+  "business": "Content management systems that ingest user-provided HTML for display in internal dashboards.",
+  "problem": "Unstructured or malformed HTML input leads to broken layout rendering and potential security risks when injected into the main document.",
+  "solution": "Utilizing the HTML document structure and standard element definitions to sanitize and validate incoming content against defined content models.",
+  "steps": [
+    "Define a strict subset of allowed HTML elements based on the specification's content models.",
+    "Parse the incoming raw string into a DOM tree to identify structural errors.",
+    "Strip elements that violate the intended content model or contain prohibited attributes.",
+    "Serialize the sanitized DOM tree back into a clean HTML string for storage."
+  ],
+  "outcome": "Consistent document rendering and reduced risk of cross-site scripting through structural validation.",
+  "limitation": "The primary tradeoff is the overhead of parsing and rebuilding the DOM tree, which can be checked by monitoring the latency of the sanitization service during high-volume ingestion.",
+  "diagram": {
+    "kind": "flow",
+    "title": "HTML Sanitization Pipeline",
+    "description": "The process of transforming raw input into a safe document structure.",
+    "nodes": [
+      {
+        "id": "raw",
+        "label": "Raw HTML Input",
+        "detail": "Untrusted string data"
+      },
+      {
+        "id": "parser",
+        "label": "DOM Parser",
+        "detail": "Creates a DOM tree"
+      },
+      {
+        "id": "validator",
+        "label": "Content Validator",
+        "detail": "Checks against content models"
+      },
+      {
+        "id": "clean",
+        "label": "Sanitized HTML",
+        "detail": "Safe output string"
+      }
+    ],
+    "edges": [
+      {
+        "from": "raw",
+        "to": "parser",
+        "label": "stream"
+      },
+      {
+        "from": "parser",
+        "to": "validator",
+        "label": "tree traversal"
+      },
+      {
+        "from": "validator",
+        "to": "clean",
+        "label": "serialization"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://html.spec.whatwg.org/multipage/",
+      "label": "HTML Standard"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In HTML Document Integrity for Content Management, why is DOM tree parsing used?",
+      "options": [
+        "To identify structural errors and sanitize input",
+        "To increase the speed of network requests",
+        "To bypass the need for character encoding",
+        "To automatically generate CSS styles"
+      ],
+      "answerIndex": 0,
+      "explanation": "Parsing the raw string into a DOM tree allows the system to inspect the structure and validate it against defined content models.",
+      "evidence": "Parse the incoming raw string into a DOM tree to identify structural errors."
+    },
+    {
+      "question": "What is a primary limitation identified in HTML Document Integrity for Content Management?",
+      "options": [
+        "The inability to use CSS",
+        "The overhead of parsing and rebuilding the DOM tree",
+        "The requirement for XML syntax",
+        "The lack of support for metadata"
+      ],
+      "answerIndex": 1,
+      "explanation": "The process of sanitizing HTML involves computational overhead that can impact performance during high-volume ingestion.",
+      "evidence": "The primary tradeoff is the overhead of parsing and rebuilding the DOM tree, which can be checked by monitoring the latency of the sanitization service during high-volume ingestion."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:48.411Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:45.439Z"
+}

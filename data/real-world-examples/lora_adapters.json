@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "lora_adapters",
+  "title": "Efficient Domain Adaptation for Legal Document Review",
+  "business": "Legal technology firms providing automated contract analysis services.",
+  "problem": "Full fine-tuning of large language models for specific legal jurisdictions is prohibitively expensive due to the massive parameter count and GPU memory requirements.",
+  "solution": "LoRA (Low-Rank Adaptation) freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer, drastically reducing the number of trainable parameters.",
+  "steps": [
+    "Load the pre-trained base model in a frozen state.",
+    "Define a LoraConfig specifying target modules such as attention blocks.",
+    "Initialize the low-rank update matrices using the configuration.",
+    "Train only the injected adapter weights on the legal dataset.",
+    "Merge the adapter weights with the base model to eliminate inference latency."
+  ],
+  "outcome": "The firm achieves domain-specific accuracy comparable to full fine-tuning while maintaining a lightweight, portable adapter for each legal jurisdiction.",
+  "limitation": "Targeting specific parameters like MoE expert weights can introduce runtime overhead; check performance by monitoring inference latency and consider merging weights if slowdowns occur.",
+  "diagram": {
+    "kind": "flow",
+    "title": "LoRA Adaptation Workflow",
+    "description": "The process of adapting a frozen base model using low-rank decomposition.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Base Model",
+        "detail": "Frozen pre-trained weights"
+      },
+      {
+        "id": "b",
+        "label": "LoraConfig",
+        "detail": "Defines rank r and target modules"
+      },
+      {
+        "id": "c",
+        "label": "Update Matrices",
+        "detail": "Trainable low-rank decomposition"
+      },
+      {
+        "id": "d",
+        "label": "Adapted Model",
+        "detail": "Base + merged LoRA weights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "frozen"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "configures"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "merges into"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from peft import LoraConfig, get_peft_model\n# Configure LoRA to target attention layers for legal domain adaptation\nconfig = LoraConfig(\n    r=16, \n    target_modules=['query', 'value'], \n    lora_alpha=16\n)\n# Wrap the base model with the LoRA adapter\nmodel = get_peft_model(base_model, config)",
+    "explanation": "This code demonstrates initializing the LoRA configuration and applying it to a base model to enable efficient training of specific attention layers."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/docs/peft/main/package_reference/lora",
+      "label": "LoRA · Hugging Face PEFT documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Efficient Domain Adaptation for Legal Document Review, how does LoRA address the cost of model adaptation?",
+      "options": [
+        "By retraining all model parameters to ensure maximum accuracy.",
+        "By freezing pre-trained weights and injecting small, trainable rank decomposition matrices.",
+        "By replacing the entire Transformer architecture with a smaller model.",
+        "By increasing the rank of the original weight matrices to improve capacity."
+      ],
+      "answerIndex": 1,
+      "explanation": "LoRA reduces the number of trainable parameters by keeping the base model frozen and only training the injected low-rank matrices.",
+      "evidence": "LoRA (Low-Rank Adaptation) freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer, drastically reducing the number of trainable parameters."
+    },
+    {
+      "question": "In Efficient Domain Adaptation for Legal Document Review, what is a potential limitation of the implementation?",
+      "options": [
+        "The model cannot be used for inference after training.",
+        "Targeting specific parameters like MoE expert weights can introduce runtime overhead.",
+        "The base model weights are permanently modified during training.",
+        "LoRA is incompatible with PyTorch models."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that targeting specific parameters, particularly in MoE layers, can cause inference slowdowns, necessitating weight merging.",
+      "evidence": "Targeting specific parameters like MoE expert weights can introduce runtime overhead; check performance by monitoring inference latency and consider merging weights if slowdowns occur."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:07.227Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:03.310Z"
+}

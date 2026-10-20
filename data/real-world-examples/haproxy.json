@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "haproxy",
+  "title": "Resilient Microservice Traffic Distribution",
+  "business": "Organizations running distributed web services that require high availability and consistent backend health monitoring.",
+  "problem": "Manual traffic routing often leads to downtime when individual backend nodes fail, as traffic continues to be routed to unresponsive services, causing user-facing errors.",
+  "solution": "HAProxy acts as a reverse proxy that performs active health checks on backend servers and distributes traffic based on defined load balancing algorithms, ensuring requests only reach healthy instances.",
+  "steps": [
+    "Define a backend section in the configuration file specifying the list of available server nodes.",
+    "Configure health check parameters within the server lines to monitor service availability via periodic requests.",
+    "Set a load balancing algorithm, such as round-robin, to distribute incoming traffic across the healthy server pool.",
+    "Configure the frontend to receive incoming client traffic and route it to the defined backend.",
+    "Validate the configuration using the HAProxy CLI to ensure syntax correctness before applying changes."
+  ],
+  "outcome": "Improved service reliability where traffic is automatically diverted away from failing nodes, resulting in a seamless user experience during backend maintenance or outages.",
+  "limitation": "Active health checks consume network resources and backend processing capacity; monitor the frequency of checks to ensure they do not become a source of overhead for the backend services.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Traffic Distribution Flow",
+    "description": "Explains how incoming traffic is filtered through HAProxy to healthy backends.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Source of incoming HTTP/TCP traffic"
+      },
+      {
+        "id": "b",
+        "label": "HAProxy",
+        "detail": "Reverse proxy performing health checks"
+      },
+      {
+        "id": "c",
+        "label": "Backend A",
+        "detail": "Healthy service node"
+      },
+      {
+        "id": "d",
+        "label": "Backend B",
+        "detail": "Unhealthy service node"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Route Traffic"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Health Check Fail"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.haproxy.org/",
+      "label": "HAProxy - The Reliable, High Perf. TCP/HTTP Load Balancer"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Resilient Microservice Traffic Distribution, what is the primary role of the reverse proxy?",
+      "options": [
+        "To perform active health checks and distribute traffic to healthy nodes",
+        "To replace the backend database entirely",
+        "To encrypt all client-side traffic automatically",
+        "To increase the hardware capacity of the backend servers"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on HAProxy's ability to monitor backend health and route traffic only to functional instances.",
+      "evidence": "HAProxy acts as a reverse proxy that performs active health checks on backend servers and distributes traffic based on defined load balancing algorithms, ensuring requests only reach healthy instances."
+    },
+    {
+      "question": "In Resilient Microservice Traffic Distribution, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use round-robin algorithms",
+        "The potential for health checks to consume network and backend resources",
+        "The requirement to manually restart the proxy for every request",
+        "The lack of support for HTTP traffic"
+      ],
+      "answerIndex": 1,
+      "explanation": "Health checks are not free; they add overhead that must be managed to prevent performance degradation.",
+      "evidence": "Active health checks consume network resources and backend processing capacity; monitor the frequency of checks to ensure they do not become a source of overhead for the backend services."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:13.051Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:09.080Z"
+}

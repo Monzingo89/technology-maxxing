@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "tool_calling_agents",
+  "title": "Automated Logistics Inventory Reconciliation",
+  "business": "Logistics companies managing high-volume warehouse inventory across distributed regional hubs.",
+  "problem": "Manual inventory reconciliation is slow and error-prone, leading to stock discrepancies and delayed order fulfillment.",
+  "solution": "Implementing an agent with Programmatic Tool Calling allows the model to execute complex, multi-step inventory checks in a single hosted V8 environment, reducing round-trip latency.",
+  "steps": [
+    "Define a Pydantic model for inventory output to ensure strict schema validation.",
+    "Create a FunctionTool to fetch real-time stock levels from the warehouse database.",
+    "Configure an Agent with ProgrammaticToolCallingTool and set model_settings to programmatic_tool_calling.",
+    "Implement the agent to summarize inventory data across multiple SKUs using the programmatic execution environment."
+  ],
+  "outcome": "Faster, consistent inventory reporting without requiring constant model-to-client communication for every sub-task.",
+  "limitation": "Programmatic Tool Calling disables provider-managed retries, requiring developers to implement robust error handling within the tool logic to manage potential execution failures.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Programmatic Inventory Reconciliation Flow",
+    "description": "Shows how the agent orchestrates inventory tasks via a programmatic environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Agent",
+        "detail": "Orchestrates the request"
+      },
+      {
+        "id": "b",
+        "label": "ProgrammaticToolCallingTool",
+        "detail": "Hosted V8 execution environment"
+      },
+      {
+        "id": "c",
+        "label": "get_inventory",
+        "detail": "Function tool fetching data"
+      },
+      {
+        "id": "d",
+        "label": "InventoryOutput",
+        "detail": "Pydantic schema for validation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "delegates logic"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "validates output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import Agent, ProgrammaticToolCallingTool, ModelSettings\n# Define tool with allowed_callers to enable programmatic access\n@tool(allowed_callers=[\"programmatic\"])\ndef get_stock(sku: str) -> int:\n    return 100 # Mock database lookup\n\nagent = Agent(\n    name=\"InventoryAgent\",\n    model_settings=ModelSettings(tool_choice=\"programmatic_tool_calling\"),\n    tools=[get_stock, ProgrammaticToolCallingTool()]\n)",
+    "explanation": "This code sets up the agent to use the programmatic tool calling feature, allowing the model to execute the get_stock function within a hosted environment."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/tools/",
+      "label": "Tools - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Inventory Reconciliation, how does the technology address the problem of slow manual reconciliation?",
+      "options": [
+        "By automating multi-step inventory checks in a single hosted environment to reduce latency.",
+        "By replacing all human warehouse staff with automated robotic systems.",
+        "By using web search tools to guess inventory levels based on public data.",
+        "By removing the need for any database lookups during the reconciliation process."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages programmatic tool calling to execute complex workflows in a single environment, which directly addresses the latency issues of manual reconciliation.",
+      "evidence": "Implementing an agent with Programmatic Tool Calling allows the model to execute complex, multi-step inventory checks in a single hosted V8 environment, reducing round-trip latency."
+    },
+    {
+      "question": "What is a key trade-off when implementing Automated Logistics Inventory Reconciliation using Programmatic Tool Calling?",
+      "options": [
+        "It requires the agent to be hosted on a local physical server.",
+        "It disables provider-managed retries, necessitating custom error handling.",
+        "It prevents the use of Pydantic models for schema validation.",
+        "It forces the agent to use only WebSearchTool for all operations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that programmatic tool calling disables provider-managed retries, which is a significant operational trade-off.",
+      "evidence": "Programmatic Tool Calling disables provider-managed retries, requiring developers to implement robust error handling within the tool logic to manage potential execution failures."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:29.597Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:34.644Z"
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "influxdb",
+  "title": "Optimizing Smart Grid Telemetry",
+  "business": "Utility companies managing distributed smart grid sensors.",
+  "problem": "High-frequency telemetry data from thousands of sensors causes ingestion bottlenecks and slow query performance for real-time grid balancing.",
+  "solution": "InfluxDB 3 Core provides a high-speed, single-node engine that utilizes columnar Parquet storage and in-memory caching to enable sub-10ms query responses for recent telemetry data.",
+  "steps": [
+    "Deploy InfluxDB 3 Core using the provided installation script on the edge server.",
+    "Configure the ingestion pipeline to map sensor IDs as tags and voltage readings as fields.",
+    "Utilize the native SQL interface to define time-windowed aggregations for grid load monitoring.",
+    "Leverage the built-in caching layer to serve the most recent 5-minute telemetry snapshots to the dashboard."
+  ],
+  "outcome": "Improved grid stability through near-instantaneous visibility into sensor fluctuations and reduced infrastructure overhead.",
+  "limitation": "InfluxDB 3 Core is optimized for recent data; heavy, long-range historical queries may require upgrading to the Enterprise version for distributed compute resources.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Data Flow",
+    "description": "The path of sensor data from the grid to the visualization layer.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensors",
+        "detail": "Grid hardware emitting telemetry"
+      },
+      {
+        "id": "b",
+        "label": "Ingest",
+        "detail": "High-speed data entry"
+      },
+      {
+        "id": "c",
+        "label": "Cache",
+        "detail": "In-memory hot data storage"
+      },
+      {
+        "id": "d",
+        "label": "Parquet",
+        "detail": "Long-term object storage"
+      },
+      {
+        "id": "e",
+        "label": "Query",
+        "detail": "SQL-based dashboard access"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Writes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Hot data"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Sub-10ms read"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Persistence"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.influxdata.com/products/influxdb/",
+      "label": "InfluxDB 3 Core"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Smart Grid Telemetry, what is the primary benefit of the solution for grid balancing?",
+      "options": [
+        "Sub-10ms query responses for recent telemetry data",
+        "Automatic replacement of all legacy hardware",
+        "Elimination of the need for SQL knowledge",
+        "Unlimited historical storage at no cost"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that sub-10ms query responses are critical for real-time grid balancing.",
+      "evidence": "InfluxDB 3 Core provides a high-speed, single-node engine that utilizes columnar Parquet storage and in-memory caching to enable sub-10ms query responses for recent telemetry data."
+    },
+    {
+      "question": "In Optimizing Smart Grid Telemetry, what is a key limitation of the chosen technology?",
+      "options": [
+        "It cannot handle high-cardinality data",
+        "It requires a multi-node cluster for all deployments",
+        "Long-range historical queries may require an upgrade to Enterprise",
+        "It does not support SQL-based queries"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly notes that while Core is great for recent data, historical queries might necessitate an Enterprise upgrade.",
+      "evidence": "InfluxDB 3 Core is optimized for recent data; heavy, long-range historical queries may require upgrading to the Enterprise version for distributed compute resources."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:57.528Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:54.121Z"
+}

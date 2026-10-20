@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_waf",
+  "title": "Securing Global E-Commerce Checkout Endpoints",
+  "business": "A global e-commerce retailer operating a high-traffic checkout API that processes thousands of transactions per minute.",
+  "problem": "The retailer faces frequent automated credential stuffing attacks and malicious bot traffic targeting their checkout endpoints, leading to unauthorized account access and increased infrastructure load.",
+  "solution": "AWS WAF provides a managed layer of defense by inspecting incoming web requests to supported AWS endpoints. By deploying configurable inspection rules, the retailer can filter out malicious traffic patterns, such as known bad IP addresses or abnormal request rates, before they reach the backend application servers.",
+  "steps": [
+    "Define a Web ACL to serve as the central container for security rules.",
+    "Configure managed rule groups to automatically block common web exploits and known bot signatures.",
+    "Associate the Web ACL with the specific Amazon CloudFront distribution or Application Load Balancer hosting the checkout API.",
+    "Monitor request patterns using WAF logs to refine rule sensitivity and minimize false positives."
+  ],
+  "outcome": "The checkout service experiences a significant reduction in unauthorized traffic, ensuring that legitimate customer transactions are processed without interference from automated botnets.",
+  "limitation": "A critical limitation is the potential for false positives where legitimate user traffic is blocked due to overly restrictive rules. Administrators must regularly review WAF logs to verify that legitimate traffic is not being inadvertently dropped.",
+  "diagram": {
+    "kind": "flow",
+    "title": "WAF Request Inspection Flow",
+    "description": "This diagram illustrates the path of a web request through the AWS WAF inspection layer before reaching the application.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Client",
+        "detail": "External user or bot"
+      },
+      {
+        "id": "waf",
+        "label": "AWS WAF",
+        "detail": "Inspection engine with Web ACL"
+      },
+      {
+        "id": "alb",
+        "label": "Endpoint",
+        "detail": "Application Load Balancer"
+      },
+      {
+        "id": "app",
+        "label": "Backend",
+        "detail": "Checkout API Service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "waf",
+        "label": "Sends HTTP Request"
+      },
+      {
+        "from": "waf",
+        "to": "alb",
+        "label": "Forwards allowed traffic"
+      },
+      {
+        "from": "alb",
+        "to": "app",
+        "label": "Routes to API"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Global E-Commerce Checkout Endpoints, how does the technology address the problem of automated bot traffic?",
+      "options": [
+        "By filtering malicious traffic patterns before they reach the backend application servers.",
+        "By increasing the server capacity to handle higher request volumes.",
+        "By encrypting all incoming traffic at the database level.",
+        "By migrating the application to a different geographic region."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that AWS WAF filters malicious traffic patterns before they reach the backend.",
+      "evidence": "AWS WAF provides a managed layer of defense by inspecting incoming web requests to supported AWS endpoints. By deploying configurable inspection rules, the retailer can filter out malicious traffic patterns, such as known bad IP addresses or abnormal request rates, before they reach the backend application servers."
+    },
+    {
+      "question": "What is a primary trade-off mentioned in Securing Global E-Commerce Checkout Endpoints regarding rule implementation?",
+      "options": [
+        "The risk of blocking legitimate user traffic due to overly restrictive rules.",
+        "The inability to log requests for security auditing.",
+        "The requirement to manually update IP addresses every hour.",
+        "The high cost of maintaining the Web ACL configuration."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section highlights the risk of false positives where legitimate traffic is blocked.",
+      "evidence": "A critical limitation is the potential for false positives where legitimate user traffic is blocked due to overly restrictive rules."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:29.592Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

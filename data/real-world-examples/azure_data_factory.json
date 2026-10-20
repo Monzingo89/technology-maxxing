@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_data_factory",
+  "title": "Retail Inventory Synchronization Pipeline",
+  "business": "Retailers managing multi-site inventory systems.",
+  "problem": "Manual data reconciliation between on-premises legacy point-of-sale databases and cloud-based inventory management systems causes significant latency and data inconsistencies.",
+  "solution": "Azure Data Factory orchestrates data movement and transformation through managed pipelines and connectors, automating the extraction of on-premises sales data and loading it into the cloud data lake for centralized processing.",
+  "steps": [
+    "Configure a self-hosted integration runtime to securely connect to the on-premises legacy database.",
+    "Define a linked service to establish the connection string and authentication credentials for the source database.",
+    "Create a copy activity within a pipeline to move raw sales data from the source to the cloud storage.",
+    "Implement a mapping data flow to transform and clean the data before it reaches the final destination."
+  ],
+  "outcome": "Automated, reliable, and timely synchronization of inventory data across all retail locations without manual intervention.",
+  "limitation": "The self-hosted integration runtime requires a dedicated machine on the local network, which introduces a dependency on local infrastructure uptime and maintenance.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Pipeline Architecture",
+    "description": "Shows the flow of data from on-premises systems to the cloud via ADF.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises POS",
+        "detail": "Source legacy database"
+      },
+      {
+        "id": "b",
+        "label": "Self-Hosted IR",
+        "detail": "Bridge for hybrid connectivity"
+      },
+      {
+        "id": "c",
+        "label": "ADF Pipeline",
+        "detail": "Orchestration engine"
+      },
+      {
+        "id": "d",
+        "label": "Cloud Data Lake",
+        "detail": "Destination storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Extracts"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Transfers"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Loads"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Data Factory"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Synchronization Pipeline, what is the primary role of Azure Data Factory?",
+      "options": [
+        "Orchestrates data movement and transformation through managed pipelines and connectors",
+        "Provides a physical server for hosting on-premises legacy databases",
+        "Acts as a real-time streaming engine for IoT telemetry data",
+        "Serves as a front-end interface for retail point-of-sale systems"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly defines Azure Data Factory as the tool used to orchestrate data movement and transformation.",
+      "evidence": "Azure Data Factory orchestrates data movement and transformation through managed pipelines and connectors"
+    },
+    {
+      "question": "In Retail Inventory Synchronization Pipeline, what is a key limitation of the implementation?",
+      "options": [
+        "The pipeline cannot connect to cloud-based data lakes",
+        "The self-hosted integration runtime requires a dedicated local machine",
+        "Data transformation is only possible using manual SQL scripts",
+        "The system is unable to handle hybrid data integration"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the self-hosted integration runtime introduces a dependency on local infrastructure.",
+      "evidence": "The self-hosted integration runtime requires a dedicated machine on the local network, which introduces a dependency on local infrastructure uptime and maintenance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:43.447Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

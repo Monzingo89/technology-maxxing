@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "age",
+  "title": "Secure Configuration Distribution for Edge Nodes",
+  "business": "DevOps teams managing distributed edge infrastructure",
+  "problem": "Distributing sensitive configuration files to specific edge nodes without exposing secrets to intermediate CI/CD storage or unauthorized administrators.",
+  "solution": "Using age to perform recipient-based encryption, ensuring that only the specific edge node holding the corresponding private key can decrypt the configuration, leveraging small explicit keys for easy management.",
+  "steps": [
+    "Generate a unique age key pair for each edge node using age-keygen.",
+    "Store the public key in a central configuration repository and keep the secret key locally on the target edge node.",
+    "Encrypt the sensitive configuration file using the target node's public key via the -r flag.",
+    "Distribute the resulting .age file to the edge node via standard file transfer protocols.",
+    "Decrypt the file locally on the edge node using the stored secret key."
+  ],
+  "outcome": "Configuration files remain encrypted at rest and in transit, with decryption restricted strictly to the intended edge node hardware.",
+  "limitation": "The primary tradeoff is key management complexity; if an edge node's secret key is lost, the encrypted configuration cannot be recovered. This can be checked by verifying the availability of the secret key file before initiating the encryption process.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Edge Configuration Encryption Flow",
+    "description": "The flow shows how a central server encrypts data for a specific edge node using its public key.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Central Server",
+        "detail": "Holds public keys for all edge nodes"
+      },
+      {
+        "id": "b",
+        "label": "Config File",
+        "detail": "Plaintext sensitive data"
+      },
+      {
+        "id": "c",
+        "label": "age Encryption",
+        "detail": "Process using -r recipient key"
+      },
+      {
+        "id": "d",
+        "label": "Edge Node",
+        "detail": "Holds secret key for decryption"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "provides public key"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "transfers .age file"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://github.com/FiloSottile/age",
+      "label": "GitHub - FiloSottile/age: A simple, modern and secure encryption tool"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Configuration Distribution for Edge Nodes, how does the solution address the problem of secret exposure?",
+      "options": [
+        "By encrypting data specifically for the target node's public key.",
+        "By using a shared passphrase for all edge nodes.",
+        "By relying on standard file permissions in the CI/CD pipeline.",
+        "By using SSH agent forwarding for every deployment."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution uses recipient-based encryption where only the holder of the specific private key can decrypt the data.",
+      "evidence": "Using age to perform recipient-based encryption, ensuring that only the specific edge node holding the corresponding private key can decrypt the configuration"
+    },
+    {
+      "question": "In Secure Configuration Distribution for Edge Nodes, what is the primary limitation regarding key management?",
+      "options": [
+        "The encryption process is too slow for large files.",
+        "The public keys are too large to store in a repository.",
+        "Loss of the secret key results in permanent data loss.",
+        "The software requires complex configuration files."
+      ],
+      "answerIndex": 2,
+      "explanation": "Since age uses explicit keys, the loss of the private key makes the encrypted data inaccessible.",
+      "evidence": "The primary tradeoff is key management complexity; if an edge node's secret key is lost, the encrypted configuration cannot be recovered."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:22.254Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:18.703Z"
+}

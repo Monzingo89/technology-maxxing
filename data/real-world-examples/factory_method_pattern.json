@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "factory_method_pattern",
+  "title": "Logistics Route Orchestration",
+  "business": "Global logistics providers managing multi-modal freight shipments.",
+  "problem": "Hard-coded instantiation of transport handlers leads to rigid systems where adding a new transport mode, such as autonomous drone delivery, requires modifying existing core business logic, increasing the risk of regression errors.",
+  "solution": "The Factory Method Pattern decouples the client code from the concrete transport classes by defining an abstract creation method in a base orchestrator. Subclasses override this method to instantiate the specific transport handler required for the shipment type, allowing the system to scale without altering the core orchestration logic.",
+  "steps": [
+    "Define an abstract base class for the logistics orchestrator containing a deferred creation method.",
+    "Implement concrete creator subclasses for each transport mode, such as SeaLogistics or AirLogistics.",
+    "Define a common interface for all transport handlers to ensure consistent behavior.",
+    "Configure the client to use the abstract orchestrator, which delegates object creation to the specific subclass implementation."
+  ],
+  "outcome": "The system achieves high extensibility, allowing developers to introduce new transport modes by adding new classes rather than modifying existing, tested orchestration code.",
+  "limitation": "The pattern introduces a proliferation of subclasses, which can increase architectural complexity. To check if this is becoming a burden, monitor the ratio of creator subclasses to actual business logic; if the number of creators grows disproportionately to the core functionality, consider consolidating logic or using a registry-based approach.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Factory Flow",
+    "description": "Shows how the client interacts with the abstract orchestrator to receive a concrete transport handler.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Requests shipment processing"
+      },
+      {
+        "id": "b",
+        "label": "AbstractOrchestrator",
+        "detail": "Defines factory method"
+      },
+      {
+        "id": "c",
+        "label": "ConcreteCreator",
+        "detail": "Implements creation logic"
+      },
+      {
+        "id": "d",
+        "label": "TransportHandler",
+        "detail": "Executes delivery"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "overridden by"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "instantiates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Route Orchestration, what is the primary benefit of using the Factory Method Pattern?",
+      "options": [
+        "It eliminates the need for database mappers.",
+        "It allows adding new transport modes without modifying core orchestration logic.",
+        "It automatically optimizes shipment routes using AI.",
+        "It reduces the total number of classes in the system."
+      ],
+      "answerIndex": 1,
+      "explanation": "The pattern specifically addresses the problem of rigid systems where adding new types requires modifying existing code, by deferring instantiation to subclasses.",
+      "evidence": "The Factory Method Pattern decouples the client code from the concrete transport classes by defining an abstract creation method in a base orchestrator. Subclasses override this method to instantiate the specific transport handler required for the shipment type, allowing the system to scale without altering the core orchestration logic."
+    },
+    {
+      "question": "In Logistics Route Orchestration, what is a potential limitation to monitor?",
+      "options": [
+        "The pattern prevents the use of interfaces.",
+        "The pattern requires all objects to be created at startup.",
+        "The pattern can lead to a proliferation of subclasses increasing complexity.",
+        "The pattern forces all transport handlers to be identical."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that the pattern can lead to too many subclasses, which increases architectural complexity.",
+      "evidence": "The pattern introduces a proliferation of subclasses, which can increase architectural complexity."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:22.476Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

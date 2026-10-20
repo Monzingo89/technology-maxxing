@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "redpanda",
+  "title": "Decoupling Smart Grid Sensor Streams",
+  "business": "Utility companies managing smart grid infrastructure that requires real-time monitoring of power consumption across thousands of residential sensors.",
+  "problem": "Tight coupling between sensor data producers and legacy billing/analytics consumers causes system-wide latency during peak load, as producers must wait for synchronous acknowledgments from every downstream consumer.",
+  "solution": "Redpanda acts as an asynchronous event streaming buffer, allowing producers to write sensor events to a durable, replayable log without waiting for downstream processing, effectively decoupling the ingestion layer from the analytical layer.",
+  "steps": [
+    "Deploy a Redpanda cluster to serve as the central event streaming platform.",
+    "Configure sensor applications as producers to send state-change events to specific Redpanda topics using the Kafka API.",
+    "Implement independent consumer services that subscribe to these topics to process data for billing and real-time grid health monitoring.",
+    "Utilize Tiered Storage to offload older log segments to object storage for long-term compliance and historical analysis."
+  ],
+  "outcome": "Improved system resilience and reduced ingestion latency, as producers no longer experience backpressure from slow downstream consumer applications.",
+  "limitation": "The primary trade-off is the complexity of managing asynchronous state consistency; developers must ensure that consumers are idempotent, as they may process events at different speeds or replay them during recovery. Check for lag using Redpanda Console to monitor consumer group offsets.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Decoupled Event Streaming Architecture",
+    "description": "Shows how Redpanda decouples producers from consumers to enable asynchronous processing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Producers",
+        "detail": "IoT devices emitting events"
+      },
+      {
+        "id": "b",
+        "label": "Redpanda Cluster",
+        "detail": "Durable event log storage"
+      },
+      {
+        "id": "c",
+        "label": "Billing Consumer",
+        "detail": "Processes usage for invoices"
+      },
+      {
+        "id": "d",
+        "label": "Analytics Consumer",
+        "detail": "Real-time grid health monitoring"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Writes events"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Asynchronous read"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Asynchronous read"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "content": "// Illustrative Kafka API producer call to Redpanda\nproducer.send(new ProducerRecord(\"grid-sensors\", sensorId, eventData)); // Asynchronous write to Redpanda",
+    "explanation": "This demonstrates how the producer offloads the event to the Redpanda cluster without waiting for the billing or analytics consumers to finish their tasks."
+  },
+  "sources": [
+    {
+      "url": "https://docs.redpanda.com/current/get-started/intro-to-events/",
+      "label": "Introduction to Redpanda"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Smart Grid Sensor Streams, how does Redpanda resolve the latency issues caused by tight coupling?",
+      "options": [
+        "By forcing producers to wait for consumer acknowledgments.",
+        "By acting as an asynchronous event streaming buffer that decouples producers from consumers.",
+        "By replacing the Kafka API with a proprietary, low-latency protocol.",
+        "By eliminating the need for durable storage of sensor events."
+      ],
+      "answerIndex": 1,
+      "explanation": "Redpanda allows producers to write events without waiting for consumers, which is the core of the decoupling solution.",
+      "evidence": "Redpanda acts as an asynchronous event streaming buffer, allowing producers to write sensor events to a durable, replayable log without waiting for downstream processing, effectively decoupling the ingestion layer from the analytical layer."
+    },
+    {
+      "question": "In Decoupling Smart Grid Sensor Streams, what is a key trade-off regarding consumer implementation?",
+      "options": [
+        "Consumers must be written in C++ to match the Redpanda core.",
+        "Consumers must be strictly synchronous to ensure data integrity.",
+        "Consumers must be idempotent to handle potential replayed events.",
+        "Consumers cannot use the Kafka API to read data."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because Redpanda is an asynchronous system, consumers may process events at different speeds or replay them, requiring idempotent logic.",
+      "evidence": "The primary trade-off is the complexity of managing asynchronous state consistency; developers must ensure that consumers are idempotent, as they may process events at different speeds or replay them during recovery."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:09.181Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:04.798Z"
+}

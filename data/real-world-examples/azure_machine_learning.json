@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_machine_learning",
+  "title": "Automated Predictive Maintenance Lifecycle",
+  "business": "Manufacturing firms managing large-scale industrial equipment fleets.",
+  "problem": "Manual model training and fragmented deployment processes lead to stale predictive maintenance insights and high operational overhead.",
+  "solution": "Azure Machine Learning provides a managed workspace to centralize the end-to-end machine learning lifecycle, enabling automated training, versioned model registry, and scalable endpoints for real-time inference.",
+  "steps": [
+    "Provision an Azure Machine Learning workspace to serve as the unified environment for data scientists.",
+    "Configure automated training pipelines to ingest sensor data and generate updated maintenance models.",
+    "Register validated models in the model registry to maintain version control and lineage.",
+    "Deploy models to managed endpoints to provide real-time inference for equipment monitoring systems."
+  ],
+  "outcome": "Increased consistency in model deployment and reduced time-to-insight for equipment failure predictions.",
+  "limitation": "Managed endpoints introduce latency overhead during high-frequency inference requests; verify performance by monitoring endpoint response times in the workspace.",
+  "diagram": {
+    "kind": "flow",
+    "title": "MLOps Lifecycle Flow",
+    "description": "The flow shows data moving from ingestion to deployment within the managed workspace.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Data Source",
+        "detail": "Raw sensor telemetry"
+      },
+      {
+        "id": "b",
+        "label": "Azure ML Workspace",
+        "detail": "Centralized compute and storage"
+      },
+      {
+        "id": "c",
+        "label": "Model Registry",
+        "detail": "Versioned model artifacts"
+      },
+      {
+        "id": "d",
+        "label": "Managed Endpoint",
+        "detail": "Real-time inference API"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Register"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Deploy"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Machine Learning"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Predictive Maintenance Lifecycle, what is the primary benefit of using Azure Machine Learning?",
+      "options": [
+        "Centralizing the end-to-end machine learning lifecycle",
+        "Eliminating the need for raw sensor data",
+        "Automatically repairing industrial equipment",
+        "Reducing the cost of physical hardware"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the managed workspace to centralize the lifecycle, addressing the problem of fragmented processes.",
+      "evidence": "Azure Machine Learning provides a managed workspace to centralize the end-to-end machine learning lifecycle, enabling automated training, versioned model registry, and scalable endpoints for real-time inference."
+    },
+    {
+      "question": "In Automated Predictive Maintenance Lifecycle, what is a noted limitation of using managed endpoints?",
+      "options": [
+        "Inability to support version control",
+        "Latency overhead during high-frequency inference",
+        "Lack of integration with the model registry",
+        "Requirement for manual model training"
+      ],
+      "answerIndex": 1,
+      "explanation": "Managed endpoints can introduce latency, which is a specific tradeoff mentioned in the limitation section.",
+      "evidence": "Managed endpoints introduce latency overhead during high-frequency inference requests; verify performance by monitoring endpoint response times in the workspace."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:54.788Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "onnx",
+  "title": "Cross-Platform Retail Computer Vision Deployment",
+  "business": "A retail technology firm developing automated inventory scanning systems for diverse hardware environments.",
+  "problem": "The engineering team faces high maintenance costs because their computer vision models are tightly coupled to specific training frameworks, preventing deployment on low-power edge devices and specialized server hardware simultaneously.",
+  "solution": "By adopting the Open Neural Network Exchange (ONNX) format, the team decouples model development from inference execution. Developers export trained models into the standardized ONNX graph format, which acts as an intermediate representation. This allows the same model architecture to be executed across various runtimes and hardware accelerators without retraining or rewriting the underlying logic.",
+  "steps": [
+    "Train the computer vision model using the preferred high-level framework.",
+    "Export the model into the .onnx file format using the framework's native conversion utility.",
+    "Validate the exported graph structure to ensure all operators are supported by the target runtime.",
+    "Integrate an ONNX-compatible inference engine into the edge device software stack.",
+    "Load and execute the serialized model graph on the target hardware."
+  ],
+  "outcome": "The organization achieves a unified deployment pipeline where a single model artifact serves multiple hardware targets, significantly reducing the engineering overhead associated with framework-specific porting.",
+  "limitation": "A primary limitation is operator compatibility; if a custom model uses proprietary or non-standard operators not defined in the ONNX specification, the conversion process will fail or require custom operator implementation. Engineers must check the ONNX operator set version against the target runtime capabilities during the validation phase.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ONNX Interoperability Workflow",
+    "description": "This diagram illustrates the flow from model training to hardware-agnostic inference.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Training Framework",
+        "detail": "Source environment for model creation"
+      },
+      {
+        "id": "b",
+        "label": "ONNX Exporter",
+        "detail": "Conversion tool for graph serialization"
+      },
+      {
+        "id": "c",
+        "label": "ONNX Model File",
+        "detail": "Portable graph representation"
+      },
+      {
+        "id": "d",
+        "label": "Inference Runtime",
+        "detail": "Execution engine for target hardware"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "exports model"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "loads for execution"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://onnx.ai/",
+      "label": "ONNX | Home"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Platform Retail Computer Vision Deployment, why is ONNX used to solve the stated problem?",
+      "options": [
+        "It allows models to be executed across various runtimes without retraining.",
+        "It automatically optimizes hardware power consumption.",
+        "It replaces the need for high-level training frameworks.",
+        "It provides a proprietary cloud-based inference service."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that ONNX decouples development from inference, allowing the same model to run on different hardware.",
+      "evidence": "This allows the same model architecture to be executed across various runtimes and hardware accelerators without retraining or rewriting the underlying logic."
+    },
+    {
+      "question": "In Cross-Platform Retail Computer Vision Deployment, what is a key limitation of the implementation?",
+      "options": [
+        "The model file size is always too large for edge devices.",
+        "Custom or non-standard operators may cause conversion failures.",
+        "ONNX only supports models trained in a single specific framework.",
+        "The runtime requires a constant internet connection."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly mentions that non-standard operators not in the specification cause conversion issues.",
+      "evidence": "if a custom model uses proprietary or non-standard operators not defined in the ONNX specification, the conversion process will fail or require custom operator implementation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:47.887Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:44.412Z"
+}

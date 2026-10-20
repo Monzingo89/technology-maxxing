@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_vpc",
+  "title": "Global Infrastructure Segmentation for Retail Logistics",
+  "business": "A global logistics firm managing regional distribution centers that require isolated yet interconnected network environments.",
+  "problem": "The firm faces operational complexity and security risks due to fragmented, non-standardized network configurations across different geographic regions, leading to inconsistent connectivity and management overhead.",
+  "solution": "Google Cloud VPC provides a global virtual network foundation, allowing the firm to deploy regional subnets within a single VPC while maintaining unified control and secure resource connectivity across the entire global footprint.",
+  "steps": [
+    "Define a single global VPC network to serve as the unified backbone for all regional logistics operations.",
+    "Create regional subnets within the VPC to isolate workloads based on geographic distribution centers.",
+    "Configure internal IP addressing schemes to ensure non-overlapping ranges across all regional subnets.",
+    "Implement firewall rules at the VPC level to enforce consistent security policies across all regions."
+  ],
+  "outcome": "A streamlined, centralized network architecture that reduces management overhead while ensuring secure, low-latency communication between global logistics resources.",
+  "limitation": "VPC subnets are regional, meaning resources cannot span multiple regions within a single subnet; verify this by checking the subnet region property in the console.",
+  "diagram": {
+    "kind": "er",
+    "title": "Global VPC Network Topology",
+    "description": "Shows the relationship between the global VPC container and its regional subnets.",
+    "nodes": [
+      {
+        "id": "vpc",
+        "label": "Global VPC",
+        "detail": "Root network container"
+      },
+      {
+        "id": "sub1",
+        "label": "US-Subnet",
+        "detail": "Regional resource group"
+      },
+      {
+        "id": "sub2",
+        "label": "EU-Subnet",
+        "detail": "Regional resource group"
+      },
+      {
+        "id": "res1",
+        "label": "VM-Instance",
+        "detail": "Compute resource"
+      }
+    ],
+    "edges": [
+      {
+        "from": "vpc",
+        "to": "sub1",
+        "label": "contains"
+      },
+      {
+        "from": "vpc",
+        "to": "sub2",
+        "label": "contains"
+      },
+      {
+        "from": "sub1",
+        "to": "res1",
+        "label": "hosts"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Infrastructure Segmentation for Retail Logistics, what is the primary benefit of using a VPC?",
+      "options": [
+        "It provides a global virtual network foundation for unified control and connectivity.",
+        "It automatically migrates all legacy on-premises databases to the cloud.",
+        "It eliminates the need for any firewall rules within the network.",
+        "It forces all traffic to route through a single physical data center."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the VPC's ability to provide a global backbone that simplifies management across regions.",
+      "evidence": "Google Cloud VPC provides a global virtual network foundation, allowing the firm to deploy regional subnets within a single VPC while maintaining unified control and secure resource connectivity across the entire global footprint."
+    },
+    {
+      "question": "In Global Infrastructure Segmentation for Retail Logistics, what is a specific limitation of the VPC implementation?",
+      "options": [
+        "Subnets can span multiple global regions simultaneously.",
+        "VPC subnets are regional and cannot span multiple regions.",
+        "The VPC requires a separate network for every individual virtual machine.",
+        "Firewall rules cannot be applied to VPC subnets."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and lesson clarify that subnets are regional, which is a structural constraint of the VPC architecture.",
+      "evidence": "VPC subnets are regional, meaning resources cannot span multiple regions within a single subnet; verify this by checking the subnet region property in the console."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:23.922Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "llamaindex",
+  "title": "Automated Logistics Compliance Extraction",
+  "business": "Global logistics firms managing thousands of unstructured shipping manifests and customs declarations.",
+  "problem": "Manual data entry from scanned, non-standardized PDF documents leads to high operational costs and frequent compliance errors.",
+  "solution": "Utilize LlamaIndex with LlamaParse to perform agentic OCR on complex documents, converting them into structured Markdown for indexing and automated retrieval by an LLM-powered agent.",
+  "steps": [
+    "Install the LlamaIndex framework and LlamaCloud SDK.",
+    "Upload raw PDF manifests to LlamaParse for agentic OCR processing.",
+    "Convert parsed Markdown pages into LlamaIndex Document objects.",
+    "Initialize a VectorStoreIndex to enable semantic search over the parsed data.",
+    "Wrap the index as a tool for an autonomous agent to query specific compliance fields."
+  ],
+  "outcome": "Reduced manual processing time and improved accuracy in identifying compliance discrepancies across diverse document formats.",
+  "limitation": "The reliance on cloud-based parsing for complex documents introduces a latency trade-off; verify performance by monitoring the parsing duration of high-page-count manifests.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Ingestion and Retrieval Pipeline",
+    "description": "The flow from raw document input to agentic query response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw PDF",
+        "detail": "Unstructured shipping manifest"
+      },
+      {
+        "id": "b",
+        "label": "LlamaParse",
+        "detail": "Agentic OCR engine"
+      },
+      {
+        "id": "c",
+        "label": "VectorStoreIndex",
+        "detail": "Semantic search index"
+      },
+      {
+        "id": "d",
+        "label": "Agent",
+        "detail": "LLM-powered assistant"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "extracts markdown"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "ingests documents"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "provides context"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from llama_cloud import LlamaCloud\nfrom llama_index.core import VectorStoreIndex, Document\n\n# Initialize client for parsing\nclient = LlamaCloud()\n# Parse complex PDF into markdown\nresult = client.parsing.parse(file_id=\"manifest_001\", tier=\"agentic\")\ndocuments = [Document(text=p.markdown) for p in result.markdown.pages]\n# Create index for agent retrieval\nindex = VectorStoreIndex.from_documents(documents)",
+    "explanation": "This code demonstrates the ingestion pipeline for Automated Logistics Compliance Extraction by parsing raw PDFs into structured documents and indexing them for the agent."
+  },
+  "sources": [
+    {
+      "url": "https://developers.llamaindex.ai/python/framework/",
+      "label": "LlamaIndex Framework"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Compliance Extraction, how does the framework address the issue of manual data entry?",
+      "options": [
+        "By automating the OCR and indexing of unstructured PDFs into a queryable format.",
+        "By manually verifying every document through a human-in-the-loop interface.",
+        "By training a custom LLM from scratch on all historical shipping data.",
+        "By replacing all PDF documents with pre-formatted Excel spreadsheets."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages LlamaParse for agentic OCR to convert unstructured documents into structured Markdown, which is then indexed for retrieval.",
+      "evidence": "Utilize LlamaIndex with LlamaParse to perform agentic OCR on complex documents, converting them into structured Markdown for indexing and automated retrieval by an LLM-powered agent."
+    },
+    {
+      "question": "What is a primary implementation trade-off identified in Automated Logistics Compliance Extraction?",
+      "options": [
+        "The framework cannot handle more than ten documents at a time.",
+        "Cloud-based parsing introduces latency that must be monitored.",
+        "The system requires manual coding for every new document type.",
+        "VectorStoreIndex is incompatible with agentic workflows."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that cloud-based parsing for complex documents creates a latency trade-off.",
+      "evidence": "The reliance on cloud-based parsing for complex documents introduces a latency trade-off; verify performance by monitoring the parsing duration of high-page-count manifests."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:02.279Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:58.282Z"
+}

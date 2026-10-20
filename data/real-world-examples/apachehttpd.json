@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "apachehttpd",
+  "title": "Decoupling Legacy Content Delivery via Reverse Proxy",
+  "business": "A regional archival library maintaining a legacy document repository that lacks modern security headers and encryption support.",
+  "problem": "The legacy repository runs on an internal server without TLS capabilities, exposing sensitive historical documents to cleartext interception when accessed by remote researchers.",
+  "solution": "Deploying Apache HTTP Server as a reverse proxy layer. By placing Apache in front of the legacy server, the organization can terminate SSL/TLS connections at the proxy, inject required security headers, and forward requests to the internal repository over a secure tunnel, shielding the legacy infrastructure from direct exposure.",
+  "steps": [
+    "Install the Apache HTTP Server with mod_proxy and mod_ssl modules enabled.",
+    "Configure a VirtualHost to listen on port 443 with valid SSL certificates.",
+    "Define ProxyPass and ProxyPassReverse directives to map public requests to the internal legacy server IP.",
+    "Use Header directives to inject security policies like Strict-Transport-Security.",
+    "Restart the service to apply the proxy configuration and verify the secure handshake."
+  ],
+  "outcome": "Researchers can access historical documents via encrypted HTTPS connections, while the legacy repository remains isolated from direct public network traffic.",
+  "limitation": "The primary limitation is the increased latency introduced by the proxy hop and the potential for the proxy to become a single point of failure. Administrators can check for this by monitoring the Apache error logs and using system-level tools to track connection timeouts between the proxy and the backend server.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Reverse Proxy Traffic Flow",
+    "description": "Visualizes the request path from a remote researcher through the secure proxy to the legacy backend.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Researcher",
+        "detail": "Client requesting documents"
+      },
+      {
+        "id": "b",
+        "label": "Apache Proxy",
+        "detail": "Terminates TLS and injects headers"
+      },
+      {
+        "id": "c",
+        "label": "Legacy Repository",
+        "detail": "Internal document storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Proxied HTTP Request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://httpd.apache.org/docs/2.4/",
+      "label": "Apache HTTP Server Version 2.4 Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Legacy Content Delivery via Reverse Proxy, how does the solution address the security risk?",
+      "options": [
+        "By replacing the legacy server entirely with Apache.",
+        "By terminating SSL/TLS at the proxy and shielding the internal server.",
+        "By encrypting the files directly on the legacy server disk.",
+        "By forcing researchers to use a VPN instead of HTTPS."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly mentions using the proxy to terminate SSL/TLS and shield the legacy infrastructure.",
+      "evidence": "By placing Apache in front of the legacy server, the organization can terminate SSL/TLS connections at the proxy, inject required security headers, and forward requests to the internal repository over a secure tunnel, shielding the legacy infrastructure from direct exposure."
+    },
+    {
+      "question": "In Decoupling Legacy Content Delivery via Reverse Proxy, what is a primary operational trade-off?",
+      "options": [
+        "The proxy cannot handle more than ten concurrent users.",
+        "The proxy introduces latency and acts as a potential single point of failure.",
+        "The proxy requires a complete rewrite of the legacy application code.",
+        "The proxy is incompatible with standard HTTPS protocols."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies latency and the single point of failure risk as the main trade-offs.",
+      "evidence": "The primary limitation is the increased latency introduced by the proxy hop and the potential for the proxy to become a single point of failure."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:35.405Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:31.760Z"
+}

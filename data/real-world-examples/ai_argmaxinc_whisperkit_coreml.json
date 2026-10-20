@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_argmaxinc_whisperkit_coreml",
+  "title": "Archival Compliance for Legal Consultations",
+  "business": "A boutique legal firm specializing in high-stakes mediation.",
+  "problem": "The firm generates thousands of hours of audio recordings from mediation sessions that remain trapped as unstructured binary files, making it impossible to perform cross-case discovery or verify verbal agreements without manual, time-consuming playback.",
+  "solution": "By integrating WhisperKit-CoreML directly into the firm's internal macOS-based case management application, the firm can perform on-device speech-to-text transcription. This transforms audio archives into searchable, indexed text logs, ensuring that sensitive client data never leaves the local hardware while enabling instant keyword retrieval across historical case files.",
+  "steps": [
+    "Integrate the WhisperKit-CoreML model assets into the local macOS application bundle.",
+    "Initialize the WhisperKit pipeline to point toward the local CoreML model files.",
+    "Stream recorded audio buffers into the transcription engine during background processing tasks.",
+    "Extract the resulting text segments and map them to specific case identifiers in the local database.",
+    "Implement a search interface that queries the generated text transcripts rather than the audio files."
+  ],
+  "outcome": "Legal staff can instantly locate specific verbal commitments or testimony across years of mediation history, significantly reducing the labor required for case preparation and internal audits.",
+  "limitation": "Because the model runs entirely on-device, transcription speed is strictly bound by the available Apple Silicon neural engine resources. If the system is under heavy load from other intensive tasks, transcription latency will increase, which can be monitored by tracking the time elapsed between audio ingestion and the availability of the text output.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Transcription Pipeline Flow",
+    "description": "This diagram illustrates the transformation of raw audio into searchable text within the local environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Audio Archive",
+        "detail": "Raw binary mediation recordings"
+      },
+      {
+        "id": "b",
+        "label": "WhisperKit-CoreML",
+        "detail": "On-device inference engine"
+      },
+      {
+        "id": "c",
+        "label": "Text Index",
+        "detail": "Searchable database records"
+      },
+      {
+        "id": "d",
+        "label": "Legal Staff",
+        "detail": "End users performing discovery"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingests audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "writes transcript"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "queries text"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/argmaxinc/whisperkit-coreml",
+      "label": "argmaxinc/whisperkit-coreml · Hugging Face WhisperKit Repo"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Archival Compliance for Legal Consultations, why is the firm adopting this specific technology?",
+      "options": [
+        "To enable cross-case discovery by converting audio into searchable text.",
+        "To reduce the cost of cloud-based storage for audio files.",
+        "To replace human mediators with automated speech analysis.",
+        "To improve the audio quality of historical mediation recordings."
+      ],
+      "answerIndex": 0,
+      "explanation": "The business problem is that audio is trapped as unstructured binary files; the solution provides searchable text to enable discovery.",
+      "evidence": "This transforms audio archives into searchable, indexed text logs, ensuring that sensitive client data never leaves the local hardware while enabling instant keyword retrieval across historical case files."
+    },
+    {
+      "question": "In Archival Compliance for Legal Consultations, what is a primary operational constraint of the implementation?",
+      "options": [
+        "The model requires an active internet connection to verify transcripts.",
+        "Transcription latency is dependent on local Apple Silicon neural engine availability.",
+        "The system cannot handle audio files longer than five minutes.",
+        "The model requires manual tagging of every speaker in the recording."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that performance is bound by local hardware resources.",
+      "evidence": "Because the model runs entirely on-device, transcription speed is strictly bound by the available Apple Silicon neural engine resources."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:38.005Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:34.193Z"
+}

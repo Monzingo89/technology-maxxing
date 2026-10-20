@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_amplitude",
+  "title": "Optimizing Subscription Conversion Funnels via Amplitude-Claude Integration",
+  "business": "Product growth teams managing subscription-based SaaS platforms.",
+  "problem": "Growth managers struggle to manually correlate feature usage drops with specific user segments, leading to delayed responses in conversion funnel optimization.",
+  "solution": "The Amplitude MCP connector allows Claude to directly query event data and feature flag status, enabling the AI to synthesize behavioral patterns and surface actionable insights from complex datasets without manual dashboard navigation.",
+  "steps": [
+    "Configure the Amplitude MCP server URL in the Claude environment settings.",
+    "Authorize the connection to the specific Amplitude project using the required API credentials.",
+    "Use the search tool to identify relevant event streams related to the subscription checkout flow.",
+    "Execute query_dataset to extract user property segments associated with high churn rates.",
+    "Analyze the output to identify which feature flags correlate with successful conversions."
+  ],
+  "outcome": "Teams achieve a more intuitive understanding of user behavior by asking natural language questions that trigger direct data retrieval from Amplitude.",
+  "limitation": "The connector provides read-only access to existing data structures; it cannot modify Amplitude configurations or create new experiments. Users must verify the freshness of the data by checking the timestamp metadata returned in the query response.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Amplitude-Claude Data Flow",
+    "description": "The flow of data from the product interface through the MCP connector to the AI assistant.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Product App",
+        "detail": "Generates user events and feature flag data"
+      },
+      {
+        "id": "b",
+        "label": "Amplitude Platform",
+        "detail": "Stores behavioral data and experiment results"
+      },
+      {
+        "id": "c",
+        "label": "Amplitude MCP Server",
+        "detail": "Translates AI requests into API calls"
+      },
+      {
+        "id": "d",
+        "label": "Claude AI",
+        "detail": "Processes natural language queries"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends events"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "exposes endpoints"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns query results"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "sends tool calls"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/amplitude",
+      "label": "Amplitude connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Subscription Conversion Funnels via Amplitude-Claude Integration, what is the primary benefit of using the connector?",
+      "options": [
+        "It automates the creation of new A/B tests in the Amplitude platform.",
+        "It allows Claude to synthesize behavioral patterns from direct data queries.",
+        "It replaces the need for product managers to define user segments.",
+        "It enables real-time modification of feature flag configurations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution highlights that the connector allows the AI to synthesize behavioral patterns and surface insights from complex datasets.",
+      "evidence": "The Amplitude MCP connector allows Claude to directly query event data and feature flag status, enabling the AI to synthesize behavioral patterns and surface actionable insights from complex datasets without manual dashboard navigation."
+    },
+    {
+      "question": "In Optimizing Subscription Conversion Funnels via Amplitude-Claude Integration, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access historical data older than 30 days.",
+        "The connector is limited to read-only access and cannot modify configurations.",
+        "The connector requires manual SQL coding for every data request.",
+        "The connector only works with EU-based Amplitude projects."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the connector is read-only and cannot modify Amplitude configurations.",
+      "evidence": "The connector provides read-only access to existing data structures; it cannot modify Amplitude configurations or create new experiments."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:24.071Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:20.262Z"
+}

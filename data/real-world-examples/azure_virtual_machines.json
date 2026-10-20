@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_virtual_machines",
+  "title": "Legacy Application Migration to Azure Virtual Machines",
+  "business": "Enterprises maintaining legacy monolithic applications requiring specific OS-level configurations.",
+  "problem": "On-premises hardware lifecycle expiration and lack of physical space for server maintenance.",
+  "solution": "Azure Virtual Machines provide a flexible IaaS environment to lift-and-shift legacy workloads, allowing for selectable sizes, disks, and networking configurations that mirror existing infrastructure requirements.",
+  "steps": [
+    "Assess existing on-premises server resource requirements including CPU, RAM, and storage IOPS.",
+    "Select an appropriate Azure Virtual Machine size that matches the identified performance profile.",
+    "Configure virtual network interfaces and subnets to maintain existing connectivity patterns.",
+    "Attach managed disks to the virtual machine to host the operating system and application data.",
+    "Deploy the virtual machine using the Azure portal or CLI to initialize the environment."
+  ],
+  "outcome": "Successful migration of legacy applications to a managed cloud environment with preserved configuration parity.",
+  "limitation": "Virtual machines require manual operating system patching and maintenance, which can be verified by checking the OS update status and system logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Virtual Machine Provisioning Workflow",
+    "description": "The flow shows the progression from resource assessment to the final operational state of the VM.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Assessment",
+        "detail": "Analyze existing hardware specs"
+      },
+      {
+        "id": "b",
+        "label": "Selection",
+        "detail": "Choose VM size and disk type"
+      },
+      {
+        "id": "c",
+        "label": "Networking",
+        "detail": "Define VNet and subnet rules"
+      },
+      {
+        "id": "d",
+        "label": "Deployment",
+        "detail": "Provision the VM instance"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "determines"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "configures"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "executes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Application Migration to Azure Virtual Machines, what is the primary benefit of using this technology for legacy workloads?",
+      "options": [
+        "It provides a flexible IaaS environment to lift-and-shift legacy workloads.",
+        "It automatically refactors monolithic code into serverless functions.",
+        "It eliminates the need for any operating system configuration.",
+        "It replaces all physical hardware with containerized microservices."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that Azure Virtual Machines allow for lifting and shifting legacy applications by providing configurable infrastructure.",
+      "evidence": "Azure Virtual Machines provide a flexible IaaS environment to lift-and-shift legacy workloads, allowing for selectable sizes, disks, and networking configurations that mirror existing infrastructure requirements."
+    },
+    {
+      "question": "In Legacy Application Migration to Azure Virtual Machines, what is a key operational limitation of the solution?",
+      "options": [
+        "The inability to select different disk types.",
+        "The requirement for manual operating system patching and maintenance.",
+        "The lack of networking configuration options.",
+        "The inability to choose virtual machine sizes."
+      ],
+      "answerIndex": 1,
+      "explanation": "Virtual machines are IaaS, meaning the user retains responsibility for the guest OS management, unlike PaaS offerings.",
+      "evidence": "Virtual machines require manual operating system patching and maintenance, which can be verified by checking the OS update status and system logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:08.899Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

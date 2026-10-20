@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_managed_cassandra",
+  "title": "Modernizing Legacy Cassandra Clusters for Global Retail",
+  "business": "Retailers managing high-velocity inventory tracking systems that rely on open-source Apache Cassandra.",
+  "problem": "Operational overhead of self-managed Cassandra clusters, including manual node provisioning, patching, and complex cluster expansion during peak seasonal traffic.",
+  "solution": "Azure Managed Instance for Apache Cassandra provides a fully managed, cloud-native service that maintains compatibility with native Cassandra tools and protocols, allowing seamless migration without refactoring application code.",
+  "steps": [
+    "Establish a hybrid network connection between the existing on-premises Cassandra data center and the Azure Virtual Network.",
+    "Provision the Azure Managed Instance for Apache Cassandra cluster within the target Azure region.",
+    "Configure the managed instance as a new data center within the existing Cassandra ring to enable data synchronization.",
+    "Perform a rolling data migration using native Cassandra replication mechanisms to ensure zero-downtime transition.",
+    "Update application connection strings to point to the new managed cluster endpoints."
+  ],
+  "outcome": "Reduced administrative burden and improved cluster elasticity, allowing the infrastructure team to focus on application logic rather than database maintenance.",
+  "limitation": "The service requires a stable, low-latency network connection for initial data synchronization; verify connectivity health using standard Cassandra nodetool status commands.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Migration Workflow to Managed Cassandra",
+    "description": "Shows the flow from legacy infrastructure to the managed cloud environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Premises Cluster",
+        "detail": "Source Cassandra nodes"
+      },
+      {
+        "id": "b",
+        "label": "Hybrid Network",
+        "detail": "ExpressRoute or VPN tunnel"
+      },
+      {
+        "id": "c",
+        "label": "Managed Cassandra",
+        "detail": "Azure Managed Instance"
+      },
+      {
+        "id": "d",
+        "label": "Application Layer",
+        "detail": "Client services"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Replication Stream"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Data Sync"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Read/Write Traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Managed Instance for Apache Cassandra"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modernizing Legacy Cassandra Clusters for Global Retail, what is the primary driver for adopting the managed service?",
+      "options": [
+        "Eliminating manual node management and patching overhead",
+        "Replacing the Cassandra protocol with a proprietary API",
+        "Reducing the number of nodes required for storage",
+        "Enabling AI-driven automated query optimization"
+      ],
+      "answerIndex": 0,
+      "explanation": "The business problem identified is the high operational overhead of self-managed clusters, which the managed service addresses.",
+      "evidence": "Operational overhead of self-managed Cassandra clusters, including manual node provisioning, patching, and complex cluster expansion during peak seasonal traffic."
+    },
+    {
+      "question": "In Modernizing Legacy Cassandra Clusters for Global Retail, what is a critical prerequisite for the migration process?",
+      "options": [
+        "Refactoring all application database queries",
+        "Establishing a stable network connection for data synchronization",
+        "Converting all data to a relational format",
+        "Disabling all existing Cassandra tools"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that a stable network connection is required for the synchronization phase of the migration.",
+      "evidence": "The service requires a stable, low-latency network connection for initial data synchronization; verify connectivity health using standard Cassandra nodetool status commands."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:56.746Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

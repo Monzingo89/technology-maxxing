@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_2_1",
+  "title": "Legacy Model Lifecycle Management",
+  "business": "Enterprise software teams maintaining long-running AI integrations",
+  "problem": "Applications relying on retired models like Claude 2.1 face service interruptions because requests to retired models will fail.",
+  "solution": "Implement a proactive model auditing and migration workflow to transition from legacy models to active, supported versions.",
+  "steps": [
+    "Navigate to the Usage page in the Claude Console to audit current model deployments.",
+    "Export the usage CSV to identify specific API keys still invoking the claude-2.1 endpoint.",
+    "Map the identified legacy model to its recommended replacement, such as claude-opus-4-8.",
+    "Update application code to point to the new model identifier and perform regression testing.",
+    "Monitor the production environment to ensure all traffic has successfully shifted away from the retired model."
+  ],
+  "outcome": "Continuous service availability and alignment with current model support standards.",
+  "limitation": "Performance characteristics may vary between model generations; check this by conducting thorough testing of applications with the new models well before the retirement date.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying legacy usage and transitioning to active models.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage data"
+      },
+      {
+        "id": "b",
+        "label": "Audit Report",
+        "detail": "CSV export identifying claude-2.1 usage"
+      },
+      {
+        "id": "c",
+        "label": "Codebase",
+        "detail": "Application logic requiring update"
+      },
+      {
+        "id": "d",
+        "label": "Active Model",
+        "detail": "Target endpoint like claude-opus-4-8"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Export usage data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify legacy endpoints"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update model reference"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Model Lifecycle Management, why must teams migrate away from models like Claude 2.1?",
+      "options": [
+        "Requests to retired models will fail",
+        "The models are too expensive to run",
+        "The models lack safety features",
+        "The models are incompatible with Python"
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation explicitly states that requests to retired models will fail, necessitating a migration.",
+      "evidence": "Applications relying on retired models like Claude 2.1 face service interruptions because requests to retired models will fail."
+    },
+    {
+      "question": "In Legacy Model Lifecycle Management, how should developers verify the impact of switching to a new model?",
+      "options": [
+        "By checking the retirement date",
+        "By conducting thorough testing of applications with the new models well before the retirement date",
+        "By contacting the support team for a performance report",
+        "By reviewing the CSV audit file"
+      ],
+      "answerIndex": 1,
+      "explanation": "Testing is the recommended method to ensure application behavior remains consistent after a model update.",
+      "evidence": "Performance characteristics may vary between model generations; check this by conducting thorough testing of applications with the new models well before the retirement date."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:27.268Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

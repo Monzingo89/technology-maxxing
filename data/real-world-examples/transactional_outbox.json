@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "transactional_outbox",
+  "title": "Synchronizing Inventory and Shipping Notifications",
+  "business": "E-commerce platforms managing high-volume warehouse inventory updates.",
+  "problem": "When an inventory update succeeds in the database but the subsequent message to the shipping service fails due to network instability, the system enters an inconsistent state where inventory is reduced but no shipment is triggered.",
+  "solution": "The Transactional Outbox pattern ensures atomicity by writing the domain state change and the corresponding integration event into the same database transaction, using a local 'Outbox' table as a persistent staging area for downstream delivery.",
+  "steps": [
+    "Define an Outbox table in the primary database schema to store serialized event payloads.",
+    "Wrap the business logic update and the insertion of the event into the Outbox table within a single ACID transaction.",
+    "Implement a separate background process or polling mechanism to read pending events from the Outbox table.",
+    "Publish the read events to the message broker and mark them as processed upon successful acknowledgment.",
+    "Delete or archive the processed events from the Outbox table to maintain performance."
+  ],
+  "outcome": "Guaranteed at-least-once delivery of integration events, ensuring that downstream services eventually synchronize with the primary domain state despite transient network failures.",
+  "limitation": "The pattern introduces a risk of duplicate message delivery if the background publisher crashes after sending the message but before marking it as processed in the Outbox table; downstream consumers must be idempotent.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Transactional Outbox Workflow",
+    "description": "Shows the flow from business logic to the outbox and eventual message dispatch.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Business Logic",
+        "detail": "Updates inventory record"
+      },
+      {
+        "id": "b",
+        "label": "Outbox Table",
+        "detail": "Stores pending event"
+      },
+      {
+        "id": "c",
+        "label": "Message Relay",
+        "detail": "Background poller"
+      },
+      {
+        "id": "d",
+        "label": "Message Broker",
+        "detail": "External queue"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Atomic Transaction"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Read Pending"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Publish Event"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronizing Inventory and Shipping Notifications, what is the primary purpose of the Outbox table?",
+      "options": [
+        "To ensure atomicity between domain state changes and event creation",
+        "To increase the speed of database read queries",
+        "To replace the need for a message broker entirely",
+        "To provide a backup of the entire inventory database"
+      ],
+      "answerIndex": 0,
+      "explanation": "The pattern uses the Outbox table to bundle the domain update and event creation into a single transaction, preventing inconsistency.",
+      "evidence": "The Transactional Outbox pattern ensures atomicity by writing the domain state change and the corresponding integration event into the same database transaction, using a local 'Outbox' table as a persistent staging area for downstream delivery."
+    },
+    {
+      "question": "In Synchronizing Inventory and Shipping Notifications, what is a key limitation of the implementation?",
+      "options": [
+        "It prevents all database deadlocks",
+        "It requires the database to be offline during publishing",
+        "It may cause duplicate messages, requiring consumer idempotency",
+        "It eliminates the need for network communication"
+      ],
+      "answerIndex": 2,
+      "explanation": "Because the relay process might fail after sending but before marking as processed, duplicates are possible.",
+      "evidence": "The pattern introduces a risk of duplicate message delivery if the background publisher crashes after sending the message but before marking it as processed in the Outbox table; downstream consumers must be idempotent."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:35.941Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

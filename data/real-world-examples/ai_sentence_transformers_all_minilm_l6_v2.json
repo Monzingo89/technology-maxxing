@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "ai_sentence_transformers_all_minilm_l6_v2",
+  "title": "Semantic Support Ticket Routing",
+  "business": "Customer support teams managing high volumes of incoming technical inquiries.",
+  "problem": "Support agents waste time manually categorizing tickets that share the same underlying technical issue but use different phrasing, leading to delayed response times.",
+  "solution": "By deploying all-MiniLM-L6-v2, the system maps incoming ticket descriptions into a 384-dimensional dense vector space. This allows the organization to perform semantic search against a knowledge base of resolved issues, identifying relevant solutions even when the user's vocabulary differs from the documentation.",
+  "steps": [
+    "Install the sentence-transformers library to access the model.",
+    "Load the all-MiniLM-L6-v2 model into the application environment.",
+    "Convert existing historical ticket resolutions into vector embeddings.",
+    "Encode incoming support tickets into vectors using the same model.",
+    "Calculate the cosine similarity between the new ticket vector and the historical database to retrieve the most semantically related past solutions."
+  ],
+  "outcome": "Improved agent efficiency through automated retrieval of contextually relevant historical solutions, reducing the need for manual ticket classification.",
+  "limitation": "The model truncates input text longer than 256 word pieces by default, which may cause loss of critical context in very long, complex technical logs or multi-paragraph descriptions. Developers should monitor input length and implement chunking strategies if necessary.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Semantic Retrieval Pipeline",
+    "description": "The flow shows how raw text is converted into vectors for comparison.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Ticket",
+        "detail": "Incoming user text"
+      },
+      {
+        "id": "b",
+        "label": "all-MiniLM-L6-v2",
+        "detail": "Encoder model"
+      },
+      {
+        "id": "c",
+        "label": "Vector Space",
+        "detail": "384-dim dense representation"
+      },
+      {
+        "id": "d",
+        "label": "Knowledge Base",
+        "detail": "Indexed historical solutions"
+      },
+      {
+        "id": "e",
+        "label": "Result",
+        "detail": "Relevant solution found"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "encode"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "maps to"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "cosine similarity"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "retrieval"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from sentence_transformers import SentenceTransformer\n# Initialize the model\nmodel = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')\n# Encode ticket text into a dense vector\nembeddings = model.encode(['My screen is flickering during video calls'])\n# The resulting embeddings can now be compared against a database of resolved issues",
+    "explanation": "This code demonstrates the initialization of the model and the transformation of a raw support ticket into a vector, which is the core requirement for semantic retrieval in the Semantic Support Ticket Routing scenario."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
+      "label": "sentence-transformers/all-MiniLM-L6-v2 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Semantic Support Ticket Routing, how does the model help resolve the identified problem?",
+      "options": [
+        "It maps tickets to a 384-dimensional vector space to enable semantic search for related solutions.",
+        "It automatically rewrites the user's ticket to match the language used in the knowledge base.",
+        "It increases the number of support agents available to handle incoming inquiries.",
+        "It summarizes long technical logs into short, readable paragraphs for agents."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the model's ability to map text to a dense vector space, allowing for semantic matching of tickets to solutions.",
+      "evidence": "By deploying all-MiniLM-L6-v2, the system maps incoming ticket descriptions into a 384-dimensional dense vector space. This allows the organization to perform semantic search against a knowledge base of resolved issues"
+    },
+    {
+      "question": "Regarding the implementation of Semantic Support Ticket Routing, what is a key limitation to consider?",
+      "options": [
+        "The model requires a minimum of 1 billion training pairs to function.",
+        "The model is limited to 128 tokens per input, making it unsuitable for short sentences.",
+        "The model truncates inputs longer than 256 word pieces, which may lose context in long tickets.",
+        "The model cannot be used for semantic similarity tasks."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and the scenario note that input length is limited, which can lead to data loss for long inputs.",
+      "evidence": "The model truncates input text longer than 256 word pieces by default, which may cause loss of critical context in very long, complex technical logs or multi-paragraph descriptions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:51.054Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:46.614Z"
+}

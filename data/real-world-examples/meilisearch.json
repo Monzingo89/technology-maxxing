@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "meilisearch",
+  "title": "Botanical Inventory Search Optimization",
+  "business": "A specialized botanical nursery managing a catalog of thousands of rare plant species for professional landscapers.",
+  "problem": "Users frequently abandon the search interface due to complex Latin nomenclature errors and the inability to filter results by specific environmental requirements like light or soil pH, leading to lost sales.",
+  "solution": "Meilisearch provides a search-as-you-type interface with built-in typo tolerance that corrects botanical spelling errors in real-time, while simultaneously applying faceted filtering to narrow results by environmental attributes.",
+  "steps": [
+    "Configure the index settings to define searchable attributes such as common name and scientific name.",
+    "Set up filterable attributes for environmental parameters like light_level and soil_type.",
+    "Implement the search-as-you-type frontend component to trigger API requests on every keystroke.",
+    "Apply filter parameters in the search query to restrict results based on user-selected environmental criteria."
+  ],
+  "outcome": "Improved user conversion rates through reduced friction in finding specific plant species despite complex naming conventions and precise environmental matching.",
+  "limitation": "The primary trade-off is the memory overhead required for maintaining typo-tolerant indexes; as the dataset grows, memory usage increases, which can be monitored by tracking the engine's memory-mapped storage utilization.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Botanical Search Data Flow",
+    "description": "The flow of user input through the Meilisearch engine to retrieve filtered botanical data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Keystrokes in search bar"
+      },
+      {
+        "id": "b",
+        "label": "Meilisearch Engine",
+        "detail": "Typo-tolerant indexing"
+      },
+      {
+        "id": "c",
+        "label": "Filter Engine",
+        "detail": "Applies environmental constraints"
+      },
+      {
+        "id": "d",
+        "label": "Result Set",
+        "detail": "Filtered plant list"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends query string"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Applies facets"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Returns matches"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "client.index('plants').search('monstera', { filter: 'light_level = \"low\"' }); // Searches for plant name with typo tolerance and filters by light requirement",
+    "explanation": "This demonstrates how the search query handles the term while simultaneously enforcing a filter attribute defined in the index settings."
+  },
+  "sources": [
+    {
+      "url": "https://www.meilisearch.com/docs/getting_started/overview",
+      "label": "Meilisearch Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Botanical Inventory Search Optimization, why is Meilisearch chosen to address the identified problem?",
+      "options": [
+        "It provides search-as-you-type with typo tolerance and faceted filtering.",
+        "It replaces the need for a database by storing all plant images.",
+        "It automatically generates botanical descriptions using AI.",
+        "It eliminates the need for any frontend development."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario specifically highlights the need for typo tolerance for complex nomenclature and filtering for environmental attributes, which Meilisearch provides.",
+      "evidence": "Meilisearch provides a search-as-you-type interface with built-in typo tolerance that corrects botanical spelling errors in real-time, while simultaneously applying faceted filtering to narrow results by environmental attributes."
+    },
+    {
+      "question": "In Botanical Inventory Search Optimization, what is the primary limitation of the implementation?",
+      "options": [
+        "The search results are limited to 50 milliseconds.",
+        "The engine cannot handle more than ten documents.",
+        "Memory overhead increases with typo-tolerant index size.",
+        "Filtering is only supported for numeric values."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies memory overhead as the trade-off for typo-tolerant indexing.",
+      "evidence": "The primary trade-off is the memory overhead required for maintaining typo-tolerant indexes; as the dataset grows, memory usage increases, which can be monitored by tracking the engine's memory-mapped storage utilization."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:23.832Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:19.645Z"
+}

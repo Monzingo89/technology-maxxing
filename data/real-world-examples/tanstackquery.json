@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "tanstackquery",
+  "title": "Synchronizing Collaborative Inventory Dashboards",
+  "business": "Logistics companies managing real-time warehouse stock levels across multiple regional distribution centers.",
+  "problem": "Users experience data staleness when multiple warehouse managers update stock counts simultaneously, leading to inconsistent UI states where one manager sees outdated inventory levels while another has already committed a change.",
+  "solution": "TanStack Query manages server state by providing a unified caching layer that automatically synchronizes remote data with the UI. By utilizing query keys, the library tracks specific data sets, allowing for background refetching and manual cache invalidation to ensure the UI reflects the most recent server-side state after a mutation.",
+  "steps": [
+    "Define a unique query key for inventory items to enable granular cache tracking.",
+    "Implement useQuery to fetch initial stock levels, allowing the library to handle background caching and deduplication.",
+    "Execute stock updates using the useMutation hook to modify server-side data.",
+    "Trigger queryClient.invalidateQueries within the mutation's onSuccess callback to force a refetch of the stale inventory data.",
+    "Configure staleTime and gcTime to balance between cache freshness and memory management."
+  ],
+  "outcome": "Managers see consistent, up-to-date inventory counts across all active sessions without manual page refreshes or complex state synchronization logic.",
+  "limitation": "The primary limitation is the potential for excessive network requests if cache invalidation is triggered too aggressively. Developers must monitor the frequency of refetches to ensure they do not overwhelm the API, which can be checked by observing the network tab in browser developer tools to verify that invalidation only occurs when necessary.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory State Synchronization Flow",
+    "description": "This diagram illustrates how TanStack Query coordinates between the UI, the cache, and the remote server.",
+    "nodes": [
+      {
+        "id": "ui",
+        "label": "Inventory UI",
+        "detail": "Displays stock levels"
+      },
+      {
+        "id": "cache",
+        "label": "Query Cache",
+        "detail": "Stores server state"
+      },
+      {
+        "id": "server",
+        "label": "Inventory API",
+        "detail": "Source of truth"
+      },
+      {
+        "id": "mutation",
+        "label": "Mutation",
+        "detail": "Update operation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "ui",
+        "to": "cache",
+        "label": "reads data"
+      },
+      {
+        "from": "cache",
+        "to": "server",
+        "label": "fetches"
+      },
+      {
+        "from": "ui",
+        "to": "mutation",
+        "label": "triggers update"
+      },
+      {
+        "from": "mutation",
+        "to": "server",
+        "label": "sends changes"
+      },
+      {
+        "from": "mutation",
+        "to": "cache",
+        "label": "invalidates"
+      }
+    ]
+  },
+  "code": {
+    "language": "tsx",
+    "content": "const queryClient = useQueryClient();\nconst mutation = useMutation({\n  mutationFn: updateStock,\n  onSuccess: () => {\n    // Force the inventory query to refetch after a successful update\n    queryClient.invalidateQueries({ queryKey: ['inventory'] });\n  },\n});",
+    "explanation": "This snippet demonstrates how to link a mutation to cache invalidation, ensuring the UI stays synchronized with the server after an inventory update."
+  },
+  "sources": [
+    {
+      "url": "https://tanstack.com/query/latest/docs/framework/react/overview",
+      "label": "TanStack Query Overview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronizing Collaborative Inventory Dashboards, how does the library resolve the problem of data staleness?",
+      "options": [
+        "By forcing the browser to perform a full page reload on every update.",
+        "By using manual state management to store every stock change in a global variable.",
+        "By utilizing query keys to track data and invalidating the cache to force a background refetch.",
+        "By disabling caching entirely to ensure every request hits the server directly."
+      ],
+      "answerIndex": 2,
+      "explanation": "The solution relies on query keys and cache invalidation to synchronize the UI with the server state.",
+      "evidence": "TanStack Query manages server state by providing a unified caching layer that automatically synchronizes remote data with the UI. By utilizing query keys, the library tracks specific data sets, allowing for background refetching and manual cache invalidation to ensure the UI reflects the most recent server-side state after a mutation."
+    },
+    {
+      "question": "In Synchronizing Collaborative Inventory Dashboards, what is a key limitation of the described implementation?",
+      "options": [
+        "The library cannot handle asynchronous data updates.",
+        "Excessive network requests may occur if invalidation is triggered too frequently.",
+        "The implementation requires manual garbage collection of all server state.",
+        "It is impossible to verify the frequency of refetches in the browser."
+      ],
+      "answerIndex": 1,
+      "explanation": "Aggressive invalidation can lead to performance issues due to high network traffic, which is a stated limitation.",
+      "evidence": "The primary limitation is the potential for excessive network requests if cache invalidation is triggered too aggressively."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:58.892Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:54.251Z"
+}

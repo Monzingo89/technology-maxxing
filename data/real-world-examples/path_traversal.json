@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "path_traversal",
+  "title": "Secure Document Retrieval System",
+  "business": "A document management platform that allows users to download archived reports stored on a server filesystem.",
+  "problem": "Attackers may manipulate file path parameters using sequences like ../ to escape the intended directory and access sensitive system configuration files or unauthorized data.",
+  "solution": "Implement path validation by resolving the absolute path of the requested file and verifying that it starts with the designated base directory before any read operation occurs.",
+  "steps": [
+    "Define a strict base directory constant for all accessible files.",
+    "Accept the user-provided filename as an untrusted input.",
+    "Resolve the canonical path of the combined base directory and user input.",
+    "Compare the resolved path against the base directory prefix.",
+    "Reject the request if the path is outside the base directory or serve the file if valid."
+  ],
+  "outcome": "The application prevents unauthorized file access while maintaining the ability to serve legitimate user requests.",
+  "limitation": "Canonicalization can be bypassed if the underlying filesystem or language runtime does not correctly handle symbolic links or specific encoding schemes, requiring periodic security audits of the path resolution logic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Path Validation Workflow",
+    "description": "The flow shows how user input is sanitized before accessing the filesystem.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Requested filename string"
+      },
+      {
+        "id": "b",
+        "label": "Path Resolver",
+        "detail": "Combines base path and input"
+      },
+      {
+        "id": "c",
+        "label": "Validation Logic",
+        "detail": "Checks if path starts with base"
+      },
+      {
+        "id": "d",
+        "label": "Filesystem",
+        "detail": "Storage of documents"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Passes input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Resolves canonical path"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Accesses file if valid"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const path = require('path');\nconst baseDir = '/var/www/docs';\n// Resolve absolute path to prevent traversal\nconst safePath = path.resolve(baseDir, userInput);\n// Ensure the resolved path starts with the base directory\nif (safePath.startsWith(baseDir)) {\n  // Serve file\n} else {\n  // Deny access\n}",
+    "explanation": "This code maps to the Secure Document Retrieval System by using path.resolve to normalize the input and then verifying the prefix to ensure the file resides within the intended directory."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Document Retrieval System, what is the primary risk addressed by the proposed solution?",
+      "options": [
+        "Unauthorized access to system files via path manipulation",
+        "Excessive memory consumption during file uploads",
+        "SQL injection in the document metadata database",
+        "Denial of service via large file requests"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario describes attackers using path segments to escape directories, which is the definition of path traversal.",
+      "evidence": "Attackers may manipulate file path parameters using sequences like ../ to escape the intended directory and access sensitive system configuration files or unauthorized data."
+    },
+    {
+      "question": "In Secure Document Retrieval System, what is a potential limitation of the path validation approach?",
+      "options": [
+        "It prevents all possible server-side attacks",
+        "It may fail if symbolic links are not handled correctly",
+        "It requires expensive hardware acceleration",
+        "It makes the system impossible to use for legitimate users"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that canonicalization can be bypassed by issues like symbolic links.",
+      "evidence": "Canonicalization can be bypassed if the underlying filesystem or language runtime does not correctly handle symbolic links or specific encoding schemes, requiring periodic security audits of the path resolution logic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:18.596Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

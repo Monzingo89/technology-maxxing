@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "swift",
+  "title": "Legacy C++ Sensor Integration",
+  "business": "Industrial IoT manufacturers maintaining legacy C++ firmware for sensor data processing.",
+  "problem": "Frequent memory corruption and data races occur when manual memory management is used to bridge high-speed sensor data into modern application logic.",
+  "solution": "Swift provides native interoperability with C++ types, allowing developers to wrap legacy sensor processing routines in a memory-safe environment without requiring a full rewrite of the existing C++ codebase.",
+  "steps": [
+    "Identify the existing C++ sensor data structures and processing functions.",
+    "Import the C++ headers into the Swift project using the native C++ interoperability layer.",
+    "Define Swift-side wrappers that utilize Swift's strong type system to encapsulate C++ pointers.",
+    "Implement data processing logic in Swift, leveraging compile-time memory safety guarantees.",
+    "Verify that the Swift-wrapped code interacts correctly with the underlying C++ memory buffers."
+  ],
+  "outcome": "A more robust sensor processing pipeline where memory safety is enforced at compile time, reducing runtime crashes caused by invalid pointer access.",
+  "limitation": "Swift's interoperability relies on the compiler's ability to map C++ types; complex template-heavy C++ code may require manual bridging or simplification, which can be verified by checking the compiler's ability to generate the corresponding Swift interface.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Sensor Data Integration Flow",
+    "description": "The flow shows how raw sensor data moves from legacy C++ into a safe Swift environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Hardware",
+        "detail": "Raw data source"
+      },
+      {
+        "id": "b",
+        "label": "C++ Driver",
+        "detail": "Legacy memory-unsafe code"
+      },
+      {
+        "id": "c",
+        "label": "Swift Wrapper",
+        "detail": "Memory-safe interface"
+      },
+      {
+        "id": "d",
+        "label": "Application Logic",
+        "detail": "High-level processing"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "raw buffer"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "direct import"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "safe access"
+      }
+    ]
+  },
+  "code": {
+    "language": "swift",
+    "content": "import CxxStdlib // Import C++ standard library types\n\nfunc processSensorData(data: [std.string]) {\n    // Swift safely iterates over C++ types without manual memory management\n    for entry in data {\n        print(\"Processing sensor: \\(entry)\")\n    }\n}",
+    "explanation": "This code demonstrates how Swift directly uses C++ types, mapping them to Swift-safe structures to prevent memory corruption."
+  },
+  "sources": [
+    {
+      "url": "https://www.swift.org/",
+      "label": "Swift Programming Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy C++ Sensor Integration, why is Swift chosen to handle the sensor data?",
+      "options": [
+        "To replace all C++ code with a new language",
+        "To enforce memory safety and prevent data races",
+        "To increase the speed of the hardware sensors",
+        "To avoid using any existing C++ libraries"
+      ],
+      "answerIndex": 1,
+      "explanation": "Swift is chosen because it provides memory safety and data race safety, which addresses the problem of memory corruption in legacy C++ code.",
+      "evidence": "Swift provides native interoperability with C++ types, allowing developers to wrap legacy sensor processing routines in a memory-safe environment without requiring a full rewrite of the existing C++ codebase."
+    },
+    {
+      "question": "In Legacy C++ Sensor Integration, what is a primary limitation of the implementation?",
+      "options": [
+        "The inability to call C++ functions",
+        "The requirement to rewrite the entire codebase",
+        "Complexity with template-heavy C++ code",
+        "The lack of native C++ support"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario note that complex C++ templates may require manual bridging, which is a known limitation of direct interoperability.",
+      "evidence": "Swift's interoperability relies on the compiler's ability to map C++ types; complex template-heavy C++ code may require manual bridging or simplification, which can be verified by checking the compiler's ability to generate the corresponding Swift interface."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:54.045Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:49.684Z"
+}

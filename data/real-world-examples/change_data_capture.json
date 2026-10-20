@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "change_data_capture",
+  "title": "Real-time Inventory Synchronization for Global Retail",
+  "business": "Global retail enterprises managing distributed warehouse systems and e-commerce storefronts.",
+  "problem": "Traditional polling-based synchronization creates significant latency and excessive load on the primary transaction database, leading to stale inventory counts during high-traffic sales events.",
+  "solution": "Change Data Capture (CDC) utilizes the PostgreSQL logical decoding mechanism to stream row-level changes (inserts, updates, and deletes) directly from the Write-Ahead Log (WAL) to downstream inventory services without querying the application tables.",
+  "steps": [
+    "Configure the PostgreSQL server with wal_level set to logical to enable the generation of information required for decoding.",
+    "Create a replication slot to track the position of the data stream and ensure the database retains necessary WAL files.",
+    "Initialize a logical decoding output plugin to transform internal WAL records into a consumable format like JSON.",
+    "Implement a consumer service that reads from the replication slot and updates the secondary inventory cache in real-time."
+  ],
+  "outcome": "Achieving near-instantaneous inventory updates across distributed systems, ensuring that storefronts reflect accurate stock levels without impacting primary database performance.",
+  "limitation": "Logical replication slots can cause disk space exhaustion if the consumer service fails or disconnects for an extended period, as the database must retain all WAL segments since the last confirmed read. Administrators must monitor the pg_replication_slots view to ensure the restart_lsn is advancing.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CDC Data Pipeline Flow",
+    "description": "This diagram illustrates the flow of data from the primary database to the inventory cache using logical decoding.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Primary DB",
+        "detail": "Source of truth with active transactions"
+      },
+      {
+        "id": "b",
+        "label": "WAL",
+        "detail": "Write-Ahead Log containing change records"
+      },
+      {
+        "id": "c",
+        "label": "Logical Decoder",
+        "detail": "Plugin parsing WAL into events"
+      },
+      {
+        "id": "d",
+        "label": "Inventory Cache",
+        "detail": "Downstream system receiving updates"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Writes changes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Streams logs"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Emits events"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Synchronization for Global Retail, what is the primary benefit of using CDC over traditional polling?",
+      "options": [
+        "It eliminates the need for a primary database.",
+        "It reduces latency and load on the primary database.",
+        "It automatically increases the price of inventory items.",
+        "It replaces the need for a Write-Ahead Log."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that polling creates latency and load, while CDC streams changes directly from the WAL to avoid querying application tables.",
+      "evidence": "Traditional polling-based synchronization creates significant latency and excessive load on the primary transaction database, leading to stale inventory counts during high-traffic sales events."
+    },
+    {
+      "question": "In Real-time Inventory Synchronization for Global Retail, what is a critical operational risk associated with logical replication slots?",
+      "options": [
+        "The database will automatically delete all WAL files.",
+        "The consumer service will always run faster than the database.",
+        "Disk space exhaustion if the consumer service stops consuming.",
+        "The primary database will stop accepting new connections."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that if the consumer disconnects, the database retains WAL segments, which can lead to disk space exhaustion.",
+      "evidence": "Logical replication slots can cause disk space exhaustion if the consumer service fails or disconnects for an extended period, as the database must retain all WAL segments since the last confirmed read."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:11.292Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

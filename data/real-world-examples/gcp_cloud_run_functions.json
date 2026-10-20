@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_run_functions",
+  "title": "Automated Image Metadata Extraction for Media Archives",
+  "business": "Digital media archives that need to process thousands of incoming image uploads to extract EXIF data for searchable indexing.",
+  "problem": "Manual metadata entry is slow and error-prone, while maintaining a dedicated server for background processing leads to idle costs during low-traffic periods.",
+  "solution": "Cloud Run functions provide an event-driven execution environment that triggers automatically upon file uploads to Cloud Storage, ensuring compute resources are only consumed during active processing.",
+  "steps": [
+    "Configure a Cloud Storage bucket to act as the event source for image uploads.",
+    "Deploy a Cloud Run function configured to listen for storage.objects.finalize events via Eventarc.",
+    "Implement the function logic to parse image binary data and extract metadata attributes.",
+    "Write the extracted metadata to a managed database for indexing."
+  ],
+  "outcome": "The archive achieves near-instantaneous metadata availability for new assets without the operational overhead of managing persistent compute infrastructure.",
+  "limitation": "Cold starts can introduce latency for infrequent events; verify performance by monitoring execution duration metrics in the Cloud Console.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event-Driven Metadata Extraction Flow",
+    "description": "Explains the path from file upload to metadata storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Cloud Storage",
+        "detail": "Source bucket for image uploads"
+      },
+      {
+        "id": "b",
+        "label": "Eventarc",
+        "detail": "Event routing layer"
+      },
+      {
+        "id": "c",
+        "label": "Cloud Run Function",
+        "detail": "Serverless compute logic"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Metadata storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers finalize event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes function"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "writes metadata"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Image Metadata Extraction for Media Archives, how does the solution address the identified problem?",
+      "options": [
+        "By replacing manual entry with event-driven, serverless execution that scales with demand.",
+        "By using a dedicated server to ensure constant availability for all incoming images.",
+        "By forcing users to manually upload metadata files alongside images.",
+        "By increasing the cost of compute to ensure faster processing speeds."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution utilizes event-driven functions to eliminate manual work and idle server costs, which directly addresses the problem of slow manual entry and inefficient resource usage.",
+      "evidence": "Cloud Run functions provide an event-driven execution environment that triggers automatically upon file uploads to Cloud Storage, ensuring compute resources are only consumed during active processing."
+    },
+    {
+      "question": "In Automated Image Metadata Extraction for Media Archives, what is a potential trade-off of the chosen architecture?",
+      "options": [
+        "The system requires constant manual scaling of the underlying hardware.",
+        "Cold starts may cause latency for infrequent events, which can be checked via execution duration metrics.",
+        "The system cannot handle more than ten images per day.",
+        "Metadata extraction is impossible without a persistent virtual machine."
+      ],
+      "answerIndex": 1,
+      "explanation": "Serverless architectures like Cloud Run functions can experience cold starts, which is a known limitation that can be monitored through standard cloud metrics.",
+      "evidence": "Cold starts can introduce latency for infrequent events; verify performance by monitoring execution duration metrics in the Cloud Console."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:08.266Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

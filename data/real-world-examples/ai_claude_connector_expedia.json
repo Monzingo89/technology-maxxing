@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_expedia",
+  "title": "Corporate Travel Coordination for Distributed Teams",
+  "business": "A global software consultancy with remote employees who frequently travel to regional hubs for quarterly planning sessions.",
+  "problem": "Administrative assistants spend excessive time manually cross-referencing flight schedules and hotel availability across multiple booking platforms to align team arrivals, leading to fragmented itineraries and missed group booking windows.",
+  "solution": "The Expedia connector for Claude allows the assistant to query real-time flight and hotel data directly within the chat interface. By providing specific constraints like arrival windows and proximity to the office, the assistant can generate consolidated travel options, enabling rapid decision-making without switching between browser tabs.",
+  "steps": [
+    "Authenticate the Expedia connector within the Claude workspace to enable tool access.",
+    "Define the travel parameters, including destination city, arrival dates, and preferred hotel amenities, in a natural language prompt.",
+    "Invoke the search_flights and search_hotels tools to retrieve current availability and pricing.",
+    "Review the returned data to identify optimal flight-hotel pairings that align with team schedules.",
+    "Finalize the itinerary by selecting the best-fit options identified through the connector's real-time data."
+  ],
+  "outcome": "The administrative team achieves a more streamlined planning process, resulting in synchronized travel schedules and reduced manual data entry errors.",
+  "limitation": "The connector provides real-time search and availability data but does not support direct booking or payment processing. Users must verify the final booking status by navigating to the external Expedia platform after the planning phase is complete.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Travel Planning Workflow",
+    "description": "This diagram illustrates the flow from user request to data retrieval and final itinerary selection.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Admin Assistant",
+        "detail": "User providing travel constraints"
+      },
+      {
+        "id": "b",
+        "label": "Claude Interface",
+        "detail": "Orchestrator of tools"
+      },
+      {
+        "id": "c",
+        "label": "Expedia Connector",
+        "detail": "Interface for search_flights/search_hotels"
+      },
+      {
+        "id": "d",
+        "label": "Travel Itinerary",
+        "detail": "Consolidated plan for the team"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input constraints"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Execute search tools"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Return availability data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generate summary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/expedia",
+      "label": "Expedia connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Corporate Travel Coordination for Distributed Teams, what is the primary problem addressed by the Expedia connector?",
+      "options": [
+        "High costs of international flight bookings",
+        "Fragmented itineraries and manual cross-referencing of data",
+        "Lack of integration with corporate accounting software",
+        "Inability to find hotels in remote locations"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that administrative assistants struggle with manually cross-referencing data across platforms, which the connector solves by centralizing search.",
+      "evidence": "Administrative assistants spend excessive time manually cross-referencing flight schedules and hotel availability across multiple booking platforms to align team arrivals, leading to fragmented itineraries and missed group booking windows."
+    },
+    {
+      "question": "In Corporate Travel Coordination for Distributed Teams, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access real-time pricing data",
+        "The connector requires manual coding for every search",
+        "The connector does not support direct booking or payment processing",
+        "The connector is only available for domestic travel"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario clarify that while the connector handles search and planning, it lacks the capability to execute the final transaction.",
+      "evidence": "The connector provides real-time search and availability data but does not support direct booking or payment processing."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:18.689Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:14.845Z"
+}

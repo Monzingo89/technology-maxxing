@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "deltalake",
+  "title": "Retail Inventory Integrity via Delta Lake",
+  "business": "A regional grocery chain managing real-time inventory updates across thousands of store locations.",
+  "problem": "The company suffers from data corruption where incoming sensor data from store shelves occasionally includes malformed schema fields, causing downstream inventory dashboards to crash and preventing accurate stock replenishment.",
+  "solution": "Delta Lake provides ACID transactions and schema enforcement to ensure that only data conforming to the predefined inventory schema is committed to the storage layer. The transaction log acts as a single source of truth, preventing partial writes and ensuring that readers always see a consistent state of the inventory.",
+  "steps": [
+    "Define the target inventory schema including product ID, timestamp, and stock quantity.",
+    "Initialize the Delta table using the specified schema to enable enforcement.",
+    "Configure the ingestion pipeline to write incoming sensor data into the Delta table.",
+    "Monitor the transaction log to verify successful commits and identify rejected malformed records."
+  ],
+  "outcome": "The inventory system achieves high reliability by rejecting non-compliant data at the point of ingestion, ensuring that business intelligence tools always operate on consistent, valid datasets.",
+  "limitation": "Schema enforcement is a strict gatekeeper; if the upstream sensor format changes, all ingestion will fail until the Delta table schema is explicitly updated. You can check for these failures by reviewing the Spark job logs for AnalysisException errors during the write operation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Data Ingestion Flow",
+    "description": "This diagram illustrates the path from raw sensor input to the validated Delta table storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Data",
+        "detail": "Raw inventory updates"
+      },
+      {
+        "id": "b",
+        "label": "Schema Validator",
+        "detail": "Delta Lake enforcement engine"
+      },
+      {
+        "id": "c",
+        "label": "Transaction Log",
+        "detail": "ACID metadata record"
+      },
+      {
+        "id": "d",
+        "label": "Delta Table",
+        "detail": "Consistent inventory state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Stream ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Validate and commit"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update table state"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.delta.io/index.html",
+      "label": "Delta Lake documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Integrity via Delta Lake, how does the technology prevent inventory dashboard crashes?",
+      "options": [
+        "By enforcing a strict schema that rejects malformed records during ingestion.",
+        "By increasing the storage capacity of the underlying data lake.",
+        "By automatically fixing incorrect data values in the sensor stream.",
+        "By bypassing the transaction log for faster write performance."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on schema enforcement to prevent bad records from entering the table, which directly addresses the problem of dashboard crashes caused by malformed data.",
+      "evidence": "Delta Lake provides ACID transactions and schema enforcement to ensure that only data conforming to the predefined inventory schema is committed to the storage layer."
+    },
+    {
+      "question": "In Retail Inventory Integrity via Delta Lake, what is a primary trade-off of using schema enforcement?",
+      "options": [
+        "It requires manual intervention for every single record processed.",
+        "It prevents all future updates to the table schema.",
+        "It causes ingestion to fail if the incoming data format does not match the table schema.",
+        "It increases the latency of read operations significantly."
+      ],
+      "answerIndex": 2,
+      "explanation": "Schema enforcement acts as a strict gatekeeper, meaning any mismatch between incoming data and the table schema results in a failure, requiring an explicit update.",
+      "evidence": "Schema enforcement is a strict gatekeeper; if the upstream sensor format changes, all ingestion will fail until the Delta table schema is explicitly updated."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:23.803Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:20.039Z"
+}

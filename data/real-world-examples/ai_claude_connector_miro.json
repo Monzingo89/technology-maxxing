@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_miro",
+  "title": "Automated Product Strategy Synthesis",
+  "business": "Product management teams at mid-sized software firms.",
+  "problem": "Product managers struggle to synthesize fragmented feedback from multiple retrospective boards into actionable strategy documents, leading to lost insights and delayed planning.",
+  "solution": "The Claude-Miro connector enables the AI to programmatically scan existing retrospective boards, extract key themes, and automatically generate a new, structured strategy board containing organized sticky notes and summary tables.",
+  "steps": [
+    "Authenticate the Claude-Miro connector to grant access to the team's workspace boards.",
+    "Use board_search_boards to identify relevant retrospective boards based on project tags.",
+    "Invoke context_explore to pull themes and decisions from the identified boards.",
+    "Execute board_create to initialize a new strategy canvas.",
+    "Utilize table_create and sticky note generation tools to populate the new board with synthesized insights."
+  ],
+  "outcome": "Teams achieve faster alignment on product priorities by reducing manual documentation time and ensuring that historical retrospective data directly informs future strategy.",
+  "limitation": "The connector relies on the AI's ability to interpret board context; if boards are poorly structured or lack clear labels, the synthesis may be inaccurate. Users should verify the generated board content against the source boards to ensure data fidelity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Strategy Synthesis Workflow",
+    "description": "The flow shows how data moves from existing boards to a new strategy output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Boards",
+        "detail": "Retrospective boards with raw feedback"
+      },
+      {
+        "id": "b",
+        "label": "Claude Connector",
+        "detail": "Processes and synthesizes data"
+      },
+      {
+        "id": "c",
+        "label": "New Strategy Board",
+        "detail": "Structured output for the team"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "context_explore"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "board_create & table_create"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/miro",
+      "label": "Miro connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Product Strategy Synthesis, how does the connector address the problem of fragmented feedback?",
+      "options": [
+        "By manually copying text from boards.",
+        "By synthesizing themes from existing boards into a new structured strategy board.",
+        "By deleting old boards to save space.",
+        "By emailing summaries to stakeholders."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution specifically mentions using the connector to extract themes and generate a new board containing organized insights.",
+      "evidence": "The Claude-Miro connector enables the AI to programmatically scan existing retrospective boards, extract key themes, and automatically generate a new, structured strategy board containing organized sticky notes and summary tables."
+    },
+    {
+      "question": "In Automated Product Strategy Synthesis, what is a primary limitation of the implementation?",
+      "options": [
+        "The connector cannot access boards.",
+        "The AI may produce inaccurate synthesis if source boards are poorly structured.",
+        "It requires manual coding for every board.",
+        "It only works with images."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the AI's synthesis quality is dependent on the quality and structure of the source boards.",
+      "evidence": "The connector relies on the AI's ability to interpret board context; if boards are poorly structured or lack clear labels, the synthesis may be inaccurate."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:42.054Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:38.565Z"
+}

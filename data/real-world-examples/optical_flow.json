@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "optical_flow",
+  "title": "Automated Warehouse Conveyor Jam Detection",
+  "business": "Logistics and automated fulfillment centers managing high-speed conveyor belts.",
+  "problem": "Manual monitoring of conveyor belts is prone to oversight, leading to pile-ups and physical damage to packages when items get stuck or misaligned during transit.",
+  "solution": "Optical Flow estimation tracks the apparent motion of packages between consecutive video frames. By calculating per-pixel displacement vectors, the system identifies regions where motion has unexpectedly ceased or diverged from the expected flow direction, triggering an automated stop before a jam escalates.",
+  "steps": [
+    "Capture high-frame-rate video streams from overhead cameras positioned along the conveyor line.",
+    "Pre-process frames to normalize lighting and reduce noise for consistent feature tracking.",
+    "Apply a convolutional neural network architecture to estimate the motion field between sequential frames.",
+    "Aggregate displacement vectors to detect stationary clusters in areas where continuous movement is expected.",
+    "Trigger an alert signal to the programmable logic controller when flow velocity drops below a defined threshold."
+  ],
+  "outcome": "Improved operational continuity and reduced equipment wear by proactively identifying and clearing minor obstructions before they become major blockages.",
+  "limitation": "The primary limitation is the computational overhead required for real-time processing; high-resolution video can lead to latency. To check for this, monitor the frame processing time against the camera capture interval to ensure the system does not fall behind the live feed.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Conveyor Flow Monitoring Pipeline",
+    "description": "This flow illustrates the transformation of raw video data into actionable stop commands.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Camera Feed",
+        "detail": "Raw input frames"
+      },
+      {
+        "id": "b",
+        "label": "Feature Extraction",
+        "detail": "CNN-based processing"
+      },
+      {
+        "id": "c",
+        "label": "Motion Estimation",
+        "detail": "Calculating per-pixel displacement"
+      },
+      {
+        "id": "d",
+        "label": "Anomaly Logic",
+        "detail": "Detecting stationary pixels"
+      },
+      {
+        "id": "e",
+        "label": "System Stop",
+        "detail": "Actuator control"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "stream"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "feature maps"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "flow vectors"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "trigger"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1504.06852",
+      "label": "FlowNet: Learning Optical Flow with Convolutional Networks"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Warehouse Conveyor Jam Detection, how does the technology address the problem of package pile-ups?",
+      "options": [
+        "By identifying stationary clusters where continuous movement is expected.",
+        "By using thermal sensors to detect heat from friction.",
+        "By counting the total number of packages on the belt.",
+        "By measuring the weight of the conveyor belt."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on calculating displacement vectors to identify areas where motion has ceased, which is the definition of a potential jam.",
+      "evidence": "Aggregate displacement vectors to detect stationary clusters in areas where continuous movement is expected."
+    },
+    {
+      "question": "In Automated Warehouse Conveyor Jam Detection, what is the primary limitation and how is it verified?",
+      "options": [
+        "Inaccurate lighting; verified by checking camera exposure settings.",
+        "Computational overhead; verified by comparing processing time to the capture interval.",
+        "Network connectivity; verified by checking packet loss.",
+        "Package color; verified by checking RGB values."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that high-resolution video processing can cause latency, which is verified by comparing processing time to the capture rate.",
+      "evidence": "The primary limitation is the computational overhead required for real-time processing; high-resolution video can lead to latency. To check for this, monitor the frame processing time against the camera capture interval to ensure the system does not fall behind the live feed."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:00.163Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:55.987Z"
+}

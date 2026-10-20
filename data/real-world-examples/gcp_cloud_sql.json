@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_sql",
+  "title": "Migrating Legacy Inventory Systems to Managed Cloud SQL",
+  "business": "Retail organizations managing legacy on-premises relational databases for inventory tracking.",
+  "problem": "High operational overhead and maintenance costs associated with manual patching, backups, and scaling of on-premises database servers.",
+  "solution": "Utilizing Google Cloud SQL to offload database administration tasks such as automated backups, high availability configuration, and patch management to a fully managed service.",
+  "steps": [
+    "Assess current database schema and compatibility with Cloud SQL supported engines (MySQL, PostgreSQL, or SQL Server).",
+    "Provision a Cloud SQL instance with appropriate compute and storage resources.",
+    "Configure network connectivity via Private IP to ensure secure access from application servers.",
+    "Perform data migration using Database Migration Service to synchronize legacy data to the cloud instance.",
+    "Update application connection strings to point to the new Cloud SQL endpoint."
+  ],
+  "outcome": "Reduced administrative burden and improved database reliability through automated maintenance and managed high availability.",
+  "limitation": "Cloud SQL instances have specific resource limits; users must monitor CPU and memory utilization to ensure the selected machine type remains sufficient for workload demands.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cloud SQL Migration Workflow",
+    "description": "The flow shows the transition from legacy infrastructure to managed cloud services.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy DB",
+        "detail": "On-premises database server"
+      },
+      {
+        "id": "b",
+        "label": "Migration Service",
+        "detail": "Database Migration Service tool"
+      },
+      {
+        "id": "c",
+        "label": "Cloud SQL",
+        "detail": "Managed database instance"
+      },
+      {
+        "id": "d",
+        "label": "App Server",
+        "detail": "Application consuming data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Extracts data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Replicates data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Serves queries"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product List"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Migrating Legacy Inventory Systems to Managed Cloud SQL, what is the primary business driver for adopting the solution?",
+      "options": [
+        "High operational overhead and maintenance costs",
+        "The need for unlimited storage capacity",
+        "Requirement for custom database engine modifications",
+        "Elimination of all network latency"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the high operational overhead and maintenance costs of on-premises servers as the specific problem being addressed.",
+      "evidence": "High operational overhead and maintenance costs associated with manual patching, backups, and scaling of on-premises database servers."
+    },
+    {
+      "question": "In Migrating Legacy Inventory Systems to Managed Cloud SQL, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use Private IP for connectivity",
+        "The requirement to manually perform all security patches",
+        "The need to monitor resource utilization against machine type limits",
+        "The lack of support for PostgreSQL engines"
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly notes that users must monitor resource usage because instances have specific limits based on the chosen machine type.",
+      "evidence": "Cloud SQL instances have specific resource limits; users must monitor CPU and memory utilization to ensure the selected machine type remains sufficient for workload demands."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:18.942Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

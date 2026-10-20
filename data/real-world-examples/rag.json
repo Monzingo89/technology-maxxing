@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "rag",
+  "title": "Maritime Regulatory Compliance Assistant",
+  "business": "Global shipping logistics firms that must adhere to rapidly changing international maritime safety and environmental regulations.",
+  "problem": "Large language models often hallucinate outdated safety protocols because their internal parametric memory is static and lacks access to the latest, frequently updated regulatory PDF documents.",
+  "solution": "Retrieval-Augmented Generation (RAG) addresses this by decoupling factual knowledge from the model's parameters. Instead of relying on training data alone, the system queries a dynamic, non-parametric vector index containing the most recent regulatory filings before generating a response, ensuring the output is grounded in current, verifiable evidence.",
+  "steps": [
+    "Ingest current maritime regulatory documents into a searchable vector database.",
+    "Implement a neural retriever to perform semantic similarity searches against the vector index based on user queries.",
+    "Pass the retrieved, relevant document chunks as context to a pre-trained seq2seq model.",
+    "Generate a final response that synthesizes the retrieved evidence with the model's linguistic capabilities."
+  ],
+  "outcome": "The system provides responses that are grounded in specific, cited regulatory documents, significantly reducing the risk of providing obsolete or incorrect safety guidance.",
+  "limitation": "A primary limitation is the dependency on the quality of the retriever; if the retrieval step fails to surface the most relevant document chunks, the model may generate an answer based on incomplete context. This can be checked by monitoring the semantic relevance scores of the retrieved passages against the user query.",
+  "diagram": {
+    "kind": "flow",
+    "title": "RAG Regulatory Query Flow",
+    "description": "This diagram illustrates the flow from a user query to the final grounded response.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Compliance Officer",
+        "detail": "Submits regulatory query"
+      },
+      {
+        "id": "retriever",
+        "label": "Neural Retriever",
+        "detail": "Searches vector index"
+      },
+      {
+        "id": "index",
+        "label": "Vector Database",
+        "detail": "Stores regulatory documents"
+      },
+      {
+        "id": "model",
+        "label": "Seq2Seq Model",
+        "detail": "Generates grounded response"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "retriever",
+        "label": "query"
+      },
+      {
+        "from": "retriever",
+        "to": "index",
+        "label": "semantic search"
+      },
+      {
+        "from": "index",
+        "to": "model",
+        "label": "retrieved evidence"
+      },
+      {
+        "from": "model",
+        "to": "user",
+        "label": "grounded answer"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2005.11401",
+      "label": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Maritime Regulatory Compliance Assistant, why is RAG used instead of relying solely on a pre-trained model?",
+      "options": [
+        "To allow the model to access and ground answers in dynamic, non-parametric memory.",
+        "To increase the number of parameters in the seq2seq model.",
+        "To eliminate the need for a neural retriever entirely.",
+        "To ensure the model ignores external documents during generation."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that RAG is used because static parametric memory leads to hallucinations of outdated information, requiring access to a dynamic, non-parametric vector index.",
+      "evidence": "Retrieval-Augmented Generation (RAG) addresses this by decoupling factual knowledge from the model's parameters. Instead of relying on training data alone, the system queries a dynamic, non-parametric vector index containing the most recent regulatory filings before generating a response, ensuring the output is grounded in current, verifiable evidence."
+    },
+    {
+      "question": "What is a key limitation of the implementation in Maritime Regulatory Compliance Assistant?",
+      "options": [
+        "The model cannot generate text if the vector database is too small.",
+        "The system relies on the retriever to surface relevant information, which can impact accuracy if it fails.",
+        "The seq2seq model is incapable of understanding regulatory language.",
+        "The system cannot provide citations for the retrieved documents."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the system's performance is contingent on the retriever's ability to find relevant information.",
+      "evidence": "A primary limitation is the dependency on the quality of the retriever; if the retrieval step fails to surface the most relevant document chunks, the model may generate an answer based on incomplete context."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:22.800Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:18.765Z"
+}

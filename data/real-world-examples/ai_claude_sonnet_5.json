@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_sonnet_5",
+  "title": "Legacy Archive Synthesis for Legal Discovery",
+  "business": "Global law firms managing massive, multi-decade document repositories.",
+  "problem": "Firms struggle with high costs and latency when performing discovery on legacy case files that require deep contextual understanding of outdated regulatory frameworks.",
+  "solution": "Utilizing the 1M token context window of Claude Sonnet 5 allows firms to ingest entire case histories into a single prompt, leveraging its adaptive thinking to synthesize legal precedents without needing complex RAG architectures.",
+  "steps": [
+    "Consolidate relevant case documents into a single serialized text stream.",
+    "Initialize the Claude API client using the claude-sonnet-5 model ID.",
+    "Inject the document stream into the message context, utilizing prompt caching to reduce recurring costs for frequently accessed archives.",
+    "Execute analytical queries using the high default effort setting to ensure deep reasoning on legacy data.",
+    "Retrieve synthesized legal summaries via the standard Messages API."
+  ],
+  "outcome": "Reduced manual review time and improved consistency in identifying cross-case legal patterns.",
+  "limitation": "The model has a knowledge cutoff of January 2026, meaning it cannot natively reason about regulatory changes or case law established after that date; developers must verify currency by checking the model's output against current legal databases.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Discovery Synthesis Workflow",
+    "description": "The flow of documents through the Claude Sonnet 5 pipeline.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Archive",
+        "detail": "Raw legacy case files"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Caching",
+        "detail": "Optimized input storage"
+      },
+      {
+        "id": "c",
+        "label": "Claude Sonnet 5",
+        "detail": "Adaptive reasoning engine"
+      },
+      {
+        "id": "d",
+        "label": "Legal Summary",
+        "detail": "Final discovery report"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest and cache"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Context injection"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Synthesize results"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.messages.create(\n    model=\"claude-sonnet-5\", # Target legacy model ID\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"Analyze these 500k words of case history...\"}],\n    extra_headers={\"anthropic-beta\": \"output-300k-2026-03-24\"} # Enable extended output for large summaries\n)",
+    "explanation": "This snippet demonstrates calling the model with the specific ID and utilizing the beta header for extended output, which is supported by the model documentation."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5/overview",
+      "label": "Claude Sonnet 5 reference"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Archive Synthesis for Legal Discovery, why is Claude Sonnet 5 chosen for the discovery process?",
+      "options": [
+        "Its 1M token context window allows for ingestion of entire case histories.",
+        "It is the newest model with the most recent knowledge cutoff.",
+        "It provides the lowest cost per token of any model in the lineup.",
+        "It is required for all new legal technology implementations."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the 1M token context window as the primary driver for handling massive document repositories.",
+      "evidence": "Utilizing the 1M token context window of Claude Sonnet 5 allows firms to ingest entire case histories into a single prompt"
+    },
+    {
+      "question": "In Legacy Archive Synthesis for Legal Discovery, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot process images.",
+        "The model is restricted to a 200k token context window.",
+        "The model has a knowledge cutoff of January 2026.",
+        "The model does not support the high effort setting."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that the model's knowledge is limited to its January 2026 cutoff.",
+      "evidence": "The model has a knowledge cutoff of January 2026, meaning it cannot natively reason about regulatory changes or case law established after that date"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:57.807Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:53.979Z"
+}

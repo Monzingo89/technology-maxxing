@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_event_grid",
+  "title": "Decoupled Inventory Synchronization",
+  "business": "Retailers managing multi-channel inventory across disparate systems.",
+  "problem": "Monolithic systems struggle with latency when updating stock levels across web, mobile, and physical store databases, leading to overselling.",
+  "solution": "Azure Event Grid routes discrete inventory change events to specific handlers, allowing independent services to react to stock updates without direct coupling.",
+  "steps": [
+    "Define a custom event schema for inventory updates.",
+    "Create an Event Grid topic to act as the entry point for events.",
+    "Configure event subscriptions with filters to target specific product categories.",
+    "Map event handlers to downstream services like database update functions or notification APIs."
+  ],
+  "outcome": "Improved system responsiveness and reduced synchronization errors by decoupling event producers from consumers.",
+  "limitation": "Event delivery is asynchronous, which may introduce slight delays in state consistency; verify by checking the event delivery status in the portal.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Event Routing",
+    "description": "Flow of inventory data from source to multiple reactive consumers.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory System",
+        "detail": "Event Producer"
+      },
+      {
+        "id": "b",
+        "label": "Event Grid Topic",
+        "detail": "Message Broker"
+      },
+      {
+        "id": "c",
+        "label": "Web Store Handler",
+        "detail": "Consumer 1"
+      },
+      {
+        "id": "d",
+        "label": "Mobile App Handler",
+        "detail": "Consumer 2"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Publishes Event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Routes Filtered Event"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Routes Filtered Event"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupled Inventory Synchronization, what is the primary benefit of using Event Grid for inventory updates?",
+      "options": [
+        "It eliminates the need for databases entirely.",
+        "It allows independent services to react to stock updates without direct coupling.",
+        "It guarantees zero-latency synchronization across all global regions.",
+        "It replaces the need for custom event schemas."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explains that Event Grid allows independent services to react to events without direct coupling, solving the problem of monolithic latency.",
+      "evidence": "Azure Event Grid routes discrete inventory change events to specific handlers, allowing independent services to react to stock updates without direct coupling."
+    },
+    {
+      "question": "In Decoupled Inventory Synchronization, what is a key trade-off when using this architecture?",
+      "options": [
+        "The system becomes strictly synchronous.",
+        "Event delivery is asynchronous, potentially introducing delays in state consistency.",
+        "The system requires manual event filtering for every single message.",
+        "The system cannot handle custom event schemas."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the asynchronous nature of the service as a trade-off affecting state consistency.",
+      "evidence": "Event delivery is asynchronous, which may introduce slight delays in state consistency; verify by checking the event delivery status in the portal."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:45.993Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "http3",
+  "title": "Optimizing Satellite-Linked Remote Sensor Data Streams",
+  "business": "A remote environmental monitoring firm deploying IoT sensors in regions with high-latency satellite backhaul.",
+  "problem": "Traditional HTTP/2 over TCP suffers from head-of-line blocking where a single packet loss stalls all concurrent streams, causing significant data gaps during intermittent satellite signal interference.",
+  "solution": "HTTP/3 leverages the QUIC transport protocol, which treats each stream independently. If one packet is lost, only the affected stream is delayed, allowing other sensor data streams to continue transmission without interruption.",
+  "steps": [
+    "Configure the edge gateway to support UDP port 443 for QUIC handshake initiation.",
+    "Enable HTTP/3 support on the load balancer to negotiate the Alt-Svc header.",
+    "Map individual sensor data channels to distinct QUIC streams to isolate transmission errors.",
+    "Implement connection migration logic to maintain sessions when the satellite terminal switches beams."
+  ],
+  "outcome": "The system achieves more consistent data ingestion rates despite high packet loss environments, as individual sensor streams no longer block each other during transient network congestion.",
+  "limitation": "Increased CPU overhead on the server due to UDP packet processing and QUIC encryption requirements; monitor this by tracking the ratio of CPU utilization to concurrent QUIC connection counts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "HTTP/3 Stream Isolation Flow",
+    "description": "This diagram illustrates how HTTP/3 decouples data streams over a single QUIC connection.",
+    "nodes": [
+      {
+        "id": "sensor",
+        "label": "IoT Sensor",
+        "detail": "Generates telemetry data"
+      },
+      {
+        "id": "quic",
+        "label": "QUIC Connection",
+        "detail": "Single UDP transport layer"
+      },
+      {
+        "id": "stream1",
+        "label": "Stream A",
+        "detail": "Temperature data"
+      },
+      {
+        "id": "stream2",
+        "label": "Stream B",
+        "detail": "Humidity data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "sensor",
+        "to": "quic",
+        "label": "multiplexes"
+      },
+      {
+        "from": "quic",
+        "to": "stream1",
+        "label": "contains"
+      },
+      {
+        "from": "quic",
+        "to": "stream2",
+        "label": "contains"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Satellite-Linked Remote Sensor Data Streams, why is HTTP/3 preferred over HTTP/2?",
+      "options": [
+        "It eliminates head-of-line blocking by isolating streams.",
+        "It reduces the total number of sensors required.",
+        "It increases the satellite signal strength.",
+        "It replaces the need for encryption."
+      ],
+      "answerIndex": 0,
+      "explanation": "HTTP/3 uses QUIC to ensure that packet loss in one stream does not block others, solving the head-of-line blocking issue inherent in TCP-based HTTP/2.",
+      "evidence": "If one packet is lost, only the affected stream is delayed, allowing other sensor data streams to continue transmission without interruption."
+    },
+    {
+      "question": "In Optimizing Satellite-Linked Remote Sensor Data Streams, what is a primary operational trade-off?",
+      "options": [
+        "Higher CPU usage due to UDP and QUIC processing.",
+        "Increased latency for all data packets.",
+        "Requirement for specialized hardware sensors.",
+        "Inability to use standard web ports."
+      ],
+      "answerIndex": 0,
+      "explanation": "The implementation of HTTP/3 introduces higher computational demands on the server side compared to traditional TCP-based stacks.",
+      "evidence": "Increased CPU overhead on the server due to UDP packet processing and QUIC encryption requirements; monitor this by tracking the ratio of CPU utilization to concurrent QUIC connection counts."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:37.016Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

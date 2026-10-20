@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "cursor",
+  "title": "Legacy Monolith Refactoring with Cursor",
+  "business": "Enterprise teams maintaining large, undocumented legacy codebases.",
+  "problem": "Engineers struggle to understand cross-module dependencies, leading to high regression risks when attempting to refactor or modernize specific features.",
+  "solution": "Cursor provides codebase-aware agents that map repository structures to identify relevant files and suggest safe refactoring paths based on existing logic patterns.",
+  "steps": [
+    "Index the local repository to allow the agent to understand the codebase structure.",
+    "Use the agent to trace dependencies between the legacy module and the rest of the application.",
+    "Define a scope for the refactor using Plan Mode to outline necessary changes.",
+    "Execute iterative updates using the agent to apply and verify code transformations.",
+    "Review generated diffs to ensure logic consistency before merging."
+  ],
+  "outcome": "Improved developer velocity and reduced regression incidents during complex refactoring tasks.",
+  "limitation": "The agent may occasionally hallucinate architectural patterns if the codebase lacks consistent coding standards; verify all suggestions against existing unit tests.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Refactoring Workflow",
+    "description": "The flow of information from the codebase to the agent and back to the developer.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Codebase",
+        "detail": "Raw source files and dependencies"
+      },
+      {
+        "id": "b",
+        "label": "Cursor Indexer",
+        "detail": "Creates context-aware representation"
+      },
+      {
+        "id": "c",
+        "label": "Coding Agent",
+        "detail": "Analyzes logic and suggests changes"
+      },
+      {
+        "id": "d",
+        "label": "Developer",
+        "detail": "Reviews and applies code diffs"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "proposes refactor"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "commits changes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://cursor.com/docs",
+      "label": "Cursor Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Monolith Refactoring with Cursor, how does the technology address the problem of high regression risks?",
+      "options": [
+        "By automatically rewriting the entire codebase from scratch.",
+        "By using codebase-aware agents to trace dependencies and suggest safe refactoring paths.",
+        "By replacing all legacy unit tests with AI-generated tests.",
+        "By preventing any changes to the codebase until manual approval is granted."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the agent's ability to understand the codebase and map dependencies to guide safe refactoring.",
+      "evidence": "Cursor provides codebase-aware agents that map repository structures to identify relevant files and suggest safe refactoring paths based on existing logic patterns."
+    },
+    {
+      "question": "What is a primary limitation identified in Legacy Monolith Refactoring with Cursor?",
+      "options": [
+        "The agent cannot read files larger than 100 lines.",
+        "The agent may hallucinate architectural patterns if coding standards are inconsistent.",
+        "The agent requires a constant internet connection to function.",
+        "The agent is unable to suggest changes to existing code."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that inconsistent standards can lead to incorrect agent suggestions, necessitating manual verification.",
+      "evidence": "The agent may occasionally hallucinate architectural patterns if the codebase lacks consistent coding standards; verify all suggestions against existing unit tests."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:50.870Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:47.738Z"
+}

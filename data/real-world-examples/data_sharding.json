@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "data_sharding",
+  "title": "Global Logistics Route Optimization Sharding",
+  "business": "A global logistics provider managing real-time tracking data for millions of shipping containers across multiple continents.",
+  "problem": "The central database node experiences severe write contention and storage exhaustion because all incoming telemetry data from global sensors is directed to a single primary instance, leading to latency spikes during peak shipping hours.",
+  "solution": "Data sharding distributes the load by partitioning records across multiple nodes based on a routing rule, specifically using the container's region ID as a partition key. This ensures that telemetry data is distributed evenly across a cluster, allowing the system to scale horizontally by adding nodes as the number of containers increases.",
+  "steps": [
+    "Define a partition key based on the geographic region ID of the shipping container.",
+    "Configure a routing layer that maps specific region ID ranges to designated storage nodes.",
+    "Initialize the cluster nodes to host their respective partitions of the global telemetry dataset.",
+    "Update the ingestion service to include the region ID in the routing metadata for every incoming record.",
+    "Monitor the distribution of data across nodes to ensure no single partition becomes a hotspot."
+  ],
+  "outcome": "The system achieves balanced resource utilization across the cluster, eliminating single-node bottlenecks and allowing for predictable growth as the fleet size expands.",
+  "limitation": "A primary limitation is the difficulty of performing cross-shard queries. If a logistics manager needs to generate a report spanning multiple regions, the system must perform a scatter-gather operation, which increases latency. To check for this, monitor the frequency of cross-shard join operations and query execution times.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Regional Sharding Architecture",
+    "description": "Explains how incoming telemetry is routed to specific nodes based on region.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Ingestion Service",
+        "detail": "Receives raw telemetry"
+      },
+      {
+        "id": "b",
+        "label": "Routing Layer",
+        "detail": "Applies partition rule"
+      },
+      {
+        "id": "c",
+        "label": "Node: North America",
+        "detail": "Stores regional data"
+      },
+      {
+        "id": "d",
+        "label": "Node: EMEA",
+        "detail": "Stores regional data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "forwards data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "routes by region ID"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "routes by region ID"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Route Optimization Sharding, what is the primary purpose of implementing sharding?",
+      "options": [
+        "To increase the storage capacity of a single primary node.",
+        "To distribute telemetry data across nodes to eliminate write contention.",
+        "To ensure all data is stored in a single global location for consistency.",
+        "To eliminate the need for a routing layer in the architecture."
+      ],
+      "answerIndex": 1,
+      "explanation": "Sharding is used to distribute the load across multiple nodes to prevent the bottleneck caused by a single primary instance.",
+      "evidence": "Data sharding distributes the load by partitioning records across multiple nodes based on a routing rule, specifically using the container's region ID as a partition key."
+    },
+    {
+      "question": "In Global Logistics Route Optimization Sharding, what is a significant trade-off of the sharding approach?",
+      "options": [
+        "Increased latency for single-shard lookups.",
+        "The inability to add more nodes to the cluster.",
+        "Increased complexity when performing queries that span multiple shards.",
+        "The requirement to store all data in a single partition."
+      ],
+      "answerIndex": 2,
+      "explanation": "Cross-shard queries require scatter-gather operations, which are inherently more complex and slower than single-shard operations.",
+      "evidence": "A primary limitation is the difficulty of performing cross-shard queries. If a logistics manager needs to generate a report spanning multiple regions, the system must perform a scatter-gather operation, which increases latency."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:58.405Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

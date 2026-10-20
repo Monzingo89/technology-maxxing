@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "tool_schema",
+  "title": "Logistics Inventory Query Automation",
+  "business": "Logistics companies managing distributed warehouse inventory.",
+  "problem": "Manual lookup of stock levels across multiple regional databases creates significant latency in order fulfillment workflows.",
+  "solution": "Implementing a Tool Schema allows the model to directly query internal inventory APIs, automating data retrieval without human intervention.",
+  "steps": [
+    "Define a JSON schema for the inventory lookup function including required parameters like SKU and warehouse_id.",
+    "Register the tool definition within the API request payload to expose the capability to the model.",
+    "Implement the application-side handler to execute the database query when the model generates a tool call.",
+    "Return the structured tool call output back to the model to synthesize the final natural language response."
+  ],
+  "outcome": "Reduced fulfillment latency and improved accuracy in stock availability reporting.",
+  "limitation": "The model may hallucinate arguments if the JSON schema lacks strict validation rules; developers must check the schema definition for 'additionalProperties: false' to enforce strict parameter adherence.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Tool Execution Flow",
+    "description": "The sequence of interactions between the user, model, and inventory system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Requests stock status"
+      },
+      {
+        "id": "b",
+        "label": "Model",
+        "detail": "Generates tool call based on schema"
+      },
+      {
+        "id": "c",
+        "label": "App Logic",
+        "detail": "Executes SQL/API query"
+      },
+      {
+        "id": "d",
+        "label": "Inventory DB",
+        "detail": "Returns stock count"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "tool_call"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "query"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "data"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "tool_call_output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.openai.com/docs/guides/function-calling",
+      "label": "Function calling"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Inventory Query Automation, how does the tool schema resolve the problem of manual lookup latency?",
+      "options": [
+        "By allowing the model to directly query internal inventory APIs.",
+        "By caching all inventory data within the model's training set.",
+        "By replacing the database with a static JSON file.",
+        "By forcing the user to manually input stock levels."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the tool schema enables the model to query internal APIs, bypassing manual lookup.",
+      "evidence": "Implementing a Tool Schema allows the model to directly query internal inventory APIs, automating data retrieval without human intervention."
+    },
+    {
+      "question": "In Logistics Inventory Query Automation, what is a primary limitation of using tool schemas?",
+      "options": [
+        "The model cannot handle more than one tool at a time.",
+        "The model may hallucinate arguments if strict validation is missing.",
+        "The system requires a human to approve every tool call.",
+        "Tool schemas are incompatible with JSON-based APIs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that without strict validation, the model might provide incorrect arguments.",
+      "evidence": "The model may hallucinate arguments if the JSON schema lacks strict validation rules; developers must check the schema definition for 'additionalProperties: false' to enforce strict parameter adherence."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:29.182Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:25.821Z"
+}

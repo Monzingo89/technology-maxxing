@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_kinesis_data_analytics",
+  "title": "Real-time Supply Chain Inventory Synchronization",
+  "business": "Global logistics providers managing thousands of warehouse sensors and inventory tracking systems.",
+  "problem": "Traditional batch processing of inventory updates leads to stale data, causing overselling of stock during high-traffic periods because the system cannot reconcile incoming sensor events against current inventory levels in real-time.",
+  "solution": "Amazon Managed Service for Apache Flink provides a managed environment to run stateful stream processing applications. By maintaining internal state, the service can perform windowed aggregations and join incoming sensor streams with existing inventory records to calculate accurate, up-to-the-second stock availability without querying a central database for every event.",
+  "steps": [
+    "Configure a Kinesis Data Stream as the source for incoming inventory sensor events.",
+    "Develop a Flink application using the DataStream API to define windowed operations for stock reconciliation.",
+    "Deploy the application to Amazon Managed Service for Apache Flink to handle the stateful processing logic.",
+    "Sink the processed, reconciled inventory updates to an Amazon DynamoDB table for downstream consumption."
+  ],
+  "outcome": "The business achieves consistent inventory visibility across all distribution centers, effectively preventing overselling by ensuring that stock counts are updated immediately as events arrive.",
+  "limitation": "Stateful processing requires managing the size of the application state. If the state grows too large, checkpointing latency increases, which can lead to processing delays. Developers must monitor the CheckpointDuration metric to ensure the application remains performant.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Stream Processing Flow",
+    "description": "Explains the movement of sensor data through the Flink managed service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Data",
+        "detail": "Raw inventory events"
+      },
+      {
+        "id": "b",
+        "label": "Kinesis Stream",
+        "detail": "Ingestion buffer"
+      },
+      {
+        "id": "c",
+        "label": "Managed Flink App",
+        "detail": "Stateful processing engine"
+      },
+      {
+        "id": "d",
+        "label": "DynamoDB",
+        "detail": "Reconciled inventory store"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Streams"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Supply Chain Inventory Synchronization, why is Amazon Managed Service for Apache Flink used?",
+      "options": [
+        "To perform real-time stateful stream processing and reconcile inventory without constant database queries",
+        "To replace the need for Kinesis Data Streams entirely",
+        "To provide a batch processing engine for historical reporting",
+        "To automatically scale the underlying database storage capacity"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights the need to reconcile events against state to prevent overselling, which is the core capability of stateful stream processing.",
+      "evidence": "By maintaining internal state, the service can perform windowed aggregations and join incoming sensor streams with existing inventory records to calculate accurate, up-to-the-second stock availability without querying a central database for every event."
+    },
+    {
+      "question": "In Real-time Supply Chain Inventory Synchronization, what is a primary limitation of the implementation?",
+      "options": [
+        "The service cannot connect to DynamoDB",
+        "Excessive state size can increase checkpointing latency and cause processing delays",
+        "The application requires manual server patching",
+        "It is impossible to use windowed operations"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies state size and checkpointing duration as a critical performance factor.",
+      "evidence": "If the state grows too large, checkpointing latency increases, which can lead to processing delays."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:09.868Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

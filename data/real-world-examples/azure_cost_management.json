@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_cost_management",
+  "title": "Optimizing Multi-Departmental Cloud Spend",
+  "business": "Large enterprises with multiple business units sharing a single Azure subscription.",
+  "problem": "Lack of visibility into which specific departments are driving cost spikes, leading to budget overruns and inefficient resource allocation.",
+  "solution": "Utilizing Azure Cost Management to implement granular tagging, automated budget alerts, and scheduled cost exports for cross-departmental chargeback reporting.",
+  "steps": [
+    "Apply consistent resource tags to all assets to categorize costs by department or project.",
+    "Configure Cost Management budgets with email alerts triggered at 50%, 80%, and 100% of the allocated spend.",
+    "Create scheduled exports to store cost data in an Azure Storage account for long-term analysis.",
+    "Review cost analysis dashboards to identify underutilized resources and apply recommendations."
+  ],
+  "outcome": "Improved financial accountability and proactive identification of cost-saving opportunities through data-driven insights.",
+  "limitation": "Cost data latency; usage information typically takes up to 24 hours to appear in the portal, meaning real-time spending tracking is not possible.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cost Management Workflow",
+    "description": "The flow of resource consumption data into actionable financial insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Azure Resources",
+        "detail": "Compute, Storage, Databases"
+      },
+      {
+        "id": "b",
+        "label": "Cost Management",
+        "detail": "Analysis, Budgets, Exports"
+      },
+      {
+        "id": "c",
+        "label": "Storage Account",
+        "detail": "Exported CSV/JSON data"
+      },
+      {
+        "id": "d",
+        "label": "Stakeholders",
+        "detail": "Finance and Dept Leads"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "emits usage data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "exports daily reports"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "sends budget alerts"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Multi-Departmental Cloud Spend, what is the primary purpose of using Azure Cost Management?",
+      "options": [
+        "To provide visibility into department-specific spending and improve resource allocation.",
+        "To automatically delete resources that exceed a monthly budget.",
+        "To increase the processing speed of Azure virtual machines.",
+        "To migrate on-premises databases to the cloud."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario focuses on solving the lack of visibility into department-specific cost spikes.",
+      "evidence": "Lack of visibility into which specific departments are driving cost spikes, leading to budget overruns and inefficient resource allocation."
+    },
+    {
+      "question": "Regarding the implementation of Optimizing Multi-Departmental Cloud Spend, what is a key limitation to consider?",
+      "options": [
+        "The inability to use tags for resource categorization.",
+        "The requirement to pay for Cost Management as a separate service.",
+        "The 24-hour latency in usage data reporting.",
+        "The inability to export data to external storage."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that usage data is not real-time and typically has a 24-hour delay.",
+      "evidence": "Cost data latency; usage information typically takes up to 24 hours to appear in the portal, meaning real-time spending tracking is not possible."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:34.263Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

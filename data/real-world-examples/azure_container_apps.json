@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "azure_container_apps",
+  "title": "Retail Inventory Event-Driven Scaling",
+  "business": "E-commerce retailers managing fluctuating inventory update requests.",
+  "problem": "Traditional monolithic services struggle to scale granularly during sudden traffic spikes, leading to resource waste during idle periods.",
+  "solution": "Azure Container Apps enables serverless container execution with event-driven scaling, allowing individual microservices to scale based on incoming request volume or queue depth.",
+  "steps": [
+    "Package the inventory microservice as a container image and push it to a container registry.",
+    "Create an Azure Container Apps environment to host the microservice.",
+    "Define scaling rules based on HTTP traffic or event triggers like queue length.",
+    "Deploy the container image to a new revision within the app environment."
+  ],
+  "outcome": "Improved resource efficiency by automatically scaling down to zero when no events are present and scaling out rapidly during high-demand periods.",
+  "limitation": "Cold starts may occur when scaling from zero, which can be verified by monitoring request latency during initial traffic bursts after an idle period.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event-Driven Scaling Workflow",
+    "description": "Shows how external events trigger container scaling in Azure Container Apps.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Event Source",
+        "detail": "HTTP requests or message queue"
+      },
+      {
+        "id": "b",
+        "label": "KEDA Scaler",
+        "detail": "Monitors event metrics"
+      },
+      {
+        "id": "c",
+        "label": "Container App",
+        "detail": "The microservice instance"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "scales replicas"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Container Apps"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Event-Driven Scaling, how does the technology address the problem of resource waste?",
+      "options": [
+        "By scaling down to zero when no events are present",
+        "By using fixed-size virtual machines for all services",
+        "By manually adjusting CPU limits during peak hours",
+        "By eliminating the need for container images"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly mentions scaling down to zero as a mechanism for resource efficiency.",
+      "evidence": "Improved resource efficiency by automatically scaling down to zero when no events are present and scaling out rapidly during high-demand periods."
+    },
+    {
+      "question": "In Retail Inventory Event-Driven Scaling, what is a potential limitation of the implementation?",
+      "options": [
+        "The inability to use container images",
+        "The requirement for manual scaling rules",
+        "Cold starts when scaling from zero",
+        "High costs during idle periods"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies cold starts as a trade-off when using serverless scaling from zero.",
+      "evidence": "Cold starts may occur when scaling from zero, which can be verified by monitoring request latency during initial traffic bursts after an idle period."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:40.249Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

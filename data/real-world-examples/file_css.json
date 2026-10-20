@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "file_css",
+  "title": "Modularizing Component Styles with Cascade Layers",
+  "business": "Frontend developers managing large-scale enterprise design systems.",
+  "problem": "Global CSS rule conflicts where generic styles inadvertently override specific component requirements, leading to high maintenance costs and unpredictable visual regressions.",
+  "solution": "Utilizing CSS cascade layers to explicitly define the order of style precedence, ensuring that component-specific rules are prioritized over base framework styles regardless of selector specificity.",
+  "steps": [
+    "Identify distinct style categories such as base, layout, and component-specific rules.",
+    "Wrap existing stylesheets or blocks in @layer rules to establish a clear hierarchy.",
+    "Import external stylesheets using the @import rule with the layer() function to assign them to specific buckets.",
+    "Verify the cascade order by ensuring the layer definition order matches the desired priority."
+  ],
+  "outcome": "A predictable, modular CSS architecture where style precedence is managed by layer order rather than complex selector specificity, reducing unintended overrides.",
+  "limitation": "The revert-layer keyword is currently at-risk and may not be consistently supported across all user agents, requiring developers to test for feature support before relying on it for complex resets.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cascade Layer Precedence Flow",
+    "description": "The flow shows how different CSS sources are funneled into defined layers, which then resolve conflicts based on their declared order.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Base Styles",
+        "detail": "Global resets and typography"
+      },
+      {
+        "id": "b",
+        "label": "Component Layer",
+        "detail": "Specific UI element styling"
+      },
+      {
+        "id": "c",
+        "label": "Cascade Resolver",
+        "detail": "Determines final property values"
+      },
+      {
+        "id": "d",
+        "label": "Rendered Element",
+        "detail": "Final visual output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "lower priority"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "higher priority"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "applies styles"
+      }
+    ]
+  },
+  "code": {
+    "language": "css",
+    "content": "@layer base, components; /* Define order of layers */\n@import url('reset.css') layer(base); /* Import into base layer */\n@layer components { .button { color: blue; } } /* Component specific rules */",
+    "explanation": "This demonstrates how to structure CSS by explicitly defining layers, which prevents generic styles from overriding component-specific definitions."
+  },
+  "sources": [
+    {
+      "url": "https://www.w3.org/TR/css-cascade-5/",
+      "label": "CSS Cascading and Inheritance Level 5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modularizing Component Styles with Cascade Layers, why is the solution effective for enterprise design systems?",
+      "options": [
+        "It eliminates the need for CSS selectors entirely.",
+        "It allows style precedence to be managed by layer order rather than complex selector specificity.",
+        "It automatically compresses CSS files to improve network performance.",
+        "It forces all browsers to ignore legacy vendor-prefixed properties."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly addresses the problem of unpredictable overrides by using layers to control precedence, which is a core benefit of the CSS cascade layers feature.",
+      "evidence": "A predictable, modular CSS architecture where style precedence is managed by layer order rather than complex selector specificity, reducing unintended overrides."
+    },
+    {
+      "question": "In Modularizing Component Styles with Cascade Layers, what is a known limitation when implementing this architecture?",
+      "options": [
+        "The browser will always crash if more than three layers are defined.",
+        "The revert-layer keyword is currently at-risk and may not be consistently supported.",
+        "CSS layers are only compatible with HTML5 and not XML documents.",
+        "All shorthand properties are disabled when using cascade layers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that the revert-layer keyword is at-risk, which is a specific technical limitation mentioned in the lesson.",
+      "evidence": "The revert-layer keyword is currently at-risk and may not be consistently supported across all user agents, requiring developers to test for feature support before relying on it for complex resets."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:44.434Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:40.870Z"
+}

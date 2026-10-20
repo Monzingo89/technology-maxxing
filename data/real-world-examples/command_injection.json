@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "command_injection",
+  "title": "Secure Document Conversion Service",
+  "business": "A document processing firm that allows clients to upload files for automated format conversion.",
+  "problem": "The conversion service uses a shell-based utility to process files. If an attacker submits a filename containing shell metacharacters, the system interprets the input as part of the command syntax, leading to arbitrary code execution on the host server.",
+  "solution": "The system must move away from direct shell invocation. By using language-specific APIs that treat arguments as literal strings rather than shell tokens, the application prevents the operating system from interpreting user input as command syntax.",
+  "steps": [
+    "Identify all locations where user-supplied strings are passed to system-level utilities.",
+    "Replace shell-executing functions with parameterized API calls that separate the command from its arguments.",
+    "Implement a strict allow-list for valid characters in filenames to ensure only expected input reaches the backend.",
+    "Apply the principle of least privilege by running the conversion process under a restricted service account.",
+    "Conduct regular audits to ensure no new shell-based execution paths are introduced during updates."
+  ],
+  "outcome": "The application becomes resilient to command injection because user input is never parsed by the shell, effectively neutralizing attempts to alter command logic.",
+  "limitation": "Parameterized APIs can be complex to implement for legacy utilities that require shell-specific features like piping or redirection. To check for this, developers must verify if the application still requires shell features and, if so, ensure those features are hardcoded rather than dynamically constructed from input.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Secure Command Execution Flow",
+    "description": "This diagram illustrates the transition from vulnerable shell execution to secure API-based processing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Untrusted filename string"
+      },
+      {
+        "id": "b",
+        "label": "Input Validator",
+        "detail": "Sanitizes input against allow-list"
+      },
+      {
+        "id": "c",
+        "label": "Secure API",
+        "detail": "Executes command with literal arguments"
+      },
+      {
+        "id": "d",
+        "label": "OS Kernel",
+        "detail": "Executes binary safely"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "passes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sanitized input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "invokes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Document Conversion Service, what is the primary risk associated with the current document processing method?",
+      "options": [
+        "The system interprets user-supplied filenames as part of the command syntax.",
+        "The conversion service lacks sufficient memory to handle large files.",
+        "The system fails to encrypt documents during the conversion process.",
+        "The application uses an outdated version of the operating system."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states that the system interprets input as command syntax, which is the definition of command injection.",
+      "evidence": "The conversion service uses a shell-based utility to process files. If an attacker submits a filename containing shell metacharacters, the system interprets the input as part of the command syntax, leading to arbitrary code execution on the host server."
+    },
+    {
+      "question": "In Secure Document Conversion Service, what is a significant limitation of using parameterized APIs?",
+      "options": [
+        "They are incompatible with modern operating systems.",
+        "They are impossible to implement in any programming language.",
+        "They can be complex to implement for legacy utilities requiring shell-specific features.",
+        "They automatically increase the attack surface of the application."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that parameterized APIs struggle with legacy utilities that rely on shell features like piping.",
+      "evidence": "Parameterized APIs can be complex to implement for legacy utilities that require shell-specific features like piping or redirection."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:19.799Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

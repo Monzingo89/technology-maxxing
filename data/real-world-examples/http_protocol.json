@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "http_protocol",
+  "title": "Synchronizing Distributed Inventory States",
+  "business": "A regional logistics provider managing warehouse stock levels across multiple localized microservices.",
+  "problem": "Inconsistent inventory counts occur when concurrent update requests arrive at different warehouse nodes, leading to overselling of items because the system lacks a standardized way to enforce state transitions.",
+  "solution": "By leveraging HTTP protocol semantics, specifically utilizing the ETag header for conditional requests, the system ensures that updates only proceed if the resource representation matches the client's last known state, effectively implementing optimistic concurrency control.",
+  "steps": [
+    "Assign a unique ETag to each inventory resource representation upon initial GET request.",
+    "Require clients to include the ETag in the If-Match header for all subsequent PUT or PATCH requests.",
+    "Configure the server to validate the If-Match header against the current resource version before applying changes.",
+    "Return a 412 Precondition Failed status if the ETag does not match the current server state.",
+    "Instruct clients to re-fetch the resource and retry the operation upon receiving a 412 error."
+  ],
+  "outcome": "The system achieves reliable state synchronization across distributed nodes, preventing race conditions without requiring heavy-weight distributed locking mechanisms.",
+  "limitation": "The primary limitation is increased client-side complexity, as applications must implement retry logic and handle conditional failure states. To check for this, monitor the frequency of 412 status codes in server access logs relative to total update requests.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Conditional Update Flow",
+    "description": "This diagram illustrates the request-response cycle for a conditional inventory update.",
+    "nodes": [
+      {
+        "id": "c",
+        "label": "Client",
+        "detail": "Requests inventory update"
+      },
+      {
+        "id": "s",
+        "label": "Server",
+        "detail": "Validates ETag"
+      },
+      {
+        "id": "db",
+        "label": "Database",
+        "detail": "Stores current state"
+      },
+      {
+        "id": "fail",
+        "label": "412 Error",
+        "detail": "Precondition failed"
+      }
+    ],
+    "edges": [
+      {
+        "from": "c",
+        "to": "s",
+        "label": "PUT with If-Match"
+      },
+      {
+        "from": "s",
+        "to": "db",
+        "label": "Check ETag"
+      },
+      {
+        "from": "db",
+        "to": "s",
+        "label": "Version Mismatch"
+      },
+      {
+        "from": "s",
+        "to": "fail",
+        "label": "Return 412"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronizing Distributed Inventory States, what is the primary purpose of using HTTP If-Match headers?",
+      "options": [
+        "To implement optimistic concurrency control",
+        "To encrypt the inventory data payload",
+        "To compress the HTTP response body",
+        "To bypass the need for authentication"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the use of ETag and If-Match as a method to ensure updates only proceed if the state matches, which defines optimistic concurrency control.",
+      "evidence": "By leveraging HTTP protocol semantics, specifically utilizing the ETag header for conditional requests, the system ensures that updates only proceed if the resource representation matches the client's last known state, effectively implementing optimistic concurrency control."
+    },
+    {
+      "question": "In Synchronizing Distributed Inventory States, what is a key trade-off of the proposed solution?",
+      "options": [
+        "Increased client-side complexity for retry logic",
+        "Higher latency due to server-side locking",
+        "Inability to handle concurrent requests",
+        "Requirement for specialized hardware"
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section explicitly mentions that the client must handle retries and conditional failures, adding complexity to the client application.",
+      "evidence": "The primary limitation is increased client-side complexity, as applications must implement retry logic and handle conditional failure states."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:34.022Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

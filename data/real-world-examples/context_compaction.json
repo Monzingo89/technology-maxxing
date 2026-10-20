@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "topicId": "context_compaction",
+  "title": "Optimizing Multi-Agent Financial Analysis",
+  "business": "Financial research firms managing complex, multi-step investment analysis workflows.",
+  "problem": "Long-running agent chains often accumulate massive transcripts, leading to excessive token consumption and potential context window overflow during handoffs between specialized agents.",
+  "solution": "Context compaction replaces selected history with a shorter representation while retaining needed facts, specifically by enabling ordered transcript compaction during agent handoffs.",
+  "steps": [
+    "Identify the specific handoff point where context volume becomes excessive.",
+    "Configure the RunConfig to enable nest_handoff_history=True for the target handoff.",
+    "Optionally define a handoff_history_mapper to customize how the transcript is summarized.",
+    "Execute the agent chain, allowing the SDK to automatically place assistant summary segments around lossless message items."
+  ],
+  "outcome": "Improved efficiency in multi-agent workflows by reducing the total input size passed to subsequent agents while maintaining essential conversation history.",
+  "limitation": "Compaction is an automated process that may lose nuance; verify accuracy by monitoring the agent's ability to recall specific details from the compacted segments.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Handoff Compaction Flow",
+    "description": "Visualizing the transformation of raw history into a compacted transcript during a handoff.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Agent 1",
+        "detail": "Initial analysis agent"
+      },
+      {
+        "id": "b",
+        "label": "Raw Transcript",
+        "detail": "Full history of interactions"
+      },
+      {
+        "id": "c",
+        "label": "Compactor",
+        "detail": "SDK logic with nest_handoff_history=True"
+      },
+      {
+        "id": "d",
+        "label": "Compacted Input",
+        "detail": "Summary segments + lossless items"
+      },
+      {
+        "id": "e",
+        "label": "Agent 2",
+        "detail": "Final synthesis agent"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "generates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "transforms"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "context for"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import RunConfig\n\n# Enable nested handoff history to compact the transcript\nconfig = RunConfig(nest_handoff_history=True)\n\n# Apply this config to a specific handoff to manage context size\n# agent.handoff(target_agent, nest_handoff_history=True)",
+    "explanation": "This code demonstrates how to enable the compaction feature within the agent SDK to manage history size during handoffs."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/running_agents/",
+      "label": "Running agents - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Multi-Agent Financial Analysis, why is context compaction used?",
+      "options": [
+        "To reduce token consumption and prevent context window overflow.",
+        "To increase the speed of local function tool execution.",
+        "To bypass the need for human-in-the-loop approvals.",
+        "To enable multi-provider model switching."
+      ],
+      "answerIndex": 0,
+      "explanation": "Compaction addresses the issue of long transcripts consuming too many tokens and potentially overflowing the context window.",
+      "evidence": "Long-running agent chains often accumulate massive transcripts, leading to excessive token consumption and potential context window overflow during handoffs between specialized agents."
+    },
+    {
+      "question": "In Optimizing Multi-Agent Financial Analysis, what is a primary limitation of the compaction process?",
+      "options": [
+        "It requires a manual summary for every single message.",
+        "It is an automated process that may lose nuance.",
+        "It prevents the use of tool execution.",
+        "It is incompatible with RunConfig settings."
+      ],
+      "answerIndex": 1,
+      "explanation": "Automated summarization is a tradeoff where some detail or nuance may be lost compared to the raw transcript.",
+      "evidence": "Compaction is an automated process that may lose nuance; verify accuracy by monitoring the agent's ability to recall specific details from the compacted segments."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:33.829Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:30.435Z"
+}

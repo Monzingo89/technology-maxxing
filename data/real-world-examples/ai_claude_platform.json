@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_platform",
+  "title": "Unified Recruitment Pipeline Optimization",
+  "business": "Talent acquisition teams managing high-volume candidate pipelines across disparate platforms.",
+  "problem": "Recruiters suffer from context switching fatigue, manually toggling between Greenhouse for candidate data, Slack for team communication, and Google Calendar for interview scheduling, leading to delayed candidate responses.",
+  "solution": "By integrating Greenhouse, Slack, and Google Calendar connectors into the Claude platform, recruiters create a centralized interface where Claude retrieves candidate profiles, drafts Slack updates for hiring managers, and proposes interview slots based on calendar availability.",
+  "steps": [
+    "Authenticate the Greenhouse connector to allow Claude to query candidate application status and scorecards.",
+    "Enable the Slack connector to permit Claude to post interview summaries and candidate feedback to specific hiring channels.",
+    "Connect the Google Calendar integration to provide Claude with read-write access for scheduling coordination.",
+    "Prompt Claude to synthesize candidate data from Greenhouse and draft a Slack message to the hiring team with proposed interview times."
+  ],
+  "outcome": "A streamlined, single-interface workflow that reduces manual data entry and accelerates the time-to-hire by consolidating fragmented communication and scheduling tasks.",
+  "limitation": "The primary limitation is the dependency on connector-specific API rate limits and permissions; users must verify the scope of data access in the connector settings to ensure Claude has sufficient authorization to perform cross-tool actions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Recruitment Workflow Integration",
+    "description": "Shows how Claude acts as an orchestrator between external recruitment tools.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Greenhouse",
+        "detail": "Candidate data source"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Central orchestration engine"
+      },
+      {
+        "id": "c",
+        "label": "Slack",
+        "detail": "Communication channel"
+      },
+      {
+        "id": "d",
+        "label": "Google Calendar",
+        "detail": "Scheduling service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Fetch candidate profile"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Post interview summary"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Check availability"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors-plugins",
+      "label": "Connectors and plugins | Claude Marketplace | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Recruitment Pipeline Optimization, what is the primary problem addressed by the Claude connector platform?",
+      "options": [
+        "High costs of hiring new recruiters",
+        "Context switching fatigue caused by manual toggling between disparate recruitment tools",
+        "Inability to find qualified candidates on social media",
+        "Lack of storage space for candidate resumes"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly identifies that recruiters struggle with context switching fatigue when moving between Greenhouse, Slack, and Google Calendar.",
+      "evidence": "Recruiters suffer from context switching fatigue, manually toggling between Greenhouse for candidate data, Slack for team communication, and Google Calendar for interview scheduling, leading to delayed candidate responses."
+    },
+    {
+      "question": "In Unified Recruitment Pipeline Optimization, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than ten candidates at once",
+        "Users must manually code the API integrations from scratch",
+        "Dependency on connector-specific API rate limits and permissions",
+        "Claude cannot read data from Greenhouse"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that the platform's effectiveness is constrained by the specific permissions and rate limits of the integrated connectors.",
+      "evidence": "The primary limitation is the dependency on connector-specific API rate limits and permissions; users must verify the scope of data access in the connector settings to ensure Claude has sufficient authorization to perform cross-tool actions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:35.223Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:31.190Z"
+}

@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "calico",
+  "title": "Securing Microservices in a Multi-Tenant E-commerce Platform",
+  "business": "A multi-tenant e-commerce provider hosting various vendor storefronts on a shared Kubernetes cluster.",
+  "problem": "The platform faces significant security risks due to lateral movement, where a compromised pod in one vendor's namespace could potentially access sensitive data or services in another vendor's namespace.",
+  "solution": "Calico Network Policies provide granular, label-based traffic control that allows the platform to enforce a zero-trust architecture, ensuring that pods can only communicate with explicitly authorized services regardless of their physical location on the cluster.",
+  "steps": [
+    "Install Calico Open Source on the Kubernetes cluster to enable the CNI and policy enforcement engine.",
+    "Define a GlobalNetworkPolicy to implement a default-deny posture for all inter-namespace traffic.",
+    "Apply specific NetworkPolicy resources using label selectors to whitelist traffic between authorized microservices.",
+    "Utilize Calico's staged policies to preview the impact of new security rules on existing traffic flows before final enforcement."
+  ],
+  "outcome": "A hardened environment where inter-tenant traffic is strictly isolated, significantly reducing the blast radius of potential security breaches.",
+  "limitation": "The primary limitation is the increased operational complexity of managing a large set of granular policies, which can lead to configuration drift; this can be checked by auditing policy logs and using the Calico flow visualization tools to identify orphaned or overly permissive rules.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Calico Policy Enforcement Flow",
+    "description": "This diagram illustrates how Calico intercepts traffic between pods to enforce security policies based on labels.",
+    "nodes": [
+      {
+        "id": "p1",
+        "label": "Frontend Pod",
+        "detail": "Vendor A Storefront"
+      },
+      {
+        "id": "p2",
+        "label": "Backend Pod",
+        "detail": "Vendor A Database"
+      },
+      {
+        "id": "p3",
+        "label": "Malicious Pod",
+        "detail": "Vendor B Compromised"
+      },
+      {
+        "id": "c",
+        "label": "Calico Policy Engine",
+        "detail": "Enforces label-based rules"
+      }
+    ],
+    "edges": [
+      {
+        "from": "p1",
+        "to": "c",
+        "label": "Traffic Request"
+      },
+      {
+        "from": "c",
+        "to": "p2",
+        "label": "Permit (Match Label)"
+      },
+      {
+        "from": "p3",
+        "to": "c",
+        "label": "Traffic Request"
+      },
+      {
+        "from": "c",
+        "to": "p3",
+        "label": "Deny (No Match)"
+      }
+    ]
+  },
+  "code": {
+    "language": "yaml",
+    "content": "apiVersion: projectcalico.org/v3\nkind: NetworkPolicy\nmetadata:\n  name: allow-frontend-to-backend\nspec:\n  selector: role == 'backend' # Target the backend pods\n  ingress:\n  - action: Allow\n    source:\n      selector: role == 'frontend' # Only allow traffic from frontend pods",
+    "explanation": "This policy restricts backend access to only those pods labeled as frontend, preventing unauthorized access from other namespaces."
+  },
+  "sources": [
+    {
+      "url": "https://docs.tigera.io/calico/latest/about/",
+      "label": "About Calico | Calico Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Microservices in a Multi-Tenant E-commerce Platform, how does Calico address the risk of lateral movement?",
+      "options": [
+        "By implementing label-based network policies that enforce zero-trust traffic isolation.",
+        "By automatically encrypting all data at rest within the Kubernetes etcd database.",
+        "By providing a web-based dashboard that monitors external user login attempts.",
+        "By replacing the standard Kubernetes CNI with a proprietary hardware-based firewall."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies lateral movement as the problem and specifies that Calico Network Policies provide granular, label-based traffic control to enforce a zero-trust architecture.",
+      "evidence": "Calico Network Policies provide granular, label-based traffic control that allows the platform to enforce a zero-trust architecture, ensuring that pods can only communicate with explicitly authorized services regardless of their physical location on the cluster."
+    },
+    {
+      "question": "What is a key operational limitation mentioned for Securing Microservices in a Multi-Tenant E-commerce Platform?",
+      "options": [
+        "The inability to use labels for policy selection.",
+        "The risk of configuration drift due to the complexity of managing granular policies.",
+        "The requirement to use a specific cloud provider for policy enforcement.",
+        "The lack of support for staged policy previews."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the complexity of managing large sets of policies as a risk for configuration drift.",
+      "evidence": "The primary limitation is the increased operational complexity of managing a large set of granular policies, which can lead to configuration drift; this can be checked by auditing policy logs and using the Calico flow visualization tools to identify orphaned or overly permissive rules."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:59.147Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:55.120Z"
+}

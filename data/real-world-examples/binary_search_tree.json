@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "binary_search_tree",
+  "title": "Optimizing Inventory Lookup for Retail Logistics",
+  "business": "A regional retail distribution center managing thousands of unique product SKUs.",
+  "problem": "The center uses a flat list to track inventory, resulting in linear search times that delay order fulfillment as the product catalog grows.",
+  "solution": "Implementing a Binary Search Tree (BST) organizes SKUs into a hierarchical structure where each node's left subtree contains smaller keys and the right subtree contains larger keys, enabling logarithmic search performance.",
+  "steps": [
+    "Define a Node structure containing the SKU key, value, and pointers to left and right children.",
+    "Insert SKUs into the tree by recursively comparing the new key against the current node to determine the path.",
+    "Traverse the tree using in-order logic to maintain a sorted view of the inventory for reporting.",
+    "Implement a search function that branches left or right based on key comparison to locate specific items."
+  ],
+  "outcome": "Faster retrieval of product availability data, reducing the time required to process individual customer orders.",
+  "limitation": "The tree can become unbalanced if keys are inserted in sorted order, effectively turning it into a linked list; performance must be monitored by checking the tree height relative to the number of nodes.",
+  "diagram": {
+    "kind": "er",
+    "title": "BST Inventory Hierarchy",
+    "description": "Nodes represent SKU records, and edges represent the partitioning logic based on key comparisons.",
+    "nodes": [
+      {
+        "id": "root",
+        "label": "Root SKU",
+        "detail": "Starting point for all searches"
+      },
+      {
+        "id": "left",
+        "label": "Left Child",
+        "detail": "SKUs with smaller keys"
+      },
+      {
+        "id": "right",
+        "label": "Right Child",
+        "detail": "SKUs with larger keys"
+      },
+      {
+        "id": "leaf",
+        "label": "Leaf Node",
+        "detail": "Terminal SKU record"
+      }
+    ],
+    "edges": [
+      {
+        "from": "root",
+        "to": "left",
+        "label": "key < root"
+      },
+      {
+        "from": "root",
+        "to": "right",
+        "label": "key > root"
+      },
+      {
+        "from": "left",
+        "to": "leaf",
+        "label": "sub-partition"
+      },
+      {
+        "from": "right",
+        "to": "leaf",
+        "label": "sub-partition"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Inventory Lookup for Retail Logistics, why is a Binary Search Tree preferred over a flat list?",
+      "options": [
+        "It enables logarithmic search performance by partitioning comparisons.",
+        "It eliminates the need for unique SKU identifiers.",
+        "It automatically reorders the entire warehouse floor.",
+        "It guarantees the fastest possible insertion regardless of key order."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explains that the BST structure enables logarithmic search performance by organizing SKUs into a hierarchy where subtrees partition comparisons.",
+      "evidence": "Implementing a Binary Search Tree (BST) organizes SKUs into a hierarchical structure where each node's left subtree contains smaller keys and the right subtree contains larger keys, enabling logarithmic search performance."
+    },
+    {
+      "question": "What is a primary limitation of the implementation described in Optimizing Inventory Lookup for Retail Logistics?",
+      "options": [
+        "The tree cannot store more than ten thousand items.",
+        "The tree can become unbalanced if keys are inserted in sorted order.",
+        "The search function requires a full traversal of all nodes.",
+        "The memory overhead of pointers exceeds the storage of the keys."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that sorted insertion can degrade the tree into a linked list, impacting performance.",
+      "evidence": "The tree can become unbalanced if keys are inserted in sorted order, effectively turning it into a linked list; performance must be monitored by checking the tree height relative to the number of nodes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:29.438Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

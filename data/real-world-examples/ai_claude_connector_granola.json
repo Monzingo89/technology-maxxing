@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_granola",
+  "title": "Synchronizing Cross-Functional Product Discovery",
+  "business": "A mid-sized product design firm managing complex client discovery sessions across multiple time zones.",
+  "problem": "Project managers struggle to maintain consistency in product requirements because meeting insights remain siloed in individual note-taking apps, leading to conflicting feature priorities and delayed development cycles.",
+  "solution": "By integrating the Granola connector with Claude, the team centralizes meeting transcripts into a single AI-accessible repository. This allows Claude to synthesize cross-meeting context, identifying recurring user pain points and conflicting requirements directly from the source transcripts without manual aggregation.",
+  "steps": [
+    "Configure the Granola MCP server using the provided connector URL to establish a secure link between the meeting history and the Claude interface.",
+    "Authenticate the connector to grant Claude read-only access to the specific meeting workspaces containing discovery session transcripts.",
+    "Utilize the list_meetings tool to identify the relevant session IDs for the current product discovery sprint.",
+    "Execute the get_meeting_transcript tool to pull raw dialogue data into the Claude context window for thematic analysis.",
+    "Prompt Claude to compare requirements across selected transcripts to generate a unified feature backlog."
+  ],
+  "outcome": "The team achieves a single source of truth for product requirements, significantly reducing the time spent manually reconciling notes and ensuring that design decisions are grounded in actual client feedback.",
+  "limitation": "The connector relies on the quality and availability of the meeting transcripts; if a meeting is not recorded or the transcript is incomplete, Claude will lack the necessary context, which can be verified by checking the output of the get_meeting_transcript tool for missing segments.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Discovery Synthesis Workflow",
+    "description": "This diagram illustrates the flow of meeting data from Granola into the Claude analysis engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Granola Store",
+        "detail": "Repository of meeting transcripts"
+      },
+      {
+        "id": "b",
+        "label": "Granola Connector",
+        "detail": "MCP interface layer"
+      },
+      {
+        "id": "c",
+        "label": "Claude AI",
+        "detail": "Analysis and synthesis engine"
+      },
+      {
+        "id": "d",
+        "label": "Product Backlog",
+        "detail": "Final synthesized output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "fetch_data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provide_context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generate_summary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/granola",
+      "label": "Granola connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronizing Cross-Functional Product Discovery, how does the Granola connector resolve the problem of siloed insights?",
+      "options": [
+        "By centralizing meeting transcripts into a single AI-accessible repository for synthesis.",
+        "By automatically emailing meeting summaries to all stakeholders.",
+        "By replacing the need for human note-takers during discovery sessions.",
+        "By creating a new project management software for the team."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that the connector allows Claude to synthesize cross-meeting context from a centralized repository.",
+      "evidence": "By integrating the Granola connector with Claude, the team centralizes meeting transcripts into a single AI-accessible repository."
+    },
+    {
+      "question": "In Synchronizing Cross-Functional Product Discovery, what is the primary limitation of the implementation?",
+      "options": [
+        "The connector is incompatible with video conferencing software.",
+        "Claude cannot process more than three meetings at a time.",
+        "The quality of analysis depends on the completeness of the meeting transcripts.",
+        "The connector requires manual data entry for every meeting."
+      ],
+      "answerIndex": 2,
+      "explanation": "The text explicitly states that the connector's effectiveness is tied to the availability and quality of the transcripts.",
+      "evidence": "The connector relies on the quality and availability of the meeting transcripts; if a meeting is not recorded or the transcript is incomplete, Claude will lack the necessary context"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:52.474Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:48.593Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_textract",
+  "title": "Automated Logistics Manifest Digitization",
+  "business": "A regional freight logistics company managing thousands of handwritten and printed shipping manifests daily.",
+  "problem": "Manual data entry from paper-based shipping manifests is prone to human error, creates significant processing delays, and prevents real-time inventory tracking.",
+  "solution": "Amazon Textract automates the extraction of printed text, handwriting, tables, and forms from scanned manifests, converting unstructured paper documents into machine-readable JSON data for downstream logistics systems.",
+  "steps": [
+    "Upload scanned manifest images to an Amazon S3 bucket.",
+    "Trigger an AWS Lambda function upon S3 object creation.",
+    "Call the AnalyzeDocument API to extract tables and key-value pairs.",
+    "Parse the returned JSON response to map fields like 'Tracking Number' and 'Weight' to the database.",
+    "Update the logistics management system with the extracted data."
+  ],
+  "outcome": "The company achieves rapid, accurate data ingestion from physical documents, enabling immediate visibility into shipment status without manual intervention.",
+  "limitation": "Textract may struggle with low-resolution scans or highly distorted handwriting, which can lead to extraction errors; developers should implement a confidence score threshold check to flag low-confidence results for human review.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Digitization Workflow",
+    "description": "This diagram illustrates the flow from physical document to database update.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Physical Manifest",
+        "detail": "Paper document"
+      },
+      {
+        "id": "b",
+        "label": "S3 Bucket",
+        "detail": "Storage for scans"
+      },
+      {
+        "id": "c",
+        "label": "Textract",
+        "detail": "Extraction engine"
+      },
+      {
+        "id": "d",
+        "label": "Logistics DB",
+        "detail": "Final data store"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Upload scan"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Trigger analysis"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Write JSON data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Amazon Web Services Products"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Manifest Digitization, what is the primary business problem being solved?",
+      "options": [
+        "Manual data entry errors and processing delays",
+        "High cost of cloud storage for images",
+        "Lack of internet connectivity in warehouses",
+        "Inability to print shipping labels"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that manual entry is prone to error and causes delays.",
+      "evidence": "Manual data entry from paper-based shipping manifests is prone to human error, creates significant processing delays, and prevents real-time inventory tracking."
+    },
+    {
+      "question": "In Automated Logistics Manifest Digitization, how should developers handle potential extraction inaccuracies?",
+      "options": [
+        "Ignore all errors as they are statistically insignificant",
+        "Implement a confidence score threshold to flag low-confidence results for human review",
+        "Retrain the model on every single document",
+        "Switch to a different cloud provider"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section suggests using confidence scores to identify documents that require manual oversight.",
+      "evidence": "Textract may struggle with low-resolution scans or highly distorted handwriting, which can lead to extraction errors; developers should implement a confidence score threshold check to flag low-confidence results for human review."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:19.750Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

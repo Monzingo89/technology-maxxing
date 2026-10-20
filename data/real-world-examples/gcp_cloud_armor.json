@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_armor",
+  "title": "Securing Global Retail API Endpoints",
+  "business": "E-commerce retailers managing global API traffic for mobile and web storefronts.",
+  "problem": "Unpredictable traffic spikes from malicious botnets and volumetric DDoS attacks threaten to overwhelm origin servers, causing service outages and latency for legitimate customers.",
+  "solution": "Google Cloud Armor provides DDoS defense and web application filtering at Google's edge, allowing the retailer to inspect incoming requests before they reach the application backend.",
+  "steps": [
+    "Provision a global external HTTP(S) load balancer to serve as the entry point for application traffic.",
+    "Create a security policy within Google Cloud Armor containing specific rules for traffic filtering.",
+    "Configure custom rules to block known malicious IP ranges or rate-limit suspicious request patterns.",
+    "Attach the security policy to the backend service of the load balancer to enforce filtering at the edge."
+  ],
+  "outcome": "Improved application availability and reduced infrastructure strain by filtering malicious traffic at the network edge before it reaches the origin.",
+  "limitation": "Security policies are applied at the edge, meaning they cannot inspect encrypted payloads without proper TLS termination at the load balancer; verify effectiveness by checking the security logs for blocked request counts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cloud Armor Traffic Filtering Flow",
+    "description": "Explains how traffic flows from the internet through the edge security layer to the backend.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "External user or bot"
+      },
+      {
+        "id": "b",
+        "label": "Google Edge",
+        "detail": "Cloud Armor Security Policy"
+      },
+      {
+        "id": "c",
+        "label": "Load Balancer",
+        "detail": "Global HTTP(S) entry point"
+      },
+      {
+        "id": "d",
+        "label": "Backend Service",
+        "detail": "Application origin"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Filtered Traffic"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Forwarded Request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product List"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Global Retail API Endpoints, how does the solution mitigate the risk of service outages?",
+      "options": [
+        "By filtering malicious traffic at the network edge before it reaches the origin.",
+        "By increasing the compute capacity of the backend servers automatically.",
+        "By caching static assets closer to the user to reduce latency.",
+        "By encrypting all database connections to prevent data leaks."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that Cloud Armor filters traffic at the edge to prevent origin servers from being overwhelmed.",
+      "evidence": "Google Cloud Armor provides DDoS defense and web application filtering at Google's edge, allowing the retailer to inspect incoming requests before they reach the application backend."
+    },
+    {
+      "question": "In Securing Global Retail API Endpoints, what is a key limitation of the security policy implementation?",
+      "options": [
+        "It requires manual intervention for every single request.",
+        "It cannot inspect encrypted payloads without TLS termination at the load balancer.",
+        "It is only compatible with internal VPC traffic.",
+        "It significantly increases the latency of legitimate requests."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that edge filtering requires TLS termination to inspect encrypted traffic.",
+      "evidence": "Security policies are applied at the edge, meaning they cannot inspect encrypted payloads without proper TLS termination at the load balancer"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:52.489Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

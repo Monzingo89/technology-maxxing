@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "vyper",
+  "title": "Supply Chain Integrity via Vyper",
+  "business": "Logistics companies managing high-value pharmaceutical shipments.",
+  "problem": "Complex smart contracts in other languages often hide state-changing logic in modifiers or inheritance, leading to opaque audit trails and potential security vulnerabilities during transit verification.",
+  "solution": "Vyper enforces strict readability and security by design, requiring all logic to be explicit and inline, which ensures that every state change in the shipment lifecycle is immediately visible to auditors.",
+  "steps": [
+    "Define the shipment state using strong typing for timestamps and location coordinates.",
+    "Implement explicit assertion checks for temperature thresholds instead of using hidden modifiers.",
+    "Utilize pure functions for calculating transit duration to ensure no unintended state modifications occur.",
+    "Deploy the contract to the EVM, relying on Vyper's bounds checking to prevent arithmetic overflows."
+  ],
+  "outcome": "A highly transparent and auditable contract structure that minimizes the risk of hidden logic flaws, ensuring stakeholders can verify shipment integrity without navigating complex inheritance trees.",
+  "limitation": "The absence of recursive calling and infinite-length loops means developers must manually calculate gas limits for all operations; this is checked by ensuring all loops have a fixed, known upper bound.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Shipment Verification Lifecycle",
+    "description": "The flow of data through the Vyper contract during a shipment lifecycle.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Data",
+        "detail": "Input of temperature and GPS"
+      },
+      {
+        "id": "b",
+        "label": "Vyper Contract",
+        "detail": "Contains explicit state logic"
+      },
+      {
+        "id": "c",
+        "label": "Audit Log",
+        "detail": "Immutable record of status"
+      },
+      {
+        "id": "d",
+        "label": "Stakeholders",
+        "detail": "Verify shipment integrity"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers validation"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "records state change"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "provides transparency"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.vyperlang.org/en/stable/",
+      "label": "Vyper documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Integrity via Vyper, why is the language choice beneficial for auditing?",
+      "options": [
+        "It uses modifiers to hide complex logic.",
+        "It forces explicit, readable code by banning modifiers and inheritance.",
+        "It allows for recursive calls to simplify audit trails.",
+        "It relies on binary fixed point for precise calculations."
+      ],
+      "answerIndex": 1,
+      "explanation": "Vyper prioritizes auditability by removing features like modifiers and inheritance that obscure code flow, as described in the solution.",
+      "evidence": "Vyper enforces strict readability and security by design, requiring all logic to be explicit and inline, which ensures that every state change in the shipment lifecycle is immediately visible to auditors."
+    },
+    {
+      "question": "In Supply Chain Integrity via Vyper, what is a primary trade-off regarding contract execution?",
+      "options": [
+        "The lack of bounds checking requires manual verification.",
+        "Developers must avoid decimal fixed point numbers.",
+        "Developers must manually ensure loops have fixed upper bounds due to the lack of recursion.",
+        "The compiler automatically adds hidden modifiers to all functions."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because Vyper prohibits recursion and infinite loops to ensure decidability, developers must ensure all loops are bounded.",
+      "evidence": "The absence of recursive calling and infinite-length loops means developers must manually calculate gas limits for all operations; this is checked by ensuring all loops have a fixed, known upper bound."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:18.540Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:14.699Z"
+}

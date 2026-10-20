@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "valkey",
+  "title": "Real-time Telemetry Stream Processing for Smart Grids",
+  "business": "Utility companies managing distributed energy resources and smart grid infrastructure.",
+  "problem": "Legacy relational databases struggle to ingest high-frequency sensor telemetry, leading to write contention and delayed visibility into grid stability.",
+  "solution": "Valkey Streams provide a lightweight, append-only log structure that decouples data ingestion from downstream analytical processing, while optional persistence ensures data durability during maintenance cycles.",
+  "steps": [
+    "Initialize a Valkey Stream to act as the primary ingestion buffer for incoming sensor telemetry packets.",
+    "Use XADD to append incoming sensor readings to the stream, assigning unique entry IDs for chronological ordering.",
+    "Configure Append Only File (AOF) persistence to ensure that telemetry logs are flushed to disk, preventing data loss during unexpected restarts.",
+    "Implement consumer groups using XREADGROUP to allow multiple analytical services to process the telemetry stream concurrently without duplicate work."
+  ],
+  "outcome": "The utility company achieves consistent, low-latency ingestion of grid data, enabling near-instantaneous detection of load imbalances across the network.",
+  "limitation": "Because Valkey operates primarily in-memory, the dataset size is constrained by available RAM; monitor the memory usage via the INFO memory command to prevent eviction of critical stream data.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Stream Ingestion Flow",
+    "description": "This diagram illustrates how sensor data flows from the grid into the Valkey stream and is subsequently consumed by analytical services.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Array",
+        "detail": "Generates telemetry packets"
+      },
+      {
+        "id": "b",
+        "label": "Valkey Stream",
+        "detail": "In-memory append-only log"
+      },
+      {
+        "id": "c",
+        "label": "AOF Disk Log",
+        "detail": "Persistent storage for durability"
+      },
+      {
+        "id": "d",
+        "label": "Analytical Service",
+        "detail": "Processes stream via consumer group"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "XADD telemetry"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Persist data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "XREADGROUP"
+      }
+    ]
+  },
+  "code": {
+    "language": "text",
+    "content": "# Add a sensor reading to the stream\nXADD grid-telemetry * sensor_id 101 voltage 230.5\n# Read new entries as part of a consumer group\nXREADGROUP GROUP group1 consumer1 STREAMS grid-telemetry >",
+    "explanation": "The XADD command appends the sensor data to the stream, while XREADGROUP allows the analytical service to consume the stream reliably."
+  },
+  "sources": [
+    {
+      "url": "https://valkey.io/topics/introduction/",
+      "label": "Valkey Documentation & Introduction"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Telemetry Stream Processing for Smart Grids, why is Valkey preferred over a traditional relational database for ingestion?",
+      "options": [
+        "It eliminates write contention by using an append-only log structure for high-frequency data.",
+        "It provides infinite storage capacity for historical telemetry data.",
+        "It automatically converts telemetry data into relational tables.",
+        "It requires no configuration for data persistence."
+      ],
+      "answerIndex": 0,
+      "explanation": "Valkey Streams act as an append-only log, which is optimized for high-frequency ingestion compared to relational databases that suffer from write contention.",
+      "evidence": "Valkey Streams provide a lightweight, append-only log structure that decouples data ingestion from downstream analytical processing, while optional persistence ensures data durability during maintenance cycles."
+    },
+    {
+      "question": "In Real-time Telemetry Stream Processing for Smart Grids, what is a primary limitation of the implementation?",
+      "options": [
+        "The system cannot handle multiple consumer groups.",
+        "The system is limited by available RAM, requiring monitoring to prevent data eviction.",
+        "The system does not support disk-based persistence.",
+        "The system is incompatible with AOF logging."
+      ],
+      "answerIndex": 1,
+      "explanation": "Since Valkey is an in-memory store, memory capacity is a hard constraint that must be monitored to avoid accidental data loss via eviction.",
+      "evidence": "Because Valkey operates primarily in-memory, the dataset size is constrained by available RAM; monitor the memory usage via the INFO memory command to prevent eviction of critical stream data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:57.036Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:53.144Z"
+}

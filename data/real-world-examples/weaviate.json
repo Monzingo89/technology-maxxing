@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "weaviate",
+  "title": "Optimizing Technical Documentation Retrieval for Global Support Teams",
+  "business": "Global technical support teams managing thousands of complex product manuals and troubleshooting guides.",
+  "problem": "Support agents struggle to find relevant solutions because traditional keyword-based search fails to capture the semantic intent of user queries, while pure vector search often misses specific product version numbers or error codes.",
+  "solution": "Weaviate enables hybrid retrieval by combining vector embeddings, which capture the conceptual meaning of a support ticket, with keyword-based filtering on object metadata like product version, OS, and error category. This dual-approach ensures that retrieved documentation is both semantically relevant and technically accurate for the specific environment.",
+  "steps": [
+    "Define a collection schema in Weaviate that includes text fields for documentation content and metadata fields for versioning and category.",
+    "Configure an embedding model to generate vector representations for the documentation text during the ingestion process.",
+    "Implement hybrid search queries that pass both the natural language query for vector similarity and metadata filters for exact keyword matching.",
+    "Integrate the retrieval results into a RAG pipeline to synthesize a concise answer for the support agent."
+  ],
+  "outcome": "Support agents receive highly accurate, context-aware documentation snippets that reduce resolution time and minimize the need for manual document filtering.",
+  "limitation": "A significant trade-off is the increased computational overhead of maintaining both vector indices and inverted keyword indices. To check for performance degradation, monitor the latency of hybrid queries as the collection size grows, as the intersection of vector and keyword results can become resource-intensive.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Hybrid Retrieval Workflow",
+    "description": "The flow shows how user queries are processed through vector and keyword channels before being merged.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Query",
+        "detail": "Natural language input"
+      },
+      {
+        "id": "b",
+        "label": "Vector Search",
+        "detail": "Semantic similarity lookup"
+      },
+      {
+        "id": "c",
+        "label": "Keyword Filter",
+        "detail": "Metadata constraint check"
+      },
+      {
+        "id": "d",
+        "label": "Hybrid Merger",
+        "detail": "Combines results"
+      },
+      {
+        "id": "e",
+        "label": "Final Context",
+        "detail": "Relevant documentation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Embeds query"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Extracts metadata"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Sends vector results"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Sends filtered results"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Ranks and returns"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.weaviate.io/weaviate",
+      "label": "Weaviate Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Technical Documentation Retrieval for Global Support Teams, why is hybrid retrieval preferred over pure vector search?",
+      "options": [
+        "Pure vector search often misses specific product version numbers or error codes.",
+        "Vector search is too slow for global support teams.",
+        "Keyword search is always more accurate than vector search.",
+        "Weaviate does not support pure vector search."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that while vector search captures intent, it lacks the precision required for exact technical identifiers like version numbers, which hybrid search solves.",
+      "evidence": "pure vector search often misses specific product version numbers or error codes."
+    },
+    {
+      "question": "In Optimizing Technical Documentation Retrieval for Global Support Teams, what is a primary limitation of the hybrid approach?",
+      "options": [
+        "It cannot be used with RAG pipelines.",
+        "It requires manual indexing of every word.",
+        "Increased computational overhead of maintaining both vector and keyword indices.",
+        "It is incompatible with metadata filtering."
+      ],
+      "answerIndex": 2,
+      "explanation": "Maintaining two distinct indexing systems (vector and inverted keyword) increases the resource requirements for the database.",
+      "evidence": "A significant trade-off is the increased computational overhead of maintaining both vector indices and inverted keyword indices."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:26.025Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:21.770Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "split_brain",
+  "title": "Global Logistics Coordinator Synchronization",
+  "business": "A global logistics firm managing automated warehouse inventory across two geographically separated data centers.",
+  "problem": "During a network partition, both data centers lose connectivity to each other but remain operational. Each site incorrectly assumes the other has failed, leading both to independently authorize inventory shipments for the same stock, resulting in double-allocation and physical warehouse errors.",
+  "solution": "Implement a consensus-based leader election protocol, such as Raft or Paxos, where a majority quorum is required to perform state-changing operations. By ensuring only the partition containing the majority of nodes can commit transactions, the system prevents isolated participants from acting as the sole authority.",
+  "steps": [
+    "Deploy an odd number of nodes across three distinct geographic regions to ensure a majority quorum is always possible.",
+    "Configure the consensus algorithm to require a heartbeat acknowledgment from a majority of nodes before committing any inventory transaction.",
+    "Implement a fencing token mechanism where each write request includes an incrementing version number to reject stale requests from partitioned nodes.",
+    "Set strict timeout thresholds for leader election to ensure that a minority partition cannot elect a new leader while the majority is unreachable."
+  ],
+  "outcome": "The system maintains strict consistency by forcing isolated nodes to become read-only or offline, ensuring that inventory allocations are never duplicated during network instability.",
+  "limitation": "The primary trade-off is availability; if a majority of nodes cannot communicate, the entire system halts writes to prevent data corruption. Operators can check for this by monitoring the 'quorum_health' metric, which triggers alerts when the number of reachable nodes falls below the required threshold.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Consensus-Based Quorum Logic",
+    "description": "Shows how nodes interact to prevent split-brain during a partition.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Request",
+        "detail": "Inventory update command"
+      },
+      {
+        "id": "b",
+        "label": "Leader Node",
+        "detail": "Proposes state change"
+      },
+      {
+        "id": "c",
+        "label": "Follower Majority",
+        "detail": "Nodes that acknowledge the change"
+      },
+      {
+        "id": "d",
+        "label": "Isolated Minority",
+        "detail": "Nodes unable to reach quorum"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends write request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Requests majority consensus"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Grants commit authority"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Rejects stale requests"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Coordinator Synchronization, how does the proposed solution prevent double-allocation during a network partition?",
+      "options": [
+        "By requiring a majority quorum to commit transactions.",
+        "By increasing the speed of the network connection.",
+        "By allowing each site to maintain its own local database.",
+        "By using a random number generator to pick a winner."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly mandates a majority quorum to prevent isolated nodes from acting independently.",
+      "evidence": "By ensuring only the partition containing the majority of nodes can commit transactions, the system prevents isolated participants from acting as the sole authority."
+    },
+    {
+      "question": "In Global Logistics Coordinator Synchronization, what is the primary trade-off associated with the consensus-based approach?",
+      "options": [
+        "Increased latency for read operations.",
+        "Reduced system availability during majority loss.",
+        "Higher storage costs for inventory logs.",
+        "Complexity in user interface design."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that the system halts writes if a majority cannot be reached, which is a trade-off in availability.",
+      "evidence": "The primary trade-off is availability; if a majority of nodes cannot communicate, the entire system halts writes to prevent data corruption."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:21.033Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

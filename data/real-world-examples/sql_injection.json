@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "sql_injection",
+  "title": "Secure Inventory Query Implementation",
+  "business": "E-commerce platforms managing product catalogs and inventory levels.",
+  "problem": "Untrusted user input is concatenated directly into database queries, allowing attackers to alter command logic to bypass filters or extract unauthorized records.",
+  "solution": "Utilize parameterized queries (prepared statements) to ensure the database engine treats input strictly as data, never as executable SQL syntax.",
+  "steps": [
+    "Identify all database interaction points where user input influences query structure.",
+    "Replace string concatenation with placeholder syntax provided by the database driver.",
+    "Bind user-supplied variables to these placeholders before query execution.",
+    "Configure the database user with the least privilege necessary for the specific operation."
+  ],
+  "outcome": "The application maintains data integrity by preventing malicious input from modifying the intended query logic.",
+  "limitation": "Parameterized queries do not protect against logic flaws in the application code itself; developers must still validate input types and ranges to ensure data quality.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Query Execution Flow",
+    "description": "Shows how input is separated from the command structure.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Raw string from web request"
+      },
+      {
+        "id": "b",
+        "label": "Query Template",
+        "detail": "SQL command with placeholders"
+      },
+      {
+        "id": "c",
+        "label": "Database Driver",
+        "detail": "Binds input to placeholders"
+      },
+      {
+        "id": "d",
+        "label": "Database Engine",
+        "detail": "Executes safe command"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Passes raw data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Defines structure"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Sends safe execution"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "-- Instead of: SELECT * FROM items WHERE id = '\" + input + \"'\n-- Use parameterized approach:\nSELECT * FROM items WHERE id = ?; -- The ? acts as a placeholder for safe binding",
+    "explanation": "This maps to the Secure Inventory Query Implementation by replacing dangerous concatenation with a placeholder that the database driver handles safely."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Inventory Query Implementation, what is the primary risk of concatenating user input directly into SQL queries?",
+      "options": [
+        "Attackers can alter command logic to extract unauthorized records.",
+        "The database engine will reject all queries containing special characters.",
+        "The application will experience significant performance degradation.",
+        "Database administrators will lose access to the underlying tables."
+      ],
+      "answerIndex": 0,
+      "explanation": "Direct concatenation allows input to be interpreted as code, which is the definition of SQL injection.",
+      "evidence": "Untrusted user input is concatenated directly into database queries, allowing attackers to alter command logic to bypass filters or extract unauthorized records."
+    },
+    {
+      "question": "In Secure Inventory Query Implementation, what is a key limitation of using parameterized queries?",
+      "options": [
+        "They require manual sanitization of every single input character.",
+        "They are incompatible with modern database drivers.",
+        "They do not prevent logic flaws in the application code.",
+        "They increase the risk of privilege escalation."
+      ],
+      "answerIndex": 2,
+      "explanation": "Parameterized queries handle syntax safety but cannot validate the business logic or the semantic correctness of the data provided.",
+      "evidence": "Parameterized queries do not protect against logic flaws in the application code itself; developers must still validate input types and ranges to ensure data quality."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:24.206Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

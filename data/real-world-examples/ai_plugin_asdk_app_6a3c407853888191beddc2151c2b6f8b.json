@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_6a3c407853888191beddc2151c2b6f8b",
+  "title": "Automated Transactional Email Recovery for SaaS",
+  "business": "SaaS platform administrators managing high-volume user authentication and billing alerts.",
+  "problem": "Manual investigation of failed transactional emails consumes significant engineering time, leading to delayed customer support responses when users fail to receive password resets or invoice notifications.",
+  "solution": "The Resend plugin for ChatGPT allows administrators to directly query delivery logs and inspect event statuses within the chat interface, enabling rapid identification of bounce reasons or delivery failures without switching contexts to a separate dashboard.",
+  "steps": [
+    "Authenticate the Resend plugin within the ChatGPT interface using a dedicated API key with read-only permissions for logs.",
+    "Prompt the AI to retrieve the latest delivery logs for a specific user email address experiencing receipt issues.",
+    "Analyze the returned delivery status and error codes provided by the plugin to determine if the failure was a hard bounce or a temporary suppression.",
+    "Trigger a re-send or update the user's status in the Resend audience list directly through the plugin if the issue is resolved."
+  ],
+  "outcome": "Reduced mean time to resolution for email delivery support tickets by eliminating context switching between the application logs and the email service provider.",
+  "limitation": "The plugin interface is limited by the scope of the provided API key; if the key lacks write permissions, the administrator cannot perform corrective actions like removing a user from a suppression list, requiring a manual check of the API key scopes in the Resend dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Email Troubleshooting Workflow",
+    "description": "The flow from user inquiry to resolution using the Resend plugin.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Reports missing email"
+      },
+      {
+        "id": "b",
+        "label": "Admin",
+        "detail": "Uses ChatGPT + Resend Plugin"
+      },
+      {
+        "id": "c",
+        "label": "Resend API",
+        "detail": "Provides delivery logs"
+      },
+      {
+        "id": "d",
+        "label": "Resolution",
+        "detail": "Email resent or user notified"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "inquiry"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "query logs"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "return status"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "fix issue"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Transactional Email Recovery for SaaS, what is the primary benefit of using the Resend plugin?",
+      "options": [
+        "Eliminating context switching between application logs and the email service provider.",
+        "Automatically generating marketing content for user newsletters.",
+        "Replacing the need for a dedicated email service provider entirely.",
+        "Increasing the total volume of emails sent per month."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that manual investigation consumes time and that the plugin allows administrators to query logs within the chat interface, directly addressing the problem of context switching.",
+      "evidence": "Reduced mean time to resolution for email delivery support tickets by eliminating context switching between the application logs and the email service provider."
+    },
+    {
+      "question": "In Automated Transactional Email Recovery for SaaS, what is a potential limitation of the implementation?",
+      "options": [
+        "The plugin cannot be used for password reset emails.",
+        "The plugin requires a separate subscription for every user.",
+        "Insufficient API key permissions may prevent corrective actions like removing a user from a suppression list.",
+        "The plugin is unable to retrieve delivery logs for any email address."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that if the API key lacks write permissions, the administrator cannot perform corrective actions.",
+      "evidence": "The plugin interface is limited by the scope of the provided API key; if the key lacks write permissions, the administrator cannot perform corrective actions like removing a user from a suppression list"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:22.005Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

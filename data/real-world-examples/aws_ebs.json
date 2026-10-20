@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "aws_ebs",
+  "title": "Persistent Storage for Regional Inventory Analytics",
+  "business": "A regional logistics firm managing high-frequency inventory tracking databases that require consistent block-level storage performance.",
+  "problem": "The firm faces data loss risks during instance termination because their current ephemeral storage is wiped when the virtual machine shuts down, preventing long-term state retention for their analytics engine.",
+  "solution": "Amazon EBS provides persistent block-level storage volumes that remain independent of the lifecycle of an EC2 instance, allowing the firm to detach and reattach volumes to different instances as needed to maintain data continuity.",
+  "steps": [
+    "Provision an Amazon EBS volume in the same Availability Zone as the target EC2 instance.",
+    "Attach the EBS volume to the EC2 instance using the AWS Management Console or CLI.",
+    "Format the volume with a file system like ext4 or XFS within the operating system.",
+    "Mount the volume to a specific directory to begin writing persistent data.",
+    "Create periodic snapshots of the volume to ensure point-in-time recovery capability."
+  ],
+  "outcome": "The firm achieves reliable data persistence where inventory records survive instance restarts or failures, ensuring that analytics workloads can resume immediately without manual data restoration.",
+  "limitation": "An EBS volume is restricted to a single Availability Zone, meaning it cannot be attached to instances in different zones simultaneously; this is verified by checking the volume's availability zone attribute in the AWS console.",
+  "diagram": {
+    "kind": "er",
+    "title": "EBS Persistence Architecture",
+    "description": "Shows the relationship between compute resources and persistent storage",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "EC2 Instance",
+        "detail": "Compute host running analytics"
+      },
+      {
+        "id": "B",
+        "label": "EBS Volume",
+        "detail": "Persistent block storage"
+      },
+      {
+        "id": "C",
+        "label": "Snapshot",
+        "detail": "Point-in-time backup"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B",
+        "label": "1:1 attachment"
+      },
+      {
+        "from": "B",
+        "to": "C",
+        "label": "1:N backup"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Persistent Storage for Regional Inventory Analytics, why is Amazon EBS used instead of ephemeral storage?",
+      "options": [
+        "To ensure data persists independently of the EC2 instance lifecycle",
+        "To increase the number of available compute regions",
+        "To automatically migrate data across different geographic continents",
+        "To eliminate the need for file system formatting"
+      ],
+      "answerIndex": 0,
+      "explanation": "EBS provides persistent block-level storage that survives instance termination, solving the firm's data loss problem.",
+      "evidence": "Amazon EBS provides persistent block-level storage volumes that remain independent of the lifecycle of an EC2 instance"
+    },
+    {
+      "question": "In Persistent Storage for Regional Inventory Analytics, what is a primary constraint regarding volume availability?",
+      "options": [
+        "Volumes must be encrypted using third-party hardware",
+        "Volumes are restricted to a single Availability Zone",
+        "Volumes can only be attached to one instance per day",
+        "Volumes require manual snapshots every hour"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that EBS volumes are bound to a specific Availability Zone, preventing cross-zone attachment.",
+      "evidence": "An EBS volume is restricted to a single Availability Zone, meaning it cannot be attached to instances in different zones simultaneously"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:01.539Z"
+}

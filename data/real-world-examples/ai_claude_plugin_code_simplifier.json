@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_plugin_code_simplifier",
+  "title": "Legacy Financial Reporting Refactoring",
+  "business": "A mid-sized fintech firm managing complex tax calculation modules.",
+  "problem": "Developers frequently introduce deep nesting and redundant conditional logic when patching legacy tax reporting modules, leading to high cognitive load and increased risk of logic errors during audits.",
+  "solution": "The Code Simplifier agent acts as an automated refactoring layer that monitors recently modified files. It identifies complex conditional structures and nested ternaries, automatically restructuring them into readable switch statements and explicit function declarations to ensure the codebase remains maintainable without altering the core tax calculation logic.",
+  "steps": [
+    "Identify the specific tax calculation module file recently modified in the IDE.",
+    "Invoke the Code Simplifier plugin with the prompt to refine the recently changed functions for clarity.",
+    "Review the suggested diffs to ensure the agent preserved the original functional behavior of the tax logic.",
+    "Accept the refactored code to replace nested ternaries with clearer conditional structures.",
+    "Verify the simplified code against existing unit tests to confirm consistency."
+  ],
+  "outcome": "The codebase achieves higher readability and reduced nesting depth, allowing junior developers to audit tax logic more effectively without needing deep historical context of the original implementation.",
+  "limitation": "The agent may occasionally over-simplify logic that relies on specific, albeit obscure, language-level optimizations. Users must verify the refactored code against existing test suites to ensure no unintended side effects were introduced during the simplification process.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Code Simplification Workflow",
+    "description": "This diagram illustrates the flow from code modification to automated refinement.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Modifies legacy tax code"
+      },
+      {
+        "id": "b",
+        "label": "Code Simplifier",
+        "detail": "Autonomous refactoring agent"
+      },
+      {
+        "id": "c",
+        "label": "Refactored Code",
+        "detail": "Simplified and readable logic"
+      },
+      {
+        "id": "d",
+        "label": "Test Suite",
+        "detail": "Functional verification"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Triggers review"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Outputs changes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Validates functionality"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/plugins/code-simplifier",
+      "label": "Code Simplifier"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Financial Reporting Refactoring, what is the primary problem addressed by the Code Simplifier?",
+      "options": [
+        "High cognitive load caused by deep nesting and redundant logic in legacy modules.",
+        "The inability of junior developers to write new tax calculation algorithms.",
+        "The lack of automated unit testing for financial reporting software.",
+        "The high cost of maintaining legacy documentation for tax modules."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that developers introduce deep nesting and redundancy, creating high cognitive load.",
+      "evidence": "Developers frequently introduce deep nesting and redundant conditional logic when patching legacy tax reporting modules, leading to high cognitive load and increased risk of logic errors during audits."
+    },
+    {
+      "question": "In Legacy Financial Reporting Refactoring, what is a key limitation of using the Code Simplifier?",
+      "options": [
+        "It cannot handle files larger than 100 lines of code.",
+        "It requires manual intervention for every single line of code changed.",
+        "It may over-simplify logic, requiring verification against test suites to ensure no side effects.",
+        "It is incompatible with existing unit testing frameworks."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes the risk of over-simplification and the necessity of testing.",
+      "evidence": "The agent may occasionally over-simplify logic that relies on specific, albeit obscure, language-level optimizations. Users must verify the refactored code against existing test suites to ensure no unintended side effects were introduced during the simplification process."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:13.450Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:09.292Z"
+}

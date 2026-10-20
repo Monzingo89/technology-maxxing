@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "agent_state",
+  "title": "Dynamic User Session Context for Financial Support Agents",
+  "business": "Financial services firms providing automated customer support agents.",
+  "problem": "Agents often lose track of user-specific authorization levels or account identifiers during complex, multi-step tool interactions, leading to redundant authentication requests or incorrect data access.",
+  "solution": "By utilizing a shared RunContextWrapper, the agent maintains a persistent, type-safe state object throughout the entire lifecycle of a run, ensuring that user-specific metadata is available to every tool without requiring the LLM to re-query the user.",
+  "steps": [
+    "Define a Pydantic model or dataclass to hold the required user session state, such as account_id and authorization_level.",
+    "Initialize the agent with the specific context type to ensure type safety across all tool definitions.",
+    "Pass the populated context object into the Runner.run method at the start of the agent interaction.",
+    "Access the shared state within tool functions using the RunContextWrapper.context property to perform authorization checks or data retrieval."
+  ],
+  "outcome": "A seamless user experience where the agent retains critical session information, reducing friction and improving the accuracy of tool-based operations.",
+  "limitation": "The context object is not automatically sent to the LLM; it is strictly for local tool execution. If the LLM needs this data to make decisions, it must be explicitly injected into the instructions or conversation history.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Context Lifecycle",
+    "description": "Shows how the application state flows through the agent execution lifecycle.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "App State",
+        "detail": "User session data"
+      },
+      {
+        "id": "b",
+        "label": "Runner",
+        "detail": "Orchestrates the run"
+      },
+      {
+        "id": "c",
+        "label": "RunContextWrapper",
+        "detail": "Provides access to state"
+      },
+      {
+        "id": "d",
+        "label": "Tool Function",
+        "detail": "Executes logic using state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "injects"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "wraps"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "exposes context"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from dataclasses import dataclass\nfrom agents import RunContextWrapper\n\n@dataclass\nclass UserSession:\n    account_id: str\n\n# Tool accesses the shared account_id from the context wrapper\nasync def get_balance(wrapper: RunContextWrapper[UserSession]) -> str:\n    return f\"Balance for {wrapper.context.account_id} is $500.\"",
+    "explanation": "Demonstrates how the tool function receives the RunContextWrapper and accesses the underlying UserSession object to perform operations."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/context/",
+      "label": "Context management"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic User Session Context for Financial Support Agents, how does the agent avoid redundant authentication requests?",
+      "options": [
+        "By storing the user session data in a shared RunContextWrapper that tools can access directly.",
+        "By sending the entire user database to the LLM in every turn.",
+        "By using a global variable that is not thread-safe.",
+        "By forcing the user to re-authenticate every time a tool is called."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution uses the RunContextWrapper to maintain a persistent state object that tools can read from, eliminating the need to re-query the user.",
+      "evidence": "By utilizing a shared RunContextWrapper, the agent maintains a persistent, type-safe state object throughout the entire lifecycle of a run, ensuring that user-specific metadata is available to every tool without requiring the LLM to re-query the user."
+    },
+    {
+      "question": "What is a key limitation of using the RunContextWrapper in Dynamic User Session Context for Financial Support Agents?",
+      "options": [
+        "It is too slow for real-time applications.",
+        "It cannot be used with Pydantic models.",
+        "The context object is not automatically sent to the LLM, requiring manual injection if the LLM needs the data.",
+        "It requires a separate database for every tool call."
+      ],
+      "answerIndex": 2,
+      "explanation": "The context is local to the code and not automatically visible to the LLM, which is a critical design trade-off.",
+      "evidence": "The context object is not automatically sent to the LLM; it is strictly for local tool execution. If the LLM needs this data to make decisions, it must be explicitly injected into the instructions or conversation history."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:36.821Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:19.478Z"
+}

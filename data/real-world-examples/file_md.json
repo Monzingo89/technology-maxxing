@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "file_md",
+  "title": "Standardizing Markdown Documentation for Technical Teams",
+  "business": "Technical documentation teams managing cross-platform knowledge bases.",
+  "problem": "Inconsistent rendering of documentation across different internal tools due to ambiguous Markdown parsing rules.",
+  "solution": "Adopting the CommonMark specification ensures unambiguous parsing of structural elements like lists, headings, and block quotes, providing predictable output across all rendering engines.",
+  "steps": [
+    "Audit existing documentation for non-standard syntax extensions.",
+    "Integrate the spec_tests.py script into the CI/CD pipeline to validate document structure.",
+    "Configure internal parsers to align with CommonMark precedence rules for block and inline elements.",
+    "Standardize on explicit indentation for nested lists to avoid ambiguity."
+  ],
+  "outcome": "Unified document rendering across all internal platforms, reducing developer confusion and support tickets.",
+  "limitation": "The CommonMark spec does not mandate how non-ASCII characters in URLs are percent-encoded, which can lead to minor cross-platform link resolution differences; verify by testing specific URL character sets in target environments.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Markdown Standardization Workflow",
+    "description": "The process of moving from raw source to validated, consistent output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source MD",
+        "detail": "Raw documentation files"
+      },
+      {
+        "id": "b",
+        "label": "Parser",
+        "detail": "CommonMark compliant engine"
+      },
+      {
+        "id": "c",
+        "label": "Validator",
+        "detail": "spec_tests.py script"
+      },
+      {
+        "id": "d",
+        "label": "Output",
+        "detail": "Consistent HTML/Rendered view"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "parses"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "verifies"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "publishes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://spec.commonmark.org/0.31.2/",
+      "label": "CommonMark Spec"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Standardizing Markdown Documentation for Technical Teams, why is the CommonMark specification adopted?",
+      "options": [
+        "To ensure unambiguous parsing of structural elements across different rendering engines.",
+        "To enable the use of proprietary non-standard Markdown extensions.",
+        "To automatically convert all documentation into PDF format.",
+        "To eliminate the need for any indentation in nested lists."
+      ],
+      "answerIndex": 0,
+      "explanation": "The business scenario identifies that inconsistent rendering is caused by ambiguous parsing, which CommonMark resolves.",
+      "evidence": "Adopting the CommonMark specification ensures unambiguous parsing of structural elements like lists, headings, and block quotes, providing predictable output across all rendering engines."
+    },
+    {
+      "question": "In Standardizing Markdown Documentation for Technical Teams, what is a noted limitation of the implementation?",
+      "options": [
+        "The spec requires all characters to be ASCII only.",
+        "The spec does not mandate how non-ASCII characters in URLs are percent-encoded.",
+        "The spec prohibits the use of block quotes in documentation.",
+        "The spec forces all lists to be tight."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the lack of mandate regarding non-ASCII URL encoding.",
+      "evidence": "The CommonMark spec does not mandate how non-ASCII characters in URLs are percent-encoded, which can lead to minor cross-platform link resolution differences"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:52.132Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:49.264Z"
+}

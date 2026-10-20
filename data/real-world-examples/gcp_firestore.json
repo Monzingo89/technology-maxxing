@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_firestore",
+  "title": "Real-time Collaborative Inventory Tracking",
+  "business": "Retailers managing high-velocity stock across distributed warehouse locations.",
+  "problem": "Legacy relational databases struggle with high-frequency updates and the overhead of polling for state changes, leading to stale inventory data and overselling.",
+  "solution": "Firestore provides a serverless document database with realtime client synchronization capabilities, allowing inventory dashboards to update instantly as stock levels change without manual refresh cycles.",
+  "steps": [
+    "Initialize the Firestore client within the warehouse management application.",
+    "Define a document structure where each unique item ID maps to a document containing stock counts.",
+    "Implement listeners on the client side to subscribe to document snapshots for specific inventory categories.",
+    "Update document fields via the client SDK when stock movements are scanned.",
+    "Leverage the automatic synchronization to push updates to all connected dashboard clients."
+  ],
+  "outcome": "Warehouse staff gain immediate visibility into stock levels across all locations, significantly reducing the risk of overselling due to data latency.",
+  "limitation": "The realtime synchronization model can lead to high read costs if listeners are attached to excessively large collections; verify this by monitoring the number of document reads in the Cloud Console.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Real-time Inventory Sync Flow",
+    "description": "Explains how inventory updates propagate from a scanner to the database and then to all active dashboards.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scanner App",
+        "detail": "Client device performing stock updates"
+      },
+      {
+        "id": "b",
+        "label": "Firestore",
+        "detail": "Serverless document store"
+      },
+      {
+        "id": "c",
+        "label": "Dashboard A",
+        "detail": "Manager view subscribing to updates"
+      },
+      {
+        "id": "d",
+        "label": "Dashboard B",
+        "detail": "Sales view subscribing to updates"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Writes stock change"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Pushes real-time update"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Pushes real-time update"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product List"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Collaborative Inventory Tracking, why is Firestore preferred over legacy relational databases?",
+      "options": [
+        "It eliminates the need for manual polling to see inventory updates.",
+        "It provides lower storage costs for relational data.",
+        "It forces all users to refresh their browsers simultaneously.",
+        "It requires a fixed schema for all inventory items."
+      ],
+      "answerIndex": 0,
+      "explanation": "Firestore's realtime synchronization capabilities allow dashboards to update automatically, removing the need for polling.",
+      "evidence": "Firestore provides a serverless document database with realtime client synchronization capabilities, allowing inventory dashboards to update instantly as stock levels change without manual refresh cycles."
+    },
+    {
+      "question": "In Real-time Collaborative Inventory Tracking, what is a primary operational risk when using realtime listeners?",
+      "options": [
+        "The database will automatically delete old documents.",
+        "Excessive read costs if listeners are attached to large collections.",
+        "The system will fail if more than two users connect.",
+        "Realtime updates are only available for relational data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that attaching listeners to large collections can lead to high read costs, which is a key tradeoff.",
+      "evidence": "The realtime synchronization model can lead to high read costs if listeners are attached to excessively large collections; verify this by monitoring the number of document reads in the Cloud Console."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:05.235Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

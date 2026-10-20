@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "elasticsearch",
+  "title": "Global Logistics Inventory Visibility",
+  "business": "A global logistics provider managing millions of shipping containers across thousands of international ports.",
+  "problem": "The company struggles with fragmented data silos, where tracking information for containers is stored in disparate legacy databases, leading to high latency when generating real-time inventory reports for regional managers.",
+  "solution": "Elasticsearch acts as a centralized, distributed search and analytics engine that ingests container status updates from various sources into a unified index, allowing for near real-time querying and complex aggregations across the entire global fleet.",
+  "steps": [
+    "Define a consistent index mapping to normalize container status fields across different regional data sources.",
+    "Configure ingest pipelines to transform and enrich raw incoming container telemetry data before indexing.",
+    "Utilize data streams to manage time-series container tracking events for efficient storage and lifecycle management.",
+    "Implement Query DSL to execute complex filtering and aggregation requests for regional inventory dashboards.",
+    "Monitor cluster health and shard distribution to ensure high availability and consistent search performance."
+  ],
+  "outcome": "Regional managers gain immediate, unified visibility into container locations and statuses, significantly reducing the time required to generate operational reports.",
+  "limitation": "A critical limitation is the potential for shard imbalance during heavy ingestion spikes, which can lead to uneven resource utilization across nodes; this is checked by monitoring node-level heap usage and shard distribution statistics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Container Data Ingestion Flow",
+    "description": "This diagram illustrates the flow of container data from regional sources into the centralized Elasticsearch cluster.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional Sources",
+        "detail": "Legacy databases and IoT sensors"
+      },
+      {
+        "id": "b",
+        "label": "Ingest Pipeline",
+        "detail": "Normalization and enrichment logic"
+      },
+      {
+        "id": "c",
+        "label": "Elasticsearch Index",
+        "detail": "Unified container data store"
+      },
+      {
+        "id": "d",
+        "label": "Dashboard API",
+        "detail": "Query DSL interface for managers"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "raw telemetry"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "indexed documents"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "search results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.elastic.co/guide/en/elasticsearch/reference/current/index.html",
+      "label": "Elasticsearch"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Inventory Visibility, how does the technology resolve the problem of data silos?",
+      "options": [
+        "By acting as a centralized, distributed search and analytics engine that ingests data into a unified index.",
+        "By replacing all legacy databases with a single relational database management system.",
+        "By automatically deleting old container data to save storage space.",
+        "By forcing all regional managers to use a single manual spreadsheet."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that Elasticsearch centralizes data from disparate sources into a unified index to enable real-time querying.",
+      "evidence": "Elasticsearch acts as a centralized, distributed search and analytics engine that ingests container status updates from various sources into a unified index, allowing for near real-time querying and complex aggregations across the entire global fleet."
+    },
+    {
+      "question": "In Global Logistics Inventory Visibility, what is a primary limitation of the implementation?",
+      "options": [
+        "The inability to use JSON for queries.",
+        "The risk of shard imbalance during heavy ingestion spikes.",
+        "The requirement to use only SQL for all data operations.",
+        "The lack of support for time-series data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies shard imbalance during ingestion spikes as a key trade-off that requires monitoring.",
+      "evidence": "A critical limitation is the potential for shard imbalance during heavy ingestion spikes, which can lead to uneven resource utilization across nodes; this is checked by monitoring node-level heap usage and shard distribution statistics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:58.404Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:54.775Z"
+}

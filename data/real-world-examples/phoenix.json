@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "phoenix",
+  "title": "Real-time Collaborative Inventory Dashboard",
+  "business": "Warehouse logistics managers overseeing high-velocity inventory turnover.",
+  "problem": "Traditional polling-based web interfaces cause stale data displays, leading to shipment errors when multiple operators update stock levels simultaneously.",
+  "solution": "Phoenix Channels provide a persistent, bidirectional communication layer between the server and client, allowing the server to push inventory updates to all connected browser sessions instantly.",
+  "steps": [
+    "Define a Phoenix Channel module to handle incoming socket connections and topic subscriptions.",
+    "Configure the UserSocket to route incoming messages to the appropriate channel based on the inventory category.",
+    "Implement the handle_in callback to process stock adjustment requests from the client.",
+    "Use the Phoenix.PubSub broadcast mechanism to push state changes to all clients subscribed to a specific inventory topic.",
+    "Update the client-side LiveView or JavaScript interface to reflect the pushed data without requiring a full page refresh."
+  ],
+  "outcome": "Operators experience a synchronized view of inventory levels, ensuring that stock adjustments are visible across all terminals in real-time.",
+  "limitation": "Maintaining thousands of persistent socket connections consumes significant server memory; monitor the process count and memory usage via the Observer tool to ensure the system remains stable under high load.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Update Flow",
+    "description": "This diagram illustrates how an inventory change propagates through the Phoenix system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client A",
+        "detail": "Browser session"
+      },
+      {
+        "id": "b",
+        "label": "Phoenix Channel",
+        "detail": "Socket handler"
+      },
+      {
+        "id": "c",
+        "label": "PubSub",
+        "detail": "Message broker"
+      },
+      {
+        "id": "d",
+        "label": "Client B",
+        "detail": "Other browser session"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "push update"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "broadcast"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "push change"
+      }
+    ]
+  },
+  "code": {
+    "language": "elixir",
+    "content": "def handle_in(\"update_stock\", payload, socket) do\n  # Broadcast the new stock level to all subscribers of this topic\n  Phoenix.PubSub.broadcast(MyApp.PubSub, \"inventory\", {:stock_updated, payload})\n  {:noreply, socket}\nend",
+    "explanation": "This code demonstrates how a channel receives an update and broadcasts it to all connected clients, mapping directly to the solution of pushing real-time inventory changes."
+  },
+  "sources": [
+    {
+      "url": "https://phoenix.hexdocs.pm/overview.html",
+      "label": "Overview — Phoenix v1.8.15"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Collaborative Inventory Dashboard, what is the primary benefit of using Phoenix Channels over traditional polling?",
+      "options": [
+        "It eliminates the need for a database.",
+        "It enables instant server-to-client pushes for synchronized data.",
+        "It automatically optimizes SQL query performance.",
+        "It reduces the total number of connected users."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that polling causes stale data, and Channels provide a bidirectional layer to push updates instantly.",
+      "evidence": "Phoenix Channels provide a persistent, bidirectional communication layer between the server and client, allowing the server to push inventory updates to all connected browser sessions instantly."
+    },
+    {
+      "question": "In Real-time Collaborative Inventory Dashboard, what is a key limitation of the proposed implementation?",
+      "options": [
+        "The system cannot handle more than ten concurrent users.",
+        "Persistent socket connections consume significant server memory.",
+        "The implementation requires a third-party message broker like Redis.",
+        "Channels are incompatible with Phoenix LiveView."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about memory consumption related to persistent socket connections.",
+      "evidence": "Maintaining thousands of persistent socket connections consumes significant server memory; monitor the process count and memory usage via the Observer tool to ensure the system remains stable under high load."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:23.330Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:19.656Z"
+}

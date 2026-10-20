@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "binary_tree",
+  "title": "Hierarchical Decision Routing",
+  "business": "Logistics firms managing complex package routing paths.",
+  "problem": "Linear search through thousands of routing rules causes latency spikes during peak shipping hours.",
+  "solution": "A binary tree organizes nodes with at most two child links, allowing the system to prune half the search space at each decision point.",
+  "steps": [
+    "Define a root node representing the primary regional hub.",
+    "Assign left child links to sub-regions with lower postal codes.",
+    "Assign right child links to sub-regions with higher postal codes.",
+    "Traverse the tree by comparing the target destination against the current node value.",
+    "Terminate the search upon reaching a leaf node or finding a match."
+  ],
+  "outcome": "Sub-millisecond routing decisions regardless of the total number of regional hubs.",
+  "limitation": "The tree can become unbalanced if data is inserted in sorted order, leading to O(n) performance; check balance by comparing the height of left and right subtrees.",
+  "diagram": {
+    "kind": "er",
+    "title": "Binary Routing Structure",
+    "description": "Nodes represent routing hubs, and edges represent the binary decision path.",
+    "nodes": [
+      {
+        "id": "root",
+        "label": "Hub A",
+        "detail": "Primary entry point"
+      },
+      {
+        "id": "left",
+        "label": "Hub B",
+        "detail": "Low-code sub-region"
+      },
+      {
+        "id": "right",
+        "label": "Hub C",
+        "detail": "High-code sub-region"
+      },
+      {
+        "id": "leaf1",
+        "label": "Hub D",
+        "detail": "Terminal destination"
+      }
+    ],
+    "edges": [
+      {
+        "from": "root",
+        "to": "left",
+        "label": "less than"
+      },
+      {
+        "from": "root",
+        "to": "right",
+        "label": "greater than"
+      },
+      {
+        "from": "left",
+        "to": "leaf1",
+        "label": "less than"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Hierarchical Decision Routing, how does the technology address the latency problem?",
+      "options": [
+        "By pruning half the search space at each decision point",
+        "By sorting all routing rules into a single linear array",
+        "By increasing the number of child links per node",
+        "By using a brute force search for every package"
+      ],
+      "answerIndex": 0,
+      "explanation": "The binary tree structure allows for efficient navigation by discarding half of the remaining possibilities at each node.",
+      "evidence": "A binary tree organizes nodes with at most two child links, allowing the system to prune half the search space at each decision point."
+    },
+    {
+      "question": "In Hierarchical Decision Routing, what is a primary limitation of the implementation?",
+      "options": [
+        "The tree cannot handle more than four nodes",
+        "It requires a constant O(1) time regardless of structure",
+        "It can become unbalanced if data is inserted in sorted order",
+        "It is impossible to check the balance of the tree"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that sorted insertion can degrade performance by creating an unbalanced tree.",
+      "evidence": "The tree can become unbalanced if data is inserted in sorted order, leading to O(n) performance; check balance by comparing the height of left and right subtrees."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:29.370Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

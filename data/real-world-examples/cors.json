@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "cors",
+  "title": "Unified Analytics Dashboard Integration",
+  "business": "A financial services firm providing a central dashboard that aggregates data from multiple internal microservices hosted on distinct subdomains.",
+  "problem": "The browser blocks the dashboard from fetching real-time market data from the analytics API because the origin of the dashboard does not match the origin of the API, triggering a security violation.",
+  "solution": "Cross-Origin Resource Sharing (CORS) allows the API server to explicitly declare which origins are permitted to access its resources by including specific HTTP headers in its responses, effectively relaxing the browser's same-origin policy.",
+  "steps": [
+    "Identify the specific origin of the dashboard application.",
+    "Configure the API server to inspect the incoming Origin request header.",
+    "Append the Access-Control-Allow-Origin header to the API response with the dashboard's origin.",
+    "Handle preflight OPTIONS requests to validate allowed methods and headers."
+  ],
+  "outcome": "The dashboard successfully retrieves and displays data from the analytics API without security errors, enabling a seamless user experience across different subdomains.",
+  "limitation": "CORS is not a security feature for the server itself; it is a browser-level mechanism. If the server is misconfigured to allow all origins using a wildcard, any malicious site can read the API data. Verify this by inspecting the response headers in the browser network tab to ensure only trusted origins are present.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CORS Request Flow",
+    "description": "This diagram illustrates the interaction between the browser, the dashboard, and the API server during a cross-origin request.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Dashboard",
+        "detail": "User interface on dashboard.finance.com"
+      },
+      {
+        "id": "b",
+        "label": "Browser",
+        "detail": "Enforces same-origin policy"
+      },
+      {
+        "id": "c",
+        "label": "API Server",
+        "detail": "Host for analytics.finance.com"
+      },
+      {
+        "id": "d",
+        "label": "Response",
+        "detail": "Includes Access-Control headers"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initiates fetch request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends request with Origin header"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Adds CORS headers"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Validates headers"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Allows data access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Analytics Dashboard Integration, why does the browser block the initial data fetch?",
+      "options": [
+        "The dashboard origin does not match the API origin.",
+        "The API server is offline.",
+        "The user lacks authentication credentials.",
+        "The browser does not support HTTP headers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The browser enforces a same-origin policy that prevents scripts from one origin from accessing resources on another unless explicitly permitted.",
+      "evidence": "The browser blocks the dashboard from fetching real-time market data from the analytics API because the origin of the dashboard does not match the origin of the API, triggering a security violation."
+    },
+    {
+      "question": "In Unified Analytics Dashboard Integration, what is a critical limitation of relying on CORS?",
+      "options": [
+        "It prevents all forms of cross-site scripting.",
+        "It is a browser-level mechanism, not a server-side security feature.",
+        "It requires the user to manually approve every request.",
+        "It only works on mobile devices."
+      ],
+      "answerIndex": 1,
+      "explanation": "CORS is a browser-side policy enforcement mechanism; if the server is configured incorrectly, it provides no protection against unauthorized access.",
+      "evidence": "CORS is not a security feature for the server itself; it is a browser-level mechanism."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:43.660Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

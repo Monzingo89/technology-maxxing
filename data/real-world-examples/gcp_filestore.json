@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_filestore",
+  "title": "Centralized Media Asset Repository for Creative Studios",
+  "business": "Creative media studios that require high-performance, shared file access across multiple compute instances to process large video assets.",
+  "problem": "Teams struggle with data silos where individual compute nodes maintain local copies of media, leading to inconsistent versions, wasted storage, and complex manual synchronization efforts.",
+  "solution": "Google Cloud Filestore provides managed network-attached storage that allows multiple compute instances to mount the same file system, ensuring a single source of truth for media assets.",
+  "steps": [
+    "Provision a Filestore instance within the same VPC network as the compute workloads.",
+    "Configure the required capacity and performance tier based on the studio's throughput needs.",
+    "Authorize the specific IP ranges of the compute instances to access the Filestore export.",
+    "Mount the Filestore NFS share onto each Linux-based compute instance using standard mount commands.",
+    "Verify file accessibility and write permissions across all connected compute nodes."
+  ],
+  "outcome": "Improved operational efficiency through unified file access, eliminating the need for manual data replication and reducing version control conflicts.",
+  "limitation": "Filestore instances are bound to a specific VPC network and region; cross-region access requires complex networking configurations like VPC peering or VPNs, which can be checked by reviewing the network connectivity topology.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Filestore Shared Access Architecture",
+    "description": "Shows how multiple compute instances connect to a single managed Filestore instance.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Filestore Instance",
+        "detail": "Managed NFS Server"
+      },
+      {
+        "id": "b",
+        "label": "Compute Instance 1",
+        "detail": "Worker Node A"
+      },
+      {
+        "id": "c",
+        "label": "Compute Instance 2",
+        "detail": "Worker Node B"
+      },
+      {
+        "id": "d",
+        "label": "VPC Network",
+        "detail": "Shared Connectivity"
+      }
+    ],
+    "edges": [
+      {
+        "from": "b",
+        "to": "d",
+        "label": "mounts"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "mounts"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "exports NFS"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Centralized Media Asset Repository for Creative Studios, what is the primary problem addressed by Filestore?",
+      "options": [
+        "Inconsistent versions and manual synchronization of media across compute nodes.",
+        "High latency in global content delivery networks.",
+        "Lack of object storage for archival data.",
+        "Inability to run serverless functions on media files."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that teams struggle with data silos and inconsistent versions when using local copies, which Filestore solves by providing a shared file system.",
+      "evidence": "Teams struggle with data silos where individual compute nodes maintain local copies of media, leading to inconsistent versions, wasted storage, and complex manual synchronization efforts."
+    },
+    {
+      "question": "In Centralized Media Asset Repository for Creative Studios, what is a key limitation of the Filestore implementation?",
+      "options": [
+        "It cannot be mounted on Linux instances.",
+        "It is restricted to a single VPC network and region, requiring extra configuration for cross-region access.",
+        "It requires manual hardware maintenance by the studio.",
+        "It does not support standard NFS protocols."
+      ],
+      "answerIndex": 1,
+      "explanation": "Filestore instances are regional and VPC-bound, which creates a limitation for distributed architectures requiring cross-region access.",
+      "evidence": "Filestore instances are bound to a specific VPC network and region; cross-region access requires complex networking configurations like VPC peering or VPNs, which can be checked by reviewing the network connectivity topology."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:03.394Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

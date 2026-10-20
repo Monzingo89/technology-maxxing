@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_image_2_5_sunburst",
+  "title": "Architectural Visualization Refinement",
+  "business": "A boutique architectural firm specializing in historical building renovations.",
+  "problem": "The firm struggles to integrate modern structural additions into existing historical site photographs, often resulting in mismatched lighting, perspective errors, or loss of architectural detail during manual editing.",
+  "solution": "The firm utilizes GPT-Image-2.5 Sunburst to perform precise inpainting, allowing them to mask specific areas of historical site photos and generate photorealistic structural additions that inherit the lighting and texture of the original environment.",
+  "steps": [
+    "Upload the original high-resolution historical site photograph to the Image API.",
+    "Define the target region for the new structure using an alpha-channel mask.",
+    "Submit the masked image and a descriptive prompt to the gpt-image-2.5-sunburst model.",
+    "Select the 'xhigh' quality setting to ensure fine architectural details are preserved.",
+    "Review the generated output and iterate using the same model if structural adjustments are needed."
+  ],
+  "outcome": "The firm achieves seamless visual integration of new designs into legacy environments, significantly reducing the time spent on manual post-production blending.",
+  "limitation": "The model may struggle with extreme perspective shifts if the input image lacks sufficient depth information; verify this by checking the alignment of generated structural lines against the original vanishing points.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inpainting Workflow",
+    "description": "The flow shows how an image is processed through the model to produce a final architectural render.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Photo",
+        "detail": "Original historical site image"
+      },
+      {
+        "id": "b",
+        "label": "Masking",
+        "detail": "Defining the area for the new structure"
+      },
+      {
+        "id": "c",
+        "label": "GPT-Image-2.5 Sunburst",
+        "detail": "Model processing with xhigh quality"
+      },
+      {
+        "id": "d",
+        "label": "Final Render",
+        "detail": "Integrated architectural design"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "apply mask"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "input masked image"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generate output"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-image-2.5-sunburst",
+      "label": "GPT-Image-2.5 Sunburst"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Visualization Refinement, why is GPT-Image-2.5 Sunburst chosen for the task?",
+      "options": [
+        "It excels at precise inpainting for integrating new structures into existing photos.",
+        "It is the only model that supports text-to-video generation.",
+        "It provides real-time translation for architectural blueprints.",
+        "It automatically optimizes the historical building's structural integrity."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the firm's need to integrate additions into existing photos, and the solution highlights the model's inpainting capability as the primary driver for this.",
+      "evidence": "The firm utilizes GPT-Image-2.5 Sunburst to perform precise inpainting, allowing them to mask specific areas of historical site photos and generate photorealistic structural additions that inherit the lighting and texture of the original environment."
+    },
+    {
+      "question": "In Architectural Visualization Refinement, what is the primary limitation to monitor?",
+      "options": [
+        "The model cannot process high-resolution images.",
+        "The model may struggle with extreme perspective shifts if depth information is insufficient.",
+        "The model requires a subscription to the Realtime API.",
+        "The model is limited to low-quality image outputs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about perspective issues and suggests checking vanishing points to verify the output quality.",
+      "evidence": "The model may struggle with extreme perspective shifts if the input image lacks sufficient depth information; verify this by checking the alignment of generated structural lines against the original vanishing points."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:33.731Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:29.750Z"
+}

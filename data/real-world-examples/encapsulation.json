@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "encapsulation",
+  "title": "Inventory Ledger Integrity for Logistics",
+  "business": "A global logistics provider managing high-velocity warehouse inventory.",
+  "problem": "Direct modification of raw inventory counts by disparate microservices leads to race conditions and inconsistent stock levels, causing shipping delays and manual reconciliation overhead.",
+  "solution": "Encapsulation hides the mutable inventory state behind a controlled public boundary, ensuring that all stock adjustments pass through a validated business logic layer that enforces atomic updates.",
+  "steps": [
+    "Define a private state object to hold raw inventory quantities.",
+    "Expose only a public interface for incrementing or decrementing stock.",
+    "Implement internal validation logic within the public methods to reject invalid states.",
+    "Restrict direct access to the raw state using language-level access modifiers.",
+    "Expose a read-only snapshot of the current state for reporting purposes."
+  ],
+  "outcome": "Improved system reliability through predictable state transitions and a centralized audit trail for all inventory modifications.",
+  "limitation": "The primary tradeoff is increased boilerplate code and potential latency due to the mandatory validation layer; check for this by monitoring the execution time of interface methods against raw state access patterns.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Encapsulated Inventory Access",
+    "description": "This diagram illustrates how external services interact with the inventory system through a protected boundary rather than accessing data directly.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "External Service",
+        "detail": "Requests stock changes"
+      },
+      {
+        "id": "b",
+        "label": "Public Interface",
+        "detail": "Validates and routes requests"
+      },
+      {
+        "id": "c",
+        "label": "Private State",
+        "detail": "Holds mutable inventory counts"
+      },
+      {
+        "id": "d",
+        "label": "Audit Log",
+        "detail": "Records state transitions"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Calls update method"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Updates internal state"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Logs transaction"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Inventory Ledger Integrity for Logistics, what is the primary reason for implementing an encapsulated boundary?",
+      "options": [
+        "To prevent direct modification of raw inventory counts by disparate microservices.",
+        "To increase the total number of microservices in the logistics network.",
+        "To allow external services to bypass validation for faster updates.",
+        "To remove the need for an audit log in the warehouse system."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states that direct modification leads to inconsistencies, which encapsulation solves by forcing all changes through a controlled boundary.",
+      "evidence": "Direct modification of raw inventory counts by disparate microservices leads to race conditions and inconsistent stock levels, causing shipping delays and manual reconciliation overhead."
+    },
+    {
+      "question": "In Inventory Ledger Integrity for Logistics, what is a noted limitation of the proposed encapsulation strategy?",
+      "options": [
+        "It eliminates the need for any validation logic.",
+        "It requires zero boilerplate code for implementation.",
+        "It introduces potential latency due to the mandatory validation layer.",
+        "It makes the system impossible to monitor for performance."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies the tradeoff of increased boilerplate and potential latency caused by the validation layer.",
+      "evidence": "The primary tradeoff is increased boilerplate code and potential latency due to the mandatory validation layer; check for this by monitoring the execution time of interface methods against raw state access patterns."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:02.617Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

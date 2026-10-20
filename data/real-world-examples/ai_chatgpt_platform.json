@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_chatgpt_platform",
+  "title": "Automated Inventory Reconciliation Plugin",
+  "business": "E-commerce logistics teams managing multi-warehouse stock levels.",
+  "problem": "Manual reconciliation between warehouse management systems and inventory databases causes significant data latency and frequent stock-out errors.",
+  "solution": "Deploy a custom plugin that bundles an MCP server to connect the inventory database with a skill-based instruction set for automated stock discrepancy reporting.",
+  "steps": [
+    "Define an MCP server to interface with the warehouse database API for real-time stock retrieval.",
+    "Create a skill containing reusable instructions for identifying and flagging stock discrepancies.",
+    "Package the MCP server and skill into a plugin via the universal plugin directory.",
+    "Install the plugin in the ChatGPT workspace and authenticate via the plugin's connection prompt.",
+    "Invoke the plugin using the @ symbol in a new chat to trigger the reconciliation workflow."
+  ],
+  "outcome": "Logistics teams gain a unified, automated interface to query stock levels and generate discrepancy reports without manual database exports.",
+  "limitation": "Plugin hooks are not supported in cloud-orchestrated ChatGPT Work environments, meaning automated background triggers for reconciliation must be handled by the MCP server logic rather than client-side hooks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Plugin Reconciliation Workflow",
+    "description": "The flow of data from the user prompt through the plugin architecture to the external database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Initiates request via @plugin"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT",
+        "detail": "Orchestrates skill and MCP server"
+      },
+      {
+        "id": "c",
+        "label": "MCP Server",
+        "detail": "Executes API calls to database"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "External inventory system"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "calls tool"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "queries"
+      }
+    ]
+  },
+  "code": {
+    "language": "json",
+    "content": "{\n  \"plugin_name\": \"InventoryReconciler\",\n  \"skills\": [\"reconcile_stock\"],\n  \"mcp_server\": {\n    \"endpoint\": \"https://api.warehouse.internal/mcp\",\n    \"auth\": \"oauth2\"\n  }\n}",
+    "explanation": "This configuration maps the business scenario by defining the plugin structure, including the specific skill for reconciliation and the MCP server connection details required to reach the warehouse database."
+  },
+  "sources": [
+    {
+      "url": "https://learn.chatgpt.com/docs/plugins",
+      "label": "Plugins | ChatGPT Learn"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation Plugin, how does the technology address the problem of manual reconciliation?",
+      "options": [
+        "By replacing all database storage with ChatGPT memory",
+        "By bundling an MCP server and skills to automate data retrieval and reporting",
+        "By automatically deleting all manual inventory spreadsheets",
+        "By forcing users to manually code SQL queries in every chat"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that the technology uses an MCP server to connect to the database and a skill-based instruction set to automate the reporting process.",
+      "evidence": "Deploy a custom plugin that bundles an MCP server to connect the inventory database with a skill-based instruction set for automated stock discrepancy reporting."
+    },
+    {
+      "question": "In Automated Inventory Reconciliation Plugin, what is a key limitation regarding the implementation?",
+      "options": [
+        "The plugin cannot be installed on mobile devices",
+        "Plugin hooks are not supported in cloud-orchestrated ChatGPT Work environments",
+        "The MCP server requires a physical server in the warehouse",
+        "Authentication must be performed every time a message is sent"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that plugin hooks are unsupported in cloud-orchestrated environments, necessitating alternative logic for automation.",
+      "evidence": "Plugin hooks are not supported in cloud-orchestrated ChatGPT Work environments, meaning automated background triggers for reconciliation must be handled by the MCP server logic rather than client-side hooks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:12.138Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:07.809Z"
+}

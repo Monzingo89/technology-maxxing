@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "purescript",
+  "title": "Type-Safe Financial Ledger Integration",
+  "business": "A boutique fintech firm managing cross-border currency conversions.",
+  "problem": "Runtime errors in JavaScript-based transaction processing logic frequently cause silent failures when handling unexpected currency record formats, leading to reconciliation discrepancies.",
+  "solution": "PureScript provides algebraic data types and row polymorphism to strictly define transaction schemas, ensuring that any missing or malformed data in a ledger record is caught at compile-time rather than during execution.",
+  "steps": [
+    "Define a sum type for Currency using algebraic data types to restrict valid inputs.",
+    "Implement a record type with row polymorphism to represent flexible ledger entries.",
+    "Write pure transformation functions that map incoming JSON to the validated record types.",
+    "Use the Effect monad to handle the side-effecting process of writing validated records to the database.",
+    "Compile the PureScript modules into clean JavaScript for integration with existing Node.js services."
+  ],
+  "outcome": "The system achieves structural integrity where the application logic cannot proceed unless the transaction data strictly conforms to the defined financial schema, significantly reducing runtime exceptions.",
+  "limitation": "The primary limitation is the increased cognitive load and compilation overhead associated with strict type checking; developers can verify this by monitoring the time taken for the Spago build tool to perform type inference on large, deeply nested record structures.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Type-Safe Ledger Transformation",
+    "description": "This flow illustrates how raw data is processed through PureScript's type system before reaching the database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw JSON",
+        "detail": "Untrusted input from external API"
+      },
+      {
+        "id": "b",
+        "label": "PureScript Parser",
+        "detail": "Uses algebraic data types to validate structure"
+      },
+      {
+        "id": "c",
+        "label": "Validated Record",
+        "detail": "Strictly typed internal representation"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Persistent storage for ledger entries"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Type-checked transformation"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Effectful write"
+      }
+    ]
+  },
+  "code": {
+    "language": "purescript",
+    "content": "data Currency = USD | EUR | GBP -- Algebraic data type for strict currency control\ntype LedgerEntry = { amount :: Number, currency :: Currency } -- Row polymorphism for record structure\nprocessEntry :: LedgerEntry -> String\nprocessEntry entry = \"Processed \" <> show entry.amount -- Pure function ensures data is valid before processing",
+    "explanation": "This code demonstrates how algebraic data types and records enforce structure on financial data before any side effects occur."
+  },
+  "sources": [
+    {
+      "url": "https://www.purescript.org/",
+      "label": "PureScript Benefits"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Type-Safe Financial Ledger Integration, what is the primary reason for adopting PureScript to handle transaction processing?",
+      "options": [
+        "To eliminate runtime errors caused by unexpected currency record formats.",
+        "To increase the execution speed of JavaScript-based ledger calculations.",
+        "To replace the existing database with a functional storage engine.",
+        "To reduce the cost of hosting the fintech application."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that runtime errors in JavaScript-based logic are the specific failure point, which PureScript addresses through strict typing.",
+      "evidence": "Runtime errors in JavaScript-based transaction processing logic frequently cause silent failures when handling unexpected currency record formats, leading to reconciliation discrepancies."
+    },
+    {
+      "question": "In Type-Safe Financial Ledger Integration, what is a notable trade-off when implementing this solution?",
+      "options": [
+        "The loss of ability to use existing JavaScript libraries.",
+        "The requirement to use a specific database vendor.",
+        "Increased cognitive load and compilation overhead during development.",
+        "The inability to handle side effects like database writes."
+      ],
+      "answerIndex": 2,
+      "explanation": "Strict type systems often require more developer effort and longer compilation times, which is a documented limitation of this approach.",
+      "evidence": "The primary limitation is the increased cognitive load and compilation overhead associated with strict type checking; developers can verify this by monitoring the time taken for the Spago build tool to perform type inference on large, deeply nested record structures."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:59.012Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:54.955Z"
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_opus_5_5",
+  "title": "Automated Legacy Codebase Migration",
+  "business": "Enterprise software firms managing massive, multi-decade legacy codebases.",
+  "problem": "Manual refactoring of monolithic legacy systems is error-prone, costly, and often stalls due to the sheer volume of interdependencies that exceed standard context windows.",
+  "solution": "Claude Opus 5.5 utilizes a 1M token context window and adaptive thinking to analyze entire repository structures, allowing it to perform complex refactoring tasks while maintaining architectural consistency across long-running agentic sessions.",
+  "steps": [
+    "Ingest the entire legacy codebase into the 1M token context window.",
+    "Initialize the agentic loop using the claude-opus-5-5 model ID.",
+    "Configure the display setting to ensure progress updates are captured from thinking blocks.",
+    "Execute iterative refactoring tasks using the adaptive thinking capability to resolve interdependencies.",
+    "Validate output against the original system architecture."
+  ],
+  "outcome": "A more maintainable, modular codebase achieved through automated, context-aware refactoring that preserves business logic integrity.",
+  "limitation": "The model's adaptive thinking is always enabled, which can introduce latency; developers must monitor the display setting to ensure streaming progress updates are visible between tool calls.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agentic Refactoring Workflow",
+    "description": "The flow shows how the model processes code and manages state through thinking blocks.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Codebase",
+        "detail": "Legacy repository"
+      },
+      {
+        "id": "b",
+        "label": "Opus 5.5",
+        "detail": "Model with adaptive thinking"
+      },
+      {
+        "id": "c",
+        "label": "Thinking Block",
+        "detail": "Internal reasoning"
+      },
+      {
+        "id": "d",
+        "label": "Refactored Code",
+        "detail": "Output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Generates"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Refines"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Produces"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Example of handling thinking blocks in the streaming response\n# The display setting must be configured to see progress between tool calls\nresponse = client.messages.create(\n    model=\"claude-opus-5-5\",\n    messages=[{\"role\": \"user\", \"content\": \"Refactor this module...\"}],\n    thinking={\"display\": \"visible\"} # Ensures text between tool calls is returned\n)",
+    "explanation": "This code snippet demonstrates how to configure the display setting to ensure that progress updates, which occur in thinking blocks between tool calls, are accessible to the application."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/opus-5-5/overview",
+      "label": "Claude Opus 5.5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Codebase Migration, how does the model address the problem of complex interdependencies?",
+      "options": [
+        "By utilizing a 1M token context window and adaptive thinking to maintain architectural consistency.",
+        "By disabling all thinking blocks to increase raw processing speed.",
+        "By forcing tool use to bypass the need for internal reasoning.",
+        "By relying on a static 128K output limit to prevent memory overflow."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the model uses its 1M token context and adaptive thinking to handle long-running agentic tasks like refactoring.",
+      "evidence": "Claude Opus 5.5 utilizes a 1M token context window and adaptive thinking to analyze entire repository structures, allowing it to perform complex refactoring tasks while maintaining architectural consistency across long-running agentic sessions."
+    },
+    {
+      "question": "In Automated Legacy Codebase Migration, what is a key implementation consideration regarding the model's behavior?",
+      "options": [
+        "The thinking process can be disabled to reduce latency.",
+        "The display setting must be managed to capture progress updates between tool calls.",
+        "The model requires the computer_20251124 tool for all refactoring tasks.",
+        "The model's adaptive thinking is limited to 128K tokens."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the model's thinking is always on and that developers must set the display value to see progress updates.",
+      "evidence": "The model's adaptive thinking is always enabled, which can introduce latency; developers must monitor the display setting to ensure streaming progress updates are visible between tool calls."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:53.782Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:49.761Z"
+}

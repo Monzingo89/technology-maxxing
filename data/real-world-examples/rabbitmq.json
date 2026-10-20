@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "rabbitmq",
+  "title": "Asynchronous Inventory Synchronization for Global Retail",
+  "business": "A global retail enterprise managing high-frequency inventory updates across disparate regional warehouses and a centralized e-commerce storefront.",
+  "problem": "Synchronous HTTP calls between the regional warehouse management systems and the central storefront frequently time out during peak traffic, leading to data inconsistency and lost sales opportunities when inventory counts fail to propagate.",
+  "solution": "RabbitMQ acts as a message broker to decouple the warehouse systems from the storefront. By using an asynchronous messaging pattern, the warehouse systems publish inventory updates to an exchange, which routes them to queues. The storefront consumes these updates at its own pace, ensuring that even if the storefront is temporarily overloaded, the inventory messages remain safely stored in the broker until processed.",
+  "steps": [
+    "Define a direct exchange in RabbitMQ to categorize inventory update messages by region.",
+    "Configure durable queues for each regional warehouse to ensure messages persist if the broker restarts.",
+    "Implement a producer in the warehouse system to publish JSON-encoded inventory changes to the exchange.",
+    "Implement a consumer in the storefront service that acknowledges message processing only after updating the local database.",
+    "Monitor queue depth using management plugins to identify if consumers are falling behind the producer rate."
+  ],
+  "outcome": "The storefront maintains eventual consistency with warehouse inventory without blocking warehouse operations, resulting in a more resilient architecture that gracefully handles transient traffic spikes.",
+  "limitation": "The primary limitation is the risk of queue buildup if consumers fail or cannot keep pace with the producer rate. This can be checked by monitoring the message count in the RabbitMQ management interface, where a continuously increasing depth indicates a bottleneck in the consumer service.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Update Message Flow",
+    "description": "This diagram illustrates the path of an inventory update from a warehouse to the storefront via RabbitMQ.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse System",
+        "detail": "Producer of inventory data"
+      },
+      {
+        "id": "b",
+        "label": "RabbitMQ Exchange",
+        "detail": "Routes messages to appropriate queues"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Queue",
+        "detail": "Durable storage for pending updates"
+      },
+      {
+        "id": "d",
+        "label": "Storefront Service",
+        "detail": "Consumer of inventory data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Publishes update"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Routes to queue"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Delivers message"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.rabbitmq.com/docs",
+      "label": "RabbitMQ Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Asynchronous Inventory Synchronization for Global Retail, why is RabbitMQ used to connect the warehouse and storefront?",
+      "options": [
+        "To replace the database with a message broker",
+        "To decouple systems and prevent synchronous timeout failures",
+        "To increase the speed of HTTP requests",
+        "To eliminate the need for inventory updates"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that synchronous HTTP calls cause timeouts; RabbitMQ decouples these systems to handle communication asynchronously.",
+      "evidence": "RabbitMQ acts as a message broker to decouple the warehouse systems from the storefront. By using an asynchronous messaging pattern, the warehouse systems publish inventory updates to an exchange, which routes them to queues."
+    },
+    {
+      "question": "In Asynchronous Inventory Synchronization for Global Retail, what is the primary risk of the chosen architecture?",
+      "options": [
+        "The broker will automatically delete all messages",
+        "The warehouse system will stop functioning",
+        "Queue buildup if consumers cannot keep pace with producers",
+        "The storefront will become the only producer"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies queue depth as the indicator of a bottleneck when consumers fall behind.",
+      "evidence": "The primary limitation is the risk of queue buildup if consumers fail or cannot keep pace with the producer rate."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:52.327Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:47.551Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_iam",
+  "title": "Granular Access Control for Data Analytics",
+  "business": "A data analytics firm managing sensitive client datasets across multiple departments.",
+  "problem": "Over-privileged service accounts allow developers to accidentally delete production datasets, increasing risk of data loss.",
+  "solution": "Implementing Google Cloud IAM to enforce the principle of least privilege by assigning specific roles to service accounts based on functional requirements.",
+  "steps": [
+    "Identify the specific actions required for the data processing service account.",
+    "Select predefined IAM roles that map to these minimal required actions.",
+    "Apply the IAM policy to the specific project or resource level.",
+    "Audit existing permissions to remove broad 'Editor' or 'Owner' roles."
+  ],
+  "outcome": "Reduced blast radius for accidental resource deletion and improved compliance posture.",
+  "limitation": "IAM policies can become complex to manage at scale; verify effectiveness using the Policy Intelligence tool to identify overly permissive access.",
+  "diagram": {
+    "kind": "er",
+    "title": "IAM Resource Access Model",
+    "description": "Shows the relationship between identities, roles, and resources.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Identity",
+        "detail": "Service Account"
+      },
+      {
+        "id": "b",
+        "label": "IAM Policy",
+        "detail": "Binding"
+      },
+      {
+        "id": "c",
+        "label": "Role",
+        "detail": "Permissions"
+      },
+      {
+        "id": "d",
+        "label": "Resource",
+        "detail": "BigQuery Dataset"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "assigned to"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "defined in"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "authorizes access to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Granular Access Control for Data Analytics, what is the primary reason for implementing IAM?",
+      "options": [
+        "To prevent accidental deletion by enforcing least privilege",
+        "To increase the speed of data processing pipelines",
+        "To lower the monthly cost of cloud storage",
+        "To automate the deployment of new virtual machines"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies over-privileged service accounts causing accidental deletion as the core problem, which IAM addresses by restricting permissions.",
+      "evidence": "Over-privileged service accounts allow developers to accidentally delete production datasets, increasing risk of data loss."
+    },
+    {
+      "question": "In Granular Access Control for Data Analytics, what is a noted limitation of the IAM implementation?",
+      "options": [
+        "It requires a high-performance network connection",
+        "It is impossible to audit permissions after assignment",
+        "Policies can become complex to manage at scale",
+        "It only works for human users, not service accounts"
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly mentions that managing IAM policies becomes difficult as the environment grows in complexity.",
+      "evidence": "IAM policies can become complex to manage at scale; verify effectiveness using the Policy Intelligence tool to identify overly permissive access."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:05.541Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

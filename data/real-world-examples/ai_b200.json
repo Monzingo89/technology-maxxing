@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_b200",
+  "title": "Optimizing Genomic Sequencing Pipelines with B200 HGX 180GB",
+  "business": "A clinical genomics research institute analyzing large-scale patient datasets for rare disease diagnostics.",
+  "problem": "The institute faces significant latency in processing high-resolution genomic sequences because their current infrastructure lacks the device memory capacity to load entire reference genomes into a single GPU buffer, causing frequent, expensive data swaps between host memory and the accelerator.",
+  "solution": "By deploying the NVIDIA B200 HGX 180GB, the institute leverages the expansive 180GB device memory to cache massive genomic reference indices directly on the hardware, enabling parallelized processing of multiple patient samples without memory-bound bottlenecks.",
+  "steps": [
+    "Provision the B200 HGX 180GB accelerator within the existing high-performance computing cluster.",
+    "Configure Multi-Instance GPU (MIG) profiles to partition the 180GB memory into isolated compute instances for distinct genomic analysis tasks.",
+    "Map the genomic reference indices into the allocated device memory buffers of the MIG instances.",
+    "Execute parallel sequence alignment algorithms across the partitioned instances to maximize throughput.",
+    "Monitor memory utilization per instance to ensure optimal distribution of the 180GB capacity."
+  ],
+  "outcome": "The research institute achieves a streamlined workflow where genomic alignment tasks run concurrently in memory, significantly reducing the time-to-insight for patient diagnostics.",
+  "limitation": "A primary limitation is that partitioning the 180GB memory via MIG reduces the maximum available memory for any single instance, which can be verified by checking the instance-specific memory allocation via the nvidia-smi command.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Genomic Pipeline Partitioning",
+    "description": "This diagram illustrates how the B200 HGX 180GB memory is partitioned into distinct instances to handle parallel genomic workloads.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "B200 HGX 180GB",
+        "detail": "Physical GPU with 180GB total memory"
+      },
+      {
+        "id": "b",
+        "label": "MIG Instance 1",
+        "detail": "Dedicated memory for Patient A"
+      },
+      {
+        "id": "c",
+        "label": "MIG Instance 2",
+        "detail": "Dedicated memory for Patient B"
+      },
+      {
+        "id": "d",
+        "label": "Genomic Index",
+        "detail": "Reference data stored in device memory"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "partitions memory"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "partitions memory"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "loads into"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "loads into"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.nvidia.com/datacenter/tesla/mig-user-guide/supported-gpus.html",
+      "label": "NVIDIA Multi-Instance GPU User Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Genomic Sequencing Pipelines with B200 HGX 180GB, what is the primary benefit of the B200 HGX 180GB for the institute?",
+      "options": [
+        "It eliminates the need for host CPUs entirely.",
+        "It allows caching massive genomic reference indices in device memory.",
+        "It automatically compresses genomic data to save disk space.",
+        "It provides infinite memory scaling for all research tasks."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that the 180GB memory capacity allows the institute to cache reference indices, preventing data swaps.",
+      "evidence": "By deploying the NVIDIA B200 HGX 180GB, the institute leverages the expansive 180GB device memory to cache massive genomic reference indices directly on the hardware"
+    },
+    {
+      "question": "In Optimizing Genomic Sequencing Pipelines with B200 HGX 180GB, what is a key trade-off when using MIG?",
+      "options": [
+        "It increases the total memory available to the GPU.",
+        "It forces all instances to run the same code.",
+        "It reduces the maximum memory available to any single instance.",
+        "It requires the GPU to be physically disconnected."
+      ],
+      "answerIndex": 2,
+      "explanation": "MIG partitions the total memory, meaning individual instances have access to less than the full 180GB capacity.",
+      "evidence": "A primary limitation is that partitioning the 180GB memory via MIG reduces the maximum available memory for any single instance"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:18.455Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:13.845Z"
+}

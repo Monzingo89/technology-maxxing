@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "input_validation",
+  "title": "Securing Municipal Utility Smart Meter Data",
+  "business": "Municipal utility providers managing smart grid infrastructure.",
+  "problem": "Unvalidated data from IoT smart meters can lead to buffer overflows or injection attacks, potentially causing service disruptions or unauthorized billing adjustments.",
+  "solution": "Implementing strict input validation ensures that all incoming data from smart meters is checked against expected type, range, length, and structure before processing, effectively neutralizing malformed payloads.",
+  "steps": [
+    "Define a strict schema for all incoming smart meter telemetry data.",
+    "Implement server-side validation logic to verify data types and length constraints.",
+    "Apply range checks to ensure numeric values fall within physically possible utility consumption bounds.",
+    "Sanitize all inputs to match expected structural patterns before database insertion."
+  ],
+  "outcome": "A resilient data ingestion pipeline that rejects malicious or malformed packets, maintaining system integrity and preventing unauthorized state changes.",
+  "limitation": "Strict validation can lead to false negatives if legitimate sensor data patterns change; check logs for rejected valid packets to adjust schema thresholds.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Input Validation Pipeline",
+    "description": "Data flows from the smart meter through a validation gate before reaching the core processing engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Smart Meter",
+        "detail": "IoT device sending telemetry"
+      },
+      {
+        "id": "b",
+        "label": "Validation Gate",
+        "detail": "Checks type, range, and length"
+      },
+      {
+        "id": "c",
+        "label": "Processing Engine",
+        "detail": "Core utility logic"
+      },
+      {
+        "id": "d",
+        "label": "Error Log",
+        "detail": "Records rejected packets"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends raw data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "passes valid data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "rejects invalid data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Municipal Utility Smart Meter Data, what is the primary purpose of the solution?",
+      "options": [
+        "To encrypt all data transmitted from smart meters.",
+        "To ensure incoming data is checked against expected type, range, length, and structure.",
+        "To increase the speed of data processing for utility billing.",
+        "To replace all IoT devices with more secure hardware."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on validating data attributes to prevent malformed payloads from reaching the core system.",
+      "evidence": "Implementing strict input validation ensures that all incoming data from smart meters is checked against expected type, range, length, and structure before processing, effectively neutralizing malformed payloads."
+    },
+    {
+      "question": "In Securing Municipal Utility Smart Meter Data, what is a potential limitation of the proposed implementation?",
+      "options": [
+        "It may cause the system to crash during high traffic.",
+        "It requires expensive hardware upgrades for every meter.",
+        "It can lead to false negatives if legitimate sensor data patterns change.",
+        "It makes the system completely immune to all cyber attacks."
+      ],
+      "answerIndex": 2,
+      "explanation": "Strict validation rules can inadvertently block valid data if the expected patterns are too rigid or if the environment changes.",
+      "evidence": "Strict validation can lead to false negatives if legitimate sensor data patterns change; check logs for rejected valid packets to adjust schema thresholds."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:57.585Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

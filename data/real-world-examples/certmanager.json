@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "certmanager",
+  "title": "Automated TLS Lifecycle for Global Retail Logistics",
+  "business": "A global logistics provider managing thousands of microservices across distributed Kubernetes clusters.",
+  "problem": "Manual certificate rotation leads to frequent service outages and security compliance failures when certificates expire unexpectedly.",
+  "solution": "Implementing cert-manager to automate the issuance and renewal of TLS certificates via integration with HashiCorp Vault, ensuring that every workload receives a valid, short-lived certificate without manual intervention.",
+  "steps": [
+    "Install cert-manager into the cluster using Helm to manage the lifecycle of Certificate resources.",
+    "Configure an Issuer or ClusterIssuer resource to define the connection parameters for the HashiCorp Vault PKI backend.",
+    "Define a Certificate resource for each microservice, specifying the common name, DNS names, and the reference to the Issuer.",
+    "Mount the resulting Kubernetes Secret containing the TLS key and certificate into the application Pods for secure communication."
+  ],
+  "outcome": "The organization achieves continuous service availability and consistent security posture by eliminating human error in the certificate renewal process.",
+  "limitation": "The standard Certificate resource stores private keys in Kubernetes Secrets, which are accessible to users with read access to the namespace; this can be checked by auditing RBAC permissions on Secret objects.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Automated Certificate Issuance Flow",
+    "description": "This diagram illustrates the lifecycle of a certificate from request to storage.",
+    "nodes": [
+      {
+        "id": "app",
+        "label": "Microservice Pod",
+        "detail": "Requests TLS certificate"
+      },
+      {
+        "id": "cm",
+        "label": "cert-manager",
+        "detail": "Orchestrates issuance"
+      },
+      {
+        "id": "vault",
+        "label": "HashiCorp Vault",
+        "detail": "Signs the certificate"
+      },
+      {
+        "id": "secret",
+        "label": "Kubernetes Secret",
+        "detail": "Stores TLS assets"
+      }
+    ],
+    "edges": [
+      {
+        "from": "app",
+        "to": "cm",
+        "label": "creates Certificate resource"
+      },
+      {
+        "from": "cm",
+        "to": "vault",
+        "label": "requests signing"
+      },
+      {
+        "from": "vault",
+        "to": "cm",
+        "label": "returns signed certificate"
+      },
+      {
+        "from": "cm",
+        "to": "secret",
+        "label": "writes key and cert"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://cert-manager.io/docs/",
+      "label": "cert-manager Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated TLS Lifecycle for Global Retail Logistics, what is the primary driver for adopting cert-manager?",
+      "options": [
+        "Manual certificate rotation leads to frequent service outages and security compliance failures when certificates expire unexpectedly.",
+        "The need to store private keys in Kubernetes Secrets for easier auditing.",
+        "To replace HashiCorp Vault with a native Kubernetes certificate authority.",
+        "To increase the performance of TLS handshakes across global clusters."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual rotation as the cause of outages and compliance failures.",
+      "evidence": "Manual certificate rotation leads to frequent service outages and security compliance failures when certificates expire unexpectedly."
+    },
+    {
+      "question": "In Automated TLS Lifecycle for Global Retail Logistics, what is a specific limitation of the standard Certificate resource implementation?",
+      "options": [
+        "It requires manual intervention every 30 days.",
+        "It cannot integrate with HashiCorp Vault.",
+        "The private key is stored in a Kubernetes Secret, which may be accessible to unauthorized users with namespace read access.",
+        "It prevents the application from starting until the certificate is renewed."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights the security risk of storing private keys in Secrets.",
+      "evidence": "The standard Certificate resource stores private keys in Kubernetes Secrets, which are accessible to users with read access to the namespace; this can be checked by auditing RBAC permissions on Secret objects."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:07.128Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:03.644Z"
+}

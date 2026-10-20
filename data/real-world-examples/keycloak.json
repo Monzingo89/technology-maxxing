@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "keycloak",
+  "title": "Unified Enterprise Portal Access",
+  "business": "A multi-departmental enterprise managing a suite of internal web applications including HR portals, project management tools, and financial dashboards.",
+  "problem": "Employees face fragmented authentication experiences, requiring separate credentials for each application, which increases help-desk overhead for password resets and creates security silos.",
+  "solution": "Keycloak acts as a centralized Identity Provider (IdP) using standard protocols like OpenID Connect and SAML 2.0. By offloading authentication to Keycloak, applications delegate login forms and session management to a single authority, enabling seamless Single-Sign On (SSO) across the entire enterprise suite.",
+  "steps": [
+    "Deploy a Keycloak instance and configure a new Realm to act as the central identity authority.",
+    "Connect existing corporate user directories to Keycloak using the User Federation feature for LDAP or Active Directory integration.",
+    "Register each internal application as a client within the Keycloak Admin Console using OIDC or SAML protocols.",
+    "Configure the applications to redirect unauthenticated users to the Keycloak login page and validate the issued tokens.",
+    "Enable Single-Sign Out to ensure that a user session termination in Keycloak invalidates access across all integrated applications."
+  ],
+  "outcome": "Users experience a unified login process, reducing friction and administrative burden while ensuring consistent security policy enforcement across all enterprise applications.",
+  "limitation": "The centralized nature of Keycloak creates a single point of failure for all authentication traffic. To verify the health and availability of this critical dependency, administrators must monitor the server's session state and cluster synchronization status through the Admin Console or metrics endpoints.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Centralized Authentication Flow",
+    "description": "This diagram illustrates how users interact with Keycloak to access multiple applications.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Employee",
+        "detail": "End user accessing services"
+      },
+      {
+        "id": "keycloak",
+        "label": "Keycloak IdP",
+        "detail": "Central authentication server"
+      },
+      {
+        "id": "app1",
+        "label": "HR Portal",
+        "detail": "OIDC/SAML Client"
+      },
+      {
+        "id": "app2",
+        "label": "Finance Dashboard",
+        "detail": "OIDC/SAML Client"
+      },
+      {
+        "id": "ldap",
+        "label": "User Directory",
+        "detail": "LDAP/Active Directory"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "keycloak",
+        "label": "authenticates"
+      },
+      {
+        "from": "keycloak",
+        "to": "ldap",
+        "label": "verifies credentials"
+      },
+      {
+        "from": "keycloak",
+        "to": "app1",
+        "label": "issues token"
+      },
+      {
+        "from": "keycloak",
+        "to": "app2",
+        "label": "issues token"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.keycloak.org/",
+      "label": "Keycloak Open Source Identity and Access Management"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Enterprise Portal Access, how does Keycloak address the problem of fragmented authentication?",
+      "options": [
+        "By requiring users to maintain separate passwords for every application.",
+        "By acting as a centralized Identity Provider that offloads authentication to a single authority.",
+        "By forcing applications to store user credentials in their own local databases.",
+        "By replacing all internal applications with a single monolithic portal."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on Keycloak acting as a central authority to handle authentication, which eliminates the need for individual applications to manage their own login forms.",
+      "evidence": "Keycloak acts as a centralized Identity Provider (IdP) using standard protocols like OpenID Connect and SAML 2.0. By offloading authentication to Keycloak, applications delegate login forms and session management to a single authority"
+    },
+    {
+      "question": "In Unified Enterprise Portal Access, what is a primary limitation of the proposed solution?",
+      "options": [
+        "It prevents users from ever logging out of applications.",
+        "It requires users to manually link their accounts every time they log in.",
+        "It creates a single point of failure for all authentication traffic.",
+        "It is incompatible with standard protocols like OIDC and SAML."
+      ],
+      "answerIndex": 2,
+      "explanation": "Centralizing authentication means that if the Keycloak server goes down, no users can authenticate to any of the integrated applications.",
+      "evidence": "The centralized nature of Keycloak creates a single point of failure for all authentication traffic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:23.340Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:18.790Z"
+}

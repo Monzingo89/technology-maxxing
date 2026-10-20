@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "dry_principle",
+  "title": "Centralized Tax Calculation Service",
+  "business": "A multi-regional e-commerce platform managing diverse international tax regulations.",
+  "problem": "The engineering team maintained redundant tax calculation logic across the web storefront, mobile application, and backend order processing service. When a regional tax rate changed, developers frequently updated one service but missed others, leading to inconsistent checkout totals and compliance risks.",
+  "solution": "By applying the Don't Repeat Yourself (DRY) principle, the team refactored the tax logic into a single, authoritative microservice. All client applications now delegate tax computation to this central source of truth, ensuring that any legislative update is applied globally by modifying only one codebase.",
+  "steps": [
+    "Identify redundant tax calculation functions across distributed codebases.",
+    "Extract the shared logic into a standalone, versioned API service.",
+    "Implement a unified interface for all clients to request tax calculations.",
+    "Deprecate and remove local tax logic from individual service repositories.",
+    "Establish a single CI/CD pipeline for the tax service to ensure consistent deployment."
+  ],
+  "outcome": "The platform achieves consistent tax reporting across all channels, significantly reducing the risk of compliance errors and minimizing the maintenance burden of updating multiple codebases simultaneously.",
+  "limitation": "The primary trade-off is the introduction of a single point of failure and increased network latency for tax lookups. To check for this, monitor the service's availability and response time metrics to ensure the centralized dependency does not degrade the user experience during peak traffic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Centralized Tax Logic Flow",
+    "description": "This diagram illustrates the transition from redundant local logic to a centralized authoritative service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Web Storefront",
+        "detail": "Client application"
+      },
+      {
+        "id": "b",
+        "label": "Mobile App",
+        "detail": "Client application"
+      },
+      {
+        "id": "c",
+        "label": "Tax Service",
+        "detail": "Authoritative source of truth"
+      },
+      {
+        "id": "d",
+        "label": "Order Processor",
+        "detail": "Backend service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Requests tax calculation"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Requests tax calculation"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Requests tax calculation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Centralized Tax Calculation Service, what is the primary reason for consolidating tax logic?",
+      "options": [
+        "To prevent inconsistent checkout totals and compliance risks caused by redundant logic.",
+        "To increase the number of microservices in the architecture.",
+        "To improve the visual design of the mobile application.",
+        "To reduce the total number of developers required on the team."
+      ],
+      "answerIndex": 0,
+      "explanation": "Consolidation addresses the problem of inconsistent calculations across multiple services.",
+      "evidence": "When a regional tax rate changed, developers frequently updated one service but missed others, leading to inconsistent checkout totals and compliance risks."
+    },
+    {
+      "question": "In Centralized Tax Calculation Service, what is a key limitation of the DRY implementation?",
+      "options": [
+        "It makes the code harder to read for new developers.",
+        "It introduces a single point of failure and potential network latency.",
+        "It requires all developers to learn a new programming language.",
+        "It prevents the team from using CI/CD pipelines."
+      ],
+      "answerIndex": 1,
+      "explanation": "Centralizing logic creates a dependency that can impact system availability and performance.",
+      "evidence": "The primary trade-off is the introduction of a single point of failure and increased network latency for tax lookups."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:46.520Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

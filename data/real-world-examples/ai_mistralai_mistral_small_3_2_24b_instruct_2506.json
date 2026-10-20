@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_mistralai_mistral_small_3_2_24b_instruct_2506",
+  "title": "Automated Logistics Query Processing",
+  "business": "Logistics companies managing high-volume, multi-modal shipping inquiries.",
+  "problem": "Manual processing of unstructured shipping requests leads to inconsistent data extraction and high operational overhead.",
+  "solution": "Mistral-Small-3.2-24B-Instruct-2506 leverages robust function calling and improved instruction following to parse unstructured text into structured API calls for logistics databases.",
+  "steps": [
+    "Deploy the model using vLLM with the mistral tool-call-parser configuration.",
+    "Define a system prompt that specifies the required output schema for shipping data.",
+    "Implement tool definitions for database lookups, such as get_shipping_status or update_delivery_route.",
+    "Route incoming user queries through the model to trigger automated tool execution.",
+    "Validate the model's structured tool arguments against the internal logistics schema."
+  ],
+  "outcome": "Increased accuracy in data extraction and a reduction in repetitive manual entry tasks.",
+  "limitation": "The model requires approximately 55 GB of GPU RAM in bf16 or fp16, which necessitates significant infrastructure investment; monitor VRAM usage during peak request periods to ensure stability.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Query Processing Flow",
+    "description": "The lifecycle of a shipping inquiry from user input to automated database update.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Query",
+        "detail": "Unstructured shipping request"
+      },
+      {
+        "id": "b",
+        "label": "Mistral-Small-3.2",
+        "detail": "Instruction following and tool selection"
+      },
+      {
+        "id": "c",
+        "label": "Tool Execution",
+        "detail": "Database API call"
+      },
+      {
+        "id": "d",
+        "label": "Logistics DB",
+        "detail": "System of record"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Parses intent"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Generates tool call"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Updates record"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/mistralai/Mistral-Small-3.2-24B-Instruct-2506",
+      "label": "Mistral-Small-3.2-24B-Instruct-2506 Hugging Face Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Query Processing, how does the model address the problem of inconsistent data extraction?",
+      "options": [
+        "By utilizing robust function calling to parse unstructured text into structured API calls.",
+        "By increasing the temperature to 1.0 for more creative data interpretation.",
+        "By bypassing the system prompt to allow for faster processing.",
+        "By ignoring tool definitions in favor of direct text generation."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the model uses robust function calling to parse unstructured text into structured API calls.",
+      "evidence": "Mistral-Small-3.2-24B-Instruct-2506 leverages robust function calling and improved instruction following to parse unstructured text into structured API calls for logistics databases."
+    },
+    {
+      "question": "In Automated Logistics Query Processing, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot be used with vLLM.",
+        "The model requires approximately 55 GB of GPU RAM in bf16 or fp16.",
+        "The model does not support system prompts.",
+        "The model is limited to English language inputs only."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies the high VRAM requirement as a key constraint for deployment.",
+      "evidence": "The model requires approximately 55 GB of GPU RAM in bf16 or fp16, which necessitates significant infrastructure investment; monitor VRAM usage during peak request periods to ensure stability."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:44.807Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:41.043Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "quic",
+  "title": "Optimizing Global Satellite Telemetry Streams",
+  "business": "A global satellite imagery provider delivering high-resolution sensor data to remote ground stations.",
+  "problem": "Traditional TCP-based transport suffers from head-of-line blocking when packet loss occurs over high-latency satellite links, causing the entire data stream to stall while waiting for retransmissions.",
+  "solution": "QUIC provides encrypted multiplexed transport over UDP, allowing multiple independent streams of telemetry data to be sent concurrently. If one packet is lost, only the affected stream is delayed, while other streams continue to transmit data without interruption.",
+  "steps": [
+    "Initialize a QUIC connection endpoint using a UDP socket to handle incoming datagrams.",
+    "Establish a TLS 1.3 handshake within the QUIC layer to secure the transport session.",
+    "Open multiple logical streams within the single QUIC connection to categorize telemetry data types.",
+    "Assign individual stream IDs to separate sensor feeds to ensure independent flow control.",
+    "Monitor stream-level congestion feedback to adjust transmission rates per sensor."
+  ],
+  "outcome": "The system achieves more consistent data throughput and reduced latency jitter, ensuring that critical telemetry packets are not held up by non-critical background synchronization tasks.",
+  "limitation": "QUIC can be blocked by restrictive middleboxes or firewalls that drop unrecognized UDP traffic. Administrators can check for this by monitoring the ratio of successful connection attempts versus connection timeouts in the network logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "QUIC Multiplexing Flow",
+    "description": "This diagram illustrates how a single UDP connection carries multiple independent data streams.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Satellite Sensor",
+        "detail": "Source of telemetry data"
+      },
+      {
+        "id": "b",
+        "label": "QUIC Layer",
+        "detail": "Handles multiplexing and encryption"
+      },
+      {
+        "id": "c",
+        "label": "UDP Socket",
+        "detail": "Transports encapsulated packets"
+      },
+      {
+        "id": "d",
+        "label": "Ground Station",
+        "detail": "Receives and demultiplexes streams"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "feeds data to"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "encapsulates streams"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "transmits over network"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Global Satellite Telemetry Streams, why is QUIC preferred over TCP?",
+      "options": [
+        "It eliminates head-of-line blocking by allowing independent stream multiplexing.",
+        "It uses a more complex handshake that increases security.",
+        "It forces all telemetry data into a single, unified stream.",
+        "It relies on TCP to handle packet retransmissions."
+      ],
+      "answerIndex": 0,
+      "explanation": "QUIC allows multiple streams to operate independently, preventing a single lost packet from stalling the entire connection.",
+      "evidence": "If one packet is lost, only the affected stream is delayed, while other streams continue to transmit data without interruption."
+    },
+    {
+      "question": "In Optimizing Global Satellite Telemetry Streams, what is a primary operational risk?",
+      "options": [
+        "The TLS handshake is too slow for satellite links.",
+        "Middleboxes or firewalls may drop UDP traffic.",
+        "The system cannot handle multiple sensor feeds.",
+        "QUIC requires a dedicated physical connection."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because QUIC operates over UDP, it is susceptible to being blocked by network infrastructure that is not configured to allow UDP traffic.",
+      "evidence": "QUIC can be blocked by restrictive middleboxes or firewalls that drop unrecognized UDP traffic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:08.786Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

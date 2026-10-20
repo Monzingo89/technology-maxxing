@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "vector_search_ai",
+  "title": "Automated Technical Support Knowledge Base",
+  "business": "Enterprise software companies managing vast repositories of technical documentation and troubleshooting guides.",
+  "problem": "Support agents struggle to manually locate specific configuration steps within thousands of documents, leading to inconsistent resolution times and high operational costs.",
+  "solution": "Implementing a RAG-based retrieval system using Vector Search to perform semantic similarity matching against technical documentation, allowing the LLM to ground responses in verified internal knowledge.",
+  "steps": [
+    "Upload technical documentation to a Cloud Storage bucket to trigger a Pub/Sub message.",
+    "Use a Cloud Run function to parse documents into smaller, manageable text chunks.",
+    "Generate embeddings for these chunks via the Agent Platform Embeddings API.",
+    "Build and deploy a Vector Search index to store and serve these embeddings.",
+    "Configure a backend Cloud Run service to retrieve relevant chunks based on user query embeddings."
+  ],
+  "outcome": "Support agents receive contextually accurate, grounded answers to complex technical queries, significantly reducing the time spent searching through static documentation.",
+  "limitation": "Vector Search relies on semantic similarity, which may retrieve irrelevant content if the query is ambiguous; verify accuracy by monitoring the relevance of retrieved grounding data against the generated LLM response.",
+  "diagram": {
+    "kind": "flow",
+    "title": "RAG Data Ingestion and Serving Flow",
+    "description": "This diagram illustrates the flow from raw data ingestion to user query resolution.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Cloud Storage",
+        "detail": "Source for raw technical documentation"
+      },
+      {
+        "id": "b",
+        "label": "Cloud Run Function",
+        "detail": "Parses data and generates embeddings"
+      },
+      {
+        "id": "c",
+        "label": "Vector Search Index",
+        "detail": "Stores and indexes vector embeddings"
+      },
+      {
+        "id": "d",
+        "label": "Backend Service",
+        "detail": "Performs similarity search and constructs prompt"
+      },
+      {
+        "id": "e",
+        "label": "LLM",
+        "detail": "Generates grounded response"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "updates index"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "queries index"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "sends augmented prompt"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/architecture/gen-ai-rag-vertex-ai-vector-search",
+      "label": "RAG infrastructure for generative AI using Agent Platform and Vector Search"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Technical Support Knowledge Base, how does the system address the problem of slow manual document searching?",
+      "options": [
+        "By using Vector Search to perform semantic similarity matching against technical documentation.",
+        "By replacing all human support agents with fully autonomous chatbots.",
+        "By storing all documentation in a relational database for keyword-based filtering.",
+        "By manually tagging every document with metadata for faster retrieval."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages Vector Search to perform semantic similarity matching, which allows the system to find relevant information based on meaning rather than just keywords.",
+      "evidence": "Implementing a RAG-based retrieval system using Vector Search to perform semantic similarity matching against technical documentation, allowing the LLM to ground responses in verified internal knowledge."
+    },
+    {
+      "question": "In Automated Technical Support Knowledge Base, what is a primary limitation of the retrieval process?",
+      "options": [
+        "The system cannot handle more than ten documents at a time.",
+        "Vector Search may retrieve irrelevant content if the query is ambiguous.",
+        "The system requires manual indexing for every new user query.",
+        "The system is incompatible with Cloud Run services."
+      ],
+      "answerIndex": 1,
+      "explanation": "Semantic search can return results that are mathematically similar but contextually irrelevant if the input query lacks sufficient clarity.",
+      "evidence": "Vector Search relies on semantic similarity, which may retrieve irrelevant content if the query is ambiguous; verify accuracy by monitoring the relevance of retrieved grounding data against the generated LLM response."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:59.855Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:02.247Z"
+}

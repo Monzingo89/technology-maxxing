@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "pulsar",
+  "title": "Multi-Tenant Logistics Data Isolation",
+  "business": "A global logistics platform providing supply chain tracking services to multiple independent shipping carriers.",
+  "problem": "The platform struggles with data leakage and resource contention when multiple carriers share the same messaging infrastructure, leading to unauthorized access risks and noisy neighbor performance degradation.",
+  "solution": "Utilizing Apache Pulsar's multi-tenancy architecture, the platform assigns each carrier to a distinct tenant and namespace. Persistent topics ensure that message delivery is guaranteed via BookKeeper, while subscription types allow carriers to choose between exclusive processing for strict ordering or shared processing for parallel scaling.",
+  "steps": [
+    "Create a dedicated tenant for each logistics carrier to enforce administrative isolation.",
+    "Define namespaces within each tenant to manage topic policies and storage quotas.",
+    "Configure persistent topics within the namespace to ensure messages are stored on disk via BookKeeper.",
+    "Assign specific subscription types to consumer applications based on whether they require strict message ordering or high-throughput parallel processing."
+  ],
+  "outcome": "Each carrier operates within a secure, isolated environment where their messaging traffic is logically separated from others, ensuring data privacy and predictable resource allocation.",
+  "limitation": "Persistent topics incur storage overhead on BookKeeper nodes. To check if storage limits are reached, monitor the backlog size and storage usage metrics per namespace to prevent disk exhaustion.",
+  "diagram": {
+    "kind": "er",
+    "title": "Multi-Tenant Messaging Hierarchy",
+    "description": "This diagram illustrates the hierarchical relationship between tenants, namespaces, and topics.",
+    "nodes": [
+      {
+        "id": "t",
+        "label": "Tenant",
+        "detail": "Carrier Organization"
+      },
+      {
+        "id": "n",
+        "label": "Namespace",
+        "detail": "Logical grouping of topics"
+      },
+      {
+        "id": "p",
+        "label": "Persistent Topic",
+        "detail": "Message storage unit"
+      },
+      {
+        "id": "s",
+        "label": "Subscription",
+        "detail": "Consumer access point"
+      }
+    ],
+    "edges": [
+      {
+        "from": "t",
+        "to": "n",
+        "label": "owns (1:N)"
+      },
+      {
+        "from": "n",
+        "to": "p",
+        "label": "contains (1:N)"
+      },
+      {
+        "from": "p",
+        "to": "s",
+        "label": "has (1:N)"
+      }
+    ]
+  },
+  "code": {
+    "language": "java",
+    "content": "Consumer<byte[]> consumer = client.newConsumer()\n    .topic(\"persistent://carrier-a/logistics-ns/tracking-updates\")\n    .subscriptionName(\"order-processor\")\n    .subscriptionType(SubscriptionType.Shared) // Allows parallel processing\n    .subscribe();",
+    "explanation": "This code demonstrates connecting to a persistent topic within a specific tenant and namespace, using a shared subscription to distribute load across multiple consumer instances."
+  },
+  "sources": [
+    {
+      "url": "https://pulsar.apache.org/docs/next/concepts-overview/",
+      "label": "Pulsar Overview | Apache Pulsar"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Multi-Tenant Logistics Data Isolation, how does the platform address data leakage and resource contention?",
+      "options": [
+        "By using multi-tenancy to assign each carrier to a distinct tenant and namespace.",
+        "By implementing a single global topic for all carriers to simplify management.",
+        "By disabling persistent storage to increase message throughput.",
+        "By forcing all carriers to use exclusive subscriptions only."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that multi-tenancy is used to isolate carriers into separate tenants and namespaces to prevent leakage and contention.",
+      "evidence": "Utilizing Apache Pulsar's multi-tenancy architecture, the platform assigns each carrier to a distinct tenant and namespace."
+    },
+    {
+      "question": "In Multi-Tenant Logistics Data Isolation, what is a primary limitation of using persistent topics?",
+      "options": [
+        "Persistent topics cannot be used with multiple tenants.",
+        "Persistent topics incur storage overhead on BookKeeper nodes.",
+        "Persistent topics do not support subscription types.",
+        "Persistent topics are only available in the enterprise version."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that persistent topics rely on BookKeeper storage, which creates a potential for disk exhaustion if not monitored.",
+      "evidence": "Persistent topics incur storage overhead on BookKeeper nodes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:42.075Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:38.247Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_synapse_analytics",
+  "title": "Unified Retail Inventory Analytics",
+  "business": "Large-scale retail enterprises requiring real-time inventory visibility across disparate global supply chain systems.",
+  "problem": "Data silos between legacy on-premises warehouse management systems and cloud-based e-commerce platforms prevent unified inventory reporting, leading to stock discrepancies.",
+  "solution": "Azure Synapse Analytics integrates data warehousing and Spark-based processing to ingest, transform, and query heterogeneous data sources within a single workspace.",
+  "steps": [
+    "Provision an Azure Synapse workspace to serve as the central analytics hub.",
+    "Configure linked services to connect to legacy SQL databases and cloud-based data lakes.",
+    "Utilize Synapse pipelines to orchestrate the movement and integration of raw inventory data.",
+    "Deploy Spark pools to perform complex data cleansing and normalization of disparate inventory schemas.",
+    "Expose the processed data via serverless SQL endpoints for consumption by business intelligence tools."
+  ],
+  "outcome": "A unified, consistent view of global inventory levels that enables accurate demand forecasting and reduces stock-out incidents.",
+  "limitation": "The primary limitation is the complexity of managing resource allocation between dedicated SQL pools and Spark pools; users must monitor pool utilization to ensure cost-effective query performance.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Synapse Inventory Integration Flow",
+    "description": "Data flows from source systems into the Synapse workspace for processing and serving.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy WMS",
+        "detail": "On-premises SQL database"
+      },
+      {
+        "id": "b",
+        "label": "Data Lake",
+        "detail": "Cloud-based raw storage"
+      },
+      {
+        "id": "c",
+        "label": "Synapse Workspace",
+        "detail": "Integration and compute hub"
+      },
+      {
+        "id": "d",
+        "label": "BI Dashboard",
+        "detail": "End-user reporting layer"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Ingest"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Products Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Retail Inventory Analytics, what is the primary problem addressed by the solution?",
+      "options": [
+        "Data silos between legacy and cloud systems causing inventory discrepancies",
+        "High latency in network connectivity between global warehouses",
+        "Lack of specialized hardware for on-premises database hosting",
+        "Inability to purchase third-party inventory management software"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies data silos between legacy and cloud systems as the cause of inventory discrepancies.",
+      "evidence": "Data silos between legacy on-premises warehouse management systems and cloud-based e-commerce platforms prevent unified inventory reporting, leading to stock discrepancies."
+    },
+    {
+      "question": "In Unified Retail Inventory Analytics, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to connect to cloud-based data lakes",
+        "The requirement to manually code all data integration pipelines in Python",
+        "The complexity of managing resource allocation between SQL and Spark pools",
+        "The lack of support for serverless SQL endpoints"
+      ],
+      "answerIndex": 2,
+      "explanation": "Managing the balance of resources between different compute engines is a noted operational tradeoff.",
+      "evidence": "The primary limitation is the complexity of managing resource allocation between dedicated SQL pools and Spark pools; users must monitor pool utilization to ensure cost-effective query performance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:07.907Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

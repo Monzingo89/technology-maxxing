@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_unsloth_qwen3_coder_30b_a3b_instruct_gguf",
+  "title": "Automated Legacy Codebase Refactoring",
+  "business": "Software engineering firms managing massive, multi-year legacy code repositories.",
+  "problem": "Developers spend excessive time manually parsing and refactoring outdated modules, leading to high technical debt and slow feature delivery cycles.",
+  "solution": "Utilize Qwen3-Coder-30B-A3B-Instruct-GGUF to perform repository-scale understanding and automated refactoring tasks by leveraging its native 256K token context window and agentic coding capabilities.",
+  "steps": [
+    "Configure a local inference environment using llama.cpp or similar GGUF-compatible runtimes.",
+    "Define custom function tools that allow the model to interact with the local file system for code analysis.",
+    "Ingest legacy module files into the model's 256K context window for comprehensive structural analysis.",
+    "Execute refactoring prompts using the model's agentic tool-calling format to generate and apply code improvements."
+  ],
+  "outcome": "Increased developer velocity through automated identification and suggestion of refactoring patterns across large codebases.",
+  "limitation": "High memory consumption during long-context processing; if the system experiences out-of-memory errors, the context length must be reduced to 32,768 tokens.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Refactoring Workflow",
+    "description": "The flow of code from legacy storage through the model to the refactored output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Repo",
+        "detail": "Source code files"
+      },
+      {
+        "id": "b",
+        "label": "Qwen3-Coder",
+        "detail": "Inference engine"
+      },
+      {
+        "id": "c",
+        "label": "Tool Interface",
+        "detail": "File system access"
+      },
+      {
+        "id": "d",
+        "label": "Refactored Code",
+        "detail": "Output artifacts"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest context"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Call refactor tool"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Write changes"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Define a tool for the model to update a file\ndef update_code_file(file_path, new_content):\n    # Logic to write refactored content back to disk\n    with open(file_path, 'w') as f:\n        f.write(new_content)\n    return \"File updated successfully\"",
+    "explanation": "This maps to the Automated Legacy Codebase Refactoring scenario by providing the model with a tool to apply the refactoring suggestions it generates."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF",
+      "label": "unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Codebase Refactoring, how does the model address the problem of manual refactoring?",
+      "options": [
+        "By performing repository-scale understanding and automated refactoring tasks.",
+        "By automatically deleting legacy code to reduce technical debt.",
+        "By generating new documentation without touching the source code.",
+        "By replacing all developers with autonomous agents."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions using the model's capabilities for repository-scale understanding and refactoring.",
+      "evidence": "Utilize Qwen3-Coder-30B-A3B-Instruct-GGUF to perform repository-scale understanding and automated refactoring tasks by leveraging its native 256K token context window and agentic coding capabilities."
+    },
+    {
+      "question": "In Automated Legacy Codebase Refactoring, what is the recommended action if the system encounters out-of-memory issues?",
+      "options": [
+        "Increase the context length to 1M tokens.",
+        "Reduce the context length to 32,768 tokens.",
+        "Disable the agentic tool-calling feature.",
+        "Switch to a smaller, non-GGUF model."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that reducing the context length to 32,768 is the remedy for OOM issues.",
+      "evidence": "if the system experiences out-of-memory errors, the context length must be reduced to 32,768 tokens."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:37.968Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:34.017Z"
+}

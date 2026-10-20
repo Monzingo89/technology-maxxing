@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "server_sent_events",
+  "title": "Real-time Logistics Fleet Tracking",
+  "business": "A regional logistics company managing a fleet of delivery vehicles that require constant location updates for dispatchers.",
+  "problem": "Dispatchers rely on manual page refreshes to see vehicle positions, leading to stale data and inefficient routing decisions during peak traffic hours.",
+  "solution": "Server-Sent Events (SSE) enables a persistent, unidirectional HTTP connection from the server to the dispatcher dashboard, pushing location updates immediately as they arrive from GPS sensors without requiring client-side polling.",
+  "steps": [
+    "Configure the server to set the Content-Type header to text/event-stream.",
+    "Maintain an open HTTP connection between the client EventSource object and the server.",
+    "Format outgoing data messages with the data: prefix followed by the JSON payload.",
+    "Implement client-side event listeners to handle incoming location updates and update the UI dynamically."
+  ],
+  "outcome": "Dispatchers gain a fluid, real-time view of fleet operations, allowing for proactive adjustments to delivery routes and improved response times to traffic incidents.",
+  "limitation": "SSE is strictly unidirectional, meaning the client cannot send data back to the server over the same connection; developers must check the browser console for connection closure events to trigger manual reconnection logic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SSE Fleet Update Flow",
+    "description": "The flow shows how GPS data moves from the vehicle to the dispatcher dashboard.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "GPS Sensor",
+        "detail": "Sends raw coordinates"
+      },
+      {
+        "id": "b",
+        "label": "Backend Server",
+        "detail": "Processes and streams data"
+      },
+      {
+        "id": "c",
+        "label": "Dispatcher Dashboard",
+        "detail": "Receives updates via EventSource"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTP POST"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "text/event-stream"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Logistics Fleet Tracking, why is SSE preferred over traditional polling?",
+      "options": [
+        "It allows the client to send data back to the server.",
+        "It eliminates the need for manual page refreshes to see vehicle positions.",
+        "It provides a bidirectional communication channel for GPS data.",
+        "It automatically reduces the number of GPS sensors required."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that manual refreshes lead to stale data, and SSE solves this by pushing updates immediately.",
+      "evidence": "Dispatchers rely on manual page refreshes to see vehicle positions, leading to stale data and inefficient routing decisions during peak traffic hours."
+    },
+    {
+      "question": "In Real-time Logistics Fleet Tracking, what is a primary limitation of the implementation?",
+      "options": [
+        "The server cannot push data to the client.",
+        "The connection is bidirectional, causing high overhead.",
+        "The client cannot send data back to the server over the same connection.",
+        "The browser cannot handle text/event-stream content types."
+      ],
+      "answerIndex": 2,
+      "explanation": "SSE is unidirectional, meaning the client cannot send data back to the server over the same connection.",
+      "evidence": "SSE is strictly unidirectional, meaning the client cannot send data back to the server over the same connection; developers must check the browser console for connection closure events to trigger manual reconnection logic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:55.194Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

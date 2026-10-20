@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "repository_pattern",
+  "title": "Inventory Management Decoupling",
+  "business": "A regional logistics firm managing a complex warehouse inventory system.",
+  "problem": "The business logic is tightly coupled to specific database queries, making it difficult to swap storage backends or perform unit testing without a live database connection.",
+  "solution": "The Repository pattern mediates between the domain and data mapping layers by providing a collection-like interface for accessing domain objects, effectively hiding the underlying persistence mechanism.",
+  "steps": [
+    "Define a domain interface that exposes methods like Add, Remove, and FindById.",
+    "Implement the interface using a specific data access technology like an ORM or direct SQL.",
+    "Inject the repository interface into the business services to decouple logic from storage.",
+    "Use the repository to retrieve domain objects as if they were stored in an in-memory collection."
+  ],
+  "outcome": "The domain layer remains agnostic of the database schema, allowing for easier testing and future infrastructure migrations.",
+  "limitation": "The primary limitation is the risk of leaking database-specific performance concerns into the domain layer if the repository interface becomes too granular or complex. You can check for this by reviewing if domain services are forced to handle database-specific exceptions or pagination logic.",
+  "diagram": {
+    "kind": "er",
+    "title": "Repository Pattern Architecture",
+    "description": "Explains how the Domain layer interacts with the Repository interface rather than the database directly.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Domain Service",
+        "detail": "Contains business logic"
+      },
+      {
+        "id": "b",
+        "label": "Repository Interface",
+        "detail": "Defines collection-like methods"
+      },
+      {
+        "id": "c",
+        "label": "Repository Implementation",
+        "detail": "Translates to SQL/ORM calls"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Persistence storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "calls"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "implements"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "queries"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Inventory Management Decoupling, what is the primary purpose of introducing a repository?",
+      "options": [
+        "To replace the database with an in-memory cache",
+        "To mediate between the domain and data mapping layers using a collection-like interface",
+        "To optimize SQL query performance for large datasets",
+        "To enforce strict database schema constraints"
+      ],
+      "answerIndex": 1,
+      "explanation": "The repository pattern is specifically designed to provide a collection-like interface that decouples the domain from the persistence layer.",
+      "evidence": "The Repository pattern mediates between the domain and data mapping layers by providing a collection-like interface for accessing domain objects, effectively hiding the underlying persistence mechanism."
+    },
+    {
+      "question": "Regarding the implementation of Inventory Management Decoupling, what is a key limitation to monitor?",
+      "options": [
+        "The inability to use multiple databases simultaneously",
+        "The risk of leaking database-specific performance concerns into the domain layer",
+        "The requirement to use only object-relational mapping tools",
+        "The overhead of creating an interface for every entity"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that leaking persistence concerns into the domain layer is a significant risk when the interface is not managed correctly.",
+      "evidence": "The primary limitation is the risk of leaking database-specific performance concerns into the domain layer if the repository interface becomes too granular or complex."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:18.244Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

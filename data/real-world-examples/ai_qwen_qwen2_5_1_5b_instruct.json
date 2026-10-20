@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen2_5_1_5b_instruct",
+  "title": "Edge-Deployed Logistics Assistant",
+  "business": "Logistics firms managing remote warehouse operations with limited connectivity.",
+  "problem": "High latency and data privacy concerns when sending sensitive inventory manifests to cloud-based APIs for parsing.",
+  "solution": "Deploying the Qwen2.5-1.5B-Instruct model locally on edge hardware to process structured inventory data and generate natural language summaries without external network dependencies.",
+  "steps": [
+    "Install the latest transformers library to ensure compatibility with the Qwen2.5 architecture.",
+    "Load the model using AutoModelForCausalLM with device_map set to auto for hardware optimization.",
+    "Initialize the tokenizer and apply the chat template to format system and user instructions.",
+    "Pass the inventory manifest as a user message to the model for structured output generation.",
+    "Decode the generated tokens into a readable summary for warehouse staff."
+  ],
+  "outcome": "Improved operational autonomy and reduced data exposure by keeping all inventory processing within the local network.",
+  "limitation": "The 1.5B parameter size is optimized for efficiency but may struggle with highly complex, multi-step reasoning compared to larger models; verify performance by testing against diverse, edge-case inventory queries.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Inference Pipeline",
+    "description": "The flow of inventory data through the local model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse System",
+        "detail": "Source of raw inventory manifests"
+      },
+      {
+        "id": "b",
+        "label": "Tokenizer",
+        "detail": "Applies chat template to raw data"
+      },
+      {
+        "id": "c",
+        "label": "Qwen2.5-1.5B",
+        "detail": "Local inference engine"
+      },
+      {
+        "id": "d",
+        "label": "Staff Dashboard",
+        "detail": "Displays natural language summary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends raw data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "feeds formatted inputs"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "outputs summary"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoModelForCausalLM, AutoTokenizer\n# Load model locally\nmodel = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2.5-1.5B-Instruct\", device_map=\"auto\")\ntokenizer = AutoTokenizer.from_pretrained(\"Qwen/Qwen2.5-1.5B-Instruct\")\n# Prepare input with chat template\nmessages = [{\"role\": \"system\", \"content\": \"Summarize the inventory.\"}, {\"role\": \"user\", \"content\": \"Manifest: 50 units SKU-A\"}]\ntext = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)\ninputs = tokenizer([text], return_tensors=\"pt\").to(model.device)\n# Generate response\ngenerated = model.generate(**inputs, max_new_tokens=100)",
+    "explanation": "This code demonstrates loading the model locally and using the chat template to process an inventory manifest, mapping directly to the Edge-Deployed Logistics Assistant scenario."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct",
+      "label": "Qwen/Qwen2.5-1.5B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge-Deployed Logistics Assistant, why is the model deployed locally?",
+      "options": [
+        "To eliminate latency and data privacy risks",
+        "To increase the parameter count to 72B",
+        "To utilize cloud-based API scaling",
+        "To avoid using transformers libraries"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that local deployment addresses high latency and data privacy concerns associated with cloud APIs.",
+      "evidence": "High latency and data privacy concerns when sending sensitive inventory manifests to cloud-based APIs for parsing."
+    },
+    {
+      "question": "In Edge-Deployed Logistics Assistant, what is a primary limitation of the 1.5B model?",
+      "options": [
+        "It cannot be used with Python",
+        "It lacks multilingual support",
+        "It may struggle with complex reasoning",
+        "It requires 128K tokens for every query"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that the 1.5B model size may struggle with complex, multi-step reasoning compared to larger models.",
+      "evidence": "The 1.5B parameter size is optimized for efficiency but may struggle with highly complex, multi-step reasoning compared to larger models"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:13.443Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:09.638Z"
+}

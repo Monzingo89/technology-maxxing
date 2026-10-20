@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "arangodb",
+  "title": "Supply Chain Resilience Mapping",
+  "business": "Global logistics providers managing complex, multi-tier supplier networks.",
+  "problem": "Traditional relational databases struggle to visualize deep-tier dependencies, leading to hidden bottlenecks when a single supplier fails.",
+  "solution": "ArangoDB utilizes a multi-model approach, storing supplier entities as JSON documents and their interdependencies as edges in a graph, allowing AQL to traverse deep paths efficiently.",
+  "steps": [
+    "Define supplier entities as document collections containing metadata like location and capacity.",
+    "Create edge collections to represent relationships such as 'supplies_to' or 'subcontracts_to'.",
+    "Populate the graph by inserting documents and linking them via edge documents containing _from and _to attributes.",
+    "Execute AQL queries using the GRAPH_TRAVERSAL function to identify all downstream dependencies of a specific supplier.",
+    "Analyze the resulting path objects to identify single points of failure in the supply chain."
+  ],
+  "outcome": "Improved visibility into indirect supplier risks, enabling proactive diversification of the supply chain.",
+  "limitation": "Graph traversal performance degrades significantly with excessive depth or high branching factors; verify this by monitoring the execution time of AQL queries using the PROFILE keyword.",
+  "diagram": {
+    "kind": "er",
+    "title": "Supplier Dependency Graph",
+    "description": "Nodes represent entities, edges represent dependency flow.",
+    "nodes": [
+      {
+        "id": "S1",
+        "label": "Tier 1 Supplier",
+        "detail": "Primary assembly provider"
+      },
+      {
+        "id": "S2",
+        "label": "Tier 2 Supplier",
+        "detail": "Component manufacturer"
+      },
+      {
+        "id": "S3",
+        "label": "Raw Material Source",
+        "detail": "Base resource provider"
+      },
+      {
+        "id": "D1",
+        "label": "Distribution Hub",
+        "detail": "Logistics node"
+      }
+    ],
+    "edges": [
+      {
+        "from": "S3",
+        "to": "S2",
+        "label": "supplies_to"
+      },
+      {
+        "from": "S2",
+        "to": "S1",
+        "label": "supplies_to"
+      },
+      {
+        "from": "S1",
+        "to": "D1",
+        "label": "ships_to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.arango.ai/arangodb/stable/",
+      "label": "ArangoDB 3.12 Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Resilience Mapping, why is a graph model preferred over a relational database?",
+      "options": [
+        "It allows for faster visualization of deep-tier dependencies.",
+        "It automatically prevents supplier bankruptcy.",
+        "It eliminates the need for JSON document storage.",
+        "It provides lower pricing for cloud hosting."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that relational databases struggle with deep-tier dependencies, which graphs solve by traversing relationships efficiently.",
+      "evidence": "Traditional relational databases struggle to visualize deep-tier dependencies, leading to hidden bottlenecks when a single supplier fails."
+    },
+    {
+      "question": "In Supply Chain Resilience Mapping, how should an architect verify if the graph traversal is becoming inefficient?",
+      "options": [
+        "By checking the total number of documents in the collection.",
+        "By monitoring the execution time of AQL queries using the PROFILE keyword.",
+        "By increasing the number of edges in the graph.",
+        "By verifying the JSON schema of the supplier documents."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly suggests using the PROFILE keyword to identify performance degradation during traversal.",
+      "evidence": "Graph traversal performance degrades significantly with excessive depth or high branching factors; verify this by monitoring the execution time of AQL queries using the PROFILE keyword."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:57.445Z"
+}

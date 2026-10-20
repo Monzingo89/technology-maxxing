@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "langgraph",
+  "title": "Automated Compliance Audit Workflow",
+  "business": "Financial institutions requiring strict adherence to regulatory reporting standards.",
+  "problem": "Manual document verification is prone to human error and lacks a persistent audit trail for long-running multi-step compliance reviews.",
+  "solution": "LangGraph provides durable execution and human-in-the-loop capabilities to orchestrate compliance checks, allowing deterministic validation steps to interleave with LLM-driven analysis while maintaining a persistent state across review cycles.",
+  "steps": [
+    "Define a StateGraph schema to track document metadata, verification status, and audit logs.",
+    "Implement deterministic nodes for initial file format validation and checksum verification.",
+    "Integrate LLM-driven nodes for semantic analysis of regulatory compliance clauses.",
+    "Configure a breakpoint before final approval to enable human-in-the-loop inspection of the agent's reasoning.",
+    "Use persistence to ensure the agent resumes from the exact state if a process is interrupted."
+  ],
+  "outcome": "A reliable, auditable compliance pipeline where human oversight is integrated directly into the workflow, reducing the risk of unverified automated decisions.",
+  "limitation": "The primary tradeoff is the complexity of managing state transitions; developers must ensure that state updates are atomic to prevent inconsistent data during long-running processes, which can be verified by inspecting the graph's state history in LangSmith.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Audit Process",
+    "description": "A directed graph showing the flow from document ingestion to human approval.",
+    "nodes": [
+      {
+        "id": "start",
+        "label": "Ingestion",
+        "detail": "Document arrival"
+      },
+      {
+        "id": "val",
+        "label": "Validation",
+        "detail": "Deterministic format check"
+      },
+      {
+        "id": "llm",
+        "label": "Analysis",
+        "detail": "LLM regulatory review"
+      },
+      {
+        "id": "human",
+        "label": "Human Review",
+        "detail": "Breakpoint for oversight"
+      },
+      {
+        "id": "end",
+        "label": "Approval",
+        "detail": "Final audit log"
+      }
+    ],
+    "edges": [
+      {
+        "from": "start",
+        "to": "val",
+        "label": "triggers"
+      },
+      {
+        "from": "val",
+        "to": "llm",
+        "label": "passed"
+      },
+      {
+        "from": "llm",
+        "to": "human",
+        "label": "requires"
+      },
+      {
+        "from": "human",
+        "to": "end",
+        "label": "authorized"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from langgraph.graph import StateGraph, START, END\n# Define the graph with a persistence checkpoint\nworkflow = StateGraph(ComplianceState)\n# Add deterministic validation node\nworkflow.add_node('validate', validate_doc)\n# Add human-in-the-loop breakpoint\nworkflow.add_edge(START, 'validate')\nworkflow.add_edge('validate', 'review') # 'review' node is set as a breakpoint",
+    "explanation": "This code initializes a StateGraph where the 'review' node acts as a human-in-the-loop checkpoint, ensuring the agent pauses for manual oversight before proceeding to final approval."
+  },
+  "sources": [
+    {
+      "url": "https://docs.langchain.com/oss/python/langgraph/overview",
+      "label": "LangGraph overview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Compliance Audit Workflow, how does the technology address the problem of manual document verification?",
+      "options": [
+        "By replacing all human staff with autonomous LLMs.",
+        "By providing durable execution and human-in-the-loop capabilities to orchestrate compliance checks.",
+        "By removing the need for persistent audit trails.",
+        "By using only deterministic logic without LLM-driven analysis."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution section explicitly states that the technology uses durable execution and human-in-the-loop capabilities to manage the compliance workflow.",
+      "evidence": "LangGraph provides durable execution and human-in-the-loop capabilities to orchestrate compliance checks, allowing deterministic validation steps to interleave with LLM-driven analysis while maintaining a persistent state across review cycles."
+    },
+    {
+      "question": "In Automated Compliance Audit Workflow, what is the primary limitation of the implementation?",
+      "options": [
+        "The inability to use deterministic steps.",
+        "The requirement to use only LangChain components.",
+        "The complexity of managing state transitions and ensuring atomic updates.",
+        "The lack of visibility into the agent's reasoning."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights the complexity of state management as the main tradeoff.",
+      "evidence": "The primary tradeoff is the complexity of managing state transitions; developers must ensure that state updates are atomic to prevent inconsistent data during long-running processes"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:36.746Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:32.573Z"
+}

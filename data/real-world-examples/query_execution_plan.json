@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "query_execution_plan",
+  "title": "Optimizing Logistics Route Retrieval",
+  "business": "A regional logistics provider managing thousands of daily delivery routes.",
+  "problem": "The dispatch system experiences significant latency when retrieving active route assignments, causing delays in driver scheduling due to inefficient table scans.",
+  "solution": "By utilizing the Query Execution Plan, developers can inspect the physical operators chosen by the database engine to identify if the system is performing a sequential scan instead of an index scan, allowing for targeted index creation.",
+  "steps": [
+    "Execute the EXPLAIN command prefixed to the slow-running route retrieval SQL query.",
+    "Analyze the output to identify physical operators such as Seq Scan or Index Scan.",
+    "Verify if the cost estimates align with the expected data distribution.",
+    "Apply appropriate indexes to the columns identified as bottlenecks in the plan.",
+    "Re-run the EXPLAIN command to confirm the transition to a more efficient physical operator."
+  ],
+  "outcome": "The system achieves more predictable retrieval times by ensuring the database engine consistently utilizes optimal access paths for frequent queries.",
+  "limitation": "Execution plans are highly dependent on current table statistics; if data distribution changes significantly, the planner may choose a suboptimal path, which can be checked by verifying the plan output against current statistics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Query Execution Plan Analysis Workflow",
+    "description": "This diagram illustrates the iterative process of identifying and resolving inefficient query paths.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "SQL Query",
+        "detail": "The initial request for route data"
+      },
+      {
+        "id": "b",
+        "label": "EXPLAIN Command",
+        "detail": "Generates the execution plan"
+      },
+      {
+        "id": "c",
+        "label": "Plan Analysis",
+        "detail": "Identifying physical operators"
+      },
+      {
+        "id": "d",
+        "label": "Index Optimization",
+        "detail": "Applying indexes to columns"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "outputs"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "requires"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Logistics Route Retrieval, what is the primary purpose of using the Query Execution Plan?",
+      "options": [
+        "To identify if the system is performing a sequential scan instead of an index scan.",
+        "To increase the total number of rows stored in the database.",
+        "To automatically rewrite SQL queries for better syntax.",
+        "To bypass the need for database indexes entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The plan allows developers to inspect the physical operators chosen by the engine to identify inefficiencies like sequential scans.",
+      "evidence": "By utilizing the Query Execution Plan, developers can inspect the physical operators chosen by the database engine to identify if the system is performing a sequential scan instead of an index scan, allowing for targeted index creation."
+    },
+    {
+      "question": "In Optimizing Logistics Route Retrieval, what is a key limitation of the Query Execution Plan?",
+      "options": [
+        "It cannot be used on production databases.",
+        "It is highly dependent on current table statistics.",
+        "It requires a complete rewrite of the application code.",
+        "It only works for read-only database operations."
+      ],
+      "answerIndex": 1,
+      "explanation": "Execution plans rely on statistics; if these are outdated, the planner may select a poor path.",
+      "evidence": "Execution plans are highly dependent on current table statistics; if data distribution changes significantly, the planner may choose a suboptimal path, which can be checked by verifying the plan output against current statistics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:05.713Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

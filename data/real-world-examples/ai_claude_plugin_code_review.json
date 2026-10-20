@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_plugin_code_review",
+  "title": "Automated Quality Gate for Fintech Microservices",
+  "business": "A high-velocity fintech engineering team managing dozens of microservices that must adhere to strict internal compliance standards.",
+  "problem": "The team faces significant bottlenecks during peer reviews, where senior engineers spend excessive time manually verifying CLAUDE.md compliance and basic bug patterns, leading to delayed releases and inconsistent feedback loops.",
+  "solution": "The Code Review plugin deploys specialized parallel agents to handle repetitive verification tasks. By utilizing confidence-based filtering, the system ensures that only high-probability issues—such as non-compliance with architectural guidelines or identified bug patterns—are surfaced to human reviewers, effectively filtering out noise.",
+  "steps": [
+    "Configure the repository with a CLAUDE.md file defining the specific architectural and compliance standards for the microservice.",
+    "Trigger the /code-review command on a new pull request to initiate the parallel agent analysis.",
+    "Set the confidence threshold to 85 to ensure that only highly relevant, actionable feedback is posted to the GitHub PR.",
+    "Review the generated comments, which include direct SHA-linked references to specific code lines for rapid remediation."
+  ],
+  "outcome": "Engineers experience a reduction in manual review overhead, allowing them to focus on complex architectural logic rather than routine compliance checks, resulting in a more predictable and streamlined development lifecycle.",
+  "limitation": "The system relies heavily on the quality of the provided CLAUDE.md file; if the documentation is ambiguous, the agents may produce inconsistent findings. This can be verified by auditing the confidence scores of findings related to documentation-specific rules versus generic bug detection.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Code Review Agent Workflow",
+    "description": "The flow from PR submission to human intervention via the plugin.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "PR Submission",
+        "detail": "Developer opens a new pull request"
+      },
+      {
+        "id": "b",
+        "label": "Plugin Trigger",
+        "detail": "Execution of /code-review command"
+      },
+      {
+        "id": "c",
+        "label": "Parallel Agents",
+        "detail": "Five specialized agents analyze code"
+      },
+      {
+        "id": "d",
+        "label": "Confidence Filter",
+        "detail": "Threshold check (e.g., 85)"
+      },
+      {
+        "id": "e",
+        "label": "GitHub Comments",
+        "detail": "Actionable feedback posted to PR"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "initiates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "launches"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "scores findings"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "posts high-confidence issues"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/plugins/code-review",
+      "label": "Code Review | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Quality Gate for Fintech Microservices, how does the plugin address the problem of review bottlenecks?",
+      "options": [
+        "By replacing all human reviewers with automated agents",
+        "By using parallel agents to filter noise and surface only high-confidence issues",
+        "By automatically merging PRs that pass basic syntax checks",
+        "By increasing the number of manual review hours required"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution focuses on using specialized agents to handle repetitive tasks and filtering results to reduce noise, which directly addresses the bottleneck problem.",
+      "evidence": "The Code Review plugin deploys specialized parallel agents to handle repetitive verification tasks. By utilizing confidence-based filtering, the system ensures that only high-probability issues—such as non-compliance with architectural guidelines or identified bug patterns—are surfaced to human reviewers, effectively filtering out noise."
+    },
+    {
+      "question": "In Automated Quality Gate for Fintech Microservices, what is a primary limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than five files per pull request",
+        "The plugin requires a paid subscription for every developer",
+        "The system depends on the clarity of the CLAUDE.md file for accurate compliance checking",
+        "The plugin is incompatible with standard GitHub workflows"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that the system's effectiveness is tied to the quality and clarity of the CLAUDE.md documentation.",
+      "evidence": "The system relies heavily on the quality of the provided CLAUDE.md file; if the documentation is ambiguous, the agents may produce inconsistent findings."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:13.385Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:09.235Z"
+}

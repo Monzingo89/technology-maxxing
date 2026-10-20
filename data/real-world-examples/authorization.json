@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "authorization",
+  "title": "Granular Access Control for Medical Records",
+  "business": "Healthcare providers managing sensitive patient data across multi-disciplinary teams.",
+  "problem": "Unauthorized staff members are accessing patient records outside their assigned department, leading to potential privacy violations and compliance failures.",
+  "solution": "Implement Complete Mediation by enforcing authorization checks on every request to ensure that only users with explicit, role-based permissions can access specific patient records.",
+  "steps": [
+    "Define granular roles such as Physician, Nurse, and Billing Clerk.",
+    "Map each role to specific resource actions like ReadRecord or UpdateBilling.",
+    "Implement a central authorization service that validates the user's token and requested action against the resource policy.",
+    "Enforce the check at the API gateway level to ensure every incoming request is mediated before reaching the database.",
+    "Audit all authorization decisions to ensure compliance with privacy regulations."
+  ],
+  "outcome": "A secure environment where access is strictly limited to the minimum necessary information, reducing the risk of unauthorized data exposure.",
+  "limitation": "The primary trade-off is latency, as performing a check on every request adds overhead; this can be monitored by tracking the response time of the authorization service.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Authorization Mediation Flow",
+    "description": "This diagram shows how a user request is intercepted and validated against a policy before accessing the patient record.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "User",
+        "detail": "Authenticated Principal"
+      },
+      {
+        "id": "gateway",
+        "label": "API Gateway",
+        "detail": "Enforcement Point"
+      },
+      {
+        "id": "authz",
+        "label": "AuthZ Service",
+        "detail": "Policy Decision Point"
+      },
+      {
+        "id": "db",
+        "label": "Patient DB",
+        "detail": "Resource"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "gateway",
+        "label": "Request Resource"
+      },
+      {
+        "from": "gateway",
+        "to": "authz",
+        "label": "Verify Permission"
+      },
+      {
+        "from": "authz",
+        "to": "gateway",
+        "label": "Grant/Deny"
+      },
+      {
+        "from": "gateway",
+        "to": "db",
+        "label": "Fetch Data"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "function authorize(user, action, resource) {\n  // Check if the user has the required permission for the specific resource\n  const hasAccess = policyEngine.check(user.role, action, resource);\n  if (!hasAccess) {\n    throw new Error('Access Denied'); // Fail safe: deny by default\n  }\n  return true;\n}",
+    "explanation": "This function maps to the solution by enforcing a check on every request, ensuring that the system fails safe if no explicit permission is found."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Granular Access Control for Medical Records, why is Complete Mediation used?",
+      "options": [
+        "To ensure authority is not circumvented by checking rights upon every request.",
+        "To improve system performance by caching user roles in the database.",
+        "To allow users to define their own access levels for better usability.",
+        "To hide the implementation details of the database from the user."
+      ],
+      "answerIndex": 0,
+      "explanation": "Complete Mediation ensures that access requests are checked every time to prevent unauthorized access.",
+      "evidence": "Implement Complete Mediation by enforcing authorization checks on every request to ensure that only users with explicit, role-based permissions can access specific patient records."
+    },
+    {
+      "question": "In Granular Access Control for Medical Records, what is the identified limitation of the implementation?",
+      "options": [
+        "The system becomes too simple to review.",
+        "The primary trade-off is latency, as performing a check on every request adds overhead.",
+        "The system fails to support role-based access control.",
+        "The system requires manual approval for every single database query."
+      ],
+      "answerIndex": 1,
+      "explanation": "The implementation requires a check on every request, which introduces latency as a trade-off.",
+      "evidence": "The primary trade-off is latency, as performing a check on every request adds overhead; this can be monitored by tracking the response time of the authorization service."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:09.435Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

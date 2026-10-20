@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_eventbridge",
+  "title": "Decoupled Inventory Synchronization for Global Retail",
+  "business": "A global retail chain managing inventory across multiple disparate warehouse management systems and regional storefronts.",
+  "problem": "The company faces significant data silos where inventory updates in one regional warehouse fail to propagate to the central storefront, leading to overselling and inconsistent stock levels across the digital catalog.",
+  "solution": "Amazon EventBridge acts as a centralized event bus that decouples the event producers (warehouse systems) from the consumers (catalog service). By routing events through a central bus, the company ensures that any inventory change triggers an immediate, asynchronous update to the storefront without requiring direct point-to-point integration between systems.",
+  "steps": [
+    "Define a custom event bus to isolate inventory-related traffic from other internal application events.",
+    "Configure warehouse systems to publish JSON-formatted inventory update events to the custom event bus.",
+    "Create EventBridge rules with pattern matching to filter for specific inventory change event types.",
+    "Set the rule targets to invoke the storefront update service, ensuring the payload is delivered to the correct downstream consumer."
+  ],
+  "outcome": "The storefront achieves near real-time inventory consistency, eliminating overselling risks while allowing the company to add new warehouse regions without modifying existing storefront code.",
+  "limitation": "EventBridge operates on an asynchronous delivery model, which means there is no guarantee of strict ordering for events. To check for potential issues, developers must implement idempotent logic in the consumer services to handle out-of-order updates gracefully.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Event Routing Flow",
+    "description": "This diagram illustrates how inventory events flow from regional warehouses through the EventBridge bus to the storefront service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse System",
+        "detail": "Event Producer"
+      },
+      {
+        "id": "b",
+        "label": "EventBridge Bus",
+        "detail": "Central Router"
+      },
+      {
+        "id": "c",
+        "label": "EventBridge Rule",
+        "detail": "Filter Logic"
+      },
+      {
+        "id": "d",
+        "label": "Storefront Service",
+        "detail": "Event Consumer"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Publishes Event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Evaluates Pattern"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Invokes Target"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupled Inventory Synchronization for Global Retail, what is the primary benefit of using EventBridge?",
+      "options": [
+        "It eliminates the need for point-to-point integration between warehouse systems and the storefront.",
+        "It provides a synchronous connection that guarantees immediate data consistency.",
+        "It reduces the cost of cloud storage for inventory logs.",
+        "It automatically migrates on-premises warehouse databases to the cloud."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario describes using EventBridge to decouple producers and consumers, which removes the need for direct, brittle point-to-point connections.",
+      "evidence": "By routing events through a central bus, the company ensures that any inventory change triggers an immediate, asynchronous update to the storefront without requiring direct point-to-point integration between systems."
+    },
+    {
+      "question": "In Decoupled Inventory Synchronization for Global Retail, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot handle JSON-formatted events.",
+        "EventBridge does not guarantee strict ordering of events, requiring idempotent consumer logic.",
+        "The system requires manual intervention for every inventory update.",
+        "EventBridge rules can only be applied to AWS service events, not custom events."
+      ],
+      "answerIndex": 1,
+      "explanation": "Asynchronous systems often struggle with message ordering; therefore, consumers must be designed to handle events that might arrive out of sequence.",
+      "evidence": "EventBridge operates on an asynchronous delivery model, which means there is no guarantee of strict ordering for events. To check for potential issues, developers must implement idempotent logic in the consumer services to handle out-of-order updates gracefully."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:07.793Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_6_35b_a3b_fp8",
+  "title": "Automated UI Regression Testing for Legacy Web Portals",
+  "business": "Enterprise software teams maintaining complex legacy web applications that lack structured metadata for automated testing.",
+  "problem": "Manual QA teams struggle to identify visual regressions in legacy portals where DOM structures are dynamic, obfuscated, or inconsistent, leading to high maintenance costs for brittle test scripts.",
+  "solution": "Qwen3.6-35B-A3B-FP8 provides an image-text-to-text capability that interprets visual UI states alongside historical context. By feeding screenshots of the legacy portal into the model, the system identifies functional discrepancies between expected and actual UI states without relying on fragile CSS selectors.",
+  "steps": [
+    "Capture baseline screenshots of stable application states to serve as visual ground truth.",
+    "Integrate the model into the CI/CD pipeline to process current build screenshots against baseline images.",
+    "Enable thinking preservation to allow the model to reference previous test iterations for consistent state tracking.",
+    "Generate natural language reports detailing identified visual deviations or functional UI errors."
+  ],
+  "outcome": "Reduced reliance on brittle element selectors and faster identification of visual regressions in legacy environments.",
+  "limitation": "The model's reliance on visual interpretation may lead to false positives if UI elements are intentionally dynamic or animated; verify results by cross-referencing visual output with backend logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Visual Regression Pipeline",
+    "description": "The flow shows how visual data and context are processed to identify regressions.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "UI Screenshot",
+        "detail": "Current build state"
+      },
+      {
+        "id": "b",
+        "label": "Baseline Image",
+        "detail": "Expected visual state"
+      },
+      {
+        "id": "c",
+        "label": "Qwen3.6-35B-A3B-FP8",
+        "detail": "Multimodal reasoning engine"
+      },
+      {
+        "id": "d",
+        "label": "Regression Report",
+        "detail": "Final analysis output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Input visual data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Input reference"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates analysis"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B-FP8",
+      "label": "Qwen/Qwen3.6-35B-A3B-FP8"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated UI Regression Testing for Legacy Web Portals, how does the model address the problem of brittle test scripts?",
+      "options": [
+        "By interpreting visual UI states instead of relying on fragile CSS selectors.",
+        "By automatically rewriting the legacy portal's HTML code.",
+        "By replacing the need for manual QA teams entirely.",
+        "By increasing the number of CSS selectors used in the test suite."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the model's image-text-to-text capability to analyze visual states, bypassing the need for brittle selectors.",
+      "evidence": "Qwen3.6-35B-A3B-FP8 provides an image-text-to-text capability that interprets visual UI states alongside historical context. By feeding screenshots of the legacy portal into the model, the system identifies functional discrepancies between expected and actual UI states without relying on fragile CSS selectors."
+    },
+    {
+      "question": "What is a primary limitation of using Qwen3.6-35B-A3B-FP8 in the Automated UI Regression Testing for Legacy Web Portals scenario?",
+      "options": [
+        "It cannot process screenshots larger than 100 pixels.",
+        "It may produce false positives due to intentional UI animations.",
+        "It requires the legacy portal to be written in Python.",
+        "It is unable to retain historical context from previous tests."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that visual interpretation might flag intentional animations as regressions.",
+      "evidence": "The model's reliance on visual interpretation may lead to false positives if UI elements are intentionally dynamic or animated; verify results by cross-referencing visual output with backend logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:43.806Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:40.330Z"
+}

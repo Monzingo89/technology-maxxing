@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "database_denormalization",
+  "title": "Optimizing Global Logistics Dashboard Latency",
+  "business": "A global logistics provider managing millions of real-time package tracking events across thousands of regional distribution centers.",
+  "problem": "The primary tracking dashboard requires joining the shipments table with the locations and carrier tables for every request. As the shipment volume grows, the computational cost of these multi-table joins causes significant latency during peak traffic hours, leading to dashboard timeouts.",
+  "solution": "Database denormalization addresses this by creating a summary table that precomputes the join result. Instead of calculating the location name and carrier details at query time, these attributes are stored directly within the shipment tracking record, allowing the application to fetch all necessary display data from a single table scan.",
+  "steps": [
+    "Identify the frequently accessed read path that relies on expensive multi-table joins.",
+    "Create a new denormalized table containing the primary entity fields plus the necessary redundant attributes from related tables.",
+    "Implement a database trigger that automatically updates the denormalized table whenever the source tables are modified.",
+    "Redirect the dashboard read queries to target the denormalized table instead of the original normalized schema."
+  ],
+  "outcome": "The dashboard achieves consistent, low-latency response times because the database engine performs simple row lookups rather than complex join operations, significantly reducing CPU overhead per request.",
+  "limitation": "The primary trade-off is data consistency risk and increased storage requirements. Because data is duplicated, the system must ensure the trigger logic is robust; developers should periodically run validation scripts to check for discrepancies between the source tables and the denormalized summary table.",
+  "diagram": {
+    "kind": "er",
+    "title": "Denormalization Flow for Logistics",
+    "description": "This diagram shows how normalized data is transformed into a single denormalized view to simplify read operations.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Shipments",
+        "detail": "shipment_id, carrier_id, location_id"
+      },
+      {
+        "id": "b",
+        "label": "Carriers",
+        "detail": "carrier_id, carrier_name"
+      },
+      {
+        "id": "c",
+        "label": "Locations",
+        "detail": "location_id, city_name"
+      },
+      {
+        "id": "d",
+        "label": "Tracking_Summary",
+        "detail": "shipment_id, carrier_name, city_name"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "1:1 join"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "1:1 join"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "denormalize"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "denormalize"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Global Logistics Dashboard Latency, why is denormalization used?",
+      "options": [
+        "To eliminate the need for complex joins and reduce dashboard latency.",
+        "To increase the storage capacity of the database server.",
+        "To ensure that all data is stored in a single normalized table.",
+        "To improve the write performance of the shipment tracking system."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that joins cause latency, and denormalization allows fetching data from a single table scan.",
+      "evidence": "Database denormalization addresses this by creating a summary table that precomputes the join result. Instead of calculating the location name and carrier details at query time, these attributes are stored directly within the shipment tracking record, allowing the application to fetch all necessary display data from a single table scan."
+    },
+    {
+      "question": "In Optimizing Global Logistics Dashboard Latency, what is a key limitation of the approach?",
+      "options": [
+        "It makes the database engine slower at performing simple row lookups.",
+        "It introduces the risk of data inconsistency between source and summary tables.",
+        "It prevents the use of database triggers for data synchronization.",
+        "It requires the dashboard to perform more complex joins than before."
+      ],
+      "answerIndex": 1,
+      "explanation": "Denormalization introduces redundancy, which creates a risk that the duplicated data may fall out of sync with the source data.",
+      "evidence": "The primary trade-off is data consistency risk and increased storage requirements. Because data is duplicated, the system must ensure the trigger logic is robust; developers should periodically run validation scripts to check for discrepancies between the source tables and the denormalized summary table."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:01.784Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_smartsheet",
+  "title": "Automated Project Portfolio Health Monitoring",
+  "business": "Project Management Offices (PMO) overseeing diverse cross-functional initiatives.",
+  "problem": "PMOs often struggle with fragmented visibility across dozens of Smartsheet projects, leading to manual, error-prone status reporting and delayed identification of at-risk milestones.",
+  "solution": "By integrating the Smartsheet connector with Claude, the PMO can automate the retrieval of sheet summaries and row data. Claude acts as an intelligent layer that parses project timelines, identifies bottlenecks, and synthesizes status reports directly from the source of truth, eliminating the need for manual spreadsheet consolidation.",
+  "steps": [
+    "Authorize the Smartsheet connector within the Claude interface to grant read access to specific workspaces.",
+    "Use the get_sheet_summary tool to pull high-level metadata and key performance indicators from active project sheets.",
+    "Invoke list_workspaces and browse_folder to locate relevant project sheets across the organization.",
+    "Prompt Claude to analyze specific row data using get_columns to identify tasks with overdue dates or blocked statuses.",
+    "Generate a natural language summary or a structured report based on the retrieved project data."
+  ],
+  "outcome": "The PMO achieves real-time, conversational access to project health, allowing for faster decision-making and reduced administrative overhead in status reporting.",
+  "limitation": "The connector relies on the existing structure of Smartsheet columns; if column names are inconsistent or non-descriptive across different sheets, Claude may struggle to map data accurately. Users must verify the accuracy of the data mapping by cross-referencing the retrieved column headers with the source sheet before relying on automated summaries.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Flow for Project Health Monitoring",
+    "description": "This diagram illustrates how project data moves from Smartsheet into Claude for analysis.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Smartsheet Workspace",
+        "detail": "Central repository for project sheets"
+      },
+      {
+        "id": "b",
+        "label": "Smartsheet Connector",
+        "detail": "API interface for data retrieval"
+      },
+      {
+        "id": "c",
+        "label": "Claude AI",
+        "detail": "Processing and synthesis engine"
+      },
+      {
+        "id": "d",
+        "label": "PMO Dashboard",
+        "detail": "Final status report output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "browse_workspace"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "get_sheet_summary"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generate_report"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/smartsheet",
+      "label": "Smartsheet connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Project Portfolio Health Monitoring, what is the primary problem addressed by the Smartsheet connector?",
+      "options": [
+        "High costs of Smartsheet licensing",
+        "Manual, error-prone status reporting and fragmented visibility",
+        "Inability to create new Smartsheet workspaces",
+        "Lack of integration with email platforms"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that PMOs face challenges with manual consolidation of data across multiple sheets, which the connector solves through automated retrieval.",
+      "evidence": "PMOs often struggle with fragmented visibility across dozens of Smartsheet projects, leading to manual, error-prone status reporting and delayed identification of at-risk milestones."
+    },
+    {
+      "question": "In Automated Project Portfolio Health Monitoring, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot read row data",
+        "Inconsistent column naming can hinder accurate data mapping",
+        "Claude cannot summarize project timelines",
+        "The connector is only available for mobile devices"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that inconsistent column naming across sheets can cause mapping issues for Claude.",
+      "evidence": "The connector relies on the existing structure of Smartsheet columns; if column names are inconsistent or non-descriptive across different sheets, Claude may struggle to map data accurately."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:09.242Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:05.251Z"
+}

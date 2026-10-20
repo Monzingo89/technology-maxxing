@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "heap_data_structure",
+  "title": "Emergency Triage Priority Management",
+  "business": "Emergency medical dispatch centers managing incoming patient status updates.",
+  "problem": "Dispatchers struggle to manually identify the most critical patient from a rapidly growing, unsorted queue of incoming trauma reports, leading to delayed response times for life-threatening cases.",
+  "solution": "A heap data structure maintains an extremal key at the root under a partial ordering, allowing the system to instantly access and extract the highest-priority patient record without sorting the entire list.",
+  "steps": [
+    "Define a priority value for each patient based on severity scores.",
+    "Insert new patient records into the heap structure.",
+    "Maintain the heap property by bubbling up or sinking down records to ensure the most critical patient remains at the root.",
+    "Extract the root node for immediate dispatch assignment.",
+    "Re-heapify the remaining structure to bring the next most critical patient to the root."
+  ],
+  "outcome": "Dispatchers consistently prioritize the most severe cases first, ensuring life-critical patients receive immediate attention regardless of the total queue volume.",
+  "limitation": "Heaps do not support efficient searching for arbitrary non-extremal elements; to check if a specific patient is in the queue, one must perform a linear scan of the underlying array.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Heap Triage Workflow",
+    "description": "The flow shows how incoming data is transformed into an ordered structure for extraction.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Incoming Report",
+        "detail": "Raw patient data"
+      },
+      {
+        "id": "b",
+        "label": "Heap Insertion",
+        "detail": "Partial ordering logic"
+      },
+      {
+        "id": "c",
+        "label": "Root Node",
+        "detail": "Highest priority patient"
+      },
+      {
+        "id": "d",
+        "label": "Dispatch",
+        "detail": "Emergency response"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "add"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "maintains"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "extract"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Emergency Triage Priority Management, why is a heap used instead of a simple unsorted list?",
+      "options": [
+        "It allows instant access to the most critical patient at the root.",
+        "It automatically sorts the entire patient database alphabetically.",
+        "It eliminates the need for any data storage.",
+        "It prevents new patients from being added to the queue."
+      ],
+      "answerIndex": 0,
+      "explanation": "The heap structure is specifically designed to maintain an extremal key at the root, which in this scenario represents the highest-priority patient.",
+      "evidence": "A heap data structure maintains an extremal key at the root under a partial ordering, allowing the system to instantly access and extract the highest-priority patient record without sorting the entire list."
+    },
+    {
+      "question": "In Emergency Triage Priority Management, what is a primary limitation of the heap implementation?",
+      "options": [
+        "It cannot store more than ten patients.",
+        "It is impossible to extract the root node.",
+        "It is inefficient to search for a specific, non-extremal patient.",
+        "It requires the entire list to be re-sorted every time a patient is added."
+      ],
+      "answerIndex": 2,
+      "explanation": "Heaps are optimized for extremal access, making searches for specific, non-extremal items slow as they require a full scan.",
+      "evidence": "Heaps do not support efficient searching for arbitrary non-extremal elements; to check if a specific patient is in the queue, one must perform a linear scan of the underlying array."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:21.351Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

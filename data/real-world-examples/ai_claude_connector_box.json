@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_box",
+  "title": "Automated Legal Contract Lifecycle Management",
+  "business": "Corporate legal departments managing high volumes of vendor agreements stored in Box.",
+  "problem": "Legal teams struggle with manual review processes, often failing to identify expiring contracts or inconsistent clauses across thousands of scattered PDF files, leading to missed renewal deadlines and compliance risks.",
+  "solution": "The Box connector for Claude enables the legal team to programmatically index and query their document repository. By utilizing AI-driven extraction tools, Claude can parse unstructured contract text to identify key metadata like expiration dates and liability clauses, while maintaining Box's native permission model to ensure sensitive documents remain restricted to authorized personnel.",
+  "steps": [
+    "Configure the Box connector within the Claude interface to authenticate against the corporate Box instance.",
+    "Use the search_files_keyword tool to locate all documents tagged with 'Vendor Agreement' within the legal folder hierarchy.",
+    "Apply the ai_extract_structured tool to pull specific fields such as 'Renewal Date' and 'Indemnity Clause' from the identified files.",
+    "Generate a summary report of expiring contracts and upload the findings back to a designated Box folder using the upload_file tool."
+  ],
+  "outcome": "Legal teams achieve a centralized, searchable view of contract obligations, significantly reducing the time spent on manual document audits and improving proactive renewal management.",
+  "limitation": "The connector relies on Box's existing folder structure and metadata indexing; if files are poorly named or lack consistent metadata, search results may be incomplete. Users should verify accuracy by cross-referencing extracted data with the original file content using the get_file_content tool.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Contract Lifecycle Automation Flow",
+    "description": "Visualizes the interaction between Claude, the Box repository, and the extraction process.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Box Repository",
+        "detail": "Stores raw PDF contracts"
+      },
+      {
+        "id": "b",
+        "label": "Claude Connector",
+        "detail": "Executes search and extraction tools"
+      },
+      {
+        "id": "c",
+        "label": "AI Engine",
+        "detail": "Parses unstructured text"
+      },
+      {
+        "id": "d",
+        "label": "Summary Report",
+        "detail": "Final output file"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "search_files_keyword"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "ai_extract_structured"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "upload_file"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/box",
+      "label": "Box connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Contract Lifecycle Management, what is the primary benefit of using the Box connector for Claude?",
+      "options": [
+        "Automating the identification of contract metadata to reduce manual audit time.",
+        "Replacing the need for Box security and access policies entirely.",
+        "Automatically renewing vendor contracts without human intervention.",
+        "Increasing the storage capacity of the existing Box instance."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the solution addresses the problem of manual review processes by using AI to extract key metadata from documents.",
+      "evidence": "Legal teams achieve a centralized, searchable view of contract obligations, significantly reducing the time spent on manual document audits and improving proactive renewal management."
+    },
+    {
+      "question": "In Automated Legal Contract Lifecycle Management, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access files stored in subfolders.",
+        "The connector is limited by the quality of existing file naming and metadata.",
+        "The connector requires a separate database to store extracted information.",
+        "The connector cannot upload files back to Box."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the connector's effectiveness depends on the existing organization of the Box repository.",
+      "evidence": "The connector relies on Box's existing folder structure and metadata indexing; if files are poorly named or lack consistent metadata, search results may be incomplete."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:41.393Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:37.716Z"
+}

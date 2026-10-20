@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "cap_theorem",
+  "title": "Global Inventory Synchronization for Retail Logistics",
+  "business": "A multinational retail logistics firm managing real-time stock levels across geographically distributed warehouses.",
+  "problem": "When network partitions occur between regional data centers, the system must decide whether to stop accepting updates to ensure data accuracy or allow divergent states that risk overselling items.",
+  "solution": "The system implements the CAP theorem by prioritizing Availability during network partitions, allowing local warehouses to continue processing orders while accepting that global inventory counts will temporarily diverge until the network heals.",
+  "steps": [
+    "Deploy replicated database nodes across three distinct geographic regions.",
+    "Configure the replication protocol to allow local writes even if the connection to other regions is severed.",
+    "Implement a conflict resolution strategy to merge divergent inventory logs once network connectivity is restored.",
+    "Monitor partition events using heartbeat signals between nodes to trigger reconciliation processes."
+  ],
+  "outcome": "The logistics platform maintains high uptime for local operations, ensuring that warehouse staff can continue scanning and shipping items without interruption during transient network outages.",
+  "limitation": "The primary limitation is the risk of temporary data inconsistency; specifically, the system may allow an order for an item that was actually depleted in another region, which can be verified by checking the divergence between local node logs and the global state after synchronization.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Partition Handling",
+    "description": "Shows how nodes handle requests during a network partition.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Warehouse terminal"
+      },
+      {
+        "id": "b",
+        "label": "Regional Node",
+        "detail": "Local database replica"
+      },
+      {
+        "id": "c",
+        "label": "Global State",
+        "detail": "Reconciled inventory"
+      },
+      {
+        "id": "d",
+        "label": "Network Partition",
+        "detail": "Communication failure"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Read/Write request"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Blocked sync"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Eventual reconciliation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Synchronization for Retail Logistics, how does the system address the problem of network partitions?",
+      "options": [
+        "By prioritizing Availability to ensure warehouse operations continue during partitions.",
+        "By enforcing strict Consistency to prevent any possibility of overselling items.",
+        "By shutting down all regional nodes until the network partition is fully resolved.",
+        "By relying on a single centralized database to avoid the need for replication."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that the system prioritizes Availability during network partitions to allow local warehouses to continue processing orders.",
+      "evidence": "The system implements the CAP theorem by prioritizing Availability during network partitions, allowing local warehouses to continue processing orders while accepting that global inventory counts will temporarily diverge until the network heals."
+    },
+    {
+      "question": "What is the primary limitation of the implementation described in Global Inventory Synchronization for Retail Logistics?",
+      "options": [
+        "The system cannot handle more than three geographic regions.",
+        "The system risks temporary data inconsistency, potentially leading to overselling.",
+        "The system requires manual intervention for every single inventory update.",
+        "The system is unable to reconcile data once the network partition is healed."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that prioritizing availability leads to temporary inconsistency, which creates the risk of overselling.",
+      "evidence": "The primary limitation is the risk of temporary data inconsistency; specifically, the system may allow an order for an item that was actually depleted in another region"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:59.882Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

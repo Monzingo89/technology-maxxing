@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "disjoint_set_union",
+  "title": "Network Topology Segmentation",
+  "business": "Telecommunications infrastructure providers managing large-scale fiber optic networks.",
+  "problem": "The provider struggles to identify if two disparate network segments are physically connected through a series of intermediate switches, leading to redundant maintenance dispatches and inefficient routing.",
+  "solution": "Disjoint-Set Union (DSU) maintains nonoverlapping sets of connected switches. By performing a Union operation when a new link is established and a Find operation to check connectivity, the provider can instantly determine if two segments belong to the same network partition.",
+  "steps": [
+    "Initialize each network switch as a unique set where it is its own parent.",
+    "Execute a Find operation with path compression to locate the representative root of a switch's network segment.",
+    "Perform a Union operation to merge two sets when a physical cable connects two previously separate segments.",
+    "Verify connectivity by comparing the root representatives of two switches using the Find operation."
+  ],
+  "outcome": "Reduced operational overhead by preventing redundant field technician dispatches for already connected network segments.",
+  "limitation": "The primary limitation is the lack of support for edge removal; once two sets are merged, they cannot be split without rebuilding the structure, which can be checked by monitoring if the network topology requires frequent dynamic disconnections.",
+  "diagram": {
+    "kind": "er",
+    "title": "Network Connectivity DSU",
+    "description": "Shows how switches are grouped into sets where each node points to a parent, eventually leading to a root representative.",
+    "nodes": [
+      {
+        "id": "s1",
+        "label": "Switch A",
+        "detail": "Root of Segment 1"
+      },
+      {
+        "id": "s2",
+        "label": "Switch B",
+        "detail": "Child of Switch A"
+      },
+      {
+        "id": "s3",
+        "label": "Switch C",
+        "detail": "Root of Segment 2"
+      },
+      {
+        "id": "s4",
+        "label": "Switch D",
+        "detail": "Child of Switch C"
+      }
+    ],
+    "edges": [
+      {
+        "from": "s2",
+        "to": "s1",
+        "label": "parent"
+      },
+      {
+        "from": "s4",
+        "to": "s3",
+        "label": "parent"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Network Topology Segmentation, why is Disjoint-Set Union used?",
+      "options": [
+        "To identify if two network segments are connected.",
+        "To calculate the shortest path between two switches.",
+        "To encrypt data packets across the fiber network.",
+        "To store the physical coordinates of every switch."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states the provider struggles to identify if segments are connected, and DSU is used to determine if two segments belong to the same partition.",
+      "evidence": "By performing a Union operation when a new link is established and a Find operation to check connectivity, the provider can instantly determine if two segments belong to the same network partition."
+    },
+    {
+      "question": "What is a significant limitation of the DSU implementation in Network Topology Segmentation?",
+      "options": [
+        "It cannot handle more than 100 switches.",
+        "It lacks support for removing existing connections.",
+        "It requires a central server for every operation.",
+        "It is slower than a simple linked list."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that DSU does not support edge removal, meaning connections cannot be split.",
+      "evidence": "The primary limitation is the lack of support for edge removal; once two sets are merged, they cannot be split without rebuilding the structure"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:36.908Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

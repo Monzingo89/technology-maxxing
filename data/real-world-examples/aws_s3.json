@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_s3",
+  "title": "Automated Architectural Blueprint Archiving",
+  "business": "A global architectural firm managing thousands of high-resolution CAD files for active construction projects.",
+  "problem": "The firm faces rising storage costs and administrative overhead from keeping all project versions in a single, high-performance storage tier, even after projects reach completion.",
+  "solution": "Amazon S3 provides a durable object storage solution where files are organized into buckets. By applying lifecycle policies, the firm can automatically transition completed project files to lower-cost storage classes and enforce deletion after a mandatory retention period, while bucket policies ensure only authorized project leads access sensitive blueprints.",
+  "steps": [
+    "Create a dedicated S3 bucket to serve as the central repository for all architectural blueprints.",
+    "Define an S3 bucket policy to restrict access to specific IAM roles associated with project leads.",
+    "Configure an S3 Lifecycle rule to transition objects to a colder storage class 90 days after project completion.",
+    "Set an expiration rule within the lifecycle configuration to permanently delete files after seven years of archival.",
+    "Enable S3 Versioning to maintain a history of changes for every blueprint uploaded to the bucket."
+  ],
+  "outcome": "The firm achieves automated compliance with data retention requirements while significantly reducing storage costs by moving inactive blueprints to appropriate tiers without manual intervention.",
+  "limitation": "A critical limitation is the eventual consistency model for certain operations and the potential for increased latency when retrieving objects from archived storage classes, which can be verified by monitoring the time-to-first-byte during retrieval requests.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Blueprint Lifecycle Management",
+    "description": "This diagram illustrates the flow of architectural files from active use to long-term archival.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Architects",
+        "detail": "Uploads blueprints to S3"
+      },
+      {
+        "id": "b",
+        "label": "S3 Bucket",
+        "detail": "Stores objects with policies"
+      },
+      {
+        "id": "c",
+        "label": "Lifecycle Rules",
+        "detail": "Automates transitions"
+      },
+      {
+        "id": "d",
+        "label": "Archival Storage",
+        "detail": "Long-term cost-effective tier"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Writes objects"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Triggers policy"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Moves inactive files"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Blueprint Archiving, how does the firm address rising storage costs?",
+      "options": [
+        "By manually deleting files every week",
+        "By applying lifecycle policies to transition files",
+        "By using high-performance storage for all files",
+        "By restricting access to project leads only"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly mentions using lifecycle policies to transition completed project files to lower-cost storage classes.",
+      "evidence": "By applying lifecycle policies, the firm can automatically transition completed project files to lower-cost storage classes and enforce deletion after a mandatory retention period"
+    },
+    {
+      "question": "In Automated Architectural Blueprint Archiving, what is a potential trade-off when using archival storage classes?",
+      "options": [
+        "Increased latency during object retrieval",
+        "Higher costs for long-term storage",
+        "Loss of data durability",
+        "Inability to use bucket policies"
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section identifies potential latency when retrieving objects from archived storage classes.",
+      "evidence": "A critical limitation is the eventual consistency model for certain operations and the potential for increased latency when retrieving objects from archived storage classes"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:14.892Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "high_cohesion",
+  "title": "Logistics Routing Cohesion",
+  "business": "A regional logistics firm managing last-mile delivery fleets.",
+  "problem": "The firm suffers from a 'God Object' anti-pattern where a single RouteManager class handles database persistence, GPS coordinate parsing, and driver notification logic. When the notification API changes, the entire routing engine requires recompilation and redeployment, leading to frequent, unrelated service outages.",
+  "solution": "By applying high cohesion, we decompose the monolithic RouteManager into specialized, single-responsibility modules. We isolate the GPS parsing logic from the notification dispatching logic, ensuring that each module encapsulates only the data and behavior strictly necessary for its specific domain function.",
+  "steps": [
+    "Identify distinct functional domains within the existing monolithic class.",
+    "Extract GPS coordinate parsing into a dedicated CoordinateProcessor module.",
+    "Move notification dispatching logic into a separate NotificationService module.",
+    "Define narrow interfaces for communication between the new modules to maintain loose coupling.",
+    "Refactor the original RouteManager to act as a thin orchestrator that delegates tasks to these cohesive components."
+  ],
+  "outcome": "The system becomes more resilient to change, as modifications to the notification logic no longer risk breaking the core routing algorithms, and individual modules become easier to test in isolation.",
+  "limitation": "The primary tradeoff is increased architectural complexity, as developers must now manage multiple smaller files and inter-module communication. This can be verified by checking the number of cross-module dependency cycles; if cycles increase, the boundaries are likely poorly defined.",
+  "diagram": {
+    "kind": "er",
+    "title": "Cohesive Routing Architecture",
+    "description": "This diagram shows the transition from a monolithic structure to a cohesive design where the Orchestrator delegates to specialized modules.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "RouteManager",
+        "detail": "Orchestrator"
+      },
+      {
+        "id": "b",
+        "label": "CoordinateProcessor",
+        "detail": "GPS Logic"
+      },
+      {
+        "id": "c",
+        "label": "NotificationService",
+        "detail": "Alerting Logic"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Persistence Layer"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "delegates parsing"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "delegates alerting"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "reads raw data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "logs status"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Routing Cohesion, what is the primary benefit of decomposing the RouteManager?",
+      "options": [
+        "It prevents unrelated service outages when specific logic changes.",
+        "It eliminates the need for a database persistence layer.",
+        "It automatically optimizes GPS coordinate parsing speed.",
+        "It reduces the total number of lines of code in the project."
+      ],
+      "answerIndex": 0,
+      "explanation": "High cohesion isolates functional domains, ensuring that changes to one area do not inadvertently break unrelated components.",
+      "evidence": "When the notification API changes, the entire routing engine requires recompilation and redeployment, leading to frequent, unrelated service outages."
+    },
+    {
+      "question": "In Logistics Routing Cohesion, what is a key limitation of the proposed architectural change?",
+      "options": [
+        "The system becomes impossible to unit test.",
+        "The increased number of modules creates higher architectural complexity.",
+        "The database will require a complete schema migration.",
+        "The system will lose all ability to communicate between modules."
+      ],
+      "answerIndex": 1,
+      "explanation": "Moving from a monolith to cohesive modules introduces more moving parts, which increases the complexity of managing the codebase.",
+      "evidence": "The primary tradeoff is increased architectural complexity, as developers must now manage multiple smaller files and inter-module communication."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:28.293Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

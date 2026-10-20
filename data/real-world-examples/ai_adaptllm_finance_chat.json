@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_adaptllm_finance_chat",
+  "title": "Corporate Disclosure Query Assistant",
+  "business": "Financial analysts and compliance officers reviewing large volumes of regulatory filings.",
+  "problem": "Generic LLMs often struggle to accurately extract or synthesize information from dense, domain-specific financial documents, leading to hallucinations or missed details in critical reports.",
+  "solution": "The AdaptLLM finance-chat model utilizes continued pre-training on domain-specific corpora, structured as reading comprehension tasks, to improve performance on specialized financial datasets while maintaining conversational capabilities.",
+  "steps": [
+    "Load the pre-trained AdaptLLM finance-chat model using the transformers library.",
+    "Initialize the tokenizer associated with the model to handle input text.",
+    "Format the user's financial query into the required LLaMA-2-Chat multi-turn conversation structure.",
+    "Inject the target financial document as context within the system prompt.",
+    "Execute the generation process to retrieve a domain-grounded response."
+  ],
+  "outcome": "Improved accuracy in extracting specific financial data points from complex regulatory filings compared to general-purpose models.",
+  "limitation": "The model is a 7B parameter research baseline and is not validated for investment decisions. Users should verify outputs against primary source documents to ensure factual accuracy.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Finance-Chat Inference Pipeline",
+    "description": "The flow of data from raw financial documents to the final user-facing response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Financial Document",
+        "detail": "Raw regulatory filing or report"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Template",
+        "detail": "LLaMA-2-Chat format integration"
+      },
+      {
+        "id": "c",
+        "label": "Finance-Chat Model",
+        "detail": "Domain-adapted 7B model"
+      },
+      {
+        "id": "d",
+        "label": "Response",
+        "detail": "Extracted financial insight"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "context injection"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "tokenized input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generation"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from transformers import AutoModelForCausalLM, AutoTokenizer\n# Load the domain-adapted model\nmodel = AutoModelForCausalLM.from_pretrained(\"AdaptLLM/finance-chat\")\ntokenizer = AutoTokenizer.from_pretrained(\"AdaptLLM/finance-chat\")\n# Apply system prompt and user input in LLaMA-2-Chat format\nprompt = f\"<s>[INST] <<SYS>> {system_prompt} <</SYS>>\\n\\n {user_input} [/INST]\"\ninputs = tokenizer(prompt, return_tensors=\"pt\")\noutputs = model.generate(input_ids=inputs.input_ids, max_length=4096)",
+    "explanation": "This code demonstrates loading the finance-chat model and formatting a query using the required system prompt structure for chat-aligned models."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/AdaptLLM/finance-chat",
+      "label": "AdaptLLM/finance-chat · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Corporate Disclosure Query Assistant, what is the primary benefit of using the finance-chat model over a generic LLM?",
+      "options": [
+        "It eliminates the need for any human oversight in financial reporting.",
+        "It provides superior accuracy in domain-specific financial tasks through reading comprehension training.",
+        "It is guaranteed to be 100% accurate for all investment decisions.",
+        "It requires significantly less hardware memory than any other model."
+      ],
+      "answerIndex": 1,
+      "explanation": "The model is specifically adapted to financial domains to improve performance on specialized tasks.",
+      "evidence": "The AdaptLLM finance-chat model utilizes continued pre-training on domain-specific corpora, structured as reading comprehension tasks, to improve performance on specialized financial datasets while maintaining conversational capabilities."
+    },
+    {
+      "question": "In Corporate Disclosure Query Assistant, what is a critical limitation of the model that users must manage?",
+      "options": [
+        "The model cannot process text longer than 100 characters.",
+        "The model is a 7B research baseline not validated for investment decisions and requires verification.",
+        "The model only supports languages other than English.",
+        "The model is incompatible with the transformers library."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario explicitly state the model is a research baseline and not for investment decisions.",
+      "evidence": "The model is a 7B parameter research baseline and is not validated for investment decisions. Users should verify outputs against primary source documents to ensure factual accuracy."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:34.785Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:30.631Z"
+}

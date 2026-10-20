@@ -114,7 +114,7 @@ test("repository data loads without broken category assignments", async () => {
   );
 });
 
-test("public assessment banks provide five focused answerable questions per topic", () => {
+test("public assessment banks preserve five core questions and add two scenario questions", () => {
   const index = JSON.parse(
     fs.readFileSync(
       new URL("../public/knowledge-index.json", import.meta.url),
@@ -127,10 +127,12 @@ test("public assessment banks provide five focused answerable questions per topi
   );
   for (const technology of index.technologies) {
     const bank = index.assessments[technology.id];
-    assert.equal(bank.length, 5, `${technology.id} should have 5 questions`);
-    assert.equal(technology.assessmentCount, 5);
-    assert.equal(new Set(bank.map((question) => question.id)).size, 5);
-    assert.equal(new Set(bank.map((question) => question.question)).size, 5);
+    const scenarios = bank.filter(q => q.section === 'real-world');
+    assert.ok([0, 2].includes(scenarios.length));
+    assert.equal(bank.length, 5 + scenarios.length);
+    assert.equal(technology.assessmentCount, bank.length);
+    assert.equal(new Set(bank.map((question) => question.id)).size, bank.length);
+    assert.equal(new Set(bank.map((question) => question.question)).size, bank.length);
     for (const question of bank) {
       assert.equal(typeof question.question, "string");
       assert.ok(question.question.length > 10);
@@ -172,14 +174,19 @@ test("authored banks are published exactly; fallback banks retain five recall di
     const authored = standardBanks[id] || reviewedBanks[id];
     if (authored) {
       assert.deepEqual(
-        bank,
+        bank.slice(0, 5),
         authored.questions,
         `${id}: authored questions must not be replaced by generated recall`,
       );
       continue;
     }
+    const topic = index.technologies.find((topic) => topic.id === id);
+    if (topic?.acronymStudy && !topic.acronymStudy.reusedTopic) {
+      assert.deepEqual(bank.slice(0, 5).map((question) => question.skill), ["Expansion", "Function", "Recall cue", "Distinction", "Study area"], `${id}: acronym recall dimensions`);
+      continue;
+    }
     assert.deepEqual(
-      bank.map((question) => question.skill),
+      bank.slice(0, 5).map((question) => question.skill),
       skills,
       `${id}: assessment dimensions`,
     );
@@ -376,9 +383,9 @@ test("bulk catalog preserves requested entries and resolves every new connection
     assert.ok(entry.history && entry.why && entry.tag, `${id} details`);
     if ([...aiTermIds, ...secondAiTermIds].includes(id)) {
       assert.equal(entry.cat, "ai", `${id} belongs in the AI section`);
-      assert.equal(index.assessments[id].length, 5, `${id} assessment size`);
+      assert.ok([5, 7].includes(index.assessments[id].length), `${id} assessment size`);
       if (reviewedBanks[id])
-        assert.deepEqual(index.assessments[id], reviewedBanks[id].questions);
+        assert.deepEqual(index.assessments[id].slice(0, 5), reviewedBanks[id].questions);
       else
         assert.equal(
           index.assessments[id][3].kind,

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "threejs",
+  "title": "Interactive Architectural Visualization for Urban Planning",
+  "business": "Urban planning firms presenting city development projects to stakeholders.",
+  "problem": "Static 2D blueprints fail to convey spatial depth and scale, leading to stakeholder confusion and delayed project approvals.",
+  "solution": "Implementing a browser-based 3D scene using Three.js allows stakeholders to interactively explore proposed building models directly in their web browsers without specialized software.",
+  "steps": [
+    "Initialize a Three.js Scene to serve as the container for all architectural assets.",
+    "Configure a PerspectiveCamera to define the viewpoint and field of view for the user.",
+    "Apply MeshNormalMaterial or similar materials to geometric models to visualize surface orientation.",
+    "Create a WebGLRenderer to project the 3D scene onto the browser's DOM element.",
+    "Implement an animation loop to handle real-time rendering and user-triggered interactions."
+  ],
+  "outcome": "Improved stakeholder engagement through immersive, accessible, and interactive spatial walkthroughs.",
+  "limitation": "The primary limitation is the reliance on client-side hardware capabilities, as complex scenes with high polygon counts may cause frame drops on low-end devices; this can be checked by monitoring the frame rate during the animation loop.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Three.js Rendering Pipeline",
+    "description": "The flow of data from the scene definition to the final visual output in the browser.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scene",
+        "detail": "Container for 3D objects"
+      },
+      {
+        "id": "b",
+        "label": "Camera",
+        "detail": "Defines the viewport"
+      },
+      {
+        "id": "c",
+        "label": "Renderer",
+        "detail": "WebGL engine"
+      },
+      {
+        "id": "d",
+        "label": "DOM Element",
+        "detail": "Browser display"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "provides content"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides perspective"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "renders output"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Initialize the scene and camera\nconst scene = new THREE.Scene();\nconst camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 1000);\n// Create renderer and attach to DOM\nconst renderer = new THREE.WebGLRenderer({ antialias: true });\ndocument.body.appendChild(renderer.domElement);\n// Animation loop for interactive rendering\nfunction animate(time) {\n  renderer.render(scene, camera); // Update frame\n}",
+    "explanation": "This code sets up the core Three.js environment required to display a 3D scene in the browser, mapping directly to the steps for building an interactive urban model."
+  },
+  "sources": [
+    {
+      "url": "https://github.com/mrdoob/three.js",
+      "label": "three.js GitHub Repository"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Interactive Architectural Visualization for Urban Planning, why is Three.js used?",
+      "options": [
+        "To replace static 2D blueprints with interactive 3D models",
+        "To increase the cost of urban planning software",
+        "To force stakeholders to install specialized CAD software",
+        "To eliminate the need for a camera in the scene"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that static 2D blueprints cause confusion, and Three.js provides an interactive 3D solution to improve stakeholder engagement.",
+      "evidence": "Static 2D blueprints fail to convey spatial depth and scale, leading to stakeholder confusion and delayed project approvals."
+    },
+    {
+      "question": "In Interactive Architectural Visualization for Urban Planning, what is a key limitation of the implementation?",
+      "options": [
+        "The browser cannot render 3D graphics",
+        "The dependency on client-side hardware performance",
+        "The lack of a WebGL renderer",
+        "The inability to use materials on geometries"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly notes that hardware performance is a constraint, which can affect the frame rate of the 3D scene.",
+      "evidence": "The primary limitation is the reliance on client-side hardware capabilities, as complex scenes with high polygon counts may cause frame drops on low-end devices"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:20.172Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:15.970Z"
+}

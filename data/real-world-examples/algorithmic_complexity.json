@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "algorithmic_complexity",
+  "title": "Predictive Inventory Scaling",
+  "business": "E-commerce logistics providers managing high-velocity warehouse inventory systems.",
+  "problem": "As the number of unique product SKUs grows, the time required to perform real-time stock lookups increases linearly, causing latency spikes during peak shopping events.",
+  "solution": "By transitioning from a linear search to a hash-based lookup, we stabilize the time complexity, ensuring that lookup duration remains constant regardless of the total SKU count.",
+  "steps": [
+    "Analyze current lookup operations to identify O(n) linear search patterns.",
+    "Implement a hash table data structure to map SKU identifiers to memory addresses.",
+    "Refactor retrieval logic to utilize direct key-based access instead of iterating through arrays.",
+    "Validate that lookup time remains stable as the SKU dataset expands."
+  ],
+  "outcome": "Consistent response times for inventory queries during high-traffic periods, preventing system bottlenecks.",
+  "limitation": "Hash tables require additional memory to maintain the hash map structure; this trade-off is verified by monitoring memory usage metrics as the SKU database grows.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Lookup Complexity Transition",
+    "description": "This diagram illustrates the shift from a slow, iterative search to an efficient, constant-time hash lookup.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Input SKU",
+        "detail": "The target identifier requested by the user"
+      },
+      {
+        "id": "b",
+        "label": "Linear Search",
+        "detail": "Iterates through n items; O(n) complexity"
+      },
+      {
+        "id": "c",
+        "label": "Hash Table",
+        "detail": "Maps key to value; O(1) complexity"
+      },
+      {
+        "id": "d",
+        "label": "Inventory Data",
+        "detail": "The final stock count result"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Legacy Path"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Slow Retrieval"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Optimized Path"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Instant Retrieval"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Predictive Inventory Scaling, what is the primary reason for the performance issue?",
+      "options": [
+        "The linear search pattern causes latency to grow with SKU count",
+        "The hash table is too small to hold the inventory",
+        "The system is using too much memory for lookups",
+        "The SKU identifiers are too complex to process"
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem states that the time required to perform lookups increases linearly as the number of SKUs grows.",
+      "evidence": "As the number of unique product SKUs grows, the time required to perform real-time stock lookups increases linearly, causing latency spikes during peak shopping events."
+    },
+    {
+      "question": "In Predictive Inventory Scaling, what is the trade-off associated with the solution?",
+      "options": [
+        "Increased CPU usage during every lookup",
+        "Higher memory consumption to maintain the hash map",
+        "Longer development time for the database schema",
+        "Reduced accuracy in stock count reporting"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies memory usage as the cost of using a hash table.",
+      "evidence": "Hash tables require additional memory to maintain the hash map structure; this trade-off is verified by monitoring memory usage metrics as the SKU database grows."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:49.898Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

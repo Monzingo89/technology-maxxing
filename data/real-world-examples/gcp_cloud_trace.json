@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_trace",
+  "title": "Optimizing Microservice Latency in Retail Logistics",
+  "business": "A regional retail logistics provider managing complex order fulfillment workflows across multiple microservices.",
+  "problem": "The fulfillment service experiences intermittent, non-deterministic latency spikes during peak order processing, making it difficult to identify which downstream service or database query is causing the bottleneck.",
+  "solution": "Cloud Trace collects and analyzes distributed latency traces for applications, allowing developers to visualize the entire request path across microservices to pinpoint the exact component contributing to the delay.",
+  "steps": [
+    "Instrument the application code using OpenTelemetry libraries to generate trace spans for incoming and outgoing requests.",
+    "Configure the application environment to export trace data to the Google Cloud project.",
+    "Deploy the instrumented services to the cloud environment.",
+    "Access the Trace interface to view the latency distribution and identify outliers in the request waterfall view."
+  ],
+  "outcome": "Engineers gain granular visibility into the request lifecycle, enabling them to isolate specific slow-performing service calls or database operations without guessing.",
+  "limitation": "Sampling rate trade-off: to manage overhead, not every request is traced; check the sampling configuration to ensure enough data is captured to represent rare latency spikes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distributed Trace Flow",
+    "description": "Shows how a request travels through services and is captured by Trace.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Initiates request"
+      },
+      {
+        "id": "b",
+        "label": "API Gateway",
+        "detail": "Entry point"
+      },
+      {
+        "id": "c",
+        "label": "Fulfillment Service",
+        "detail": "Core logic"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Data storage"
+      },
+      {
+        "id": "e",
+        "label": "Cloud Trace",
+        "detail": "Latency analysis"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Forward"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "Trace Data"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Trace Data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Microservice Latency in Retail Logistics, how does the technology address the identified problem?",
+      "options": [
+        "By visualizing the entire request path to pinpoint the exact component causing the delay.",
+        "By automatically rewriting slow database queries to improve execution speed.",
+        "By replacing the existing microservices with a monolithic architecture.",
+        "By increasing the server capacity to handle higher traffic volumes."
+      ],
+      "answerIndex": 0,
+      "explanation": "Cloud Trace provides visibility into the request path, which is the primary solution for identifying bottlenecks in distributed systems.",
+      "evidence": "Cloud Trace collects and analyzes distributed latency traces for applications, allowing developers to visualize the entire request path across microservices to pinpoint the exact component contributing to the delay."
+    },
+    {
+      "question": "In Optimizing Microservice Latency in Retail Logistics, what is a key limitation of the implementation?",
+      "options": [
+        "The system requires manual hardware configuration for every trace.",
+        "The sampling rate must be balanced against overhead to ensure rare spikes are captured.",
+        "The tool only works for monolithic applications and not microservices.",
+        "The tool cannot be used with OpenTelemetry libraries."
+      ],
+      "answerIndex": 1,
+      "explanation": "Sampling rates are a common trade-off in distributed tracing to balance performance overhead with data granularity.",
+      "evidence": "Sampling rate trade-off: to manage overhead, not every request is traced; check the sampling configuration to ensure enough data is captured to represent rare latency spikes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:22.039Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "aws_elastic_beanstalk",
+  "title": "Automated Deployment for Seasonal Retail Analytics",
+  "business": "A mid-sized retail analytics firm that provides real-time inventory dashboards to regional warehouse managers.",
+  "problem": "The firm struggles with manual server provisioning during peak holiday seasons, leading to significant downtime when traffic spikes overwhelm their static compute instances.",
+  "solution": "AWS Elastic Beanstalk automates the orchestration of compute, scaling, and load balancing, allowing the firm to deploy application code without manually configuring underlying infrastructure components.",
+  "steps": [
+    "Package the retail analytics application code into a deployable archive format.",
+    "Create an Elastic Beanstalk environment specifying the desired runtime platform.",
+    "Configure environment properties to define auto-scaling triggers based on CPU utilization.",
+    "Upload the application version to the environment to initiate automated resource provisioning.",
+    "Monitor the health of the load balancer and compute instances via the management console."
+  ],
+  "outcome": "The firm achieves a resilient infrastructure that automatically adjusts capacity to handle traffic fluctuations, ensuring consistent dashboard availability for warehouse managers.",
+  "limitation": "Elastic Beanstalk abstracts underlying infrastructure, which limits granular control over specific operating system configurations; developers must verify compatibility by checking the environment health status and logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Elastic Beanstalk Deployment Workflow",
+    "description": "This diagram illustrates how application code is transformed into a managed infrastructure environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Source code provider"
+      },
+      {
+        "id": "b",
+        "label": "Elastic Beanstalk",
+        "detail": "Orchestration engine"
+      },
+      {
+        "id": "c",
+        "label": "Load Balancer",
+        "detail": "Traffic distribution"
+      },
+      {
+        "id": "d",
+        "label": "Compute Instances",
+        "detail": "Application execution"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Uploads code"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provisions"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Scales"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Routes traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Deployment for Seasonal Retail Analytics, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual server provisioning causing downtime during traffic spikes",
+        "Excessive costs associated with static compute instances",
+        "Lack of developer access to cloud infrastructure",
+        "Incompatibility between retail dashboards and cloud platforms"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that manual provisioning during peak seasons leads to downtime.",
+      "evidence": "The firm struggles with manual server provisioning during peak holiday seasons, leading to significant downtime when traffic spikes overwhelm their static compute instances."
+    },
+    {
+      "question": "In Automated Deployment for Seasonal Retail Analytics, what is a key limitation of the chosen technology?",
+      "options": [
+        "Inability to scale compute resources automatically",
+        "Limited granular control over operating system configurations",
+        "Requirement to manually configure load balancers",
+        "High complexity in deploying application code"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution abstracts infrastructure, which restricts deep OS-level customization.",
+      "evidence": "Elastic Beanstalk abstracts underlying infrastructure, which limits granular control over specific operating system configurations; developers must verify compatibility by checking the environment health status and logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:19.835Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

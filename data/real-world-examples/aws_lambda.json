@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "aws_lambda",
+  "title": "Automated Image Metadata Extraction for Media Archives",
+  "business": "A digital media archive company managing millions of historical photographs that require automated tagging and metadata extraction upon upload.",
+  "problem": "The company faces unpredictable spikes in image uploads, leading to idle server costs during quiet periods and processing bottlenecks during peak ingestion times.",
+  "solution": "AWS Lambda provides event-driven execution that triggers code only when a new image is uploaded to storage, automatically scaling the compute capacity to match the incoming volume of files without managing underlying infrastructure.",
+  "steps": [
+    "Configure an event notification on the object storage bucket to trigger a function upon new file creation.",
+    "Develop the function logic to parse image headers and extract EXIF metadata using standard libraries.",
+    "Grant the function execution role permissions to read from the source bucket and write results to a database.",
+    "Deploy the function code to the AWS environment to begin listening for storage events."
+  ],
+  "outcome": "The archive achieves seamless scaling during high-volume ingestion periods while eliminating compute costs during periods of inactivity.",
+  "limitation": "Lambda functions have a maximum execution timeout, which can cause processing failures for exceptionally large or complex image files; developers must monitor the function logs for execution duration metrics to identify if files exceed these time constraints.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event-Driven Metadata Extraction Flow",
+    "description": "This diagram illustrates the flow from file upload to metadata storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Uploads image file"
+      },
+      {
+        "id": "b",
+        "label": "Storage Bucket",
+        "detail": "Triggers event notification"
+      },
+      {
+        "id": "c",
+        "label": "AWS Lambda",
+        "detail": "Executes extraction logic"
+      },
+      {
+        "id": "d",
+        "label": "Metadata Database",
+        "detail": "Stores extracted tags"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "PUT object"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Invokes function"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Writes metadata"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Image Metadata Extraction for Media Archives, why is AWS Lambda chosen over traditional servers?",
+      "options": [
+        "To eliminate idle costs and handle unpredictable upload spikes automatically.",
+        "To ensure all images are processed in a single, continuous batch.",
+        "To provide permanent storage for the original image files.",
+        "To manually manage the underlying operating system updates."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the company faces idle costs and bottlenecks, which Lambda solves by scaling compute capacity only when events occur.",
+      "evidence": "The company faces unpredictable spikes in image uploads, leading to idle server costs during quiet periods and processing bottlenecks during peak ingestion times."
+    },
+    {
+      "question": "In Automated Image Metadata Extraction for Media Archives, what is a primary operational limitation to consider?",
+      "options": [
+        "The inability to connect to a database.",
+        "The risk of exceeding the maximum execution timeout for large files.",
+        "The requirement to manually provision servers for every upload.",
+        "The lack of event-driven triggers for storage."
+      ],
+      "answerIndex": 1,
+      "explanation": "Lambda functions are constrained by execution time, which is a critical factor when processing large media files.",
+      "evidence": "Lambda functions have a maximum execution timeout, which can cause processing failures for exceptionally large or complex image files; developers must monitor the function logs for execution duration metrics to identify if files exceed these time constraints."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:23.771Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

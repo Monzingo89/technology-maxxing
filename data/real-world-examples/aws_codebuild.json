@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "aws_codebuild",
+  "title": "Automated Build Pipelines for FinTech Compliance",
+  "business": "A boutique financial services firm developing proprietary trading algorithms that require strict audit trails for every code change.",
+  "problem": "Manual build processes and inconsistent local development environments lead to configuration drift, making it impossible to verify if the production binary matches the audited source code.",
+  "solution": "AWS CodeBuild provides a fully managed build service that compiles source code, runs unit tests, and produces deployable artifacts in isolated, ephemeral environments, ensuring every build is reproducible and consistent.",
+  "steps": [
+    "Define a build specification file in the source repository to outline build commands and artifact locations.",
+    "Configure a CodeBuild project to pull source code from a version control system.",
+    "Select a managed build environment image that includes the necessary language runtimes and build tools.",
+    "Execute the build process to compile code and run automated test suites.",
+    "Upload the resulting build artifacts to an S3 bucket for downstream deployment."
+  ],
+  "outcome": "The firm achieves a standardized, repeatable build process where every artifact is linked to a specific commit, satisfying internal compliance requirements for immutable build history.",
+  "limitation": "CodeBuild environments are ephemeral and do not persist state between builds, meaning dependencies must be re-downloaded or cached externally, which can increase build duration if not properly managed.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CodeBuild Pipeline Workflow",
+    "description": "This diagram illustrates the flow from source code to the creation of a verified build artifact.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "Version controlled repository"
+      },
+      {
+        "id": "b",
+        "label": "CodeBuild",
+        "detail": "Managed build environment"
+      },
+      {
+        "id": "c",
+        "label": "Test Suite",
+        "detail": "Automated validation logic"
+      },
+      {
+        "id": "d",
+        "label": "Artifact Store",
+        "detail": "S3 bucket for binaries"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers build"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes tests"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "passes validation"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "uploads binary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Build Pipelines for FinTech Compliance, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual build processes causing configuration drift and lack of auditability.",
+        "High costs associated with maintaining local physical server hardware.",
+        "Inability to scale the number of developers working on the same project.",
+        "Lack of integration with third-party cloud-based SaaS applications."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual processes and inconsistent environments as the cause of configuration drift.",
+      "evidence": "Manual build processes and inconsistent local development environments lead to configuration drift, making it impossible to verify if the production binary matches the audited source code."
+    },
+    {
+      "question": "In Automated Build Pipelines for FinTech Compliance, what is a key limitation of the build environment?",
+      "options": [
+        "The build environment cannot run automated test suites.",
+        "Build environments are ephemeral and do not persist state between builds.",
+        "The service requires manual intervention to trigger every build.",
+        "Artifacts cannot be stored in an S3 bucket after the build finishes."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that the ephemeral nature of the environment requires external caching for dependencies.",
+      "evidence": "CodeBuild environments are ephemeral and do not persist state between builds, meaning dependencies must be re-downloaded or cached externally, which can increase build duration if not properly managed."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:15.888Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "kiss_principle",
+  "title": "The Minimalist Inventory Tracker",
+  "business": "A local community library managing physical book loans.",
+  "problem": "The library staff attempted to build a complex, multi-tiered database system with automated predictive analytics for book demand, which led to frequent system crashes and an inability for volunteers to perform basic check-outs.",
+  "solution": "By applying the Keep It Simple (KISS) principle, the library replaced the complex architecture with a single-table flat file system that only tracks current borrower IDs and book ISBNs, ensuring the system remains maintainable and functional for all staff.",
+  "steps": [
+    "Identify the core requirement: recording which member currently has which book.",
+    "Discard all secondary features like predictive demand modeling or automated email reminders.",
+    "Implement a single, flat data structure to store the active loan state.",
+    "Verify that the interface allows check-outs in under three clicks.",
+    "Document the system architecture as a single page to ensure future maintainability."
+  ],
+  "outcome": "The library staff regained the ability to manage inventory reliably without technical support, and the system became highly resilient to minor hardware failures.",
+  "limitation": "The primary trade-off is the lack of historical data tracking, which prevents the library from generating long-term usage reports. To check for this limitation, administrators can attempt to query a book's past loan history and observe the lack of available data.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Simplified Loan Process",
+    "description": "This flow shows the minimal path from a book request to the final state.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Member Request",
+        "detail": "Input: Member ID and ISBN"
+      },
+      {
+        "id": "b",
+        "label": "Validation",
+        "detail": "Check if book is available"
+      },
+      {
+        "id": "c",
+        "label": "Update Table",
+        "detail": "Write to flat file"
+      },
+      {
+        "id": "d",
+        "label": "Confirmation",
+        "detail": "Display success"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Verify availability"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Commit transaction"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Notify user"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In The Minimalist Inventory Tracker, what was the primary reason for moving to a simpler design?",
+      "options": [
+        "The original system was too complex and caused operational failures.",
+        "The library wanted to save money on cloud hosting costs.",
+        "The staff requested advanced predictive analytics features.",
+        "The database was too slow for large-scale data processing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the complex system led to crashes and hindered basic functionality, necessitating a simpler approach.",
+      "evidence": "The library staff attempted to build a complex, multi-tiered database system with automated predictive analytics for book demand, which led to frequent system crashes and an inability for volunteers to perform basic check-outs."
+    },
+    {
+      "question": "In The Minimalist Inventory Tracker, what is the identified trade-off of the simplified system?",
+      "options": [
+        "Increased maintenance costs for the flat file system.",
+        "The inability to generate long-term usage reports.",
+        "A requirement for highly trained technical staff to operate.",
+        "Slower check-out times due to the flat file structure."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the lack of historical data tracking prevents long-term reporting.",
+      "evidence": "The primary trade-off is the lack of historical data tracking, which prevents the library from generating long-term usage reports."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:18.512Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

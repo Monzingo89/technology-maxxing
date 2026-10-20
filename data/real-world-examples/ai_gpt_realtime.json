@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_realtime",
+  "title": "Realtime Multimodal Technical Support for Field Technicians",
+  "business": "Industrial field service companies managing complex hardware repairs.",
+  "problem": "Technicians often struggle with hands-free documentation access, leading to delays when they must manually search manuals while handling tools or equipment in low-visibility environments.",
+  "solution": "The GPT-Realtime model enables a hands-free, voice-activated interface that processes audio input directly from the field, allowing technicians to ask questions and receive immediate, synthesized audio instructions without interrupting their physical workflow.",
+  "steps": [
+    "Establish a persistent WebSocket connection to the gpt-realtime endpoint.",
+    "Configure the session to accept audio input streams from the technician's headset.",
+    "Define function calling tools that allow the model to query internal repair databases.",
+    "Stream the model's audio output back to the technician's device for immediate playback.",
+    "Implement prompt caching for frequently accessed equipment manuals to optimize context usage."
+  ],
+  "outcome": "Technicians experience improved operational efficiency and reduced cognitive load by interacting with technical documentation through natural, conversational voice commands.",
+  "limitation": "The model's reliance on continuous streaming connections means that intermittent network connectivity in remote industrial sites can cause latency or session drops; developers should monitor WebSocket heartbeat signals to detect and trigger automatic reconnection logic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Realtime Support Interaction Flow",
+    "description": "This diagram illustrates the bidirectional flow of data between the technician and the model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Technician",
+        "detail": "Field user providing audio input"
+      },
+      {
+        "id": "b",
+        "label": "WebSocket",
+        "detail": "Persistent communication channel"
+      },
+      {
+        "id": "c",
+        "label": "GPT-Realtime",
+        "detail": "Multimodal processing engine"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Tool-accessible repair manuals"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Streams audio input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Transmits data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Executes function call"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Streams audio response"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Establish connection to the realtime endpoint\nconst ws = new WebSocket('wss://api.openai.com/v1/realtime');\n\n// Send audio chunk as part of the session\nws.send(JSON.stringify({\n  type: 'input_audio_buffer.append',\n  audio: base64EncodedAudio // Audio from technician's microphone\n}));\n\n// Handle function call for database lookup\nif (event.type === 'function_call') {\n  const result = await queryRepairDatabase(event.args);\n  // Send tool output back to model\n  ws.send(JSON.stringify({ type: 'conversation.item.create', item: result }));\n}",
+    "explanation": "This code demonstrates the WebSocket communication pattern required to stream audio to the model and handle function calls for retrieving technical data."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime",
+      "label": "GPT-Realtime"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Realtime Multimodal Technical Support for Field Technicians, what is the primary benefit of the chosen solution?",
+      "options": [
+        "It eliminates the need for any internet connectivity.",
+        "It allows hands-free, voice-activated access to documentation.",
+        "It automatically repairs hardware using robotic arms.",
+        "It replaces the need for human technicians entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution specifically addresses the problem of manual documentation searches by providing a voice-activated interface.",
+      "evidence": "The GPT-Realtime model enables a hands-free, voice-activated interface that processes audio input directly from the field, allowing technicians to ask questions and receive immediate, synthesized audio instructions without interrupting their physical workflow."
+    },
+    {
+      "question": "In Realtime Multimodal Technical Support for Field Technicians, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot process audio inputs.",
+        "The model requires a persistent WebSocket connection which may be affected by network instability.",
+        "The model is limited to text-only outputs.",
+        "The model cannot use function calling."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies network connectivity and WebSocket stability as a critical trade-off.",
+      "evidence": "The model's reliance on continuous streaming connections means that intermittent network connectivity in remote industrial sites can cause latency or session drops; developers should monitor WebSocket heartbeat signals to detect and trigger automatic reconnection logic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:39.886Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:36.019Z"
+}

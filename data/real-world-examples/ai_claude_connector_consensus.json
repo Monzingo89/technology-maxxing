@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_consensus",
+  "title": "Evidence-Based Nutritional Formulation for Biotech",
+  "business": "A boutique biotech firm specializing in personalized nutritional supplements needs to validate ingredient efficacy claims against peer-reviewed literature.",
+  "problem": "The R&D team spends excessive manual hours scouring academic databases to verify if specific compounds have human trial support, often missing recent meta-analyses that contradict existing internal assumptions.",
+  "solution": "By integrating the Consensus connector, the firm enables Claude to perform automated, grounded literature searches across 400 million academic papers, ensuring that product development roadmaps are anchored in verified scientific evidence rather than anecdotal data.",
+  "steps": [
+    "Configure the Consensus MCP connector within the Claude environment to enable direct access to the Semantic Scholar and PubMed databases.",
+    "Define specific research queries focused on human study designs and randomized controlled trials for the target compounds.",
+    "Instruct Claude to generate evidence tables that link each ingredient claim to a specific DOI and citation count retrieved by the connector.",
+    "Review the synthesized literature summaries to identify gaps in clinical evidence before proceeding to the prototyping phase."
+  ],
+  "outcome": "The R&D team achieves a more rigorous, transparent validation process where every ingredient inclusion is backed by citable, peer-reviewed research, significantly reducing the risk of launching products with unsupported health claims.",
+  "limitation": "The connector relies on the indexing depth of external databases like OpenAlex and PubMed; if a niche or emerging field lacks significant peer-reviewed publication volume, the tool may return insufficient results, which can be checked by reviewing the 'relevance' metadata provided in the search output.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Evidence Validation Workflow",
+    "description": "This diagram illustrates the flow from R&D inquiry to evidence-based product formulation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "R&D Team",
+        "detail": "Initiates research query"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Orchestrates search"
+      },
+      {
+        "id": "c",
+        "label": "Consensus Connector",
+        "detail": "Queries 400M papers"
+      },
+      {
+        "id": "d",
+        "label": "Evidence Table",
+        "detail": "Output for formulation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Submits query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Executes search"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns citations"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Synthesizes data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/consensus",
+      "label": "Consensus connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Evidence-Based Nutritional Formulation for Biotech, what is the primary benefit of using the Consensus connector for R&D?",
+      "options": [
+        "Ensuring product roadmaps are anchored in verified scientific evidence.",
+        "Automating the physical manufacturing process of supplements.",
+        "Reducing the cost of clinical trial recruitment.",
+        "Replacing the need for human researchers entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the firm needs to anchor development roadmaps in verified scientific evidence to avoid unsupported claims.",
+      "evidence": "ensuring that product development roadmaps are anchored in verified scientific evidence rather than anecdotal data."
+    },
+    {
+      "question": "In Evidence-Based Nutritional Formulation for Biotech, what is a specific limitation of the implementation?",
+      "options": [
+        "The connector cannot access PubMed.",
+        "The tool may return insufficient results if the research field lacks significant peer-reviewed publication volume.",
+        "The system requires manual DOI entry for every paper.",
+        "The connector only works for social-science questions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that the tool's effectiveness is tied to the volume of existing peer-reviewed literature.",
+      "evidence": "if a niche or emerging field lacks significant peer-reviewed publication volume, the tool may return insufficient results"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:28.780Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:24.664Z"
+}

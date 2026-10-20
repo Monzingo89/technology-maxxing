@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "topicId": "distributed_lease",
+  "title": "Automated Inventory Reconciliation Lease",
+  "business": "A global logistics provider managing automated warehouse robots that must perform exclusive inventory counts on specific storage aisles.",
+  "problem": "Multiple robots might attempt to scan the same aisle simultaneously, leading to redundant data processing, potential mechanical collisions, or inconsistent inventory records when two processes update the same database row.",
+  "solution": "Implementing a distributed lease mechanism ensures that only one robot is granted exclusive access to an aisle for a fixed duration. The robot must periodically renew the lease to continue its work; if the robot crashes, the lease expires, allowing another robot to take over.",
+  "steps": [
+    "Define a central lock service or database table to store the lease state, including the resource ID, owner ID, and expiration timestamp.",
+    "Require the robot to request a lease by writing its ID and a future expiration time to the central store, conditional on the current lease being expired or null.",
+    "Execute the inventory counting task only after receiving a successful confirmation of lease acquisition.",
+    "Implement a background heartbeat process that updates the expiration timestamp to extend the lease before it lapses.",
+    "Release the lease explicitly upon task completion or allow it to naturally expire if the process terminates unexpectedly."
+  ],
+  "outcome": "The system achieves mutual exclusion for resource-intensive tasks, preventing data corruption and operational conflicts without requiring manual intervention when a process fails.",
+  "limitation": "The primary trade-off is the risk of clock skew between the distributed nodes and the lease manager. If the robot's local clock is significantly ahead of the lease manager's clock, it may assume it still holds a valid lease when the manager has already granted it to another node. To check for this, monitor the drift between node system times and the central coordinator.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distributed Lease Acquisition Flow",
+    "description": "Shows the interaction between a robot and the lease manager to secure exclusive access.",
+    "nodes": [
+      {
+        "id": "robot",
+        "label": "Warehouse Robot",
+        "detail": "Worker node requesting access"
+      },
+      {
+        "id": "manager",
+        "label": "Lease Coordinator",
+        "detail": "Centralized state store"
+      },
+      {
+        "id": "aisle",
+        "label": "Storage Aisle",
+        "detail": "Protected resource"
+      }
+    ],
+    "edges": [
+      {
+        "from": "robot",
+        "to": "manager",
+        "label": "request_lease(resource_id)"
+      },
+      {
+        "from": "manager",
+        "to": "robot",
+        "label": "grant_lease(expiry_time)"
+      },
+      {
+        "from": "robot",
+        "to": "aisle",
+        "label": "perform_exclusive_task"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation Lease, why is a distributed lease preferred over a simple flag?",
+      "options": [
+        "It prevents data corruption by ensuring only one robot accesses an aisle at a time.",
+        "It eliminates the need for a central database entirely.",
+        "It allows robots to ignore clock skew issues.",
+        "It increases the speed of the warehouse robots."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that multiple robots accessing the same aisle leads to inconsistent records, which a lease prevents by enforcing mutual exclusion.",
+      "evidence": "Multiple robots might attempt to scan the same aisle simultaneously, leading to redundant data processing, potential mechanical collisions, or inconsistent inventory records when two processes update the same database row."
+    },
+    {
+      "question": "In Automated Inventory Reconciliation Lease, what is a critical limitation of the lease mechanism?",
+      "options": [
+        "The lease cannot be renewed.",
+        "Clock skew between nodes can cause lease validity conflicts.",
+        "The lease manager requires manual resets.",
+        "Robots cannot release leases early."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly identifies clock skew as a trade-off that can cause a node to incorrectly believe it still holds a valid lease.",
+      "evidence": "The primary trade-off is the risk of clock skew between the distributed nodes and the lease manager. If the robot's local clock is significantly ahead of the lease manager's clock, it may assume it still holds a valid lease when the manager has already granted it to another node."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:39.549Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

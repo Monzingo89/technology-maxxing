@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "event_sourcing",
+  "title": "Auditable Carbon Credit Ledger",
+  "business": "Environmental compliance firms managing carbon credit issuance and trading.",
+  "problem": "Traditional CRUD databases overwrite current state, losing the historical context required for regulatory audits and preventing the reconstruction of credit balances at specific past timestamps.",
+  "solution": "Event Sourcing stores an append-only sequence of domain events as the authoritative state history, allowing the system to derive the current balance by replaying the event stream from the beginning.",
+  "steps": [
+    "Define immutable event types such as CreditIssued, CreditTransferred, and CreditRetired.",
+    "Append each new event to an immutable event store instead of updating a current balance row.",
+    "Implement a projection engine that consumes the event stream to build a read-optimized view of current balances.",
+    "Use the event stream to reconstruct the state of any account at any point in time for audit verification."
+  ],
+  "outcome": "The system gains a complete, immutable audit trail of every credit movement, ensuring regulatory compliance and enabling point-in-time state reconstruction.",
+  "limitation": "The primary limitation is the complexity of evolving the event schema over time; to check for this, monitor the cost of migration scripts required to handle legacy event formats when business rules change.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event Sourcing Data Flow",
+    "description": "Explains how events are captured and projected into state.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Command",
+        "detail": "User request to issue or trade credit"
+      },
+      {
+        "id": "b",
+        "label": "Event Store",
+        "detail": "Append-only log of domain events"
+      },
+      {
+        "id": "c",
+        "label": "Projection",
+        "detail": "Logic to derive current state"
+      },
+      {
+        "id": "d",
+        "label": "Read Model",
+        "detail": "Current balance view for queries"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Persist Event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Stream Events"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Update State"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Auditable Carbon Credit Ledger, why is Event Sourcing used instead of a standard database update?",
+      "options": [
+        "To enable point-in-time state reconstruction and auditability.",
+        "To improve the performance of simple read queries.",
+        "To reduce the total number of database tables required.",
+        "To eliminate the need for a service layer."
+      ],
+      "answerIndex": 0,
+      "explanation": "Event Sourcing preserves the history of changes, which is necessary for the audit requirements described in the scenario.",
+      "evidence": "Traditional CRUD databases overwrite current state, losing the historical context required for regulatory audits and preventing the reconstruction of credit balances at specific past timestamps."
+    },
+    {
+      "question": "What is a key trade-off when implementing Event Sourcing in Auditable Carbon Credit Ledger?",
+      "options": [
+        "The system becomes impossible to scale horizontally.",
+        "The difficulty of managing schema evolution over time.",
+        "The loss of data integrity during event replays.",
+        "The requirement to use only relational databases."
+      ],
+      "answerIndex": 1,
+      "explanation": "As noted in the limitations, evolving the event schema is a significant challenge in event-sourced systems.",
+      "evidence": "The primary limitation is the complexity of evolving the event schema over time; to check for this, monitor the cost of migration scripts required to handle legacy event formats when business rules change."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:11.111Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

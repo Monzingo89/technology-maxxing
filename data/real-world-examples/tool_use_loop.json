@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "tool_use_loop",
+  "title": "Automated Inventory Reconciliation Loop",
+  "business": "Logistics and warehouse management systems requiring real-time stock verification.",
+  "problem": "Manual reconciliation of inventory discrepancies between digital records and physical warehouse scanners is slow and prone to human error.",
+  "solution": "The Tool-Use Loop automates this by allowing the agent to iteratively query the database, trigger physical scanner APIs, and process results until the stock count matches or a final report is generated.",
+  "steps": [
+    "Define an Agent with access to inventory database and scanner control tools.",
+    "Initialize a Runner to manage the execution lifecycle.",
+    "Invoke the Runner with the initial stock discrepancy report.",
+    "The Runner executes the loop: LLM decides on a tool, SDK executes the tool, and results are fed back to the LLM.",
+    "The loop terminates when the LLM produces a final text output confirming the reconciliation."
+  ],
+  "outcome": "Reduced latency in inventory adjustments and higher accuracy in stock reporting without constant human intervention.",
+  "limitation": "The loop may enter an infinite cycle if the LLM repeatedly calls the same tool with identical inputs; this is checked by monitoring the MaxTurnsExceeded exception.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Tool-Use Loop Execution Flow",
+    "description": "The process iterates between the LLM model and the tool execution environment until a final result is reached.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "LLM Model",
+        "detail": "Decides whether to call a tool or provide final output"
+      },
+      {
+        "id": "b",
+        "label": "Runner",
+        "detail": "Orchestrates the loop and checks for final output"
+      },
+      {
+        "id": "c",
+        "label": "Tool Execution",
+        "detail": "Runs local function tools and returns results"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Emits tool call or final output"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Executes tool"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns tool output"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Feeds output back to model"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import Agent, Runner\n# Define agent with inventory tools\nagent = Agent(name=\"InventoryAgent\", tools=[query_db, trigger_scanner])\n# Runner initiates the loop: LLM -> Tool -> LLM\nresult = await Runner.run(agent, \"Reconcile SKU 12345\")\n# Final output is returned once the loop finishes\nprint(result.final_output)",
+    "explanation": "This code demonstrates the Runner orchestrating the Tool-Use Loop where the agent iteratively uses tools to resolve a specific inventory task."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/running_agents/",
+      "label": "Running agents"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation Loop, how does the technology address the problem of manual reconciliation?",
+      "options": [
+        "By allowing the agent to iteratively query the database, trigger physical scanner APIs, and process results until the stock count matches.",
+        "By replacing all warehouse staff with automated robotic arms.",
+        "By bypassing the LLM entirely to query the database directly via SQL.",
+        "By using a static script that runs once per day without feedback."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly describes using the Tool-Use Loop to iteratively query databases and scanners until the reconciliation is complete.",
+      "evidence": "The Tool-Use Loop automates this by allowing the agent to iteratively query the database, trigger physical scanner APIs, and process results until the stock count matches or a final report is generated."
+    },
+    {
+      "question": "In Automated Inventory Reconciliation Loop, what is a potential limitation of the implementation?",
+      "options": [
+        "The agent may become too fast for the database to handle.",
+        "The loop may enter an infinite cycle if the LLM repeatedly calls the same tool with identical inputs.",
+        "The system requires a human to approve every single tool call.",
+        "The SDK cannot handle more than two tools at once."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies the risk of infinite loops when the model repeatedly calls tools with the same input.",
+      "evidence": "The loop may enter an infinite cycle if the LLM repeatedly calls the same tool with identical inputs; this is checked by monitoring the MaxTurnsExceeded exception."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:32.821Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:30.435Z"
+}

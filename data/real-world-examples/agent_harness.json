@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "agent_harness",
+  "title": "Automated Compliance Audit Orchestration",
+  "business": "Financial institutions managing complex regulatory reporting requirements.",
+  "problem": "Manual compliance audits are prone to human error, slow to execute, and struggle to integrate disparate data sources across legacy systems.",
+  "solution": "The Agent Harness wraps a specialized compliance agent with specific instructions, regulatory tools, and a persistent execution loop to automate data retrieval and validation.",
+  "steps": [
+    "Define the Agent with system instructions tailored to specific financial regulatory frameworks.",
+    "Equip the Agent with function tools that interface with internal databases and external APIs.",
+    "Implement guardrails to validate that all extracted data meets strict schema requirements before reporting.",
+    "Configure a persistent session to maintain context across multi-step audit workflows.",
+    "Deploy the Runner to manage the execution loop until the compliance report is finalized."
+  ],
+  "outcome": "Increased consistency in audit reporting and significant reduction in manual processing time for compliance teams.",
+  "limitation": "The harness relies on the model's ability to interpret instructions correctly; verify this by monitoring the built-in tracing logs for unexpected tool usage patterns.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Harness Execution Flow",
+    "description": "The flow shows how the Agent Harness manages the lifecycle of a compliance task.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Request",
+        "detail": "Audit initiation"
+      },
+      {
+        "id": "b",
+        "label": "Agent Harness",
+        "detail": "Wraps model, tools, and state"
+      },
+      {
+        "id": "c",
+        "label": "Function Tools",
+        "detail": "Data retrieval and validation"
+      },
+      {
+        "id": "d",
+        "label": "Guardrails",
+        "detail": "Input/Output validation"
+      },
+      {
+        "id": "e",
+        "label": "Final Report",
+        "detail": "Output generation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "validates"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "loop continues"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "completes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/",
+      "label": "OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Compliance Audit Orchestration, how does the Agent Harness address the identified problem?",
+      "options": [
+        "By automating data retrieval and validation through a wrapped agent with tools and a persistent loop.",
+        "By replacing all human auditors with a fully autonomous system that requires no oversight.",
+        "By increasing the speed of legacy systems through hardware acceleration.",
+        "By removing the need for regulatory frameworks in financial reporting."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the harness wraps the agent with tools and a loop to automate the manual, error-prone audit process.",
+      "evidence": "The Agent Harness wraps a specialized compliance agent with specific instructions, regulatory tools, and a persistent execution loop to automate data retrieval and validation."
+    },
+    {
+      "question": "What is a primary limitation of the Agent Harness in Automated Compliance Audit Orchestration and how is it verified?",
+      "options": [
+        "It is too slow for real-time applications; verify by checking latency metrics.",
+        "It requires expensive hardware; verify by checking server costs.",
+        "It relies on the model's instruction interpretation; verify by monitoring built-in tracing logs.",
+        "It cannot handle persistent state; verify by checking session memory limits."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies model interpretation as a risk and suggests using tracing logs to verify correct behavior.",
+      "evidence": "The harness relies on the model's ability to interpret instructions correctly; verify this by monitoring the built-in tracing logs for unexpected tool usage patterns."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:30.310Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:26.782Z"
+}

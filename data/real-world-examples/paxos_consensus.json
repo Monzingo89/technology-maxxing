@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "paxos_consensus",
+  "title": "Global Inventory Synchronization for AeroParts",
+  "business": "AeroParts, a global aerospace logistics provider, manages critical aircraft component inventory across three geographically dispersed data centers.",
+  "problem": "The company faces significant data inconsistency issues when multiple regional offices attempt to update the same part availability status simultaneously, leading to overselling or phantom inventory errors.",
+  "solution": "AeroParts implements the Paxos consensus algorithm to ensure that all regional nodes agree on a single, linearizable sequence of inventory updates, preventing conflicting state changes.",
+  "steps": [
+    "Proposer nodes broadcast a proposal with a unique sequence number to all Acceptor nodes.",
+    "Acceptors evaluate the proposal and promise to ignore any future requests with lower sequence numbers.",
+    "If a majority of Acceptors acknowledge the proposal, the Proposer sends an accept request for the specific value.",
+    "Acceptors commit the value if they have not promised to a higher sequence number in the interim.",
+    "The system confirms the update as globally consistent once a quorum of Acceptors has successfully stored the value."
+  ],
+  "outcome": "The system achieves a reliable, single-source-of-truth for inventory levels, ensuring that no two regions can commit conflicting updates to the same component record.",
+  "limitation": "Paxos introduces increased latency due to the multi-phase communication required for quorum agreement; developers can monitor this by tracking the time elapsed between proposal initiation and final commit acknowledgement.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Paxos Consensus Flow",
+    "description": "The flow shows the interaction between a Proposer and a quorum of Acceptors to reach consensus.",
+    "nodes": [
+      {
+        "id": "p",
+        "label": "Proposer",
+        "detail": "Initiates value proposal"
+      },
+      {
+        "id": "a1",
+        "label": "Acceptor 1",
+        "detail": "Validates and promises"
+      },
+      {
+        "id": "a2",
+        "label": "Acceptor 2",
+        "detail": "Validates and promises"
+      },
+      {
+        "id": "a3",
+        "label": "Acceptor 3",
+        "detail": "Validates and promises"
+      }
+    ],
+    "edges": [
+      {
+        "from": "p",
+        "to": "a1",
+        "label": "Prepare(seq)"
+      },
+      {
+        "from": "p",
+        "to": "a2",
+        "label": "Prepare(seq)"
+      },
+      {
+        "from": "p",
+        "to": "a3",
+        "label": "Prepare(seq)"
+      },
+      {
+        "from": "a1",
+        "to": "p",
+        "label": "Promise/Ack"
+      },
+      {
+        "from": "a2",
+        "to": "p",
+        "label": "Promise/Ack"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Synchronization for AeroParts, why is Paxos used to address the inventory problem?",
+      "options": [
+        "To ensure all regional nodes agree on a single, linearizable sequence of updates.",
+        "To increase the total storage capacity of the regional data centers.",
+        "To allow regional offices to update inventory without any network communication.",
+        "To automatically delete old inventory records that are no longer needed."
+      ],
+      "answerIndex": 0,
+      "explanation": "Paxos is used to maintain consistency across distributed nodes by reaching consensus on a sequence of operations.",
+      "evidence": "AeroParts implements the Paxos consensus algorithm to ensure that all regional nodes agree on a single, linearizable sequence of inventory updates, preventing conflicting state changes."
+    },
+    {
+      "question": "In Global Inventory Synchronization for AeroParts, what is a primary trade-off associated with the implementation?",
+      "options": [
+        "The system becomes entirely centralized and loses all fault tolerance.",
+        "The system experiences increased latency due to the multi-phase communication required for quorum agreement.",
+        "The system requires infinite bandwidth to function correctly.",
+        "The system cannot handle more than two regional offices."
+      ],
+      "answerIndex": 1,
+      "explanation": "The multi-phase nature of Paxos requires multiple round-trips between nodes, which inherently increases latency.",
+      "evidence": "Paxos introduces increased latency due to the multi-phase communication required for quorum agreement; developers can monitor this by tracking the time elapsed between proposal initiation and final commit acknowledgement."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:19.531Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

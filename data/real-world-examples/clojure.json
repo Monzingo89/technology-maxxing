@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "clojure",
+  "title": "Concurrent Inventory Synchronization",
+  "business": "A high-frequency retail logistics firm managing global warehouse stock levels.",
+  "problem": "Traditional Java-based systems rely on pervasive, unmoderated mutation of shared objects, leading to frequent race conditions and deadlocks during concurrent inventory updates.",
+  "solution": "Clojure utilizes immutable persistent data structures and software transactional memory to manage state safely, allowing multiple threads to read and update stock levels without manual locking.",
+  "steps": [
+    "Define the inventory state as an immutable map structure.",
+    "Use Clojure atoms or refs to wrap the inventory state, providing a controlled point of identity.",
+    "Implement update functions that transform the state using pure functional logic.",
+    "Execute state transitions through transactional primitives to ensure consistency across concurrent threads."
+  ],
+  "outcome": "A robust, thread-safe inventory system that eliminates manual locking overhead while maintaining high performance on the JVM.",
+  "limitation": "Because all data structures are immutable, frequent large-scale updates can increase garbage collection pressure; verify this by monitoring heap utilization during peak load.",
+  "diagram": {
+    "kind": "flow",
+    "title": "State Transition Flow",
+    "description": "Shows how concurrent threads interact with managed state via transactional primitives.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Thread A",
+        "detail": "Requesting stock decrement"
+      },
+      {
+        "id": "b",
+        "label": "Thread B",
+        "detail": "Requesting stock increment"
+      },
+      {
+        "id": "c",
+        "label": "STM Transaction",
+        "detail": "Coordinates safe state changes"
+      },
+      {
+        "id": "d",
+        "label": "Immutable State",
+        "detail": "Persistent map of inventory"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "initiates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "initiates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://clojure.org/about/rationale",
+      "label": "Clojure - Rationale"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Concurrent Inventory Synchronization, how does the proposed solution address the identified concurrency issues?",
+      "options": [
+        "By replacing the JVM with a custom runtime environment.",
+        "By using software transactional memory and immutable data structures to avoid manual locking.",
+        "By forcing all inventory updates to be processed sequentially on a single thread.",
+        "By implementing a complex object-oriented inheritance hierarchy for stock items."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution leverages Clojure's built-in concurrency primitives to handle state safely without the risks associated with mutable shared objects.",
+      "evidence": "Clojure utilizes immutable persistent data structures and software transactional memory to manage state safely, allowing multiple threads to read and update stock levels without manual locking."
+    },
+    {
+      "question": "In Concurrent Inventory Synchronization, what is the primary trade-off associated with the implementation?",
+      "options": [
+        "The system becomes incompatible with existing Java libraries.",
+        "The use of immutable data structures may increase garbage collection pressure under heavy load.",
+        "The system requires a complete rewrite of the underlying JVM infrastructure.",
+        "The system loses the ability to perform any state updates."
+      ],
+      "answerIndex": 1,
+      "explanation": "Immutability is a core feature, but creating new versions of data structures can impact memory management, which must be monitored.",
+      "evidence": "Because all data structures are immutable, frequent large-scale updates can increase garbage collection pressure; verify this by monitoring heap utilization during peak load."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:05.059Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:01.723Z"
+}

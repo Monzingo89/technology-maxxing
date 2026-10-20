@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "nginx",
+  "title": "Unified API Gateway for Distributed Microservices",
+  "business": "A growing logistics firm managing a fleet of microservices that handle real-time tracking, inventory updates, and customer notifications.",
+  "problem": "The firm faces inconsistent request handling and security overhead because each microservice independently manages its own SSL termination, authentication, and rate limiting, leading to fragmented security policies and increased maintenance complexity.",
+  "solution": "By deploying NGINX as a centralized reverse proxy, the firm can offload SSL termination, authentication, and request routing to a single entry point. This event-driven architecture ensures that all incoming traffic is validated and routed consistently before reaching internal services, simplifying the security posture and reducing redundant logic in application code.",
+  "steps": [
+    "Define an upstream block in the NGINX configuration to group the backend microservice instances.",
+    "Configure the server block to listen on port 443 and define SSL certificates for centralized encryption.",
+    "Implement the proxy_pass directive within location blocks to forward traffic to the defined upstream group.",
+    "Apply authentication modules such as ngx_http_auth_request_module to verify user credentials at the gateway level.",
+    "Reload the NGINX configuration to apply the new routing and security rules."
+  ],
+  "outcome": "A streamlined infrastructure where security and traffic management are decoupled from application logic, resulting in easier policy updates and uniform request handling across the entire service ecosystem.",
+  "limitation": "The primary limitation is that the centralized proxy can become a single point of failure or a bottleneck if not scaled horizontally; administrators should monitor the error logs and use the ngx_http_stub_status_module to track active connections and identify potential saturation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "NGINX Gateway Traffic Flow",
+    "description": "This diagram illustrates how external requests are processed by NGINX before being distributed to internal microservices.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "External Client",
+        "detail": "Initiates HTTP/HTTPS requests"
+      },
+      {
+        "id": "nginx",
+        "label": "NGINX Proxy",
+        "detail": "Handles SSL, Auth, and Routing"
+      },
+      {
+        "id": "svc1",
+        "label": "Tracking Service",
+        "detail": "Internal microservice"
+      },
+      {
+        "id": "svc2",
+        "label": "Inventory Service",
+        "detail": "Internal microservice"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "nginx",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "nginx",
+        "to": "svc1",
+        "label": "Proxied Request"
+      },
+      {
+        "from": "nginx",
+        "to": "svc2",
+        "label": "Proxied Request"
+      }
+    ]
+  },
+  "code": {
+    "language": "nginx",
+    "content": "upstream backend_services { server 10.0.0.1; server 10.0.0.2; } # Define backend pool\nserver { listen 443 ssl; # Centralized SSL termination\nlocation / { proxy_pass http://backend_services; # Forwarding traffic } }",
+    "explanation": "This configuration demonstrates defining an upstream group for load balancing and using proxy_pass to route traffic, which addresses the problem of inconsistent request handling."
+  },
+  "sources": [
+    {
+      "url": "https://nginx.org/en/docs/",
+      "label": "nginx documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified API Gateway for Distributed Microservices, what is the primary benefit of using NGINX as a reverse proxy?",
+      "options": [
+        "It eliminates the need for backend microservices entirely.",
+        "It centralizes SSL termination and authentication to simplify security.",
+        "It automatically rewrites application code for better performance.",
+        "It replaces the need for internal network infrastructure."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that using NGINX as a reverse proxy allows offloading SSL and authentication to a single entry point, reducing redundant logic.",
+      "evidence": "By deploying NGINX as a centralized reverse proxy, the firm can offload SSL termination, authentication, and request routing to a single entry point."
+    },
+    {
+      "question": "In Unified API Gateway for Distributed Microservices, what is a key limitation of the proposed architecture?",
+      "options": [
+        "It requires all microservices to run on the same physical server.",
+        "It prevents the use of SSL encryption for internal traffic.",
+        "It can become a single point of failure or bottleneck if not monitored.",
+        "It forces all traffic to be processed in a synchronous, blocking manner."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that the centralized proxy can become a bottleneck and suggests monitoring active connections to identify saturation.",
+      "evidence": "The primary limitation is that the centralized proxy can become a single point of failure or a bottleneck if not scaled horizontally; administrators should monitor the error logs and use the ngx_http_stub_status_module to track active connections and identify potential saturation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:16.456Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:12.494Z"
+}

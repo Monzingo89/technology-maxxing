@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "aws_kms",
+  "title": "Securing Multi-Tenant Financial Records with AWS KMS",
+  "business": "A boutique financial advisory firm managing sensitive client investment portfolios across shared cloud infrastructure.",
+  "problem": "The firm faces a compliance risk where unauthorized internal applications or compromised service roles could potentially access raw client data stored in shared storage buckets.",
+  "solution": "The firm implements AWS Key Management Service to enforce envelope encryption, ensuring that data is only accessible to services that possess explicit IAM permissions to call the KMS Decrypt API for specific Customer Master Keys.",
+  "steps": [
+    "Create a Customer Managed Key within AWS KMS to serve as the root of trust for financial data.",
+    "Define a Key Policy that restricts usage to specific IAM roles associated with the firm's application tier.",
+    "Configure the application to request a data key from KMS to encrypt objects before uploading them to storage.",
+    "Attach IAM policies to application roles that grant kms:Decrypt permissions only for the specific key ARN."
+  ],
+  "outcome": "The firm achieves cryptographic isolation between tenants, ensuring that even if storage access is misconfigured, the underlying data remains ciphertext without the corresponding KMS key access.",
+  "limitation": "A critical limitation is the strict regionality of KMS keys; keys cannot be used across different AWS regions, requiring a multi-region replication strategy or separate key management per region, which can be verified by checking the Key ARN region prefix.",
+  "diagram": {
+    "kind": "flow",
+    "title": "KMS Envelope Encryption Flow",
+    "description": "This diagram illustrates the interaction between the application, KMS, and storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Application",
+        "detail": "Requests data keys"
+      },
+      {
+        "id": "b",
+        "label": "AWS KMS",
+        "detail": "Generates and decrypts keys"
+      },
+      {
+        "id": "c",
+        "label": "Storage",
+        "detail": "Holds encrypted data"
+      },
+      {
+        "id": "d",
+        "label": "IAM Policy",
+        "detail": "Controls access rights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "requests key"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "returns ciphertext"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "writes ciphertext"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "authorizes access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Multi-Tenant Financial Records with AWS KMS, what is the primary purpose of using KMS for the firm's data?",
+      "options": [
+        "To enforce envelope encryption and restrict data access via IAM permissions.",
+        "To increase the storage capacity of the firm's existing cloud buckets.",
+        "To automate the migration of on-premises databases to the cloud.",
+        "To monitor microservices performance across the firm's infrastructure."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that KMS is used to enforce envelope encryption so that data is only accessible to services with explicit IAM permissions.",
+      "evidence": "The firm implements AWS Key Management Service to enforce envelope encryption, ensuring that data is only accessible to services that possess explicit IAM permissions to call the KMS Decrypt API for specific Customer Master Keys."
+    },
+    {
+      "question": "In Securing Multi-Tenant Financial Records with AWS KMS, what is a notable limitation of the implementation?",
+      "options": [
+        "KMS keys are limited to a maximum of 100 users per key.",
+        "KMS keys cannot be used across different AWS regions.",
+        "KMS keys require manual rotation every 24 hours.",
+        "KMS keys are incompatible with IAM policies."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation of the limitation highlights the regional nature of KMS keys as a constraint for the firm.",
+      "evidence": "A critical limitation is the strict regionality of KMS keys; keys cannot be used across different AWS regions, requiring a multi-region replication strategy or separate key management per region, which can be verified by checking the Key ARN region prefix."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:23.280Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

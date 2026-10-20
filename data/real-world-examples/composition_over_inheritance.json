@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "composition_over_inheritance",
+  "title": "Modular Logistics Fleet Management",
+  "business": "A regional logistics firm managing a diverse fleet of delivery vehicles including electric vans, heavy-duty trucks, and autonomous drones.",
+  "problem": "The engineering team initially used a deep class hierarchy where every vehicle type inherited from a base Vehicle class. As requirements grew, adding a new feature like 'GPS Tracking' required modifying the base class, which inadvertently broke unrelated subclasses, leading to fragile code and high regression risks.",
+  "solution": "By shifting to composition, the team defines small, focused components like NavigationModule, BatteryMonitor, and CargoHandler. Instead of inheriting behavior, each vehicle instance is constructed by injecting these specific components, allowing for flexible configuration without rigid class trees.",
+  "steps": [
+    "Decompose monolithic base classes into granular, independent behavior interfaces.",
+    "Define concrete component classes that implement these interfaces.",
+    "Create a vehicle container class that accepts a list of components via constructor injection.",
+    "Assemble specific vehicle configurations by passing the required components at runtime."
+  ],
+  "outcome": "The codebase becomes significantly more maintainable, as adding new features involves creating new components rather than modifying existing inheritance chains, effectively isolating side effects.",
+  "limitation": "A primary limitation is increased object complexity during initialization. Because behavior is injected, it is harder to verify the complete state of an object at a glance. Developers must use dependency injection containers or factory patterns to ensure required components are present, which can be verified by checking for null references in the vehicle constructor.",
+  "diagram": {
+    "kind": "er",
+    "title": "Vehicle Composition Structure",
+    "description": "This diagram shows how a Vehicle entity is composed of multiple independent behavior components.",
+    "nodes": [
+      {
+        "id": "v",
+        "label": "Vehicle",
+        "detail": "The container object holding references to components"
+      },
+      {
+        "id": "n",
+        "label": "NavigationModule",
+        "detail": "Provides GPS and routing logic"
+      },
+      {
+        "id": "b",
+        "label": "BatteryMonitor",
+        "detail": "Provides energy status logic"
+      },
+      {
+        "id": "c",
+        "label": "CargoHandler",
+        "detail": "Provides weight and volume tracking"
+      }
+    ],
+    "edges": [
+      {
+        "from": "v",
+        "to": "n",
+        "label": "has-a"
+      },
+      {
+        "from": "v",
+        "to": "b",
+        "label": "has-a"
+      },
+      {
+        "from": "v",
+        "to": "c",
+        "label": "has-a"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modular Logistics Fleet Management, what is the primary reason for moving away from inheritance?",
+      "options": [
+        "Inheritance caused fragile code and high regression risks when modifying base classes.",
+        "Inheritance was too slow for the autonomous drone hardware.",
+        "The team wanted to reduce the number of files in the repository.",
+        "Inheritance prevented the use of modern programming languages."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that modifying the base class in a deep hierarchy broke unrelated subclasses, creating instability.",
+      "evidence": "As requirements grew, adding a new feature like 'GPS Tracking' required modifying the base class, which inadvertently broke unrelated subclasses, leading to fragile code and high regression risks."
+    },
+    {
+      "question": "In Modular Logistics Fleet Management, what is a key trade-off of using composition?",
+      "options": [
+        "It makes the code impossible to test.",
+        "It increases object complexity during initialization, requiring careful management of injected components.",
+        "It requires a complete rewrite of the database schema.",
+        "It forces all components to be written in the same language."
+      ],
+      "answerIndex": 1,
+      "explanation": "Composition shifts complexity from the class hierarchy to the object assembly phase, necessitating robust initialization patterns.",
+      "evidence": "A primary limitation is increased object complexity during initialization. Because behavior is injected, it is harder to verify the complete state of an object at a glance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:24.435Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "trie",
+  "title": "Prefix-Based Routing Optimization",
+  "business": "Telecommunications providers managing massive routing tables for network packets.",
+  "problem": "Traditional hash-based lookups fail to handle longest-prefix matching efficiently, leading to high latency when routing packets based on hierarchical network addresses.",
+  "solution": "A Trie stores keys by sharing prefixes along tree paths, allowing the system to traverse the network address bit-by-bit to find the most specific route without scanning the entire table.",
+  "steps": [
+    "Initialize a root node representing an empty prefix.",
+    "Insert network addresses by creating child nodes for each bit (0 or 1) in the address sequence.",
+    "Mark terminal nodes with a flag to indicate a complete valid routing destination.",
+    "Traverse the tree based on incoming packet bits until the longest matching path is identified."
+  ],
+  "outcome": "Reduced lookup time complexity proportional to the address length rather than the total number of stored routes.",
+  "limitation": "Memory overhead is high due to the storage of many pointers in sparse nodes; check memory usage by monitoring node density versus total address count.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Trie Routing Path",
+    "description": "Shows how bits 1 and 0 branch into specific nodes to reach a destination.",
+    "nodes": [
+      {
+        "id": "root",
+        "label": "Root",
+        "detail": "Start of lookup"
+      },
+      {
+        "id": "n1",
+        "label": "Node 1",
+        "detail": "Bit 1 path"
+      },
+      {
+        "id": "n0",
+        "label": "Node 0",
+        "detail": "Bit 0 path"
+      },
+      {
+        "id": "dest",
+        "label": "Destination",
+        "detail": "Valid route found"
+      }
+    ],
+    "edges": [
+      {
+        "from": "root",
+        "to": "n1",
+        "label": "Input bit 1"
+      },
+      {
+        "from": "n1",
+        "to": "dest",
+        "label": "Input bit 0"
+      },
+      {
+        "from": "root",
+        "to": "n0",
+        "label": "Input bit 0"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Prefix-Based Routing Optimization, why is a Trie preferred over hash-based lookups?",
+      "options": [
+        "It enables efficient longest-prefix matching by traversing shared paths.",
+        "It eliminates the need for memory entirely.",
+        "It uses constant time regardless of address length.",
+        "It prevents all network packet collisions."
+      ],
+      "answerIndex": 0,
+      "explanation": "Tries are specifically suited for prefix-based matching because they store keys by sharing prefixes along tree paths.",
+      "evidence": "A Trie stores keys by sharing prefixes along tree paths, allowing the system to traverse the network address bit-by-bit to find the most specific route without scanning the entire table."
+    },
+    {
+      "question": "What is a primary tradeoff when implementing Prefix-Based Routing Optimization?",
+      "options": [
+        "Increased CPU usage for every bit comparison.",
+        "High memory overhead due to pointer storage in sparse nodes.",
+        "The inability to store binary data.",
+        "The requirement for a sorted input list."
+      ],
+      "answerIndex": 1,
+      "explanation": "The structure requires many pointers, which can consume significant memory if the tree is sparse.",
+      "evidence": "Memory overhead is high due to the storage of many pointers in sparse nodes; check memory usage by monitoring node density versus total address count."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:40.245Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "content_delivery_network",
+  "title": "Global Media Asset Distribution for Streamline Studios",
+  "business": "Streamline Studios operates a global platform for high-resolution digital media assets, requiring consistent access for creative teams distributed across multiple continents.",
+  "problem": "The centralized origin server experiences significant latency and connection timeouts when users in distant regions attempt to fetch large media files, leading to workflow bottlenecks.",
+  "solution": "By implementing a Content Delivery Network, the studio caches static media assets at geographically distributed edge locations, ensuring that users retrieve data from a server physically closer to their location rather than the origin.",
+  "steps": [
+    "Configure the origin server to set appropriate Cache-Control headers for static assets.",
+    "Provision a CDN distribution and map it to the origin server's domain.",
+    "Update DNS records to point the media subdomain to the CDN's provided edge endpoint.",
+    "Validate that subsequent requests for assets are served with cache-hit headers from edge nodes."
+  ],
+  "outcome": "Creative teams experience reduced latency and more reliable download speeds for large assets, as traffic is offloaded from the origin server to the edge network.",
+  "limitation": "The primary limitation is cache invalidation latency; when an asset is updated at the origin, the edge nodes may continue serving the stale version until the Time-To-Live (TTL) expires or a manual purge is triggered. To check for this, developers can inspect the Age and X-Cache headers in the HTTP response to determine if the content is being served from the edge cache or the origin.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CDN Asset Retrieval Flow",
+    "description": "This diagram illustrates the path of a user request for media assets through the CDN architecture.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Client",
+        "detail": "Remote creative user"
+      },
+      {
+        "id": "edge",
+        "label": "Edge Node",
+        "detail": "Geographically local cache"
+      },
+      {
+        "id": "origin",
+        "label": "Origin Server",
+        "detail": "Centralized storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "edge",
+        "label": "Request asset"
+      },
+      {
+        "from": "edge",
+        "to": "user",
+        "label": "Serve cached content"
+      },
+      {
+        "from": "edge",
+        "to": "origin",
+        "label": "Fetch on cache miss"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Media Asset Distribution for Streamline Studios, what is the primary purpose of deploying a CDN?",
+      "options": [
+        "To increase the storage capacity of the origin server",
+        "To reduce latency by serving assets from geographically closer edge locations",
+        "To encrypt media files before they are transmitted",
+        "To replace the need for DNS management"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explains that the CDN caches assets at edge locations to ensure users retrieve data from servers physically closer to them.",
+      "evidence": "By implementing a Content Delivery Network, the studio caches static media assets at geographically distributed edge locations, ensuring that users retrieve data from a server physically closer to their location rather than the origin."
+    },
+    {
+      "question": "In Global Media Asset Distribution for Streamline Studios, how can a developer verify if an asset is being served from the edge cache?",
+      "options": [
+        "By checking the server's CPU usage",
+        "By inspecting the Age and X-Cache headers in the HTTP response",
+        "By measuring the total number of users connected",
+        "By reviewing the origin server's file system logs"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions checking specific HTTP headers to determine the source of the content.",
+      "evidence": "To check for this, developers can inspect the Age and X-Cache headers in the HTTP response to determine if the content is being served from the edge cache or the origin."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:32.303Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

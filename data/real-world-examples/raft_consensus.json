@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "raft_consensus",
+  "title": "Synchronized Global Inventory Ledger",
+  "business": "A multinational logistics firm managing real-time stock levels across distributed regional warehouses.",
+  "problem": "Inconsistent inventory counts caused by network partitions, leading to overselling items that are already allocated to other regions.",
+  "solution": "Implementing the Raft consensus algorithm to ensure all regional nodes agree on a single, linearizable sequence of inventory updates, preventing conflicting state changes.",
+  "steps": [
+    "Elect a single leader node through a majority vote to coordinate all incoming inventory write requests.",
+    "The leader receives an update, appends it to its local log, and replicates the entry to follower nodes.",
+    "Follower nodes acknowledge receipt of the log entry, confirming persistence in their local storage.",
+    "Once a majority of nodes acknowledge the entry, the leader commits the change and notifies followers to apply it to their state machines.",
+    "If a leader fails, followers initiate a new election based on term numbers to restore service."
+  ],
+  "outcome": "A unified, reliable source of truth for inventory levels that remains consistent even if individual nodes or network segments experience temporary failures.",
+  "limitation": "The primary limitation is latency; because every write requires a round-trip to a majority of nodes, the system performance is constrained by the slowest link in the majority quorum. You can check this by monitoring the time elapsed between a client request and the commit confirmation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Raft Inventory Replication Flow",
+    "description": "This diagram shows how a leader node coordinates state changes across a cluster to ensure consistency.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "Inventory API",
+        "detail": "Submits stock update requests"
+      },
+      {
+        "id": "leader",
+        "label": "Leader Node",
+        "detail": "Manages log and coordinates quorum"
+      },
+      {
+        "id": "f1",
+        "label": "Follower A",
+        "detail": "Replicates log entries"
+      },
+      {
+        "id": "f2",
+        "label": "Follower B",
+        "detail": "Replicates log entries"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "leader",
+        "label": "proposes update"
+      },
+      {
+        "from": "leader",
+        "to": "f1",
+        "label": "replicates log"
+      },
+      {
+        "from": "leader",
+        "to": "f2",
+        "label": "replicates log"
+      },
+      {
+        "from": "f1",
+        "to": "leader",
+        "label": "acknowledges"
+      },
+      {
+        "from": "f2",
+        "to": "leader",
+        "label": "acknowledges"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronized Global Inventory Ledger, why is Raft used to solve the inventory problem?",
+      "options": [
+        "To ensure all regional nodes agree on a single, linearizable sequence of inventory updates.",
+        "To increase the total number of requests the system can handle per second.",
+        "To allow nodes to operate independently without communicating with each other.",
+        "To replace the need for network connectivity between regional warehouses."
+      ],
+      "answerIndex": 0,
+      "explanation": "Raft provides consensus, which forces distributed nodes to agree on a single order of operations, preventing the conflicts described in the problem.",
+      "evidence": "Implementing the Raft consensus algorithm to ensure all regional nodes agree on a single, linearizable sequence of inventory updates, preventing conflicting state changes."
+    },
+    {
+      "question": "In Synchronized Global Inventory Ledger, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot handle more than three nodes.",
+        "The system performance is constrained by the slowest link in the majority quorum.",
+        "The system requires a manual reset every time a leader is elected.",
+        "The system cannot function if a single follower node goes offline."
+      ],
+      "answerIndex": 1,
+      "explanation": "Consensus algorithms require a majority quorum, meaning the leader must wait for the majority to respond, making the slowest node in that majority a bottleneck.",
+      "evidence": "The primary limitation is latency; because every write requires a round-trip to a majority of nodes, the system performance is constrained by the slowest link in the majority quorum."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:56.097Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

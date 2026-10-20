@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "kafka",
+  "title": "Real-time Logistics Event Synchronization",
+  "business": "Global logistics companies managing complex supply chains.",
+  "problem": "Legacy systems often suffer from data silos where shipping status updates are trapped in isolated databases, causing significant delays in customer notification and inventory reconciliation.",
+  "solution": "Kafka acts as a distributed event streaming platform, decoupling data producers from consumers by storing events in durable topics, allowing multiple downstream services to consume the same status updates in real-time.",
+  "steps": [
+    "Initialize the Kafka cluster environment using storage formatting tools.",
+    "Define a dedicated shipping-updates topic to serve as the central event log.",
+    "Deploy a source connector via Kafka Connect to ingest status changes from legacy databases.",
+    "Implement a Kafka Streams application to filter and aggregate shipment milestones.",
+    "Expose the processed event stream to customer-facing dashboards and inventory systems."
+  ],
+  "outcome": "Improved operational visibility and reduced latency in cross-departmental data synchronization.",
+  "limitation": "The primary trade-off is the operational complexity of managing cluster state and partition distribution, which must be monitored by checking the consumer lag and broker health metrics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Event Pipeline",
+    "description": "Data flows from legacy databases through Kafka into multiple consuming services.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy DB",
+        "detail": "Source of truth"
+      },
+      {
+        "id": "b",
+        "label": "Kafka Connect",
+        "detail": "Ingestion layer"
+      },
+      {
+        "id": "c",
+        "label": "Kafka Topic",
+        "detail": "Durable event log"
+      },
+      {
+        "id": "d",
+        "label": "Kafka Streams",
+        "detail": "Processing logic"
+      },
+      {
+        "id": "e",
+        "label": "Dashboard",
+        "detail": "Consumer"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "reads"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "produces"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "consumes"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://kafka.apache.org/quickstart",
+      "label": "Quickstart | Apache Kafka Quickstart"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Logistics Event Synchronization, how does Kafka address the problem of data silos?",
+      "options": [
+        "By replacing all legacy databases with a single centralized SQL server.",
+        "By decoupling producers from consumers and storing events in durable topics.",
+        "By automatically deleting events after they are read by the first consumer.",
+        "By forcing all applications to use the same programming language."
+      ],
+      "answerIndex": 1,
+      "explanation": "Kafka allows multiple services to consume the same data stream independently, breaking the dependency on the original source system.",
+      "evidence": "Kafka acts as a distributed event streaming platform, decoupling data producers from consumers by storing events in durable topics, allowing multiple downstream services to consume the same status updates in real-time."
+    },
+    {
+      "question": "What is a key limitation mentioned for Real-time Logistics Event Synchronization?",
+      "options": [
+        "The inability to store data for more than one hour.",
+        "The requirement to use only Java 8 for all components.",
+        "The operational complexity of managing cluster state and partition distribution.",
+        "The lack of support for external data connectors."
+      ],
+      "answerIndex": 2,
+      "explanation": "Managing a distributed system like Kafka requires monitoring cluster health and partition distribution, which adds operational overhead.",
+      "evidence": "The primary trade-off is the operational complexity of managing cluster state and partition distribution, which must be monitored by checking the consumer lag and broker health metrics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:37.637Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:34.333Z"
+}

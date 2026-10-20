@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "tensorflow",
+  "title": "Automated Quality Inspection for Precision Manufacturing",
+  "business": "A high-precision electronics manufacturer producing micro-components.",
+  "problem": "Manual visual inspection of micro-components is slow, prone to human fatigue, and results in inconsistent quality control standards across shifts.",
+  "solution": "Implementing a computer vision pipeline using TensorFlow Keras to classify component images as 'pass' or 'fail' based on structural integrity, enabling real-time automated sorting.",
+  "steps": [
+    "Collect and label a dataset of micro-component images categorized by defect types.",
+    "Utilize tf.keras to define a Sequential model with convolutional layers for feature extraction.",
+    "Normalize input image data to ensure consistent pixel intensity values for the model.",
+    "Compile the model using an appropriate optimizer and loss function for binary classification.",
+    "Train the model on the labeled dataset and evaluate performance against a hold-out test set."
+  ],
+  "outcome": "A consistent, high-speed inspection process that reduces human error and standardizes quality thresholds across all production lines.",
+  "limitation": "The model may suffer from 'concept drift' if manufacturing processes change, requiring periodic retraining; monitor this by tracking classification accuracy over time against manual audits.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Automated Inspection Pipeline",
+    "description": "The flow of image data through the TensorFlow-based classification system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Camera",
+        "detail": "Captures raw component images"
+      },
+      {
+        "id": "b",
+        "label": "tf.data",
+        "detail": "Preprocesses and batches images"
+      },
+      {
+        "id": "c",
+        "label": "tf.keras Model",
+        "detail": "Classifies image as Pass/Fail"
+      },
+      {
+        "id": "d",
+        "label": "Sorting Arm",
+        "detail": "Physical actuator for output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Raw Image Stream"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Normalized Input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Classification Signal"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import tensorflow as tf\n# Define a simple model for binary classification\nmodel = tf.keras.models.Sequential([\n  tf.keras.layers.Flatten(input_shape=(128, 128)), # Input image size\n  tf.keras.layers.Dense(64, activation='relu'),\n  tf.keras.layers.Dense(1, activation='sigmoid') # Binary output: Pass/Fail\n])\nmodel.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])",
+    "explanation": "This maps to the solution by defining a neural network architecture capable of learning the visual features required to distinguish between defective and non-defective components."
+  },
+  "sources": [
+    {
+      "url": "https://www.tensorflow.org/",
+      "label": "TensorFlow"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Quality Inspection for Precision Manufacturing, what is the primary business driver for adopting TensorFlow?",
+      "options": [
+        "Eliminating human fatigue and standardizing quality control.",
+        "Reducing the cost of raw materials for micro-components.",
+        "Increasing the physical speed of the manufacturing assembly line.",
+        "Replacing all human staff with automated robotic systems."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies manual inspection as slow and inconsistent, which the solution addresses through automated classification.",
+      "evidence": "Manual visual inspection of micro-components is slow, prone to human fatigue, and results in inconsistent quality control standards across shifts."
+    },
+    {
+      "question": "In Automated Quality Inspection for Precision Manufacturing, what is a key limitation of the proposed implementation?",
+      "options": [
+        "The model cannot be used on edge devices.",
+        "The model may experience concept drift if manufacturing processes change.",
+        "TensorFlow does not support binary classification.",
+        "The system requires manual input for every single component."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about concept drift as a risk factor for model performance over time.",
+      "evidence": "The model may suffer from 'concept drift' if manufacturing processes change, requiring periodic retraining; monitor this by tracking classification accuracy over time against manual audits."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:05.939Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:01.987Z"
+}

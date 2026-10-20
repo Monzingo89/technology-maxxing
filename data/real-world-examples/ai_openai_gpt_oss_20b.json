@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_openai_gpt_oss_20b",
+  "title": "Local Regulatory Compliance Analysis",
+  "business": "Legal firms handling sensitive client data in jurisdictions with strict data residency requirements.",
+  "problem": "Legal teams cannot upload confidential case files to public cloud APIs due to strict data privacy mandates, preventing the use of advanced AI for document summarization.",
+  "solution": "Deploying gpt-oss-20b locally allows legal firms to process sensitive documents on-premises or within a private cloud, ensuring data never leaves their secure infrastructure while leveraging text-generation capabilities.",
+  "steps": [
+    "Provision local hardware with sufficient VRAM to host the 20B parameter model weights.",
+    "Configure the environment to load the model using transformers library compatible with the provided chat template.",
+    "Implement the chat template logic to handle system instructions and user messages locally.",
+    "Integrate the model into the internal document review workflow as a private inference endpoint."
+  ],
+  "outcome": "Legal teams gain the ability to perform automated document analysis and drafting on highly confidential data without violating privacy regulations.",
+  "limitation": "The model has a fixed knowledge cutoff date; users must verify if the generated legal summaries account for legislative changes occurring after the cutoff by cross-referencing with internal databases.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Inference Pipeline",
+    "description": "The flow shows how sensitive data stays within the secure boundary.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Data",
+        "detail": "Sensitive legal documents"
+      },
+      {
+        "id": "b",
+        "label": "Local Server",
+        "detail": "Host for gpt-oss-20b"
+      },
+      {
+        "id": "c",
+        "label": "Inference Engine",
+        "detail": "Processes text locally"
+      },
+      {
+        "id": "d",
+        "label": "Legal Summary",
+        "detail": "Output for review"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Execute"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/openai/gpt-oss-20b",
+      "label": "openai/gpt-oss-20b · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Local Regulatory Compliance Analysis, why is the model deployed locally?",
+      "options": [
+        "To ensure sensitive data never leaves the secure infrastructure.",
+        "To increase the model's parameter count to 100B.",
+        "To bypass the need for a chat template.",
+        "To automatically update the knowledge cutoff date."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that legal firms cannot use public cloud APIs due to privacy mandates, so local deployment keeps data within their secure environment.",
+      "evidence": "Deploying gpt-oss-20b locally allows legal firms to process sensitive documents on-premises or within a private cloud, ensuring data never leaves their secure infrastructure while leveraging text-generation capabilities."
+    },
+    {
+      "question": "In Local Regulatory Compliance Analysis, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot process text.",
+        "The model's knowledge is limited to its cutoff date.",
+        "The model requires an internet connection for every inference.",
+        "The model cannot be used for legal documents."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the fixed knowledge cutoff date as a factor that requires manual verification for recent legislative changes.",
+      "evidence": "The model has a fixed knowledge cutoff date; users must verify if the generated legal summaries account for legislative changes occurring after the cutoff by cross-referencing with internal databases."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:37.710Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:34.495Z"
+}

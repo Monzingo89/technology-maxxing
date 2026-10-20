@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "dvc",
+  "title": "Synchronizing Genomic Model Weights",
+  "business": "Bioinformatics teams managing large-scale genomic sequence model weights.",
+  "problem": "Git repositories become bloated and unusable when storing multi-gigabyte model weight files, leading to slow clones and repository corruption.",
+  "solution": "DVC decouples large model files from Git by storing them in external remote storage while keeping lightweight metadata pointers in the repository.",
+  "steps": [
+    "Initialize DVC within the existing Git repository using dvc init.",
+    "Add the large model weight file to DVC tracking using dvc add, which generates a small .dvc metadata file.",
+    "Configure a remote storage location, such as S3 or a shared network drive, using dvc remote add.",
+    "Push the actual model data to the remote storage with dvc push.",
+    "Commit the .dvc metadata file to Git to version the model state alongside the training code."
+  ],
+  "outcome": "Developers can clone the repository instantly and retrieve specific model versions on demand without bloating the Git history.",
+  "limitation": "DVC is not designed for data lakes or petabyte-scale storage; performance may degrade when syncing tens of thousands of individual files, requiring alternative infrastructure solutions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "DVC Data Versioning Workflow",
+    "description": "The flow shows how DVC separates metadata from the actual binary data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Git Repo",
+        "detail": "Contains code and .dvc metadata files"
+      },
+      {
+        "id": "b",
+        "label": "DVC Cache",
+        "detail": "Local storage for versioned data"
+      },
+      {
+        "id": "c",
+        "label": "Remote Storage",
+        "detail": "Centralized storage for model weights"
+      },
+      {
+        "id": "d",
+        "label": "Workspace",
+        "detail": "Active directory with actual model files"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "dvc checkout"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "dvc add"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "dvc push"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "dvc pull"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://doc.dvc.org/start",
+      "label": "Get Started with DVC"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Synchronizing Genomic Model Weights, how does DVC resolve the issue of repository bloat?",
+      "options": [
+        "By compressing all files into a single Git blob",
+        "By storing large files in external remote storage and tracking metadata in Git",
+        "By automatically deleting old model versions from the server",
+        "By forcing developers to use a separate Git repository for every model"
+      ],
+      "answerIndex": 1,
+      "explanation": "DVC decouples large model files from Git by storing them in external remote storage while keeping lightweight metadata pointers in the repository.",
+      "evidence": "DVC decouples large model files from Git by storing them in external remote storage while keeping lightweight metadata pointers in the repository."
+    },
+    {
+      "question": "What is a primary limitation of the implementation described in Synchronizing Genomic Model Weights?",
+      "options": [
+        "It cannot track changes to code files",
+        "It requires a paid subscription for remote storage",
+        "It is not suitable for petabyte-scale data lakes or massive file counts",
+        "It prevents developers from switching between different model versions"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that DVC is not designed for data lakes or petabyte-scale storage and may struggle with tens of thousands of files.",
+      "evidence": "DVC is not designed for data lakes or petabyte-scale storage; performance may degrade when syncing tens of thousands of individual files, requiring alternative infrastructure solutions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:54.017Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:50.341Z"
+}

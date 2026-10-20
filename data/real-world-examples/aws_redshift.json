@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_redshift",
+  "title": "Unified Logistics Analytics for Global Supply Chains",
+  "business": "A global logistics firm managing thousands of shipping containers across multiple continents needs to consolidate disparate telemetry data from IoT sensors, warehouse management systems, and regional shipping manifests.",
+  "problem": "The firm currently relies on siloed regional databases that prevent real-time visibility into global inventory levels, leading to high latency in decision-making and redundant shipping costs caused by poor stock distribution.",
+  "solution": "Amazon Redshift provides a managed cloud data warehouse that allows the firm to ingest high-volume telemetry data into a centralized cluster. By utilizing Redshift's ability to handle complex analytical queries across massive datasets, the firm can gain a unified view of its global supply chain operations without managing underlying infrastructure hardware.",
+  "steps": [
+    "Provision an Amazon Redshift cluster or serverless workgroup to serve as the central data repository.",
+    "Define schema structures that map incoming IoT telemetry and regional manifest data into optimized columnar tables.",
+    "Configure data ingestion pipelines to stream or batch load records into the Redshift cluster.",
+    "Implement workload management (WLM) queues to prioritize critical supply chain dashboard queries over background data processing tasks.",
+    "Connect business intelligence tools to the Redshift endpoint for real-time visualization of global logistics status."
+  ],
+  "outcome": "The firm achieves a single source of truth for global inventory, enabling proactive rerouting of shipments and optimized warehouse stocking levels based on consolidated, high-fidelity data.",
+  "limitation": "A primary limitation is the potential for query contention when high-concurrency analytical workloads compete for cluster resources. To check for this, administrators should monitor the WLM query queue wait times and throughput metrics in the management console to determine if additional nodes or concurrency scaling is required.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Data Integration Flow",
+    "description": "This diagram illustrates the flow of data from regional sources into the centralized Redshift warehouse.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IoT Sensors",
+        "detail": "Real-time telemetry data"
+      },
+      {
+        "id": "b",
+        "label": "Regional Databases",
+        "detail": "Manifest and inventory records"
+      },
+      {
+        "id": "c",
+        "label": "Amazon Redshift",
+        "detail": "Centralized data warehouse"
+      },
+      {
+        "id": "d",
+        "label": "BI Dashboard",
+        "detail": "Global logistics visualization"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Load"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Amazon Web Services Products"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Analytics for Global Supply Chains, what is the primary business problem being addressed?",
+      "options": [
+        "Siloed regional databases preventing global visibility",
+        "High costs of physical warehouse infrastructure",
+        "Lack of IoT hardware in shipping containers",
+        "Inability to hire data scientists"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that regional silos prevent visibility into global inventory.",
+      "evidence": "The firm currently relies on siloed regional databases that prevent real-time visibility into global inventory levels, leading to high latency in decision-making and redundant shipping costs caused by poor stock distribution."
+    },
+    {
+      "question": "In Unified Logistics Analytics for Global Supply Chains, what is a key limitation of the Redshift implementation?",
+      "options": [
+        "The inability to use SQL for data analysis",
+        "Query contention during high-concurrency workloads",
+        "The requirement to manage physical server hardware",
+        "A lack of support for IoT data ingestion"
+      ],
+      "answerIndex": 1,
+      "explanation": "The text identifies query contention as a specific limitation related to resource competition.",
+      "evidence": "A primary limitation is the potential for query contention when high-concurrency analytical workloads compete for cluster resources."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:13.241Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

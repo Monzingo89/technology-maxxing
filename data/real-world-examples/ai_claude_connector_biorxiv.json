@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_biorxiv",
+  "title": "Accelerating Oncology Drug Discovery via Preprint Synthesis",
+  "business": "A mid-sized oncology research firm focused on identifying novel protein kinase inhibitors.",
+  "problem": "Researchers lose weeks manually monitoring hundreds of new biological preprints, leading to delayed identification of emerging therapeutic targets and redundant experimental efforts.",
+  "solution": "The bioRxiv connector enables Claude to programmatically query the latest preprints, allowing the research team to synthesize findings across multiple biological categories without manual literature review.",
+  "steps": [
+    "Configure the bioRxiv connector within the Claude environment to establish API connectivity.",
+    "Define specific search parameters using the search_preprints tool to filter for kinase-related keywords.",
+    "Execute automated queries to retrieve metadata and abstracts for papers published within the last 48 hours.",
+    "Instruct Claude to summarize the findings and highlight potential conflicts with existing internal research pipelines."
+  ],
+  "outcome": "The research team achieves a more agile R&D cycle by identifying relevant preprints in near real-time, allowing for faster pivot decisions in experimental design.",
+  "limitation": "The connector accesses preprints that have not yet undergone peer review; users must verify the scientific rigor of findings by checking the get_published_articles tool to see if a peer-reviewed version exists.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Preprint Synthesis Workflow",
+    "description": "This diagram illustrates the flow from raw preprint data to actionable research insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "bioRxiv/medRxiv",
+        "detail": "Source repository of biological preprints"
+      },
+      {
+        "id": "b",
+        "label": "Claude Connector",
+        "detail": "Interface for search_preprints tool"
+      },
+      {
+        "id": "c",
+        "label": "Research Synthesis",
+        "detail": "Claude-generated summary of findings"
+      },
+      {
+        "id": "d",
+        "label": "Peer Review Check",
+        "detail": "Verification via search_published_articles"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "data retrieval"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "summarization"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "validation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/biorxiv",
+      "label": "bioRxiv Connector"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Accelerating Oncology Drug Discovery via Preprint Synthesis, what is the primary problem addressed by the connector?",
+      "options": [
+        "The high cost of journal subscriptions for oncology research.",
+        "The manual effort required to monitor and synthesize new biological preprints.",
+        "The lack of access to historical clinical trial data.",
+        "The inability to communicate with other researchers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that researchers lose weeks manually monitoring preprints, which the connector solves by automating the retrieval and synthesis process.",
+      "evidence": "Researchers lose weeks manually monitoring hundreds of new biological preprints, leading to delayed identification of emerging therapeutic targets and redundant experimental efforts."
+    },
+    {
+      "question": "In Accelerating Oncology Drug Discovery via Preprint Synthesis, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot search for specific keywords.",
+        "The connector only works with PubMed data.",
+        "The data is not peer-reviewed, requiring subsequent validation.",
+        "The connector is limited to medical sciences only."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because preprints are not peer-reviewed, the implementation requires a validation step to ensure scientific rigor.",
+      "evidence": "The connector accesses preprints that have not yet undergone peer review; users must verify the scientific rigor of findings by checking the get_published_articles tool to see if a peer-reviewed version exists."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:33.606Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:29.705Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "circuit_breaker_pattern",
+  "title": "Resilient Inventory Sync for Global Retail",
+  "business": "Global e-commerce platforms requiring consistent inventory synchronization across distributed microservices.",
+  "problem": "When a downstream inventory service experiences latency or outages, the calling order-processing service hangs while waiting for timeouts, leading to cascading resource exhaustion and thread starvation across the entire application stack.",
+  "solution": "The Circuit Breaker pattern acts as a state machine that monitors for failures in calls to the inventory service. When failure thresholds are exceeded, the breaker trips to an open state, immediately failing fast without attempting the remote call. This prevents the order-processing service from wasting resources on doomed requests, allowing the inventory service space to recover.",
+  "steps": [
+    "Define a threshold for consecutive failures that triggers the transition from closed to open state.",
+    "Implement a proxy or wrapper around the inventory service client to intercept all outgoing requests.",
+    "Configure a timeout period for the open state, after which the breaker enters a half-open state to allow a limited number of test requests.",
+    "Reset the breaker to the closed state if the test requests succeed, or return to open if they fail."
+  ],
+  "outcome": "The system maintains overall stability during partial outages, ensuring that the order-processing service remains responsive even when the inventory service is unreachable.",
+  "limitation": "A significant limitation is the risk of false positives where the breaker trips due to transient network blips rather than actual service failure. To check for this, developers must monitor the circuit state transitions and adjust the failure threshold and timeout duration based on observed error patterns rather than static defaults.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Circuit Breaker State Machine",
+    "description": "Shows how requests flow through the breaker states.",
+    "nodes": [
+      {
+        "id": "closed",
+        "label": "Closed State",
+        "detail": "Normal operation, requests pass through"
+      },
+      {
+        "id": "open",
+        "label": "Open State",
+        "detail": "Failing fast, requests blocked"
+      },
+      {
+        "id": "half-open",
+        "label": "Half-Open State",
+        "detail": "Testing recovery with limited traffic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "closed",
+        "to": "open",
+        "label": "Failure threshold reached"
+      },
+      {
+        "from": "open",
+        "to": "half-open",
+        "label": "Timeout period expired"
+      },
+      {
+        "from": "half-open",
+        "to": "closed",
+        "label": "Test requests succeed"
+      },
+      {
+        "from": "half-open",
+        "to": "open",
+        "label": "Test requests fail"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Resilient Inventory Sync for Global Retail, what is the primary purpose of the Circuit Breaker pattern?",
+      "options": [
+        "To prevent cascading resource exhaustion by failing fast when a dependency is down",
+        "To increase the speed of database queries by caching inventory data",
+        "To automatically scale the number of inventory service instances",
+        "To encrypt data transmitted between the order and inventory services"
+      ],
+      "answerIndex": 0,
+      "explanation": "The pattern prevents the calling service from hanging on timeouts, which protects system resources.",
+      "evidence": "This prevents the order-processing service from wasting resources on doomed requests, allowing the inventory service space to recover."
+    },
+    {
+      "question": "In Resilient Inventory Sync for Global Retail, what is a key limitation of the pattern?",
+      "options": [
+        "It requires a manual restart of the application to reset the circuit",
+        "It can trip unnecessarily due to transient network issues",
+        "It increases the complexity of the database schema",
+        "It prevents the system from ever retrying a failed request"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that false positives from transient issues are a known risk.",
+      "evidence": "A significant limitation is the risk of false positives where the breaker trips due to transient network blips rather than actual service failure."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:20.255Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

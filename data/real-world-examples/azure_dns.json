@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_dns",
+  "title": "Hybrid Infrastructure Name Resolution",
+  "business": "Enterprises operating hybrid environments with both cloud-native and on-premises resources.",
+  "problem": "Fragmented name resolution leads to connectivity failures when cloud services cannot resolve internal hostnames or vice versa.",
+  "solution": "Azure DNS provides a unified platform to host public and private DNS zones, enabling seamless resolution across the Azure infrastructure and connected networks.",
+  "steps": [
+    "Create a private DNS zone within the Azure portal to host internal domain names.",
+    "Link the private DNS zone to the specific virtual networks requiring internal resolution.",
+    "Configure DNS forwarding rules to bridge queries between on-premises servers and Azure private zones.",
+    "Verify resolution by performing a lookup from a virtual machine within the linked virtual network."
+  ],
+  "outcome": "Consistent, reliable name resolution across hybrid environments without maintaining disparate DNS servers.",
+  "limitation": "Private DNS zones are scoped to specific virtual networks; to check if a resource is reachable, verify the virtual network link status in the Azure portal.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Hybrid DNS Resolution Flow",
+    "description": "Shows how DNS queries traverse from clients to the Azure DNS infrastructure.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client VM",
+        "detail": "Source of DNS query"
+      },
+      {
+        "id": "b",
+        "label": "Virtual Network",
+        "detail": "Network hosting the client"
+      },
+      {
+        "id": "c",
+        "label": "Azure Private DNS Zone",
+        "detail": "Authoritative records"
+      },
+      {
+        "id": "d",
+        "label": "On-Premises Network",
+        "detail": "External resource location"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "resolves via link"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "forwards if needed"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Hybrid Infrastructure Name Resolution, what is the primary problem addressed by Azure DNS?",
+      "options": [
+        "Fragmented name resolution causing connectivity failures",
+        "High latency in public web traffic",
+        "Excessive costs of on-premises hardware",
+        "Lack of support for Linux virtual machines"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that fragmented name resolution is the specific failure point for hybrid environments.",
+      "evidence": "Fragmented name resolution leads to connectivity failures when cloud services cannot resolve internal hostnames or vice versa."
+    },
+    {
+      "question": "In Hybrid Infrastructure Name Resolution, what is a key limitation of the implementation?",
+      "options": [
+        "Private DNS zones are limited to 10 records",
+        "Private DNS zones are scoped to specific virtual networks",
+        "Azure DNS does not support public zones",
+        "Integration requires manual IP updates"
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation of the limitation explicitly mentions the scoping requirement for private zones.",
+      "evidence": "Private DNS zones are scoped to specific virtual networks; to check if a resource is reachable, verify the virtual network link status in the Azure portal."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:45.482Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

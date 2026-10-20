@@ -15,6 +15,7 @@ import {
   Clock3,
   FileText,
   Library,
+  BookOpen,
   LoaderCircle,
   Lock,
   LogIn,
@@ -64,6 +65,8 @@ import type { Category, LeaderboardEntry } from "./services/types";
 import { learningDestination, learningLogin } from "./services/learningGate";
 import { pickCategories } from "./workstation/modelRecommendations";
 import { topicGroup } from "./services/topicGroups";
+import type { Exam, StudyTopic } from "./services/examStudy";
+const ExamStudy = lazy(() => import("./components/ExamStudy"));
 const Benchmarks = lazy(() => import("./workstation/Benchmarks"));
 const CategoryPicks = lazy(() => import("./workstation/CategoryPicks"));
 
@@ -72,6 +75,7 @@ type View =
   | "home"
   | "videos"
   | "library"
+  | "study"
   | "assessments"
   | "papers"
   | "leaderboards"
@@ -86,6 +90,7 @@ function readView(): View {
     "home",
     "videos",
     "library",
+    "study",
     "assessments",
     "papers",
     "leaderboards",
@@ -110,19 +115,11 @@ type Question = {
   explanation: string;
   skill?: string;
   difficulty?: "foundation" | "applied" | "advanced";
+  section?: "real-world";
   sources?: { label: string; url: string }[];
 };
 
-type Technology = {
-  id: string;
-  name: string;
-  category: string;
-  tag: string;
-  challengeCount: number;
-  assessmentCount: number;
-  learnPath: string;
-  assessmentQuality?: "authored" | "catalog-recall";
-};
+type Technology = StudyTopic;
 
 type Progress = {
   guestCount: number;
@@ -152,8 +149,8 @@ type ActiveAssessment = {
 
 const GUEST_LIMIT = 5;
 const guestAccessUnavailable = !firebaseReady && !import.meta.env.DEV;
-const ASSESSMENT_QUESTION_COUNT = 5;
-const QUESTION_SECONDS = 10;
+const ASSESSMENT_QUESTION_COUNT = 7;
+const QUESTION_SECONDS = 20;
 const TOTAL_MINUTES = 10;
 const PASS_RATE = 0.7;
 const RETAKE_LOCK_MS = 5 * 24 * 60 * 60 * 1000;
@@ -382,6 +379,8 @@ function selectAssessmentQuestions(bank: Question[], seed: string) {
   if (bank.every((question) => question.difficulty)) {
     randomized.sort((a, b) => level[a.difficulty!] - level[b.difficulty!]);
   }
+  // Keep the two scenario questions together at the end of the assessment.
+  randomized.sort((a, b) => Number(a.section === "real-world") - Number(b.section === "real-world"));
   const selected: Question[] = [];
   const seenKeys = new Set<string>();
   for (const question of randomized) {
@@ -481,6 +480,7 @@ export default function App() {
   const [assessmentBusy, setAssessmentBusy] = useState(false);
   const assessmentBusyRef = useRef(false);
   const activeRef = useRef<ActiveAssessment | null>(null);
+  const examRef = useRef<HTMLElement | null>(null);
   const [pendingCompletion, setPendingCompletion] = useState<{
     current: ActiveAssessment;
     answers: (number | number[] | null)[];
@@ -501,11 +501,13 @@ export default function App() {
     document.title =
       view === "privacy"
         ? "Privacy Policy | AI Space"
-        : view === "terms"
-          ? "Terms of Service | AI Space"
-          : view === "videos"
-            ? "Technology Maxxing — Learn in 1 minute"
-            : "AI Space — IoT Library, AI Topics, Timed Assessments";
+        : view === "study"
+          ? "Study For Exam — Acronyms & Flashcards | Technology Maxxing"
+          : view === "terms"
+            ? "Terms of Service | AI Space"
+            : view === "videos"
+              ? "Technology Maxxing — Learn in 1 minute"
+              : "AI Space — IoT Library, AI Topics, Timed Assessments";
     if (view === "privacy" || view === "terms") {
       window.scrollTo(0, 0);
       document.getElementById("legal-title")?.focus({ preventScroll: true });
@@ -580,6 +582,7 @@ export default function App() {
     );
   }, [videoOwner, user]);
   const [technologies, setTechnologies] = useState<Technology[]>([]);
+  const [exams, setExams] = useState<Exam[]>([]);
   const [questionBanks, setQuestionBanks] = useState<
     Record<string, Question[]>
   >({});
@@ -593,6 +596,14 @@ export default function App() {
   const [progress, setProgress] = useState(loadProgress);
   const [paperVotes, setPaperVotes] = useState(loadPaperVotes);
   const [active, setActive] = useState<ActiveAssessment | null>(null);
+  useEffect(() => {
+    if (!active || active.index !== 0 || view !== "assessments") return;
+    const frame = requestAnimationFrame(() => {
+      examRef.current?.focus({ preventScroll: true });
+      examRef.current?.scrollIntoView({ block: "center", behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [active?.startedAt, view]);
   const [multipleSelection, setMultipleSelection] = useState<number[]>([]);
   const [pendingAssessment, setPendingAssessment] = useState<Technology | null>(
     null,
@@ -676,6 +687,7 @@ export default function App() {
       })
       .then((data) => {
         setTechnologies(data.technologies || []);
+        setExams(data.exams || []);
         setQuestionBanks(data.assessments || {});
       })
       .catch((error) => setLoadError(error.message));
@@ -1342,6 +1354,9 @@ export default function App() {
                 <Library size={18} />
                 Library
               </button>
+              <button className={view === "study" ? "active" : ""} onClick={() => setView("study")}>
+                <BookOpen size={18} /> Study For Exam
+              </button>
               <button
                 className={view === "assessments" ? "active" : ""}
                 onClick={() => setView("assessments")}
@@ -1522,6 +1537,7 @@ export default function App() {
             {([
               ["home", "Home", Home],
               ["assessments", "Assessments", CheckCircle2],
+              ["study", "Study For Exam", BookOpen],
               ["leaderboards", "Leaderboards", Trophy],
             ] as const).map(([destination, label, Icon]) => (
               <button key={destination} className="mobile-navigation-link" aria-current={view === destination ? "page" : undefined}
@@ -1597,6 +1613,7 @@ export default function App() {
       ) : view === "builder" ||
         view === "models" ||
         view === "benchmarks" ||
+        view === "study" ||
         view === "videos" ||
         view === "home" ? null : (
         <section className="hero">
@@ -1604,7 +1621,7 @@ export default function App() {
             <p className="eyebrow">Learn & practice</p>
             <h1>Test your knowledge.</h1>
             <p>
-              5 questions. 10 seconds each. Retry after 5 days if you don’t pass.
+              20 seconds per question. Retry after 5 days if you don’t pass.
             </p>
             <p className="assessment-disclosure">
               Practice quizzes, not professional certification. Quiz types are
@@ -1704,6 +1721,11 @@ export default function App() {
           />
         </Suspense>
       )}
+      {view === "study" ? (
+        <Suspense fallback={<p role="status">Loading your study desk…</p>}>
+          <ExamStudy topics={technologies} exams={exams} signedIn={!!user} loadError={loadError} onAssess={requestAssessment} />
+        </Suspense>
+      ) : null}
       {view === "library" ? (
         <section className="panel">
           <div className="panel-head">
@@ -1787,9 +1809,9 @@ export default function App() {
                   <h3>{item.name}</h3>
                   <p>{item.tag}</p>
                   <small>
-                    {ASSESSMENT_QUESTION_COUNT} timed questions ·{" "}
+                    {item.assessmentCount} timed questions ·{" "}
                     {item.assessmentQuality === "authored"
-                      ? "Authored knowledge check"
+                      ? "Authored core questions"
                       : "Catalog recall, not proficiency"}
                   </small>
                   <div className="card-actions">
@@ -1860,12 +1882,12 @@ export default function App() {
       ) : null}
 
       {view === "assessments" ? (
-        <section className="panel">
+        <section className={`panel${active ? " assessment-in-progress" : ""}`}>
           <div className="panel-head">
             <div>
               <h2>Assessments</h2>
               <p>
-                5 focused questions. 10 seconds per question. 4 correct to pass.
+                20 seconds per question. Pass with 70% correct.
               </p>
             </div>
             {!user && guestCompleted >= GUEST_LIMIT ? (
@@ -1876,7 +1898,7 @@ export default function App() {
           </div>
 
           {active && activeQuestion ? (
-            <article className="exam-card">
+            <article className="exam-card" ref={examRef} tabIndex={-1} aria-label="Assessment question">
               <div className="exam-meta">
                 <span>{active.technology.name}</span>
                 <span>
@@ -2061,7 +2083,7 @@ export default function App() {
                       <small>
                         {lock
                           ? `Retake available in ${lock}`
-                          : `${ASSESSMENT_QUESTION_COUNT} questions`}
+                          : `${item.assessmentCount} questions`}
                       </small>
                     </button>
                   );
@@ -2294,12 +2316,15 @@ export default function App() {
             <h2 id="assessment-warning-title">Ready for a timed assessment?</h2>
             <p>
               {pendingAssessment.assessmentQuality === "authored"
-                ? "Authored knowledge check."
+                ? "Authored core questions."
                 : "Catalog-recall check: tests recognition of this library’s descriptions, not practical proficiency."}{" "}
               This is a learning exercise, not a proctored exam.
             </p>
+            {pendingAssessment.assessmentCount === 7 && (
+              <p>Includes two AI-generated questions about the Real World Example at the end of this topic’s lesson.</p>
+            )}
             <p>
-              Each question has a strict 10-second timer. During the final 3
+              {pendingAssessment.assessmentCount} questions, with a strict 20-second timer each. During the final 3
               seconds, the timer turns red and pulses. If time reaches zero
               before you select an answer, that question is marked incorrect.
             </p>

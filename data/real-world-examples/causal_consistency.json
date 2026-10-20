@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "causal_consistency",
+  "title": "Collaborative Document Threading",
+  "business": "A collaborative enterprise messaging platform where users engage in threaded discussions across globally distributed data centers.",
+  "problem": "In a distributed system, if a reply to a message arrives at a user's client before the original message due to network latency or replication lag, the conversation becomes unintelligible, breaking the user's mental model of the discussion flow.",
+  "solution": "Causal consistency ensures that operations that are causally related—such as a reply depending on a parent message—are observed by all participants in the same order. By tracking dependencies between messages, the system prevents the 'out-of-order' display of replies relative to their parent posts.",
+  "steps": [
+    "Assign a unique sequence number or vector clock to every new message created by a user.",
+    "Include the identifier of the parent message in the metadata of the reply operation.",
+    "Configure the storage layer to buffer incoming operations that reference a parent ID not yet present in the local replica.",
+    "Apply the buffered operation only after the parent message has been successfully committed and made visible to the local node."
+  ],
+  "outcome": "Users experience a coherent, logical conversation flow where replies always appear beneath their corresponding parent messages, regardless of which data center processed the initial request.",
+  "limitation": "The primary limitation is the overhead of tracking causal dependencies, which requires metadata storage and can increase latency for operations that must wait for their causal predecessors to arrive. This can be checked by monitoring the 'buffer-wait-time' metric, which tracks how long an operation stays in a pending state before being applied.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Causal Dependency Flow",
+    "description": "Shows how a reply is held until its parent is processed.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Parent Message",
+        "detail": "Original post created by User 1"
+      },
+      {
+        "id": "b",
+        "label": "Reply Operation",
+        "detail": "Dependent on Parent Message"
+      },
+      {
+        "id": "c",
+        "label": "Buffer Queue",
+        "detail": "Holds Reply until Parent is ready"
+      },
+      {
+        "id": "d",
+        "label": "User View",
+        "detail": "Final ordered display"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "is-visible"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "waits-for-parent"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "releases-to-view"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Collaborative Document Threading, why is causal consistency necessary?",
+      "options": [
+        "To prevent replies from appearing before their parent messages.",
+        "To ensure all users see the exact same data at the exact same microsecond.",
+        "To eliminate the need for network latency compensation.",
+        "To increase the total throughput of the messaging system."
+      ],
+      "answerIndex": 0,
+      "explanation": "Causal consistency maintains the order of operations that are causally related, preventing the confusion caused by replies appearing before the original message.",
+      "evidence": "In a distributed system, if a reply to a message arrives at a user's client before the original message due to network latency or replication lag, the conversation becomes unintelligible, breaking the user's mental model of the discussion flow."
+    },
+    {
+      "question": "In Collaborative Document Threading, what is a primary trade-off of the implementation?",
+      "options": [
+        "It requires infinite storage for all historical messages.",
+        "It introduces latency because operations may wait for causal predecessors.",
+        "It prevents users from posting messages simultaneously.",
+        "It forces the system to use a single centralized database node."
+      ],
+      "answerIndex": 1,
+      "explanation": "Causal consistency requires tracking dependencies, which can cause operations to wait in a buffer, thereby increasing latency.",
+      "evidence": "The primary limitation is the overhead of tracking causal dependencies, which requires metadata storage and can increase latency for operations that must wait for their causal predecessors to arrive."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:03.013Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

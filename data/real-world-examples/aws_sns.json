@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_sns",
+  "title": "Automated Logistics Notification Orchestration",
+  "business": "A regional logistics provider managing a fleet of delivery vehicles and warehouse inventory systems.",
+  "problem": "The company struggles with fragmented communication where the central order management system must manually call separate APIs for SMS alerts, email notifications, and internal warehouse dashboard updates, leading to high coupling and frequent integration failures.",
+  "solution": "Amazon SNS provides managed pub-sub topics that fan messages out to multiple endpoint types, allowing the order management system to publish a single event to a topic while SNS handles the delivery to disparate subscribers like email services, SMS gateways, and internal webhooks.",
+  "steps": [
+    "Create an SNS topic to serve as the central message bus for logistics events.",
+    "Configure subscribers for the topic, including email addresses for managers and HTTPS endpoints for warehouse dashboards.",
+    "Grant the order management system IAM permissions to publish messages to the specific SNS topic.",
+    "Implement logic in the order management system to send a JSON payload to the SNS topic upon status changes.",
+    "Verify message delivery across all configured endpoints to ensure synchronized state updates."
+  ],
+  "outcome": "The architecture achieves decoupled communication where the order management system remains agnostic of the specific notification delivery methods, significantly reducing integration complexity and maintenance overhead.",
+  "limitation": "SNS is an asynchronous delivery service, meaning it does not guarantee immediate delivery or order of messages; developers must check the delivery status via CloudWatch metrics to identify potential delays or failed delivery attempts to specific endpoints.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Event Fan-out Flow",
+    "description": "Shows how a single event is distributed to multiple systems.",
+    "nodes": [
+      {
+        "id": "oms",
+        "label": "Order Management System",
+        "detail": "Source of truth for logistics events"
+      },
+      {
+        "id": "sns",
+        "label": "SNS Topic",
+        "detail": "Managed pub-sub message bus"
+      },
+      {
+        "id": "email",
+        "label": "Manager Email",
+        "detail": "Endpoint for human alerts"
+      },
+      {
+        "id": "wh",
+        "label": "Warehouse Dashboard",
+        "detail": "HTTPS endpoint for inventory updates"
+      }
+    ],
+    "edges": [
+      {
+        "from": "oms",
+        "to": "sns",
+        "label": "publishes event"
+      },
+      {
+        "from": "sns",
+        "to": "email",
+        "label": "fans out via SMTP"
+      },
+      {
+        "from": "sns",
+        "to": "wh",
+        "label": "fans out via HTTPS"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Notification Orchestration, what is the primary benefit of using SNS?",
+      "options": [
+        "It eliminates the need for an order management system.",
+        "It allows the order management system to publish a single event to a topic while SNS handles the delivery to disparate subscribers.",
+        "It provides a real-time database for inventory tracking.",
+        "It forces all subscribers to use the same communication protocol."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that SNS allows for a single publish action to reach multiple endpoint types, solving the problem of manual, coupled API calls.",
+      "evidence": "Amazon SNS provides managed pub-sub topics that fan messages out to multiple endpoint types, allowing the order management system to publish a single event to a topic while SNS handles the delivery to disparate subscribers like email services, SMS gateways, and internal webhooks."
+    },
+    {
+      "question": "In Automated Logistics Notification Orchestration, what is a key limitation of the implementation?",
+      "options": [
+        "SNS cannot send messages to email addresses.",
+        "SNS requires all subscribers to be in the same region.",
+        "SNS is an asynchronous delivery service and does not guarantee immediate delivery or order of messages.",
+        "SNS is only compatible with mobile applications."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly states that SNS is asynchronous and lacks guarantees on order or immediate delivery, requiring monitoring via CloudWatch.",
+      "evidence": "SNS is an asynchronous delivery service, meaning it does not guarantee immediate delivery or order of messages; developers must check the delivery status via CloudWatch metrics to identify potential delays or failed delivery attempts to specific endpoints."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:17.024Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

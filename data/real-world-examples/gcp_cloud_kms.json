@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_kms",
+  "title": "Secure Financial Ledger Encryption",
+  "business": "A regional banking consortium managing sensitive transaction logs that must be encrypted at rest to meet strict regulatory compliance requirements.",
+  "problem": "The organization struggles with manual key rotation and the risk of unauthorized access to cleartext master keys stored on local application servers.",
+  "solution": "Google Cloud KMS centralizes the management of cryptographic keys, allowing the bank to offload the complexity of key lifecycle management, including automated rotation and hardware-backed security, while maintaining strict IAM-based access control.",
+  "steps": [
+    "Create a Key Ring within the specific region to group related cryptographic keys.",
+    "Generate a CryptoKey within the Key Ring, selecting either software-backed or hardware-backed protection levels.",
+    "Configure IAM policies to grant the application service account the specific role of Cloud KMS Encrypter/Decrypter.",
+    "Enable automated key rotation on the CryptoKey to ensure new versions are generated periodically without manual intervention.",
+    "Integrate the application code to call the KMS API for encrypting data before writing to persistent storage."
+  ],
+  "outcome": "The organization achieves a centralized, auditable, and automated encryption posture that minimizes human exposure to raw cryptographic material.",
+  "limitation": "A significant trade-off is the dependency on API availability; if the KMS service is unreachable, the application cannot decrypt data. This can be checked by monitoring the latency and error rates of KMS API calls via Cloud Monitoring.",
+  "diagram": {
+    "kind": "flow",
+    "title": "KMS Encryption Workflow",
+    "description": "The flow shows how an application requests encryption from the centralized KMS service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Application",
+        "detail": "Service account requesting encryption"
+      },
+      {
+        "id": "b",
+        "label": "Cloud KMS",
+        "detail": "Centralized key management service"
+      },
+      {
+        "id": "c",
+        "label": "CryptoKey",
+        "detail": "The specific key version used for operations"
+      },
+      {
+        "id": "d",
+        "label": "Storage",
+        "detail": "Encrypted data repository"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends plaintext"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Uses active version"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Returns ciphertext"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "Writes encrypted data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Financial Ledger Encryption, what is the primary benefit of using Cloud KMS for the banking consortium?",
+      "options": [
+        "It eliminates the need for application-level encryption logic entirely.",
+        "It provides automated key rotation and centralized management to reduce manual risk.",
+        "It allows the bank to store cleartext keys on local servers for faster access.",
+        "It automatically migrates all legacy data to new encryption algorithms."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies manual key rotation and exposure of master keys as the core problem, which Cloud KMS addresses through centralization and automation.",
+      "evidence": "Google Cloud KMS centralizes the management of cryptographic keys, allowing the bank to offload the complexity of key lifecycle management, including automated rotation and hardware-backed security, while maintaining strict IAM-based access control."
+    },
+    {
+      "question": "In Secure Financial Ledger Encryption, what is a key operational limitation of the implementation?",
+      "options": [
+        "The service is only available for hardware-backed keys.",
+        "The application cannot perform encryption if the KMS API is unreachable.",
+        "IAM policies cannot be applied to individual CryptoKeys.",
+        "Automated rotation requires manual approval for every new version."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the application's ability to decrypt is dependent on the availability of the KMS API.",
+      "evidence": "A significant trade-off is the dependency on API availability; if the KMS service is unreachable, the application cannot decrypt data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:09.109Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "cross_site_request_forgery",
+  "title": "Banking Portal Transaction Integrity",
+  "business": "Online banking platforms that allow authenticated users to perform sensitive fund transfers.",
+  "problem": "An attacker tricks an authenticated user's browser into submitting an unauthorized state-changing request, such as a wire transfer, by leveraging the user's existing session cookies.",
+  "solution": "Implementing unique, cryptographically strong anti-CSRF tokens for every state-changing request ensures that the server only processes requests that include a secret, unpredictable value known only to the legitimate client application.",
+  "steps": [
+    "Generate a cryptographically secure, unique token for the user session upon login.",
+    "Embed this token as a hidden field in all HTML forms or as a custom header for AJAX requests.",
+    "Configure the server to validate the presence and correctness of this token before executing any sensitive business logic.",
+    "Reject any request that lacks a valid token or contains a mismatch, returning a 403 Forbidden error."
+  ],
+  "outcome": "The application effectively prevents unauthorized actions because the attacker cannot predict or retrieve the secret token required to complete the request.",
+  "limitation": "The primary limitation is that tokens must be managed carefully across distributed systems; if the token generation logic is weak or the token is leaked via insecure channels like HTTP or logs, the protection is bypassed. Check for this by auditing token entropy and ensuring they are transmitted only over TLS.",
+  "diagram": {
+    "kind": "flow",
+    "title": "CSRF Mitigation Flow",
+    "description": "The flow shows how the server validates the request origin using a secret token.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Browser",
+        "detail": "Holds session cookies"
+      },
+      {
+        "id": "b",
+        "label": "Attacker Site",
+        "detail": "Attempts malicious request"
+      },
+      {
+        "id": "c",
+        "label": "Banking Server",
+        "detail": "Validates anti-CSRF token"
+      },
+      {
+        "id": "d",
+        "label": "Account Ledger",
+        "detail": "Protected resource"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Sends request with valid token"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends request without token"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Authorized state change"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Rejects unauthorized request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Banking Portal Transaction Integrity, what is the primary mechanism used to address the CSRF problem?",
+      "options": [
+        "Using unique, cryptographically strong anti-CSRF tokens for every state-changing request.",
+        "Relying solely on session cookies to verify the identity of the user.",
+        "Increasing the complexity of the banking portal's architectural design.",
+        "Restricting all user access to read-only operations."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on secret, unpredictable tokens to verify that the request originated from the legitimate application.",
+      "evidence": "Implementing unique, cryptographically strong anti-CSRF tokens for every state-changing request ensures that the server only processes requests that include a secret, unpredictable value known only to the legitimate client application."
+    },
+    {
+      "question": "In Banking Portal Transaction Integrity, what is a key limitation of the proposed CSRF mitigation?",
+      "options": [
+        "The tokens are too easy for users to remember and type manually.",
+        "The mitigation requires the server to be 100% secure against all possible attacks.",
+        "Tokens must be managed carefully and can be bypassed if they are leaked or have low entropy.",
+        "The implementation prevents users from accessing the portal over TLS."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation highlights that the security of the token depends on its secrecy and randomness, and it must be protected during transmission.",
+      "evidence": "The primary limitation is that tokens must be managed carefully across distributed systems; if the token generation logic is weak or the token is leaked via insecure channels like HTTP or logs, the protection is bypassed."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:44.275Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

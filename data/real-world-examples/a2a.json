@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "topicId": "a2a",
+  "title": "Supply Chain Logistics Orchestration",
+  "business": "Global manufacturing firms managing complex, multi-vendor logistics networks.",
+  "problem": "Firms struggle with siloed logistics agents—such as regional warehouse managers, freight forwarders, and customs brokers—that cannot communicate directly, leading to manual data entry and delayed shipment visibility.",
+  "solution": "The A2A Protocol enables these autonomous logistics agents to interoperate by providing a standardized language for discovery and task delegation, allowing a central orchestrator to request status updates or initiate actions across disparate systems without custom point-to-point integrations.",
+  "steps": [
+    "Publish an Agent Card at the .well-known/agent-card.json endpoint for each logistics agent to declare its capabilities.",
+    "Configure the central orchestrator to perform agent discovery by fetching these cards to identify available endpoints.",
+    "Implement the SendMessage API for synchronous status queries or SendStreamingMessage for real-time shipment tracking updates.",
+    "Utilize standard JWT-based authentication to ensure secure, authorized communication between the orchestrator and regional agents."
+  ],
+  "outcome": "A unified, responsive supply chain ecosystem where agents autonomously negotiate and share task results, significantly reducing manual coordination overhead.",
+  "limitation": "Opaque execution prevents agents from inspecting the internal logic or proprietary tools of their peers; developers must verify system health through declared capabilities and standardized status events rather than direct introspection.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Agent Collaboration Flow",
+    "description": "Shows the orchestrator discovering and delegating tasks to specialized logistics agents via A2A.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Orchestrator",
+        "detail": "Central agent managing the supply chain flow"
+      },
+      {
+        "id": "b",
+        "label": "Warehouse Agent",
+        "detail": "Handles inventory and storage tasks"
+      },
+      {
+        "id": "c",
+        "label": "Freight Agent",
+        "detail": "Handles transport and shipping tasks"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "GET agent-card"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "POST /message:send"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "Stream: TaskStatusUpdate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://a2a-protocol.org/latest/topics/what-is-a2a/",
+      "label": "What is A2A?"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Logistics Orchestration, how does the A2A Protocol resolve the issue of siloed logistics agents?",
+      "options": [
+        "By forcing all agents to use the same underlying framework and vendor.",
+        "By providing a standardized language for discovery and task delegation.",
+        "By wrapping every agent as a simple, stateless tool for the orchestrator.",
+        "By replacing the need for an orchestrator with a decentralized peer-to-peer mesh."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that A2A provides a standardized language for discovery and task delegation to allow agents to interoperate.",
+      "evidence": "The A2A Protocol enables these autonomous logistics agents to interoperate by providing a standardized language for discovery and task delegation"
+    },
+    {
+      "question": "In Supply Chain Logistics Orchestration, what is a primary limitation of the Opaque Execution design principle?",
+      "options": [
+        "It prevents agents from communicating with each other across different networks.",
+        "It forces agents to expose their private memory and proprietary tools to peers.",
+        "It prevents agents from inspecting the internal logic of their collaborators.",
+        "It requires all agents to be hosted on the same physical server to maintain security."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that opaque execution prevents agents from seeing the internal logic of their peers, requiring reliance on declared capabilities.",
+      "evidence": "Opaque execution prevents agents from inspecting the internal logic or proprietary tools of their peers"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:42.343Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:38.382Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_pyannote_speaker_diarization_3_1",
+  "title": "Automated Legislative Session Transcription",
+  "business": "Municipal legislative bodies that must maintain accurate public records of city council meetings.",
+  "problem": "Manual transcription of multi-speaker council meetings is prohibitively expensive and slow, leading to significant delays in publishing searchable public records.",
+  "solution": "The pyannote/speaker-diarization-3.1 pipeline automates the identification of distinct speakers within audio recordings, allowing downstream speech-to-text engines to attribute dialogue correctly to specific individuals.",
+  "steps": [
+    "Authenticate with Hugging Face to accept user conditions for the speaker-diarization-3.1 model.",
+    "Install the pyannote.audio library and configure the pipeline using a valid access token.",
+    "Load the meeting audio file, ensuring it is processed as mono audio at 16kHz.",
+    "Execute the pipeline to generate an Annotation object containing speaker segments and timestamps.",
+    "Export the diarization results to an RTTM file to serve as a temporal map for text transcription."
+  ],
+  "outcome": "A structured, time-stamped log of speaker turns that enables efficient, searchable archival of legislative proceedings.",
+  "limitation": "The model may struggle with highly overlapped speech or rapid speaker transitions, which can be verified by reviewing the RTTM output for fragmented or misidentified segments.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legislative Audio Processing Pipeline",
+    "description": "The flow from raw audio input to structured speaker-labeled output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Audio",
+        "detail": "Multi-speaker meeting recording"
+      },
+      {
+        "id": "b",
+        "label": "Pre-processing",
+        "detail": "Resampling to 16kHz and mono downmixing"
+      },
+      {
+        "id": "c",
+        "label": "Diarization Pipeline",
+        "detail": "pyannote/speaker-diarization-3.1 inference"
+      },
+      {
+        "id": "d",
+        "label": "RTTM Output",
+        "detail": "Structured speaker segments"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "load"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "ingest"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generate"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from pyannote.audio import Pipeline\n# Initialize pipeline with auth token\npipeline = Pipeline.from_pretrained(\"pyannote/speaker-diarization-3.1\", use_auth_token=\"TOKEN\")\n# Process audio and save segments to RTTM\ndiarization = pipeline(\"council_meeting.wav\")\nwith open(\"meeting.rttm\", \"w\") as f:\n    diarization.write_rttm(f) # Maps segments to speakers",
+    "explanation": "This code demonstrates the core implementation step of loading the model and exporting the diarization result to a standard RTTM format for archival."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/pyannote/speaker-diarization-3.1",
+      "label": "pyannote/speaker-diarization-3.1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legislative Session Transcription, how does the technology address the problem of manual transcription costs?",
+      "options": [
+        "By automating the identification of distinct speakers to enable accurate dialogue attribution.",
+        "By providing a built-in speech-to-text engine that replaces human transcribers entirely.",
+        "By fine-tuning the internal models to recognize specific municipal legal terminology.",
+        "By eliminating the need for audio recording during legislative sessions."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on speaker diarization to attribute dialogue, which is the primary bottleneck in manual transcription.",
+      "evidence": "The pyannote/speaker-diarization-3.1 pipeline automates the identification of distinct speakers within audio recordings, allowing downstream speech-to-text engines to attribute dialogue correctly to specific individuals."
+    },
+    {
+      "question": "In Automated Legislative Session Transcription, what is a primary limitation of the implementation?",
+      "options": [
+        "The model requires manual voice activity detection for every file.",
+        "The model cannot process files longer than ten minutes.",
+        "The model may struggle with highly overlapped speech or rapid speaker transitions.",
+        "The model requires a paid subscription to function in a production environment."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies overlapped speech and rapid transitions as potential points of failure.",
+      "evidence": "The model may struggle with highly overlapped speech or rapid speaker transitions, which can be verified by reviewing the RTTM output for fragmented or misidentified segments."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:17.810Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:13.423Z"
+}

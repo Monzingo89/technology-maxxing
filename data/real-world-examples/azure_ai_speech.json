@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "azure_ai_speech",
+  "title": "Automated Multilingual Customer Support Routing",
+  "business": "Global logistics companies managing high-volume, multilingual customer inquiries via phone.",
+  "problem": "Manual call routing based on language selection is slow, prone to error, and increases wait times, leading to customer frustration.",
+  "solution": "Azure AI Speech provides speech recognition to identify the caller's language in real-time, enabling automated, intelligent routing to the appropriate support queue without manual menu navigation.",
+  "steps": [
+    "Provision an Azure AI Speech resource in the Azure portal.",
+    "Configure the Speech-to-Text service to enable continuous language identification.",
+    "Integrate the Speech SDK into the telephony gateway to stream audio input.",
+    "Implement logic to parse the identified language locale from the service response.",
+    "Route the call to the corresponding regional support agent pool based on the locale."
+  ],
+  "outcome": "Reduced call abandonment rates and improved operational efficiency by eliminating manual language selection steps.",
+  "limitation": "Language identification accuracy can degrade in environments with significant background noise or overlapping speech; verify performance by testing with representative audio samples.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Speech-Driven Routing Workflow",
+    "description": "The flow of audio from the customer through the Azure Speech service to the final agent destination.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Customer",
+        "detail": "Initiates phone call"
+      },
+      {
+        "id": "b",
+        "label": "Telephony Gateway",
+        "detail": "Streams audio to Azure"
+      },
+      {
+        "id": "c",
+        "label": "Azure AI Speech",
+        "detail": "Performs language identification"
+      },
+      {
+        "id": "d",
+        "label": "Routing Engine",
+        "detail": "Directs call to agent"
+      },
+      {
+        "id": "e",
+        "label": "Support Agent",
+        "detail": "Receives routed call"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "audio input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "streaming audio"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "identified locale"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "call transfer"
+      }
+    ]
+  },
+  "code": {
+    "language": "csharp",
+    "content": "// Initialize speech config with subscription key\nvar config = SpeechConfig.FromSubscription(\"key\", \"region\");\n// Enable language identification for incoming audio\nvar autoDetectConfig = AutoDetectSourceLanguageConfig.FromLanguages(new string[] { \"en-US\", \"es-ES\", \"fr-FR\" });\nvar recognizer = new SpeechRecognizer(config, audioConfig, autoDetectConfig);\n// Start recognition to capture language\nvar result = await recognizer.RecognizeOnceAsync();",
+    "explanation": "This code initializes the recognizer with multiple language targets, allowing the service to identify the caller's language automatically as required by the routing solution."
+  },
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Speech in Foundry Tools"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Multilingual Customer Support Routing, how does the technology address the identified problem?",
+      "options": [
+        "By replacing human agents with autonomous bots.",
+        "By identifying the caller's language in real-time to automate routing.",
+        "By translating all incoming calls into English text.",
+        "By reducing the cost of telephony hardware."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution uses speech recognition to identify the language, which directly automates the routing process.",
+      "evidence": "Azure AI Speech provides speech recognition to identify the caller's language in real-time, enabling automated, intelligent routing to the appropriate support queue without manual menu navigation."
+    },
+    {
+      "question": "In Automated Multilingual Customer Support Routing, what is a primary limitation of the implementation?",
+      "options": [
+        "The service only supports English language identification.",
+        "The service requires manual configuration for every single call.",
+        "Accuracy can degrade in noisy environments.",
+        "The service is incompatible with telephony gateways."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that background noise can impact the accuracy of the speech recognition service.",
+      "evidence": "Language identification accuracy can degrade in environments with significant background noise or overlapping speech; verify performance by testing with representative audio samples."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:34.172Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

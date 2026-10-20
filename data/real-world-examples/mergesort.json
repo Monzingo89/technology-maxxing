@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "mergesort",
+  "title": "Logistics Route Sequencing",
+  "business": "Regional distribution centers managing high-volume delivery manifests.",
+  "problem": "Sorting unsorted delivery manifests by destination priority causes significant delays in loading docks, leading to missed transit windows.",
+  "solution": "Merge Sort provides a stable, predictable sorting mechanism that recursively divides the manifest list into halves, sorts them, and merges the ordered outputs to ensure consistent performance regardless of initial data distribution.",
+  "steps": [
+    "Divide the unsorted manifest list into two equal-sized sub-lists.",
+    "Recursively apply the sorting process to each sub-list until individual elements remain.",
+    "Compare the elements of the two sub-lists sequentially.",
+    "Merge the compared elements back into a single, ordered manifest list."
+  ],
+  "outcome": "Consistent, reliable sorting times for delivery manifests, ensuring loading dock operations remain synchronized with transit schedules.",
+  "limitation": "Merge Sort requires additional memory proportional to the size of the input list, which can be a constraint in memory-limited embedded hardware; verify memory overhead by monitoring peak heap usage during the merge phase.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Merge Sort Recursive Flow",
+    "description": "The process flows from a single unsorted list through recursive division into sub-lists, followed by the merging of ordered segments.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Unsorted List",
+        "detail": "Input manifest array"
+      },
+      {
+        "id": "b",
+        "label": "Divide",
+        "detail": "Split into halves"
+      },
+      {
+        "id": "c",
+        "label": "Base Case",
+        "detail": "Single element lists"
+      },
+      {
+        "id": "d",
+        "label": "Merge",
+        "detail": "Combine ordered halves"
+      },
+      {
+        "id": "e",
+        "label": "Sorted List",
+        "detail": "Final output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Splits"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Recursion"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Comparison"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Result"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Route Sequencing, why is Merge Sort chosen to address the manifest sorting problem?",
+      "options": [
+        "It provides a stable, predictable sorting mechanism.",
+        "It eliminates the need for any memory usage.",
+        "It is faster than all other known sorting algorithms.",
+        "It is specifically designed for hardware-based routing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that Merge Sort is selected for its predictable performance in organizing delivery manifests.",
+      "evidence": "Merge Sort provides a stable, predictable sorting mechanism that recursively divides the manifest list into halves, sorts them, and merges the ordered outputs to ensure consistent performance regardless of initial data distribution."
+    },
+    {
+      "question": "What is a primary limitation of the implementation described in Logistics Route Sequencing?",
+      "options": [
+        "It cannot handle more than ten items.",
+        "It requires additional memory proportional to the input size.",
+        "It is unstable and changes the order of equal items.",
+        "It only works on pre-sorted data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly identifies memory overhead as the main trade-off for this algorithm.",
+      "evidence": "Merge Sort requires additional memory proportional to the size of the input list, which can be a constraint in memory-limited embedded hardware; verify memory overhead by monitoring peak heap usage during the merge phase."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:26.788Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

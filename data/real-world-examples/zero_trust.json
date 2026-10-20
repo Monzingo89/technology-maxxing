@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "zero_trust",
+  "title": "Continuous Verification for Distributed Logistics",
+  "business": "Global logistics firms managing distributed warehouse IoT sensors and remote administrative portals.",
+  "problem": "Traditional perimeter-based security relies on network location, allowing lateral movement once an attacker gains internal network access.",
+  "solution": "Zero Trust Architecture implements Complete Mediation, ensuring every access request is evaluated for authorization regardless of the subject's network origin.",
+  "steps": [
+    "Define granular identity-based access policies for every service and user.",
+    "Implement a policy enforcement point that intercepts all traffic to verify credentials and context.",
+    "Enforce Complete Mediation by validating authorization rights upon every individual request.",
+    "Apply Least Privilege to ensure subjects only access the specific resources required for their current task."
+  ],
+  "outcome": "Reduced risk of lateral movement and unauthorized access, as network location is no longer a proxy for trust.",
+  "limitation": "Increased latency due to constant policy evaluation; check this by monitoring request processing times against defined service level objectives.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Zero Trust Access Flow",
+    "description": "Illustrates how every request is mediated by a central policy engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User/Device",
+        "detail": "Requesting entity"
+      },
+      {
+        "id": "b",
+        "label": "Policy Enforcement Point",
+        "detail": "Interception layer"
+      },
+      {
+        "id": "c",
+        "label": "Policy Decision Engine",
+        "detail": "Authorization logic"
+      },
+      {
+        "id": "d",
+        "label": "Resource",
+        "detail": "Target application or data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Access Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Verify Authorization"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Grant/Deny"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Forward Traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Continuous Verification for Distributed Logistics, how does the solution mitigate the risk of lateral movement?",
+      "options": [
+        "By requiring Complete Mediation, which checks authorization for every request regardless of network location.",
+        "By trusting all internal network traffic to improve system performance.",
+        "By relying on the physical security of the warehouse to protect the network perimeter.",
+        "By using a single password for all administrative portals to simplify user management."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly addresses the failure of perimeter-based security by implementing Complete Mediation, which prevents attackers from moving laterally by requiring authorization for every request.",
+      "evidence": "Zero Trust Architecture implements Complete Mediation, ensuring every access request is evaluated for authorization regardless of the subject's network origin."
+    },
+    {
+      "question": "What is a primary trade-off identified in Continuous Verification for Distributed Logistics?",
+      "options": [
+        "The system becomes impossible to manage due to excessive compartmentalization.",
+        "The implementation requires 100% security guarantees to function correctly.",
+        "Increased latency occurs due to constant policy evaluation for every request.",
+        "The system defaults to an unsafe state whenever an error condition is detected."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that constant mediation introduces a performance trade-off in the form of increased latency, which must be monitored.",
+      "evidence": "Increased latency due to constant policy evaluation; check this by monitoring request processing times against defined service level objectives."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:54.569Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

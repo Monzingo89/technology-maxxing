@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen2_5_coder_32b_instruct",
+  "title": "Legacy Monolith Refactoring Assistant",
+  "business": "Enterprise software teams maintaining massive, aging codebases.",
+  "problem": "Developers struggle to understand and refactor legacy modules because the context required to safely modify interdependent functions exceeds standard model token limits, leading to regression errors.",
+  "solution": "Utilizing Qwen2.5-Coder-32B-Instruct allows teams to ingest entire legacy file structures into the model's 128K token context window, enabling the model to perform holistic code reasoning and generate safer, context-aware refactoring suggestions.",
+  "steps": [
+    "Load the Qwen2.5-Coder-32B-Instruct model using the latest Hugging Face transformers library to ensure compatibility.",
+    "Configure the model's environment to support long-context inputs by applying the YaRN scaling factor in the configuration.",
+    "Ingest the legacy codebase modules into the model's input buffer, ensuring the total token count remains within the 128K limit.",
+    "Prompt the model to identify dependencies and suggest refactoring patterns that maintain existing logic.",
+    "Validate the generated code against existing unit tests before integration."
+  ],
+  "outcome": "Improved developer velocity and reduced regression rates during complex system modernization efforts.",
+  "limitation": "The current implementation of YaRN in vLLM uses static scaling, which means the scaling factor remains constant regardless of input length, potentially impacting performance on shorter texts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Refactoring Workflow",
+    "description": "The flow from legacy code ingestion to validated refactored output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Codebase",
+        "detail": "Source files"
+      },
+      {
+        "id": "b",
+        "label": "Qwen2.5-Coder-32B",
+        "detail": "Inference Engine"
+      },
+      {
+        "id": "c",
+        "label": "Context Window",
+        "detail": "128K Token Buffer"
+      },
+      {
+        "id": "d",
+        "label": "Refactored Code",
+        "detail": "Output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Ingest"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Process"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct",
+      "label": "Qwen/Qwen2.5-Coder-32B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Monolith Refactoring Assistant, why is the 128K token context window critical?",
+      "options": [
+        "It allows the model to ingest entire legacy file structures for holistic reasoning.",
+        "It automatically executes unit tests on the legacy code.",
+        "It reduces the number of parameters required for the model.",
+        "It eliminates the need for the YaRN scaling technique."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that standard limits are insufficient for legacy codebases, and the model's ability to handle 128K tokens allows for better context-aware refactoring.",
+      "evidence": "Utilizing Qwen2.5-Coder-32B-Instruct allows teams to ingest entire legacy file structures into the model's 128K token context window, enabling the model to perform holistic code reasoning and generate safer, context-aware refactoring suggestions."
+    },
+    {
+      "question": "In Legacy Monolith Refactoring Assistant, what is a primary trade-off when using YaRN for long-context processing?",
+      "options": [
+        "It requires a custom hardware architecture.",
+        "It is incompatible with the transformers library.",
+        "Static scaling factors may negatively impact performance on shorter texts.",
+        "It increases the number of parameters in the model."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario note that vLLM's static YARN implementation applies a constant scaling factor, which can be suboptimal for shorter inputs.",
+      "evidence": "The current implementation of YaRN in vLLM uses static scaling, which means the scaling factor remains constant regardless of input length, potentially impacting performance on shorter texts."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:20.765Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:17.187Z"
+}

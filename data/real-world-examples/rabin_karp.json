@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "rabin_karp",
+  "title": "High-Throughput Log Pattern Matching",
+  "business": "Cybersecurity firms monitoring massive server log streams for specific threat signatures.",
+  "problem": "Traditional brute-force string searching is too slow when scanning millions of lines for multiple potential attack patterns, causing latency in threat detection.",
+  "solution": "The Rabin-Karp algorithm uses rolling hashes to find candidate substring matches, allowing the system to rapidly filter out non-matching segments before performing expensive character-by-character verification.",
+  "steps": [
+    "Calculate the hash value of the target pattern.",
+    "Compute the hash value for the first window of the log text.",
+    "Slide the window across the text, updating the hash value in constant time using the rolling hash formula.",
+    "Compare the current window hash with the pattern hash.",
+    "Perform a character-by-character check only if the hash values match to confirm the candidate."
+  ],
+  "outcome": "Significant reduction in computational overhead by ignoring non-matching text segments, leading to faster real-time threat identification.",
+  "limitation": "Spurious hits occur when different strings produce the same hash value (collisions), requiring a verification step to ensure correctness.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Rabin-Karp Matching Process",
+    "description": "The flow shows how the algorithm filters text segments before verifying them.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Input Stream",
+        "detail": "Raw log data"
+      },
+      {
+        "id": "b",
+        "label": "Rolling Hash",
+        "detail": "Compute hash for current window"
+      },
+      {
+        "id": "c",
+        "label": "Hash Comparison",
+        "detail": "Check against target hash"
+      },
+      {
+        "id": "d",
+        "label": "Verification",
+        "detail": "Confirm match if hashes align"
+      },
+      {
+        "id": "e",
+        "label": "Match Found",
+        "detail": "Output result"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "windowing"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "compare"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "collision check"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "confirmed"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Throughput Log Pattern Matching, why is the Rabin-Karp algorithm preferred over brute force?",
+      "options": [
+        "It eliminates the need for character comparisons entirely.",
+        "It uses rolling hashes to filter non-matching segments quickly.",
+        "It guarantees zero collisions during the search process.",
+        "It is the only algorithm capable of searching log files."
+      ],
+      "answerIndex": 1,
+      "explanation": "The algorithm uses rolling hashes to find candidate substring matches, which allows the system to skip segments that cannot possibly match the pattern.",
+      "evidence": "The Rabin-Karp algorithm uses rolling hashes to find candidate substring matches, allowing the system to rapidly filter out non-matching segments before performing expensive character-by-character verification."
+    },
+    {
+      "question": "What is a primary limitation of the Rabin-Karp approach in High-Throughput Log Pattern Matching?",
+      "options": [
+        "It requires excessive memory for all possible strings.",
+        "It cannot handle patterns longer than one character.",
+        "Spurious hits occur when different strings produce the same hash value.",
+        "It is slower than brute force for small datasets."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because multiple strings can map to the same hash value, the algorithm must perform an additional check to verify the match, which is a known trade-off.",
+      "evidence": "Spurious hits occur when different strings produce the same hash value (collisions), requiring a verification step to ensure correctness."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:52.132Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

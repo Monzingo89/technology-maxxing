@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_695bfc98071c8191bac7bc479aa27de7",
+  "title": "Automated Architectural Compliance Review",
+  "business": "Architecture firms managing large-scale infrastructure projects.",
+  "problem": "Project managers struggle to manually verify if thousands of sub-contractor PDF submissions comply with specific internal metadata standards, leading to compliance bottlenecks and delayed project audits.",
+  "solution": "The Box MCP server enables an AI agent to programmatically traverse project folders, extract metadata fields from submitted documents, and cross-reference them against internal compliance schemas, automating the verification process.",
+  "steps": [
+    "Configure the Box MCP server with read-only access to the designated project root folder.",
+    "Define the compliance metadata schema within the AI agent's system prompt.",
+    "Instruct the agent to iterate through sub-folders to identify files missing required metadata fields.",
+    "Generate a summary report of non-compliant files for human review."
+  ],
+  "outcome": "A significant reduction in manual audit time and improved data consistency across project documentation.",
+  "limitation": "The solution relies on the accuracy of existing file metadata; if metadata fields are empty or incorrectly populated at the source, the agent cannot verify compliance, which can be checked by auditing the agent's 'null' return values for specific metadata fields.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Verification Workflow",
+    "description": "The flow shows how the AI agent interacts with Box to validate documents.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Project Manager",
+        "detail": "Initiates the compliance audit request"
+      },
+      {
+        "id": "b",
+        "label": "AI Agent",
+        "detail": "Processes logic and schema comparison"
+      },
+      {
+        "id": "c",
+        "label": "Box MCP Server",
+        "detail": "Secure bridge to Box storage"
+      },
+      {
+        "id": "d",
+        "label": "Box Storage",
+        "detail": "Repository of project files"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Triggers audit"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Queries metadata"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetches file attributes"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns metadata"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Compliance Review, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual verification of metadata standards in sub-contractor submissions.",
+        "The inability to store large-scale infrastructure files in the cloud.",
+        "The lack of high-speed internet for remote project managers.",
+        "High costs associated with purchasing architectural software."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the bottleneck caused by manually checking thousands of files for compliance as the core problem.",
+      "evidence": "Project managers struggle to manually verify if thousands of sub-contractor PDF submissions comply with specific internal metadata standards, leading to compliance bottlenecks and delayed project audits."
+    },
+    {
+      "question": "In Automated Architectural Compliance Review, what is a known limitation of the implementation?",
+      "options": [
+        "The agent cannot access files outside of the Box environment.",
+        "The agent is unable to process files larger than 10MB.",
+        "The agent cannot verify compliance if source metadata is empty or incorrect.",
+        "The agent requires a human to manually input every metadata field."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that the agent's effectiveness is constrained by the quality of the existing metadata in the source files.",
+      "evidence": "The solution relies on the accuracy of existing file metadata; if metadata fields are empty or incorrectly populated at the source, the agent cannot verify compliance"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:38.991Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

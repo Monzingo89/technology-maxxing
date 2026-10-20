@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "file_ipynb",
+  "title": "Secure Audit of Jupyter Notebook Artifacts",
+  "business": "Data science teams sharing research notebooks across internal departments.",
+  "problem": "Unintended exposure of sensitive data or credentials embedded within notebook outputs or metadata.",
+  "solution": "Programmatic validation of the .ipynb JSON structure to strip unauthorized metadata and sensitive output fields before distribution.",
+  "steps": [
+    "Load the .ipynb file as a JSON object using standard library parsers.",
+    "Iterate through the cells list to identify and clear sensitive output data.",
+    "Validate the nbformat and nbformat_minor versions to ensure compatibility.",
+    "Sanitize the metadata dictionary by removing non-essential fields.",
+    "Serialize the cleaned dictionary back to a .ipynb file for secure sharing."
+  ],
+  "outcome": "A standardized, clean notebook format that minimizes the risk of accidental data leakage while maintaining code reproducibility.",
+  "limitation": "The format often stores multi-line strings as lists of strings on disk, which can complicate manual regex-based sanitization; always use the official nbformat API to ensure proper string reconstruction.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Notebook Sanitization Workflow",
+    "description": "The flow shows how raw notebook files are processed into sanitized versions.",
+    "nodes": [
+      {
+        "id": "raw",
+        "label": "Raw .ipynb",
+        "detail": "Contains code, outputs, and metadata"
+      },
+      {
+        "id": "parse",
+        "label": "JSON Parser",
+        "detail": "Loads structure into memory"
+      },
+      {
+        "id": "filter",
+        "label": "Sanitization Logic",
+        "detail": "Removes sensitive outputs and metadata"
+      },
+      {
+        "id": "clean",
+        "label": "Clean .ipynb",
+        "detail": "Safe for distribution"
+      }
+    ],
+    "edges": [
+      {
+        "from": "raw",
+        "to": "parse",
+        "label": "input"
+      },
+      {
+        "from": "parse",
+        "to": "filter",
+        "label": "process"
+      },
+      {
+        "from": "filter",
+        "to": "clean",
+        "label": "output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import json\n# Load the notebook structure\nwith open('research.ipynb', 'r') as f:\n    nb = json.load(f)\n# Clear outputs from all code cells to prevent data leakage\nfor cell in nb.get('cells', []):\n    if cell.get('cell_type') == 'code':\n        cell['outputs'] = [] # Reset outputs list\n# Save the sanitized notebook\nwith open('clean_research.ipynb', 'w') as f:\n    json.dump(nb, f)",
+    "explanation": "This code demonstrates the programmatic approach to clearing sensitive outputs from a notebook by manipulating the underlying JSON structure."
+  },
+  "sources": [
+    {
+      "url": "https://nbformat.readthedocs.io/en/latest/format_description.html",
+      "label": "The Notebook file format"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Audit of Jupyter Notebook Artifacts, what is the primary reason for programmatically validating the .ipynb structure?",
+      "options": [
+        "To increase the execution speed of the notebook.",
+        "To strip unauthorized metadata and sensitive output fields before distribution.",
+        "To convert the notebook into a PDF format.",
+        "To update the kernel version automatically."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies the risk of sensitive data exposure in outputs and metadata as the problem, which is addressed by cleaning these components.",
+      "evidence": "Programmatic validation of the .ipynb JSON structure to strip unauthorized metadata and sensitive output fields before distribution."
+    },
+    {
+      "question": "In Secure Audit of Jupyter Notebook Artifacts, what is a specific limitation when handling .ipynb files directly?",
+      "options": [
+        "The file format is not compatible with JSON parsers.",
+        "Multi-line strings may be stored as lists of strings, complicating manual sanitization.",
+        "Metadata fields are mandatory and cannot be removed.",
+        "Cell IDs must be sequential integers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and the limitation section highlight that multi-line strings are often split into lists on disk, requiring careful handling.",
+      "evidence": "The format often stores multi-line strings as lists of strings on disk, which can complicate manual regex-based sanitization; always use the official nbformat API to ensure proper string reconstruction."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:52:51.570Z",
+  "sourceRetrievedAt": "2026-10-18T00:52:48.012Z"
+}

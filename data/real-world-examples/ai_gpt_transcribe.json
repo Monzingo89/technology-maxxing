@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_transcribe",
+  "title": "Automated Legal Deposition Archiving",
+  "business": "Legal firms managing high volumes of recorded depositions.",
+  "problem": "Manual transcription of legal proceedings is slow, prone to human error, and fails to capture specialized legal terminology accurately, leading to delays in case preparation.",
+  "solution": "The GPT-Transcribe model provides high-accuracy speech-to-text capabilities by utilizing domain-specific keyword hints to ensure legal terminology is correctly captured during the transcription of audio files.",
+  "steps": [
+    "Initialize a transcription request using the gpt-transcribe model ID.",
+    "Upload the recorded deposition audio file to the transcription endpoint.",
+    "Supply a list of legal keyword hints to the model to improve domain-specific accuracy.",
+    "Retrieve the structured text output for integration into the firm's case management system."
+  ],
+  "outcome": "Legal teams receive near-instant, highly accurate transcripts that reduce the time spent on manual review and correction, allowing for faster case analysis.",
+  "limitation": "The model may struggle with heavy background noise or overlapping speakers, which can be verified by checking the confidence scores or reviewing the raw text output for fragmented sentences.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Transcription Workflow",
+    "description": "The flow of audio data through the transcription service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Audio Source",
+        "detail": "Deposition recording"
+      },
+      {
+        "id": "b",
+        "label": "GPT-Transcribe",
+        "detail": "Transcription engine"
+      },
+      {
+        "id": "c",
+        "label": "Keyword Hints",
+        "detail": "Legal terminology list"
+      },
+      {
+        "id": "d",
+        "label": "Case Database",
+        "detail": "Final text storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends audio"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "provides context"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "outputs transcript"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-transcribe",
+      "label": "GPT-Transcribe"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Deposition Archiving, what is the primary benefit of using GPT-Transcribe?",
+      "options": [
+        "It eliminates the need for human lawyers entirely.",
+        "It uses keyword hints to improve accuracy for specialized legal terminology.",
+        "It provides real-time video editing for depositions.",
+        "It automatically archives physical paper files."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly mentions using keyword hints to ensure legal terminology is correctly captured.",
+      "evidence": "The GPT-Transcribe model provides high-accuracy speech-to-text capabilities by utilizing domain-specific keyword hints to ensure legal terminology is correctly captured during the transcription of audio files."
+    },
+    {
+      "question": "In Automated Legal Deposition Archiving, what is a known limitation of the model?",
+      "options": [
+        "It cannot process files longer than one minute.",
+        "It is unable to handle multiple languages.",
+        "It may struggle with heavy background noise or overlapping speakers.",
+        "It requires a manual review of every single word."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies background noise and overlapping speakers as potential issues.",
+      "evidence": "The model may struggle with heavy background noise or overlapping speakers, which can be verified by checking the confidence scores or reviewing the raw text output for fragmented sentences."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:46.705Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:43.854Z"
+}

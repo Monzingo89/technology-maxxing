@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "sft",
+  "title": "Legal Document Summarization Fine-Tuning",
+  "business": "Legal tech firms providing automated contract analysis for corporate law departments.",
+  "problem": "Generic base models frequently hallucinate legal terminology or fail to adhere to the specific, dense formatting requirements of corporate contract summaries, leading to costly manual review cycles.",
+  "solution": "Supervised Fine-Tuning (SFT) allows the firm to train a base model on a curated dataset of high-quality, human-verified contract summaries, forcing the model to learn the precise structure and professional tone required for legal documentation.",
+  "steps": [
+    "Prepare a conversational dataset containing pairs of raw legal contracts as user inputs and expert-verified summaries as assistant outputs.",
+    "Define a chat template to ensure the model correctly distinguishes between the contract text and the required summary structure.",
+    "Configure the SFTTrainer with assistant_only_loss=True to ensure the model focuses its learning exclusively on the quality of the generated summary rather than the input contract text.",
+    "Execute the training process using a PEFT configuration to efficiently adapt the model while minimizing hardware resource consumption.",
+    "Validate the model on a held-out set of contracts to ensure adherence to the desired summary format."
+  ],
+  "outcome": "The model consistently produces summaries that mirror the structure and professional precision of human-written legal documents, significantly reducing the time required for attorney oversight.",
+  "limitation": "Over-fitting to the training examples can lead to a loss of general reasoning capabilities; this is checked by monitoring the validation loss and evaluating the model on diverse, unseen contract types.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SFT Training Pipeline for Legal Summaries",
+    "description": "The flow shows how raw legal data is transformed into a specialized model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Contracts",
+        "detail": "Input text corpus"
+      },
+      {
+        "id": "b",
+        "label": "Dataset Formatting",
+        "detail": "Applying chat templates"
+      },
+      {
+        "id": "c",
+        "label": "SFTTrainer",
+        "detail": "Supervised learning engine"
+      },
+      {
+        "id": "d",
+        "label": "Fine-Tuned Model",
+        "detail": "Specialized summarizer"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "preprocess"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "train"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from trl import SFTTrainer, SFTConfig\n# Configure trainer to focus loss only on assistant responses\ntraining_args = SFTConfig(assistant_only_loss=True)\ntrainer = SFTTrainer(\n    model=\"Qwen/Qwen3-0.6B\",\n    train_dataset=legal_dataset,\n    args=training_args\n)\ntrainer.train()",
+    "explanation": "This code initializes the SFTTrainer with a configuration that ensures the model learns specifically from the assistant's summaries, ignoring the input contract text during loss calculation."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/docs/trl/sft_trainer",
+      "label": "SFT Trainer · Hugging Face TRL documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legal Document Summarization Fine-Tuning, why is SFT used?",
+      "options": [
+        "To force the model to learn specific structure and professional tone.",
+        "To replace the need for human-verified training data entirely.",
+        "To increase the base model's parameter count for better reasoning.",
+        "To automatically generate new legal contracts from scratch."
+      ],
+      "answerIndex": 0,
+      "explanation": "SFT is used to adapt the model to specific requirements, such as the structure and tone needed for legal summaries.",
+      "evidence": "Supervised Fine-Tuning (SFT) allows the firm to train a base model on a curated dataset of high-quality, human-verified contract summaries, forcing the model to learn the precise structure and professional tone required for legal documentation."
+    },
+    {
+      "question": "In Legal Document Summarization Fine-Tuning, what is a primary limitation of the approach?",
+      "options": [
+        "It requires significantly more hardware than standard training.",
+        "It cannot be used with PEFT adapters.",
+        "It may lead to a loss of general reasoning capabilities due to over-fitting.",
+        "It prevents the use of chat templates during training."
+      ],
+      "answerIndex": 2,
+      "explanation": "Over-fitting is a known risk in SFT where the model becomes too specialized to the training set at the expense of general performance.",
+      "evidence": "Over-fitting to the training examples can lead to a loss of general reasoning capabilities; this is checked by monitoring the validation loss and evaluating the model on diverse, unseen contract types."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:59.366Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:55.351Z"
+}

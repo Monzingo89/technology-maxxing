@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "spark",
+  "title": "Retail Inventory Synchronization",
+  "business": "Global retail chains managing massive product catalogs across thousands of regional warehouses.",
+  "problem": "Legacy monolithic database systems fail to process daily inventory updates when the volume of stock-keeping units (SKUs) exceeds the memory capacity of a single server, leading to delayed stock availability reports.",
+  "solution": "Apache Spark provides a unified analytics engine that distributes data processing tasks across a cluster, allowing the retail chain to partition large inventory datasets and process them in parallel using the Spark SQL API.",
+  "steps": [
+    "Initialize a Spark session configured for a distributed cluster environment.",
+    "Load raw inventory logs from distributed storage into Spark DataFrames.",
+    "Apply transformation logic using Spark SQL to aggregate SKU counts across regional partitions.",
+    "Write the processed, consistent inventory state back to the central data warehouse."
+  ],
+  "outcome": "The retail chain achieves timely, consistent inventory visibility across all regions, eliminating the bottleneck of single-node processing limits.",
+  "limitation": "A significant trade-off is the overhead of data shuffling across the network during wide transformations; this can be checked by monitoring the Spark Web UI for high shuffle read/write metrics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distributed Inventory Processing Flow",
+    "description": "Data flows from regional storage into the Spark cluster for parallel processing and final aggregation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional Storage",
+        "detail": "Source of raw SKU logs"
+      },
+      {
+        "id": "b",
+        "label": "Spark Driver",
+        "detail": "Orchestrates the job"
+      },
+      {
+        "id": "c",
+        "label": "Worker Nodes",
+        "detail": "Executes parallel transformations"
+      },
+      {
+        "id": "d",
+        "label": "Central Warehouse",
+        "detail": "Stores aggregated results"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "partitioned read"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "task distribution"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "write aggregated data"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Initialize Spark session for distributed processing\nfrom pyspark.sql import SparkSession\nspark = SparkSession.builder.appName(\"InventorySync\").getOrCreate()\n\n# Load distributed inventory data\ndf = spark.read.parquet(\"s3://inventory-logs/*\")\n\n# Aggregate SKU counts using SQL-like transformations\nresult = df.groupBy(\"sku_id\").sum(\"quantity\")\n\n# Save results to warehouse\nresult.write.mode(\"overwrite\").parquet(\"s3://warehouse/inventory_state\")",
+    "explanation": "This code demonstrates loading distributed data into a DataFrame and performing a parallel aggregation, which directly addresses the Retail Inventory Synchronization problem of processing large datasets."
+  },
+  "sources": [
+    {
+      "url": "https://spark.apache.org/docs/latest/",
+      "label": "Overview - Spark 4.2.0 Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Inventory Synchronization, what is the primary reason for adopting Apache Spark?",
+      "options": [
+        "To replace the need for physical warehouse storage.",
+        "To enable parallel processing of large datasets that exceed single-node memory.",
+        "To eliminate the need for SQL queries in data processing.",
+        "To provide a proprietary database management system."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that legacy systems fail when SKU volume exceeds single-server memory, and Spark addresses this by distributing processing tasks.",
+      "evidence": "Legacy monolithic database systems fail to process daily inventory updates when the volume of stock-keeping units (SKUs) exceeds the memory capacity of a single server, leading to delayed stock availability reports."
+    },
+    {
+      "question": "In Retail Inventory Synchronization, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use Python for data processing.",
+        "The requirement to use only Hadoop-based storage.",
+        "The overhead of network data shuffling during wide transformations.",
+        "The lack of support for SQL-based data manipulation."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions network shuffling as a trade-off in distributed processing.",
+      "evidence": "A significant trade-off is the overhead of data shuffling across the network during wide transformations; this can be checked by monitoring the Spark Web UI for high shuffle read/write metrics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:43.639Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:39.991Z"
+}

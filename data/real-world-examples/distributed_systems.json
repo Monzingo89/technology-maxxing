@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "distributed_systems",
+  "title": "Global Inventory Synchronization for OmniRetail",
+  "business": "OmniRetail, a multinational clothing chain, needs to maintain a unified view of product stock across thousands of physical stores and regional warehouses to prevent overselling.",
+  "problem": "Local databases at each store cannot communicate in real-time, leading to inconsistent stock levels where a customer might purchase an item online that was just sold out in a physical location.",
+  "solution": "Implementing a distributed system that coordinates independent networked computers as one logical service allows OmniRetail to treat disparate regional databases as a single, consistent inventory pool through replication and consensus protocols.",
+  "steps": [
+    "Identify the primary data partitions across regional data centers to enable sharding.",
+    "Implement a consensus-based replication protocol to ensure all nodes agree on the current stock count.",
+    "Deploy a message broker to handle asynchronous updates between the physical store POS systems and the central logical service.",
+    "Configure conflict resolution policies to handle concurrent updates to the same SKU from different geographic regions.",
+    "Monitor node health to ensure the logical service remains available even if individual regional nodes fail."
+  ],
+  "outcome": "OmniRetail achieves a unified inventory state, significantly reducing overselling incidents and improving customer trust in online stock availability.",
+  "limitation": "The primary trade-off is the latency introduced by consensus protocols; to check for this, engineers must monitor the time taken for a write operation to be acknowledged by a majority of nodes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Distributed Inventory Coordination",
+    "description": "This diagram shows how individual store nodes interact with a central logical service to maintain consistency.",
+    "nodes": [
+      {
+        "id": "pos",
+        "label": "POS Terminal",
+        "detail": "Local store transaction point"
+      },
+      {
+        "id": "broker",
+        "label": "Message Broker",
+        "detail": "Asynchronous event buffer"
+      },
+      {
+        "id": "logical",
+        "label": "Logical Service",
+        "detail": "Unified inventory coordinator"
+      },
+      {
+        "id": "db",
+        "label": "Regional DB",
+        "detail": "Sharded data storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "pos",
+        "to": "broker",
+        "label": "updates stock"
+      },
+      {
+        "from": "broker",
+        "to": "logical",
+        "label": "propagates events"
+      },
+      {
+        "from": "logical",
+        "to": "db",
+        "label": "synchronizes state"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Inventory Synchronization for OmniRetail, what is the primary reason for adopting a distributed system?",
+      "options": [
+        "To eliminate the need for physical store databases entirely",
+        "To coordinate independent networked computers as one logical service",
+        "To increase the physical speed of the network cables",
+        "To reduce the total number of items sold in stores"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using a distributed system to unify disparate regional databases into a single service to solve inventory inconsistency.",
+      "evidence": "Implementing a distributed system that coordinates independent networked computers as one logical service allows OmniRetail to treat disparate regional databases as a single, consistent inventory pool through replication and consensus protocols."
+    },
+    {
+      "question": "In Global Inventory Synchronization for OmniRetail, what is the main limitation of the proposed solution?",
+      "options": [
+        "The system cannot handle more than ten stores",
+        "The latency introduced by consensus protocols",
+        "The inability to use message brokers",
+        "The requirement to use only one database node"
+      ],
+      "answerIndex": 1,
+      "explanation": "Distributed systems often face trade-offs between consistency and latency, specifically when using consensus protocols to ensure all nodes agree.",
+      "evidence": "The primary trade-off is the latency introduced by consensus protocols; to check for this, engineers must monitor the time taken for a write operation to be acknowledged by a majority of nodes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:40.352Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

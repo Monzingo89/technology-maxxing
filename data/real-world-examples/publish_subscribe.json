@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "publish_subscribe",
+  "title": "Decoupled Inventory Synchronization",
+  "business": "A multi-regional retail conglomerate managing inventory across disparate warehouse management systems.",
+  "problem": "The existing architecture uses direct point-to-point service calls to update stock levels, causing high coupling where the inventory service fails if any downstream reporting or logistics system is temporarily unreachable.",
+  "solution": "Implementing a Publish-Subscribe pattern introduces an intermediary message broker, allowing the inventory service to publish stock updates to a channel without needing to know which specific systems are listening, thereby decoupling producers from consumers.",
+  "steps": [
+    "Define a common message schema for inventory updates to ensure consistent data interpretation.",
+    "Configure a message broker as the central intermediary channel for all inventory events.",
+    "Modify the inventory service to publish update events to the broker instead of calling downstream APIs.",
+    "Register downstream services as subscribers to the relevant inventory topic within the broker.",
+    "Implement asynchronous message processing in subscribers to handle incoming updates independently."
+  ],
+  "outcome": "Improved system resilience and maintainability, as the inventory service remains operational even when individual downstream consumers experience downtime.",
+  "limitation": "The primary limitation is the loss of immediate consistency, as updates are processed asynchronously; this can be checked by monitoring the lag between the message publication timestamp and the subscriber processing timestamp.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Event Flow",
+    "description": "Shows how the inventory service pushes data to a broker which then distributes it to multiple independent subscribers.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory Service",
+        "detail": "Publisher of stock events"
+      },
+      {
+        "id": "b",
+        "label": "Message Broker",
+        "detail": "Intermediary channel"
+      },
+      {
+        "id": "c",
+        "label": "Reporting Service",
+        "detail": "Subscriber"
+      },
+      {
+        "id": "d",
+        "label": "Logistics Service",
+        "detail": "Subscriber"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "publishes event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "delivers to"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "delivers to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupled Inventory Synchronization, why is a Publish-Subscribe pattern chosen over point-to-point calls?",
+      "options": [
+        "To ensure immediate consistency across all systems.",
+        "To reduce coupling by removing the need for the producer to know about specific consumers.",
+        "To increase the number of direct API calls between services.",
+        "To eliminate the need for a message schema."
+      ],
+      "answerIndex": 1,
+      "explanation": "The pattern allows the inventory service to publish updates without knowing which systems are listening, solving the problem of high coupling.",
+      "evidence": "Implementing a Publish-Subscribe pattern introduces an intermediary message broker, allowing the inventory service to publish stock updates to a channel without needing to know which specific systems are listening, thereby decoupling producers from consumers."
+    },
+    {
+      "question": "In Decoupled Inventory Synchronization, what is the primary tradeoff of using this pattern?",
+      "options": [
+        "The inventory service becomes more dependent on downstream systems.",
+        "The system gains immediate consistency at the cost of performance.",
+        "The loss of immediate consistency due to asynchronous processing.",
+        "The broker requires all subscribers to be active simultaneously."
+      ],
+      "answerIndex": 2,
+      "explanation": "Asynchronous messaging inherently means that updates are not processed instantly by all subscribers, leading to eventual rather than immediate consistency.",
+      "evidence": "The primary limitation is the loss of immediate consistency, as updates are processed asynchronously; this can be checked by monitoring the lag between the message publication timestamp and the subscriber processing timestamp."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:56.602Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

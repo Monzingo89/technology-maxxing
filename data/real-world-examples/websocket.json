@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "websocket",
+  "title": "Real-time Collaborative Inventory Sync",
+  "business": "A regional warehouse management firm coordinating stock levels across multiple distributed loading docks.",
+  "problem": "Traditional HTTP polling creates significant latency and server overhead, causing inventory discrepancies when multiple scanners update stock levels simultaneously.",
+  "solution": "Implementing a WebSocket connection establishes a persistent, full-duplex channel, allowing the server to push inventory updates to all connected scanners instantly without waiting for client requests.",
+  "steps": [
+    "Initialize a new WebSocket instance pointing to the warehouse server endpoint.",
+    "Attach an event listener to the open event to confirm the handshake is complete.",
+    "Use the send method to transmit stock update payloads whenever a scanner registers a barcode.",
+    "Define a message event listener to process incoming inventory synchronization packets from the server.",
+    "Monitor the readyState property to ensure the connection remains active during shifts."
+  ],
+  "outcome": "Warehouse staff experience immediate visual confirmation of stock changes across all terminals, ensuring data consistency without the delay of periodic polling cycles.",
+  "limitation": "The WebSocket API lacks native backpressure mechanisms, meaning if the server pushes updates faster than the scanner hardware can process them, the application may exhaust device memory or become unresponsive. Developers should monitor the bufferedAmount property to check if the queue is growing uncontrollably.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Sync Data Flow",
+    "description": "This diagram illustrates the bidirectional flow of inventory data between the warehouse scanner and the central server.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Scanner Client",
+        "detail": "Initiates connection and sends updates"
+      },
+      {
+        "id": "b",
+        "label": "WebSocket Channel",
+        "detail": "Persistent TCP-based full-duplex link"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Server",
+        "detail": "Broadcasts state changes to all clients"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends stock update"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "forwards data"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "pushes sync event"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "delivers update"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const socket = new WebSocket('ws://warehouse.local/sync'); // Establish persistent link\nsocket.addEventListener('message', (event) => {\n  const data = JSON.parse(event.data); // Process incoming inventory update\n  updateUI(data);\n});\nif (socket.bufferedAmount > 1000) { console.warn('High latency detected'); } // Check for potential backpressure issues",
+    "explanation": "This code initializes the connection for the Real-time Collaborative Inventory Sync scenario and includes a check on bufferedAmount to mitigate the lack of native backpressure."
+  },
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Web/API/WebSocket",
+      "label": "WebSocket - Web APIs | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Collaborative Inventory Sync, why is WebSocket preferred over traditional polling?",
+      "options": [
+        "It eliminates the latency and server overhead associated with periodic HTTP requests.",
+        "It automatically handles backpressure for all connected scanner devices.",
+        "It provides a way to encrypt data packets at the transport layer.",
+        "It allows the client to store inventory data locally without a server."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that traditional polling causes latency and overhead, which WebSocket solves through a persistent, full-duplex channel.",
+      "evidence": "Traditional HTTP polling creates significant latency and server overhead, causing inventory discrepancies when multiple scanners update stock levels simultaneously."
+    },
+    {
+      "question": "In Real-time Collaborative Inventory Sync, what is a primary risk when using the WebSocket API?",
+      "options": [
+        "The connection automatically closes if no data is sent for ten seconds.",
+        "The API does not support binary data types.",
+        "The lack of backpressure can lead to memory exhaustion if messages arrive too quickly.",
+        "The readyState property cannot be accessed from Web Workers."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that the absence of backpressure can cause memory issues if the application cannot keep up with incoming messages.",
+      "evidence": "The WebSocket API lacks native backpressure mechanisms, meaning if the server pushes updates faster than the scanner hardware can process them, the application may exhaust device memory or become unresponsive."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:34.086Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:29.548Z"
+}

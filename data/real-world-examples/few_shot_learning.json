@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "few_shot_learning",
+  "title": "Automated Niche Legal Document Classification",
+  "business": "Boutique law firms handling specialized, low-volume litigation.",
+  "problem": "The firm encounters rare, highly specific legal document types that lack the thousands of labeled examples required for traditional supervised fine-tuning, leading to manual processing bottlenecks.",
+  "solution": "Few-shot learning allows the firm to adapt a pre-trained language model to recognize new document categories by providing only a handful of representative examples within the prompt, bypassing the need for extensive gradient-based training.",
+  "steps": [
+    "Identify a set of 3-5 representative legal document examples for the new category.",
+    "Construct a prompt template that includes these examples as context.",
+    "Append the target document to the prompt without modifying model weights.",
+    "Execute inference to classify the target document based on the provided pattern."
+  ],
+  "outcome": "The firm achieves rapid, on-the-fly classification of novel document types, significantly reducing manual review time for specialized cases.",
+  "limitation": "The primary limitation is that few-shot performance is highly sensitive to the quality and diversity of the provided examples; if the examples are ambiguous or poorly selected, the model may hallucinate or misclassify. This can be checked by evaluating the model against a small, held-out validation set of known documents.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Few-Shot Inference Pipeline",
+    "description": "The process shows how context examples guide the model to classify a new document without weight updates.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Example Store",
+        "detail": "Repository of 3-5 labeled documents"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Constructor",
+        "detail": "Combines examples with target input"
+      },
+      {
+        "id": "c",
+        "label": "Pre-trained Model",
+        "detail": "Large language model (frozen)"
+      },
+      {
+        "id": "d",
+        "label": "Classification Output",
+        "detail": "Predicted label for target document"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Injects context"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends formatted prompt"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates prediction"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2005.14165",
+      "label": "Language Models are Few-Shot Learners"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Niche Legal Document Classification, how does the system address the lack of large labeled datasets?",
+      "options": [
+        "By using few-shot learning to provide examples within the prompt.",
+        "By performing gradient updates on the entire model architecture.",
+        "By training a new model from scratch for every document type.",
+        "By relying on human evaluators to manually label every document."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages few-shot learning to adapt the model using only a handful of examples provided in the prompt context.",
+      "evidence": "Few-shot learning allows the firm to adapt a pre-trained language model to recognize new document categories by providing only a handful of representative examples within the prompt, bypassing the need for extensive gradient-based training."
+    },
+    {
+      "question": "What is a primary limitation of the approach used in Automated Niche Legal Document Classification?",
+      "options": [
+        "The model requires thousands of examples to function.",
+        "The model is highly sensitive to the quality and diversity of the provided examples.",
+        "The model cannot perform classification on any legal documents.",
+        "The model must be retrained every time a new document is processed."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that performance depends on the quality of the examples, which can be verified via a validation set.",
+      "evidence": "The primary limitation is that few-shot performance is highly sensitive to the quality and diversity of the provided examples; if the examples are ambiguous or poorly selected, the model may hallucinate or misclassify."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:30.422Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:26.869Z"
+}

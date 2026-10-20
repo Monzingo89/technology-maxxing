@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_cmsmanhattan_jirackultra_1b",
+  "title": "Edge Robotics Diagnostic Deployment",
+  "business": "Industrial robotics firms managing remote hardware fleets.",
+  "problem": "High latency and cloud dependency for real-time diagnostic processing on edge devices with limited memory.",
+  "solution": "Deploying the JiRackUltra_1b model locally using GGUF quantizations to enable on-device tool calling and routing without external network round-trips.",
+  "steps": [
+    "Select the Q4_K_M quantization variant for an optimal balance of memory footprint and reasoning accuracy.",
+    "Configure the Docker container with restricted CPU and memory limits to match the target edge hardware specifications.",
+    "Integrate the JiRack Precision Tokenizer to map diagnostic sensor outputs to specific Robotics and Tool call tags.",
+    "Deploy the containerized model to the edge node to handle local routing of diagnostic tasks."
+  ],
+  "outcome": "Reduced operational latency and increased system autonomy for remote diagnostic tasks.",
+  "limitation": "The model's performance is sensitive to memory constraints; check system stability by monitoring KV-cache consumption during peak generation periods.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Edge Diagnostic Routing",
+    "description": "The flow of sensor data through the local JiRack model for automated tool execution.",
+    "nodes": [
+      {
+        "id": "sensor",
+        "label": "Robot Sensor",
+        "detail": "Generates raw diagnostic telemetry"
+      },
+      {
+        "id": "tokenizer",
+        "label": "JiRack Tokenizer",
+        "detail": "Maps telemetry to Robotics/Tool tags"
+      },
+      {
+        "id": "model",
+        "label": "JiRackUltra_1b",
+        "detail": "Inference engine running locally"
+      },
+      {
+        "id": "action",
+        "label": "Tool Execution",
+        "detail": "Performs corrective maintenance"
+      }
+    ],
+    "edges": [
+      {
+        "from": "sensor",
+        "to": "tokenizer",
+        "label": "data_ingest"
+      },
+      {
+        "from": "tokenizer",
+        "to": "model",
+        "label": "tagged_input"
+      },
+      {
+        "from": "model",
+        "to": "action",
+        "label": "trigger_tool"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/CMSManhattan/JiRackUltra_1b",
+      "label": "CMSManhattan/JiRackUltra_1b · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge Robotics Diagnostic Deployment, what is the primary benefit of using the JiRackUltra_1b model locally?",
+      "options": [
+        "Eliminating latency and cloud dependency for real-time diagnostics.",
+        "Increasing the total number of parameters beyond 1.5B.",
+        "Replacing the need for any tokenizer in the diagnostic pipeline.",
+        "Enabling cloud-based training on private datasets."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies high latency and cloud dependency as the specific problem, which local deployment solves.",
+      "evidence": "High latency and cloud dependency for real-time diagnostic processing on edge devices with limited memory."
+    },
+    {
+      "question": "In Edge Robotics Diagnostic Deployment, what is a key limitation to monitor during model execution?",
+      "options": [
+        "The lack of support for GGUF quantization formats.",
+        "The model's sensitivity to memory constraints and KV-cache usage.",
+        "The requirement for a minimum of 64GB of RAM for all variants.",
+        "The inability to use Docker for deployment."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about memory sensitivity and KV-cache consumption.",
+      "evidence": "The model's performance is sensitive to memory constraints; check system stability by monitoring KV-cache consumption during peak generation periods."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:14.358Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:10.879Z"
+}

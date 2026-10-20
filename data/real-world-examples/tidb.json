@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "tidb",
+  "title": "Unified Inventory and Analytics for Global Retail",
+  "business": "Global retail enterprises managing high-volume e-commerce platforms that require both immediate transaction processing and real-time inventory analytics.",
+  "problem": "Traditional architectures force a split between transactional databases and analytical data warehouses. This creates data latency, where inventory reports are hours behind actual sales, leading to overselling or inefficient stock allocation during peak traffic.",
+  "solution": "TiDB provides a Hybrid Transactional and Analytical Processing (HTAP) architecture. By utilizing TiKV for row-based transactional storage and TiFlash for columnar-based analytical storage, the system maintains strong consistency while allowing complex analytical queries to run on the same data set without impacting transactional performance.",
+  "steps": [
+    "Deploy the TiDB cluster across multiple availability zones to ensure high availability via the Multi-Raft protocol.",
+    "Configure TiFlash nodes to act as columnar replicas of the primary TiKV row-based data.",
+    "Direct transactional application traffic to TiDB nodes for standard SQL operations.",
+    "Execute analytical reporting queries directly against the TiFlash engine to leverage columnar acceleration.",
+    "Monitor replication lag between TiKV and TiFlash to ensure real-time data consistency for reporting."
+  ],
+  "outcome": "The business achieves real-time visibility into inventory levels across all regions, eliminating the need for complex ETL pipelines and reducing the window between a sale and its reflection in management reports to near-zero.",
+  "limitation": "The primary trade-off is the additional storage cost and resource overhead required to maintain the TiFlash columnar replicas. Administrators must monitor the replication lag between TiKV and TiFlash to ensure that analytical queries do not return stale data during periods of extreme write pressure.",
+  "diagram": {
+    "kind": "flow",
+    "title": "HTAP Data Flow Architecture",
+    "description": "This diagram illustrates how transactional data is ingested and then replicated for analytical processing.",
+    "nodes": [
+      {
+        "id": "app",
+        "label": "Application Layer",
+        "detail": "Sends SQL queries"
+      },
+      {
+        "id": "tidb",
+        "label": "TiDB Server",
+        "detail": "SQL parsing and routing"
+      },
+      {
+        "id": "tikv",
+        "label": "TiKV Engine",
+        "detail": "Row-based storage for OLTP"
+      },
+      {
+        "id": "tiflash",
+        "label": "TiFlash Engine",
+        "detail": "Columnar storage for OLAP"
+      }
+    ],
+    "edges": [
+      {
+        "from": "app",
+        "to": "tidb",
+        "label": "MySQL Protocol"
+      },
+      {
+        "from": "tidb",
+        "to": "tikv",
+        "label": "Write/Read Transactions"
+      },
+      {
+        "from": "tikv",
+        "to": "tiflash",
+        "label": "Real-time Replication"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.pingcap.com/tidb/stable/overview/",
+      "label": "What is TiDB Self-Managed | TiDB Docs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Inventory and Analytics for Global Retail, what is the primary benefit of the HTAP architecture?",
+      "options": [
+        "It eliminates the need for any storage engines.",
+        "It allows transactional and analytical processing on the same data set.",
+        "It replaces the need for SQL entirely.",
+        "It forces all data to be stored in a single row-based format."
+      ],
+      "answerIndex": 1,
+      "explanation": "The HTAP architecture allows the system to handle both OLTP and OLAP workloads simultaneously using TiKV and TiFlash.",
+      "evidence": "TiDB provides a Hybrid Transactional and Analytical Processing (HTAP) architecture. By utilizing TiKV for row-based transactional storage and TiFlash for columnar-based analytical storage, the system maintains strong consistency while allowing complex analytical queries to run on the same data set without impacting transactional performance."
+    },
+    {
+      "question": "In Unified Inventory and Analytics for Global Retail, what is a key limitation of the implementation?",
+      "options": [
+        "The system cannot handle high concurrency.",
+        "Analytical queries are always slower than transactional ones.",
+        "Additional storage and replication lag must be managed.",
+        "The system is not compatible with MySQL protocols."
+      ],
+      "answerIndex": 2,
+      "explanation": "The implementation requires extra storage for columnar replicas and requires monitoring of replication lag to ensure data freshness.",
+      "evidence": "The primary trade-off is the additional storage cost and resource overhead required to maintain the TiFlash columnar replicas. Administrators must monitor the replication lag between TiKV and TiFlash to ensure that analytical queries do not return stale data during periods of extreme write pressure."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:21.399Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:17.159Z"
+}

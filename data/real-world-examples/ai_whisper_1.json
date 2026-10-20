@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_whisper_1",
+  "title": "Automated Legal Deposition Indexing",
+  "business": "A regional law firm managing high volumes of recorded legal depositions.",
+  "problem": "Manual transcription of hours-long audio files is labor-intensive, prone to human error, and creates significant delays in case preparation.",
+  "solution": "The firm utilizes the Whisper-1 model to programmatically convert audio recordings into structured text, enabling rapid search and keyword identification across deposition archives.",
+  "steps": [
+    "Capture raw audio files from deposition sessions in supported formats.",
+    "Submit audio files to the whisper-1 transcription endpoint via API.",
+    "Receive the generated text output for indexing in the firm's internal database.",
+    "Perform keyword analysis on the transcribed text to identify key testimony."
+  ],
+  "outcome": "Legal teams gain immediate access to searchable text records, significantly reducing the time required to prepare for trial proceedings.",
+  "limitation": "Whisper-1 is a general-purpose model and may struggle with highly specialized legal jargon or thick regional accents, which can be verified by conducting spot-checks against the original audio.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Deposition Transcription Pipeline",
+    "description": "The flow of audio data from capture to searchable text.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Deposition Audio",
+        "detail": "Raw recorded file"
+      },
+      {
+        "id": "b",
+        "label": "Whisper-1 API",
+        "detail": "Transcription engine"
+      },
+      {
+        "id": "c",
+        "label": "Text Output",
+        "detail": "Transcribed testimony"
+      },
+      {
+        "id": "d",
+        "label": "Legal Database",
+        "detail": "Searchable archive"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submits audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "returns text"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "stores for search"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "import openai\n# Send audio file to whisper-1 for transcription\naudio_file = open(\"deposition_001.mp3\", \"rb\")\ntranscript = openai.Audio.transcribe(\"whisper-1\", audio_file) # Calls the transcription endpoint",
+    "explanation": "This code demonstrates the basic API call to the transcription endpoint, which maps directly to the solution of converting audio files into searchable text."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/whisper-1",
+      "label": "General-purpose speech recognition model"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Deposition Indexing, how does the technology address the firm's primary operational challenge?",
+      "options": [
+        "By automating the conversion of audio to text for rapid searching.",
+        "By providing real-time translation of foreign language testimony.",
+        "By automatically generating legal summaries of the trial.",
+        "By replacing the need for human court reporters entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions using Whisper-1 to convert audio into structured text to enable rapid search and keyword identification.",
+      "evidence": "The firm utilizes the Whisper-1 model to programmatically convert audio recordings into structured text, enabling rapid search and keyword identification across deposition archives."
+    },
+    {
+      "question": "In Automated Legal Deposition Indexing, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot handle audio files longer than five minutes.",
+        "The model may struggle with specialized jargon or accents.",
+        "The model requires manual fine-tuning for every new case.",
+        "The model is only compatible with specific proprietary audio formats."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies that the general-purpose nature of the model can lead to inaccuracies with specialized legal terminology or accents.",
+      "evidence": "Whisper-1 is a general-purpose model and may struggle with highly specialized legal jargon or thick regional accents, which can be verified by conducting spot-checks against the original audio."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:34.537Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:30.752Z"
+}

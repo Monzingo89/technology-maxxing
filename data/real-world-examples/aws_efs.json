@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "aws_efs",
+  "title": "Collaborative Media Rendering Workflow",
+  "business": "A boutique animation studio requiring shared access to large asset libraries across multiple compute instances.",
+  "problem": "The studio struggled with data silos where individual rendering instances maintained local copies of assets, leading to inconsistent versions and high storage overhead.",
+  "solution": "Amazon EFS provides a managed, elastic NFS file system that allows multiple compute instances to concurrently mount the same storage volume, ensuring a single source of truth for all rendering assets.",
+  "steps": [
+    "Create an Amazon EFS file system within the VPC to serve as the centralized asset repository.",
+    "Configure mount targets in each Availability Zone where rendering instances are deployed.",
+    "Update the security group rules for the EFS mount targets to permit NFS traffic from the rendering instances.",
+    "Mount the EFS file system on each compute instance using the standard Linux mount command with the NFS protocol."
+  ],
+  "outcome": "The studio achieves seamless collaboration as all rendering nodes access the same file system, eliminating the need for manual synchronization and reducing storage redundancy.",
+  "limitation": "EFS performance is subject to throughput limits based on the file system size and burst credits; administrators can monitor this via CloudWatch metrics to ensure the workload does not exceed provisioned or burstable capacity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "EFS Shared Storage Architecture",
+    "description": "This diagram illustrates how multiple compute nodes connect to a central EFS file system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "EFS File System",
+        "detail": "Centralized NFS storage"
+      },
+      {
+        "id": "b",
+        "label": "Mount Target AZ1",
+        "detail": "Network interface in AZ1"
+      },
+      {
+        "id": "c",
+        "label": "Mount Target AZ2",
+        "detail": "Network interface in AZ2"
+      },
+      {
+        "id": "d",
+        "label": "Compute Node A",
+        "detail": "Rendering instance"
+      },
+      {
+        "id": "e",
+        "label": "Compute Node B",
+        "detail": "Rendering instance"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides access"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "provides access"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "mounts via NFS"
+      },
+      {
+        "from": "e",
+        "to": "c",
+        "label": "mounts via NFS"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Collaborative Media Rendering Workflow, what is the primary problem addressed by EFS?",
+      "options": [
+        "High latency in network connectivity",
+        "Data silos and inconsistent asset versions across instances",
+        "Inability to scale compute instances",
+        "High cost of local SSD storage"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that local copies led to inconsistent versions and data silos.",
+      "evidence": "The studio struggled with data silos where individual rendering instances maintained local copies of assets, leading to inconsistent versions and high storage overhead."
+    },
+    {
+      "question": "In Collaborative Media Rendering Workflow, what is a known limitation of the solution?",
+      "options": [
+        "EFS cannot be mounted by more than one instance",
+        "Throughput is limited by file system size and burst credits",
+        "NFS is not supported by Linux instances",
+        "Mount targets are only available in one Availability Zone"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies throughput limits and the need for CloudWatch monitoring.",
+      "evidence": "EFS performance is subject to throughput limits based on the file system size and burst credits; administrators can monitor this via CloudWatch metrics to ensure the workload does not exceed provisioned or burstable capacity."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:02.532Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

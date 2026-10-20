@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_realtime_mini",
+  "title": "Automated Language Learning Companion",
+  "business": "Language education platforms providing conversational practice to millions of students.",
+  "problem": "High-fidelity conversational AI models are prohibitively expensive to deploy at scale for low-stakes practice sessions, leading to unsustainable operational overhead.",
+  "solution": "GPT-Realtime Mini provides a cost-efficient alternative for real-time audio interaction, allowing platforms to maintain interactive, low-latency experiences while significantly reducing the token-based cost per session.",
+  "steps": [
+    "Establish a WebSocket connection to the v1/realtime endpoint using the gpt-realtime-mini model ID.",
+    "Configure the session to accept audio input and stream audio output for natural turn-taking.",
+    "Implement prompt caching for recurring instructional system prompts to lower input token costs.",
+    "Define function calling schemas to allow the model to trigger external vocabulary lookup tools during conversation."
+  ],
+  "outcome": "Platforms can offer persistent, high-frequency conversational practice to a broader user base without compromising the responsiveness required for effective language acquisition.",
+  "limitation": "The model has a 4,096 max output token limit, which may truncate long-form explanations; developers should monitor the output token count per turn to ensure responses remain within bounds.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Realtime Interaction Flow",
+    "description": "The flow of data between the student, the WebSocket session, and the model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Student",
+        "detail": "Audio input source"
+      },
+      {
+        "id": "b",
+        "label": "WebSocket",
+        "detail": "v1/realtime connection"
+      },
+      {
+        "id": "c",
+        "label": "GPT-Realtime Mini",
+        "detail": "Processing engine"
+      },
+      {
+        "id": "d",
+        "label": "Tools",
+        "detail": "Function calling for vocabulary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Stream audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Process input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Invoke lookup"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Stream audio response"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-mini",
+      "label": "GPT-Realtime Mini"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Language Learning Companion, what is the primary driver for adopting GPT-Realtime Mini?",
+      "options": [
+        "To reduce the operational cost of high-fidelity conversational AI at scale.",
+        "To enable offline processing of language audio files.",
+        "To bypass the need for WebSocket connections.",
+        "To increase the maximum output token limit beyond 4,096."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that high-fidelity models are too expensive for scale, and the solution highlights the model's cost-efficiency.",
+      "evidence": "High-fidelity conversational AI models are prohibitively expensive to deploy at scale for low-stakes practice sessions, leading to unsustainable operational overhead."
+    },
+    {
+      "question": "In Automated Language Learning Companion, what is a specific technical limitation to monitor?",
+      "options": [
+        "The lack of support for WebSocket connections.",
+        "The inability to use function calling.",
+        "The 4,096 max output token limit which may truncate long responses.",
+        "The requirement to use legacy completions endpoints."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about the output token constraint and its impact on response length.",
+      "evidence": "The model has a 4,096 max output token limit, which may truncate long-form explanations; developers should monitor the output token count per turn to ensure responses remain within bounds."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:40.695Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:37.662Z"
+}

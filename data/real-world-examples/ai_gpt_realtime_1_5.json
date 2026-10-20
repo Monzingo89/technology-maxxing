@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_realtime_1_5",
+  "title": "Automated Emergency Triage for Remote Field Clinics",
+  "business": "Remote medical field clinics operating in low-connectivity, high-stress environments.",
+  "problem": "Medical staff in remote areas often face critical delays when manually documenting patient symptoms while simultaneously performing life-saving procedures, leading to incomplete triage records and potential diagnostic errors.",
+  "solution": "By integrating GPT-Realtime-1.5, clinics can deploy a hands-free voice agent that listens to patient-provider interactions in real-time. The model processes raw audio input to generate structured clinical notes and immediate triage recommendations, allowing providers to maintain focus on the patient rather than data entry.",
+  "steps": [
+    "Establish a persistent WebSocket connection to the v1/realtime endpoint to stream raw audio from the clinic environment.",
+    "Configure the session to utilize function_calling to trigger external medical database lookups based on detected symptoms.",
+    "Enable prompt_caching for standardized medical protocols to reduce latency during high-frequency triage sessions.",
+    "Process the model output as audio to provide immediate, synthesized guidance back to the field clinician."
+  ],
+  "outcome": "Clinicians achieve higher focus on patient care, resulting in more comprehensive and accurate triage documentation generated concurrently with the examination.",
+  "limitation": "The model relies on continuous audio streaming; network jitter or packet loss in remote areas can interrupt the session. To check for this, developers must monitor the WebSocket connection state and implement local audio buffering to ensure the model receives a coherent stream.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Realtime Triage Data Flow",
+    "description": "The flow of audio data from the clinic to the model and back.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Field Clinician",
+        "detail": "Source of raw audio input"
+      },
+      {
+        "id": "b",
+        "label": "WebSocket Stream",
+        "detail": "Transport layer for audio"
+      },
+      {
+        "id": "c",
+        "label": "GPT-Realtime-1.5",
+        "detail": "Audio processing and reasoning"
+      },
+      {
+        "id": "d",
+        "label": "Electronic Health Record",
+        "detail": "Storage for structured notes"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "streams audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "input modalities"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "triggers function call"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Establish connection to the realtime endpoint\nconst ws = new WebSocket('wss://api.openai.com/v1/realtime?model=gpt-realtime-1.5');\n\n// Send audio chunks as they are captured from the microphone\nws.send(JSON.stringify({\n  type: 'input_audio_buffer.append',\n  audio: base64EncodedAudioData // Raw audio stream from clinician\n}));\n\n// Handle function calling for medical database lookups\nws.on('message', (data) => {\n  if (data.type === 'function_call') {\n    // Execute local medical protocol lookup\n  }\n});",
+    "explanation": "This code demonstrates the core interaction pattern for Automated Emergency Triage for Remote Field Clinics, showing how audio is streamed to the model and how function calling is used to integrate medical protocols."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-realtime-1.5",
+      "label": "GPT-Realtime-1.5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Emergency Triage for Remote Field Clinics, what is the primary benefit of using the model?",
+      "options": [
+        "It allows providers to focus on patients while the model handles documentation.",
+        "It replaces the need for medical staff entirely.",
+        "It provides a way to generate high-resolution medical images.",
+        "It reduces the cost of storing patient records."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explains that the model allows providers to maintain focus on the patient rather than data entry by generating structured notes.",
+      "evidence": "By integrating GPT-Realtime-1.5, clinics can deploy a hands-free voice agent that listens to patient-provider interactions in real-time. The model processes raw audio input to generate structured clinical notes and immediate triage recommendations, allowing providers to maintain focus on the patient rather than data entry."
+    },
+    {
+      "question": "In Automated Emergency Triage for Remote Field Clinics, what is a specific limitation of the implementation?",
+      "options": [
+        "The model cannot process audio input.",
+        "Network jitter can interrupt the streaming session.",
+        "The model is limited to text-only output.",
+        "Function calling is not supported by the model."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies network instability as a challenge for the streaming requirement.",
+      "evidence": "The model relies on continuous audio streaming; network jitter or packet loss in remote areas can interrupt the session."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:41.928Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:37.839Z"
+}

@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "topicId": "azure_managed_disks",
+  "title": "Streamlining Virtual Machine Storage Lifecycle",
+  "business": "Enterprises running high-availability Linux virtual machines for internal applications.",
+  "problem": "Manual management of storage accounts and underlying VHD files leads to operational overhead and potential data consistency issues during scaling operations.",
+  "solution": "Azure Managed Disks abstract the storage account management layer, providing block-level storage volumes that are automatically handled by the Azure platform, simplifying attachment and snapshotting processes.",
+  "steps": [
+    "Provision a new Linux virtual machine specifying the managed disk option.",
+    "Define the disk size and performance tier requirements within the VM configuration.",
+    "Attach additional data disks to the virtual machine via the Azure portal or CLI.",
+    "Utilize platform-managed snapshots to create point-in-time backups of the disks."
+  ],
+  "outcome": "Reduced administrative burden and improved reliability for disk lifecycle management without manual storage account orchestration.",
+  "limitation": "Managed disks are tied to the lifecycle of the virtual machine; deleting the VM may result in the deletion of attached managed disks unless explicitly configured otherwise. Check the 'Delete option' setting in the VM resource properties.",
+  "diagram": {
+    "kind": "er",
+    "title": "Managed Disk Attachment Relationship",
+    "description": "Shows the relationship between the compute resource and its persistent storage.",
+    "nodes": [
+      {
+        "id": "vm",
+        "label": "Virtual Machine",
+        "detail": "Compute resource"
+      },
+      {
+        "id": "os_disk",
+        "label": "OS Managed Disk",
+        "detail": "Boot volume"
+      },
+      {
+        "id": "data_disk",
+        "label": "Data Managed Disk",
+        "detail": "Application storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "vm",
+        "to": "os_disk",
+        "label": "1:1"
+      },
+      {
+        "from": "vm",
+        "to": "data_disk",
+        "label": "1:N"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Virtual Machine Storage Lifecycle, what is the primary benefit of using Azure Managed Disks?",
+      "options": [
+        "Automatic handling of storage account management",
+        "Unlimited storage capacity per virtual machine",
+        "Elimination of the need for virtual machine backups",
+        "Lowering the cost of compute resources"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that Managed Disks abstract the storage account management layer, which is the primary operational benefit.",
+      "evidence": "Azure Managed Disks abstract the storage account management layer, providing block-level storage volumes that are automatically handled by the Azure platform"
+    },
+    {
+      "question": "In Streamlining Virtual Machine Storage Lifecycle, what is a key limitation regarding disk persistence?",
+      "options": [
+        "Managed disks cannot be resized after creation",
+        "Managed disks are tied to the lifecycle of the virtual machine",
+        "Managed disks require manual storage account configuration",
+        "Managed disks only support Windows operating systems"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that managed disks are tied to the VM lifecycle, meaning deletion of the VM can impact the disk.",
+      "evidence": "Managed disks are tied to the lifecycle of the virtual machine; deleting the VM may result in the deletion of attached managed disks unless explicitly configured otherwise."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:55.104Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

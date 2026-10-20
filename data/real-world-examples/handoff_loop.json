@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "handoff_loop",
+  "title": "Automated Technical Support Routing",
+  "business": "Enterprise SaaS providers managing complex, multi-tiered customer support queues.",
+  "problem": "Generalist triage agents often struggle to resolve deep technical queries, leading to prolonged resolution times and inconsistent user experiences when context is lost during manual escalations.",
+  "solution": "The Agent Handoff Loop enables a triage agent to transfer both the active conversation control and the accumulated context to a specialized technical agent, ensuring the specialist owns the remainder of the turn without requiring the triage agent to narrate the result.",
+  "steps": [
+    "Define a triage agent with instructions to identify technical intent.",
+    "Configure the specialist agent with specific tools for database diagnostics.",
+    "Implement the handoff trigger within the triage agent's logic to initiate the transfer.",
+    "Verify that the specialist agent receives the full conversation history and state.",
+    "Monitor the handoff transition to ensure the specialist assumes direct user interaction."
+  ],
+  "outcome": "Improved resolution efficiency by reducing the need for users to repeat information, as the specialist agent inherits the full context of the triage phase.",
+  "limitation": "The primary tradeoff is the potential for context bloat; as the handoff chain grows, the conversation history passed to the specialist can become excessively large, which should be checked by monitoring token usage and response latency.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Handoff Flow",
+    "description": "The flow shows how a user request moves from a triage agent to a specialist agent.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "User",
+        "detail": "Customer submitting a query"
+      },
+      {
+        "id": "triage",
+        "label": "Triage Agent",
+        "detail": "Initial intent classifier"
+      },
+      {
+        "id": "specialist",
+        "label": "Technical Specialist",
+        "detail": "Deep diagnostic agent"
+      },
+      {
+        "id": "db",
+        "label": "Database",
+        "detail": "System logs and state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "triage",
+        "label": "submits query"
+      },
+      {
+        "from": "triage",
+        "to": "specialist",
+        "label": "handoffs context"
+      },
+      {
+        "from": "specialist",
+        "to": "db",
+        "label": "queries logs"
+      },
+      {
+        "from": "specialist",
+        "to": "user",
+        "label": "provides resolution"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/multi_agent/",
+      "label": "Agent orchestration"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Technical Support Routing, what is the primary benefit of using a handoff loop over a generalist agent?",
+      "options": [
+        "It allows the specialist to own the remainder of the turn without the triage agent narrating the result.",
+        "It forces the user to repeat their request to the specialist for verification.",
+        "It eliminates the need for any triage agent in the system architecture.",
+        "It automatically reduces the number of tokens used in every conversation."
+      ],
+      "answerIndex": 0,
+      "explanation": "The handoff loop is designed to transfer control so the specialist can respond directly, keeping the conversation focused.",
+      "evidence": "The Agent Handoff Loop enables a triage agent to transfer both the active conversation control and the accumulated context to a specialized technical agent, ensuring the specialist owns the remainder of the turn without requiring the triage agent to narrate the result."
+    },
+    {
+      "question": "In Automated Technical Support Routing, what is a key limitation of the handoff implementation?",
+      "options": [
+        "The specialist agent cannot access the database.",
+        "The triage agent must always remain active during the specialist's turn.",
+        "The potential for context bloat as the handoff chain grows.",
+        "The system requires manual intervention for every transfer."
+      ],
+      "answerIndex": 2,
+      "explanation": "Passing conversation history through multiple handoffs can lead to excessive context size, which impacts performance.",
+      "evidence": "The primary tradeoff is the potential for context bloat; as the handoff chain grows, the conversation history passed to the specialist can become excessively large, which should be checked by monitoring token usage and response latency."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:28.159Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:19.890Z"
+}

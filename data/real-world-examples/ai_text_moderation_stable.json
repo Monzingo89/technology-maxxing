@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_text_moderation_stable",
+  "title": "Legacy Forum Content Governance",
+  "business": "A community-driven historical archive platform hosting millions of legacy text posts.",
+  "problem": "The platform struggles with high volumes of user-generated content that may violate community safety guidelines, requiring a consistent, cost-effective way to flag potentially harmful text without migrating to newer, more complex model architectures.",
+  "solution": "By integrating the text-moderation-stable model, the platform can programmatically scan incoming and existing text submissions against safety categories. This model provides a stable, locked-in snapshot (text-moderation-007) that ensures consistent classification behavior for legacy datasets, avoiding the variability that might arise from frequent model updates.",
+  "steps": [
+    "Identify the specific text fields in the legacy database requiring moderation.",
+    "Configure the application to route text payloads to the v1/moderations endpoint.",
+    "Utilize the text-moderation-007 snapshot to ensure consistent classification logic.",
+    "Implement a conditional logic gate to flag or block content based on the model's returned categories.",
+    "Log the moderation results for audit trails and manual review queues."
+  ],
+  "outcome": "The platform achieves a predictable and automated safety filtering process that maintains historical consistency across its archive.",
+  "limitation": "The primary limitation is that text-moderation-stable is a text-only model and cannot process multimodal content like images or audio. To check for this, developers must validate input types before calling the moderation endpoint; if the input contains non-text media, the system should trigger a fallback error handler.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Moderation Workflow for Legacy Archive",
+    "description": "This diagram illustrates the flow of text content from the user archive through the moderation model and into the final decision state.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Input",
+        "detail": "Raw text post from archive"
+      },
+      {
+        "id": "b",
+        "label": "Validation",
+        "detail": "Check if content is text-only"
+      },
+      {
+        "id": "c",
+        "label": "Moderation API",
+        "detail": "text-moderation-007"
+      },
+      {
+        "id": "d",
+        "label": "Decision Engine",
+        "detail": "Flag or Approve"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submit"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "valid text"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "classification results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/text-moderation-stable",
+      "label": "text-moderation-stable"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Forum Content Governance, why is the text-moderation-stable model chosen for the archive?",
+      "options": [
+        "It supports multimodal analysis for images and text.",
+        "It provides a stable snapshot for consistent classification.",
+        "It is the newest model with the highest performance.",
+        "It allows for real-time translation of legacy posts."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario emphasizes the need for consistency in legacy datasets, which is achieved by using the locked-in text-moderation-007 snapshot.",
+      "evidence": "This model provides a stable, locked-in snapshot (text-moderation-007) that ensures consistent classification behavior for legacy datasets, avoiding the variability that might arise from frequent model updates."
+    },
+    {
+      "question": "In Legacy Forum Content Governance, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot process non-text media inputs.",
+        "The model requires frequent updates to the snapshot.",
+        "The model is incompatible with the v1/moderations endpoint.",
+        "The model is too expensive for high-volume archives."
+      ],
+      "answerIndex": 0,
+      "explanation": "The text-moderation-stable model is explicitly defined as a text-only model, meaning it cannot handle other media types.",
+      "evidence": "The primary limitation is that text-moderation-stable is a text-only model and cannot process multimodal content like images or audio."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:15.340Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:11.444Z"
+}

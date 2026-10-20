@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "webassembly",
+  "title": "Secure Plugin Architecture for Financial Analytics",
+  "business": "A financial data visualization platform that allows third-party developers to contribute custom risk-modeling algorithms.",
+  "problem": "The platform faces significant security risks when executing untrusted third-party code within the main application process, potentially leading to data leakage or unauthorized memory access.",
+  "solution": "By utilizing WebAssembly as a sandboxed execution environment, the platform can isolate third-party risk models. The Wasm binary format acts as a portable compilation target, ensuring that external algorithms run within a strictly defined, memory-safe virtual machine that cannot access the host application's private memory space.",
+  "steps": [
+    "Define a strict interface contract using WebIDL to govern data exchange between the host and the Wasm module.",
+    "Compile third-party risk-modeling algorithms from source languages like C or Rust into the Wasm binary instruction format.",
+    "Instantiate the Wasm module within the host environment, explicitly granting access only to the necessary memory buffers.",
+    "Execute the sandboxed module to process financial data, ensuring all operations remain within the stack-based virtual machine boundaries."
+  ],
+  "outcome": "The platform achieves a robust security posture where third-party code can be executed safely without compromising the integrity of the core financial application or sensitive user data.",
+  "limitation": "The primary tradeoff is the overhead of data marshaling between the host environment and the Wasm sandbox. Developers can check for performance bottlenecks by monitoring the latency of memory copies across the module boundary during high-frequency data updates.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Wasm Sandbox Execution Flow",
+    "description": "This diagram illustrates how the host application interacts with the isolated Wasm module.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Host App",
+        "detail": "Main financial platform"
+      },
+      {
+        "id": "b",
+        "label": "Wasm Sandbox",
+        "detail": "Isolated execution environment"
+      },
+      {
+        "id": "c",
+        "label": "Data Buffer",
+        "detail": "Shared memory region"
+      },
+      {
+        "id": "d",
+        "label": "Risk Model",
+        "detail": "Third-party logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Writes input data"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Accesses memory"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Executes logic"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Writes results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://webassembly.org/",
+      "label": "WebAssembly"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Plugin Architecture for Financial Analytics, how does WebAssembly address the security risk of third-party code?",
+      "options": [
+        "By encrypting the third-party source code before execution.",
+        "By providing a memory-safe, sandboxed execution environment that isolates the code.",
+        "By requiring all third-party developers to sign their code with a digital certificate.",
+        "By converting all third-party code into JavaScript before running it."
+      ],
+      "answerIndex": 1,
+      "explanation": "WebAssembly provides a sandboxed environment that prevents third-party code from accessing the host's private memory, mitigating security risks.",
+      "evidence": "The Wasm binary format acts as a portable compilation target, ensuring that external algorithms run within a strictly defined, memory-safe virtual machine that cannot access the host application's private memory space."
+    },
+    {
+      "question": "In Secure Plugin Architecture for Financial Analytics, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to use languages other than C.",
+        "The requirement for a browser to run the code.",
+        "The overhead of data marshaling between the host and the sandbox.",
+        "The lack of support for complex mathematical operations."
+      ],
+      "answerIndex": 2,
+      "explanation": "Moving data between the host and the Wasm module introduces latency, which is a known tradeoff in this architecture.",
+      "evidence": "The primary tradeoff is the overhead of data marshaling between the host environment and the Wasm sandbox."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:26.530Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:22.840Z"
+}

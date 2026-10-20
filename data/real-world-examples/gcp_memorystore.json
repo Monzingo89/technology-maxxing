@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "gcp_memorystore",
+  "title": "Optimizing Session State for E-commerce Flash Sales",
+  "business": "E-commerce platforms experiencing high-concurrency traffic during flash sales.",
+  "problem": "Database bottlenecks caused by frequent read/write operations for transient user session data, leading to increased latency and potential checkout failures.",
+  "solution": "Utilizing Memorystore for Memcached to offload session state management from the primary relational database, providing a low-latency, in-memory caching layer.",
+  "steps": [
+    "Provision a Memorystore for Memcached instance within the same VPC as the application servers.",
+    "Configure application session middleware to point to the Memorystore endpoint.",
+    "Implement logic to serialize session objects before caching them in the memory store.",
+    "Set appropriate Time-to-Live (TTL) values for session keys to ensure memory efficiency."
+  ],
+  "outcome": "Improved application responsiveness and reduced load on the primary database, ensuring a smoother user experience during traffic spikes.",
+  "limitation": "Data stored in Memcached is volatile and will be lost if the instance is restarted; verify persistence requirements by checking if the application can gracefully handle session re-authentication.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Session Caching Workflow",
+    "description": "Flow of user requests interacting with the cache layer versus the primary database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Client browser"
+      },
+      {
+        "id": "b",
+        "label": "App Server",
+        "detail": "Application logic"
+      },
+      {
+        "id": "c",
+        "label": "Memorystore",
+        "detail": "In-memory cache"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Primary persistent storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTP Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Check Session"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Cache Hit"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Cache Miss/Write"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Session State for E-commerce Flash Sales, what is the primary purpose of using Memorystore?",
+      "options": [
+        "To replace the relational database entirely",
+        "To offload transient session data to improve latency",
+        "To provide long-term persistent storage for orders",
+        "To manage user authentication credentials securely"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario focuses on offloading session state management to reduce database bottlenecks during high-traffic events.",
+      "evidence": "Utilizing Memorystore for Memcached to offload session state management from the primary relational database, providing a low-latency, in-memory caching layer."
+    },
+    {
+      "question": "In Optimizing Session State for E-commerce Flash Sales, what is a critical limitation to consider?",
+      "options": [
+        "The service is only available in a single region",
+        "Data is volatile and lost upon instance restart",
+        "It requires manual hardware provisioning",
+        "It cannot be used within a VPC"
+      ],
+      "answerIndex": 1,
+      "explanation": "Memcached is an in-memory store, meaning data is not persisted to disk and is lost if the service restarts.",
+      "evidence": "Data stored in Memcached is volatile and will be lost if the instance is restarted; verify persistence requirements by checking if the application can gracefully handle session re-authentication."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:10.330Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "anti_corruption_layer",
+  "title": "Legacy Logistics Integration",
+  "business": "A modern e-commerce platform transitioning to a microservices architecture.",
+  "problem": "The new order management system must integrate with a legacy mainframe logistics provider that uses proprietary, rigid data formats, threatening to pollute the clean domain model of the new system with legacy constraints.",
+  "solution": "An Anti-Corruption Layer (ACL) acts as a protective boundary, translating the legacy system's complex, non-standard data structures into the clean, domain-specific objects required by the new order management system.",
+  "steps": [
+    "Define a clean domain interface that represents the order requirements without legacy baggage.",
+    "Implement a facade or adapter that communicates with the legacy logistics API.",
+    "Create a translation layer that maps legacy data fields into the domain objects.",
+    "Route all interactions through the translation layer so the domain model remains isolated from the legacy system."
+  ],
+  "outcome": "The core domain model remains decoupled from the legacy system, allowing for easier future migrations or replacements of the logistics provider.",
+  "limitation": "The ACL introduces a maintenance overhead because any change in the legacy system's schema requires a corresponding update to the translation logic, which can be verified by monitoring the mapping layer's unit test coverage.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Anti-Corruption Layer Architecture",
+    "description": "The flow shows how the Domain Model interacts with the Legacy System through the ACL.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Domain Model",
+        "detail": "Clean, modern business objects"
+      },
+      {
+        "id": "b",
+        "label": "Anti-Corruption Layer",
+        "detail": "Translation and mapping logic"
+      },
+      {
+        "id": "c",
+        "label": "Legacy System",
+        "detail": "Proprietary mainframe logistics"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Requests via clean interface"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Translates to legacy protocol"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns raw legacy data"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Maps to domain objects"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Logistics Integration, what is the primary purpose of the Anti-Corruption Layer?",
+      "options": [
+        "To replace the legacy mainframe entirely.",
+        "To protect the domain model from legacy data constraints.",
+        "To increase the performance of the legacy database.",
+        "To provide a user interface for the logistics team."
+      ],
+      "answerIndex": 1,
+      "explanation": "The ACL is designed to prevent legacy system structures from polluting the clean domain model.",
+      "evidence": "An Anti-Corruption Layer (ACL) acts as a protective boundary, translating the legacy system's complex, non-standard data structures into the clean, domain-specific objects required by the new order management system."
+    },
+    {
+      "question": "In Legacy Logistics Integration, what is a key limitation of implementing an ACL?",
+      "options": [
+        "It prevents the system from ever connecting to new services.",
+        "It requires the legacy system to be rewritten first.",
+        "It creates maintenance overhead when the legacy schema changes.",
+        "It forces the domain model to use legacy data types."
+      ],
+      "answerIndex": 2,
+      "explanation": "The translation logic must be updated whenever the underlying legacy system changes, creating an ongoing maintenance task.",
+      "evidence": "The ACL introduces a maintenance overhead because any change in the legacy system's schema requires a corresponding update to the translation logic, which can be verified by monitoring the mapping layer's unit test coverage."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:27.554Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

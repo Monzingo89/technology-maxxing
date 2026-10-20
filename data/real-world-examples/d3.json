@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "d3",
+  "title": "Custom Supply Chain Flow Visualization",
+  "business": "Logistics managers tracking global inventory transit.",
+  "problem": "Standard charting tools fail to represent complex, non-linear supply chain nodes and multi-path dependencies, leading to opaque inventory visibility.",
+  "solution": "D3.js provides a low-level toolbox to map custom data structures directly to SVG elements, allowing for bespoke path-based visualizations that reflect actual transit routes.",
+  "steps": [
+    "Parse raw transit data using d3-dsv.",
+    "Define d3-scale linear and band scales to map geographical coordinates to SVG space.",
+    "Utilize d3-selection to bind data to SVG path elements.",
+    "Apply d3-shape to generate curved lines representing transit routes.",
+    "Implement d3-zoom to allow users to navigate complex network clusters."
+  ],
+  "outcome": "Improved clarity in identifying transit bottlenecks through custom-rendered network paths.",
+  "limitation": "D3 is not a monolithic charting library; it requires manual composition of primitives, which increases development time. Check complexity by auditing the number of discrete modules required for a single view.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data-to-Graphic Pipeline",
+    "description": "The flow from raw logistics data to rendered visual elements.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Data",
+        "detail": "CSV transit logs"
+      },
+      {
+        "id": "b",
+        "label": "D3 Modules",
+        "detail": "Scales, Shapes, Selections"
+      },
+      {
+        "id": "c",
+        "label": "SVG DOM",
+        "detail": "Visualized paths"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "transformation"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "rendering"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://d3js.org/what-is-d3",
+      "label": "What is D3?"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Custom Supply Chain Flow Visualization, why is D3.js chosen over standard charting libraries?",
+      "options": [
+        "It provides a low-level toolbox to map custom data structures directly to SVG elements.",
+        "It automatically generates supply chain reports without manual configuration.",
+        "It is a monolithic library that simplifies complex logistics math.",
+        "It is the only library that supports CSV parsing for logistics data."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that standard tools fail to represent non-linear dependencies, and D3's low-level nature allows for the necessary customization.",
+      "evidence": "D3.js provides a low-level toolbox to map custom data structures directly to SVG elements, allowing for bespoke path-based visualizations that reflect actual transit routes."
+    },
+    {
+      "question": "In Custom Supply Chain Flow Visualization, what is a primary trade-off when using D3?",
+      "options": [
+        "It is too simple and lacks advanced geometric capabilities.",
+        "It requires manual composition of primitives, increasing development time.",
+        "It cannot handle large datasets due to performance constraints.",
+        "It forces users to adopt a specific chart type for every visualization."
+      ],
+      "answerIndex": 1,
+      "explanation": "D3 is not a monolithic library, meaning developers must manually assemble parts, which is a known trade-off for its flexibility.",
+      "evidence": "D3 is not a monolithic charting library; it requires manual composition of primitives, which increases development time."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:54.784Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:51.944Z"
+}

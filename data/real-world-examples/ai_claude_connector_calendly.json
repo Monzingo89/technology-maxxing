@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_calendly",
+  "title": "Automated Consultant Availability Management",
+  "business": "Independent boutique consulting firms managing high-volume client intake.",
+  "problem": "Consultants lose billable hours manually updating Calendly event types and checking availability across fragmented calendar views when client project scopes shift.",
+  "solution": "By integrating the Calendly connector, consultants use Claude to programmatically query availability schedules and update event type parameters, ensuring that booking windows reflect real-time project capacity without manual dashboard navigation.",
+  "steps": [
+    "Authenticate the Calendly connector within the Claude interface to grant access to user event types.",
+    "Invoke event_types-list_event_types to identify the specific consulting session event ID.",
+    "Use availability-list_user_availability_schedules to retrieve current blocking rules.",
+    "Execute event_types-update_event_type_availability_schedule to refine the booking window based on new project constraints."
+  ],
+  "outcome": "Consultants achieve a fluid scheduling workflow where administrative overhead is minimized, allowing for immediate adjustments to availability as project demands evolve.",
+  "limitation": "The connector operates on the current user's permissions, meaning it cannot modify availability for other team members or shared organization calendars. Users must verify changes by checking the returned event object status to ensure the API successfully committed the update.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Consultant Availability Adjustment Flow",
+    "description": "This flow shows how the consultant interacts with Claude to update their Calendly availability.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Consultant",
+        "detail": "Initiates request to Claude"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Processes natural language intent"
+      },
+      {
+        "id": "c",
+        "label": "Calendly API",
+        "detail": "Executes scheduling updates"
+      },
+      {
+        "id": "d",
+        "label": "Event Type",
+        "detail": "Updated availability schedule"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request update"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Call update_event_type_availability_schedule"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Apply new rules"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/calendly",
+      "label": "Calendly connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Consultant Availability Management, what is the primary benefit of using the Calendly connector?",
+      "options": [
+        "It automates the manual adjustment of event types and availability based on project shifts.",
+        "It automatically bills clients for consulting sessions booked through the platform.",
+        "It allows consultants to manage the calendars of their entire organization.",
+        "It replaces the need for a calendar provider by hosting events directly in Claude."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that consultants use Claude to update event parameters to reflect real-time capacity, reducing manual administrative work.",
+      "evidence": "By integrating the Calendly connector, consultants use Claude to programmatically query availability schedules and update event type parameters, ensuring that booking windows reflect real-time project capacity without manual dashboard navigation."
+    },
+    {
+      "question": "In Automated Consultant Availability Management, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot be used to list existing event types.",
+        "The connector cannot modify availability for other team members or shared calendars.",
+        "The connector requires manual approval for every single availability update.",
+        "The connector is unable to retrieve current busy times from the user's calendar."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the connector is restricted to the current user's permissions and cannot modify others' calendars.",
+      "evidence": "The connector operates on the current user's permissions, meaning it cannot modify availability for other team members or shared organization calendars."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:56.569Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:53.138Z"
+}

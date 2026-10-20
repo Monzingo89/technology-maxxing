@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_m4max",
+  "title": "Local LLM Inference for Secure Financial Analysis",
+  "business": "Financial analysts and data scientists handling sensitive client data who require local execution of large models.",
+  "problem": "High latency and security risks associated with sending proprietary financial datasets to external cloud-based model APIs.",
+  "solution": "Utilizing the M4 Max chip's 128GB unified memory capacity to load and run large language models with nearly 200 billion parameters directly on-device.",
+  "steps": [
+    "Provision a workstation equipped with the M4 Max chip and 128GB of unified memory.",
+    "Configure the local development environment to utilize the high-bandwidth unified memory architecture.",
+    "Load the target large language model into the unified memory pool.",
+    "Execute inference tasks locally using the Neural Engine and ML accelerators to ensure data privacy."
+  ],
+  "outcome": "Reduced inference latency and enhanced data security by keeping sensitive financial information within the local hardware environment.",
+  "limitation": "The primary limitation is the physical ceiling of 128GB of unified memory; if a model's parameter footprint exceeds this capacity, it cannot be loaded entirely into memory for optimal performance. Users should monitor memory pressure via system diagnostic tools when loading new models.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Inference Data Pipeline",
+    "description": "Flow of data from local storage to the M4 Max processing units.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Financial Data",
+        "detail": "Sensitive client records"
+      },
+      {
+        "id": "b",
+        "label": "Unified Memory",
+        "detail": "128GB capacity pool"
+      },
+      {
+        "id": "c",
+        "label": "M4 Max Chip",
+        "detail": "Neural Engine & ML Accelerators"
+      },
+      {
+        "id": "d",
+        "label": "Inference Output",
+        "detail": "Secure analysis results"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Load"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Process"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.apple.com/newsroom/2024/10/apple-introduces-m4-pro-and-m4-max/",
+      "label": "Apple introduces M4 Pro and M4 Max"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Local LLM Inference for Secure Financial Analysis, what is the primary benefit of using the M4 Max chip?",
+      "options": [
+        "Eliminating the need for a display engine.",
+        "Enabling local execution of large models to keep sensitive data private.",
+        "Reducing the total number of CPU cores required for multitasking.",
+        "Increasing the clock speed of external cloud servers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that local execution addresses the security risks of sending proprietary data to external cloud APIs.",
+      "evidence": "Utilizing the M4 Max chip's 128GB unified memory capacity to load and run large language models with nearly 200 billion parameters directly on-device."
+    },
+    {
+      "question": "In Local LLM Inference for Secure Financial Analysis, what is the main constraint when deploying models?",
+      "options": [
+        "The inability to use Thunderbolt 5 ports.",
+        "The 128GB limit on unified memory capacity.",
+        "The lack of support for machine learning accelerators.",
+        "The requirement to always be connected to the internet."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the 128GB unified memory ceiling as the factor that determines if a model can be loaded.",
+      "evidence": "The primary limitation is the physical ceiling of 128GB of unified memory; if a model's parameter footprint exceeds this capacity, it cannot be loaded entirely into memory for optimal performance."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:50.420Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:46.966Z"
+}

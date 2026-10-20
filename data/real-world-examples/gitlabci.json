@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "gitlabci",
+  "title": "Automated Logistics Fleet Deployment",
+  "business": "A regional logistics firm managing a fleet of autonomous delivery drones that requires frequent firmware updates to navigation software.",
+  "problem": "Manual deployment processes lead to inconsistent firmware versions across the drone fleet, resulting in navigation errors and significant downtime during manual troubleshooting.",
+  "solution": "GitLab CI/CD provides an integrated pipeline that enforces a standardized build, test, and deployment sequence, ensuring every firmware update is validated against automated test suites before being pushed to the fleet management server.",
+  "steps": [
+    "Define a .gitlab-ci.yml file in the repository root to establish build, test, and deploy stages.",
+    "Configure GitLab Runners as execution agents to process the firmware compilation and unit testing tasks.",
+    "Utilize protected CI/CD variables to securely store API keys required for communicating with the fleet management server.",
+    "Implement pipeline stages to ensure that the deployment job only triggers if the test stage completes successfully.",
+    "Use CI/CD components to standardize the deployment logic across multiple drone model repositories."
+  ],
+  "outcome": "A reliable, repeatable deployment process that eliminates configuration drift and ensures only verified firmware reaches the production drone fleet.",
+  "limitation": "A primary limitation is the potential for pipeline bottlenecks if too many jobs are queued for a single runner; this can be checked by monitoring the job queue duration in the GitLab CI/CD pipeline dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Firmware Pipeline Workflow",
+    "description": "The sequence of automated actions triggered by a code commit.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Code Commit",
+        "detail": "Developer pushes firmware update"
+      },
+      {
+        "id": "b",
+        "label": "Build Stage",
+        "detail": "Compiles firmware binary"
+      },
+      {
+        "id": "c",
+        "label": "Test Stage",
+        "detail": "Validates navigation logic"
+      },
+      {
+        "id": "d",
+        "label": "Deploy Stage",
+        "detail": "Pushes to fleet server"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "passes artifacts"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "conditional on success"
+      }
+    ]
+  },
+  "code": {
+    "language": "yaml",
+    "content": "stages:\n  - build\n  - test\n  - deploy\n\nbuild_firmware:\n  stage: build\n  script: make compile # Compiles the drone firmware\n\ntest_firmware:\n  stage: test\n  script: ./run_nav_tests.sh # Validates navigation logic\n\ndeploy_to_fleet:\n  stage: deploy\n  script: ./push_to_server.sh # Deploys to fleet management server\n  variables:\n    API_KEY: $SECURE_API_KEY # Uses protected variable for security",
+    "explanation": "This configuration maps to the Automated Logistics Fleet Deployment scenario by defining the mandatory stages to ensure firmware is built, tested, and deployed in a controlled, secure manner."
+  },
+  "sources": [
+    {
+      "url": "https://docs.gitlab.com/ee/ci/",
+      "label": "Get started with GitLab CI/CD | GitLab Docs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Fleet Deployment, what is the primary purpose of the integrated pipeline?",
+      "options": [
+        "To reduce manual troubleshooting by enforcing a standardized, validated deployment sequence.",
+        "To increase the number of firmware updates per day regardless of testing outcomes.",
+        "To replace the need for physical drone hardware during the testing phase.",
+        "To automatically generate new firmware code using artificial intelligence."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that manual processes caused inconsistencies; the solution uses the pipeline to enforce standards and validation.",
+      "evidence": "GitLab CI/CD provides an integrated pipeline that enforces a standardized build, test, and deployment sequence, ensuring every firmware update is validated against automated test suites before being pushed to the fleet management server."
+    },
+    {
+      "question": "In Automated Logistics Fleet Deployment, what is a key limitation of the pipeline implementation?",
+      "options": [
+        "The inability to use protected variables for sensitive API keys.",
+        "The risk of pipeline bottlenecks if runner capacity is exceeded.",
+        "The requirement to use only one stage for all build and test tasks.",
+        "The lack of support for custom CI/CD components."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies runner queueing as a potential bottleneck for the pipeline.",
+      "evidence": "A primary limitation is the potential for pipeline bottlenecks if too many jobs are queued for a single runner; this can be checked by monitoring the job queue duration in the GitLab CI/CD pipeline dashboard."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:35.795Z",
+  "sourceRetrievedAt": "2026-10-18T01:01:32.282Z"
+}

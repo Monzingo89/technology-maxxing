@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_coqui_xtts_v2",
+  "title": "Multilingual Museum Audio Guide Personalization",
+  "business": "A global museum network providing inclusive audio tours for international visitors.",
+  "problem": "The museum struggles with high production costs and long lead times for recording professional voice actors in 17 different languages for every new exhibit.",
+  "solution": "By utilizing XTTS-v2, the museum can generate high-quality, localized audio guides using a single 6-second reference clip from a primary narrator, ensuring consistent voice identity across all supported languages.",
+  "steps": [
+    "Select a professional narrator to record a 6-second reference audio clip.",
+    "Upload the reference clip to the XTTS-v2 inference environment.",
+    "Input the exhibit description text and specify the target language code.",
+    "Execute the synthesis process to generate the localized audio file.",
+    "Review the output for prosody and clarity before deploying to the mobile guide application."
+  ],
+  "outcome": "The museum achieves a seamless, personalized visitor experience where the narrator's voice remains consistent regardless of the language selected by the guest.",
+  "limitation": "The model may exhibit varying degrees of prosodic accuracy across different languages; developers should verify output quality by listening to generated samples to ensure the emotional tone matches the exhibit content.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Audio Guide Generation Workflow",
+    "description": "This diagram illustrates the transformation of source text into localized audio using a reference voice.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Narrator Clip",
+        "detail": "6-second audio reference"
+      },
+      {
+        "id": "b",
+        "label": "XTTS-v2 Engine",
+        "detail": "Voice cloning and synthesis"
+      },
+      {
+        "id": "c",
+        "label": "Exhibit Text",
+        "detail": "Localized script content"
+      },
+      {
+        "id": "d",
+        "label": "Audio Guide",
+        "detail": "Final localized output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "speaker conditioning"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "text input"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from TTS.api import TTS\n# Initialize the multilingual model\ntts = TTS(\"tts_models/multilingual/multi-dataset/xtts_v2\", gpu=True)\n# Generate localized audio using a narrator reference clip\ntts.tts_to_file(text=\"Welcome to the exhibit.\", file_path=\"output.wav\", speaker_wav=\"narrator_ref.wav\", language=\"fr\")",
+    "explanation": "This code initializes the XTTS-v2 model and generates a French audio file using a specific narrator's reference clip, mapping directly to the museum's need for consistent voice identity."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/coqui/XTTS-v2",
+      "label": "coqui/XTTS-v2 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Multilingual Museum Audio Guide Personalization, how does the technology address the problem of high production costs?",
+      "options": [
+        "By using a single 6-second reference clip to clone a voice across 17 languages.",
+        "By hiring professional actors for every language to ensure quality.",
+        "By eliminating the need for any text input during the generation process.",
+        "By automatically translating exhibits without human oversight."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the model's ability to clone a voice using a very short audio sample, which removes the need for extensive recording sessions.",
+      "evidence": "By utilizing XTTS-v2, the museum can generate high-quality, localized audio guides using a single 6-second reference clip from a primary narrator, ensuring consistent voice identity across all supported languages."
+    },
+    {
+      "question": "In Multilingual Museum Audio Guide Personalization, what is a key limitation to consider during implementation?",
+      "options": [
+        "The model requires hours of training data for every new language.",
+        "The model cannot handle more than one language at a time.",
+        "Prosodic accuracy may vary, requiring quality checks on generated samples.",
+        "The model is limited to only English language generation."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario note that while the model is powerful, verifying the output quality is necessary because prosody can vary.",
+      "evidence": "The model may exhibit varying degrees of prosodic accuracy across different languages; developers should verify output quality by listening to generated samples to ensure the emotional tone matches the exhibit content."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:50.326Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:46.079Z"
+}

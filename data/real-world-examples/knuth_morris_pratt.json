@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "knuth_morris_pratt",
+  "title": "High-Throughput Log Pattern Analysis",
+  "business": "Cybersecurity operations centers monitoring massive server log streams.",
+  "problem": "Brute-force string searching causes significant latency when scanning multi-gigabyte log files for specific threat signatures, as it repeatedly re-scans characters after partial matches.",
+  "solution": "The Knuth-Morris-Pratt (KMP) algorithm uses a prefix table to store information about the pattern's internal structure, allowing the search to skip redundant comparisons and avoid rechecking text after a pattern mismatch.",
+  "steps": [
+    "Preprocess the target pattern to build a prefix table (failure function) that identifies the longest proper prefix that is also a suffix.",
+    "Initialize a pointer for the text and a pointer for the pattern.",
+    "Compare characters at the current pointers.",
+    "If a mismatch occurs, use the prefix table to shift the pattern pointer to the next viable position without backtracking the text pointer.",
+    "Continue until the pattern is found or the text is exhausted."
+  ],
+  "outcome": "Improved search efficiency in large datasets by ensuring each character in the text is processed a constant number of times, regardless of the number of partial matches.",
+  "limitation": "The algorithm requires additional memory proportional to the length of the pattern to store the prefix table, which can be a constraint in extremely memory-limited embedded systems.",
+  "diagram": {
+    "kind": "flow",
+    "title": "KMP Search Logic Flow",
+    "description": "This diagram illustrates how the algorithm transitions between states based on character matching or mismatching.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Start",
+        "detail": "Initialize pointers and prefix table"
+      },
+      {
+        "id": "b",
+        "label": "Compare",
+        "detail": "Check text[i] against pattern[j]"
+      },
+      {
+        "id": "c",
+        "label": "Mismatch",
+        "detail": "Consult prefix table to update j"
+      },
+      {
+        "id": "d",
+        "label": "Match",
+        "detail": "Increment i and j"
+      },
+      {
+        "id": "e",
+        "label": "Found",
+        "detail": "Pattern located in text"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Begin"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Match"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Mismatch"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Shift pattern"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "j == pattern length"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Throughput Log Pattern Analysis, why is KMP preferred over brute-force search?",
+      "options": [
+        "It eliminates the need for a prefix table entirely.",
+        "It avoids rechecking text after a pattern mismatch.",
+        "It reduces the total number of characters in the log file.",
+        "It allows for searching multiple patterns simultaneously."
+      ],
+      "answerIndex": 1,
+      "explanation": "KMP uses a prefix table to skip redundant comparisons, specifically avoiding rechecking text after a pattern mismatch.",
+      "evidence": "The Knuth-Morris-Pratt (KMP) algorithm uses a prefix table to store information about the pattern's internal structure, allowing the search to skip redundant comparisons and avoid rechecking text after a pattern mismatch."
+    },
+    {
+      "question": "What is a primary implementation tradeoff in High-Throughput Log Pattern Analysis when using KMP?",
+      "options": [
+        "The algorithm requires additional memory proportional to the length of the pattern.",
+        "The algorithm cannot be used on log files larger than the system RAM.",
+        "The algorithm requires the text to be sorted before searching.",
+        "The algorithm is slower than brute-force for very short patterns."
+      ],
+      "answerIndex": 0,
+      "explanation": "The lesson notes that the prefix table requires extra memory, which is a constraint in memory-limited environments.",
+      "evidence": "The algorithm requires additional memory proportional to the length of the pattern to store the prefix table, which can be a constraint in extremely memory-limited embedded systems."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:27.457Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

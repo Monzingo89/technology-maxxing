@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "transfer_learning",
+  "title": "Botanical Disease Classification via Feature Reuse",
+  "business": "Agricultural technology firms developing automated crop health monitoring systems.",
+  "problem": "Training deep convolutional neural networks from scratch requires massive, labeled datasets of diseased plant leaves, which are expensive and time-consuming to curate for every specific crop variety.",
+  "solution": "Transfer learning allows the reuse of general visual feature extractors—such as edge and texture detectors—learned from large-scale natural image datasets. By repurposing these pre-trained layers, the model can identify complex plant pathologies using only a small set of domain-specific images, significantly reducing the data acquisition burden.",
+  "steps": [
+    "Select a deep neural network pre-trained on a large-scale natural image dataset.",
+    "Freeze the weights of the initial layers to preserve general feature extraction capabilities.",
+    "Replace the final classification layers with a new head tailored to specific plant disease categories.",
+    "Fine-tune the model using the smaller, labeled agricultural dataset to adapt higher-layer neurons to the specific task."
+  ],
+  "outcome": "The model achieves high diagnostic accuracy on crop diseases despite limited training samples, accelerating the deployment of field-ready monitoring tools.",
+  "limitation": "Negative transfer can occur if the source task features are too distant from the target domain; this is checked by monitoring validation loss during fine-tuning to ensure the model is not overfitting to the small dataset.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Transfer Learning Workflow",
+    "description": "The flow shows how a pre-trained model is adapted for a new domain.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Dataset",
+        "detail": "Large-scale natural images"
+      },
+      {
+        "id": "b",
+        "label": "Pre-trained Model",
+        "detail": "General feature extractors"
+      },
+      {
+        "id": "c",
+        "label": "Target Dataset",
+        "detail": "Small set of plant images"
+      },
+      {
+        "id": "d",
+        "label": "Fine-tuned Model",
+        "detail": "Specialized disease classifier"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initial Training"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Weight Reuse"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fine-tuning"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1411.1792",
+      "label": "How transferable are features in deep neural networks?"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Botanical Disease Classification via Feature Reuse, why is transfer learning used?",
+      "options": [
+        "To eliminate the need for any labeled data",
+        "To reduce the burden of curating large, expensive datasets",
+        "To increase the number of layers in the network",
+        "To replace the need for neural networks entirely"
+      ],
+      "answerIndex": 1,
+      "explanation": "The business problem identifies that large datasets are expensive to curate, and the solution highlights that transfer learning reduces this acquisition burden.",
+      "evidence": "By repurposing these pre-trained layers, the model can identify complex plant pathologies using only a small set of domain-specific images, significantly reducing the data acquisition burden."
+    },
+    {
+      "question": "In Botanical Disease Classification via Feature Reuse, what is a primary limitation?",
+      "options": [
+        "The model will always perform better than training from scratch",
+        "Negative transfer can occur if source and target domains are too distant",
+        "The model requires more computational power than training from scratch",
+        "Fine-tuning always destroys the pre-trained features"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about negative transfer when domains are distant.",
+      "evidence": "Negative transfer can occur if the source task features are too distant from the target domain; this is checked by monitoring validation loss during fine-tuning to ensure the model is not overfitting to the small dataset."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:36.846Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:32.899Z"
+}

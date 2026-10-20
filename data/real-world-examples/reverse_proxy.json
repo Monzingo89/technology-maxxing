@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "reverse_proxy",
+  "title": "Unified API Gateway for Modular Microservices",
+  "business": "A logistics coordination firm managing disparate tracking, billing, and inventory microservices.",
+  "problem": "The firm faces fragmented client connectivity where external mobile applications must individually authenticate and connect to five distinct internal service endpoints, leading to complex firewall rules and inconsistent security enforcement.",
+  "solution": "Implementing a reverse proxy acts as a centralized entry point that intercepts all incoming client traffic, terminates TLS connections, and forwards requests to the appropriate internal origin services based on URL path routing.",
+  "steps": [
+    "Configure the reverse proxy server to listen on a single public-facing IP address and port.",
+    "Define routing rules that map incoming request paths to specific internal service backend addresses.",
+    "Implement centralized TLS termination at the proxy layer to offload encryption overhead from origin services.",
+    "Apply global request headers and security policies to all proxied traffic before forwarding to internal services."
+  ],
+  "outcome": "A simplified client-facing architecture where external consumers interact with a single stable endpoint, while internal services remain isolated from direct public exposure.",
+  "limitation": "The reverse proxy introduces a single point of failure and a potential bottleneck for traffic throughput; monitor this by tracking the error rate and latency of the proxy process relative to backend service health.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Reverse Proxy Traffic Flow",
+    "description": "This diagram illustrates how client requests are intercepted by the proxy before being routed to internal services.",
+    "nodes": [
+      {
+        "id": "c",
+        "label": "Client",
+        "detail": "External mobile application"
+      },
+      {
+        "id": "p",
+        "label": "Reverse Proxy",
+        "detail": "Centralized traffic interceptor"
+      },
+      {
+        "id": "s1",
+        "label": "Billing Service",
+        "detail": "Internal origin service"
+      },
+      {
+        "id": "s2",
+        "label": "Inventory Service",
+        "detail": "Internal origin service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "c",
+        "to": "p",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "p",
+        "to": "s1",
+        "label": "Forward /billing"
+      },
+      {
+        "from": "p",
+        "to": "s2",
+        "label": "Forward /inventory"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified API Gateway for Modular Microservices, what is the primary reason for deploying a reverse proxy?",
+      "options": [
+        "To eliminate the need for internal microservices entirely",
+        "To centralize traffic interception and simplify client connectivity",
+        "To increase the number of public-facing IP addresses",
+        "To bypass the need for TLS encryption"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that the firm faces fragmented connectivity and uses the proxy to act as a centralized entry point.",
+      "evidence": "Implementing a reverse proxy acts as a centralized entry point that intercepts all incoming client traffic, terminates TLS connections, and forwards requests to the appropriate internal origin services based on URL path routing."
+    },
+    {
+      "question": "In Unified API Gateway for Modular Microservices, what is a critical operational risk of the proposed solution?",
+      "options": [
+        "Increased complexity of internal service code",
+        "The proxy becomes a single point of failure and potential bottleneck",
+        "Inability to route traffic based on URL paths",
+        "Mandatory public exposure of all internal services"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the risk of the proxy becoming a bottleneck and a single point of failure.",
+      "evidence": "The reverse proxy introduces a single point of failure and a potential bottleneck for traffic throughput; monitor this by tracking the error rate and latency of the proxy process relative to backend service health."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:25.170Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

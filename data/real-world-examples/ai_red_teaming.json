@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "ai_red_teaming",
+  "title": "Automated Financial Advisory Red Teaming",
+  "business": "A digital wealth management firm deploying a generative AI assistant for personalized financial planning.",
+  "problem": "The AI assistant risks providing unauthorized financial advice or generating biased investment recommendations that violate regulatory compliance and internal safety policies.",
+  "solution": "Implementing a structured AI Red Teaming program to proactively probe the model for policy-violating outputs, such as unauthorized tax advice or discriminatory lending suggestions, before public release.",
+  "steps": [
+    "Define a comprehensive threat taxonomy covering regulatory, ethical, and safety-critical failure modes.",
+    "Develop adversarial prompts designed to bypass safety filters and elicit non-compliant financial guidance.",
+    "Execute automated red teaming cycles using a controlled sandbox environment to observe model responses.",
+    "Analyze failure patterns to identify specific model vulnerabilities in reasoning or knowledge retrieval.",
+    "Retrain or apply system-level guardrails to mitigate the identified risks and verify improvements."
+  ],
+  "outcome": "A more resilient AI system that demonstrates consistent adherence to financial regulations and internal safety standards under adversarial pressure.",
+  "limitation": "Red teaming is inherently incomplete; it cannot guarantee the absence of all future vulnerabilities, requiring continuous monitoring of real-world interactions to check for emerging edge cases.",
+  "diagram": {
+    "kind": "flow",
+    "title": "AI Red Teaming Lifecycle",
+    "description": "The flow shows how adversarial inputs are used to test and refine the AI system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Threat Taxonomy",
+        "detail": "Defines prohibited behaviors"
+      },
+      {
+        "id": "b",
+        "label": "Adversarial Generator",
+        "detail": "Creates probe prompts"
+      },
+      {
+        "id": "c",
+        "label": "Target AI System",
+        "detail": "The model being tested"
+      },
+      {
+        "id": "d",
+        "label": "Evaluation Engine",
+        "detail": "Scores output against policy"
+      },
+      {
+        "id": "e",
+        "label": "Mitigation Layer",
+        "detail": "Applies safety guardrails"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "informs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "probes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "outputs"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "triggers fix"
+      },
+      {
+        "from": "e",
+        "to": "c",
+        "label": "updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "label": "AI Risk Management Framework"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Financial Advisory Red Teaming, what is the primary purpose of the solution?",
+      "options": [
+        "To proactively probe the model for policy-violating outputs before public release.",
+        "To increase the speed of financial transactions processed by the AI.",
+        "To replace human financial advisors with automated systems.",
+        "To generate marketing content for the wealth management firm."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution focuses on identifying and mitigating risks through active probing of the system for non-compliant behavior.",
+      "evidence": "Implementing a structured AI Red Teaming program to proactively probe the model for policy-violating outputs, such as unauthorized tax advice or discriminatory lending suggestions, before public release."
+    },
+    {
+      "question": "In Automated Financial Advisory Red Teaming, what is a key limitation of the approach?",
+      "options": [
+        "It is too expensive for small firms to implement.",
+        "It guarantees that the system will never fail in production.",
+        "It is inherently incomplete and requires continuous monitoring.",
+        "It prevents the AI from learning new financial data."
+      ],
+      "answerIndex": 2,
+      "explanation": "Red teaming is a diagnostic process that cannot cover every possible scenario, necessitating ongoing oversight.",
+      "evidence": "Red teaming is inherently incomplete; it cannot guarantee the absence of all future vulnerabilities, requiring continuous monitoring of real-world interactions to check for emerging edge cases."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:49.222Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:45.275Z"
+}

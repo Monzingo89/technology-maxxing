@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "etag",
+  "title": "Optimizing Inventory Catalog Synchronization",
+  "business": "A regional logistics provider managing a centralized inventory catalog accessed by hundreds of distributed warehouse tablets.",
+  "problem": "The system suffers from excessive bandwidth consumption and redundant data processing because warehouse tablets repeatedly download the full 5MB inventory JSON file even when no updates have occurred.",
+  "solution": "By implementing HTTP ETags, the server assigns a unique hash to the current state of the inventory file. When a tablet requests the catalog, it sends the previous ETag in an If-None-Match header. If the hash matches the server's current version, the server returns a 304 Not Modified status, signaling the client to continue using its local cache.",
+  "steps": [
+    "Generate a unique hash (e.g., MD5 or SHA) based on the inventory file content during the server-side build process.",
+    "Configure the server to include the ETag header in the HTTP response for the inventory endpoint.",
+    "Update client-side logic to store the received ETag alongside the cached inventory data.",
+    "Modify subsequent requests to include the If-None-Match header containing the stored ETag value.",
+    "Implement server-side logic to compare the incoming If-None-Match header against the current file hash."
+  ],
+  "outcome": "Warehouse tablets significantly reduce network traffic and local processing overhead, resulting in a more responsive user interface and lower infrastructure costs.",
+  "limitation": "ETags rely on consistent hash generation; if the server cluster generates different hashes for the same content due to load balancing across heterogeneous nodes, the cache will be invalidated unnecessarily. Check this by inspecting the ETag header across multiple server nodes to ensure consistency.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ETag Conditional Request Flow",
+    "description": "This diagram illustrates the interaction between the warehouse client and the inventory server during a conditional request.",
+    "nodes": [
+      {
+        "id": "client",
+        "label": "Warehouse Tablet",
+        "detail": "Stores inventory and previous ETag"
+      },
+      {
+        "id": "request",
+        "label": "HTTP Request",
+        "detail": "Contains If-None-Match header"
+      },
+      {
+        "id": "server",
+        "label": "Inventory Server",
+        "detail": "Calculates current file hash"
+      },
+      {
+        "id": "compare",
+        "label": "Comparison Logic",
+        "detail": "Checks if hashes match"
+      },
+      {
+        "id": "response",
+        "label": "HTTP Response",
+        "detail": "Returns 304 or 200 with new data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "client",
+        "to": "request",
+        "label": "sends"
+      },
+      {
+        "from": "request",
+        "to": "server",
+        "label": "triggers"
+      },
+      {
+        "from": "server",
+        "to": "compare",
+        "label": "evaluates"
+      },
+      {
+        "from": "compare",
+        "to": "response",
+        "label": "determines status"
+      },
+      {
+        "from": "response",
+        "to": "client",
+        "label": "updates cache"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Inventory Catalog Synchronization, what is the primary purpose of using ETags?",
+      "options": [
+        "To encrypt inventory data for secure transmission.",
+        "To reduce bandwidth by avoiding redundant downloads of unchanged data.",
+        "To increase the speed of the database query execution.",
+        "To force the client to clear its local cache every hour."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using ETags to prevent redundant downloads of a 5MB JSON file when no updates have occurred.",
+      "evidence": "The system suffers from excessive bandwidth consumption and redundant data processing because warehouse tablets repeatedly download the full 5MB inventory JSON file even when no updates have occurred."
+    },
+    {
+      "question": "In Optimizing Inventory Catalog Synchronization, what is a potential limitation of the ETag implementation?",
+      "options": [
+        "The client might store outdated data indefinitely.",
+        "The server might run out of memory storing hashes.",
+        "Inconsistent hash generation across server nodes can cause unnecessary cache invalidation.",
+        "The If-None-Match header is not supported by modern browsers."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson notes that if server nodes generate different hashes for the same content, the cache mechanism fails to be effective.",
+      "evidence": "ETags rely on consistent hash generation; if the server cluster generates different hashes for the same content due to load balancing across heterogeneous nodes, the cache will be invalidated unnecessarily."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:33.224Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

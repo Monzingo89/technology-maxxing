@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_connector_1p_32dba5a7095c8191adca04ee30276304",
+  "title": "Automated Inventory Reconciliation for Boutique Retailers",
+  "business": "Small boutique retailers managing inventory across physical storefronts and digital storefronts.",
+  "problem": "Manual inventory reconciliation between physical stock and digital storefronts leads to overselling items, resulting in customer dissatisfaction and operational overhead.",
+  "solution": "By developing a custom ChatGPT plugin that interfaces with an inventory management API, retailers can enable the AI to query real-time stock levels and trigger automated adjustments directly through natural language commands in the chat interface.",
+  "steps": [
+    "Define an OpenAPI specification that maps natural language intents to specific inventory API endpoints.",
+    "Implement a secure authentication layer using OAuth to ensure the AI only accesses authorized store data.",
+    "Deploy a manifest file that describes the plugin capabilities and endpoints to the ChatGPT plugin registry.",
+    "Configure the plugin to handle JSON-formatted requests from the model to update stock counts or fetch availability."
+  ],
+  "outcome": "Retailers achieve synchronized inventory states across channels without manual data entry, reducing overselling incidents.",
+  "limitation": "The plugin relies on the accuracy of the underlying inventory API; if the API returns stale data, the AI will provide incorrect stock information, which can be verified by checking the API response logs against physical stock counts.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Reconciliation Workflow",
+    "description": "The flow shows how a user request triggers the AI to interact with the inventory system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Retail manager"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT",
+        "detail": "Orchestrator"
+      },
+      {
+        "id": "c",
+        "label": "Plugin",
+        "detail": "API Connector"
+      },
+      {
+        "id": "d",
+        "label": "Inventory API",
+        "detail": "Data source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Natural language query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "API call"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Read/Write stock"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "JSON response"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation for Boutique Retailers, what is the primary problem being solved?",
+      "options": [
+        "Manual reconciliation causing overselling",
+        "High cost of physical storefront rent",
+        "Inability to hire new retail staff",
+        "Lack of social media marketing tools"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual inventory reconciliation as the cause of overselling.",
+      "evidence": "Manual inventory reconciliation between physical stock and digital storefronts leads to overselling items, resulting in customer dissatisfaction and operational overhead."
+    },
+    {
+      "question": "In Automated Inventory Reconciliation for Boutique Retailers, what is a noted limitation of the solution?",
+      "options": [
+        "The plugin requires expensive hardware",
+        "The AI cannot understand natural language",
+        "Reliance on the accuracy of the underlying inventory API",
+        "The plugin only works on mobile devices"
+      ],
+      "answerIndex": 2,
+      "explanation": "The text states that the plugin's effectiveness is constrained by the data provided by the inventory API.",
+      "evidence": "The plugin relies on the accuracy of the underlying inventory API; if the API returns stale data, the AI will provide incorrect stock information"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:50.717Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

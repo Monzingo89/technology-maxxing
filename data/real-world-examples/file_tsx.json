@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "file_tsx",
+  "title": "Type-Safe UI Component Integration",
+  "business": "Frontend engineering teams building complex, component-driven web interfaces.",
+  "problem": "Runtime errors caused by passing incorrect props to custom components or missing required attributes, which are difficult to debug in standard JavaScript.",
+  "solution": "Utilizing .tsx files allows TypeScript to enforce strict type checking on JSX elements, ensuring that props passed to components match defined interfaces and that intrinsic elements are validated against the JSX namespace.",
+  "steps": [
+    "Configure the jsx compiler option in tsconfig.json to match the project runtime (e.g., react-jsx).",
+    "Rename all component files to the .tsx extension to enable TypeScript's JSX parsing capabilities.",
+    "Define component props using interfaces to establish a contract for required and optional attributes.",
+    "Replace legacy angle-bracket type assertions with the 'as' operator to avoid syntax collisions with JSX tags.",
+    "Implement the JSX.IntrinsicElements interface if custom intrinsic tags are required for the application."
+  ],
+  "outcome": "A robust development environment where component interface mismatches are caught during compilation rather than at runtime, significantly reducing UI regression bugs.",
+  "limitation": "The 'as' operator is mandatory for type assertions in .tsx files because angle-bracket syntax conflicts with JSX tag parsing, requiring developers to refactor existing legacy codebases.",
+  "diagram": {
+    "kind": "flow",
+    "title": "JSX Type Checking Pipeline",
+    "description": "The transformation flow from source code to type-validated output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source .tsx",
+        "detail": "Contains JSX and TS logic"
+      },
+      {
+        "id": "b",
+        "label": "TS Compiler",
+        "detail": "Validates against JSX namespace"
+      },
+      {
+        "id": "c",
+        "label": "Type Checker",
+        "detail": "Checks props vs interfaces"
+      },
+      {
+        "id": "d",
+        "label": "Output .js",
+        "detail": "Transformed valid JavaScript"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "parses"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "verifies"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "emits"
+      }
+    ]
+  },
+  "code": {
+    "language": "typescript",
+    "content": "interface ButtonProps { label: string; disabled?: boolean; } // Define contract\nconst CustomButton = (props: ButtonProps) => <button>{props.label}</button>;\nconst app = <CustomButton label=\"Submit\" />; // Valid\n// const error = <CustomButton label={123} />; // Type error: label must be string",
+    "explanation": "This maps to the business scenario by demonstrating how an interface enforces the correct prop types, preventing runtime errors before the code is even compiled."
+  },
+  "sources": [
+    {
+      "url": "https://www.typescriptlang.org/docs/handbook/jsx.html",
+      "label": "TypeScript: Documentation - JSX"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Type-Safe UI Component Integration, how does the technology address the problem of runtime prop errors?",
+      "options": [
+        "By enforcing strict type checking on JSX elements via defined interfaces.",
+        "By automatically converting all props to strings at runtime.",
+        "By disabling the use of custom components in favor of intrinsic elements.",
+        "By ignoring prop types to ensure the application always renders."
+      ],
+      "answerIndex": 0,
+      "explanation": "TypeScript uses .tsx files to validate that props passed to components match the defined interfaces, catching errors during compilation.",
+      "evidence": "Utilizing .tsx files allows TypeScript to enforce strict type checking on JSX elements, ensuring that props passed to components match defined interfaces and that intrinsic elements are validated against the JSX namespace."
+    },
+    {
+      "question": "In Type-Safe UI Component Integration, what is a primary implementation requirement or limitation?",
+      "options": [
+        "Developers must use angle-bracket syntax for all type assertions.",
+        "The 'as' operator must be used for type assertions to avoid syntax collisions.",
+        "All components must be defined as classes rather than functions.",
+        "The .tsx extension is optional if the jsx compiler flag is set to preserve."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because JSX uses angle brackets for tags, TypeScript requires the 'as' operator for type assertions in .tsx files.",
+      "evidence": "The 'as' operator is mandatory for type assertions in .tsx files because angle-bracket syntax conflicts with JSX tag parsing, requiring developers to refactor existing legacy codebases."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:04.176Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:00.137Z"
+}

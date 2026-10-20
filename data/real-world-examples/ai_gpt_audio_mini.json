@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_audio_mini",
+  "title": "Automated Multilingual Customer Support Triage",
+  "business": "A global logistics firm managing high volumes of voice-based shipment inquiries across diverse regions.",
+  "problem": "The firm struggles with high operational costs and latency when routing voice inquiries to human agents, as traditional transcription-then-LLM pipelines introduce significant overhead and data loss during conversion.",
+  "solution": "By utilizing gpt-audio-mini via the Chat Completions API, the firm processes raw audio inputs directly to determine intent and generate spoken responses, bypassing intermediate transcription steps and reducing the computational footprint per interaction.",
+  "steps": [
+    "Configure the Chat Completions API endpoint to accept audio input modalities.",
+    "Define system instructions to guide the model in identifying shipment status intent.",
+    "Implement function calling to retrieve real-time tracking data from internal logistics databases.",
+    "Stream the model output back as audio to provide immediate, natural-sounding status updates to the caller."
+  ],
+  "outcome": "The system achieves a more fluid, low-latency conversational experience that maintains context while significantly lowering the cost per customer interaction compared to multi-stage processing.",
+  "limitation": "Because the model is optimized for cost-efficiency, it may exhibit reduced nuance in complex, multi-turn emotional reasoning; developers should monitor the conversation history length and verify intent accuracy through secondary validation logic.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Audio Triage Workflow",
+    "description": "This flow illustrates how raw audio is processed through the model to trigger backend actions and return a response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Customer Audio",
+        "detail": "Incoming voice inquiry"
+      },
+      {
+        "id": "b",
+        "label": "gpt-audio-mini",
+        "detail": "Chat Completions API"
+      },
+      {
+        "id": "c",
+        "label": "Logistics DB",
+        "detail": "Function calling target"
+      },
+      {
+        "id": "d",
+        "label": "Audio Response",
+        "detail": "Final output to user"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input audio stream"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Function call trigger"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Data return"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generate audio output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(model='gpt-audio-mini-2025-12-15', messages=[{'role': 'user', 'content': audio_data}], tools=[tracking_tool]) # Direct audio processing via Chat API",
+    "explanation": "This snippet demonstrates sending raw audio data directly to the Chat Completions API, which is the core mechanism for the Automated Multilingual Customer Support Triage scenario."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-audio-mini",
+      "label": "GPT-Audio Mini"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Multilingual Customer Support Triage, why is gpt-audio-mini preferred over traditional pipelines?",
+      "options": [
+        "It eliminates the need for intermediate transcription steps.",
+        "It supports Realtime translation endpoints.",
+        "It allows for unlimited context window usage.",
+        "It provides higher accuracy for emotional reasoning."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the model processes raw audio directly, bypassing the overhead of transcription.",
+      "evidence": "By utilizing gpt-audio-mini via the Chat Completions API, the firm processes raw audio inputs directly to determine intent and generate spoken responses, bypassing intermediate transcription steps and reducing the computational footprint per interaction."
+    },
+    {
+      "question": "In Automated Multilingual Customer Support Triage, what is a primary trade-off when using this model?",
+      "options": [
+        "Increased latency due to function calling.",
+        "Reduced nuance in complex, multi-turn emotional reasoning.",
+        "Incompatibility with the Chat Completions API.",
+        "Higher costs compared to standard GPT-4."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about the potential for reduced nuance in complex reasoning due to the model's cost-efficient design.",
+      "evidence": "Because the model is optimized for cost-efficiency, it may exhibit reduced nuance in complex, multi-turn emotional reasoning; developers should monitor the conversation history length and verify intent accuracy through secondary validation logic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:26.972Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:22.562Z"
+}

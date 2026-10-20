@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "cookie_security",
+  "title": "Securing Session Persistence in Financial Portals",
+  "business": "Financial service providers managing authenticated user sessions for retail banking applications.",
+  "problem": "Session hijacking via Cross-Site Request Forgery (CSRF) and unauthorized client-side script access to sensitive session tokens stored in browser cookies.",
+  "solution": "Implementing defense-in-depth via cookie attributes that restrict token exposure to network-only transit and prevent cross-site context leakage.",
+  "steps": [
+    "Set the HttpOnly flag to prevent JavaScript access to the session cookie.",
+    "Apply the Secure flag to ensure cookies are only transmitted over encrypted HTTPS connections.",
+    "Configure the SameSite attribute to Strict or Lax to mitigate cross-site request forgery risks.",
+    "Define a narrow scope using the Path and Domain attributes to limit cookie visibility to specific application endpoints."
+  ],
+  "outcome": "Reduced risk of session token theft and unauthorized cross-site actions, ensuring session integrity remains within the intended application boundary.",
+  "limitation": "Strict SameSite configurations may break legitimate cross-site authentication flows, such as OAuth redirects; verify functionality by testing session persistence across third-party identity provider callbacks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cookie Security Enforcement Flow",
+    "description": "The flow shows how the server enforces security attributes during the Set-Cookie response to the browser.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Server",
+        "detail": "Application Backend"
+      },
+      {
+        "id": "b",
+        "label": "Response",
+        "detail": "HTTP Set-Cookie Header"
+      },
+      {
+        "id": "c",
+        "label": "Browser",
+        "detail": "Client Storage"
+      },
+      {
+        "id": "d",
+        "label": "Attacker",
+        "detail": "Malicious Script"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Applies Secure/HttpOnly/SameSite"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Stores restricted cookie"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Blocked by HttpOnly"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "res.cookie('session_id', 'xyz123', { httpOnly: true, secure: true, sameSite: 'Strict' }); // Enforces browser-level protection",
+    "explanation": "This code maps to the solution by setting the HttpOnly, Secure, and SameSite attributes on the session cookie to prevent client-side script access and cross-site leakage."
+  },
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Securing Session Persistence in Financial Portals, what is the primary purpose of the solution?",
+      "options": [
+        "To prevent session hijacking and unauthorized token access",
+        "To increase the speed of user authentication",
+        "To allow third-party scripts to read session data",
+        "To bypass the need for HTTPS encryption"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution focuses on mitigating CSRF and unauthorized script access to tokens.",
+      "evidence": "Session hijacking via Cross-Site Request Forgery (CSRF) and unauthorized client-side script access to sensitive session tokens stored in browser cookies."
+    },
+    {
+      "question": "In Securing Session Persistence in Financial Portals, what is a potential trade-off of the implementation?",
+      "options": [
+        "It prevents all forms of network interception",
+        "It may break legitimate cross-site authentication flows",
+        "It requires the user to manually clear cookies",
+        "It forces the use of insecure HTTP connections"
+      ],
+      "answerIndex": 1,
+      "explanation": "Strict cookie policies can interfere with cross-site redirects required for external identity providers.",
+      "evidence": "Strict SameSite configurations may break legitimate cross-site authentication flows, such as OAuth redirects; verify functionality by testing session persistence across third-party identity provider callbacks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:39.668Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

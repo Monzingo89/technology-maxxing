@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "license_openrail_m",
+  "title": "CreativeML Open RAIL-M Compliance for SaaS Image Generation",
+  "business": "A startup building a custom image generation platform for creative agencies.",
+  "problem": "The startup risks legal liability and license termination if their users generate prohibited content, such as defamatory material or PII, using the underlying model.",
+  "solution": "The startup implements the CreativeML Open RAIL-M license by embedding mandatory use-based restrictions into their Terms of Service and deploying a content moderation layer that prevents the generation of prohibited categories.",
+  "steps": [
+    "Incorporate the full text of the CreativeML Open RAIL-M license into the platform's legal documentation.",
+    "Draft a mandatory End User License Agreement (EULA) that explicitly includes the use-based restrictions from Attachment A.",
+    "Implement a technical filtering system to intercept prompts and outputs that violate the prohibited use cases.",
+    "Provide clear notice to all end users that the model is subject to the specific use-based restrictions defined in the license.",
+    "Maintain audit logs to demonstrate that the platform enforces these restrictions for all model interactions."
+  ],
+  "outcome": "The business achieves a compliant operational posture that protects its intellectual property rights while mitigating the risk of prohibited model misuse.",
+  "limitation": "The primary limitation is that automated filtering cannot catch every nuance of prohibited content, requiring periodic manual review and updates to the moderation logic to ensure ongoing compliance with the evolving definition of harmful use.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Enforcement Workflow",
+    "description": "This diagram illustrates how the platform ensures compliance by wrapping the model in legal and technical safeguards.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "End User",
+        "detail": "Submits prompt to platform"
+      },
+      {
+        "id": "b",
+        "label": "EULA Agreement",
+        "detail": "Legal contract binding user to restrictions"
+      },
+      {
+        "id": "c",
+        "label": "Moderation Layer",
+        "detail": "Technical filter for prohibited content"
+      },
+      {
+        "id": "d",
+        "label": "Model Execution",
+        "detail": "Generates output if compliant"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Accepts terms"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Sends request"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Passes valid prompt"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/spaces/CompVis/stable-diffusion-license/blob/main/license.txt",
+      "label": "CreativeML Open RAIL-M License"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In CreativeML Open RAIL-M Compliance for SaaS Image Generation, how does the startup address the problem of potential misuse?",
+      "options": [
+        "By embedding mandatory use-based restrictions into their Terms of Service and deploying a content moderation layer.",
+        "By purchasing a commercial license that removes all restrictions on generated content.",
+        "By ignoring the license terms since they are a small startup.",
+        "By limiting the model to internal use only to avoid external liability."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that the startup addresses the problem by embedding restrictions into their Terms of Service and using a moderation layer.",
+      "evidence": "The startup implements the CreativeML Open RAIL-M license by embedding mandatory use-based restrictions into their Terms of Service and deploying a content moderation layer that prevents the generation of prohibited categories."
+    },
+    {
+      "question": "In CreativeML Open RAIL-M Compliance for SaaS Image Generation, what is the primary limitation of the proposed solution?",
+      "options": [
+        "The license prohibits the use of any moderation software.",
+        "Automated filtering cannot catch every nuance of prohibited content, requiring periodic manual review.",
+        "The license requires the startup to pay royalties for every image generated.",
+        "The startup is not allowed to modify the model under any circumstances."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that automated filters are not perfect and require ongoing manual oversight.",
+      "evidence": "The primary limitation is that automated filtering cannot catch every nuance of prohibited content, requiring periodic manual review and updates to the moderation logic to ensure ongoing compliance with the evolving definition of harmful use."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:42.179Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:38.617Z"
+}

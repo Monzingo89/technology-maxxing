@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "bash",
+  "title": "Automated Log Aggregation Pipeline",
+  "business": "System administrators managing distributed server fleets.",
+  "problem": "Manual log collection across multiple nodes is error-prone, leading to fragmented data and delayed incident response.",
+  "solution": "Bash pipelines enable the chaining of standard output from remote commands directly into local processing utilities, using quoting to ensure complex commands are executed correctly on remote hosts.",
+  "steps": [
+    "Define a list of target hostnames in a local array variable.",
+    "Use a loop to iterate through the array, invoking ssh to execute remote commands.",
+    "Apply double quotes around remote command strings to allow local variable expansion while preserving command structure.",
+    "Pipe the remote output into local tools like grep or awk for filtering and aggregation.",
+    "Redirect the final stream into a centralized log file for analysis."
+  ],
+  "outcome": "A unified, consistent stream of filtered log data from disparate sources without requiring intermediate temporary files.",
+  "limitation": "The primary limitation is the potential for shell injection if user-supplied input is not properly escaped before being passed to remote shells. This can be checked by auditing scripts for unquoted variables that contain metacharacters.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Log Aggregation Flow",
+    "description": "Data flows from remote servers through a secure shell tunnel into a local processing pipeline.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Remote Server",
+        "detail": "Source of raw log data"
+      },
+      {
+        "id": "b",
+        "label": "SSH Tunnel",
+        "detail": "Secure transport layer"
+      },
+      {
+        "id": "c",
+        "label": "Local Pipeline",
+        "detail": "Bash command chain"
+      },
+      {
+        "id": "d",
+        "label": "Log File",
+        "detail": "Final aggregated output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "streams output"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "pipes data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "writes results"
+      }
+    ]
+  },
+  "code": {
+    "language": "bash",
+    "content": "hosts=('srv1' 'srv2') # Define target nodes\nfor h in \"${hosts[@]}\"; do\n  # Use double quotes to allow local variable expansion\n  ssh \"$h\" \"grep 'ERROR' /var/log/syslog\" | awk '{print $1, $NF}'\ndone > aggregated_errors.log # Redirect stream to file",
+    "explanation": "This code maps to the scenario by iterating through an array of hosts, executing a remote grep command via SSH, and piping the output into a local awk processor for aggregation."
+  },
+  "sources": [
+    {
+      "url": "https://www.gnu.org/software/bash/manual/bash.html",
+      "label": "Bash Reference Manual"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Log Aggregation Pipeline, how does the solution improve log management?",
+      "options": [
+        "By replacing all manual server access with automated scripts.",
+        "By chaining standard output into local utilities to avoid fragmented data.",
+        "By increasing the storage capacity of remote servers.",
+        "By using Bash builtins to replace SSH entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution uses pipelines to chain remote output into local tools, which solves the problem of fragmented data.",
+      "evidence": "Bash pipelines enable the chaining of standard output from remote commands directly into local processing utilities, using quoting to ensure complex commands are executed correctly on remote hosts."
+    },
+    {
+      "question": "In Automated Log Aggregation Pipeline, what is the primary risk associated with the implementation?",
+      "options": [
+        "The shell may fail to execute commands if too many pipes are used.",
+        "The potential for shell injection if input is not properly escaped.",
+        "The inability to use double quotes for remote command execution.",
+        "The requirement to store all logs in temporary files before processing."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies shell injection as the primary risk when handling variables in scripts.",
+      "evidence": "The primary limitation is the potential for shell injection if user-supplied input is not properly escaped before being passed to remote shells."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:21.424Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:17.612Z"
+}

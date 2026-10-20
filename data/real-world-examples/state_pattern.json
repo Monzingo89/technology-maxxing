@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "state_pattern",
+  "title": "Automated Industrial Logistics Controller",
+  "business": "Warehouse automation systems managing robotic sorting arms.",
+  "problem": "The system suffers from complex, nested conditional logic (if-else chains) when tracking robot states like Idle, Moving, Sorting, and Error, leading to fragile code that breaks during state transitions.",
+  "solution": "The State Pattern delegates behavior to an object representing the current state, allowing the robot to change its behavior dynamically by swapping its internal state object rather than evaluating conditional flags.",
+  "steps": [
+    "Define a common State interface declaring methods for all possible robot actions.",
+    "Create concrete classes for each state (e.g., IdleState, MovingState) implementing the interface.",
+    "Maintain a reference to the current state object within the main Robot context class.",
+    "Delegate incoming requests to the current state object instance.",
+    "Implement state transition logic within each state class to update the context reference."
+  ],
+  "outcome": "The codebase achieves cleaner modularity where adding a new state requires creating a new class rather than modifying existing conditional blocks, significantly reducing regression risks.",
+  "limitation": "The pattern increases the number of classes in the system, which can lead to overhead if the state machine is simple; check for excessive class proliferation by verifying if the state logic is truly distinct enough to warrant separate objects.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Robot State Transition Flow",
+    "description": "Nodes represent the state objects, and edges represent the transition triggers that swap the active state.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IdleState",
+        "detail": "Waiting for package"
+      },
+      {
+        "id": "b",
+        "label": "MovingState",
+        "detail": "Transporting to bin"
+      },
+      {
+        "id": "c",
+        "label": "SortingState",
+        "detail": "Scanning barcode"
+      },
+      {
+        "id": "d",
+        "label": "ErrorState",
+        "detail": "System alert"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "PackageDetected"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "ReachedBin"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "SortComplete"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "ScanFailure"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Industrial Logistics Controller, what is the primary benefit of using the State Pattern?",
+      "options": [
+        "It eliminates complex conditional logic by delegating behavior to state-specific objects.",
+        "It improves database performance by caching state records.",
+        "It reduces the total number of classes in the application.",
+        "It automates the physical movement of robotic sorting arms."
+      ],
+      "answerIndex": 0,
+      "explanation": "The pattern replaces nested conditionals with polymorphic state objects.",
+      "evidence": "The State Pattern delegates behavior to an object representing the current state, allowing the robot to change its behavior dynamically by swapping its internal state object rather than evaluating conditional flags."
+    },
+    {
+      "question": "In Automated Industrial Logistics Controller, what is a notable limitation of the State Pattern?",
+      "options": [
+        "It makes the system impossible to test.",
+        "It increases the number of classes, which may be unnecessary for simple state machines.",
+        "It requires all states to be stored in a single database table.",
+        "It prevents the system from ever entering an ErrorState."
+      ],
+      "answerIndex": 1,
+      "explanation": "The pattern introduces multiple classes, which can be overkill for simple logic.",
+      "evidence": "The pattern increases the number of classes in the system, which can lead to overhead if the state machine is simple; check for excessive class proliferation by verifying if the state logic is truly distinct enough to warrant separate objects."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:29.303Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

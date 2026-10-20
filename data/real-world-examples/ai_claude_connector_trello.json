@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_trello",
+  "title": "Automated Creative Agency Project Triage",
+  "business": "A boutique creative agency managing high-volume client feedback across multiple Trello boards.",
+  "problem": "Project managers spend excessive time manually moving client requests from a centralized 'Inbox' board into specific project-based boards, leading to delayed responses and missed task assignments.",
+  "solution": "The Trello connector for Claude allows the agency to automate the triage process by using natural language instructions to read cards from the central Inbox and write them to the appropriate project boards based on project metadata.",
+  "steps": [
+    "Authenticate the Trello MCP server within the Claude interface to grant read/write access to the agency's workspace.",
+    "Instruct Claude to use the trelloReadInbox tool to retrieve all pending client requests from the central board.",
+    "Provide Claude with the mapping logic to identify the correct project board for each request based on card descriptions.",
+    "Execute the trelloWriteCard tool to recreate the card on the target project board and trelloWriteInbox to remove the original item."
+  ],
+  "outcome": "Project managers achieve a streamlined workflow where client requests are automatically categorized and assigned without manual intervention, ensuring faster project turnaround.",
+  "limitation": "The connector relies on Claude's ability to interpret card content accurately; if a card lacks sufficient detail, the automated triage may misclassify the task. Users must manually verify the board assignments in the Trello UI to ensure accuracy.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Trello Triage Workflow",
+    "description": "The flow of data from the central inbox to specific project boards via Claude.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Trello Inbox",
+        "detail": "Central board holding raw client requests"
+      },
+      {
+        "id": "b",
+        "label": "Claude AI",
+        "detail": "Processes requests via Trello MCP tools"
+      },
+      {
+        "id": "c",
+        "label": "Project Board A",
+        "detail": "Target board for specific client tasks"
+      },
+      {
+        "id": "d",
+        "label": "Project Board B",
+        "detail": "Target board for specific client tasks"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "trelloReadInbox"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "trelloWriteCard"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "trelloWriteCard"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/trello",
+      "label": "Trello connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Creative Agency Project Triage, what is the primary problem addressed by the Trello connector?",
+      "options": [
+        "High costs of Trello subscription tiers",
+        "Manual effort required to move tasks from the inbox to project boards",
+        "Lack of integration with external email providers",
+        "Inability to create new boards via the mobile app"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that project managers spend excessive time manually moving client requests, which the connector automates.",
+      "evidence": "Project managers spend excessive time manually moving client requests from a centralized 'Inbox' board into specific project-based boards, leading to delayed responses and missed task assignments."
+    },
+    {
+      "question": "In Automated Creative Agency Project Triage, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot read from the Trello Inbox",
+        "Claude may misclassify tasks if card descriptions are vague",
+        "The connector requires a paid Trello Enterprise license",
+        "All Trello boards must be public for the connector to work"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the connector's effectiveness depends on Claude's interpretation of card content, which can fail if details are missing.",
+      "evidence": "The connector relies on Claude's ability to interpret card content accurately; if a card lacks sufficient detail, the automated triage may misclassify the task."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:41.281Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:37.701Z"
+}

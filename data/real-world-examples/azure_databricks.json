@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "azure_databricks",
+  "title": "Unified Retail Inventory Analytics",
+  "business": "Retail organizations managing massive, disparate supply chain datasets.",
+  "problem": "Data silos between warehouse management systems and point-of-sale logs prevent real-time inventory visibility, leading to stockouts.",
+  "solution": "Azure Databricks provides an integrated Apache Spark-based lakehouse platform to unify batch and streaming data into a single source of truth for analytics.",
+  "steps": [
+    "Provision an Azure Databricks workspace within the existing Azure tenant.",
+    "Configure data ingestion pipelines to pull raw logs from warehouse and POS systems into the lakehouse.",
+    "Execute Spark-based transformation jobs to normalize and join disparate datasets.",
+    "Expose the refined data layer for downstream business intelligence reporting."
+  ],
+  "outcome": "Improved inventory accuracy and reduced stockout incidents through a unified, high-performance data foundation.",
+  "limitation": "The platform requires significant cluster management and configuration to optimize resource utilization; verify this by monitoring job execution times and cluster idle metrics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Retail Data Lakehouse Flow",
+    "description": "Data flows from source systems through the Databricks processing layer to the final analytics output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Systems",
+        "detail": "Warehouse and POS logs"
+      },
+      {
+        "id": "b",
+        "label": "Azure Databricks",
+        "detail": "Spark-based processing engine"
+      },
+      {
+        "id": "c",
+        "label": "Lakehouse Storage",
+        "detail": "Unified data repository"
+      },
+      {
+        "id": "d",
+        "label": "Analytics Layer",
+        "detail": "BI and reporting tools"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingest"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Transform"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Query"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Read raw data from storage\ndf = spark.read.format('delta').load('/mnt/raw_inventory')\n# Perform transformation to unify schemas\nrefined_df = df.filter(df.status == 'active')\n# Write to the lakehouse\nrefined_df.write.format('delta').save('/mnt/lakehouse/inventory')",
+    "explanation": "This snippet demonstrates reading raw inventory data, filtering for active items, and saving the result into the Delta Lake format within the Azure Databricks environment."
+  },
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Retail Inventory Analytics, what is the primary problem addressed by the solution?",
+      "options": [
+        "Data silos between warehouse and POS systems",
+        "High cost of cloud storage hardware",
+        "Lack of available programming languages",
+        "Inability to connect to external internet"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that data silos between warehouse management systems and point-of-sale logs prevent real-time inventory visibility.",
+      "evidence": "Data silos between warehouse management systems and point-of-sale logs prevent real-time inventory visibility, leading to stockouts."
+    },
+    {
+      "question": "In Unified Retail Inventory Analytics, what is a noted limitation of the implementation?",
+      "options": [
+        "The platform cannot process streaming data",
+        "It requires cluster management to optimize resources",
+        "It is incompatible with Apache Spark",
+        "It cannot be integrated into an Azure tenant"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson notes that the platform requires cluster management and configuration to optimize resource utilization.",
+      "evidence": "The platform requires significant cluster management and configuration to optimize resource utilization; verify this by monitoring job execution times and cluster idle metrics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:46.011Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

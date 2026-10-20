@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_blob_storage",
+  "title": "Media Archive Lifecycle Management",
+  "business": "Digital media production companies managing massive libraries of raw video assets.",
+  "problem": "High storage costs due to keeping infrequently accessed historical footage in high-performance storage tiers.",
+  "solution": "Azure Blob Storage allows for the organization of massive amounts of object data into containers, utilizing access tiers to move older content to cooler storage and lifecycle policies to automate this transition.",
+  "steps": [
+    "Create a storage account and define containers for raw and processed media assets.",
+    "Upload video files into the Hot access tier for immediate post-production access.",
+    "Configure a lifecycle management policy to transition blobs to the Archive tier after 90 days of inactivity.",
+    "Apply rules to permanently delete blobs older than seven years to maintain compliance and storage efficiency."
+  ],
+  "outcome": "Reduced operational storage overhead by automatically transitioning aged assets to lower-cost tiers without manual intervention.",
+  "limitation": "Data in the Archive tier is not immediately available for read operations; it requires a rehydration process that can take several hours to complete.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Blob Lifecycle Workflow",
+    "description": "Visualizes the movement of media assets through storage tiers based on age.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Ingestion",
+        "detail": "Raw media upload"
+      },
+      {
+        "id": "b",
+        "label": "Hot Tier",
+        "detail": "Active production assets"
+      },
+      {
+        "id": "c",
+        "label": "Archive Tier",
+        "detail": "Historical footage"
+      },
+      {
+        "id": "d",
+        "label": "Deletion",
+        "detail": "End of lifecycle"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initial upload"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Lifecycle policy (90 days)"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Lifecycle policy (7 years)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Media Archive Lifecycle Management, how does the solution address the problem of high storage costs?",
+      "options": [
+        "By utilizing access tiers and lifecycle policies to move older content to cooler storage.",
+        "By increasing the performance of the Hot tier for faster video rendering.",
+        "By deleting all raw video assets immediately after the production phase.",
+        "By migrating all data to an on-premises server to avoid cloud fees."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions using access tiers and lifecycle policies to transition infrequently accessed data to cooler, more cost-effective tiers.",
+      "evidence": "Azure Blob Storage allows for the organization of massive amounts of object data into containers, utilizing access tiers to move older content to cooler storage and lifecycle policies to automate this transition."
+    },
+    {
+      "question": "In Media Archive Lifecycle Management, what is a primary limitation of the Archive tier?",
+      "options": [
+        "It cannot store video files larger than 1GB.",
+        "It requires a rehydration process that can take several hours.",
+        "It is only available for text-based documentation files.",
+        "It automatically deletes files after 24 hours of inactivity."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that Archive tier data is not immediately accessible and requires a rehydration process.",
+      "evidence": "Data in the Archive tier is not immediately available for read operations; it requires a rehydration process that can take several hours to complete."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:40.506Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

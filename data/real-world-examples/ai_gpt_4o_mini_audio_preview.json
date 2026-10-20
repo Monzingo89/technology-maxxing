@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_4o_mini_audio_preview",
+  "title": "Multilingual Field Maintenance Audio Assistant",
+  "business": "Remote industrial maintenance teams operating in regions with low literacy or high physical task intensity.",
+  "problem": "Technicians struggle to document complex equipment repairs while wearing protective gloves, making text-based logging slow and prone to errors.",
+  "solution": "Utilizing the gpt-4o-mini-audio-preview model to process raw voice reports directly via the Chat Completions API, allowing technicians to speak their findings and receive immediate, spoken troubleshooting guidance.",
+  "steps": [
+    "Capture raw audio stream from the technician's headset device.",
+    "Send the audio data payload to the v1/chat/completions endpoint using the gpt-4o-mini-audio-preview model ID.",
+    "Configure the model to return audio output for direct playback to the technician.",
+    "Parse the returned audio response to confirm task completion or request clarification."
+  ],
+  "outcome": "Improved documentation accuracy and reduced physical strain on technicians by eliminating the need for manual data entry during repair tasks.",
+  "limitation": "The model is limited to the v1/chat/completions endpoint, meaning it does not support low-latency real-time session streaming; developers must monitor response latency to ensure the conversational flow remains acceptable for field use.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Audio Processing Workflow",
+    "description": "The flow shows how audio data moves from the field device to the model and back.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Technician Device",
+        "detail": "Captures raw audio input"
+      },
+      {
+        "id": "b",
+        "label": "API Gateway",
+        "detail": "Routes requests to v1/chat/completions"
+      },
+      {
+        "id": "c",
+        "label": "gpt-4o-mini-audio-preview",
+        "detail": "Processes audio input and generates audio output"
+      },
+      {
+        "id": "d",
+        "label": "Audio Playback",
+        "detail": "Delivers spoken guidance to technician"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends audio payload"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Forwards to model"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns audio response"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Streams output to device"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-4o-mini-audio-preview-2024-12-17',\n  messages=[{'role': 'user', 'content': 'Repair log audio data...'}],\n  modalities=['audio'] # Requesting audio output modality\n)",
+    "explanation": "This demonstrates calling the Chat Completions API with the specific audio-capable model ID and requesting audio modality output for the technician."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-4o-mini-audio-preview",
+      "label": "GPT-4o Mini Audio"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Multilingual Field Maintenance Audio Assistant, why is the gpt-4o-mini-audio-preview model selected?",
+      "options": [
+        "It supports real-time streaming sessions for instant feedback.",
+        "It allows technicians to provide voice input and receive audio guidance.",
+        "It is the only model that supports file_search tools.",
+        "It provides the lowest cost for text-only documentation."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario focuses on technicians speaking findings and receiving spoken guidance, which the model supports via audio input and output.",
+      "evidence": "Utilizing the gpt-4o-mini-audio-preview model to process raw voice reports directly via the Chat Completions API, allowing technicians to speak their findings and receive immediate, spoken troubleshooting guidance."
+    },
+    {
+      "question": "In Multilingual Field Maintenance Audio Assistant, what is a key implementation limitation?",
+      "options": [
+        "The model cannot process audio inputs.",
+        "The model is restricted to the v1/chat/completions endpoint.",
+        "The model requires a fine-tuning phase before use.",
+        "The model does not support function calling."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario note that the model is limited to the Chat Completions endpoint and does not support real-time sessions.",
+      "evidence": "The model is limited to the v1/chat/completions endpoint, meaning it does not support low-latency real-time session streaming"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:47.140Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:43.035Z"
+}

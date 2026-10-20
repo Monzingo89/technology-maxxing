@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_4",
+  "title": "Legacy Codebase Modernization at FinTech Corp",
+  "business": "Financial software firms maintaining massive, multi-decade monolithic codebases.",
+  "problem": "High operational costs and slow iteration cycles when attempting to refactor legacy modules due to the sheer volume of documentation and interdependent code files that exceed standard context windows.",
+  "solution": "Utilize GPT-5.4's 1,050,000 token context window to ingest entire legacy modules, allowing the model to understand global dependencies and suggest refactoring patterns that maintain system integrity without manual cross-referencing.",
+  "steps": [
+    "Aggregate legacy source files and technical documentation into a unified context package.",
+    "Configure the Chat Completions API using the gpt-5.4 model identifier.",
+    "Implement prompt caching for frequently referenced core library headers to reduce input costs.",
+    "Execute refactoring requests using structured outputs to ensure the generated code adheres to modern syntax standards.",
+    "Validate the output against existing unit tests to ensure functional parity."
+  ],
+  "outcome": "Improved developer velocity and reduced technical debt by enabling automated, context-aware refactoring across large-scale codebases.",
+  "limitation": "The model's reasoning effort can lead to increased latency; developers should monitor response times and adjust the reasoning effort parameter if real-time feedback is required.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Refactoring Workflow",
+    "description": "The flow of data from legacy storage to the model for refactoring.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Repo",
+        "detail": "Source code and docs"
+      },
+      {
+        "id": "b",
+        "label": "Context Cache",
+        "detail": "Cached headers"
+      },
+      {
+        "id": "c",
+        "label": "GPT-5.4",
+        "detail": "Refactoring engine"
+      },
+      {
+        "id": "d",
+        "label": "Modernized Code",
+        "detail": "Refactored output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Ingests full module"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides cached context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates refactored files"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-5.4', # Using the flagship model for complex refactoring\n  messages=[{'role': 'user', 'content': 'Refactor this module: ' + large_code_blob}],\n  reasoning_effort='high' # Ensuring deep analysis of dependencies\n)",
+    "explanation": "This snippet demonstrates calling the GPT-5.4 model with a large code blob, utilizing high reasoning effort to ensure the model understands the complex dependencies inherent in legacy systems."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5.4",
+      "label": "GPT-5.4"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Codebase Modernization at FinTech Corp, how does the model address the problem of high operational costs and slow iteration?",
+      "options": [
+        "By ingesting entire legacy modules into its 1,050,000 token context window.",
+        "By utilizing the Realtime API for instant code generation.",
+        "By relying on fine-tuning to memorize the legacy codebase.",
+        "By using the Assistants API to manage long-term state."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly mentions using the large context window to ingest entire modules to solve the problem of slow iteration caused by interdependent code.",
+      "evidence": "Utilize GPT-5.4's 1,050,000 token context window to ingest entire legacy modules, allowing the model to understand global dependencies and suggest refactoring patterns that maintain system integrity without manual cross-referencing."
+    },
+    {
+      "question": "In Legacy Codebase Modernization at FinTech Corp, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot process images for documentation.",
+        "Increased reasoning effort can result in higher latency.",
+        "The model is limited to 128,000 tokens of output.",
+        "Prompt caching is not supported for large codebases."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that reasoning effort impacts latency, which developers must monitor.",
+      "evidence": "The model's reasoning effort can lead to increased latency; developers should monitor response times and adjust the reasoning effort parameter if real-time feedback is required."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:10.900Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:06.872Z"
+}

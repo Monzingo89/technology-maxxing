@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "derivative",
+  "title": "Optimizing High-Frequency Inventory Replenishment",
+  "business": "Automated warehouse logistics managers",
+  "problem": "Generic inventory systems use average daily consumption rates, leading to stockouts during sudden demand spikes because they fail to account for the instantaneous rate of change in order velocity.",
+  "solution": "By applying the derivative to the cumulative order function, the system calculates the instantaneous velocity of demand, allowing for proactive replenishment before a stockout occurs.",
+  "steps": [
+    "Define the cumulative order function s(t) representing total units ordered at time t.",
+    "Select a small time increment h to observe order volume changes.",
+    "Calculate the difference quotient (s(t+h) - s(t)) / h to estimate current demand velocity.",
+    "Apply the limit as h approaches 0 to determine the precise instantaneous rate of change.",
+    "Trigger automated reorder workflows when the derivative exceeds a predefined threshold."
+  ],
+  "outcome": "Improved service levels through responsive, velocity-aware inventory adjustments rather than reactive, average-based planning.",
+  "limitation": "The derivative is highly sensitive to noise in order data; high-frequency fluctuations can trigger false-positive reorders. Check for this by applying a moving average filter to the input data before differentiation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Velocity Calculation Flow",
+    "description": "The process of transforming raw order data into actionable replenishment signals.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Order Stream",
+        "detail": "Raw timestamped order events"
+      },
+      {
+        "id": "b",
+        "label": "Cumulative Function",
+        "detail": "s(t) mapping time to total units"
+      },
+      {
+        "id": "c",
+        "label": "Differentiation",
+        "detail": "Calculating s'(t) via limit"
+      },
+      {
+        "id": "d",
+        "label": "Replenishment Trigger",
+        "detail": "Action based on instantaneous rate"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "aggregates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "input to"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "exceeds threshold"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openstax.org/books/calculus-volume-1/pages/3-1-defining-the-derivative",
+      "label": "3.1 Defining the Derivative - Calculus Volume 1 | OpenStax"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing High-Frequency Inventory Replenishment, why is the derivative used instead of simple averages?",
+      "options": [
+        "To capture the instantaneous rate of change in order velocity for proactive replenishment.",
+        "To calculate the total integral of all orders over a fiscal year.",
+        "To eliminate the need for any data collection during peak hours.",
+        "To replace the requirement for physical warehouse stock counts."
+      ],
+      "answerIndex": 0,
+      "explanation": "The derivative measures the instantaneous rate of change, which allows the system to react to current demand spikes that averages would smooth over.",
+      "evidence": "By applying the derivative to the cumulative order function, the system calculates the instantaneous velocity of demand, allowing for proactive replenishment before a stockout occurs."
+    },
+    {
+      "question": "In Optimizing High-Frequency Inventory Replenishment, what is a primary limitation of using the derivative?",
+      "options": [
+        "It is only applicable to linear growth patterns.",
+        "It is highly sensitive to noise, which may cause false-positive reorders.",
+        "It requires infinite computing power to solve.",
+        "It cannot be used for time-based variables."
+      ],
+      "answerIndex": 1,
+      "explanation": "The derivative's sensitivity to noise is a known trade-off, requiring filtering to ensure accuracy in real-world data.",
+      "evidence": "The derivative is highly sensitive to noise in order data; high-frequency fluctuations can trigger false-positive reorders."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:29.126Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:25.184Z"
+}

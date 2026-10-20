@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_open_webui",
+  "title": "Secure Internal Knowledge Synthesis",
+  "business": "A regional legal firm handling sensitive client documents that cannot be uploaded to public cloud AI services.",
+  "problem": "The firm struggles with fragmented document storage and the inability to query internal case files securely, leading to significant time loss during legal research.",
+  "solution": "Deploying Open WebUI as a self-hosted interface allows the firm to connect local, offline models to their internal document repositories, ensuring all data processing remains within their private infrastructure.",
+  "steps": [
+    "Provision a secure server instance within the firm's private network.",
+    "Install Open WebUI using Docker to maintain a stateless, scalable architecture.",
+    "Configure the interface to point to a local Ollama instance for model inference.",
+    "Upload sensitive legal documents into the Open WebUI knowledge base for RAG-based querying.",
+    "Enable user authentication to ensure only authorized legal staff access the interface."
+  ],
+  "outcome": "Legal staff gain the ability to perform rapid, secure semantic searches across internal case files without risking data exposure to external cloud providers.",
+  "limitation": "The primary limitation is the reliance on local hardware resources for inference; users can check performance by monitoring system latency during complex document retrieval tasks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Secure Document Query Workflow",
+    "description": "This diagram illustrates how a user interacts with the self-hosted system to query internal documents.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Legal Staff",
+        "detail": "Authorized firm employee"
+      },
+      {
+        "id": "ui",
+        "label": "Open WebUI",
+        "detail": "Self-hosted interface"
+      },
+      {
+        "id": "kb",
+        "label": "Knowledge Base",
+        "detail": "Internal document store"
+      },
+      {
+        "id": "llm",
+        "label": "Local Model",
+        "detail": "Ollama-hosted LLM"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "ui",
+        "label": "submits query"
+      },
+      {
+        "from": "ui",
+        "to": "kb",
+        "label": "retrieves context"
+      },
+      {
+        "from": "ui",
+        "to": "llm",
+        "label": "sends prompt"
+      },
+      {
+        "from": "llm",
+        "to": "ui",
+        "label": "returns answer"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.openwebui.com/",
+      "label": "Open WebUI Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Internal Knowledge Synthesis, why is Open WebUI chosen over public cloud AI services?",
+      "options": [
+        "To ensure all data processing remains within their private infrastructure.",
+        "To access a wider variety of proprietary cloud-based models.",
+        "To reduce the cost of hardware maintenance for the firm.",
+        "To enable real-time collaboration with external legal partners."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario emphasizes the need for security regarding sensitive client documents, which is addressed by the self-hosted nature of the solution.",
+      "evidence": "Deploying Open WebUI as a self-hosted interface allows the firm to connect local, offline models to their internal document repositories, ensuring all data processing remains within their private infrastructure."
+    },
+    {
+      "question": "In Secure Internal Knowledge Synthesis, what is the primary constraint of the implementation?",
+      "options": [
+        "The inability to use RAG for document retrieval.",
+        "The requirement for an active internet connection at all times.",
+        "The reliance on local hardware resources for inference.",
+        "The lack of user authentication features in the platform."
+      ],
+      "answerIndex": 2,
+      "explanation": "Self-hosting requires local compute power, which can become a bottleneck depending on the hardware available.",
+      "evidence": "The primary limitation is the reliance on local hardware resources for inference; users can check performance by monitoring system latency during complex document retrieval tasks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:48.023Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:44.514Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "flink",
+  "title": "Smart Grid Energy Balancing",
+  "business": "Utility companies managing distributed renewable energy grids.",
+  "problem": "Inconsistent sensor reporting across geographic zones leads to inaccurate load balancing, where delayed events cause the system to miscalculate current energy demand, resulting in potential grid instability.",
+  "solution": "Apache Flink uses event-time processing to handle out-of-order sensor data by assigning timestamps to events at the source. By maintaining stateful operators, Flink tracks energy consumption patterns per zone, while asynchronous checkpointing ensures that the state remains consistent even if a processing node fails, allowing the system to recover to the exact point of the last successful snapshot.",
+  "steps": [
+    "Define a Watermark strategy to handle late-arriving sensor events based on event-time timestamps.",
+    "Implement a KeyedProcessFunction to maintain local state for each energy zone, storing the running sum of energy consumption.",
+    "Configure the Flink environment to enable periodic checkpointing to durable storage for fault tolerance.",
+    "Process the unbounded stream of sensor readings, updating the stateful energy balance in real-time.",
+    "Emit periodic alerts when the aggregated load exceeds the capacity threshold for a specific zone."
+  ],
+  "outcome": "The utility company achieves a reliable, consistent view of energy demand across the grid, ensuring that load balancing decisions are based on the actual time events occurred rather than the time they were ingested.",
+  "limitation": "The primary trade-off is the memory overhead required for state maintenance. As the number of energy zones grows, the local state size increases, potentially requiring disk-backed state storage. This can be monitored by observing the checkpoint duration and the size of the state stored in durable storage.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Energy Stream Processing Flow",
+    "description": "This diagram illustrates how raw sensor data is ingested, processed using stateful logic, and persisted via checkpoints.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Stream",
+        "detail": "Unbounded stream of energy readings"
+      },
+      {
+        "id": "b",
+        "label": "Event-Time Processor",
+        "detail": "Applies Watermarks and KeyedProcessFunction"
+      },
+      {
+        "id": "c",
+        "label": "Local State",
+        "detail": "In-memory energy balance per zone"
+      },
+      {
+        "id": "d",
+        "label": "Durable Storage",
+        "detail": "Checkpoint snapshots for fault tolerance"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests events"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Updates state"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Asynchronous checkpointing"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://flink.apache.org/what-is-flink/flink-architecture/",
+      "label": "Architecture | Apache Flink"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Smart Grid Energy Balancing, how does Flink address the issue of inaccurate load balancing caused by delayed events?",
+      "options": [
+        "By using event-time processing to handle out-of-order data based on when events actually occurred.",
+        "By discarding all late-arriving events to ensure the system only processes real-time data.",
+        "By increasing the cluster parallelism to process all events at the exact same ingestion time.",
+        "By converting the unbounded stream into a bounded batch to sort all events before processing."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on event-time processing to ensure that calculations are based on the actual occurrence of events, correcting for ingestion delays.",
+      "evidence": "Apache Flink uses event-time processing to handle out-of-order sensor data by assigning timestamps to events at the source."
+    },
+    {
+      "question": "In Smart Grid Energy Balancing, what is a primary limitation of the stateful approach described?",
+      "options": [
+        "The system cannot handle more than ten energy zones simultaneously.",
+        "Checkpointing to durable storage is synchronous and blocks all incoming data.",
+        "The memory overhead of maintaining state can grow, potentially requiring disk-backed storage.",
+        "Flink cannot recover from node failures if the state is stored in memory."
+      ],
+      "answerIndex": 2,
+      "explanation": "Maintaining state for many zones consumes memory, which may necessitate moving state to disk, as noted in the limitation section.",
+      "evidence": "The primary trade-off is the memory overhead required for state maintenance. As the number of energy zones grows, the local state size increases, potentially requiring disk-backed state storage."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:33.809Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:29.527Z"
+}

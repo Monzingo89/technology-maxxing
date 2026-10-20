@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_3_sonnet_20240229",
+  "title": "Automated Model Lifecycle Management for Enterprise Workflows",
+  "business": "Enterprise software teams managing multiple AI-integrated applications",
+  "problem": "Operational instability caused by reliance on legacy or deprecated models that are approaching their retirement date, leading to potential service outages.",
+  "solution": "Implementing a systematic audit and migration process using Claude Console to identify deprecated model usage and transition to active, supported replacements before retirement.",
+  "steps": [
+    "Access the Usage page in the Claude Console to retrieve API consumption data.",
+    "Export the usage report as a CSV to identify specific API keys and model versions currently in production.",
+    "Cross-reference identified models against the official documentation to determine their lifecycle status.",
+    "Prioritize migration for models marked as Deprecated or nearing their retirement date.",
+    "Update application code to point to the recommended replacement model and perform validation testing."
+  ],
+  "outcome": "Increased system reliability and proactive avoidance of service failures caused by model retirement.",
+  "limitation": "The primary tradeoff is the requirement for thorough application testing when switching models, as behavior may vary between versions; this must be checked by comparing output quality and performance against established benchmarks before full deployment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing legacy models to maintain service continuity.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Usage Audit",
+        "detail": "Export CSV from Claude Console"
+      },
+      {
+        "id": "b",
+        "label": "Lifecycle Check",
+        "detail": "Compare against documentation"
+      },
+      {
+        "id": "c",
+        "label": "Migration",
+        "detail": "Update code to active model"
+      },
+      {
+        "id": "d",
+        "label": "Validation",
+        "detail": "Test output quality"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Identify model IDs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Select replacement"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Verify performance"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Model Lifecycle Management for Enterprise Workflows, what is the primary risk addressed by the solution?",
+      "options": [
+        "Operational instability caused by reliance on legacy or deprecated models.",
+        "Excessive costs associated with using the latest model versions.",
+        "Incompatibility between different API SDK versions.",
+        "Lack of documentation for new model features."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem statement explicitly identifies reliance on legacy or deprecated models as the cause of operational instability.",
+      "evidence": "Operational instability caused by reliance on legacy or deprecated models that are approaching their retirement date, leading to potential service outages."
+    },
+    {
+      "question": "In Automated Model Lifecycle Management for Enterprise Workflows, what is a key limitation of the migration process?",
+      "options": [
+        "The inability to export usage data from the Claude Console.",
+        "The requirement for thorough application testing due to potential behavioral variance.",
+        "The lack of recommended replacement models in the documentation.",
+        "The requirement to contact support for every model update."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that switching models requires testing because behavior may vary between versions.",
+      "evidence": "The primary tradeoff is the requirement for thorough application testing when switching models, as behavior may vary between versions; this must be checked by comparing output quality and performance against established benchmarks before full deployment."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:29.940Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

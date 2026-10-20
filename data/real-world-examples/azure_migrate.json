@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_migrate",
+  "title": "Legacy Data Center Consolidation",
+  "business": "Enterprises operating aging on-premises server infrastructure that require a transition to cloud-native environments.",
+  "problem": "Organizations often lack visibility into complex inter-server dependencies, leading to broken application functionality when migrating monolithic workloads to the cloud.",
+  "solution": "Azure Migrate provides a centralized hub for discovery, assessment, and dependency analysis, allowing teams to map network connections between servers before migration to ensure application integrity.",
+  "steps": [
+    "Deploy the Azure Migrate appliance within the local environment to initiate server discovery.",
+    "Enable dependency analysis to capture real-time network traffic patterns between servers.",
+    "Review assessment reports to identify right-sizing recommendations for target Azure virtual machines.",
+    "Execute the migration of validated server groups using the integrated replication tooling."
+  ],
+  "outcome": "A risk-mitigated migration path where application dependencies are preserved, reducing post-migration downtime and configuration errors.",
+  "limitation": "Dependency analysis relies on agent-based or agentless data collection; if the appliance cannot reach the source servers or if traffic is encrypted in a way that obscures headers, the dependency mapping may remain incomplete. Verify by checking the 'Dependencies' tab in the Azure Migrate portal for missing connection data.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Azure Migrate Workflow",
+    "description": "The flow from on-premises infrastructure to the cloud migration target.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "On-Prem Servers",
+        "detail": "Source workloads"
+      },
+      {
+        "id": "b",
+        "label": "Azure Migrate Appliance",
+        "detail": "Discovery engine"
+      },
+      {
+        "id": "c",
+        "label": "Azure Assessment",
+        "detail": "Dependency analysis"
+      },
+      {
+        "id": "d",
+        "label": "Azure Target",
+        "detail": "Cloud destination"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Discovery"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Data ingestion"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Migration execution"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Data Center Consolidation, what is the primary role of Azure Migrate regarding application dependencies?",
+      "options": [
+        "It maps network connections to ensure application integrity before migration.",
+        "It automatically rewrites application code for cloud compatibility.",
+        "It replaces the need for network firewalls in the cloud.",
+        "It manages the physical hardware lifecycle of on-premises servers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that Azure Migrate allows teams to map network connections between servers to ensure application integrity.",
+      "evidence": "Azure Migrate provides a centralized hub for discovery, assessment, and dependency analysis, allowing teams to map network connections between servers before migration to ensure application integrity."
+    },
+    {
+      "question": "In Legacy Data Center Consolidation, what is a known limitation of the dependency analysis feature?",
+      "options": [
+        "It only works for Linux-based servers.",
+        "It requires a manual restart of all production databases.",
+        "It may provide incomplete mapping if traffic is encrypted or the appliance cannot reach sources.",
+        "It is only available for small-scale environments under ten servers."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that dependency mapping can be incomplete if the appliance cannot reach sources or if traffic is obscured.",
+      "evidence": "Dependency analysis relies on agent-based or agentless data collection; if the appliance cannot reach the source servers or if traffic is encrypted in a way that obscures headers, the dependency mapping may remain incomplete."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:58.270Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

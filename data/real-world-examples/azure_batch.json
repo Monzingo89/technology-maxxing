@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_batch",
+  "title": "Automated Architectural Rendering Pipeline",
+  "business": "Architectural firms requiring high-fidelity 3D model rendering for client presentations.",
+  "problem": "Local workstations fail to process complex 3D scenes within required deadlines, leading to project bottlenecks and hardware underutilization.",
+  "solution": "Azure Batch provides a managed service to create and manage pools of compute nodes, enabling the parallel execution of rendering tasks across multiple virtual machines.",
+  "steps": [
+    "Define a Batch Account to serve as the central management entity for compute resources.",
+    "Configure a Pool of compute nodes specifying the virtual machine size and operating system image.",
+    "Create a Job to act as a logical container for the collection of rendering tasks.",
+    "Submit individual rendering Tasks to the job, each referencing specific scene files and output requirements.",
+    "Monitor task execution and retrieve rendered assets from linked storage once completion is signaled."
+  ],
+  "outcome": "The firm achieves consistent, predictable rendering timelines by scaling compute resources dynamically to match the volume of pending 3D scenes.",
+  "limitation": "Azure Batch manages the infrastructure but does not automatically handle complex application-level dependency conflicts; verify compatibility by checking node startup task logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Batch Rendering Workflow",
+    "description": "Illustrates the flow of rendering tasks from the client to the managed compute pool.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Application",
+        "detail": "Submits rendering requests"
+      },
+      {
+        "id": "b",
+        "label": "Azure Batch Service",
+        "detail": "Schedules and manages jobs"
+      },
+      {
+        "id": "c",
+        "label": "Compute Pool",
+        "detail": "Collection of compute nodes"
+      },
+      {
+        "id": "d",
+        "label": "Azure Storage",
+        "detail": "Stores input and output files"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Submits Job"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Allocates Tasks"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Reads/Writes Data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Architectural Rendering Pipeline, how does the technology resolve the identified bottleneck?",
+      "options": [
+        "By replacing local hardware with a managed service that enables parallel execution of rendering tasks.",
+        "By automatically optimizing the 3D geometry of the models to reduce rendering time.",
+        "By providing a pre-configured workstation environment for every architect.",
+        "By eliminating the need for storage accounts during the rendering process."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages Azure Batch to distribute rendering tasks across multiple nodes, directly addressing the inability of local workstations to handle the load.",
+      "evidence": "Azure Batch provides a managed service to create and manage pools of compute nodes, enabling the parallel execution of rendering tasks across multiple virtual machines."
+    },
+    {
+      "question": "Regarding the implementation of Automated Architectural Rendering Pipeline, what is a primary operational limitation?",
+      "options": [
+        "The service cannot scale beyond ten compute nodes.",
+        "The service does not automatically resolve application-level dependency conflicts.",
+        "The service requires manual intervention for every single task submission.",
+        "The service is incompatible with Azure Storage."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that while Batch manages infrastructure, it does not handle application-level dependencies, requiring users to verify via logs.",
+      "evidence": "Azure Batch manages the infrastructure but does not automatically handle complex application-level dependency conflicts; verify compatibility by checking node startup task logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:40.008Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

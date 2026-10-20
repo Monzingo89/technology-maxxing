@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_opus_4_7",
+  "title": "Legacy Archive Synthesis for Legal Discovery",
+  "business": "Large-scale law firms managing decades of unstructured case files.",
+  "problem": "Firms struggle to synthesize insights across massive, fragmented digital archives because newer models may hallucinate on specific legacy terminology or lack the specific alignment tuning present in older, stable versions used for initial indexing.",
+  "solution": "Utilizing the Claude Opus 4.7 model allows firms to maintain consistency with existing long-context indexing workflows. By leveraging its 1M token context window, the model can ingest entire case histories in a single pass, ensuring that cross-referencing between disparate legal documents remains grounded in the specific knowledge cutoff of January 2026.",
+  "steps": [
+    "Identify legacy document repositories requiring consistent, long-context analysis.",
+    "Configure the API client to target the claude-opus-4-7 model ID to ensure architectural parity with existing internal indexes.",
+    "Utilize the 1M token context window to batch-process multi-year case files without fragmenting the narrative.",
+    "Implement the Batch API to process these massive document sets at a 50% cost reduction.",
+    "Validate outputs against the January 2026 knowledge cutoff to ensure no reliance on post-cutoff events."
+  ],
+  "outcome": "The firm achieves a stable, reproducible synthesis of historical case data that aligns with their established internal validation protocols.",
+  "limitation": "As a legacy model, Claude Opus 4.7 lacks the performance optimizations and updated knowledge base of newer models like Claude Opus 5.5; developers should check for performance degradation by comparing outputs against newer models using a subset of the same test data.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Archive Processing Flow",
+    "description": "Explains the ingestion and synthesis of legal archives.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Store",
+        "detail": "Raw legal archives"
+      },
+      {
+        "id": "b",
+        "label": "Batch API",
+        "detail": "Processing layer"
+      },
+      {
+        "id": "c",
+        "label": "Claude Opus 4.7",
+        "detail": "Legacy model engine"
+      },
+      {
+        "id": "d",
+        "label": "Synthesis Report",
+        "detail": "Final legal summary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Queues documents"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends 1M token context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates synthesis"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.messages.create(\n    model=\"claude-opus-4-7\", # Explicitly targeting legacy model\n    max_tokens=4096,\n    messages=[{\"role\": \"user\", \"content\": \"Analyze this 500k word archive...\"}]\n)",
+    "explanation": "Demonstrates the explicit selection of the legacy model ID to maintain workflow consistency."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/opus-4-7/overview",
+      "label": "Claude Opus 4.7"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Archive Synthesis for Legal Discovery, why is Claude Opus 4.7 preferred over newer models?",
+      "options": [
+        "To maintain consistency with existing internal indexing workflows.",
+        "Because it is the only model that supports 1M token context.",
+        "It is significantly cheaper than all other available models.",
+        "It has a more recent knowledge cutoff than newer models."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that firms use this model to maintain architectural parity and consistency with existing indexing workflows.",
+      "evidence": "Utilizing the Claude Opus 4.7 model allows firms to maintain consistency with existing long-context indexing workflows."
+    },
+    {
+      "question": "In Legacy Archive Synthesis for Legal Discovery, what is a primary limitation of the implementation?",
+      "options": [
+        "The model cannot process more than 100k tokens.",
+        "It is incompatible with the Batch API.",
+        "It lacks the performance optimizations and updated knowledge base of newer models.",
+        "It requires a manual budget_tokens mode for all requests."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that as a legacy model, it lacks the newer optimizations and knowledge updates found in current versions.",
+      "evidence": "As a legacy model, Claude Opus 4.7 lacks the performance optimizations and updated knowledge base of newer models like Claude Opus 5.5"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:50.671Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:46.180Z"
+}

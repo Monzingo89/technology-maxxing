@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "snowflake",
+  "title": "Decoupled Inventory Analytics for Global Retail",
+  "business": "A global retail chain managing millions of SKU-level transactions across diverse regional markets.",
+  "problem": "The company suffers from resource contention where heavy analytical reporting jobs interfere with real-time inventory updates, leading to stale data and operational bottlenecks.",
+  "solution": "Snowflake architecture decouples storage from compute, allowing the retail chain to assign independent virtual warehouses to ingestion pipelines and analytical workloads, ensuring that resource-heavy reporting does not impact data loading performance.",
+  "steps": [
+    "Provision separate virtual warehouses for the ingestion layer and the reporting layer.",
+    "Create a database schema to house raw transaction logs and refined analytical tables.",
+    "Configure a COPY INTO command to load data from cloud storage into the raw ingestion table.",
+    "Define a materialized view on the reporting warehouse to aggregate inventory levels for dashboard consumption.",
+    "Grant usage privileges on specific warehouses to the respective service accounts for ingestion and analytics."
+  ],
+  "outcome": "The retail chain achieves consistent data availability for dashboards without latency spikes during peak transaction ingestion periods.",
+  "limitation": "Materialized views incur additional storage costs and background maintenance overhead; check the SYSTEM$CLUSTERING_INFORMATION function to monitor if the maintenance cost outweighs the query performance benefit.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Decoupled Compute Architecture",
+    "description": "Shows how data flows from storage into isolated compute resources.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Cloud Storage",
+        "detail": "Source of raw transaction files"
+      },
+      {
+        "id": "b",
+        "label": "Ingestion Warehouse",
+        "detail": "Dedicated compute for loading"
+      },
+      {
+        "id": "c",
+        "label": "Snowflake Storage",
+        "detail": "Centralized persistent data layer"
+      },
+      {
+        "id": "d",
+        "label": "Reporting Warehouse",
+        "detail": "Dedicated compute for analytics"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "COPY INTO"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Write"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Read"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "-- Create separate compute resources for isolation\nCREATE WAREHOUSE ingestion_wh WITH WAREHOUSE_SIZE = 'XSMALL';\nCREATE WAREHOUSE reporting_wh WITH WAREHOUSE_SIZE = 'MEDIUM';\n\n-- Load data using the ingestion warehouse\nCOPY INTO raw_inventory FROM @my_stage;\n\n-- Aggregate data using the reporting warehouse\nCREATE MATERIALIZED VIEW daily_stock AS SELECT sku, sum(qty) FROM raw_inventory GROUP BY sku;",
+    "explanation": "This code demonstrates the creation of isolated virtual warehouses to separate ingestion tasks from analytical reporting tasks, preventing resource contention."
+  },
+  "sources": [
+    {
+      "url": "https://docs.snowflake.com/",
+      "label": "Snowflake Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupled Inventory Analytics for Global Retail, how does the architecture resolve the problem of resource contention?",
+      "options": [
+        "By assigning independent virtual warehouses to ingestion and analytical workloads.",
+        "By forcing all users to share a single large warehouse to maximize cache hits.",
+        "By moving all data to a local file system to bypass network latency.",
+        "By disabling all analytical reporting during peak transaction hours."
+      ],
+      "answerIndex": 0,
+      "explanation": "Snowflake allows compute resources (warehouses) to be scaled and assigned independently, preventing one workload from starving another.",
+      "evidence": "Snowflake architecture decouples storage from compute, allowing the retail chain to assign independent virtual warehouses to ingestion pipelines and analytical workloads, ensuring that resource-heavy reporting does not impact data loading performance."
+    },
+    {
+      "question": "Regarding the implementation of Decoupled Inventory Analytics for Global Retail, what is a primary trade-off of using materialized views?",
+      "options": [
+        "They require manual data loading every hour.",
+        "They cannot be queried by multiple users simultaneously.",
+        "They incur additional storage costs and background maintenance overhead.",
+        "They are incompatible with virtual warehouses."
+      ],
+      "answerIndex": 2,
+      "explanation": "Materialized views provide performance benefits but introduce costs related to storage and the background processes that keep them updated.",
+      "evidence": "Materialized views incur additional storage costs and background maintenance overhead; check the SYSTEM$CLUSTERING_INFORMATION function to monitor if the maintenance cost outweighs the query performance benefit."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:11.095Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:06.522Z"
+}

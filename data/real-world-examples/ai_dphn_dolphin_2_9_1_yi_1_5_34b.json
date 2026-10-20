@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_dphn_dolphin_2_9_1_yi_1_5_34b",
+  "title": "Automated Technical Support Agent for Legacy Systems",
+  "business": "Enterprise software maintenance firms managing complex, undocumented legacy codebases.",
+  "problem": "Support teams struggle with high-volume, repetitive technical queries that require deep reasoning and code-aware responses, leading to slow resolution times and developer burnout.",
+  "solution": "Deploying the Dolphin-2.9.1-yi-1.5-34b model allows for high-performance, instruction-tuned responses that leverage the model's inherent coding capabilities and function-calling support to automate initial triage and provide accurate technical guidance.",
+  "steps": [
+    "Configure the inference environment to support the ChatML prompt template format required by the model.",
+    "Implement a custom alignment layer to filter model outputs before they reach end-users, as the model is uncensored.",
+    "Integrate the model with internal documentation and code repositories using function-calling to ground responses in specific system context.",
+    "Validate the model's reasoning performance on domain-specific technical tasks using the 8k sequence length capacity."
+  ],
+  "outcome": "Reduced manual triage burden on senior engineers and faster, consistent technical support responses for clients.",
+  "limitation": "The model is uncensored, meaning it will be highly compliant with any requests, even unethical ones, which necessitates rigorous output monitoring to ensure safe deployment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agentic Support Workflow",
+    "description": "The flow shows how user queries are processed through the model and filtered for safety.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Query",
+        "detail": "Incoming technical support request"
+      },
+      {
+        "id": "b",
+        "label": "Dolphin-2.9.1",
+        "detail": "Generates technical response"
+      },
+      {
+        "id": "c",
+        "label": "Alignment Layer",
+        "detail": "Filters output for safety"
+      },
+      {
+        "id": "d",
+        "label": "Client Response",
+        "detail": "Final safe output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Raw Output"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Sanitized Output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Example of ChatML structure for the model\nprompt = \"<|im_start|>system\\nYou are a technical assistant.<|im_end|>\\n<|im_start|>user\\nHow do I refactor this legacy function?<|im_end|>\\n<|im_start|>assistant\\n\"",
+    "explanation": "This demonstrates the required ChatML prompt template format used to interface with the model."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/dphn/dolphin-2.9.1-yi-1.5-34b",
+      "label": "dphn/dolphin-2.9.1-yi-1.5-34b"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Technical Support Agent for Legacy Systems, why is this specific model chosen?",
+      "options": [
+        "It provides high-performance instruction-tuned responses and coding capabilities.",
+        "It is the only model that supports 32k context length.",
+        "It is pre-aligned to prevent all unethical requests.",
+        "It requires no additional infrastructure for deployment."
+      ],
+      "answerIndex": 0,
+      "explanation": "The model's instruction-tuned and coding capabilities are explicitly cited as the reason for its utility in technical support scenarios.",
+      "evidence": "Deploying the Dolphin-2.9.1-yi-1.5-34b model allows for high-performance, instruction-tuned responses that leverage the model's inherent coding capabilities and function-calling support to automate initial triage and provide accurate technical guidance."
+    },
+    {
+      "question": "In Automated Technical Support Agent for Legacy Systems, what is a critical operational requirement?",
+      "options": [
+        "The model must be retrained daily on new data.",
+        "An alignment layer must be implemented to filter outputs.",
+        "The model must be restricted to 4k sequence length.",
+        "The model must be used only for internal research."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because the model is uncensored, the documentation and scenario emphasize the need for an alignment layer to ensure safe service delivery.",
+      "evidence": "The model is uncensored, meaning it will be highly compliant with any requests, even unethical ones, which necessitates rigorous output monitoring to ensure safe deployment."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:44.279Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:40.528Z"
+}

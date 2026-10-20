@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "esbuild",
+  "title": "Legacy Financial Dashboard Modernization",
+  "business": "A regional investment firm managing real-time portfolio tracking portals for retail clients.",
+  "problem": "The firm's legacy build pipeline relies on a monolithic, plugin-heavy configuration that causes deployment delays exceeding twenty minutes, preventing rapid hotfixes for critical market data visualization bugs.",
+  "solution": "By migrating the build process to esbuild, the firm replaces complex, multi-stage transpilation and minification steps with a unified, high-performance pipeline that handles TypeScript, JSX, and CSS bundling natively without requiring external cache management.",
+  "steps": [
+    "Define the entry point and output directory in a build script using the esbuild JavaScript API.",
+    "Enable the minify flag to reduce bundle size for client-side delivery.",
+    "Configure sourcemap generation to ensure production errors remain debuggable in the browser.",
+    "Integrate the build script into the existing CI/CD pipeline to replace the legacy task runner."
+  ],
+  "outcome": "The development team achieves near-instant feedback loops during local development and significantly reduced CI/CD pipeline duration, allowing for more frequent and reliable deployments of client-facing features.",
+  "limitation": "Because esbuild prioritizes speed by omitting certain complex type-checking features found in the TypeScript compiler, developers must run the tsc command separately to verify type safety, which can be checked by inspecting the build logs for type errors that esbuild ignores.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Build Pipeline Transformation",
+    "description": "This flow shows the transition from a slow legacy pipeline to the streamlined esbuild process.",
+    "nodes": [
+      {
+        "id": "src",
+        "label": "Source Files",
+        "detail": "TS, JSX, CSS"
+      },
+      {
+        "id": "esb",
+        "label": "esbuild",
+        "detail": "Bundler/Minifier"
+      },
+      {
+        "id": "tsc",
+        "label": "TSC",
+        "detail": "Type Checker"
+      },
+      {
+        "id": "dist",
+        "label": "Distributables",
+        "detail": "Minified JS/CSS + Maps"
+      }
+    ],
+    "edges": [
+      {
+        "from": "src",
+        "to": "esb",
+        "label": "bundles and minifies"
+      },
+      {
+        "from": "src",
+        "to": "tsc",
+        "label": "validates types"
+      },
+      {
+        "from": "esb",
+        "to": "dist",
+        "label": "outputs artifacts"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "require('esbuild').build({\n  entryPoints: ['app.tsx'],\n  bundle: true,\n  minify: true, // Reduces bundle size for production\n  sourcemap: true, // Enables debugging in production\n  outfile: 'out.js',\n}).catch(() => process.exit(1));",
+    "explanation": "This script demonstrates the core bundling and minification process required to replace the legacy build tool, mapping directly to the solution steps."
+  },
+  "sources": [
+    {
+      "url": "https://esbuild.github.io/",
+      "label": "esbuild - An extremely fast bundler for the web"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Financial Dashboard Modernization, what is the primary reason for adopting esbuild?",
+      "options": [
+        "To replace a slow, monolithic build pipeline with a faster, unified solution.",
+        "To add new features to the investment firm's client portal.",
+        "To eliminate the need for TypeScript entirely.",
+        "To increase the complexity of the existing build configuration."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario focuses on solving the problem of slow deployment delays caused by a legacy build pipeline.",
+      "evidence": "By migrating the build process to esbuild, the firm replaces complex, multi-stage transpilation and minification steps with a unified, high-performance pipeline that handles TypeScript, JSX, and CSS bundling natively without requiring external cache management."
+    },
+    {
+      "question": "In Legacy Financial Dashboard Modernization, what is a necessary trade-off when using esbuild?",
+      "options": [
+        "It cannot bundle CSS files.",
+        "It requires a complex external cache to function.",
+        "It does not perform full TypeScript type-checking, requiring a separate tsc process.",
+        "It is slower than traditional build tools."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that esbuild omits type-checking, necessitating a separate tsc run.",
+      "evidence": "Because esbuild prioritizes speed by omitting certain complex type-checking features found in the TypeScript compiler, developers must run the tsc command separately to verify type safety"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:07.378Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:02.965Z"
+}

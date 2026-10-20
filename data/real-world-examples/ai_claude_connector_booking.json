@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_booking",
+  "title": "Corporate Retreat Logistics Automation",
+  "business": "A boutique travel agency managing off-site logistics for distributed engineering teams.",
+  "problem": "Manual coordination of accommodation searches across multiple cities often leads to inconsistent booking criteria and significant time loss for travel coordinators.",
+  "solution": "The Booking.com Claude connector allows the agency to integrate real-time accommodation search capabilities directly into the AI workspace, enabling the agent to filter properties based on specific team requirements like proximity to transit or facility amenities.",
+  "steps": [
+    "Authenticate the Booking.com connector within the Claude workspace environment.",
+    "Define the search parameters including location, dates, and specific facility requirements in the natural language prompt.",
+    "Invoke the accommodations_search tool to retrieve a filtered list of available properties.",
+    "Review the returned property metadata to select the optimal stay for the engineering team."
+  ],
+  "outcome": "Travel coordinators achieve a more streamlined workflow by consolidating search and comparison tasks within a single interface, reducing the need to switch between external travel portals.",
+  "limitation": "The connector provides search results based on current availability but does not support direct booking or payment processing, requiring users to finalize transactions on the Booking.com platform.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Accommodation Search Workflow",
+    "description": "This diagram illustrates the flow from the coordinator's request to the retrieval of property data via the connector.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Coordinator",
+        "detail": "Input: Location and requirements"
+      },
+      {
+        "id": "b",
+        "label": "Claude AI",
+        "detail": "Orchestrator"
+      },
+      {
+        "id": "c",
+        "label": "Booking.com Connector",
+        "detail": "Tool: accommodations_search"
+      },
+      {
+        "id": "d",
+        "label": "Property Data",
+        "detail": "Output: Filtered list"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sends prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes tool"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "fetches results"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "returns data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/booking",
+      "label": "Booking.com connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Corporate Retreat Logistics Automation, what is the primary benefit of using the connector?",
+      "options": [
+        "It automates the final payment processing for all team members.",
+        "It consolidates search and comparison tasks within a single interface.",
+        "It guarantees the lowest possible price for every hotel booking.",
+        "It manages the travel calendar and flight scheduling automatically."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution section highlights that the connector allows the agency to consolidate search and comparison tasks, reducing the need to switch between portals.",
+      "evidence": "Travel coordinators achieve a more streamlined workflow by consolidating search and comparison tasks within a single interface, reducing the need to switch between external travel portals."
+    },
+    {
+      "question": "In Corporate Retreat Logistics Automation, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot filter by facility amenities.",
+        "The connector only works for beach houses in Miami.",
+        "The connector does not support direct booking or payment processing.",
+        "The connector requires manual data entry for every search parameter."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that the connector lacks the capability to finalize transactions or process payments.",
+      "evidence": "The connector provides search results based on current availability but does not support direct booking or payment processing, requiring users to finalize transactions on the Booking.com platform."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:37.431Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:33.868Z"
+}

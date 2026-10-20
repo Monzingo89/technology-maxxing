@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "ring_buffer",
+  "title": "Telemetry Stream Smoothing",
+  "business": "IoT sensor networks monitoring industrial equipment",
+  "problem": "High-frequency telemetry data bursts cause memory fragmentation and excessive garbage collection overhead when using dynamic lists to buffer incoming packets.",
+  "solution": "A ring buffer provides a fixed-size, pre-allocated memory region that reuses space by wrapping read and write pointers, ensuring constant-time operations without memory reallocation.",
+  "steps": [
+    "Allocate a fixed-size array to hold the telemetry packets.",
+    "Initialize read and write indices to zero.",
+    "Write incoming data to the current write index and increment it using modulo arithmetic.",
+    "Read data from the current read index and increment it using modulo arithmetic.",
+    "Check if the write index catches up to the read index to prevent buffer overflow."
+  ],
+  "outcome": "Stable memory consumption and predictable latency for high-throughput sensor data ingestion.",
+  "limitation": "The buffer size is static; if the producer outpaces the consumer, data will be overwritten, which can be detected by checking if the write index equals the read index before a write.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Ring Buffer Data Flow",
+    "description": "Shows how data flows from sensors into a fixed array and is consumed by a processor.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor",
+        "detail": "Produces telemetry packets"
+      },
+      {
+        "id": "b",
+        "label": "Write Pointer",
+        "detail": "Tracks next insertion index"
+      },
+      {
+        "id": "c",
+        "label": "Fixed Array",
+        "detail": "Circular storage buffer"
+      },
+      {
+        "id": "d",
+        "label": "Read Pointer",
+        "detail": "Tracks next extraction index"
+      },
+      {
+        "id": "e",
+        "label": "Processor",
+        "detail": "Consumes telemetry data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "pushes data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "updates index"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "provides data"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "pulls data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Telemetry Stream Smoothing, why is a ring buffer preferred over a dynamic list?",
+      "options": [
+        "It eliminates memory fragmentation and garbage collection overhead",
+        "It allows for infinite storage of telemetry data",
+        "It automatically increases the size of the array when full",
+        "It provides faster sorting of incoming sensor packets"
+      ],
+      "answerIndex": 0,
+      "explanation": "The business problem specifically identifies dynamic lists as causing memory fragmentation and garbage collection issues, which the ring buffer solves through pre-allocation.",
+      "evidence": "High-frequency telemetry data bursts cause memory fragmentation and excessive garbage collection overhead when using dynamic lists to buffer incoming packets."
+    },
+    {
+      "question": "What is a primary limitation of the implementation in Telemetry Stream Smoothing?",
+      "options": [
+        "The read pointer cannot move faster than the write pointer",
+        "The buffer size is static and may overwrite data if the producer is too fast",
+        "The modulo arithmetic operations are computationally expensive",
+        "The buffer requires constant re-allocation of the array"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the buffer is static and data is overwritten if the producer outpaces the consumer.",
+      "evidence": "The buffer size is static; if the producer outpaces the consumer, data will be overwritten, which can be detected by checking if the write index equals the read index before a write."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:25.257Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

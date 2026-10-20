@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "topicId": "database_transaction",
+  "title": "Atomic Inventory Reconciliation for Retail Logistics",
+  "business": "Retail logistics providers managing multi-warehouse inventory updates.",
+  "problem": "In a distributed inventory system, updating stock levels across multiple tables (e.g., Warehouse_Stock and Order_Log) often fails midway due to network interruptions or constraint violations. Without atomicity, the system enters an inconsistent state where an order is recorded but stock is not deducted, leading to overselling.",
+  "solution": "Database transactions group these related operations into a single boundary. By utilizing the BEGIN, COMMIT, and ROLLBACK commands, the system ensures that either every operation in the sequence succeeds or none of them are applied, maintaining data integrity.",
+  "steps": [
+    "Initiate the transaction block using the BEGIN command to start the atomic boundary.",
+    "Execute the first data manipulation statement to decrement stock from the source warehouse table.",
+    "Execute the second data manipulation statement to insert a record into the order fulfillment log.",
+    "Evaluate the success of both operations; if any error occurs, issue a ROLLBACK to revert all changes.",
+    "Finalize the process with COMMIT to permanently save the changes to the database storage."
+  ],
+  "outcome": "The system achieves a consistent state where inventory counts always match the recorded order history, eliminating partial updates.",
+  "limitation": "Long-running transactions hold locks on rows for extended periods, which can lead to contention and block concurrent processes. This is checked by monitoring the pg_locks system view to identify sessions holding locks longer than expected.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Transaction Boundary Flow",
+    "description": "This diagram illustrates the lifecycle of a transaction from initiation to finalization or reversal.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "BEGIN",
+        "detail": "Starts the transaction block"
+      },
+      {
+        "id": "b",
+        "label": "Update Stock",
+        "detail": "Decrement inventory count"
+      },
+      {
+        "id": "c",
+        "label": "Log Order",
+        "detail": "Insert record into log"
+      },
+      {
+        "id": "d",
+        "label": "COMMIT",
+        "detail": "Persist all changes"
+      },
+      {
+        "id": "e",
+        "label": "ROLLBACK",
+        "detail": "Discard all changes"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "proceeds"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "success"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "success"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "failure"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "failure"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "BEGIN; -- Start atomic boundary\nUPDATE warehouse_stock SET qty = qty - 1 WHERE id = 101;\nINSERT INTO order_log (order_id, status) VALUES (5001, 'processed');\nCOMMIT; -- Persist changes if both succeed",
+    "explanation": "This code demonstrates the grouping of an inventory update and an order log insertion within a single transaction block."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Atomic Inventory Reconciliation for Retail Logistics, what is the primary purpose of using a transaction?",
+      "options": [
+        "To group multiple operations into a single boundary to ensure data consistency.",
+        "To increase the speed of individual SQL queries.",
+        "To automatically generate reports for warehouse managers.",
+        "To bypass the need for primary keys in the database tables."
+      ],
+      "answerIndex": 0,
+      "explanation": "Transactions ensure that related operations are treated as a single unit, preventing partial updates.",
+      "evidence": "Database transactions group these related operations into a single boundary."
+    },
+    {
+      "question": "In Atomic Inventory Reconciliation for Retail Logistics, what is a potential drawback of long-running transactions?",
+      "options": [
+        "They cause the database to run out of memory immediately.",
+        "They hold locks on rows, potentially causing contention for other processes.",
+        "They require the database to be restarted after every commit.",
+        "They prevent the use of indexes on the affected tables."
+      ],
+      "answerIndex": 1,
+      "explanation": "Holding locks for too long prevents other concurrent transactions from accessing the same data.",
+      "evidence": "Long-running transactions hold locks on rows for extended periods, which can lead to contention and block concurrent processes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:04.853Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

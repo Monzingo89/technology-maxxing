@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "aws",
+  "title": "Serverless Event-Driven Inventory Sync",
+  "business": "Retailers managing distributed inventory across multiple regional warehouses.",
+  "problem": "High latency and operational overhead when synchronizing inventory updates between legacy on-premises databases and cloud-based storefronts.",
+  "solution": "Utilize Amazon EventBridge as a serverless event bus to decouple inventory producers from consumers, triggering AWS Lambda functions to update stock levels asynchronously without managing server infrastructure.",
+  "steps": [
+    "Configure an EventBridge event bus to receive inventory update events from warehouse systems.",
+    "Define event patterns to filter specific stock change messages.",
+    "Create an AWS Lambda function to process incoming events and update the central database.",
+    "Attach the Lambda function as a target to the EventBridge rule for automated execution."
+  ],
+  "outcome": "Improved system responsiveness and reduced maintenance effort by eliminating the need to provision or scale servers for inventory processing.",
+  "limitation": "Event delivery is asynchronous, which may introduce slight delays in data consistency; verify this by monitoring Lambda execution duration and event latency metrics.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Event Flow",
+    "description": "Inventory systems push events to the bus, which triggers serverless compute.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse System",
+        "detail": "Inventory Producer"
+      },
+      {
+        "id": "b",
+        "label": "EventBridge",
+        "detail": "Serverless Event Bus"
+      },
+      {
+        "id": "c",
+        "label": "Lambda",
+        "detail": "Compute Logic"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Stock Records"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Publishes Event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Triggers Function"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Updates Record"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "def lambda_handler(event, context):\n    # Extract inventory data from the event payload\n    stock_update = event['detail']\n    # Logic to update database record\n    print(f'Updating stock for {stock_update[\"item\"]}')\n    return {'status': 'success'}",
+    "explanation": "This Lambda function acts as the consumer in the Serverless Event-Driven Inventory Sync scenario, processing events routed by EventBridge."
+  },
+  "sources": [
+    {
+      "url": "https://docs.aws.amazon.com/",
+      "label": "AWS Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Serverless Event-Driven Inventory Sync, what is the primary benefit of using Amazon EventBridge?",
+      "options": [
+        "It eliminates the need to manage server infrastructure for event routing.",
+        "It provides a relational database for inventory storage.",
+        "It forces synchronous processing of all inventory updates.",
+        "It replaces the need for AWS Lambda functions entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "EventBridge acts as a serverless event bus that decouples producers and consumers, removing the need for managing underlying server infrastructure.",
+      "evidence": "Utilize Amazon EventBridge as a serverless event bus to decouple inventory producers from consumers, triggering AWS Lambda functions to update stock levels asynchronously without managing server infrastructure."
+    },
+    {
+      "question": "Regarding the implementation of Serverless Event-Driven Inventory Sync, what is a key limitation to consider?",
+      "options": [
+        "The system cannot handle more than one warehouse.",
+        "Asynchronous delivery may cause slight delays in data consistency.",
+        "AWS Lambda cannot be used with EventBridge.",
+        "Inventory updates must be processed manually."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because the architecture is asynchronous, there is a trade-off regarding immediate data consistency which must be monitored.",
+      "evidence": "Event delivery is asynchronous, which may introduce slight delays in data consistency; verify this by monitoring Lambda execution duration and event latency metrics."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:12.524Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:08.794Z"
+}

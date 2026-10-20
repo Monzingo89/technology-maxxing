@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "azure_sql_database",
+  "title": "Modernizing Inventory Tracking with Managed SQL",
+  "business": "Retailers managing high-volume, transactional inventory data who require consistent relational database availability without manual server maintenance.",
+  "problem": "Operational overhead from managing on-premises SQL servers, including manual patching, backups, and scaling limitations during seasonal traffic spikes.",
+  "solution": "Azure SQL Database provides a managed, SQL Server-compatible relational database service that automates maintenance tasks, allowing developers to focus on schema design and application logic rather than infrastructure management.",
+  "steps": [
+    "Provision an Azure SQL Database instance via the Azure portal or CLI.",
+    "Define the relational schema using standard T-SQL DDL commands.",
+    "Configure connection strings in the application to point to the new database endpoint.",
+    "Implement automated backup and patching settings within the service configuration.",
+    "Monitor database health and resource utilization using built-in Azure tools."
+  ],
+  "outcome": "Reduced administrative burden and improved database availability through automated platform management.",
+  "limitation": "The service is a managed platform, meaning users have limited access to underlying operating system settings; verify compatibility by checking the specific SQL feature set supported by the service tier.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Data Flow",
+    "description": "Shows how application data moves into the managed database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory App",
+        "detail": "Client application layer"
+      },
+      {
+        "id": "b",
+        "label": "Azure SQL Database",
+        "detail": "Managed relational storage"
+      },
+      {
+        "id": "c",
+        "label": "Azure Portal",
+        "detail": "Management interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Transacts data"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Configures settings"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modernizing Inventory Tracking with Managed SQL, what is the primary benefit of using the solution?",
+      "options": [
+        "Automating maintenance tasks like patching and backups",
+        "Eliminating the need for relational database schemas",
+        "Providing direct access to the underlying server OS",
+        "Removing the requirement for connection strings"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution focuses on using a managed service to handle infrastructure tasks like patching and backups.",
+      "evidence": "Azure SQL Database provides a managed, SQL Server-compatible relational database service that automates maintenance tasks"
+    },
+    {
+      "question": "In Modernizing Inventory Tracking with Managed SQL, what is a noted limitation of the implementation?",
+      "options": [
+        "The service cannot handle high-volume transactions",
+        "Users have limited access to underlying operating system settings",
+        "The service requires manual installation of SQL Server software",
+        "It is incompatible with standard T-SQL DDL commands"
+      ],
+      "answerIndex": 1,
+      "explanation": "As a managed platform, Azure SQL Database abstracts the OS layer, which is a trade-off for reduced maintenance.",
+      "evidence": "The service is a managed platform, meaning users have limited access to underlying operating system settings"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:04.717Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

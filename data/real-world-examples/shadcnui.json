@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "shadcnui",
+  "title": "Unified Internal Dashboard Standardization",
+  "business": "Internal enterprise teams managing fragmented legacy admin panels.",
+  "problem": "Teams struggle with inconsistent UI patterns and rigid third-party component libraries that prevent deep customization, leading to high maintenance overhead when design requirements evolve.",
+  "solution": "By adopting shadcn/ui, the organization moves from consuming opaque NPM packages to owning the component source code, allowing developers to modify Tailwind CSS classes and React logic directly within their local project structure.",
+  "steps": [
+    "Initialize the project using the shadcn/ui CLI to create the components directory.",
+    "Add specific components like Button, Card, and Table to the local registry.",
+    "Modify the source code of the installed components to match internal brand guidelines.",
+    "Utilize the shared composable interface to build complex dashboard views.",
+    "Commit the component source code directly to the application repository."
+  ],
+  "outcome": "A consistent, fully owned design system that allows for rapid, granular UI updates without fighting against external library abstractions.",
+  "limitation": "Because the code is copied locally, upstream updates to the original shadcn/ui library are not automatically applied, requiring manual synchronization or careful tracking of component changes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Component Ownership Workflow",
+    "description": "This diagram shows how shadcn/ui moves components from a distribution source into the local codebase for modification.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "shadcn/ui CLI",
+        "detail": "Tool for component distribution"
+      },
+      {
+        "id": "b",
+        "label": "Local /components Folder",
+        "detail": "Directly editable source code"
+      },
+      {
+        "id": "c",
+        "label": "Tailwind CSS",
+        "detail": "Styling engine for customization"
+      },
+      {
+        "id": "d",
+        "label": "Final Dashboard UI",
+        "detail": "The rendered application"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "installs source code"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "applies styles"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "renders components"
+      }
+    ]
+  },
+  "code": {
+    "language": "tsx",
+    "content": "import { Button } from \"@/components/ui/button\"; // Import locally owned component\n\nexport function AdminPanel() {\n  return (\n    <Button variant=\"outline\" className=\"border-blue-500\"> // Direct class modification\n      Update Records\n    </Button>\n  );\n}",
+    "explanation": "This maps to the solution by demonstrating how the developer imports a locally owned component and modifies its Tailwind classes directly, rather than overriding a locked library component."
+  },
+  "sources": [
+    {
+      "url": "https://ui.shadcn.com/docs",
+      "label": "shadcn/ui Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Internal Dashboard Standardization, what is the primary benefit of the solution?",
+      "options": [
+        "Automatic updates from the cloud",
+        "Full ownership and direct modification of component source code",
+        "Reduced bundle size via NPM dependency management",
+        "Pre-built backend integration for admin panels"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution emphasizes owning the source code to allow for granular customization, which is the core value proposition of shadcn/ui.",
+      "evidence": "By adopting shadcn/ui, the organization moves from consuming opaque NPM packages to owning the component source code, allowing developers to modify Tailwind CSS classes and React logic directly within their local project structure."
+    },
+    {
+      "question": "In Unified Internal Dashboard Standardization, what is the main limitation of the implementation?",
+      "options": [
+        "Incompatibility with Tailwind CSS",
+        "Lack of accessibility features",
+        "Manual effort required to track upstream changes",
+        "Inability to use React components"
+      ],
+      "answerIndex": 2,
+      "explanation": "Since the code is copied locally, the developer loses the automatic update path provided by traditional NPM packages.",
+      "evidence": "Because the code is copied locally, upstream updates to the original shadcn/ui library are not automatically applied, requiring manual synchronization or careful tracking of component changes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:01.369Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:57.446Z"
+}

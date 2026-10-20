@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "csharp",
+  "title": "Asynchronous Inventory Reconciliation",
+  "business": "A regional logistics firm managing high-frequency warehouse stock updates across multiple distributed nodes.",
+  "problem": "Synchronous blocking calls during inventory updates cause thread pool starvation, leading to latency spikes and timeouts when the database experiences high contention.",
+  "solution": "Utilizing C# asynchronous programming patterns with the Task-based Asynchronous Pattern (TAP) allows the system to release threads back to the pool while awaiting I/O-bound operations, maintaining responsiveness.",
+  "steps": [
+    "Define asynchronous methods using the async keyword to enable non-blocking execution.",
+    "Replace synchronous I/O calls with their Task-returning counterparts, such as ReadAsync or WriteAsync.",
+    "Use the await keyword to pause method execution until the task completes without blocking the calling thread.",
+    "Implement CancellationToken to allow graceful cancellation of long-running inventory synchronization tasks.",
+    "Configure Task.WhenAll to execute multiple independent inventory updates concurrently for improved throughput."
+  ],
+  "outcome": "Improved system scalability and reduced thread contention, allowing the application to handle higher concurrent request volumes without increasing hardware resources.",
+  "limitation": "The primary trade-off is increased complexity in exception handling and state management; developers must ensure that asynchronous state machines do not inadvertently capture and hold large objects in memory, which can be verified by monitoring the Managed Heap size and GC collection frequency.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Async Inventory Update Flow",
+    "description": "This diagram illustrates the non-blocking flow of an inventory update request.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Request",
+        "detail": "Initiates inventory change"
+      },
+      {
+        "id": "b",
+        "label": "Async Controller",
+        "detail": "Entry point for async task"
+      },
+      {
+        "id": "c",
+        "label": "Thread Pool",
+        "detail": "Available for other tasks"
+      },
+      {
+        "id": "d",
+        "label": "Database I/O",
+        "detail": "Awaiting completion"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "awaits"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "releases thread"
+      }
+    ]
+  },
+  "code": {
+    "language": "csharp",
+    "content": "public async Task UpdateStockAsync(int itemId, int quantity, CancellationToken ct) {\n    // Await non-blocking I/O operation\n    await _db.Items.Where(i => i.Id == itemId)\n                   .ExecuteUpdateAsync(s => s.SetProperty(i => i.Count, quantity), ct);\n}",
+    "explanation": "This code demonstrates the use of the async keyword and the await operator to perform a database update without blocking the calling thread, mapping directly to the solution of using TAP for inventory reconciliation."
+  },
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/dotnet/csharp/",
+      "label": "C# Guide - .NET managed language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Asynchronous Inventory Reconciliation, why is the Task-based Asynchronous Pattern (TAP) used?",
+      "options": [
+        "To eliminate the need for database transactions.",
+        "To prevent thread pool starvation during I/O-bound operations.",
+        "To increase the CPU clock speed of the server.",
+        "To bypass the C# type system for faster execution."
+      ],
+      "answerIndex": 1,
+      "explanation": "The problem states that synchronous calls cause thread pool starvation, and the solution explicitly identifies TAP as the method to release threads back to the pool.",
+      "evidence": "Synchronous blocking calls during inventory updates cause thread pool starvation, leading to latency spikes and timeouts when the database experiences high contention."
+    },
+    {
+      "question": "In Asynchronous Inventory Reconciliation, what is a key limitation of the proposed implementation?",
+      "options": [
+        "It requires a complete rewrite of the database schema.",
+        "It increases the complexity of exception handling and state management.",
+        "It prevents the use of CancellationToken.",
+        "It is incompatible with the .NET managed language runtime."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that increased complexity in exception handling and state management is the primary trade-off.",
+      "evidence": "The primary trade-off is increased complexity in exception handling and state management; developers must ensure that asynchronous state machines do not inadvertently capture and hold large objects in memory"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:52.034Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:48.291Z"
+}

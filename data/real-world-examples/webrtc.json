@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "topicId": "webrtc",
+  "title": "Remote Collaborative Architectural Review",
+  "business": "A global architecture firm requiring real-time visual collaboration between field engineers and office-based lead architects.",
+  "problem": "High-latency video conferencing tools introduce significant lag during complex structural inspections, preventing precise communication and causing costly delays in project approval.",
+  "solution": "WebRTC enables peer-to-peer media streaming directly between the field engineer's mobile browser and the architect's desktop, bypassing centralized media servers to minimize latency.",
+  "steps": [
+    "Request user permission to access the device camera and microphone using the browser media API.",
+    "Initialize an RTCPeerConnection object to manage the connection state and media tracks.",
+    "Exchange session descriptions (SDP) via a signaling server to establish the peer-to-peer handshake.",
+    "Add local media streams to the connection and handle incoming remote streams for rendering in the UI."
+  ],
+  "outcome": "Architects experience near-instantaneous visual feedback from the field, allowing for accurate, real-time structural assessments without the lag typical of relayed video services.",
+  "limitation": "WebRTC relies on NAT traversal techniques like ICE candidates to establish connections; if strict corporate firewalls block these, the connection will fail, which can be verified by monitoring the ICE connection state changes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "WebRTC Peer Connection Flow",
+    "description": "This diagram illustrates the flow of media and signaling between two peers.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Field Engineer",
+        "detail": "Source of video stream"
+      },
+      {
+        "id": "b",
+        "label": "Signaling Server",
+        "detail": "Exchanges connection metadata"
+      },
+      {
+        "id": "c",
+        "label": "Lead Architect",
+        "detail": "Receiver of video stream"
+      },
+      {
+        "id": "d",
+        "label": "Media Stream",
+        "detail": "Real-time audio/video data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends SDP Offer"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Forwards SDP Offer"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Sends SDP Answer"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Forwards SDP Answer"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Direct P2P Media Stream"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const pc = new RTCPeerConnection(); // Initialize connection\nconst stream = await navigator.mediaDevices.getUserMedia({video: true, audio: true}); // Access hardware\nstream.getTracks().forEach(track => pc.addTrack(track, stream)); // Add media to peer connection",
+    "explanation": "This code demonstrates the initial steps of accessing hardware and binding media tracks to a peer connection for the Remote Collaborative Architectural Review."
+  },
+  "sources": [
+    {
+      "url": "https://webrtc.org/",
+      "label": "WebRTC"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Remote Collaborative Architectural Review, why is WebRTC chosen over traditional conferencing tools?",
+      "options": [
+        "It bypasses centralized media servers to minimize latency.",
+        "It provides higher resolution video than standard tools.",
+        "It automatically archives all project structural data.",
+        "It eliminates the need for a signaling server."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that WebRTC is used to bypass centralized servers to reduce the lag that causes delays in structural inspections.",
+      "evidence": "WebRTC enables peer-to-peer media streaming directly between the field engineer's mobile browser and the architect's desktop, bypassing centralized media servers to minimize latency."
+    },
+    {
+      "question": "In Remote Collaborative Architectural Review, what is a primary technical limitation to monitor?",
+      "options": [
+        "The browser's inability to access the camera.",
+        "The failure of NAT traversal through strict firewalls.",
+        "The lack of support for audio streaming.",
+        "The requirement for a paid subscription service."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that strict firewalls can block ICE candidates, which are necessary for NAT traversal in WebRTC.",
+      "evidence": "WebRTC relies on NAT traversal techniques like ICE candidates to establish connections; if strict corporate firewalls block these, the connection will fail, which can be verified by monitoring the ICE connection state changes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:31.343Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:27.350Z"
+}

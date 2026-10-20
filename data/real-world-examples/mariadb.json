@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "mariadb",
+  "title": "Inventory Synchronization for Regional Retailers",
+  "business": "A regional retail chain managing inventory across multiple physical storefronts and a centralized e-commerce platform.",
+  "problem": "The retailer faces data inconsistency where local store inventory updates are not reflected in the central database in real-time, leading to overselling of items during high-traffic periods.",
+  "solution": "Implementing MariaDB Galera Cluster provides synchronous multi-master replication, ensuring that every node in the cluster contains the same data set at all times, allowing any node to handle read and write operations reliably.",
+  "steps": [
+    "Configure individual MariaDB Server instances on separate network nodes.",
+    "Install and enable the wsrep provider plugin to manage cluster state synchronization.",
+    "Define the cluster address and node address in the configuration files to establish peer discovery.",
+    "Initialize the cluster on the primary node and join subsequent nodes to the existing cluster.",
+    "Verify cluster status using the wsrep_local_state_comment variable to ensure all nodes are in sync."
+  ],
+  "outcome": "The retailer achieves high availability and strong consistency across all locations, preventing inventory discrepancies and improving the customer checkout experience.",
+  "limitation": "A significant tradeoff is the write latency overhead caused by the synchronous replication protocol, which requires all nodes to agree on a transaction before it is committed; this can be checked by monitoring the wsrep_flow_control_paused status variable.",
+  "diagram": {
+    "kind": "er",
+    "title": "Inventory Cluster Topology",
+    "description": "This diagram illustrates how regional store nodes synchronize with the central cluster.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Store_Node_1",
+        "detail": "Local inventory database"
+      },
+      {
+        "id": "b",
+        "label": "Store_Node_2",
+        "detail": "Local inventory database"
+      },
+      {
+        "id": "c",
+        "label": "Central_Cluster",
+        "detail": "Galera Cluster Coordinator"
+      },
+      {
+        "id": "d",
+        "label": "E-commerce_API",
+        "detail": "Read/Write interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Synchronous Replication"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Synchronous Replication"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Transaction Commit"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://mariadb.com/docs/",
+      "label": "MariaDB Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Inventory Synchronization for Regional Retailers, what is the primary reason for adopting MariaDB Galera Cluster?",
+      "options": [
+        "To enable synchronous multi-master replication for data consistency",
+        "To reduce the total number of database servers required",
+        "To provide a read-only archive for historical inventory data",
+        "To automatically migrate data from MySQL to MariaDB"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies data inconsistency as the core problem, which Galera Cluster solves through synchronous replication.",
+      "evidence": "Implementing MariaDB Galera Cluster provides synchronous multi-master replication, ensuring that every node in the cluster contains the same data set at all times"
+    },
+    {
+      "question": "In Inventory Synchronization for Regional Retailers, what is the identified tradeoff of the chosen solution?",
+      "options": [
+        "Increased risk of data loss during power outages",
+        "Write latency overhead due to synchronous transaction commitment",
+        "Inability to perform read operations on secondary nodes",
+        "Requirement for specialized proprietary hardware"
+      ],
+      "answerIndex": 1,
+      "explanation": "Synchronous replication requires coordination across nodes, which introduces latency during the commit phase.",
+      "evidence": "A significant tradeoff is the write latency overhead caused by the synchronous replication protocol, which requires all nodes to agree on a transaction before it is committed"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:19.292Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:15.186Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_supermetrics",
+  "title": "Unified Cross-Channel Campaign Synthesis for Boutique Retailers",
+  "business": "Boutique e-commerce brands managing fragmented advertising budgets across Google Ads, Meta, and TikTok.",
+  "problem": "Marketing teams struggle with manual data consolidation, leading to delayed insights and an inability to compare performance across disparate social and search platforms in a single interface.",
+  "solution": "The Supermetrics Marketing Analytics connector for Claude enables direct, natural language queries against 200+ data sources. By utilizing the data_query and data_source_discovery tools, the system pulls raw performance metrics into the Claude environment, allowing for automated synthesis and comparative analysis without manual spreadsheet exports.",
+  "steps": [
+    "Authenticate the Supermetrics MCP server within the Claude environment using the provided connector URL.",
+    "Execute data_source_discovery to map available accounts across Google Ads, Facebook Ads, and TikTok.",
+    "Define specific metrics and dimensions using the data_query tool to pull cross-platform performance data.",
+    "Instruct Claude to synthesize the retrieved data into a comparative summary of campaign effectiveness.",
+    "Review the generated insights and iterate by adjusting the query parameters if data granularity is insufficient."
+  ],
+  "outcome": "A centralized, conversational interface for performance monitoring that eliminates the need for manual data aggregation and allows for rapid, cross-channel strategic adjustments.",
+  "limitation": "The connector relies on the accuracy of the underlying API responses from the 200+ integrated platforms; users must verify data integrity by cross-referencing the raw output of the get_async_query_results tool against the native platform dashboards.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Synthesis Workflow",
+    "description": "This diagram illustrates how marketing data flows from external platforms into the Claude analysis environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Ad Platforms",
+        "detail": "Google, Meta, TikTok"
+      },
+      {
+        "id": "b",
+        "label": "Supermetrics MCP",
+        "detail": "Connector Interface"
+      },
+      {
+        "id": "c",
+        "label": "Claude AI",
+        "detail": "Analysis Engine"
+      },
+      {
+        "id": "d",
+        "label": "Marketing Insights",
+        "detail": "Final Output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "data_query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "get_async_query_results"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "synthesis"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/supermetrics",
+      "label": "Supermetrics Marketing Analytics connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Cross-Channel Campaign Synthesis for Boutique Retailers, what is the primary problem addressed by the Supermetrics connector?",
+      "options": [
+        "Manual data consolidation and delayed insights across fragmented platforms.",
+        "The lack of available advertising platforms in the current market.",
+        "High costs associated with hiring external data analysts.",
+        "The inability to create visual charts within the Claude interface."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the core issue as the struggle with manual data consolidation leading to delayed insights.",
+      "evidence": "Marketing teams struggle with manual data consolidation, leading to delayed insights and an inability to compare performance across disparate social and search platforms in a single interface."
+    },
+    {
+      "question": "In Unified Cross-Channel Campaign Synthesis for Boutique Retailers, what is the stated limitation of the implementation?",
+      "options": [
+        "The connector cannot access more than 50 data sources simultaneously.",
+        "The system requires manual verification of data against native platform dashboards.",
+        "The connector is incompatible with Google Ads and TikTok.",
+        "The system cannot process asynchronous query results."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the need to verify data integrity against native dashboards.",
+      "evidence": "The connector relies on the accuracy of the underlying API responses from the 200+ integrated platforms; users must verify data integrity by cross-referencing the raw output of the get_async_query_results tool against the native platform dashboards."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:45.666Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:41.878Z"
+}

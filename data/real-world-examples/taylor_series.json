@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "taylor_series",
+  "title": "Optimizing Signal Processing Latency",
+  "business": "Embedded systems engineers developing real-time audio filters.",
+  "problem": "High-latency transcendental function calls (like sine or log) in inner processing loops cause audio buffer underruns.",
+  "solution": "Replace expensive function calls with low-degree Taylor polynomials centered at a stable operating point to approximate values with minimal CPU cycles.",
+  "steps": [
+    "Identify the critical operating range for the input variable x near a stable center point a.",
+    "Calculate the derivatives of the target function f(x) up to the desired order n at point a.",
+    "Construct the Taylor polynomial p_n(x) using the formula c_n = f^(n)(a) / n!.",
+    "Implement the polynomial as a series of additions and multiplications to avoid transcendental function overhead.",
+    "Verify the approximation error using Taylor’s theorem with remainder to ensure it stays within audio fidelity requirements."
+  ],
+  "outcome": "Reduced computational overhead per sample, allowing for higher throughput and lower latency in real-time audio processing.",
+  "limitation": "The approximation accuracy degrades rapidly as the input x moves away from the center point a, requiring periodic re-centering or higher-order polynomials to maintain precision.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Polynomial Approximation Workflow",
+    "description": "The process of replacing a complex function with a computationally efficient polynomial approximation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Target Function",
+        "detail": "Complex function f(x) causing latency"
+      },
+      {
+        "id": "b",
+        "label": "Derivatives",
+        "detail": "Calculate f'(a), f''(a), etc."
+      },
+      {
+        "id": "c",
+        "label": "Taylor Polynomial",
+        "detail": "Construct p_n(x) = sum(c_n * (x-a)^n)"
+      },
+      {
+        "id": "d",
+        "label": "Error Check",
+        "detail": "Verify |R_n(x)| <= M/(n+1)! * |x-a|^(n+1)"
+      },
+      {
+        "id": "e",
+        "label": "Deployment",
+        "detail": "Execute optimized polynomial in loop"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "differentiate"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "compute coefficients"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "bound remainder"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "validate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://openstax.org/books/calculus-volume-2/pages/6-3-taylor-and-maclaurin-series",
+      "label": "6.3 Taylor and Maclaurin Series - Calculus Volume 2 | OpenStax"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Signal Processing Latency, why are Taylor polynomials used instead of standard transcendental functions?",
+      "options": [
+        "To eliminate the need for derivatives entirely",
+        "To reduce computational overhead per sample",
+        "To ensure the series converges for all real numbers",
+        "To simplify the calculation of the remainder"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that standard function calls cause latency, and the solution uses polynomials to avoid this overhead.",
+      "evidence": "Reduced computational overhead per sample, allowing for higher throughput and lower latency in real-time audio processing."
+    },
+    {
+      "question": "What is a primary limitation of the approach described in Optimizing Signal Processing Latency?",
+      "options": [
+        "The polynomial requires infinite terms to be accurate",
+        "The approximation accuracy degrades as x moves away from the center a",
+        "The derivatives cannot be calculated for transcendental functions",
+        "The remainder R_n(x) always increases as the order n increases"
+      ],
+      "answerIndex": 1,
+      "explanation": "Taylor polynomials are local approximations; their accuracy is highest near the center point and decreases as the input deviates.",
+      "evidence": "The approximation accuracy degrades rapidly as the input x moves away from the center point a, requiring periodic re-centering or higher-order polynomials to maintain precision."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:01.229Z",
+  "sourceRetrievedAt": "2026-10-18T01:11:57.302Z"
+}

@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "objectivec",
+  "title": "Dynamic Message Dispatch for Plugin Architectures",
+  "business": "Developers building modular iOS applications that require third-party plugin integration without recompiling the core application.",
+  "problem": "Static linking prevents the core application from invoking methods on dynamically loaded modules because the compiler lacks the necessary interface definitions at build time.",
+  "solution": "Objective-C utilizes a dynamic runtime that defers method binding until execution. By sending messages to objects, the runtime searches the object's class hierarchy for a matching selector, allowing the app to interact with plugins that were not present during the initial compilation.",
+  "steps": [
+    "Define a common protocol that both the host application and the plugin module adopt to ensure interface consistency.",
+    "Load the external plugin bundle into the application process at runtime using NSBundle.",
+    "Instantiate the plugin class dynamically using the runtime system.",
+    "Send messages to the instantiated object using the selector defined in the protocol.",
+    "Handle potential runtime errors using NSError if the plugin fails to respond to the expected message."
+  ],
+  "outcome": "The application achieves high extensibility, enabling the loading of new features as separate bundles that communicate seamlessly with the core system via dynamic message dispatch.",
+  "limitation": "Dynamic dispatch introduces a slight runtime overhead compared to static function calls. Developers can check for performance bottlenecks by profiling the application in Instruments to monitor message-sending frequency in tight loops.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Dynamic Message Dispatch Flow",
+    "description": "The flow illustrates how the host app interacts with a plugin via the Objective-C runtime.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Host App",
+        "detail": "Core application logic"
+      },
+      {
+        "id": "b",
+        "label": "NSBundle",
+        "detail": "Loads external code"
+      },
+      {
+        "id": "c",
+        "label": "Plugin Object",
+        "detail": "Dynamically loaded instance"
+      },
+      {
+        "id": "d",
+        "label": "Runtime System",
+        "detail": "Performs message lookup"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Loads bundle"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Instantiates class"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "Sends message"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Dispatches to method"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/Introduction/Introduction.html",
+      "label": "About Objective-C"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Message Dispatch for Plugin Architectures, how does the application interact with plugins not known at compile time?",
+      "options": [
+        "By using the dynamic runtime to defer method binding until execution.",
+        "By recompiling the core application every time a plugin is added.",
+        "By using static linking to force interface definitions.",
+        "By converting all plugin methods into C-style primitive types."
+      ],
+      "answerIndex": 0,
+      "explanation": "The Objective-C runtime allows for dynamic binding, which is essential for interacting with objects whose interfaces are resolved at runtime rather than compile time.",
+      "evidence": "Objective-C utilizes a dynamic runtime that defers method binding until execution. By sending messages to objects, the runtime searches the object's class hierarchy for a matching selector, allowing the app to interact with plugins that were not present during the initial compilation."
+    },
+    {
+      "question": "In Dynamic Message Dispatch for Plugin Architectures, what is a primary trade-off of using dynamic dispatch?",
+      "options": [
+        "It prevents the use of protocols for interface definition.",
+        "It requires manual memory management for all objects.",
+        "It introduces a slight runtime overhead compared to static calls.",
+        "It forces all errors to be handled via exceptions."
+      ],
+      "answerIndex": 2,
+      "explanation": "Dynamic dispatch provides flexibility but incurs a performance cost because the runtime must perform a lookup for each message sent.",
+      "evidence": "Dynamic dispatch introduces a slight runtime overhead compared to static function calls."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:39.595Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:35.792Z"
+}

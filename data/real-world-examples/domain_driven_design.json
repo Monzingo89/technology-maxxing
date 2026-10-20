@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "domain_driven_design",
+  "title": "Autonomous Logistics Orchestration",
+  "business": "Global freight forwarding firms managing multi-modal transport networks.",
+  "problem": "Monolithic software architectures fail to distinguish between the distinct business rules of international customs compliance and local last-mile delivery, leading to rigid, error-prone codebases that cannot adapt to regional regulatory shifts.",
+  "solution": "Applying Domain-Driven Design (DDD) to decompose the system into Bounded Contexts, ensuring that the 'Customs' domain model remains decoupled from the 'Delivery' domain model, even when they share data entities like 'Shipment'.",
+  "steps": [
+    "Identify core domains through event storming with domain experts to define clear boundaries.",
+    "Establish a Ubiquitous Language that standardizes terminology across both technical and business teams.",
+    "Define Bounded Contexts to isolate the Customs Compliance engine from the Last-Mile Dispatch logic.",
+    "Implement an Anti-Corruption Layer (ACL) to translate data between the legacy Shipment database and the new domain-specific services.",
+    "Refine the domain model iteratively to ensure it reflects current business rules rather than database schema constraints."
+  ],
+  "outcome": "Improved system maintainability and the ability to update regional compliance logic without disrupting core delivery operations.",
+  "limitation": "The primary tradeoff is increased architectural complexity due to the overhead of maintaining multiple models and translation layers; this can be checked by monitoring the frequency of cross-context integration failures.",
+  "diagram": {
+    "kind": "er",
+    "title": "Bounded Context Relationship",
+    "description": "Shows how the Shipment entity is interpreted differently across two distinct business domains.",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Customs Context",
+        "detail": "Handles tariffs and legal declarations"
+      },
+      {
+        "id": "B",
+        "label": "Delivery Context",
+        "detail": "Handles routing and driver assignment"
+      },
+      {
+        "id": "C",
+        "label": "Shipment Entity",
+        "detail": "Shared data object"
+      },
+      {
+        "id": "D",
+        "label": "Anti-Corruption Layer",
+        "detail": "Translation service"
+      }
+    ],
+    "edges": [
+      {
+        "from": "C",
+        "to": "A",
+        "label": "1:1 (Compliance View)"
+      },
+      {
+        "from": "C",
+        "to": "B",
+        "label": "1:N (Logistics View)"
+      },
+      {
+        "from": "B",
+        "to": "D",
+        "label": "Requests data via"
+      },
+      {
+        "from": "D",
+        "to": "A",
+        "label": "Translates to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://domainlanguage.com/",
+      "label": "Home - Domain Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Autonomous Logistics Orchestration, what is the primary purpose of applying Bounded Contexts?",
+      "options": [
+        "To reduce the total number of database tables in the system",
+        "To isolate distinct business rules and prevent logic leakage between domains",
+        "To replace all legacy code with artificial intelligence components",
+        "To increase the speed of the user interface rendering"
+      ],
+      "answerIndex": 1,
+      "explanation": "Bounded Contexts are used to separate different areas of the business so that specific rules, like customs compliance, do not interfere with other areas like delivery.",
+      "evidence": "Define Bounded Contexts to isolate the Customs Compliance engine from the Last-Mile Dispatch logic."
+    },
+    {
+      "question": "In Autonomous Logistics Orchestration, what is a known limitation of this architectural approach?",
+      "options": [
+        "It prevents the use of any cloud-based infrastructure",
+        "It requires all developers to be experts in international law",
+        "It introduces increased architectural complexity due to multiple models and translation layers",
+        "It makes the system impossible to update once deployed"
+      ],
+      "answerIndex": 2,
+      "explanation": "DDD introduces complexity because you must manage multiple models and ensure they communicate correctly, which is a noted tradeoff.",
+      "evidence": "The primary tradeoff is increased architectural complexity due to the overhead of maintaining multiple models and translation layers; this can be checked by monitoring the frequency of cross-context integration failures."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:48.787Z"
+}

@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "topicId": "consul",
+  "title": "Dynamic Service Discovery for Retail Inventory",
+  "business": "A regional retail chain managing distributed inventory microservices across hybrid cloud environments.",
+  "problem": "Manual IP address management and static configuration files cause frequent service outages when inventory nodes scale or migrate, leading to failed customer orders.",
+  "solution": "Consul provides a centralized service registry and health checking mechanism that allows services to dynamically discover each other's network locations without manual intervention.",
+  "steps": [
+    "Deploy Consul server agents in a cluster to maintain the global service registry state.",
+    "Install Consul client agents on every node running inventory microservices to facilitate local communication.",
+    "Define service configurations including health checks to ensure only operational instances are discoverable.",
+    "Register inventory services with the local Consul agent to enable automatic catalog updates.",
+    "Configure applications to query the Consul DNS interface or HTTP API for real-time service locations."
+  ],
+  "outcome": "Inventory microservices achieve seamless connectivity and automated recovery, as the network topology updates instantly when instances are added or removed.",
+  "limitation": "The primary trade-off is the dependency on the Consul control plane; if the server cluster becomes unreachable, new service lookups will fail, which can be monitored by checking the health status of the Consul server nodes via the HTTP API.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Service Discovery Workflow",
+    "description": "Explains how inventory services register and discover peers via the Consul agent.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory Service",
+        "detail": "Application workload"
+      },
+      {
+        "id": "b",
+        "label": "Consul Client Agent",
+        "detail": "Local node daemon"
+      },
+      {
+        "id": "c",
+        "label": "Consul Server Cluster",
+        "detail": "Global registry state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "registers service"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "syncs catalog"
+      },
+      {
+        "from": "a",
+        "to": "b",
+        "label": "queries peer location"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.hashicorp.com/consul/docs",
+      "label": "Consul Documentation | Consul | HashiCorp Developer"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Service Discovery for Retail Inventory, what is the primary problem addressed by the solution?",
+      "options": [
+        "Manual IP address management and static configuration files causing outages",
+        "High latency in cross-region database replication",
+        "Lack of encryption for internal service communication",
+        "Inability to scale the number of retail store locations"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies manual configuration as the root cause of service outages.",
+      "evidence": "Manual IP address management and static configuration files cause frequent service outages when inventory nodes scale or migrate, leading to failed customer orders."
+    },
+    {
+      "question": "In Dynamic Service Discovery for Retail Inventory, what is a key limitation of the implementation?",
+      "options": [
+        "The system requires manual updates to DNS records",
+        "The dependency on the Consul control plane for service lookups",
+        "The inability to run in hybrid cloud environments",
+        "The requirement for specialized hardware for agents"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes the reliance on the Consul server cluster for lookups.",
+      "evidence": "The primary trade-off is the dependency on the Consul control plane; if the server cluster becomes unreachable, new service lookups will fail, which can be monitored by checking the health status of the Consul server nodes via the HTTP API."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:15.919Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:12.156Z"
+}

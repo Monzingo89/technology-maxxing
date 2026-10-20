@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "aws_elasticache",
+  "title": "Real-time Inventory Synchronization for Global Retailers",
+  "business": "A global e-commerce retailer managing high-frequency inventory updates across multiple storefronts.",
+  "problem": "The primary relational database experiences excessive read latency during peak shopping events, as thousands of concurrent users query real-time stock levels, leading to stale data and potential overselling.",
+  "solution": "Implementing Amazon ElastiCache as an in-memory data store allows the application to offload read-heavy inventory lookups from the primary database. By caching frequently accessed stock counts in a Valkey or Redis OSS engine, the system serves requests with sub-millisecond latency, ensuring users see accurate availability without overloading the persistent storage layer.",
+  "steps": [
+    "Provision an Amazon ElastiCache cluster using the Valkey or Redis OSS engine within a private VPC subnet.",
+    "Configure the application layer to implement a cache-aside pattern, checking the cache for inventory keys before querying the primary database.",
+    "Set an appropriate Time-to-Live (TTL) on inventory keys to balance data freshness with cache hit ratios.",
+    "Update the cache layer whenever a successful transaction occurs in the primary database to maintain consistency.",
+    "Monitor cache eviction rates and memory utilization to ensure the cluster size is sufficient for the workload."
+  ],
+  "outcome": "The application achieves significantly reduced database CPU utilization and consistent inventory visibility, preventing overselling during high-traffic periods.",
+  "limitation": "A primary limitation is the risk of data inconsistency between the cache and the primary database if the cache update fails or if network partitions occur. This can be checked by monitoring the cache hit ratio and comparing cache values against the source of truth in the primary database during off-peak windows.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Cache-Aside Workflow",
+    "description": "This diagram illustrates how the application interacts with the cache and database to retrieve inventory data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Request",
+        "detail": "Incoming request for item stock"
+      },
+      {
+        "id": "b",
+        "label": "Application Layer",
+        "detail": "Logic to check cache first"
+      },
+      {
+        "id": "c",
+        "label": "ElastiCache",
+        "detail": "In-memory key-value store"
+      },
+      {
+        "id": "d",
+        "label": "Primary Database",
+        "detail": "Persistent relational storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Query Stock"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Check Cache"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Return Value"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Cache Miss / Update"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services Overview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Synchronization for Global Retailers, why is Amazon ElastiCache used?",
+      "options": [
+        "To offload read-heavy inventory lookups from the primary database.",
+        "To replace the primary database entirely for all transactions.",
+        "To provide long-term cold storage for historical sales data.",
+        "To manage user authentication tokens exclusively."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that the primary database suffers from high latency during peak events, and ElastiCache is used to offload these reads.",
+      "evidence": "Implementing Amazon ElastiCache as an in-memory data store allows the application to offload read-heavy inventory lookups from the primary database."
+    },
+    {
+      "question": "In Real-time Inventory Synchronization for Global Retailers, what is a key limitation of the implementation?",
+      "options": [
+        "The cache will always be faster than the database.",
+        "The risk of data inconsistency between the cache and the primary database.",
+        "The requirement to use only Memcached engines.",
+        "The inability to scale the cluster horizontally."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text identifies the risk of inconsistency between the cache and the source of truth as a primary limitation.",
+      "evidence": "A primary limitation is the risk of data inconsistency between the cache and the primary database if the cache update fails or if network partitions occur."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:06.188Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_todoist",
+  "title": "Automated Project Task Orchestration for Creative Agencies",
+  "business": "A mid-sized creative agency managing hundreds of concurrent client deliverables across distributed teams.",
+  "problem": "Project managers spend excessive time manually cross-referencing client emails with Todoist task lists, leading to missed deadlines and fragmented communication when status updates are not synchronized.",
+  "solution": "By integrating the Claude Todoist connector, the agency enables Claude to directly query project status, identify overdue items, and programmatically update task completion states based on natural language summaries of client feedback.",
+  "steps": [
+    "Authenticate the Claude Todoist connector via the marketplace interface to grant read/write access to specific project boards.",
+    "Define a system prompt for Claude that instructs it to scan for tasks matching specific client project tags using the find-tasks tool.",
+    "Configure Claude to trigger the complete-tasks tool once a task's sub-requirements are verified against provided documentation.",
+    "Implement a periodic review loop where Claude fetches updated task lists to reconcile progress against the original project scope."
+  ],
+  "outcome": "Project managers achieve higher operational velocity by offloading the administrative burden of task status updates and synchronization to an automated assistant that maintains context across client communications.",
+  "limitation": "The connector relies on the accuracy of natural language interpretation; if task naming conventions are inconsistent, Claude may fail to identify the correct task, requiring manual verification of the tool's output logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Task Orchestration Workflow",
+    "description": "This flow shows how Claude interacts with Todoist to manage project tasks.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Email",
+        "detail": "Input source containing task updates"
+      },
+      {
+        "id": "b",
+        "label": "Claude AI",
+        "detail": "Orchestrator processing natural language"
+      },
+      {
+        "id": "c",
+        "label": "Todoist API",
+        "detail": "Connector interface"
+      },
+      {
+        "id": "d",
+        "label": "Task Database",
+        "detail": "Persistent storage of project items"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Parses updates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calls find-tasks/complete-tasks"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Executes state change"
+      }
+    ]
+  },
+  "code": {
+    "language": "json",
+    "content": "{\n  \"tool\": \"complete-tasks\",\n  \"parameters\": {\n    \"task_id\": \"12345\",\n    \"status\": \"completed\" // Marks the specific task as finished\n  }\n}",
+    "explanation": "This snippet illustrates the tool call structure used by Claude to interact with the Todoist connector to finalize a task identified during the project orchestration process."
+  },
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/todoist",
+      "label": "Todoist connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Project Task Orchestration for Creative Agencies, what is the primary problem addressed by the connector?",
+      "options": [
+        "Project managers spend excessive time manually cross-referencing client emails with Todoist task lists.",
+        "The agency lacks sufficient storage space for project documentation.",
+        "Creative team members are unable to access their email accounts.",
+        "The Todoist API is frequently offline during business hours."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the manual effort of cross-referencing emails and task lists as the core inefficiency.",
+      "evidence": "Project managers spend excessive time manually cross-referencing client emails with Todoist task lists, leading to missed deadlines and fragmented communication when status updates are not synchronized."
+    },
+    {
+      "question": "What is a known limitation when implementing the Automated Project Task Orchestration for Creative Agencies solution?",
+      "options": [
+        "The connector cannot connect to multiple Todoist projects simultaneously.",
+        "Claude requires a paid subscription to access the Todoist API.",
+        "Inconsistent task naming conventions may cause Claude to fail to identify the correct task.",
+        "The connector only supports task creation and not task completion."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that reliance on natural language interpretation makes the system sensitive to inconsistent naming conventions.",
+      "evidence": "The connector relies on the accuracy of natural language interpretation; if task naming conventions are inconsistent, Claude may fail to identify the correct task, requiring manual verification of the tool's output logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:25.467Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:21.889Z"
+}

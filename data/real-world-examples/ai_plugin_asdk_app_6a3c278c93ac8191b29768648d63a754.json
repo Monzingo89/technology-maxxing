@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_6a3c278c93ac8191b29768648d63a754",
+  "title": "Remote Codex Workspace Provisioning",
+  "business": "Independent software consultants managing multiple client environments.",
+  "problem": "Local development environments often suffer from configuration drift and resource constraints, leading to inconsistent build results and slow compilation times when working on complex projects.",
+  "solution": "By utilizing a DigitalOcean droplet as a remote Codex workspace, consultants can standardize their development environment in the cloud, ensuring consistent performance and isolation for every client project.",
+  "steps": [
+    "Authenticate the ChatGPT session with the DigitalOcean API using a personal access token.",
+    "Define the droplet configuration including region, image, and size parameters.",
+    "Trigger the droplet creation request through the plugin interface.",
+    "Verify the droplet status and retrieve the public IP address for SSH access.",
+    "Initialize the remote workspace with necessary development tools and project dependencies."
+  ],
+  "outcome": "A consistent, high-performance, and isolated cloud-based development environment that eliminates local machine configuration issues.",
+  "limitation": "The primary limitation is network latency between the local terminal and the remote droplet, which can impact real-time feedback; this is checked by monitoring round-trip time (RTT) during SSH sessions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Remote Workspace Provisioning Flow",
+    "description": "The flow shows the progression from the user request to the active remote environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Software consultant"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT Plugin",
+        "detail": "Orchestration layer"
+      },
+      {
+        "id": "c",
+        "label": "DigitalOcean API",
+        "detail": "Infrastructure provider"
+      },
+      {
+        "id": "d",
+        "label": "Droplet",
+        "detail": "Remote Codex workspace"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initiates provisioning"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Sends API request"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Provisions instance"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "Provides SSH access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Remote Codex Workspace Provisioning, what is the primary business problem addressed?",
+      "options": [
+        "Inconsistent build results due to local configuration drift",
+        "Excessive costs associated with cloud storage",
+        "Lack of internet connectivity for remote teams",
+        "Inability to share code between different developers"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario specifically identifies local environment configuration drift as the cause of inconsistent builds.",
+      "evidence": "Local development environments often suffer from configuration drift and resource constraints, leading to inconsistent build results and slow compilation times when working on complex projects."
+    },
+    {
+      "question": "In Remote Codex Workspace Provisioning, what is the identified limitation of the solution?",
+      "options": [
+        "Incompatibility with Linux-based operating systems",
+        "High network latency impacting real-time feedback",
+        "Requirement for physical hardware access",
+        "Inability to scale resources dynamically"
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly mentions network latency as the tradeoff for using a remote workspace.",
+      "evidence": "The primary limitation is network latency between the local terminal and the remote droplet, which can impact real-time feedback; this is checked by monitoring round-trip time (RTT) during SSH sessions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:35.663Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "vitest",
+  "title": "Unified Configuration for E-commerce Micro-frontends",
+  "business": "A retail platform managing dozens of independent micro-frontends built on Vite.",
+  "problem": "Development teams face configuration drift where production build pipelines and test environments diverge, leading to 'works in dev but fails in test' scenarios that delay deployment cycles.",
+  "solution": "By utilizing Vitest, the organization leverages the existing Vite configuration files directly within the test runner. This ensures that resolve aliases, environment variables, and plugin transformations are identical during both the build process and the execution of unit tests, eliminating environment-specific discrepancies.",
+  "steps": [
+    "Install Vitest as a dev dependency in the root of the micro-frontend project.",
+    "Configure the vitest.config.ts file to extend or import the existing vite.config.ts settings.",
+    "Define test suites using the standard Vitest API, ensuring compatibility with existing Jest-like syntax.",
+    "Integrate the vitest command into the package.json scripts to trigger watch mode during development.",
+    "Execute tests using the shared resolution pipeline to validate component behavior against production-like settings."
+  ],
+  "outcome": "Teams achieve higher confidence in test results, as the testing environment perfectly mirrors the production build pipeline, reducing the frequency of integration bugs.",
+  "limitation": "Because Vitest relies on the Vite pipeline, complex custom plugins that are strictly tied to build-time assets may require conditional logic to avoid execution errors during testing. Developers can check for this by inspecting the vitest.config.ts file to ensure that plugins are correctly guarded or mocked when the environment is set to 'test'.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Unified Pipeline Integration",
+    "description": "This flow shows how the Vite configuration acts as a single source of truth for both production builds and testing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Vite Config",
+        "detail": "Shared resolve/transform rules"
+      },
+      {
+        "id": "b",
+        "label": "Production Build",
+        "detail": "Vite-native build pipeline"
+      },
+      {
+        "id": "c",
+        "label": "Vitest Runner",
+        "detail": "Test execution engine"
+      },
+      {
+        "id": "d",
+        "label": "Test Results",
+        "detail": "Validated application logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides settings"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "reused configuration"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": {
+    "language": "typescript",
+    "content": "import { defineConfig } from 'vitest/config';\nimport viteConfig from './vite.config';\n\n// Reusing the existing vite configuration to ensure consistency\nexport default defineConfig({\n  ...viteConfig,\n  test: {\n    globals: true,\n    environment: 'jsdom',\n  },\n});",
+    "explanation": "This code demonstrates how the business scenario uses the existing vite.config.ts to maintain parity between the build and test environments."
+  },
+  "sources": [
+    {
+      "url": "https://vitest.dev/",
+      "label": "Vitest | Next Generation testing framework"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Configuration for E-commerce Micro-frontends, what is the primary benefit of using Vitest?",
+      "options": [
+        "It eliminates configuration drift by reusing the Vite pipeline.",
+        "It provides faster hardware-level performance metrics.",
+        "It replaces the need for any build configuration files.",
+        "It automatically generates production code from tests."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that reusing the Vite config ensures the test environment matches the production build environment.",
+      "evidence": "By utilizing Vitest, the organization leverages the existing Vite configuration files directly within the test runner. This ensures that resolve aliases, environment variables, and plugin transformations are identical during both the build process and the execution of unit tests"
+    },
+    {
+      "question": "In Unified Configuration for E-commerce Micro-frontends, how should developers address potential limitations with custom plugins?",
+      "options": [
+        "By ignoring the plugins during the build phase.",
+        "By using conditional logic to guard or mock plugins during testing.",
+        "By manually rewriting all plugins in a different language.",
+        "By disabling the Vitest watch mode entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly suggests guarding or mocking plugins that are not compatible with the test environment.",
+      "evidence": "Developers can check for this by inspecting the vitest.config.ts file to ensure that plugins are correctly guarded or mocked when the environment is set to 'test'."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:14.980Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:10.762Z"
+}

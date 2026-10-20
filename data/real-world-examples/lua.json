@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "lua",
+  "title": "Dynamic Rule Orchestration for IoT Gateways",
+  "business": "Industrial IoT gateway manufacturers who need to update device behavior without reflashing firmware.",
+  "problem": "Hard-coded logic in C-based firmware prevents rapid adaptation to changing sensor data formats or new business rules, leading to costly maintenance cycles.",
+  "solution": "Embedding the Lua interpreter allows developers to offload volatile business logic into lightweight scripts that the host application executes, enabling hot-swapping of device behavior.",
+  "steps": [
+    "Integrate the Lua C API into the host firmware to initialize the virtual machine state.",
+    "Define a C-based interface that exposes specific sensor data structures to the Lua environment.",
+    "Load external Lua scripts containing device-specific processing logic into the interpreter.",
+    "Execute the Lua scripts during the main event loop to determine device actions based on input.",
+    "Use the Lua garbage collector to manage memory for script-defined tables and variables."
+  ],
+  "outcome": "The gateway achieves modularity where logic updates occur via script deployment rather than full system recompilation, significantly reducing downtime.",
+  "limitation": "Because Lua uses a register-based virtual machine, complex logic requiring heavy computational overhead can impact the host application's real-time constraints; monitor execution time per script cycle to ensure stability.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Lua Host Integration Flow",
+    "description": "This diagram illustrates how the host application interacts with the Lua engine to process sensor data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Host Firmware",
+        "detail": "C-based application managing hardware"
+      },
+      {
+        "id": "b",
+        "label": "Lua VM",
+        "detail": "Embedded interpreter instance"
+      },
+      {
+        "id": "c",
+        "label": "Lua Script",
+        "detail": "Dynamic business logic file"
+      },
+      {
+        "id": "d",
+        "label": "Action",
+        "detail": "Resulting command sent to hardware"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "initializes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns result"
+      }
+    ]
+  },
+  "code": {
+    "language": "lua",
+    "content": "-- Logic defined in a separate script file\nfunction process_sensor(value)\n  -- Simple data transformation logic\n  if value > 100 then\n    return \"ALERT\"\n  end\n  return \"NORMAL\"\nend",
+    "explanation": "This script is loaded by the host firmware to evaluate sensor data dynamically without modifying the underlying C code."
+  },
+  "sources": [
+    {
+      "url": "https://www.lua.org/about.html",
+      "label": "Lua: about"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Rule Orchestration for IoT Gateways, what is the primary benefit of using Lua for business logic?",
+      "options": [
+        "It eliminates the need for C-based firmware entirely.",
+        "It allows updating device behavior without full system recompilation.",
+        "It provides native hardware drivers for all IoT sensors.",
+        "It increases the memory footprint of the gateway significantly."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explains that Lua allows offloading volatile logic to scripts, enabling hot-swapping of behavior without reflashing firmware.",
+      "evidence": "The gateway achieves modularity where logic updates occur via script deployment rather than full system recompilation, significantly reducing downtime."
+    },
+    {
+      "question": "In Dynamic Rule Orchestration for IoT Gateways, what is a key limitation to monitor when integrating the engine?",
+      "options": [
+        "The inability to use associative arrays.",
+        "The lack of support for C-based host integration.",
+        "The potential impact of script execution time on real-time constraints.",
+        "The requirement to use a stack-based virtual machine."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section warns that complex logic can impact real-time constraints, requiring monitoring of execution time.",
+      "evidence": "Because Lua uses a register-based virtual machine, complex logic requiring heavy computational overhead can impact the host application's real-time constraints; monitor execution time per script cycle to ensure stability."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:14.951Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:10.670Z"
+}

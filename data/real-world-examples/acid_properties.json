@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "acid_properties",
+  "title": "Inventory Ledger Synchronization",
+  "business": "A boutique logistics firm managing high-value inventory transfers between regional warehouses.",
+  "problem": "Inconsistent stock levels occur when a transfer transaction fails midway, leaving the source warehouse with deducted items while the destination warehouse never receives the credit, leading to financial discrepancies.",
+  "solution": "ACID properties ensure that every inventory transfer is treated as a single, indivisible unit of work. Atomicity guarantees that if any part of the transfer fails, the entire operation is rolled back. Consistency ensures the database transitions from one valid state to another, maintaining strict inventory integrity. Isolation prevents concurrent transactions from seeing partial, uncommitted transfers. Durability ensures that once a transfer is committed, the record persists even in the event of a system crash.",
+  "steps": [
+    "Initiate a transaction block to encapsulate the transfer logic.",
+    "Execute a decrement operation on the source warehouse inventory table.",
+    "Execute an increment operation on the destination warehouse inventory table.",
+    "Commit the transaction to finalize changes or rollback if any error occurs."
+  ],
+  "outcome": "The system achieves reliable state transitions where inventory counts remain accurate and synchronized across all warehouse locations, eliminating orphaned stock records.",
+  "limitation": "Strict isolation levels can lead to increased lock contention during high-frequency updates, which can be monitored by checking the pg_stat_activity view for blocked processes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Transfer Transaction Flow",
+    "description": "This diagram illustrates the lifecycle of an atomic inventory transfer between two nodes.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Start Transaction",
+        "detail": "Begin block"
+      },
+      {
+        "id": "b",
+        "label": "Source Update",
+        "detail": "Decrement stock"
+      },
+      {
+        "id": "c",
+        "label": "Dest Update",
+        "detail": "Increment stock"
+      },
+      {
+        "id": "d",
+        "label": "Commit",
+        "detail": "Finalize state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initiates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Proceeds if success"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Finalizes"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "BEGIN; -- Start transaction block\nUPDATE warehouse SET stock = stock - 10 WHERE id = 1;\nUPDATE warehouse SET stock = stock + 10 WHERE id = 2;\nCOMMIT; -- Finalize changes atomically",
+    "explanation": "This code demonstrates the atomic grouping of two distinct update operations, ensuring both succeed or both fail."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Inventory Ledger Synchronization, how does the solution prevent financial discrepancies during a transfer failure?",
+      "options": [
+        "By using Atomicity to ensure the entire operation rolls back if any part fails.",
+        "By increasing the frequency of manual database audits.",
+        "By allowing partial updates to be visible to other warehouse users.",
+        "By ignoring the source warehouse deduction until the destination confirms receipt."
+      ],
+      "answerIndex": 0,
+      "explanation": "Atomicity ensures that the transaction is treated as an indivisible unit, preventing partial states.",
+      "evidence": "Atomicity guarantees that if any part of the transfer fails, the entire operation is rolled back."
+    },
+    {
+      "question": "In Inventory Ledger Synchronization, what is a primary trade-off of implementing strict ACID properties?",
+      "options": [
+        "Increased risk of data loss during system crashes.",
+        "Higher lock contention during high-frequency updates.",
+        "Reduced need for database maintenance tasks.",
+        "Automatic elimination of all application-level bugs."
+      ],
+      "answerIndex": 1,
+      "explanation": "Strict isolation levels require locking resources, which can cause contention when many transactions access the same rows.",
+      "evidence": "Strict isolation levels can lead to increased lock contention during high-frequency updates, which can be monitored by checking the pg_stat_activity view for blocked processes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:14.390Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

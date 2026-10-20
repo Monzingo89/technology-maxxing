@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "load_shedding",
+  "title": "Resilient Analytics Ingestion for Global Logistics",
+  "business": "A global logistics provider managing real-time telemetry from millions of shipping containers.",
+  "problem": "During peak holiday shipping seasons, the telemetry ingestion service experiences massive request spikes that saturate CPU and memory, causing cascading failures and total system downtime for all clients.",
+  "solution": "Load shedding protects the core ingestion service by proactively rejecting non-critical background telemetry updates when system capacity thresholds are breached, ensuring that high-priority delivery status updates continue to be processed without interruption.",
+  "steps": [
+    "Define a priority hierarchy for incoming telemetry packets based on business impact.",
+    "Implement a monitoring layer to track current system resource utilization against defined safety thresholds.",
+    "Configure a request interceptor that checks the current load before processing any incoming payload.",
+    "Drop low-priority packets immediately at the edge when the system enters a high-load state.",
+    "Return a specific status code to the client to signal that the request was rejected due to capacity constraints."
+  ],
+  "outcome": "The ingestion service maintains stable performance for critical operations during traffic surges, preventing total system collapse at the cost of temporary data loss for non-essential telemetry.",
+  "limitation": "Load shedding introduces partial data loss for lower-priority tasks, which can lead to incomplete historical datasets; operators must monitor rejection rates to determine if capacity expansion is required.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Ingestion Load Shedding Flow",
+    "description": "This diagram illustrates how incoming requests are filtered based on system capacity before reaching the processing engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Telemetry Source",
+        "detail": "IoT devices sending data"
+      },
+      {
+        "id": "b",
+        "label": "Load Monitor",
+        "detail": "Tracks CPU/Memory usage"
+      },
+      {
+        "id": "c",
+        "label": "Interceptor",
+        "detail": "Decides to accept or reject"
+      },
+      {
+        "id": "d",
+        "label": "Core Processor",
+        "detail": "Handles high-priority data"
+      },
+      {
+        "id": "e",
+        "label": "Discard Queue",
+        "detail": "Drops low-priority packets"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Sends request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides capacity status"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Passes high-priority"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Rejects low-priority"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Resilient Analytics Ingestion for Global Logistics, what is the primary purpose of implementing load shedding?",
+      "options": [
+        "To increase the total throughput of the system during normal operations.",
+        "To protect the core service from cascading failures by rejecting non-critical work during spikes.",
+        "To ensure that all telemetry data is stored regardless of system load.",
+        "To replace the need for horizontal scaling of the ingestion service."
+      ],
+      "answerIndex": 1,
+      "explanation": "Load shedding is used to protect system stability by selectively rejecting work when capacity is exhausted, as described in the solution.",
+      "evidence": "Load shedding protects the core ingestion service by proactively rejecting non-critical background telemetry updates when system capacity thresholds are breached, ensuring that high-priority delivery status updates continue to be processed without interruption."
+    },
+    {
+      "question": "In Resilient Analytics Ingestion for Global Logistics, what is a key limitation of the described implementation?",
+      "options": [
+        "It requires significant manual intervention for every incoming request.",
+        "It guarantees that no data will ever be lost during a spike.",
+        "It results in partial data loss for non-essential tasks, requiring monitoring of rejection rates.",
+        "It prevents the system from ever reaching full capacity."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation of load shedding is the intentional sacrifice of lower-priority data to maintain system health.",
+      "evidence": "Load shedding introduces partial data loss for lower-priority tasks, which can lead to incomplete historical datasets; operators must monitor rejection rates to determine if capacity expansion is required."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:03.133Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

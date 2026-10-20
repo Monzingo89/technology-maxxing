@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "hash_table",
+  "title": "Optimizing Inventory Lookup for Global Logistics",
+  "business": "Global logistics providers managing millions of unique SKU identifiers across distributed warehouses.",
+  "problem": "Linear search times for SKU metadata result in high latency during peak order processing, causing bottlenecks in warehouse dispatch systems.",
+  "solution": "Implementing a hash table allows for constant-time average access to SKU metadata by mapping unique alphanumeric identifiers to specific memory buckets via a hash function, effectively bypassing the need to scan entire inventory lists.",
+  "steps": [
+    "Define a hash function to convert SKU strings into integer indices within a fixed-size array.",
+    "Allocate an array of buckets to store SKU metadata records.",
+    "Implement a collision resolution policy, such as separate chaining, to handle multiple SKUs mapping to the same index.",
+    "Insert SKU records by computing the hash and appending them to the corresponding bucket list.",
+    "Retrieve records by hashing the target SKU and traversing only the specific bucket list."
+  ],
+  "outcome": "Significant reduction in lookup latency, enabling near-instantaneous retrieval of inventory details regardless of the total number of SKUs in the system.",
+  "limitation": "Performance degrades significantly if the hash function produces frequent collisions or if the load factor becomes too high, requiring a check of the bucket chain length to ensure it remains within acceptable bounds.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SKU Lookup Process",
+    "description": "The flow shows how an input SKU is transformed into a storage location.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "SKU Input",
+        "detail": "Raw alphanumeric string"
+      },
+      {
+        "id": "b",
+        "label": "Hash Function",
+        "detail": "Mathematical mapping"
+      },
+      {
+        "id": "c",
+        "label": "Bucket Array",
+        "detail": "Storage slots"
+      },
+      {
+        "id": "d",
+        "label": "Metadata Record",
+        "detail": "Final SKU data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Passes string"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calculates index"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Retrieves object"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Inventory Lookup for Global Logistics, why is a hash table used instead of a linear search?",
+      "options": [
+        "To enable constant-time average access to SKU metadata.",
+        "To ensure every SKU is stored in a unique memory address.",
+        "To eliminate the need for a hash function entirely.",
+        "To increase the total number of warehouses supported."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that linear search causes latency, and the solution provides constant-time access as the remedy.",
+      "evidence": "Implementing a hash table allows for constant-time average access to SKU metadata by mapping unique alphanumeric identifiers to specific memory buckets via a hash function, effectively bypassing the need to scan entire inventory lists."
+    },
+    {
+      "question": "In Optimizing Inventory Lookup for Global Logistics, what is a primary limitation of the implementation?",
+      "options": [
+        "The hash function cannot handle alphanumeric strings.",
+        "The system fails if the bucket array is empty.",
+        "Performance degrades if the hash function produces frequent collisions.",
+        "The load factor must always be exactly zero."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly states that collisions and high load factors are the primary risks to performance.",
+      "evidence": "Performance degrades significantly if the hash function produces frequent collisions or if the load factor becomes too high, requiring a check of the bucket chain length to ensure it remains within acceptable bounds."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:14.094Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

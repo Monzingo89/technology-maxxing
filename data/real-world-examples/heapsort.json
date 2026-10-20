@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "heapsort",
+  "title": "Logistics Priority Sorting",
+  "business": "Automated warehouse management systems",
+  "problem": "High-latency sorting of incoming shipment manifests causes bottlenecks during peak delivery windows.",
+  "solution": "Heapsort provides a reliable, in-place sorting mechanism by building a binary heap from the manifest data and repeatedly extracting the extremal element to organize shipments by priority.",
+  "steps": [
+    "Transform the unordered shipment array into a max-heap structure to satisfy the heap property.",
+    "Swap the root element, representing the highest priority shipment, with the last element in the array.",
+    "Reduce the heap size and perform a heapify operation on the new root to restore the max-heap property.",
+    "Repeat the extraction and heapify process until the entire manifest is sorted in ascending order."
+  ],
+  "outcome": "Consistent, predictable sorting performance that eliminates processing spikes during high-volume periods.",
+  "limitation": "Heapsort is not a stable sort, meaning the relative order of shipments with identical priority values may not be preserved; verify this by checking if original input indices are maintained after sorting.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Heapsort Manifest Processing",
+    "description": "The flow shows how raw manifest data is transformed into an ordered list via heap extraction.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Manifest",
+        "detail": "Unordered shipment list"
+      },
+      {
+        "id": "b",
+        "label": "Build Heap",
+        "detail": "Max-heap construction"
+      },
+      {
+        "id": "c",
+        "label": "Extract Max",
+        "detail": "Move root to end"
+      },
+      {
+        "id": "d",
+        "label": "Heapify",
+        "detail": "Restore heap property"
+      },
+      {
+        "id": "e",
+        "label": "Sorted Manifest",
+        "detail": "Ordered shipment list"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initialize"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Extract"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Rebalance"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Loop"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "Complete"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Priority Sorting, how does the technology address the identified bottleneck?",
+      "options": [
+        "By building a binary heap and repeatedly extracting the extremal element.",
+        "By using a randomized search to find the highest priority shipment.",
+        "By implementing a stable merge sort to preserve shipment order.",
+        "By offloading the manifest data to an external database."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions using a binary heap and extracting the extremal element to organize shipments.",
+      "evidence": "Heapsort provides a reliable, in-place sorting mechanism by building a binary heap from the manifest data and repeatedly extracting the extremal element to organize shipments by priority."
+    },
+    {
+      "question": "Regarding the implementation of Logistics Priority Sorting, what is a key limitation to consider?",
+      "options": [
+        "It requires significant additional memory for auxiliary storage.",
+        "It is not a stable sort, potentially reordering identical priority values.",
+        "It cannot handle large datasets due to recursion depth limits.",
+        "It is only effective when the input is already partially sorted."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that Heapsort is not stable and may not preserve the relative order of identical items.",
+      "evidence": "Heapsort is not a stable sort, meaning the relative order of shipments with identical priority values may not be preserved; verify this by checking if original input indices are maintained after sorting."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:21.856Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

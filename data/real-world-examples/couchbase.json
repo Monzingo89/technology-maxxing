@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "couchbase",
+  "title": "Dynamic Inventory Management for Global Retail",
+  "business": "Global retail enterprises managing high-velocity product catalogs and real-time stock levels across thousands of distributed storefronts.",
+  "problem": "Traditional relational databases struggle with the rigid schema requirements of diverse product attributes and the latency overhead of complex joins when querying stock levels across fragmented regional databases.",
+  "solution": "Couchbase provides a distributed JSON document store that allows for flexible schema evolution. By utilizing the key-value store, the system achieves sub-millisecond access for individual product lookups, while the SQL++ query engine enables complex analytical queries across the entire document collection without requiring rigid table joins.",
+  "steps": [
+    "Define a JSON document structure for products that includes nested arrays for regional stock levels and metadata.",
+    "Use the Key-Value API to perform high-speed retrieval of specific product documents using a unique document key.",
+    "Create Global Secondary Indexes (GSI) on specific JSON fields like category or region to optimize query performance.",
+    "Execute SQL++ queries to aggregate stock data across multiple documents for regional reporting.",
+    "Implement document expiration (TTL) for temporary promotional data to manage storage efficiency."
+  ],
+  "outcome": "The organization achieves a unified view of global inventory with low-latency access for point-of-sale systems and flexible querying capabilities for supply chain analysts.",
+  "limitation": "The primary limitation involves index maintenance overhead; as the number of Global Secondary Indexes increases, write performance may degrade because every document mutation must update the associated indexes. This can be monitored by observing indexer latency metrics in the Couchbase management console.",
+  "diagram": {
+    "kind": "er",
+    "title": "Inventory Data Flow",
+    "description": "Shows how applications interact with the Couchbase cluster via different access patterns.",
+    "nodes": [
+      {
+        "id": "app",
+        "label": "Retail Application",
+        "detail": "Client-side SDK"
+      },
+      {
+        "id": "kv",
+        "label": "Key-Value Store",
+        "detail": "Sub-millisecond access"
+      },
+      {
+        "id": "idx",
+        "label": "Global Secondary Index",
+        "detail": "Query optimization"
+      },
+      {
+        "id": "sql",
+        "label": "SQL++ Engine",
+        "detail": "Complex aggregation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "app",
+        "to": "kv",
+        "label": "Direct Lookup"
+      },
+      {
+        "from": "app",
+        "to": "sql",
+        "label": "Complex Query"
+      },
+      {
+        "from": "sql",
+        "to": "idx",
+        "label": "Uses Index"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Retrieve product by ID using Key-Value API\nconst result = await collection.get('product::1001');\n// Query stock across region using SQL++\nconst query = 'SELECT name FROM inventory WHERE region = $1';\nconst rows = await cluster.query(query, { parameters: ['EMEA'] });",
+    "explanation": "Demonstrates the dual-access approach: high-speed KV lookup for specific items and SQL++ for regional filtering."
+  },
+  "sources": [
+    {
+      "url": "https://docs.couchbase.com/server/current/introduction/intro.html",
+      "label": "Couchbase Server"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Inventory Management for Global Retail, what is the primary benefit of using the SQL++ query engine over traditional relational joins?",
+      "options": [
+        "It eliminates the need for any indexing.",
+        "It allows for complex analytical queries across document collections without rigid table joins.",
+        "It guarantees sub-millisecond latency for every single query.",
+        "It automatically converts JSON to a relational schema."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that the SQL++ engine enables complex queries across collections without the overhead of rigid joins.",
+      "evidence": "the SQL++ query engine enables complex analytical queries across the entire document collection without requiring rigid table joins."
+    },
+    {
+      "question": "In Dynamic Inventory Management for Global Retail, what is a key trade-off when implementing Global Secondary Indexes?",
+      "options": [
+        "Increased storage costs for every document.",
+        "Write performance may degrade due to index maintenance overhead.",
+        "It prevents the use of the Key-Value API.",
+        "It requires a fixed schema for all documents."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that increasing indexes can impact write performance due to the need to update indexes on mutation.",
+      "evidence": "as the number of Global Secondary Indexes increases, write performance may degrade because every document mutation must update the associated indexes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:40.896Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:37.118Z"
+}

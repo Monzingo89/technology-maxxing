@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_live_1",
+  "title": "Dynamic Concierge for High-End Hospitality",
+  "business": "Luxury hotel chains managing high-volume guest inquiries via voice channels.",
+  "problem": "Traditional IVR systems and standard text-based bots fail to handle natural interruptions, leading to guest frustration when they attempt to clarify requests mid-sentence or correct information during a booking process.",
+  "solution": "GPT-Live 1 provides a full-duplex voice interface that allows guests to speak naturally. Because the model supports smooth interruption handling, it can process a guest's correction instantly without waiting for a pre-recorded prompt to finish, maintaining a fluid, human-like interaction.",
+  "steps": [
+    "Initialize a session using the v1/live/sessions endpoint to establish the full-duplex connection.",
+    "Configure the backend agent to handle specific hotel operations like room service or concierge requests.",
+    "Implement function calling to allow the model to query internal reservation databases during the live audio stream.",
+    "Monitor concurrent session limits to ensure the infrastructure scales with peak check-in hours."
+  ],
+  "outcome": "Guests experience a more responsive and empathetic service interaction, reducing the perceived friction of automated booking systems.",
+  "limitation": "The primary trade-off is the reliance on real-time full-duplex processing, which requires stable network conditions; developers should check for latency spikes in the audio stream to determine if the connection quality is degrading.",
+  "diagram": {
+    "kind": "flow",
+    "title": "GPT-Live 1 Interaction Flow",
+    "description": "The flow shows how the guest interacts with the model and how the model delegates tasks.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Guest",
+        "detail": "Audio Input"
+      },
+      {
+        "id": "b",
+        "label": "GPT-Live 1",
+        "detail": "Full-duplex processing"
+      },
+      {
+        "id": "c",
+        "label": "Backend Agent",
+        "detail": "Logic and Tools"
+      },
+      {
+        "id": "d",
+        "label": "Reservation DB",
+        "detail": "Data storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "interrupts/speaks"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "delegates task"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "queries/updates"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns result"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-live-1",
+      "label": "GPT-Live 1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Concierge for High-End Hospitality, why is GPT-Live 1 chosen over traditional systems?",
+      "options": [
+        "It supports smooth interruption handling for fluid, natural conversations.",
+        "It provides the lowest cost for text-based chat completions.",
+        "It allows for image generation during the voice call.",
+        "It supports legacy completion endpoints for easier integration."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that traditional systems fail to handle interruptions, which GPT-Live 1 specifically addresses.",
+      "evidence": "Because the model supports smooth interruption handling, it can process a guest's correction instantly without waiting for a pre-recorded prompt to finish, maintaining a fluid, human-like interaction."
+    },
+    {
+      "question": "In Dynamic Concierge for High-End Hospitality, what is a key limitation to monitor?",
+      "options": [
+        "The inability to use function calling.",
+        "The requirement to use structured outputs.",
+        "The sensitivity to network latency affecting the full-duplex stream.",
+        "The lack of support for concurrent sessions."
+      ],
+      "answerIndex": 2,
+      "explanation": "Full-duplex voice models are sensitive to network quality, which is a noted trade-off in the implementation.",
+      "evidence": "The primary trade-off is the reliance on real-time full-duplex processing, which requires stable network conditions; developers should check for latency spikes in the audio stream to determine if the connection quality is degrading."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:03:34.169Z",
+  "sourceRetrievedAt": "2026-10-18T01:03:30.739Z"
+}

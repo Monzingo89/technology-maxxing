@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_plaud",
+  "title": "Architectural Design Review Synthesis",
+  "business": "A boutique architectural firm managing complex client feedback sessions.",
+  "problem": "Project leads struggle to manually synthesize hours of unstructured verbal feedback from site visits into actionable design revisions, leading to missed requirements and delayed project timelines.",
+  "solution": "By integrating the Plaud connector with Claude, the firm can programmatically ingest voice transcripts from site visits. Claude uses the get_transcript tool to parse these recordings, allowing architects to query specific design constraints or client preferences directly within the chat interface, ensuring that verbal feedback is immediately converted into structured design tasks.",
+  "steps": [
+    "Install the Plaud MCP connector to enable secure access to the firm's recording library.",
+    "Authenticate the connection to authorize Claude to browse and retrieve specific voice notes.",
+    "Invoke the list_files tool to identify the relevant site visit recording by date or project code.",
+    "Use the get_transcript tool to extract the raw text of the client discussion.",
+    "Prompt Claude to summarize the transcript and extract specific action items for the drafting team."
+  ],
+  "outcome": "Architects achieve a more accurate alignment between client expectations and final design documents, significantly reducing the need for rework caused by forgotten verbal instructions.",
+  "limitation": "The connector relies on the quality of the initial audio capture; if the recording environment is noisy or the speaker is unclear, the transcript quality degrades, which can be verified by reviewing the raw output of the get_transcript tool before finalizing design tasks.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Architectural Feedback Synthesis Workflow",
+    "description": "This flow illustrates how raw audio data is transformed into actionable design tasks through the Plaud-Claude integration.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Site Visit Audio",
+        "detail": "Raw recording stored in Plaud"
+      },
+      {
+        "id": "b",
+        "label": "Plaud Connector",
+        "detail": "MCP interface for Claude"
+      },
+      {
+        "id": "c",
+        "label": "Claude AI",
+        "detail": "Processing engine"
+      },
+      {
+        "id": "d",
+        "label": "Design Tasks",
+        "detail": "Structured output for architects"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides transcript"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/plaud",
+      "label": "Plaud connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Design Review Synthesis, how does the Plaud connector address the firm's primary problem?",
+      "options": [
+        "It automates the drafting of architectural blueprints.",
+        "It converts unstructured verbal feedback into actionable design tasks.",
+        "It manages the firm's project budget and billing cycles.",
+        "It replaces the need for physical site visits."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution specifically mentions using Claude to parse transcripts to ensure verbal feedback is converted into structured design tasks.",
+      "evidence": "Claude uses the get_transcript tool to parse these recordings, allowing architects to query specific design constraints or client preferences directly within the chat interface, ensuring that verbal feedback is immediately converted into structured design tasks."
+    },
+    {
+      "question": "In Architectural Design Review Synthesis, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access recordings older than one week.",
+        "The system requires manual transcription by a third party.",
+        "Transcript quality depends on the clarity of the initial audio capture.",
+        "Claude is unable to summarize audio files longer than five minutes."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly notes that the quality of the transcript is dependent on the initial audio quality.",
+      "evidence": "The connector relies on the quality of the initial audio capture; if the recording environment is noisy or the speaker is unclear, the transcript quality degrades, which can be verified by reviewing the raw output of the get_transcript tool before finalizing design tasks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:31.615Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:27.342Z"
+}

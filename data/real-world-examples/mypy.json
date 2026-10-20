@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "mypy",
+  "title": "Protocol-Based Plugin Architecture for Data Ingestion",
+  "business": "Data engineering teams building modular ingestion pipelines that must support diverse, third-party data sources without tight coupling.",
+  "problem": "Runtime errors occur when ingestion modules expect specific attributes from dynamic data objects, leading to attribute errors during production execution.",
+  "solution": "Mypy Protocols enable structural subtyping, allowing developers to define an interface based on required attributes rather than inheritance, while type narrowing safely confirms object capabilities at runtime.",
+  "steps": [
+    "Define a Protocol class specifying the required methods or attributes for a data source.",
+    "Annotate ingestion functions to accept the Protocol type instead of concrete classes.",
+    "Implement type narrowing using isinstance() or type guards to verify object structure before access.",
+    "Run mypy to statically validate that all passed objects satisfy the Protocol requirements."
+  ],
+  "outcome": "Increased system reliability through compile-time detection of missing interface implementations, reducing runtime attribute errors.",
+  "limitation": "Protocols rely on structural compatibility, which can lead to false positives if two objects share the same attribute names but have different semantic meanings; verify with runtime checks.",
+  "diagram": {
+    "kind": "er",
+    "title": "Protocol-Based Ingestion Flow",
+    "description": "Shows how ingestion logic validates data sources via Protocols.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IngestionEngine",
+        "detail": "Core processing logic"
+      },
+      {
+        "id": "b",
+        "label": "DataSourceProtocol",
+        "detail": "Interface definition"
+      },
+      {
+        "id": "c",
+        "label": "ExternalAPI",
+        "detail": "Concrete data source"
+      },
+      {
+        "id": "d",
+        "label": "DatabaseSource",
+        "detail": "Concrete data source"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "depends on"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "satisfies"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "satisfies"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://mypy.readthedocs.io/en/stable/",
+      "label": "mypy 2.4.0 documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Protocol-Based Plugin Architecture for Data Ingestion, how does the solution address runtime attribute errors?",
+      "options": [
+        "By enforcing strict inheritance hierarchies for all data sources.",
+        "By using Mypy Protocols to define required attributes and validating them statically.",
+        "By converting all dynamic data into JSON strings before processing.",
+        "By disabling dynamic typing entirely across the codebase."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution leverages Protocols to define structural requirements, allowing Mypy to catch missing attributes before the code runs.",
+      "evidence": "Mypy Protocols enable structural subtyping, allowing developers to define an interface based on required attributes rather than inheritance, while type narrowing safely confirms object capabilities at runtime."
+    },
+    {
+      "question": "What is a primary limitation of the approach described in Protocol-Based Plugin Architecture for Data Ingestion?",
+      "options": [
+        "Protocols cannot be used with third-party libraries.",
+        "Structural compatibility might ignore semantic differences between objects with identical attribute names.",
+        "Mypy cannot perform type narrowing on objects that implement Protocols.",
+        "The approach requires all objects to inherit from a common base class."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because Protocols check structure (names of attributes) rather than intent, objects that happen to have the same names but different behaviors can pass checks incorrectly.",
+      "evidence": "Protocols rely on structural compatibility, which can lead to false positives if two objects share the same attribute names but have different semantic meanings; verify with runtime checks."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:06.004Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:01.977Z"
+}

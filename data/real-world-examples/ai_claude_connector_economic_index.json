@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_economic_index",
+  "title": "Global Workforce Skill Gap Analysis for EdTech Expansion",
+  "business": "A global vocational training platform planning to expand its curriculum into emerging markets.",
+  "problem": "The company lacks granular data on which specific professional tasks are currently being prioritized by Claude users in target regions, leading to a mismatch between course offerings and actual labor market demand.",
+  "solution": "By integrating the Anthropic Economic Index connector, the platform can programmatically query regional usage patterns and task breakdowns to identify high-growth professional domains, ensuring curriculum development aligns with real-world Claude interaction trends.",
+  "steps": [
+    "Authenticate the Anthropic Economic Index connector within the Claude environment to gain read-only access to the public dataset.",
+    "Execute econ_index_list_countries to filter for target emerging markets.",
+    "Call econ_index_get_occupation_usage and econ_index_list_top_work_tasks for each identified country to extract task-specific usage patterns.",
+    "Aggregate the retrieved task data to map current user interest against existing course modules.",
+    "Compare regional findings using econ_index_compare_regions to prioritize market entry based on shared skill demand."
+  ],
+  "outcome": "The platform achieves a data-driven strategy for curriculum localization, reducing the risk of launching training programs that do not address the specific professional needs of the target workforce.",
+  "limitation": "The dataset is strictly read-only and reflects historical usage patterns, meaning it cannot predict future market shifts or provide real-time user intent; verify findings by cross-referencing with local labor bureau reports.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data-Driven Curriculum Alignment Workflow",
+    "description": "This diagram illustrates the flow from querying global usage data to curriculum adjustment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Connector",
+        "detail": "Anthropic Economic Index"
+      },
+      {
+        "id": "b",
+        "label": "Query Engine",
+        "detail": "Claude MCP Interface"
+      },
+      {
+        "id": "c",
+        "label": "Data Processor",
+        "detail": "Task/Occupation Aggregator"
+      },
+      {
+        "id": "d",
+        "label": "Curriculum Team",
+        "detail": "Course Development"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides read-only data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "extracts task breakdowns"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "informs course modules"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/economic-index",
+      "label": "Anthropic Economic Index connector"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Workforce Skill Gap Analysis for EdTech Expansion, what is the primary purpose of using the Anthropic Economic Index connector?",
+      "options": [
+        "To automate the creation of vocational training videos.",
+        "To identify high-growth professional domains by analyzing task-specific usage patterns.",
+        "To directly modify the curriculum database via write-access.",
+        "To predict future stock market fluctuations in emerging regions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using the connector to align curriculum development with real-world task trends identified through Claude usage data.",
+      "evidence": "By integrating the Anthropic Economic Index connector, the platform can programmatically query regional usage patterns and task breakdowns to identify high-growth professional domains, ensuring curriculum development aligns with real-world Claude interaction trends."
+    },
+    {
+      "question": "In Global Workforce Skill Gap Analysis for EdTech Expansion, what is a key limitation of the implementation?",
+      "options": [
+        "The connector requires a paid subscription for every query.",
+        "The data is strictly read-only and reflects historical patterns rather than future predictions.",
+        "The connector only supports data from developed nations.",
+        "The implementation requires manual data entry into the Claude interface."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states the read-only nature and historical focus of the dataset.",
+      "evidence": "The dataset is strictly read-only and reflects historical usage patterns, meaning it cannot predict future market shifts or provide real-time user intent; verify findings by cross-referencing with local labor bureau reports."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:28.466Z",
+  "sourceRetrievedAt": "2026-10-18T00:54:24.353Z"
+}

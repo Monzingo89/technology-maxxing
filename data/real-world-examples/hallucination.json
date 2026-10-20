@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "hallucination",
+  "title": "Automated Regulatory Compliance Summarization",
+  "business": "Legal and compliance departments in international financial institutions.",
+  "problem": "Large language models generate confident but factually incorrect summaries of complex regulatory updates, leading to potential non-compliance and legal risk.",
+  "solution": "Implementing a Retrieval-Augmented Generation (RAG) architecture that constrains the model to ground its output exclusively in verified, ingested regulatory documents, effectively mitigating the generation of unsupported content.",
+  "steps": [
+    "Ingest raw regulatory PDF documents into a vector database for semantic indexing.",
+    "Implement a retrieval mechanism that fetches only relevant document chunks based on user queries.",
+    "Inject the retrieved chunks into the model prompt as a mandatory context window.",
+    "Apply a post-generation verification step to cross-reference claims against the source chunks.",
+    "Configure the model to output a null response if the provided context does not contain the answer."
+  ],
+  "outcome": "Increased reliability in automated compliance reporting by ensuring every generated claim is directly traceable to a specific regulatory source.",
+  "limitation": "The system may suffer from reduced creative flexibility; check this by measuring the frequency of 'I cannot answer' responses when source data is sparse.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Regulatory RAG Pipeline",
+    "description": "The flow from raw data to a grounded, verified response.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regulatory Docs",
+        "detail": "Source PDFs"
+      },
+      {
+        "id": "b",
+        "label": "Vector DB",
+        "detail": "Indexed chunks"
+      },
+      {
+        "id": "c",
+        "label": "Retriever",
+        "detail": "Query processor"
+      },
+      {
+        "id": "d",
+        "label": "LLM",
+        "detail": "Generation engine"
+      },
+      {
+        "id": "e",
+        "label": "Final Summary",
+        "detail": "Grounded output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingest"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "search"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "provide context"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "generate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2202.03629",
+      "label": "Survey of Hallucination in Natural Language Generation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Regulatory Compliance Summarization, how is the risk of hallucination primarily addressed?",
+      "options": [
+        "By training a larger model on more regulatory data.",
+        "By using a RAG architecture to ground outputs in verified documents.",
+        "By increasing the temperature setting of the model.",
+        "By removing the retrieval mechanism entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly uses a RAG architecture to constrain the model to source documents.",
+      "evidence": "Implementing a Retrieval-Augmented Generation (RAG) architecture that constrains the model to ground its output exclusively in verified, ingested regulatory documents, effectively mitigating the generation of unsupported content."
+    },
+    {
+      "question": "In Automated Regulatory Compliance Summarization, what is a primary limitation of the proposed solution?",
+      "options": [
+        "The system becomes too creative in its summaries.",
+        "The system is unable to process PDF documents.",
+        "The system may produce 'I cannot answer' responses when data is sparse.",
+        "The system requires manual verification of every word."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that the system may return null responses when source data is insufficient.",
+      "evidence": "The system may suffer from reduced creative flexibility; check this by measuring the frequency of 'I cannot answer' responses when source data is sparse."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:45.978Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:42.497Z"
+}

@@ -11,8 +11,9 @@ const prompts = new Map();
 let authored = 0;
 for (const topic of index.technologies) {
   const bank = index.assessments[topic.id];
-  if (bank?.length !== 5) {
-    errors.push(`${topic.id}: expected five questions`);
+  const scenarioCount = bank?.filter(q => q.section === 'real-world').length || 0;
+  if (![0, 2].includes(scenarioCount) || bank?.length !== 5 + scenarioCount) {
+    errors.push(`${topic.id}: expected five core questions and two when a real-world example is available`);
     continue;
   }
   if (topic.assessmentQuality === "authored") authored++;
@@ -51,12 +52,12 @@ for (const topic of index.technologies) {
     if (words > 85)
       flags.push({
         topic: topic.id,
-        reason: `${q.id} has ${words} words; review reading burden under the 10-second timer.`,
+        reason: `${q.id} has ${words} words; review reading burden under the 20-second timer.`,
       });
   }
 }
 const report = {
-  checkedAt: "2026-10-13",
+  checkedAt: new Date().toISOString().slice(0, 10),
   topics: index.technologies.length,
   questions: prompts.size,
   authoredTopics: authored,
@@ -65,7 +66,7 @@ const report = {
   flags,
   limitations: [
     "Structural checks are not expert validation of every answer or distractor.",
-    "Ten-second timing, randomized question order and shuffled options discourage casual lookup but cannot prevent AI assistance.",
+    "Twenty-second timing, randomized question order and shuffled options discourage casual lookup but cannot prevent AI assistance.",
     "Publicly shipped answer keys and client-side timers cannot support high-stakes certification.",
     "Catalog-recall banks test recognition of catalog descriptions; they do not establish practical proficiency.",
   ],

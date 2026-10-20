@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "in_context_learning",
+  "title": "Dynamic Regulatory Compliance Labeling",
+  "business": "Legal and compliance departments in multinational corporations.",
+  "problem": "The high cost and latency associated with fine-tuning machine learning models every time a new regional regulatory policy is introduced, which requires thousands of labeled examples and gradient updates.",
+  "solution": "In-Context Learning (ICL) allows the organization to adapt models to new regulatory formats instantly by providing a few representative examples of the desired output directly within the prompt, bypassing the need for weight updates.",
+  "steps": [
+    "Identify a set of high-quality, representative regulatory document snippets.",
+    "Format these snippets into a prompt template that includes the input text and the expected classification or extraction result.",
+    "Concatenate the few-shot examples with the new, unseen regulatory document to form the final input context.",
+    "Submit the prompt to the language model to generate the compliant output without modifying the underlying model parameters."
+  ],
+  "outcome": "The organization achieves rapid adaptability to shifting regulatory landscapes without the operational overhead of retraining or fine-tuning cycles.",
+  "limitation": "A primary limitation is the context window constraint; as more examples are added to improve accuracy, the prompt consumes more tokens, which can lead to performance degradation or truncation. This is checked by monitoring the token count against the model's maximum input capacity.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ICL Regulatory Workflow",
+    "description": "This diagram illustrates how few-shot examples are combined with target data to guide the model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regulatory Examples",
+        "detail": "Few-shot demonstrations of compliance labeling"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Assembler",
+        "detail": "Combines examples with target document"
+      },
+      {
+        "id": "c",
+        "label": "Language Model",
+        "detail": "Processes context without weight updates"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Output",
+        "detail": "The final labeled regulatory result"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "injects"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2005.14165",
+      "label": "Language Models are Few-Shot Learners"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Regulatory Compliance Labeling, how does the proposed approach address the problem of high latency?",
+      "options": [
+        "By using In-Context Learning to adapt via prompt examples instead of weight updates.",
+        "By performing gradient updates on a daily basis for every new policy.",
+        "By replacing the language model with a rule-based system.",
+        "By reducing the number of parameters in the model to improve speed."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that fine-tuning is costly and slow, and the solution explicitly uses ICL to adapt without weight updates.",
+      "evidence": "In-Context Learning (ICL) allows the organization to adapt models to new regulatory formats instantly by providing a few representative examples of the desired output directly within the prompt, bypassing the need for weight updates."
+    },
+    {
+      "question": "What is a key limitation of the implementation in Dynamic Regulatory Compliance Labeling?",
+      "options": [
+        "The model requires constant retraining to remain accurate.",
+        "The context window constraint limits the number of examples that can be included.",
+        "It is impossible to use more than one example in a prompt.",
+        "The model cannot handle regulatory documents longer than one page."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the context window constraint as a primary factor when adding examples.",
+      "evidence": "A primary limitation is the context window constraint; as more examples are added to improve accuracy, the prompt consumes more tokens, which can lead to performance degradation or truncation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:56.981Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:26.869Z"
+}

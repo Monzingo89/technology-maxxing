@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "facade_pattern",
+  "title": "Streamlining Logistics Integration",
+  "business": "Logistics providers managing multi-carrier shipping workflows.",
+  "problem": "Developers struggle with a fragmented subsystem where they must manually coordinate inventory, carrier rate calculation, and label generation services, leading to high integration costs and fragile code.",
+  "solution": "The Facade pattern provides a simplified interface over a more complex subsystem, allowing the client to trigger a complete shipping workflow through a single, unified entry point rather than interacting with disparate components.",
+  "steps": [
+    "Identify the core subsystems: Inventory, RateCalculator, and LabelGenerator.",
+    "Define a unified ShippingFacade interface that exposes only the necessary high-level methods.",
+    "Implement the facade to encapsulate the orchestration logic between the three subsystems.",
+    "Refactor client code to interact exclusively with the ShippingFacade instead of individual subsystem components."
+  ],
+  "outcome": "Reduced coupling between the client application and the underlying logistics infrastructure, resulting in cleaner, more maintainable code.",
+  "limitation": "The facade can become a bottleneck or a 'god object' if it attempts to expose too much functionality; check for this by monitoring if the facade class grows disproportionately to the rest of the codebase.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Shipping Facade Workflow",
+    "description": "Shows how the client interacts with a single facade instead of multiple complex subsystems.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Application",
+        "detail": "Requests shipment"
+      },
+      {
+        "id": "b",
+        "label": "ShippingFacade",
+        "detail": "Orchestrator"
+      },
+      {
+        "id": "c",
+        "label": "Inventory",
+        "detail": "Subsystem"
+      },
+      {
+        "id": "d",
+        "label": "RateCalculator",
+        "detail": "Subsystem"
+      },
+      {
+        "id": "e",
+        "label": "LabelGenerator",
+        "detail": "Subsystem"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Call processShipment()"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Verify stock"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Get rates"
+      },
+      {
+        "from": "b",
+        "to": "e",
+        "label": "Print label"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Logistics Integration, what is the primary purpose of the facade?",
+      "options": [
+        "To provide a simplified interface over a more complex subsystem",
+        "To replace the need for inventory management entirely",
+        "To increase the number of method calls required by the client",
+        "To act as a database gateway for individual records"
+      ],
+      "answerIndex": 0,
+      "explanation": "The facade pattern is specifically used to hide the complexity of multiple subsystems behind a single, unified interface.",
+      "evidence": "The Facade pattern provides a simplified interface over a more complex subsystem"
+    },
+    {
+      "question": "In Streamlining Logistics Integration, what is a potential risk of the facade implementation?",
+      "options": [
+        "It makes the client code too simple to test",
+        "It can become a bottleneck or a 'god object' if it exposes too much functionality",
+        "It forces the use of multiple databases",
+        "It prevents the use of asynchronous processing"
+      ],
+      "answerIndex": 1,
+      "explanation": "Over-extending a facade leads to a 'god object' anti-pattern where the class becomes too large and difficult to manage.",
+      "evidence": "The facade can become a bottleneck or a 'god object' if it attempts to expose too much functionality"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:20.982Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

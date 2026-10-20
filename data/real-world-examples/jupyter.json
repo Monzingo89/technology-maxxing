@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "jupyter",
+  "title": "Clinical Research Data Reproducibility",
+  "business": "A clinical research institute managing longitudinal patient study data across multiple international sites.",
+  "problem": "Researchers struggle to reproduce complex statistical analysis results because disparate teams use different local environments, leading to inconsistent data processing and undocumented manual steps.",
+  "solution": "By adopting Jupyter Notebooks, the institute creates reproducible computational documents that bundle code, narrative documentation, and rich output, ensuring that every analysis step is traceable and executable in a standardized environment.",
+  "steps": [
+    "Standardize the computational environment using Docker containers to ensure consistent library versions.",
+    "Develop Jupyter Notebooks that integrate narrative text with Python code to document the methodology for each study.",
+    "Deploy a centralized JupyterHub instance to manage multi-user access and authentication.",
+    "Share completed notebooks via a version-controlled repository to allow peer review of the computational logic."
+  ],
+  "outcome": "The institute achieves a transparent audit trail where peer researchers can re-run the exact analysis code to verify findings, significantly reducing discrepancies in reported clinical outcomes.",
+  "limitation": "Jupyter Notebooks store state in the kernel; if a user runs cells out of order, the document may contain output that does not match the current code, which can be checked by restarting the kernel and running all cells sequentially.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Reproducible Research Workflow",
+    "description": "The flow of data from raw clinical sources to verified research insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Data",
+        "detail": "Clinical patient records"
+      },
+      {
+        "id": "b",
+        "label": "Jupyter Kernel",
+        "detail": "Language-specific execution process"
+      },
+      {
+        "id": "c",
+        "label": "Notebook Document",
+        "detail": "JSON-based record of code and narrative"
+      },
+      {
+        "id": "d",
+        "label": "Peer Review",
+        "detail": "Validation of computational logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "inputs data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generates output"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "shared for verification"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://jupyter.org/",
+      "label": "Project Jupyter | Home"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Clinical Research Data Reproducibility, what is the primary problem addressed by the solution?",
+      "options": [
+        "Inconsistent data processing due to disparate local environments",
+        "Lack of high-performance computing hardware for big data",
+        "Inability to share results via email or GitHub",
+        "High costs associated with proprietary software licenses"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that researchers face issues with inconsistent data processing and undocumented steps when using different local environments.",
+      "evidence": "Researchers struggle to reproduce complex statistical analysis results because disparate teams use different local environments, leading to inconsistent data processing and undocumented manual steps."
+    },
+    {
+      "question": "In Clinical Research Data Reproducibility, what is a key limitation of the technology?",
+      "options": [
+        "The inability to use Python or R within the same document",
+        "The risk of out-of-order execution leading to inconsistent state",
+        "The lack of support for rich output like images or LaTeX",
+        "The requirement to use only cloud-based infrastructure"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explains that notebooks store state in the kernel, which can lead to discrepancies if cells are executed non-sequentially.",
+      "evidence": "Jupyter Notebooks store state in the kernel; if a user runs cells out of order, the document may contain output that does not match the current code, which can be checked by restarting the kernel and running all cells sequentially."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:18.632Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:15.226Z"
+}

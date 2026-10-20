@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "quantization",
+  "title": "Edge-Device Deployment for Logistics Optimization",
+  "business": "Logistics companies deploying real-time route optimization models on edge-computing hardware.",
+  "problem": "Large language models exceed the memory capacity of edge gateways, causing deployment failures and excessive latency during inference.",
+  "solution": "Model quantization reduces memory requirements by storing weights in lower precision formats like int8 or int4, allowing large models to fit within restricted hardware memory limits.",
+  "steps": [
+    "Assess the target hardware memory constraints and compatibility with quantization methods.",
+    "Select a quantization method that supports the required precision level (e.g., 4-bit or 8-bit).",
+    "Apply the quantization transformation to the model weights to reduce the memory footprint.",
+    "Validate the quantized model to ensure it meets accuracy requirements for route optimization.",
+    "Deploy the optimized model to the edge gateway for local inference."
+  ],
+  "outcome": "Successful deployment of high-performance models on memory-constrained edge hardware with reduced memory usage.",
+  "limitation": "Quantization can lead to a loss in model accuracy; this must be checked by comparing the output of the quantized model against the original full-precision model using a validation dataset.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Quantization Workflow",
+    "description": "The process of transforming high-precision models into memory-efficient formats for edge deployment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Full-Precision Model",
+        "detail": "fp32 weights"
+      },
+      {
+        "id": "b",
+        "label": "Quantization Engine",
+        "detail": "Applies precision reduction"
+      },
+      {
+        "id": "c",
+        "label": "Quantized Model",
+        "detail": "int4 or int8 weights"
+      },
+      {
+        "id": "d",
+        "label": "Edge Gateway",
+        "detail": "Hardware with limited memory"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "transforms"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "deploys"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/docs/transformers/en/quantization/overview",
+      "label": "Overview · Hugging Face Transformers documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge-Device Deployment for Logistics Optimization, how does the technology address the identified memory failure?",
+      "options": [
+        "By increasing the hardware RAM capacity",
+        "By storing weights in lower precision formats",
+        "By removing all weights from the model",
+        "By switching to a cloud-only architecture"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that quantization reduces memory requirements by storing weights in lower precision formats.",
+      "evidence": "Model quantization reduces memory requirements by storing weights in lower precision formats like int8 or int4, allowing large models to fit within restricted hardware memory limits."
+    },
+    {
+      "question": "In Edge-Device Deployment for Logistics Optimization, what is a primary limitation of the implementation process?",
+      "options": [
+        "The model becomes too large for storage",
+        "The model requires more CPU power",
+        "The model may suffer from a loss in accuracy",
+        "The model cannot be deployed on edge hardware"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section notes that quantization can reduce model accuracy, requiring validation against the original model.",
+      "evidence": "Quantization can lead to a loss in model accuracy; this must be checked by comparing the output of the quantized model against the original full-precision model using a validation dataset."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:53.218Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:49.742Z"
+}

@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "azure_aks",
+  "title": "Streamlining Microservices Orchestration with AKS",
+  "business": "E-commerce platforms managing high-traffic microservices architectures.",
+  "problem": "Operational overhead and security fragmentation when manually managing container orchestration, identity, and networking across disparate cloud environments.",
+  "solution": "Azure Kubernetes Service (AKS) provides a managed Kubernetes environment that simplifies cluster operations by integrating directly with Azure identity (Microsoft Entra ID), native networking (Azure CNI), and monitoring (Azure Monitor).",
+  "steps": [
+    "Provision an AKS cluster using the Azure CLI or portal, specifying the desired node pool configuration.",
+    "Configure Microsoft Entra ID integration for role-based access control (RBAC) to secure cluster management.",
+    "Deploy containerized microservices into the cluster using standard Kubernetes manifests or Helm charts.",
+    "Enable Azure Monitor for containers to gain observability into cluster health and application performance.",
+    "Expose services via Azure Load Balancer or Application Gateway for secure ingress traffic management."
+  ],
+  "outcome": "Reduced administrative burden and improved security posture through unified management of containerized workloads.",
+  "limitation": "The managed control plane abstracts underlying infrastructure, which limits direct access to the Kubernetes master nodes; verify compatibility with custom admission controllers or specific kernel-level modifications before deployment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "AKS Integration Workflow",
+    "description": "The flow shows how infrastructure components integrate with the managed AKS cluster.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "User deploying apps"
+      },
+      {
+        "id": "b",
+        "label": "Entra ID",
+        "detail": "Identity provider"
+      },
+      {
+        "id": "c",
+        "label": "AKS Cluster",
+        "detail": "Managed Kubernetes"
+      },
+      {
+        "id": "d",
+        "label": "Azure Monitor",
+        "detail": "Observability"
+      },
+      {
+        "id": "e",
+        "label": "Azure Network",
+        "detail": "Connectivity"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "deploys to"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "authenticates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "sends metrics"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "uses CNI"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Kubernetes Service (AKS)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Microservices Orchestration with AKS, how does the technology address operational overhead?",
+      "options": [
+        "By providing a managed environment integrated with Azure identity, networking, and monitoring.",
+        "By allowing direct access to the Kubernetes master nodes for custom kernel modifications.",
+        "By replacing all microservices with serverless functions automatically.",
+        "By eliminating the need for container images entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that AKS simplifies operations by integrating with core Azure services.",
+      "evidence": "Azure Kubernetes Service (AKS) provides a managed Kubernetes environment that simplifies cluster operations by integrating directly with Azure identity (Microsoft Entra ID), native networking (Azure CNI), and monitoring (Azure Monitor)."
+    },
+    {
+      "question": "In Streamlining Microservices Orchestration with AKS, what is a key limitation of the managed control plane?",
+      "options": [
+        "It prevents the use of Helm charts for deployment.",
+        "It limits direct access to the Kubernetes master nodes.",
+        "It requires manual configuration of every network packet.",
+        "It is incompatible with Microsoft Entra ID."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the managed nature of the control plane restricts access to master nodes.",
+      "evidence": "The managed control plane abstracts underlying infrastructure, which limits direct access to the Kubernetes master nodes"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:51.828Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

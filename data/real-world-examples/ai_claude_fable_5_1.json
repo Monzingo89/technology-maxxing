@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_fable_5_1",
+  "title": "Automated Regulatory Compliance Audit for Global Finance",
+  "business": "Global financial institutions managing multi-jurisdictional regulatory filings.",
+  "problem": "Manual reconciliation of thousands of pages of cross-border legal documents leads to high error rates and missed compliance deadlines during quarterly reporting cycles.",
+  "solution": "Claude Fable 5.1 provides the deep reasoning capabilities required to ingest massive document sets and perform long-horizon agentic analysis, ensuring consistent interpretation of complex regulatory requirements across different regions.",
+  "steps": [
+    "Cache the core regulatory framework documents using prompt caching to optimize costs for repeated analysis cycles.",
+    "Implement turn-scoped system messages to provide specific jurisdictional context for each segment of the audit.",
+    "Utilize readable progress updates between tool calls to monitor the agent's reasoning path during complex multi-step document extraction.",
+    "Adjust the per-message effort parameter dynamically to increase reasoning depth when the agent encounters ambiguous legal clauses."
+  ],
+  "outcome": "Improved accuracy in regulatory filings and significantly reduced human intervention time during high-pressure reporting windows.",
+  "limitation": "The model's thinking blocks are tied to the specific model version, meaning that editing earlier turns in the conversation invalidates existing thinking blocks and requires a full re-computation of the reasoning chain.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Regulatory Audit Workflow",
+    "description": "The flow shows how the agent processes documents through reasoning and tool-based validation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Ingestion",
+        "detail": "Loading regulatory files into context"
+      },
+      {
+        "id": "b",
+        "label": "Claude Fable 5.1",
+        "detail": "Reasoning engine with adaptive thinking"
+      },
+      {
+        "id": "c",
+        "label": "Tool Execution",
+        "detail": "Extracting data with progress updates"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Report",
+        "detail": "Final validated output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Contextualizes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Invokes tools"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns updates"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generates"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.messages.create(\n    model=\"claude-fable-5-1\",\n    messages=[{\"role\": \"user\", \"content\": \"Analyze this clause...\"}],\n    extra_headers={\"anthropic-beta\": \"progress-updates-2026-09-01\"}, # Enable progress updates\n    thinking={\"budget_tokens\": 1024} # Set reasoning depth\n)",
+    "explanation": "This snippet demonstrates initiating a request with progress updates enabled, allowing the system to track the agent's reasoning steps during the audit."
+  },
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview",
+      "label": "Claude Fable 5.1"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Regulatory Compliance Audit for Global Finance, why is Claude Fable 5.1 chosen over other models?",
+      "options": [
+        "It provides the deep reasoning capabilities required to ingest massive document sets and perform long-horizon agentic analysis.",
+        "It is the only model that supports standard text input.",
+        "It is the cheapest model available for simple classification tasks.",
+        "It eliminates the need for any human oversight in legal filings."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the need for deep reasoning and long-horizon work for complex regulatory documents, which aligns with the model's primary use case.",
+      "evidence": "Claude Fable 5.1 provides the deep reasoning capabilities required to ingest massive document sets and perform long-horizon agentic analysis, ensuring consistent interpretation of complex regulatory requirements across different regions."
+    },
+    {
+      "question": "Regarding the implementation of Automated Regulatory Compliance Audit for Global Finance, what is a key limitation to consider?",
+      "options": [
+        "The model cannot process documents longer than 100 tokens.",
+        "Editing earlier turns in the conversation invalidates existing thinking blocks and requires a full re-computation.",
+        "The model is unable to use tools for data extraction.",
+        "Prompt caching is not supported for regulatory documents."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that editing earlier turns invalidates thinking blocks, which is a critical constraint for long-horizon agentic work.",
+      "evidence": "The model's thinking blocks are tied to the specific model version, meaning that editing earlier turns in the conversation invalidates existing thinking blocks and requires a full re-computation of the reasoning chain."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:38.293Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:33.866Z"
+}

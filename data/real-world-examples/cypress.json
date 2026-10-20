@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "cypress",
+  "title": "Accessible Component Validation",
+  "business": "E-commerce platforms requiring strict WCAG compliance for user interface components.",
+  "problem": "Traditional selectors like CSS classes or IDs often fail when components are dynamically rendered or when accessibility roles are the primary interaction point, leading to brittle tests that break during UI refactors.",
+  "solution": "Cypress provides the cy.getByRole() query, which targets elements based on their ARIA roles and accessible names, ensuring that tests validate the application as a screen reader or assistive technology would perceive it.",
+  "steps": [
+    "Identify the ARIA role of the target component (e.g., button, tab, link).",
+    "Use cy.getByRole() to locate the element by its role and accessible name.",
+    "Chain assertions to verify the element's state or visibility.",
+    "Configure { hidden: true } if the element is intentionally excluded from the accessibility tree."
+  ],
+  "outcome": "Tests become more resilient to CSS changes and provide higher confidence that the application is usable for all customers.",
+  "limitation": "The query only matches elements with native HTML roles by default; using non-standard elements with role attributes requires the { native: false } option, which must be explicitly managed to avoid false negatives.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cypress Accessibility Query Flow",
+    "description": "The process of locating and validating a UI component via accessibility roles.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Test Script",
+        "detail": "Initiates the query"
+      },
+      {
+        "id": "b",
+        "label": "Cypress Engine",
+        "detail": "Scans DOM accessibility tree"
+      },
+      {
+        "id": "c",
+        "label": "Target Element",
+        "detail": "Matches role and name"
+      },
+      {
+        "id": "d",
+        "label": "Assertion",
+        "detail": "Validates state"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes cy.getByRole"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "finds match"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "yields subject"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "// Locate a 'Billing' tab by its ARIA role and name\ncy.getByRole('tab', { name: 'Billing' }).click();\n\n// Verify visibility for elements hidden from the accessibility tree\ncy.getByRole('button', { name: 'Submit', hidden: true }).should('be.visible');",
+    "explanation": "This code demonstrates using the accessibility-focused query to interact with UI components, ensuring the test relies on semantic structure rather than volatile CSS selectors."
+  },
+  "sources": [
+    {
+      "url": "https://docs.cypress.io/app/references/changelog",
+      "label": "Cypress App Changelog"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Accessible Component Validation, why is cy.getByRole() preferred over traditional CSS selectors?",
+      "options": [
+        "It is faster than CSS selectors",
+        "It targets elements by semantic role and accessible name, making tests more resilient to UI refactors",
+        "It automatically fixes accessibility violations in the source code",
+        "It is the only way to select elements in modern browsers"
+      ],
+      "answerIndex": 1,
+      "explanation": "The business problem highlights that CSS selectors are brittle; using accessibility roles ensures tests focus on how the component is perceived, which is more stable.",
+      "evidence": "Traditional selectors like CSS classes or IDs often fail when components are dynamically rendered or when accessibility roles are the primary interaction point, leading to brittle tests that break during UI refactors."
+    },
+    {
+      "question": "In Accessible Component Validation, what is a primary limitation of using cy.getByRole()?",
+      "options": [
+        "It cannot be used with assertions",
+        "It requires the { native: false } option to match elements that use a role attribute instead of native HTML roles",
+        "It only works in Firefox",
+        "It is deprecated in Cypress 16.2.0"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the need for the native: false option when dealing with non-standard elements.",
+      "evidence": "The query only matches elements with native HTML roles by default; using non-standard elements with role attributes requires the { native: false } option, which must be explicitly managed to avoid false negatives."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:54.044Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:50.505Z"
+}

@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "server_side_request_forgery",
+  "title": "SSRF Mitigation in Microservice Image Fetchers",
+  "business": "A cloud-based digital asset management platform that allows users to import profile images via external URLs.",
+  "problem": "The image processing service blindly follows user-provided URLs, allowing attackers to force the server to scan internal network segments, access metadata services, or interact with private APIs that are otherwise unreachable from the public internet.",
+  "solution": "Implement a strict allow-list and network-level isolation. By validating the destination against a predefined set of trusted domains and using a dedicated proxy that lacks access to internal infrastructure, the application prevents unauthorized requests to sensitive internal endpoints.",
+  "steps": [
+    "Define a strict allow-list of permitted hostnames and protocols for image retrieval.",
+    "Configure a dedicated, isolated egress proxy that cannot resolve or route to internal IP ranges like 127.0.0.1 or 169.254.169.254.",
+    "Validate the user-provided URL against the allow-list before initiating any network request.",
+    "Ensure the application service runs with least privilege, lacking network permissions to reach internal management interfaces."
+  ],
+  "outcome": "The application successfully fetches external assets while remaining resilient against attempts to probe internal network infrastructure or sensitive metadata services.",
+  "limitation": "The primary limitation is the maintenance overhead of the allow-list; as business requirements change, the list must be updated, which may introduce friction if not automated. Check for this by monitoring blocked request logs to identify legitimate traffic being incorrectly denied.",
+  "diagram": {
+    "kind": "flow",
+    "title": "SSRF Mitigation Flow",
+    "description": "The flow shows how an incoming request is validated against a security policy before reaching the external network.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Submits URL"
+      },
+      {
+        "id": "b",
+        "label": "App Server",
+        "detail": "Validates URL"
+      },
+      {
+        "id": "c",
+        "label": "Allow-list",
+        "detail": "Security Policy"
+      },
+      {
+        "id": "d",
+        "label": "Isolated Proxy",
+        "detail": "Restricted Egress"
+      },
+      {
+        "id": "e",
+        "label": "External Server",
+        "detail": "Target Asset"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "request_url"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "check_validity"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "forward_if_valid"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "fetch_image"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In SSRF Mitigation in Microservice Image Fetchers, what is the primary risk addressed by the solution?",
+      "options": [
+        "Unauthorized access to internal network segments and metadata services.",
+        "Increased latency during image processing tasks.",
+        "Failure to render images from public domains.",
+        "Inability to scale the image processing service."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem description explicitly states that the service is vulnerable to attackers forcing the server to scan internal network segments or access metadata services.",
+      "evidence": "The image processing service blindly follows user-provided URLs, allowing attackers to force the server to scan internal network segments, access metadata services, or interact with private APIs that are otherwise unreachable from the public internet."
+    },
+    {
+      "question": "In SSRF Mitigation in Microservice Image Fetchers, what is the main trade-off of the proposed solution?",
+      "options": [
+        "The system becomes 100% secure against all attacks.",
+        "The allow-list requires ongoing maintenance and may block legitimate traffic.",
+        "The proxy increases the cost of cloud infrastructure significantly.",
+        "The solution requires replacing the entire network stack."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that maintaining an allow-list introduces management overhead and potential friction for legitimate users.",
+      "evidence": "The primary limitation is the maintenance overhead of the allow-list; as business requirements change, the list must be updated, which may introduce friction if not automated."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:57.229Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

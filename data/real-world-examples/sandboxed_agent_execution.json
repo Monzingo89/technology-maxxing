@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "sandboxed_agent_execution",
+  "title": "Automated Financial Document Reconciliation",
+  "business": "Financial auditing firms managing high-volume client document processing.",
+  "problem": "Manual verification of client-submitted financial statements is slow, error-prone, and risks exposing sensitive host-system files to unauthorized scripts.",
+  "solution": "Use a SandboxAgent with a constrained filesystem to isolate document processing. The agent uses filesystem tools to read client files, perform calculations, and generate reconciliation reports within a temporary, isolated workspace.",
+  "steps": [
+    "Define a SandboxAgent with a Manifest that mounts the specific client document directory as a read-only workspace.",
+    "Configure the agent capabilities to include Filesystem access for reading statements and Shell access for running validation scripts.",
+    "Initialize a DockerSandboxClient to ensure that all agent-executed code runs within a containerized, OS-isolated environment.",
+    "Execute the agent using a SandboxRunConfig that points to the client-specific snapshot for consistent processing.",
+    "Verify the output artifacts generated in the sandbox workspace before promoting them to the firm's primary storage."
+  ],
+  "outcome": "Secure, reproducible document processing where the agent operates on isolated data without risking host-system integrity.",
+  "limitation": "The sandbox session does not provide inherent OS-level confinement when using the UnixLocalSandboxClient; developers must choose a Docker or hosted backend to ensure true process isolation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Sandbox Execution Workflow",
+    "description": "The flow shows how the agent definition and configuration interact with the sandbox environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "SandboxAgent",
+        "detail": "Defines instructions and capabilities"
+      },
+      {
+        "id": "b",
+        "label": "SandboxRunConfig",
+        "detail": "Determines client and session source"
+      },
+      {
+        "id": "c",
+        "label": "Runner",
+        "detail": "Binds agent to session"
+      },
+      {
+        "id": "d",
+        "label": "SandboxSession",
+        "detail": "Isolated workspace for execution"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "provides definition"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "injects session config"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "binds and executes"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import SandboxAgent, DockerSandboxClient\n\n# Define the agent with filesystem capabilities\nagent = SandboxAgent(\n    name=\"ReconciliationAgent\",\n    capabilities=[Filesystem(), Shell()] # Allows file edits and shell commands\n)\n\n# Configure the run to use Docker for isolation\nconfig = SandboxRunConfig(client=DockerSandboxClient())",
+    "explanation": "This code initializes a SandboxAgent with necessary capabilities and selects a Docker backend, which maps to the solution of using isolated environments for financial document processing."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/sandbox/guide/",
+      "label": "Concepts - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Financial Document Reconciliation, how does the technology address the risk of manual verification?",
+      "options": [
+        "By using a SandboxAgent with a constrained filesystem to isolate processing.",
+        "By replacing all human auditors with automated shell scripts.",
+        "By granting the agent full root access to the host system.",
+        "By using a cloud-based database instead of a local filesystem."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that the solution involves using a SandboxAgent with a constrained filesystem to isolate document processing.",
+      "evidence": "Use a SandboxAgent with a constrained filesystem to isolate document processing."
+    },
+    {
+      "question": "In Automated Financial Document Reconciliation, what is a key limitation regarding the execution environment?",
+      "options": [
+        "The sandbox cannot access any files.",
+        "UnixLocalSandboxClient does not provide inherent OS-level confinement.",
+        "Docker backends are not supported for financial tasks.",
+        "The agent cannot run shell commands."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that the UnixLocalSandboxClient lacks OS-level confinement, requiring a Docker or hosted backend for true isolation.",
+      "evidence": "The sandbox session does not provide inherent OS-level confinement when using the UnixLocalSandboxClient; developers must choose a Docker or hosted backend to ensure true process isolation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:40.025Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:36.315Z"
+}

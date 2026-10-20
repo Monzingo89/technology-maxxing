@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "agent_tracing",
+  "title": "Supply Chain Logistics Agent Observability",
+  "business": "Logistics companies managing automated warehouse inventory and shipping coordination.",
+  "problem": "Complex, multi-step agent workflows involving tool calls to inventory databases and external shipping APIs often fail silently, making it impossible to determine if a breakdown occurred during a database query, a guardrail check, or a model generation.",
+  "solution": "Implementing Agent Tracing allows developers to capture a hierarchical record of every event—including tool calls, guardrails, and model turns—linked together in a single trace, providing a clear audit trail for debugging asynchronous failures.",
+  "steps": [
+    "Initialize the agent workflow within a trace context manager to group multiple runner calls into a single logical unit.",
+    "Configure RunConfig to include or exclude specific span types like task or turn spans to balance detail with performance.",
+    "Use custom_span() to wrap proprietary business logic or external API interactions that fall outside standard SDK instrumentation.",
+    "Call flush_traces() after critical background tasks or long-running worker processes to ensure all buffered spans are exported to the dashboard.",
+    "Set trace_include_sensitive_data to False in production environments to redact PII from stored span data."
+  ],
+  "outcome": "Developers gain the ability to visualize the entire lifecycle of a logistics request, enabling rapid identification of which specific tool or guardrail caused a workflow interruption.",
+  "limitation": "The default batch processing of traces may introduce a delay in visibility for long-running background workers; developers must manually invoke flush_traces() to force immediate export if real-time monitoring is required.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Trace Hierarchy",
+    "description": "Shows how a parent Trace contains nested Spans representing different stages of an agent execution.",
+    "nodes": [
+      {
+        "id": "T1",
+        "label": "Trace",
+        "detail": "Root container for the entire workflow"
+      },
+      {
+        "id": "S1",
+        "label": "Agent Span",
+        "detail": "Represents the overall agent execution"
+      },
+      {
+        "id": "S2",
+        "label": "Tool Span",
+        "detail": "Captures inventory database query"
+      },
+      {
+        "id": "S3",
+        "label": "Guardrail Span",
+        "detail": "Validates shipping constraints"
+      }
+    ],
+    "edges": [
+      {
+        "from": "T1",
+        "to": "S1",
+        "label": "contains"
+      },
+      {
+        "from": "S1",
+        "to": "S2",
+        "label": "invokes"
+      },
+      {
+        "from": "S1",
+        "to": "S3",
+        "label": "triggers"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import Runner, trace, flush_traces\n\n# Wrap the entire logistics workflow in a single trace\nwith trace(\"Logistics_Workflow\"):\n    try:\n        # Execute agent run; spans are automatically linked\n        result = Runner.run_sync(agent, \"Ship order #123\")\n    finally:\n        # Ensure traces are sent immediately after the task completes\n        flush_traces()",
+    "explanation": "This code demonstrates wrapping a multi-step agent process in a trace and ensuring immediate export using flush_traces, which is critical for background logistics tasks."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/tracing/",
+      "label": "Tracing - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Supply Chain Logistics Agent Observability, why is Agent Tracing used?",
+      "options": [
+        "To provide an audit trail for debugging asynchronous failures in complex workflows.",
+        "To increase the speed of model generations by caching previous responses.",
+        "To automatically fix errors found during the execution of tool calls.",
+        "To bypass the need for human-in-the-loop approvals in shipping workflows."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that complex workflows often fail silently, and tracing provides the necessary audit trail to identify where the breakdown occurred.",
+      "evidence": "Implementing Agent Tracing allows developers to capture a hierarchical record of every event—including tool calls, guardrails, and model turns—linked together in a single trace, providing a clear audit trail for debugging asynchronous failures."
+    },
+    {
+      "question": "Regarding the implementation of Supply Chain Logistics Agent Observability, what is a primary trade-off of the default tracing behavior?",
+      "options": [
+        "It requires manual instrumentation of every single line of code.",
+        "It prevents the use of custom trace processors for external backends.",
+        "It may cause a delay in trace visibility for background workers unless explicitly flushed.",
+        "It automatically deletes all sensitive data, making debugging impossible."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly notes that batch processing can delay visibility in background workers, necessitating the use of flush_traces().",
+      "evidence": "The default batch processing of traces may introduce a delay in visibility for long-running background workers; developers must manually invoke flush_traces() to force immediate export if real-time monitoring is required."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:41.425Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_4_turbo_preview",
+  "title": "Legacy Legal Document Summarization",
+  "business": "A mid-sized law firm managing thousands of archived case files.",
+  "problem": "The firm struggles with high operational costs and slow retrieval times when associates manually review lengthy, unstructured legal briefs to identify key case precedents.",
+  "solution": "By leveraging the 128,000 token context window of the gpt-4-turbo-preview model, the firm can ingest entire multi-page legal documents in a single API call, allowing the model to synthesize complex arguments and extract relevant precedents without needing to chunk the text into smaller, potentially disjointed segments.",
+  "steps": [
+    "Configure the application to connect to the Chat Completions endpoint using the gpt-4-0125-preview snapshot.",
+    "Pre-process legal documents into plain text format to ensure compatibility with the text-only input modality.",
+    "Construct a system prompt that defines the extraction schema for case precedents.",
+    "Send the full document text to the API, ensuring the total token count remains within the 128,000 window.",
+    "Parse the structured JSON response to update the firm's internal case management database."
+  ],
+  "outcome": "Associates experience a significant reduction in time spent on initial document triage, enabling them to focus on higher-value legal strategy.",
+  "limitation": "The model has a knowledge cutoff of December 2023, meaning it cannot natively understand or reference legal developments or case law established after this date; developers must verify the accuracy of citations against current legal databases.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Processing Pipeline",
+    "description": "This flow illustrates how raw legal text is transformed into actionable insights using the model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legal Archive",
+        "detail": "Source of unstructured PDF/Text files"
+      },
+      {
+        "id": "b",
+        "label": "API Request",
+        "detail": "Payload containing full text"
+      },
+      {
+        "id": "c",
+        "label": "GPT-4 Turbo Preview",
+        "detail": "Processing engine for summarization"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Storage for extracted precedents"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "128k Context Window"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Structured Output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-4-0125-preview', # Using the specific snapshot for consistency\n  messages=[{'role': 'user', 'content': full_legal_brief}] # Sending entire document at once\n)",
+    "explanation": "This code demonstrates calling the Chat Completions endpoint to process a full legal brief in one request, utilizing the large context window."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-4-turbo-preview",
+      "label": "GPT-4 Turbo Preview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Legal Document Summarization, why is the 128,000 token context window critical?",
+      "options": [
+        "It allows for the ingestion of entire multi-page documents in a single call.",
+        "It enables the model to access real-time legal databases via the internet.",
+        "It reduces the cost of output tokens to zero.",
+        "It allows the model to generate images of legal documents."
+      ],
+      "answerIndex": 0,
+      "explanation": "The large context window is the primary feature enabling the ingestion of full documents without manual chunking.",
+      "evidence": "the firm can ingest entire multi-page legal documents in a single API call, allowing the model to synthesize complex arguments and extract relevant precedents without needing to chunk the text into smaller, potentially disjointed segments."
+    },
+    {
+      "question": "In Legacy Legal Document Summarization, what is a primary limitation of the model?",
+      "options": [
+        "It cannot output text.",
+        "It has a knowledge cutoff of December 2023, requiring verification of recent legal developments.",
+        "It requires the use of the legacy completions endpoint.",
+        "It only supports input in image format."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation specifies a knowledge cutoff, which limits the model's awareness of events occurring after that date.",
+      "evidence": "The model has a knowledge cutoff of December 2023, meaning it cannot natively understand or reference legal developments or case law established after this date; developers must verify the accuracy of citations against current legal databases."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:38.878Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:34.837Z"
+}

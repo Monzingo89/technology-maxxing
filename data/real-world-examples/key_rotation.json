@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "key_rotation",
+  "title": "Automated Cryptographic Key Rotation for Financial Microservices",
+  "business": "Financial services firms handling high-frequency transaction data that require strict compliance with data protection standards.",
+  "problem": "Static cryptographic keys increase the blast radius of a potential breach, as a single compromised key could expose years of historical transaction data.",
+  "solution": "Implementing a scheduled key rotation strategy ensures that keys are replaced periodically or after security events, limiting the window of exposure while maintaining system availability through transition rules.",
+  "steps": [
+    "Define a key versioning schema to track active, retired, and pending keys.",
+    "Configure a secure vault to store key metadata and rotation schedules.",
+    "Implement a transition period where the system supports decryption with the previous key while encrypting all new data with the current key.",
+    "Automate the decommissioning of old keys once the transition grace period expires.",
+    "Audit all key access logs to ensure compliance with the rotation policy."
+  ],
+  "outcome": "Reduced impact of potential key compromise and improved alignment with security compliance requirements.",
+  "limitation": "The primary limitation is the increased complexity of managing key versions, which can lead to data decryption failures if the transition grace period is shorter than the time required for background batch processes to re-encrypt legacy data. Monitor this by checking the error rate of decryption requests using retired key versions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Key Rotation Lifecycle",
+    "description": "The flow shows how a system transitions from an old key to a new one while maintaining access to encrypted data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Vault",
+        "detail": "Stores current and previous keys"
+      },
+      {
+        "id": "b",
+        "label": "Service",
+        "detail": "Application performing encryption"
+      },
+      {
+        "id": "c",
+        "label": "Data Store",
+        "detail": "Encrypted records"
+      },
+      {
+        "id": "d",
+        "label": "Rotation Trigger",
+        "detail": "Automated scheduler"
+      }
+    ],
+    "edges": [
+      {
+        "from": "d",
+        "to": "a",
+        "label": "Initiates rotation"
+      },
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Provides new key"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Writes new data"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Requests decryption of legacy data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Cryptographic Key Rotation for Financial Microservices, what is the primary security benefit of the solution?",
+      "options": [
+        "It eliminates the need for encryption entirely.",
+        "It limits the window of exposure for compromised keys.",
+        "It makes the system 100% immune to all attacks.",
+        "It removes the requirement for access control."
+      ],
+      "answerIndex": 1,
+      "explanation": "Rotating keys ensures that if a key is compromised, the attacker only gains access to a limited subset of data rather than the entire historical dataset.",
+      "evidence": "Implementing a scheduled key rotation strategy ensures that keys are replaced periodically or after security events, limiting the window of exposure while maintaining system availability through transition rules."
+    },
+    {
+      "question": "In Automated Cryptographic Key Rotation for Financial Microservices, what is a key operational risk identified?",
+      "options": [
+        "The system becomes too fast for users.",
+        "Decryption failures due to short transition grace periods.",
+        "The vault becomes too small to store keys.",
+        "Automated rotation is prohibited by security standards."
+      ],
+      "answerIndex": 1,
+      "explanation": "If the transition period is too short, background processes may fail to access data encrypted with older keys, leading to service disruption.",
+      "evidence": "The primary limitation is the increased complexity of managing key versions, which can lead to data decryption failures if the transition grace period is shorter than the time required for background batch processes to re-encrypt legacy data."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:47.575Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

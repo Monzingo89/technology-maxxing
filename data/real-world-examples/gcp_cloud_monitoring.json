@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_monitoring",
+  "title": "Retail Platform Uptime Assurance",
+  "business": "E-commerce retailers requiring high availability for customer-facing web services.",
+  "problem": "Unnoticed service outages during peak traffic periods lead to lost revenue and poor customer experience.",
+  "solution": "Google Cloud Monitoring provides a unified observability platform to track service health via uptime checks and automated alerting, ensuring rapid incident response.",
+  "steps": [
+    "Define uptime check configurations targeting the public-facing URL of the retail application.",
+    "Create alerting policies that trigger notifications when uptime checks fail for a specified duration.",
+    "Configure notification channels such as email or SMS to alert the on-call engineering team.",
+    "Build custom dashboards to visualize service latency and error rates alongside infrastructure metrics."
+  ],
+  "outcome": "Improved service reliability through proactive identification and resolution of availability issues.",
+  "limitation": "Uptime checks are limited to external connectivity; they cannot detect internal application logic errors that do not impact HTTP response codes, requiring additional log-based metrics to verify.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Monitoring Incident Lifecycle",
+    "description": "The flow of service health data from the application to the alerting system.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Retail App",
+        "detail": "Public web service"
+      },
+      {
+        "id": "b",
+        "label": "Uptime Check",
+        "detail": "External probe"
+      },
+      {
+        "id": "c",
+        "label": "Cloud Monitoring",
+        "detail": "Aggregation engine"
+      },
+      {
+        "id": "d",
+        "label": "Alerting Policy",
+        "detail": "Threshold evaluator"
+      },
+      {
+        "id": "e",
+        "label": "Engineering Team",
+        "detail": "Incident responders"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "probes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "reports status"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "evaluates metrics"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "notifies"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Retail Platform Uptime Assurance, what is the primary role of Google Cloud Monitoring?",
+      "options": [
+        "To provide a unified observability platform to track service health via uptime checks and automated alerting.",
+        "To replace the need for application logs by automatically fixing code errors.",
+        "To manage the physical hardware of the retail data center.",
+        "To provide automated customer support for e-commerce shoppers."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies the solution as using the platform to track service health and alert on outages.",
+      "evidence": "Google Cloud Monitoring provides a unified observability platform to track service health via uptime checks and automated alerting, ensuring rapid incident response."
+    },
+    {
+      "question": "In Retail Platform Uptime Assurance, what is a key limitation of the proposed monitoring strategy?",
+      "options": [
+        "It cannot monitor internal application logic errors that do not impact HTTP response codes.",
+        "It is too expensive for small retail businesses.",
+        "It requires manual intervention for every uptime check.",
+        "It only works for internal network traffic."
+      ],
+      "answerIndex": 0,
+      "explanation": "The limitation section explicitly states that uptime checks are external and miss internal logic errors.",
+      "evidence": "Uptime checks are limited to external connectivity; they cannot detect internal application logic errors that do not impact HTTP response codes, requiring additional log-based metrics to verify."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:12.413Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

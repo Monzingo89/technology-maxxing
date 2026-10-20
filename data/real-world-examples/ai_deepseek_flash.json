@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_deepseek_flash",
+  "title": "Automated Legal Discovery for Global Logistics",
+  "business": "A global logistics firm managing thousands of complex international shipping contracts and customs compliance documents.",
+  "problem": "The firm struggles with high latency and inconsistent extraction accuracy when processing unstructured legal documents, leading to delayed customs clearance and manual review bottlenecks.",
+  "solution": "By utilizing DeepSeek V4.1 Flash, the firm leverages the model's native support for structured JSON output and tool calls to automatically parse legal clauses into a standardized database schema. The model's thinking mode allows it to reason through ambiguous contract language before finalizing the structured data, ensuring higher reliability for downstream compliance systems.",
+  "steps": [
+    "Define a strict JSON schema representing the required contract fields such as liability limits, jurisdiction, and delivery terms.",
+    "Configure the DeepSeek API endpoint to enable thinking mode, allowing the model to perform internal reasoning on complex clauses before outputting the final JSON.",
+    "Implement tool calls to trigger external validation functions that verify extracted dates and currency codes against the firm's internal master data.",
+    "Process the structured output into the firm's central document management system for automated compliance auditing."
+  ],
+  "outcome": "The implementation results in a more predictable and automated compliance pipeline, reducing the need for manual intervention in routine contract reviews and accelerating the document ingestion lifecycle.",
+  "limitation": "The primary trade-off is the increased token consumption associated with thinking mode, which can lead to higher costs during peak hours. To monitor this, developers should track the ratio of input tokens to output tokens and evaluate if non-thinking mode suffices for simpler, high-volume document types.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Automated Legal Discovery Workflow",
+    "description": "The flow shows how raw documents are processed through the DeepSeek model to reach a structured database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Document",
+        "detail": "Unstructured contract text"
+      },
+      {
+        "id": "b",
+        "label": "DeepSeek V4.1 Flash",
+        "detail": "Thinking mode enabled"
+      },
+      {
+        "id": "c",
+        "label": "Tool Call",
+        "detail": "Validation function"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Structured compliance records"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Verify Data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Store JSON"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "label": "Models & Pricing | DeepSeek API Docs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Discovery for Global Logistics, why is the model's thinking mode utilized?",
+      "options": [
+        "To reduce the total number of tokens processed.",
+        "To reason through ambiguous contract language before finalizing structured data.",
+        "To bypass the need for tool calls entirely.",
+        "To ensure the model only operates during off-peak hours."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that thinking mode is used to reason through complex language to ensure higher reliability.",
+      "evidence": "The model's thinking mode allows it to reason through ambiguous contract language before finalizing the structured data, ensuring higher reliability for downstream compliance systems."
+    },
+    {
+      "question": "In Automated Legal Discovery for Global Logistics, what is the identified limitation of the implementation?",
+      "options": [
+        "The model cannot output JSON format.",
+        "The model does not support tool calls.",
+        "Increased token consumption in thinking mode may raise costs during peak hours.",
+        "The model is unable to process international shipping contracts."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights the cost trade-off of thinking mode during peak hours.",
+      "evidence": "The primary trade-off is the increased token consumption associated with thinking mode, which can lead to higher costs during peak hours."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:16.734Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:12.014Z"
+}

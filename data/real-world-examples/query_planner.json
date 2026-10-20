@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "query_planner",
+  "title": "Optimizing Logistics Route Discovery",
+  "business": "A global logistics provider managing millions of delivery waypoints.",
+  "problem": "Complex analytical queries joining historical transit data with real-time sensor logs frequently time out because the database engine defaults to inefficient nested loop joins instead of hash joins.",
+  "solution": "The Query Planner evaluates available access paths and join strategies based on table statistics. By ensuring accurate statistics are gathered, the planner can correctly identify that a hash join is more efficient for large datasets than a sequential scan followed by nested loops.",
+  "steps": [
+    "Analyze the current query execution plan using the EXPLAIN command to identify high-cost nodes.",
+    "Update table statistics using the ANALYZE command to provide the planner with accurate row counts and data distribution.",
+    "Verify that appropriate indexes exist on join keys to allow the planner to consider index scans.",
+    "Review the cost estimates in the plan to ensure the planner is choosing the optimal join strategy."
+  ],
+  "outcome": "Queries execute with predictable latency, as the planner consistently selects efficient join paths based on current data distribution.",
+  "limitation": "The planner may occasionally choose a suboptimal path if statistics are stale or if the data distribution is highly skewed; check this by comparing the estimated row counts versus actual row counts in the EXPLAIN ANALYZE output.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Query Planner Decision Flow",
+    "description": "The process of how a query is transformed into an execution plan.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "SQL Query",
+        "detail": "Input statement"
+      },
+      {
+        "id": "b",
+        "label": "Statistics",
+        "detail": "Table metadata"
+      },
+      {
+        "id": "c",
+        "label": "Query Planner",
+        "detail": "Cost-based optimizer"
+      },
+      {
+        "id": "d",
+        "label": "Execution Plan",
+        "detail": "Selected access path"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "c",
+        "label": "parses"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "informs cost"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Logistics Route Discovery, why does the system struggle with complex analytical queries?",
+      "options": [
+        "The database defaults to inefficient nested loop joins instead of hash joins.",
+        "The hardware lacks sufficient memory for large datasets.",
+        "The SQL syntax is incompatible with the database engine.",
+        "The network latency between sensor logs and transit data is too high."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly states that the problem arises because the engine defaults to inefficient join strategies for large datasets.",
+      "evidence": "Complex analytical queries joining historical transit data with real-time sensor logs frequently time out because the database engine defaults to inefficient nested loop joins instead of hash joins."
+    },
+    {
+      "question": "In Optimizing Logistics Route Discovery, how can a user verify if the Query Planner has made a suboptimal decision?",
+      "options": [
+        "By checking the server hardware logs.",
+        "By comparing estimated versus actual row counts in the EXPLAIN ANALYZE output.",
+        "By manually rewriting the SQL query to force a specific join type.",
+        "By deleting all existing indexes on the table."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that stale statistics or skewed data can lead to poor planning, which is diagnosed by comparing estimated and actual row counts.",
+      "evidence": "The planner may occasionally choose a suboptimal path if statistics are stale or if the data distribution is highly skewed; check this by comparing the estimated row counts versus actual row counts in the EXPLAIN ANALYZE output."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:05.799Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

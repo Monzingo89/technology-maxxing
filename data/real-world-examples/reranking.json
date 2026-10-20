@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "reranking",
+  "title": "Precision Enhancement for Legal Discovery Systems",
+  "business": "Corporate legal departments managing massive document repositories for litigation discovery.",
+  "problem": "Initial keyword-based retrieval often returns large sets of documents that are topically relevant but contextually misaligned with the specific legal query, forcing attorneys to manually filter through irrelevant noise.",
+  "solution": "Implementing a two-stage retrieval pipeline where a high-recall initial search retrieves a broad candidate set, followed by a BERT-based reranker that evaluates the semantic relationship between the query and each candidate document to assign a precise relevance score.",
+  "steps": [
+    "Execute an initial retrieval query using traditional BM25 or vector search to fetch the top 100 candidate documents.",
+    "Pass the original user query and each candidate document text as a concatenated input pair into a pre-trained BERT model.",
+    "Compute a relevance score for each pair using the model's classification head.",
+    "Sort the candidate list in descending order based on these refined scores.",
+    "Return the top-ranked subset to the user interface for review."
+  ],
+  "outcome": "Users receive a highly curated list of documents where the most contextually significant information appears at the top, significantly reducing the time spent on manual document review.",
+  "limitation": "The primary limitation is computational latency; because the reranker processes every candidate document individually, it is significantly slower than the initial retrieval stage. To check for this, monitor the p99 latency of the request-response cycle as the candidate pool size increases.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Two-Stage Retrieval Pipeline",
+    "description": "The flow from user query to final ranked results.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Query",
+        "detail": "Input search string"
+      },
+      {
+        "id": "b",
+        "label": "Initial Retrieval",
+        "detail": "High-recall search engine"
+      },
+      {
+        "id": "c",
+        "label": "Candidate Pool",
+        "detail": "Set of 100 documents"
+      },
+      {
+        "id": "d",
+        "label": "BERT Reranker",
+        "detail": "Semantic scoring model"
+      },
+      {
+        "id": "e",
+        "label": "Final Results",
+        "detail": "Sorted document list"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "initiates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "populates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "scores pairs"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "sorts"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1901.04085",
+      "label": "Passage Re-ranking with BERT"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Precision Enhancement for Legal Discovery Systems, why is a two-stage retrieval process used?",
+      "options": [
+        "To eliminate the need for an initial search engine entirely.",
+        "To balance high-recall retrieval with high-precision semantic scoring.",
+        "To increase the number of irrelevant documents returned to the user.",
+        "To reduce the computational cost of the initial retrieval stage."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using a high-recall initial search followed by a BERT-based reranker to achieve precise relevance.",
+      "evidence": "Implementing a two-stage retrieval pipeline where a high-recall initial search retrieves a broad candidate set, followed by a BERT-based reranker that evaluates the semantic relationship between the query and each candidate document to assign a precise relevance score."
+    },
+    {
+      "question": "In Precision Enhancement for Legal Discovery Systems, what is a primary limitation of the reranking approach?",
+      "options": [
+        "It is unable to handle long legal documents.",
+        "It increases latency because it processes candidates individually.",
+        "It requires a larger initial candidate pool than necessary.",
+        "It cannot be used with BERT-based models."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario note that reranking is computationally expensive because it processes each candidate document, which impacts system latency.",
+      "evidence": "The primary limitation is computational latency; because the reranker processes every candidate document individually, it is significantly slower than the initial retrieval stage."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:18.736Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:15.282Z"
+}

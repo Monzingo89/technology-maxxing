@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_ec2",
+  "title": "Dynamic Compute Scaling for Seasonal Analytics",
+  "business": "A regional meteorological research firm performing high-frequency weather data processing.",
+  "problem": "The firm faces extreme compute demand spikes during storm seasons, leading to hardware resource exhaustion on static local servers and delayed data processing.",
+  "solution": "Amazon EC2 provides resizable virtual compute instances that allow the firm to provision capacity on-demand, matching compute power to the volume of incoming meteorological data streams.",
+  "steps": [
+    "Select an appropriate Amazon Machine Image (AMI) containing the required data processing libraries.",
+    "Choose an instance family optimized for compute-intensive workloads to handle complex weather modeling.",
+    "Configure Security Groups to restrict inbound traffic to specific data ingestion ports.",
+    "Launch the instances within a Virtual Private Cloud to ensure network isolation.",
+    "Monitor instance health and resource utilization to trigger manual or automated scaling actions."
+  ],
+  "outcome": "The firm achieves consistent processing throughput during peak events without maintaining idle hardware during off-peak periods.",
+  "limitation": "A primary limitation is the management overhead of virtual machine maintenance, such as OS patching and software updates, which must be verified by checking the instance status and system logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "EC2 Compute Provisioning Flow",
+    "description": "This diagram illustrates the lifecycle of an EC2 instance within the research firm's architecture.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Data Source",
+        "detail": "External weather sensors"
+      },
+      {
+        "id": "b",
+        "label": "EC2 Instance",
+        "detail": "Compute-optimized virtual machine"
+      },
+      {
+        "id": "c",
+        "label": "Storage",
+        "detail": "Persistent data volume"
+      },
+      {
+        "id": "d",
+        "label": "Admin",
+        "detail": "System maintenance and patching"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Writes results"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Performs OS updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely- AWS"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Compute Scaling for Seasonal Analytics, why does the firm choose Amazon EC2?",
+      "options": [
+        "To replace physical hardware with resizable virtual compute instances for variable demand.",
+        "To automatically eliminate the need for any data processing software.",
+        "To permanently store all weather data in a global database.",
+        "To avoid using any network security configurations."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the firm needs to handle compute spikes that static hardware cannot manage, and EC2 provides the resizable capacity required.",
+      "evidence": "Amazon EC2 provides resizable virtual compute instances that allow the firm to provision capacity on-demand, matching compute power to the volume of incoming meteorological data streams."
+    },
+    {
+      "question": "In Dynamic Compute Scaling for Seasonal Analytics, what is a key operational limitation?",
+      "options": [
+        "The inability to choose different instance families.",
+        "The requirement for manual OS patching and maintenance.",
+        "The lack of network isolation within the cloud.",
+        "The inability to monitor instance health."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson highlights that managing virtual machines involves operational overhead like patching, which is a trade-off for the flexibility provided.",
+      "evidence": "A primary limitation is the management overhead of virtual machine maintenance, such as OS patching and software updates, which must be verified by checking the instance status and system logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:02.356Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

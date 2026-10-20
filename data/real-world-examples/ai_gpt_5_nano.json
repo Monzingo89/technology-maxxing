@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5_nano",
+  "title": "High-Volume Logistics Classification",
+  "business": "Global logistics firm managing millions of daily shipping manifests.",
+  "problem": "The firm faces prohibitive costs and latency when using high-parameter models to classify incoming shipping manifests into customs categories, leading to processing bottlenecks.",
+  "solution": "Implementing GPT-5 nano via the Chat Completions API allows the firm to perform rapid, cost-efficient classification of text-based manifests at scale, utilizing the model's optimized architecture for high-throughput tasks.",
+  "steps": [
+    "Configure the application to route manifest text data to the gpt-5-nano-2025-08-07 snapshot.",
+    "Implement structured outputs to ensure the model returns consistent JSON classification labels.",
+    "Utilize prompt caching for recurring manifest templates to reduce input token expenditure.",
+    "Deploy the classification logic using the v1/chat/completions endpoint for real-time processing."
+  ],
+  "outcome": "The firm achieves a streamlined customs documentation workflow with significantly reduced operational overhead and improved throughput for high-volume manifest ingestion.",
+  "limitation": "The model's focus on speed and cost-efficiency may result in lower reasoning depth for highly ambiguous or complex legal edge cases; verify performance by monitoring classification confidence scores against a human-audited sample set.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Classification Pipeline",
+    "description": "This diagram illustrates the flow of manifest data from ingestion to classification using the GPT-5 nano model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Manifest Ingestion",
+        "detail": "Raw shipping document input"
+      },
+      {
+        "id": "b",
+        "label": "Prompt Caching",
+        "detail": "Check for recurring template matches"
+      },
+      {
+        "id": "c",
+        "label": "GPT-5 nano",
+        "detail": "Model processes text classification"
+      },
+      {
+        "id": "d",
+        "label": "Structured Output",
+        "detail": "JSON response with category label"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends raw text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Provides cached context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Generates classification"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5-nano",
+      "label": "GPT-5 nano"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Volume Logistics Classification, why is GPT-5 nano selected for the manifest processing task?",
+      "options": [
+        "It provides the highest reasoning depth for complex legal edge cases.",
+        "It offers a cost-efficient, high-throughput solution for classification tasks.",
+        "It supports real-time transcription sessions for voice-based manifests.",
+        "It is the only model that supports fine-tuning for custom logistics data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that the firm needs to reduce costs and latency for high-volume classification, which aligns with the model's design as the fastest, most cost-efficient version of GPT-5.",
+      "evidence": "Implementing GPT-5 nano via the Chat Completions API allows the firm to perform rapid, cost-efficient classification of text-based manifests at scale, utilizing the model's optimized architecture for high-throughput tasks."
+    },
+    {
+      "question": "In High-Volume Logistics Classification, what is a primary limitation of the proposed implementation?",
+      "options": [
+        "The model cannot handle structured JSON outputs.",
+        "The model requires manual fine-tuning for every new manifest type.",
+        "The model may lack the reasoning depth required for ambiguous edge cases.",
+        "The model is incompatible with the Chat Completions API."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because GPT-5 nano is optimized for speed and cost, it may sacrifice reasoning depth compared to larger models, requiring verification for complex cases.",
+      "evidence": "The model's focus on speed and cost-efficiency may result in lower reasoning depth for highly ambiguous or complex legal edge cases; verify performance by monitoring classification confidence scores against a human-audited sample set."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:57.901Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:54.311Z"
+}

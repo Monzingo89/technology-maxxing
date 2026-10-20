@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_pitchbook",
+  "title": "Streamlining Venture Capital Due Diligence with PitchBook Premium",
+  "business": "A mid-sized venture capital firm specializing in Series B software investments.",
+  "problem": "Investment analysts spend excessive time manually toggling between private market data platforms and internal research documents to synthesize company profiles, cap tables, and deal history, leading to fragmented analysis and potential oversight of key investor relationships.",
+  "solution": "By integrating the PitchBook Premium MCP server into Claude, analysts can query private market intelligence directly within their research environment. The connector allows Claude to invoke specific tools like pitchbook_get_company_deals and pitchbook_get_company_cap_table, enabling the AI to automatically aggregate and summarize complex deal structures and historical funding rounds without leaving the workspace.",
+  "steps": [
+    "Configure the PitchBook Premium MCP server endpoint within the Claude environment settings.",
+    "Authorize the connection to enable Claude to authenticate against PitchBook private market data APIs.",
+    "Prompt Claude to identify a target firm using pitchbook_search to retrieve the unique company identifier.",
+    "Execute pitchbook_get_company_cap_table and pitchbook_get_company_deals to pull structured data into the current conversation context.",
+    "Synthesize the retrieved data into a standardized investment memo format using Claude's natural language generation."
+  ],
+  "outcome": "Analysts achieve a more cohesive research workflow, reducing the cognitive load of manual data reconciliation and allowing for faster, more informed decision-making during the due diligence process.",
+  "limitation": "The connector relies on the accuracy and availability of the underlying PitchBook API endpoints; users must verify data freshness by checking the timestamp of the retrieved reports, as the AI may occasionally synthesize outdated information if the API response is cached or stale.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Data Flow for Due Diligence Integration",
+    "description": "This diagram illustrates how an analyst interacts with Claude to retrieve and process PitchBook data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Analyst",
+        "detail": "Initiates research query"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "Orchestrates tool calls"
+      },
+      {
+        "id": "c",
+        "label": "PitchBook API",
+        "detail": "Provides private market data"
+      },
+      {
+        "id": "d",
+        "label": "Research Memo",
+        "detail": "Final synthesized output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends natural language prompt"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Invokes pitchbook_get_company_deals"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns structured deal data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generates summary"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/pitchbook",
+      "label": "PitchBook Premium connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Venture Capital Due Diligence with PitchBook Premium, what is the primary problem addressed by the solution?",
+      "options": [
+        "Fragmented analysis caused by manual toggling between data platforms and research documents.",
+        "The inability of analysts to access public market reports.",
+        "High costs associated with maintaining internal databases.",
+        "A lack of communication between venture capital firms and startups."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the problem as analysts spending excessive time toggling between platforms, leading to fragmented analysis.",
+      "evidence": "Investment analysts spend excessive time manually toggling between private market data platforms and internal research documents to synthesize company profiles, cap tables, and deal history, leading to fragmented analysis and potential oversight of key investor relationships."
+    },
+    {
+      "question": "In Streamlining Venture Capital Due Diligence with PitchBook Premium, what is a noted limitation of the implementation?",
+      "options": [
+        "The connector cannot search for company names.",
+        "The AI may synthesize outdated information if the API response is stale.",
+        "The connector requires manual coding for every query.",
+        "The connector is only compatible with public market data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section warns that users must verify data freshness because the AI might use stale information from the API.",
+      "evidence": "The connector relies on the accuracy and availability of the underlying PitchBook API endpoints; users must verify data freshness by checking the timestamp of the retrieved reports, as the AI may occasionally synthesize outdated information if the API response is cached or stale."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:27.648Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:23.641Z"
+}

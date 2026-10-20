@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "topicId": "ai_openai_whisper_large_v3_turbo",
+  "title": "Corporate Compliance Archive Search",
+  "business": "Legal and compliance departments in multinational firms",
+  "problem": "High volume of internal meeting recordings remain unsearchable, preventing rapid retrieval of specific policy discussions or compliance statements.",
+  "solution": "Utilize whisper-large-v3-turbo to automatically transcribe meeting audio into searchable text, enabling keyword-based indexing of historical audio archives.",
+  "steps": [
+    "Provision a GPU-enabled environment to host the model using the Transformers library.",
+    "Initialize the pipeline with the whisper-large-v3-turbo model ID for automatic-speech-recognition.",
+    "Batch process existing audio archives to generate full-text transcripts.",
+    "Store the resulting text in a searchable database linked to original audio timestamps."
+  ],
+  "outcome": "Improved audit readiness and reduced time spent manually reviewing hours of meeting recordings.",
+  "limitation": "The model uses a reduced number of decoding layers, which may result in a minor quality degradation compared to the full-scale version; verify accuracy by spot-checking transcripts against high-stakes audio segments.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Audio to Searchable Text Pipeline",
+    "description": "The flow from raw audio input to searchable text output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Audio Archive",
+        "detail": "Raw meeting files"
+      },
+      {
+        "id": "b",
+        "label": "Whisper-large-v3-turbo",
+        "detail": "ASR processing engine"
+      },
+      {
+        "id": "c",
+        "label": "Transcript Database",
+        "detail": "Searchable text repository"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingests audio"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "outputs text"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Initialize the pipeline for transcription\npipe = pipeline(\"automatic-speech-recognition\", model=\"openai/whisper-large-v3-turbo\")\n# Transcribe a batch of meeting files for indexing\nresults = pipe([\"meeting_1.mp3\", \"meeting_2.mp3\"], batch_size=4)",
+    "explanation": "This code demonstrates how to load the model and process multiple audio files in parallel to create the text data needed for the Corporate Compliance Archive Search."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/openai/whisper-large-v3-turbo",
+      "label": "openai/whisper-large-v3-turbo · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Corporate Compliance Archive Search, why is the model used?",
+      "options": [
+        "To automatically transcribe meeting audio into searchable text",
+        "To compress audio files for cheaper storage",
+        "To encrypt sensitive meeting recordings",
+        "To generate audio summaries from text documents"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically addresses the inability to search audio by converting it to text.",
+      "evidence": "Utilize whisper-large-v3-turbo to automatically transcribe meeting audio into searchable text, enabling keyword-based indexing of historical audio archives."
+    },
+    {
+      "question": "In Corporate Compliance Archive Search, what is a primary trade-off?",
+      "options": [
+        "The model is too slow for batch processing",
+        "The model requires excessive GPU memory",
+        "A minor quality degradation due to reduced decoding layers",
+        "The model only supports English language input"
+      ],
+      "answerIndex": 2,
+      "explanation": "The model's architecture involves a trade-off between speed and transcription precision.",
+      "evidence": "The model uses a reduced number of decoding layers, which may result in a minor quality degradation compared to the full-scale version; verify accuracy by spot-checking transcripts against high-stakes audio segments."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:13:34.983Z",
+  "sourceRetrievedAt": "2026-10-18T01:13:31.512Z"
+}

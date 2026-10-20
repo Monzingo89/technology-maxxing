@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "priority_queue",
+  "title": "Emergency Medical Triage System",
+  "business": "Emergency room intake departments managing patient flow.",
+  "problem": "Standard first-come, first-served queues cause critical patients to wait behind minor cases, leading to preventable health deterioration.",
+  "solution": "A priority queue implementation allows the system to organize patients by clinical urgency (triage level) rather than arrival time, ensuring the highest-acuity patients are processed first.",
+  "steps": [
+    "Assign a numerical priority score to each patient upon intake.",
+    "Insert patient records into a binary heap structure based on their score.",
+    "Extract the patient with the highest priority score for the next available physician.",
+    "Maintain the heap property after each extraction to ensure the next most urgent patient is at the root."
+  ],
+  "outcome": "Improved patient safety and reduced wait times for critical cases.",
+  "limitation": "The primary limitation is that low-priority patients may suffer from 'starvation' if high-priority patients continue to arrive, which can be checked by monitoring the maximum wait time of the lowest-priority records.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Triage Priority Flow",
+    "description": "Patients enter the system and are sorted by urgency into a priority queue before being routed to medical staff.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Intake",
+        "detail": "Patient arrival"
+      },
+      {
+        "id": "b",
+        "label": "Triage",
+        "detail": "Assign priority score"
+      },
+      {
+        "id": "c",
+        "label": "Priority Queue",
+        "detail": "Heap-based storage"
+      },
+      {
+        "id": "d",
+        "label": "Physician",
+        "detail": "Treatment"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Arrival"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Insert(score)"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Extract-Max"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Emergency Medical Triage System, why is a priority queue preferred over a standard queue?",
+      "options": [
+        "It ensures critical patients are processed before minor cases.",
+        "It reduces the total number of patients entering the hospital.",
+        "It allows for faster registration of patient insurance data.",
+        "It automatically assigns doctors to patients based on specialty."
+      ],
+      "answerIndex": 0,
+      "explanation": "The business problem is that standard queues cause critical patients to wait behind minor cases; a priority queue solves this by ordering by urgency.",
+      "evidence": "A priority queue implementation allows the system to organize patients by clinical urgency (triage level) rather than arrival time, ensuring the highest-acuity patients are processed first."
+    },
+    {
+      "question": "In Emergency Medical Triage System, what is a potential risk of using a priority queue?",
+      "options": [
+        "The system might run out of memory for patient records.",
+        "Low-priority patients may experience starvation.",
+        "The doctors will work too quickly for the system.",
+        "The priority scores might become too large to store."
+      ],
+      "answerIndex": 1,
+      "explanation": "Priority queues can cause starvation for low-priority items if high-priority items are constantly added, which is a known limitation.",
+      "evidence": "The primary limitation is that low-priority patients may suffer from 'starvation' if high-priority patients continue to arrive, which can be checked by monitoring the maximum wait time of the lowest-priority records."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:47.076Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

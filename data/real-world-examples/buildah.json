@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "buildah",
+  "title": "Daemonless OCI Image Construction for Secure CI/CD",
+  "business": "Organizations managing high-security build pipelines that require OCI-compliant images without exposing a persistent container daemon.",
+  "problem": "Traditional container build environments often require a long-running daemon with elevated privileges, creating a significant security surface area and complicating integration into hardened Kubernetes clusters.",
+  "solution": "Buildah enables the creation of OCI container images using scripts or Containerfiles without needing a full container runtime or daemon installed, allowing for lightweight, rootless, and secure image generation.",
+  "steps": [
+    "Initialize a working container instance from a base image using buildah from.",
+    "Execute commands within the container context to install dependencies or copy application artifacts.",
+    "Commit the modified container state to a new OCI image using buildah commit.",
+    "Push the resulting image to a registry for deployment."
+  ],
+  "outcome": "A streamlined, daemonless build process that integrates directly into existing CI/CD pipelines while reducing the security risks associated with privileged daemon access.",
+  "limitation": "Buildah lacks a persistent daemon, meaning it does not manage container lifecycles or runtime execution; users must verify image integrity and runtime compatibility using external tools like Skopeo or Podman.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Daemonless Build Process",
+    "description": "The flow shows how Buildah transforms source artifacts into an OCI image without a daemon.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "Application files"
+      },
+      {
+        "id": "b",
+        "label": "Buildah Engine",
+        "detail": "Daemonless CLI"
+      },
+      {
+        "id": "c",
+        "label": "Working Container",
+        "detail": "Temporary filesystem"
+      },
+      {
+        "id": "d",
+        "label": "OCI Image",
+        "detail": "Final artifact"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "injects"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "creates"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "commits"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://buildah.io/",
+      "label": "Buildah | buildah.io"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Daemonless OCI Image Construction for Secure CI/CD, what is the primary security benefit of using Buildah?",
+      "options": [
+        "It eliminates the need for a persistent container daemon.",
+        "It automatically patches all vulnerabilities in base images.",
+        "It provides built-in encryption for all container layers.",
+        "It replaces the need for a container registry."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that traditional builds require a long-running daemon, which Buildah avoids to reduce the security surface area.",
+      "evidence": "Traditional container build environments often require a long-running daemon with elevated privileges, creating a significant security surface area and complicating integration into hardened Kubernetes clusters."
+    },
+    {
+      "question": "In Daemonless OCI Image Construction for Secure CI/CD, what is a noted limitation of the Buildah approach?",
+      "options": [
+        "It cannot build images from Containerfiles.",
+        "It does not manage container lifecycles or runtime execution.",
+        "It requires root privileges for every single operation.",
+        "It is incompatible with OCI-compliant registries."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because Buildah is daemonless, it focuses on image creation rather than managing the runtime lifecycle of containers.",
+      "evidence": "Buildah lacks a persistent daemon, meaning it does not manage container lifecycles or runtime execution; users must verify image integrity and runtime compatibility using external tools like Skopeo or Podman."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:44.668Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:41.663Z"
+}

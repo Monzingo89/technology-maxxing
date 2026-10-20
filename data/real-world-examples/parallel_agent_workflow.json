@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "parallel_agent_workflow",
+  "title": "Concurrent Compliance and Sentiment Analysis",
+  "business": "Financial institutions requiring rapid document processing.",
+  "problem": "Sequential processing of high-volume client communications leads to unacceptable latency, as compliance screening and sentiment analysis are performed one after another.",
+  "solution": "Implementing a Parallel Agent Workflow allows the system to trigger compliance screening and sentiment analysis simultaneously, aggregating both results before finalizing the client response.",
+  "steps": [
+    "Decompose the incoming client communication into independent analysis tasks.",
+    "Dispatch the compliance screening task to a dedicated model instance.",
+    "Dispatch the sentiment analysis task to a separate model instance concurrently.",
+    "Collect the outputs from both model instances once both tasks complete.",
+    "Programmatically aggregate the results to determine the final communication strategy."
+  ],
+  "outcome": "Reduced total processing time per communication while maintaining distinct, specialized analysis for both safety and tone.",
+  "limitation": "Parallelization increases the total number of concurrent LLM calls, which can lead to higher infrastructure costs; monitor this by tracking the aggregate token usage per request.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Parallel Analysis Workflow",
+    "description": "The input is split into two concurrent paths that are later merged.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Input",
+        "detail": "Raw communication"
+      },
+      {
+        "id": "b",
+        "label": "Compliance Agent",
+        "detail": "Screening for policy"
+      },
+      {
+        "id": "c",
+        "label": "Sentiment Agent",
+        "detail": "Analyzing tone"
+      },
+      {
+        "id": "d",
+        "label": "Aggregator",
+        "detail": "Merge results"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Trigger"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Trigger"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Result"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Result"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.anthropic.com/engineering/building-effective-agents",
+      "label": "Building Effective AI Agents"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Concurrent Compliance and Sentiment Analysis, what is the primary benefit of using a Parallel Agent Workflow?",
+      "options": [
+        "It eliminates the need for human oversight entirely.",
+        "It reduces latency by processing independent tasks simultaneously.",
+        "It forces the model to use a single, more powerful prompt.",
+        "It ensures that sentiment analysis always overrides compliance."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario describes using parallelization to avoid the latency of sequential processing by running tasks at the same time.",
+      "evidence": "Implementing a Parallel Agent Workflow allows the system to trigger compliance screening and sentiment analysis simultaneously, aggregating both results before finalizing the client response."
+    },
+    {
+      "question": "Regarding the implementation of Concurrent Compliance and Sentiment Analysis, what is a key trade-off to monitor?",
+      "options": [
+        "The model will lose its ability to perform sentiment analysis.",
+        "The system will require more complex prompt chaining.",
+        "Increased concurrent LLM calls can lead to higher infrastructure costs.",
+        "The aggregator will fail if the compliance agent is faster."
+      ],
+      "answerIndex": 2,
+      "explanation": "Parallelization involves running multiple instances, which naturally increases the volume of calls and associated costs.",
+      "evidence": "Parallelization increases the total number of concurrent LLM calls, which can lead to higher infrastructure costs; monitor this by tracking the aggregate token usage per request."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:14.481Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:28.759Z"
+}

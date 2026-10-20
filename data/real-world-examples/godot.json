@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "godot",
+  "title": "Cross-Platform Educational Asset Deployment",
+  "business": "A boutique educational software studio developing interactive history modules for schools.",
+  "problem": "The studio faces high maintenance costs due to fragmented codebases required to deploy the same interactive history lessons across desktop computers and tablet devices.",
+  "solution": "By utilizing Godot's multiplatform export capabilities, the studio can maintain a single project structure that compiles into native binaries for Windows, macOS, and mobile platforms, ensuring consistent logic across all student hardware.",
+  "steps": [
+    "Configure the project settings to define specific export templates for target operating systems.",
+    "Utilize the Godot scene tree to encapsulate lesson logic, ensuring UI elements are responsive to different screen aspect ratios.",
+    "Implement platform-specific input handling using the Input singleton to manage both mouse clicks and touch gestures.",
+    "Execute the export process via the editor's export menu to generate platform-specific executables."
+  ],
+  "outcome": "The studio achieves a unified development workflow, significantly reducing the time spent on porting features between different hardware environments.",
+  "limitation": "Godot's multiplatform export relies on pre-compiled export templates; developers must verify that the target platform's specific graphics API requirements are met by the chosen template, which can be checked by reviewing the export logs for compatibility warnings.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Multiplatform Export Workflow",
+    "description": "This diagram shows how a single project source is transformed into multiple deployment targets.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Project Source",
+        "detail": "Unified GDScript and Scene files"
+      },
+      {
+        "id": "b",
+        "label": "Export Templates",
+        "detail": "Platform-specific binaries"
+      },
+      {
+        "id": "c",
+        "label": "Desktop Build",
+        "detail": "Windows/macOS executable"
+      },
+      {
+        "id": "d",
+        "label": "Mobile Build",
+        "detail": "Tablet-optimized package"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "compiles with"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generates"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": {
+    "language": "gdscript",
+    "content": "func _input(event):\n    # Check if the input is a touch or mouse click\n    if event is InputEventMouseButton or event is InputEventScreenTouch:\n        print(\"Interaction detected across platforms\")",
+    "explanation": "This code demonstrates how the Input singleton abstracts hardware differences, allowing the same logic to handle both mouse and touch inputs in the educational modules."
+  },
+  "sources": [
+    {
+      "url": "https://docs.godotengine.org/en/stable/",
+      "label": "Godot Engine 4.7 documentation in English"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Platform Educational Asset Deployment, what is the primary business benefit of using Godot?",
+      "options": [
+        "Reducing maintenance costs by using a single codebase for multiple platforms",
+        "Increasing the graphical fidelity of the history modules",
+        "Automating the creation of historical content",
+        "Eliminating the need for software testing"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies high maintenance costs from fragmented codebases as the problem, which is solved by Godot's ability to maintain a single project structure.",
+      "evidence": "The studio faces high maintenance costs due to fragmented codebases required to deploy the same interactive history lessons across desktop computers and tablet devices."
+    },
+    {
+      "question": "In Cross-Platform Educational Asset Deployment, what is a key limitation of the export process?",
+      "options": [
+        "The inability to use GDScript for mobile platforms",
+        "The requirement to verify that target platform graphics APIs match the export templates",
+        "The need to manually rewrite the UI for every single device",
+        "The lack of support for Windows and macOS exports"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the need to verify graphics API compatibility with export templates.",
+      "evidence": "Godot's multiplatform export relies on pre-compiled export templates; developers must verify that the target platform's specific graphics API requirements are met by the chosen template, which can be checked by reviewing the export logs for compatibility warnings."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:46.344Z",
+  "sourceRetrievedAt": "2026-10-18T01:01:42.817Z"
+}

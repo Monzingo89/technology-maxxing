@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_lightricks_ltx_2_5",
+  "title": "Automated Cinematic B-Roll Generation for Content Agencies",
+  "business": "Digital marketing agencies producing high-volume social media video content.",
+  "problem": "High production costs and slow turnaround times when manually animating static product photography into engaging video clips.",
+  "solution": "Utilizing LTX-2.5 to perform image-to-video inference, allowing agencies to animate static assets into cinematic clips using text-based motion prompts.",
+  "steps": [
+    "Install the ltx-pipelines package and download the split model checkpoints.",
+    "Prepare the static source image ensuring dimensions are divisible by 32.",
+    "Execute the image-to-video inference command using the --image flag with the source path and frame index.",
+    "Apply the latent spatial upscaler to enhance the output resolution for final delivery."
+  ],
+  "outcome": "Rapid, scalable production of motion-rich video assets from existing static image libraries without requiring manual animation.",
+  "limitation": "The model may fail to generate videos that match the prompt perfectly, requiring iterative prompt engineering to ensure visual adherence.",
+  "diagram": {
+    "kind": "flow",
+    "title": "LTX-2.5 Image-to-Video Pipeline",
+    "description": "The flow from static input to rendered video output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Static Image",
+        "detail": "Source asset"
+      },
+      {
+        "id": "b",
+        "label": "LTX-2.5 Pipeline",
+        "detail": "Transformer and VAE"
+      },
+      {
+        "id": "c",
+        "label": "Latent Upscaler",
+        "detail": "Spatial enhancement"
+      },
+      {
+        "id": "d",
+        "label": "Video Output",
+        "detail": "Final MP4"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "conditioning"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "latent output"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "decoding"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Example of triggering image-to-video inference\n# --image path/to/image.jpg 0 1.0 sets the first frame as conditioning\n# --prompt defines the cinematic motion\nimport subprocess\nsubprocess.run([\"python\", \"-m\", \"ltx_pipelines.distilled\", \"--image\", \"input.jpg\", \"0\", \"1.0\", \"--prompt\", \"Wind blowing through trees\", \"--output-path\", \"output.mp4\"])",
+    "explanation": "This maps to the business scenario by showing how an agency would programmatically pass a product image into the LTX-2.5 pipeline to generate a video clip."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Lightricks/LTX-2.5",
+      "label": "Lightricks/LTX-2.5 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Cinematic B-Roll Generation for Content Agencies, how does LTX-2.5 resolve the identified production bottleneck?",
+      "options": [
+        "By automating the animation of static product photography into video clips.",
+        "By providing a cloud-based video editing suite for manual frame adjustments.",
+        "By replacing the need for high-resolution source images entirely.",
+        "By generating factual information about the products in the video."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically addresses the problem of manual animation costs by using LTX-2.5 to animate static assets.",
+      "evidence": "Utilizing LTX-2.5 to perform image-to-video inference, allowing agencies to animate static assets into cinematic clips using text-based motion prompts."
+    },
+    {
+      "question": "Regarding the implementation of Automated Cinematic B-Roll Generation for Content Agencies, what is a primary constraint or limitation to monitor?",
+      "options": [
+        "The model requires a minimum of 10,000 images for training.",
+        "The model may fail to generate videos that match the prompt perfectly.",
+        "The model is only compatible with non-commercial personal projects.",
+        "The model requires a fixed duration for every generated clip."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section notes that prompt adherence is a potential failure point, which requires monitoring.",
+      "evidence": "The model may fail to generate videos that match the prompt perfectly, requiring iterative prompt engineering to ensure visual adherence."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:11.508Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:07.321Z"
+}

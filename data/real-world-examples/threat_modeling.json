@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "threat_modeling",
+  "title": "Threat Modeling for Financial Ledger Microservices",
+  "business": "FinTech organizations managing multi-tenant ledger systems.",
+  "problem": "Unintended lateral movement between tenant data partitions due to poorly defined trust boundaries in microservice communication.",
+  "solution": "Implementing a structured threat modeling process to map assets, identify trust boundaries, and define abuse cases, ensuring that every service-to-service request is explicitly mediated.",
+  "steps": [
+    "Decompose the system architecture into distinct components and identify sensitive data assets.",
+    "Define trust boundaries between microservices and external ingress points to isolate tenant data.",
+    "Perform an adversary analysis to document potential abuse cases, such as unauthorized cross-tenant data access.",
+    "Design and implement specific mitigations, such as mutual TLS and granular authorization checks, for each identified threat.",
+    "Validate the effectiveness of mitigations against the documented abuse cases."
+  ],
+  "outcome": "A hardened architecture where trust boundaries are explicitly enforced, significantly reducing the risk of unauthorized cross-tenant data exposure.",
+  "limitation": "Threat modeling is a point-in-time exercise; architectural drift can invalidate assumptions, requiring periodic reviews to ensure security controls remain aligned with the current system state.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Trust Boundary Enforcement Flow",
+    "description": "This diagram illustrates how requests are mediated across defined trust boundaries.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "External User",
+        "detail": "Untrusted request source"
+      },
+      {
+        "id": "b",
+        "label": "API Gateway",
+        "detail": "Trust Boundary 1"
+      },
+      {
+        "id": "c",
+        "label": "Ledger Service",
+        "detail": "Internal processing"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Asset storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Authenticated mTLS"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Scoped Query"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://devguide.owasp.org/en/02-foundations/03-security-principles/",
+      "label": "Principles of security - OWASP Developer Guide"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Threat Modeling for Financial Ledger Microservices, what is the primary purpose of the described solution?",
+      "options": [
+        "To map assets and define trust boundaries to prevent unauthorized cross-tenant data access.",
+        "To automate the deployment of microservices across multiple cloud regions.",
+        "To increase the performance of ledger transactions by removing authorization checks.",
+        "To replace existing security controls with a single, unified authentication mechanism."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution focuses on structuring the threat modeling process to identify trust boundaries and mitigate risks like cross-tenant data access.",
+      "evidence": "Implementing a structured threat modeling process to map assets, identify trust boundaries, and define abuse cases, ensuring that every service-to-service request is explicitly mediated."
+    },
+    {
+      "question": "Regarding the implementation of Threat Modeling for Financial Ledger Microservices, what is the main limitation mentioned?",
+      "options": [
+        "It is too expensive to perform for small microservices.",
+        "It requires 100% security guarantees which are impossible to achieve.",
+        "It is a point-in-time exercise that can be invalidated by architectural drift.",
+        "It prevents developers from using open source components."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that threat modeling is a static assessment that requires ongoing maintenance to remain effective as the system evolves.",
+      "evidence": "Threat modeling is a point-in-time exercise; architectural drift can invalidate assumptions, requiring periodic reviews to ensure security controls remain aligned with the current system state."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:17.509Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:02.187Z"
+}

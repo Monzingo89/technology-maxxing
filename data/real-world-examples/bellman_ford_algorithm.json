@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "bellman_ford_algorithm",
+  "title": "Dynamic Logistics Route Optimization",
+  "business": "A regional logistics firm managing multi-modal freight shipments across a network of hubs.",
+  "problem": "The firm faces fluctuating fuel surcharges and temporary toll discounts that occasionally create negative cost values for specific route segments, causing standard shortest-path algorithms to fail.",
+  "solution": "The Bellman-Ford algorithm addresses this by relaxing every edge repeatedly to find shortest paths with negative weights, ensuring accurate cost calculations even when specific segments have negative cost adjustments.",
+  "steps": [
+    "Initialize the distance to the source hub as zero and all other hubs as infinity.",
+    "Iterate through the entire list of route segments for a total of V-1 times, where V is the number of hubs.",
+    "For each segment, update the destination hub's distance if the current path cost plus the segment cost is less than the previously recorded distance.",
+    "Perform a final pass over all segments to detect if any distances can still be reduced, which indicates the presence of a negative cycle."
+  ],
+  "outcome": "The firm achieves a reliable, cost-minimized routing schedule that correctly accounts for complex, negative-cost financial incentives across the supply chain.",
+  "limitation": "The algorithm has a higher computational complexity compared to Dijkstra's, making it slower on dense networks; check performance by verifying if the edge count significantly exceeds the hub count.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Route Relaxation Process",
+    "description": "Shows how the algorithm evaluates paths between hubs to determine the minimal cost.",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Warehouse",
+        "detail": "Source node"
+      },
+      {
+        "id": "B",
+        "label": "Hub 1",
+        "detail": "Intermediate node"
+      },
+      {
+        "id": "C",
+        "label": "Hub 2",
+        "detail": "Intermediate node"
+      },
+      {
+        "id": "D",
+        "label": "Retailer",
+        "detail": "Destination node"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B",
+        "label": "Cost 5"
+      },
+      {
+        "from": "B",
+        "to": "C",
+        "label": "Cost -2"
+      },
+      {
+        "from": "C",
+        "to": "D",
+        "label": "Cost 3"
+      },
+      {
+        "from": "B",
+        "to": "D",
+        "label": "Cost 8"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Logistics Route Optimization, why is the Bellman-Ford algorithm preferred over standard shortest-path algorithms?",
+      "options": [
+        "It handles negative cost values effectively.",
+        "It is significantly faster on large graphs.",
+        "It requires less memory for storage.",
+        "It ignores fuel surcharges entirely."
+      ],
+      "answerIndex": 0,
+      "explanation": "The business scenario specifically notes that negative cost values cause standard algorithms to fail, and the solution explains that this algorithm handles such values.",
+      "evidence": "The Bellman-Ford algorithm addresses this by relaxing every edge repeatedly to find shortest paths with negative weights, ensuring accurate cost calculations even when specific segments have negative cost adjustments."
+    },
+    {
+      "question": "In Dynamic Logistics Route Optimization, what is a primary limitation of the implementation?",
+      "options": [
+        "It cannot detect negative cycles.",
+        "It is slower on dense networks.",
+        "It only works for positive weights.",
+        "It requires a fixed number of hubs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the trade-off regarding computational complexity and performance on dense networks.",
+      "evidence": "The algorithm has a higher computational complexity compared to Dijkstra's, making it slower on dense networks; check performance by verifying if the edge count significantly exceeds the hub count."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:22.028Z"
+}

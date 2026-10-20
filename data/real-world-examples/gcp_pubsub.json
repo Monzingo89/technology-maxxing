@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_pubsub",
+  "title": "Decoupling Global Inventory Updates",
+  "business": "Retailers managing high-volume inventory updates across multiple global warehouses.",
+  "problem": "Direct synchronous API calls between inventory systems and regional storefronts lead to cascading failures when one region experiences high latency or downtime.",
+  "solution": "Google Cloud Pub/Sub provides global asynchronous messaging, allowing inventory systems to publish updates to a topic without needing to know the status of downstream subscribers.",
+  "steps": [
+    "Create a Pub/Sub topic to serve as the central message bus for inventory events.",
+    "Configure individual subscriptions for each regional storefront application.",
+    "Publish inventory change events from the central warehouse system to the topic.",
+    "Implement logic in regional storefronts to pull and process messages from their respective subscriptions.",
+    "Monitor subscription backlog metrics to ensure regional storefronts are keeping pace with updates."
+  ],
+  "outcome": "Improved system resilience where regional storefronts remain operational even if the central inventory system experiences temporary spikes or maintenance.",
+  "limitation": "Pub/Sub is an asynchronous system, meaning there is no guarantee of immediate consistency; check the message delivery latency via monitoring tools to ensure it meets business requirements.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Event Distribution Flow",
+    "description": "Shows how inventory updates flow from the source to multiple regional consumers via Pub/Sub.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory System",
+        "detail": "Publisher"
+      },
+      {
+        "id": "b",
+        "label": "Pub/Sub Topic",
+        "detail": "Global Message Bus"
+      },
+      {
+        "id": "c",
+        "label": "Storefront A",
+        "detail": "Subscriber"
+      },
+      {
+        "id": "d",
+        "label": "Storefront B",
+        "detail": "Subscriber"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "publishes event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "delivers message"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "delivers message"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Global Inventory Updates, why is Pub/Sub used instead of direct API calls?",
+      "options": [
+        "To prevent cascading failures when regional storefronts experience latency.",
+        "To ensure immediate synchronous consistency across all global databases.",
+        "To replace the need for regional storefront applications entirely.",
+        "To increase the cost of maintaining the central inventory system."
+      ],
+      "answerIndex": 0,
+      "explanation": "Direct synchronous calls cause failures to propagate; Pub/Sub decouples these systems.",
+      "evidence": "Direct synchronous API calls between inventory systems and regional storefronts lead to cascading failures when one region experiences high latency or downtime."
+    },
+    {
+      "question": "In Decoupling Global Inventory Updates, what is a primary trade-off of using this asynchronous messaging approach?",
+      "options": [
+        "The system becomes strictly consistent across all regions.",
+        "There is no guarantee of immediate consistency, requiring monitoring of delivery latency.",
+        "The system requires all subscribers to be online simultaneously to receive messages.",
+        "The central inventory system must manage the connection state of every subscriber."
+      ],
+      "answerIndex": 1,
+      "explanation": "Asynchronous systems do not provide immediate consistency, so latency must be monitored.",
+      "evidence": "Pub/Sub is an asynchronous system, meaning there is no guarantee of immediate consistency; check the message delivery latency via monitoring tools to ensure it meets business requirements."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:15.841Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

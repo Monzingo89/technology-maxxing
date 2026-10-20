@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_qwen_qwen3_8b",
+  "title": "Dynamic Reasoning for Logistics Optimization",
+  "business": "Logistics firms managing complex, multi-stop delivery routes that require both rapid status updates and deep logical path planning.",
+  "problem": "Standard LLMs often struggle to balance the need for quick, low-latency responses for simple status queries with the deep, multi-step reasoning required to optimize complex, multi-variable delivery schedules.",
+  "solution": "Qwen3-8B provides a dual-mode architecture that allows the system to toggle between a thinking mode for complex route optimization and a non-thinking mode for efficient, real-time customer status updates, all within a single model instance.",
+  "steps": [
+    "Initialize the Qwen3-8B model using the Hugging Face transformers library.",
+    "Configure the chat template with enable_thinking=True to support dynamic reasoning for complex planning tasks.",
+    "Implement a conditional logic layer that detects query complexity.",
+    "Use the /no_think tag in user prompts for routine status requests to minimize latency.",
+    "Use the /think tag for complex route planning requests to trigger deep logical reasoning."
+  ],
+  "outcome": "The system achieves a more natural, responsive user experience by matching the model's reasoning depth to the specific requirements of each individual query.",
+  "limitation": "Using thinking mode with greedy decoding can lead to performance degradation and endless repetitions; verify this by monitoring the output for repetitive patterns and ensuring non-greedy sampling parameters are applied.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Query Processing Logic",
+    "description": "The flow shows how incoming requests are routed based on complexity to optimize model performance.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Query",
+        "detail": "Input from logistics operator"
+      },
+      {
+        "id": "b",
+        "label": "Complexity Classifier",
+        "detail": "Logic to determine if reasoning is needed"
+      },
+      {
+        "id": "c",
+        "label": "Non-Thinking Mode",
+        "detail": "Fast, direct response path"
+      },
+      {
+        "id": "d",
+        "label": "Thinking Mode",
+        "detail": "Deep reasoning with <think> block"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Analyze"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Simple Query"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Complex Planning"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Example of triggering non-thinking mode for status checks\ntext = tokenizer.apply_chat_template(\n    messages, \n    tokenize=False, \n    add_generation_prompt=True, \n    enable_thinking=False # Disables thinking for efficiency\n)",
+    "explanation": "This code demonstrates how to programmatically disable the thinking mode to ensure low-latency responses for routine logistics queries."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/Qwen/Qwen3-8B",
+      "label": "Qwen/Qwen3-8B · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Reasoning for Logistics Optimization, how does the model address the conflict between speed and reasoning depth?",
+      "options": [
+        "By using a dual-mode architecture that toggles between thinking and non-thinking modes.",
+        "By forcing all queries to use a high-latency reasoning path.",
+        "By utilizing two separate models for different tasks.",
+        "By disabling all reasoning capabilities permanently."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages the model's ability to switch modes to match the query requirements.",
+      "evidence": "Qwen3-8B provides a dual-mode architecture that allows the system to toggle between a thinking mode for complex route optimization and a non-thinking mode for efficient, real-time customer status updates, all within a single model instance."
+    },
+    {
+      "question": "In Dynamic Reasoning for Logistics Optimization, what is a primary risk when using the thinking mode?",
+      "options": [
+        "The model will always fail to answer simple questions.",
+        "Greedy decoding can lead to performance degradation and endless repetitions.",
+        "The model will consume significantly more memory than non-thinking mode.",
+        "The model will refuse to output any text if the thinking block is empty."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation explicitly warns against using greedy decoding in thinking mode to avoid specific performance issues.",
+      "evidence": "Using thinking mode with greedy decoding can lead to performance degradation and endless repetitions; verify this by monitoring the output for repetitive patterns and ensuring non-greedy sampling parameters are applied."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:34.147Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:30.231Z"
+}

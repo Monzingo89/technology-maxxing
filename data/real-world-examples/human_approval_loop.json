@@ -1,0 +1,116 @@
+{
+  "version": 1,
+  "topicId": "human_approval_loop",
+  "title": "Automated Financial Disbursement Review",
+  "business": "Corporate finance departments managing automated vendor payments.",
+  "problem": "Unchecked automated agents might execute high-value wire transfers based on misidentified invoice data, leading to significant financial loss.",
+  "solution": "The Human Approval Loop pauses the agent execution when a sensitive tool call is triggered, requiring a manual decision before the transaction proceeds.",
+  "steps": [
+    "Define a function tool for wire transfers with needs_approval set to True.",
+    "Execute the agent run until it reaches the pending tool call.",
+    "Inspect the RunResult.interruptions property to identify the pending transaction.",
+    "Convert the result to a RunState and apply the human decision using state.approve or state.reject.",
+    "Resume the agent execution using the updated RunState."
+  ],
+  "outcome": "Financial operations maintain high velocity while ensuring that all high-value disbursements undergo mandatory human oversight.",
+  "limitation": "The RunState snapshot does not include built-in authentication for the person submitting the approval; the application must verify the reviewer's identity and authorization before calling state.approve.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Approval Loop Execution Flow",
+    "description": "The flow shows how an agent pauses upon reaching a sensitive tool call and waits for external intervention.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Agent",
+        "detail": "Processes invoice data"
+      },
+      {
+        "id": "b",
+        "label": "Tool",
+        "detail": "Wire Transfer (needs_approval=True)"
+      },
+      {
+        "id": "c",
+        "label": "Runner",
+        "detail": "Pauses execution"
+      },
+      {
+        "id": "d",
+        "label": "Human",
+        "detail": "Reviews and approves/rejects"
+      },
+      {
+        "id": "e",
+        "label": "Resume",
+        "detail": "Continues execution"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "calls"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers interruption"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "awaits input"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "provides decision"
+      },
+      {
+        "from": "e",
+        "to": "a",
+        "label": "resumes"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "@tool(needs_approval=True)\nasync def execute_transfer(amount: float, account: str) -> str:\n    # Logic to perform the actual bank transfer\n    return f\"Transferred {amount} to {account}\"\n\n# After runner pauses:\nstate = result.to_state()\n# Apply human decision\nstate.approve(interruption)\n# Resume the agent\nresult = await Runner.run(agent, state)",
+    "explanation": "This demonstrates marking a sensitive function as requiring approval and using the RunState to resume the agent after the human decision is processed."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/human_in_the_loop/",
+      "label": "Human-in-the-loop - OpenAI Agents SDK"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Financial Disbursement Review, how does the system prevent unauthorized or erroneous high-value transfers?",
+      "options": [
+        "By requiring a manual decision before the transaction proceeds.",
+        "By automatically rejecting all transfers over a certain amount.",
+        "By using a secondary AI agent to verify the first agent's work.",
+        "By encrypting the invoice data before the agent processes it."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on pausing the agent and requiring human intervention to approve or reject the tool call.",
+      "evidence": "The Human Approval Loop pauses the agent execution when a sensitive tool call is triggered, requiring a manual decision before the transaction proceeds."
+    },
+    {
+      "question": "In Automated Financial Disbursement Review, what is a critical security limitation of the implementation?",
+      "options": [
+        "The system cannot resume if the agent is paused for too long.",
+        "The SDK does not authenticate the person submitting the approval.",
+        "The RunState cannot be serialized to a database.",
+        "The system requires the human to be an administrator."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation explicitly states that RunState does not authenticate the snapshot or the person submitting the decision.",
+      "evidence": "The RunState snapshot does not include built-in authentication for the person submitting the approval; the application must verify the reviewer's identity and authorization before calling state.approve."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:45.312Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:41.308Z"
+}

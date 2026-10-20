@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "gleam",
+  "title": "Cross-Platform Inventory Synchronization",
+  "business": "A retail logistics firm managing inventory across web dashboards and warehouse backend systems.",
+  "problem": "Runtime errors and data mismatches occur when the web frontend and BEAM-based backend interpret shared inventory data structures differently, leading to inconsistent stock levels.",
+  "solution": "Gleam provides a unified type system that compiles to both JavaScript for the browser and the BEAM for the server, ensuring shared data models are strictly validated at compile-time on both targets.",
+  "steps": [
+    "Define shared inventory record types in a core Gleam module.",
+    "Implement logic for inventory updates using Result types to handle potential failures explicitly.",
+    "Compile the core module to JavaScript for the frontend and BEAM bytecode for the backend.",
+    "Integrate the generated TypeScript definitions into the web frontend to enforce type safety.",
+    "Use pattern matching on the Result type to handle synchronization errors gracefully."
+  ],
+  "outcome": "Developers achieve high confidence in data integrity across platforms, as the compiler prevents mismatched record fields or unhandled error states before deployment.",
+  "limitation": "The primary trade-off is the overhead of maintaining a shared codebase that must remain compatible with both JavaScript and Erlang runtimes; developers can verify compatibility by running the Gleam compiler for both targets during the CI process.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Synchronization Flow",
+    "description": "Data flows from the shared Gleam source to platform-specific targets.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Gleam Source",
+        "detail": "Shared types and logic"
+      },
+      {
+        "id": "b",
+        "label": "BEAM Compiler",
+        "detail": "Target: Erlang VM"
+      },
+      {
+        "id": "c",
+        "label": "JS Compiler",
+        "detail": "Target: Browser/Node"
+      },
+      {
+        "id": "d",
+        "label": "Backend Service",
+        "detail": "Inventory Database"
+      },
+      {
+        "id": "e",
+        "label": "Web Dashboard",
+        "detail": "User Interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "compiles to"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "compiles to"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "updates"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "renders"
+      }
+    ]
+  },
+  "code": {
+    "language": "gleam",
+    "content": "pub type InventoryError { OutOfStock DatabaseDown } \n// Explicit Result type forces handling of failure cases\npub fn update_stock(amount: Int) -> Result(Int, InventoryError) { \n  case amount { \n    n if n < 0 -> Error(OutOfStock) \n    n -> Ok(n) \n  } \n}",
+    "explanation": "This maps to the business scenario by using the Result type to ensure that inventory updates are handled safely, preventing runtime crashes in the warehouse backend or web dashboard."
+  },
+  "sources": [
+    {
+      "url": "https://gleam.run/",
+      "label": "Gleam programming language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Platform Inventory Synchronization, how does Gleam resolve the problem of data mismatches?",
+      "options": [
+        "By enforcing strict type safety across both JavaScript and BEAM targets.",
+        "By using a runtime exception handler for all inventory updates.",
+        "By automatically converting all data to JSON strings.",
+        "By relying on the browser to validate backend database schemas."
+      ],
+      "answerIndex": 0,
+      "explanation": "Gleam ensures consistency by compiling the same type-safe code to both platforms, preventing mismatches.",
+      "evidence": "Gleam provides a unified type system that compiles to both JavaScript for the browser and the BEAM for the server, ensuring shared data models are strictly validated at compile-time on both targets."
+    },
+    {
+      "question": "What is a key limitation of the Cross-Platform Inventory Synchronization approach?",
+      "options": [
+        "The inability to use any external libraries.",
+        "The requirement to maintain compatibility across two different runtimes.",
+        "The lack of support for Result types.",
+        "The inability to compile to JavaScript."
+      ],
+      "answerIndex": 1,
+      "explanation": "Maintaining a single codebase that satisfies the constraints of both the BEAM and JavaScript environments is the primary trade-off.",
+      "evidence": "The primary trade-off is the overhead of maintaining a shared codebase that must remain compatible with both JavaScript and Erlang runtimes; developers can verify compatibility by running the Gleam compiler for both targets during the CI process."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:37.433Z",
+  "sourceRetrievedAt": "2026-10-18T01:01:33.740Z"
+}

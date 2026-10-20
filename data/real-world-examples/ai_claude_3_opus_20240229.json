@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_3_opus_20240229",
+  "title": "Automated Model Lifecycle Management for Claude 3 Opus",
+  "business": "Enterprise software teams maintaining legacy AI integrations",
+  "problem": "Unplanned service outages occurring when deprecated models reach their retirement date, causing production failures in downstream applications.",
+  "solution": "Implementing a proactive audit and migration workflow using the Claude Console to identify active usage of legacy models and transition to supported, active versions before retirement.",
+  "steps": [
+    "Access the Usage page in the Claude Console to export API activity logs.",
+    "Analyze the CSV export to identify specific API keys and model identifiers currently in production.",
+    "Cross-reference identified models against the official documentation to determine their current lifecycle status.",
+    "Update application code to point to the recommended active replacement model.",
+    "Perform regression testing with the new model to ensure output consistency before full deployment."
+  ],
+  "outcome": "Increased system reliability and elimination of service interruptions caused by model retirement.",
+  "limitation": "The primary tradeoff is the potential for behavioral drift between model versions, which requires thorough testing of application prompts to ensure consistent performance after migration.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "A process flow showing how to identify and replace legacy models.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage data"
+      },
+      {
+        "id": "b",
+        "label": "Audit CSV",
+        "detail": "Exported report of model usage"
+      },
+      {
+        "id": "c",
+        "label": "Documentation",
+        "detail": "Reference for lifecycle status"
+      },
+      {
+        "id": "d",
+        "label": "Application Code",
+        "detail": "Target for model update"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "export usage data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "verify model status"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "identify replacement"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Model Lifecycle Management for Claude 3 Opus, what is the primary cause of the problem described?",
+      "options": [
+        "Unplanned service outages occurring when deprecated models reach their retirement date",
+        "High latency in API responses during peak hours",
+        "Incompatibility with third-party cloud infrastructure",
+        "Excessive costs associated with newer model versions"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that production failures are caused by reaching the retirement date of deprecated models.",
+      "evidence": "Unplanned service outages occurring when deprecated models reach their retirement date, causing production failures in downstream applications."
+    },
+    {
+      "question": "What is a key limitation of the migration process in Automated Model Lifecycle Management for Claude 3 Opus?",
+      "options": [
+        "The inability to export usage data from the console",
+        "The risk of behavioral drift between model versions requiring testing",
+        "The lack of documentation regarding retirement dates",
+        "The requirement to contact support for every model change"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson notes that switching models can introduce behavioral changes, necessitating testing to maintain performance.",
+      "evidence": "The primary tradeoff is the potential for behavioral drift between model versions, which requires thorough testing of application prompts to ensure consistent performance after migration."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:27.470Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

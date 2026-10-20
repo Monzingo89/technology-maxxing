@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "netlify",
+  "title": "Automated Preview Workflow for Global Retail",
+  "business": "A global retail company managing a high-frequency e-commerce frontend that requires constant updates from distributed marketing and engineering teams.",
+  "problem": "The team suffers from a bottleneck where content updates and code changes require manual staging environments, leading to delayed feedback loops and synchronization errors between the design team and developers.",
+  "solution": "By leveraging Netlify's Git-based deployment model, the company can automatically generate unique preview URLs for every pull request. This allows stakeholders to review live, functional versions of the site before merging, ensuring that code and content changes are validated in a production-like environment without manual infrastructure provisioning.",
+  "steps": [
+    "Connect the project repository to Netlify to enable automatic CI/CD triggers on every push.",
+    "Configure the build settings to execute the framework-specific build command upon commit.",
+    "Utilize the automatic Preview URL generation feature for every pull request to share live links with stakeholders.",
+    "Review the preview environment to verify changes before merging into the main production branch."
+  ],
+  "outcome": "The organization achieves a streamlined review process where cross-functional teams can collaborate on live previews, significantly reducing the time between content creation and production deployment.",
+  "limitation": "A primary limitation is the potential for build time overhead when managing complex, large-scale applications with frequent commits. To check if this is impacting the workflow, developers should monitor the build logs in the Netlify dashboard to identify if queue times or build durations are increasing as the project complexity grows.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Netlify Git-Based Preview Workflow",
+    "description": "This diagram illustrates the flow from code commit to stakeholder review.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Pushes code to Git repository"
+      },
+      {
+        "id": "b",
+        "label": "Netlify CI/CD",
+        "detail": "Triggers build process"
+      },
+      {
+        "id": "c",
+        "label": "Preview Environment",
+        "detail": "Hosts the live preview URL"
+      },
+      {
+        "id": "d",
+        "label": "Stakeholders",
+        "detail": "Reviews and approves changes"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Triggers build"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Deploys to"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Provides URL for"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.netlify.com/",
+      "label": "Netlify Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Preview Workflow for Global Retail, what is the primary benefit of using Netlify's Git-based deployment model?",
+      "options": [
+        "It eliminates the need for manual infrastructure provisioning for staging environments.",
+        "It automatically optimizes images for all global users.",
+        "It replaces the need for a Git repository entirely.",
+        "It provides a database for all e-commerce transactions."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that manual staging environments cause bottlenecks, and Netlify's preview URLs solve this by automating the process.",
+      "evidence": "This allows stakeholders to review live, functional versions of the site before merging, ensuring that code and content changes are validated in a production-like environment without manual infrastructure provisioning."
+    },
+    {
+      "question": "In Automated Preview Workflow for Global Retail, how can a team identify if the build process is becoming a bottleneck?",
+      "options": [
+        "By checking the total number of Git commits.",
+        "By monitoring build logs in the Netlify dashboard for duration and queue times.",
+        "By asking stakeholders to manually time the deployment process.",
+        "By checking the number of preview URLs generated."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly suggests monitoring build logs to identify if build durations or queue times are increasing.",
+      "evidence": "To check if this is impacting the workflow, developers should monitor the build logs in the Netlify dashboard to identify if queue times or build durations are increasing as the project complexity grows."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:10.836Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:06.602Z"
+}

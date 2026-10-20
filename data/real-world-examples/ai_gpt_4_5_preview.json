@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_4_5_preview",
+  "title": "Legacy Archive Synthesis for Historical Preservation",
+  "business": "A national historical archive managing millions of digitized document pages.",
+  "problem": "The archive faces difficulty extracting nuanced thematic insights from vast, unstructured historical records, where standard models often lose context across long-form documents.",
+  "solution": "Utilizing the 128,000 token context window of gpt-4.5-preview allows the system to ingest entire multi-page historical manuscripts in a single request, ensuring the model maintains coherence across complex, archaic narratives that would otherwise require fragmented processing.",
+  "steps": [
+    "Identify historical document batches exceeding 50,000 tokens.",
+    "Configure the Chat Completions API to use the gpt-4.5-preview-2025-02-27 snapshot.",
+    "Implement prompt caching to reduce redundant processing costs for recurring document headers.",
+    "Execute batch processing requests to synthesize thematic summaries across the full context window.",
+    "Validate output consistency using structured outputs to ensure metadata compliance."
+  ],
+  "outcome": "The archive achieves a more comprehensive understanding of thematic connections between disparate historical events, reducing the need for manual cross-referencing.",
+  "limitation": "The primary limitation is the high cost of token consumption compared to newer models; users should monitor usage via the API dashboard to ensure the cost-to-benefit ratio remains acceptable for specific high-value archives.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Archive Synthesis Workflow",
+    "description": "This diagram illustrates the data flow from raw historical documents to synthesized thematic insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Documents",
+        "detail": "Digitized manuscripts"
+      },
+      {
+        "id": "b",
+        "label": "Context Manager",
+        "detail": "Aggregates documents into 128k token chunks"
+      },
+      {
+        "id": "c",
+        "label": "GPT-4.5 Preview",
+        "detail": "Processes full context for synthesis"
+      },
+      {
+        "id": "d",
+        "label": "Thematic Insights",
+        "detail": "Structured metadata output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingestion"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Prompt Injection"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Synthesis"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-4.5-preview-2025-02-27', # Locking to specific snapshot\n  messages=[{'role': 'user', 'content': long_manuscript_text}],\n  response_format={'type': 'json_object'} # Ensuring structured outputs\n)",
+    "explanation": "This snippet demonstrates calling the model with a specific snapshot and enforcing structured output for consistent metadata extraction."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-4.5-preview",
+      "label": "GPT-4.5 Preview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Archive Synthesis for Historical Preservation, why is the model chosen over alternatives?",
+      "options": [
+        "It offers the lowest cost per token.",
+        "It provides a 128,000 token context window for full manuscript ingestion.",
+        "It is the only model that supports image input.",
+        "It is the fastest model for real-time translation."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights the need to ingest entire multi-page manuscripts, which is enabled by the large context window.",
+      "evidence": "Utilizing the 128,000 token context window of gpt-4.5-preview allows the system to ingest entire multi-page historical manuscripts in a single request"
+    },
+    {
+      "question": "In Legacy Archive Synthesis for Historical Preservation, what is the primary tradeoff mentioned?",
+      "options": [
+        "The model lacks support for structured outputs.",
+        "The model is limited to 1,000 tokens of output.",
+        "The model has higher token costs compared to newer alternatives.",
+        "The model cannot be used with prompt caching."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about the high cost of token consumption for this specific model.",
+      "evidence": "The primary limitation is the high cost of token consumption compared to newer models"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:42.949Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:38.961Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_69bd90ac5acc8191ba9dcd990ef07b84",
+  "title": "Streamlining Retail Inventory Replenishment",
+  "business": "Retail operations managers who maintain product catalogs and stock levels in Coda docs.",
+  "problem": "Managers face significant delays in manual inventory updates, often failing to reconcile real-time stock shortages with supplier order forms, leading to lost sales.",
+  "solution": "The Coda plugin for ChatGPT bridges this gap by allowing managers to query current stock levels directly from Coda tables and trigger automated row updates to create new purchase orders based on conversational prompts.",
+  "steps": [
+    "Authenticate the Coda plugin within the ChatGPT interface to link the specific workspace.",
+    "Define a Coda table structure containing columns for Product Name, Current Stock, and Reorder Status.",
+    "Instruct ChatGPT to scan the Coda table for items where stock is below a defined threshold.",
+    "Use natural language to confirm the list of items needing replenishment.",
+    "Direct the plugin to update the Coda table by adding new rows to a linked Purchase Orders table."
+  ],
+  "outcome": "A more responsive supply chain where inventory replenishment is initiated immediately upon identifying a deficit, reducing human error and administrative latency.",
+  "limitation": "The plugin relies on the semantic accuracy of the user's prompt; ambiguous instructions can lead to incorrect row updates. Users must verify changes in the Coda UI, as the plugin does not provide a native 'undo' function for bulk row modifications.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Replenishment Workflow",
+    "description": "The flow of data between the user, the AI agent, and the Coda workspace.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Retail Manager",
+        "detail": "Initiates the request"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT Plugin",
+        "detail": "Processes natural language"
+      },
+      {
+        "id": "c",
+        "label": "Coda Workspace",
+        "detail": "Stores inventory data"
+      },
+      {
+        "id": "d",
+        "label": "Purchase Order Table",
+        "detail": "Target for updates"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Issues query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Reads stock levels"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Creates new rows"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Streamlining Retail Inventory Replenishment, what is the primary problem addressed by the integration?",
+      "options": [
+        "Manual delays in reconciling stock shortages with supplier orders.",
+        "The lack of a native inventory tracking system in Coda.",
+        "High costs associated with purchasing third-party supply chain software.",
+        "Inability of ChatGPT to understand retail terminology."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies manual updates and the failure to reconcile stock as the core issue.",
+      "evidence": "Managers face significant delays in manual inventory updates, often failing to reconcile real-time stock shortages with supplier order forms, leading to lost sales."
+    },
+    {
+      "question": "In Streamlining Retail Inventory Replenishment, what is a key limitation of using the plugin?",
+      "options": [
+        "The plugin cannot read data from Coda tables.",
+        "The plugin requires manual coding for every inventory update.",
+        "Ambiguous prompts can lead to incorrect updates, and there is no native undo function.",
+        "The plugin is only compatible with mobile devices."
+      ],
+      "answerIndex": 2,
+      "explanation": "The text highlights the risk of user-prompt ambiguity and the lack of an undo function as a specific limitation.",
+      "evidence": "The plugin relies on the semantic accuracy of the user's prompt; ambiguous instructions can lead to incorrect row updates. Users must verify changes in the Coda UI, as the plugin does not provide a native 'undo' function for bulk row modifications."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:12.306Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

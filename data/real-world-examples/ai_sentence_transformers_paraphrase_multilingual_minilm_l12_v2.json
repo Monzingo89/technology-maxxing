@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_sentence_transformers_paraphrase_multilingual_minilm_l12_v2",
+  "title": "Cross-Lingual Support Ticket Routing",
+  "business": "Global customer support teams managing inquiries in dozens of languages.",
+  "problem": "Support agents struggle to manually categorize incoming tickets written in various languages, leading to slow response times and misrouted requests.",
+  "solution": "Use the paraphrase-multilingual-MiniLM-L12-v2 model to map incoming support tickets into a unified 384-dimensional dense vector space, allowing for semantic similarity matching against a library of known issue categories regardless of the original language.",
+  "steps": [
+    "Install the sentence-transformers library in the production environment.",
+    "Load the paraphrase-multilingual-MiniLM-L12-v2 model using the SentenceTransformer class.",
+    "Convert incoming multilingual support tickets into dense vector embeddings.",
+    "Calculate the cosine similarity between the ticket embedding and pre-computed category embeddings to identify the best match.",
+    "Route the ticket to the appropriate language-specific support queue based on the highest similarity score."
+  ],
+  "outcome": "Improved routing accuracy and reduced manual triage time by automatically grouping semantically related inquiries across different languages.",
+  "limitation": "The model has a maximum sequence length of 128 tokens; longer support tickets may be truncated, potentially losing context. This can be verified by checking the token count of input text before encoding.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Multilingual Ticket Routing Pipeline",
+    "description": "The flow from raw input to automated routing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Ticket",
+        "detail": "Input in any supported language"
+      },
+      {
+        "id": "b",
+        "label": "Embedding Model",
+        "detail": "paraphrase-multilingual-MiniLM-L12-v2"
+      },
+      {
+        "id": "c",
+        "label": "Vector Space",
+        "detail": "384-dimensional dense representation"
+      },
+      {
+        "id": "d",
+        "label": "Router",
+        "detail": "Similarity matching logic"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "encode"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "maps to"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "compares"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from sentence_transformers import SentenceTransformer\n# Load the multilingual model\nmodel = SentenceTransformer('sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2')\n# Encode ticket text into 384-dimensional vectors\nembeddings = model.encode(['Ticket text here', 'Texte de ticket ici'])",
+    "explanation": "This code demonstrates initializing the model and generating vector embeddings for multilingual inputs as required for the routing logic."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+      "label": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Cross-Lingual Support Ticket Routing, how does the model address the issue of manual categorization?",
+      "options": [
+        "By mapping tickets to a 384-dimensional dense vector space for semantic matching.",
+        "By translating all tickets into English before processing.",
+        "By using a keyword-based lookup table for each language.",
+        "By training a new model from scratch for every support ticket."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the model's ability to map text to a dense vector space to enable semantic similarity comparisons.",
+      "evidence": "Use the paraphrase-multilingual-MiniLM-L12-v2 model to map incoming support tickets into a unified 384-dimensional dense vector space, allowing for semantic similarity matching against a library of known issue categories regardless of the original language."
+    },
+    {
+      "question": "In Cross-Lingual Support Ticket Routing, what is a primary limitation of the implementation?",
+      "options": [
+        "The model only supports English language inputs.",
+        "The model is restricted to a maximum sequence length of 128 tokens.",
+        "The model requires a dedicated GPU for every inference.",
+        "The model cannot be used with the sentence-transformers library."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario specify a maximum sequence length constraint that affects how long inputs are handled.",
+      "evidence": "The model has a maximum sequence length of 128 tokens; longer support tickets may be truncated, potentially losing context."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:15.348Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:11.108Z"
+}

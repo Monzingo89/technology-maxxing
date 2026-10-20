@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "cpp",
+  "title": "High-Frequency Telemetry Ingestion",
+  "business": "Financial services firms requiring microsecond-level data processing for market feeds.",
+  "problem": "High-level managed languages introduce non-deterministic garbage collection pauses, causing significant data loss during market volatility spikes.",
+  "solution": "Utilizing C++ allows for deterministic memory management and zero-overhead abstractions, ensuring consistent throughput for telemetry ingestion pipelines.",
+  "steps": [
+    "Define fixed-size circular buffers to avoid dynamic memory allocation during the hot path.",
+    "Utilize stack-allocated structures to ensure cache locality and minimize pointer indirection.",
+    "Implement custom memory pools to manage object lifecycles without relying on the global heap.",
+    "Apply compile-time templates to generate specialized code paths for specific data packet types."
+  ],
+  "outcome": "The system achieves stable, predictable latency profiles that remain consistent regardless of the volume of incoming market data.",
+  "limitation": "Manual memory management increases the risk of memory leaks or dangling pointers; developers must verify safety using static analysis tools or modern RAII patterns.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Ingestion Pipeline",
+    "description": "Data flows from the network interface through a pre-allocated buffer to the processing engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Network NIC",
+        "detail": "Hardware ingress point"
+      },
+      {
+        "id": "b",
+        "label": "Circular Buffer",
+        "detail": "Pre-allocated memory region"
+      },
+      {
+        "id": "c",
+        "label": "Processing Engine",
+        "detail": "Zero-copy logic"
+      },
+      {
+        "id": "d",
+        "label": "Storage/Analytics",
+        "detail": "Final data sink"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "writes packets"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "consumes data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "persists results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://isocpp.org/",
+      "label": "Standard C++"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Frequency Telemetry Ingestion, why is C++ preferred over managed languages?",
+      "options": [
+        "It eliminates non-deterministic garbage collection pauses.",
+        "It provides automatic memory management by default.",
+        "It is easier to learn than managed alternatives.",
+        "It requires less code to implement network protocols."
+      ],
+      "answerIndex": 0,
+      "explanation": "Managed languages often have garbage collection which causes unpredictable pauses, whereas C++ allows for deterministic control.",
+      "evidence": "High-level managed languages introduce non-deterministic garbage collection pauses, causing significant data loss during market volatility spikes."
+    },
+    {
+      "question": "In High-Frequency Telemetry Ingestion, what is a primary trade-off of the implementation?",
+      "options": [
+        "Increased risk of memory leaks and dangling pointers.",
+        "Higher CPU usage due to template instantiation.",
+        "Inability to use stack-allocated structures.",
+        "Mandatory reliance on the global heap."
+      ],
+      "answerIndex": 0,
+      "explanation": "Manual memory management in C++ shifts the burden of safety to the developer, increasing the risk of common memory errors.",
+      "evidence": "Manual memory management increases the risk of memory leaks or dangling pointers; developers must verify safety using static analysis tools or modern RAII patterns."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:52.225Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.332Z"
+}

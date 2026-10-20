@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_dataflow",
+  "title": "Unified Logistics Telemetry Processing",
+  "business": "Logistics providers managing global freight fleets requiring real-time visibility.",
+  "problem": "Legacy batch systems create significant data latency, preventing timely rerouting of shipments during transit disruptions.",
+  "solution": "Google Cloud Dataflow provides a unified model for stream and batch processing, allowing the same pipeline code to ingest live telemetry from IoT sensors and perform historical trend analysis on stored logs.",
+  "steps": [
+    "Define the pipeline using the Apache Beam SDK to handle both unbounded streaming data and bounded batch datasets.",
+    "Configure the Dataflow job to utilize autoscaling workers to maintain throughput during peak telemetry ingestion periods.",
+    "Implement windowing functions to group incoming sensor events into logical time-based segments for analysis.",
+    "Execute the pipeline on the managed Dataflow service to decouple infrastructure management from data processing logic."
+  ],
+  "outcome": "Improved operational agility through near real-time visibility into fleet status, enabling proactive responses to transit delays.",
+  "limitation": "Dataflow pipelines can incur higher costs if windowing strategies are not optimized; verify efficiency by monitoring worker utilization and shuffle service usage in the job dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Pipeline Architecture",
+    "description": "Data flows from source to processing and finally to storage.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IoT Sensors",
+        "detail": "Source of telemetry"
+      },
+      {
+        "id": "b",
+        "label": "Pub/Sub",
+        "detail": "Message ingestion"
+      },
+      {
+        "id": "c",
+        "label": "Dataflow",
+        "detail": "Unified processing engine"
+      },
+      {
+        "id": "d",
+        "label": "BigQuery",
+        "detail": "Analytical storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "publishes events"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "streams data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "writes results"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Logistics Telemetry Processing, what is the primary driver for adopting Dataflow?",
+      "options": [
+        "To replace legacy batch systems that cause high data latency",
+        "To increase the cost of infrastructure management",
+        "To eliminate the need for IoT sensors in logistics",
+        "To store data without processing it"
+      ],
+      "answerIndex": 0,
+      "explanation": "The business problem identified is that legacy batch systems create significant data latency, which Dataflow solves via unified stream processing.",
+      "evidence": "Legacy batch systems create significant data latency, preventing timely rerouting of shipments during transit disruptions."
+    },
+    {
+      "question": "In Unified Logistics Telemetry Processing, what is a key operational consideration for Dataflow?",
+      "options": [
+        "It requires manual hardware provisioning for every job",
+        "It is impossible to use for batch processing",
+        "Inefficient windowing strategies can lead to higher costs",
+        "It cannot scale based on telemetry volume"
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns that poor windowing strategies can increase costs and suggests monitoring worker utilization.",
+      "evidence": "Dataflow pipelines can incur higher costs if windowing strategies are not optimized; verify efficiency by monitoring worker utilization and shuffle service usage in the job dashboard."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:59.655Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

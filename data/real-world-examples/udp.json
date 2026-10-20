@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "udp",
+  "title": "Real-Time Telemetry for Autonomous Drone Fleets",
+  "business": "A logistics company managing a fleet of autonomous drones for last-mile delivery.",
+  "problem": "The fleet requires constant, low-latency position updates to avoid collisions, but traditional connection-oriented protocols introduce head-of-line blocking and retransmission delays that render stale location data dangerous.",
+  "solution": "By utilizing the User Datagram Protocol (UDP), the drones transmit independent datagrams containing current telemetry. Because UDP does not perform built-in ordering or retransmission, the system always processes the most recent packet, discarding delayed or out-of-order data that would otherwise clog the control loop.",
+  "steps": [
+    "Initialize a socket bound to a specific port on the drone controller.",
+    "Package telemetry data into a compact, fixed-length binary structure.",
+    "Transmit datagrams directly to the ground station IP address without establishing a handshake.",
+    "Implement a lightweight application-layer sequence check to identify if a packet is significantly older than the current state."
+  ],
+  "outcome": "The ground station maintains a fluid, real-time view of the fleet position, ensuring that collision avoidance logic reacts to the latest possible drone state rather than waiting for outdated retransmissions.",
+  "limitation": "UDP lacks reliability; packets may be dropped by network congestion. To check for this, the application must monitor the gap between sequence numbers in the received telemetry stream to determine if packet loss exceeds acceptable thresholds.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Transmission Flow",
+    "description": "This diagram illustrates the unidirectional flow of telemetry data from the drone to the ground station.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Drone Sensor",
+        "detail": "Captures GPS and velocity"
+      },
+      {
+        "id": "b",
+        "label": "UDP Socket",
+        "detail": "Encapsulates data into datagrams"
+      },
+      {
+        "id": "c",
+        "label": "Network Path",
+        "detail": "Unreliable transport medium"
+      },
+      {
+        "id": "d",
+        "label": "Ground Station",
+        "detail": "Processes latest telemetry"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Data Input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Send Datagram"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Packet Delivery"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developer.mozilla.org/en-US/docs/Glossary",
+      "label": "Glossary of web terms | MDN"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-Time Telemetry for Autonomous Drone Fleets, why is UDP preferred over connection-oriented protocols?",
+      "options": [
+        "It prevents head-of-line blocking and avoids stale data processing.",
+        "It guarantees that every telemetry packet reaches the destination.",
+        "It automatically encrypts the telemetry data for security.",
+        "It provides built-in retransmission for lost packets."
+      ],
+      "answerIndex": 0,
+      "explanation": "UDP avoids the delays associated with retransmission and ordering, which is critical for real-time collision avoidance.",
+      "evidence": "Because UDP does not perform built-in ordering or retransmission, the system always processes the most recent packet, discarding delayed or out-of-order data that would otherwise clog the control loop."
+    },
+    {
+      "question": "In Real-Time Telemetry for Autonomous Drone Fleets, how can an operator verify if the network is losing too many packets?",
+      "options": [
+        "By checking the TCP handshake status.",
+        "By monitoring the gap between sequence numbers in the received stream.",
+        "By requesting a retransmission of all missing datagrams.",
+        "By increasing the frequency of the drone sensor updates."
+      ],
+      "answerIndex": 1,
+      "explanation": "Since UDP does not track loss, the application must manually track sequence numbers to detect missing data.",
+      "evidence": "To check for this, the application must monitor the gap between sequence numbers in the received telemetry stream to determine if packet loss exceeds acceptable thresholds."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:54.386Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:49.414Z"
+}

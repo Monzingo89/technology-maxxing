@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_4o_audio_preview",
+  "title": "Multilingual Technical Support Voice Interface",
+  "business": "Global technical support centers providing hardware troubleshooting for non-native speakers.",
+  "problem": "Support agents struggle to interpret complex technical descriptions from users with thick accents or limited vocabulary, leading to high ticket resolution times and user frustration.",
+  "solution": "Implementing the gpt-4o-audio-preview model allows the system to ingest raw audio input directly, bypassing the latency and potential data loss of intermediate speech-to-text transcription layers. By processing the user's voice directly, the model captures nuanced prosody and tone, enabling more accurate intent recognition and providing immediate, natural-sounding audio responses that guide the user through troubleshooting steps in their preferred language.",
+  "steps": [
+    "Capture the user's audio stream via the client-side interface.",
+    "Format the audio data into a base64-encoded string for the Chat Completions API payload.",
+    "Send the request to the gpt-4o-audio-preview model specifying audio as both input and output modality.",
+    "Receive the response containing the generated audio content.",
+    "Stream the returned audio output back to the user's device for immediate playback."
+  ],
+  "outcome": "Improved user experience through reduced communication friction and faster, more empathetic technical guidance without the need for manual transcription.",
+  "limitation": "The model operates under a strict 16,384 max output token limit, which may truncate long-form technical instructions; developers should monitor the finish_reason in the API response to check if the output was cut off.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Audio Processing Workflow",
+    "description": "This diagram illustrates the flow of audio data from the user through the GPT-4o Audio model and back.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "User",
+        "detail": "Provides voice input"
+      },
+      {
+        "id": "client",
+        "label": "Client App",
+        "detail": "Encodes audio to base64"
+      },
+      {
+        "id": "api",
+        "label": "Chat Completions API",
+        "detail": "Processes gpt-4o-audio-preview"
+      },
+      {
+        "id": "output",
+        "label": "Audio Response",
+        "detail": "Decodes and plays audio"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "client",
+        "label": "records voice"
+      },
+      {
+        "from": "client",
+        "to": "api",
+        "label": "sends audio input"
+      },
+      {
+        "from": "api",
+        "to": "output",
+        "label": "returns audio output"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model=\"gpt-4o-audio-preview-2025-06-03\",\n  messages=[{\"role\": \"user\", \"content\": \"[base64_audio_data]\"}],\n  modalities=[\"audio\"] # Requesting audio output\n)",
+    "explanation": "This snippet demonstrates sending a base64-encoded audio input to the model and requesting an audio response, which is central to the Multilingual Technical Support Voice Interface."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-4o-audio-preview",
+      "label": "GPT-4o Audio"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Multilingual Technical Support Voice Interface, why is the gpt-4o-audio-preview model used instead of standard text-based models?",
+      "options": [
+        "To bypass intermediate transcription layers and capture nuanced audio input directly.",
+        "To reduce the cost of processing tokens compared to text models.",
+        "To enable offline processing of user support requests.",
+        "To increase the maximum context window beyond 128,000 tokens."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that direct audio ingestion avoids the latency and data loss associated with intermediate transcription.",
+      "evidence": "Implementing the gpt-4o-audio-preview model allows the system to ingest raw audio input directly, bypassing the latency and potential data loss of intermediate speech-to-text transcription layers."
+    },
+    {
+      "question": "In Multilingual Technical Support Voice Interface, what is a primary limitation developers must monitor?",
+      "options": [
+        "The model cannot handle non-English languages.",
+        "The model requires a specific hardware setup for audio input.",
+        "The 16,384 max output token limit may truncate long responses.",
+        "The model only supports text as an output modality."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly warns about the output token limit and the need to check the finish_reason.",
+      "evidence": "The model operates under a strict 16,384 max output token limit, which may truncate long-form technical instructions; developers should monitor the finish_reason in the API response to check if the output was cut off."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:44.157Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:39.983Z"
+}

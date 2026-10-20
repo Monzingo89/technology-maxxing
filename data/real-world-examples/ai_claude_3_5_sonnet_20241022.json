@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_3_5_sonnet_20241022",
+  "title": "Lifecycle Management for Legacy Claude Integrations",
+  "business": "Enterprise software teams maintaining long-running AI-powered analytics pipelines.",
+  "problem": "Teams often face service interruptions when legacy models reach their retirement date, causing silent failures in automated data processing workflows that rely on specific model versions.",
+  "solution": "Implementing a proactive model lifecycle audit using the Claude Console Usage export to identify deprecated model usage and systematically migrating workloads to active, supported models before the retirement deadline.",
+  "steps": [
+    "Navigate to the Usage page in the Claude Console to generate an audit report.",
+    "Export the usage data to CSV format to identify specific API keys and model IDs currently in production.",
+    "Cross-reference identified models against the official documentation to determine their current lifecycle status.",
+    "Update application code to point to the recommended replacement model as specified in the deprecation tables.",
+    "Perform regression testing with the new model to ensure output consistency before full deployment."
+  ],
+  "outcome": "Improved system reliability and the elimination of unexpected downtime caused by the retirement of legacy model versions.",
+  "limitation": "The primary trade-off is the potential for slight variations in model output behavior between versions, which must be verified through thorough testing before final migration.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing legacy models to ensure continuous service.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage data"
+      },
+      {
+        "id": "b",
+        "label": "Audit Report",
+        "detail": "CSV export containing model identifiers"
+      },
+      {
+        "id": "c",
+        "label": "Documentation",
+        "detail": "Reference for lifecycle status and replacements"
+      },
+      {
+        "id": "d",
+        "label": "Application Code",
+        "detail": "Production environment requiring update"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "generates"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "cross-referenced"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "defines replacement"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Lifecycle Management for Legacy Claude Integrations, what is the primary risk of not addressing model retirement?",
+      "options": [
+        "Silent failures in automated workflows",
+        "Increased latency in API responses",
+        "Incompatibility with Python SDK versions",
+        "Loss of access to the Claude Console"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies that relying on retired models leads to service interruptions and silent failures in automated pipelines.",
+      "evidence": "Teams often face service interruptions when legacy models reach their retirement date, causing silent failures in automated data processing workflows that rely on specific model versions."
+    },
+    {
+      "question": "In Lifecycle Management for Legacy Claude Integrations, what is the recommended approach to mitigate the limitation of model migration?",
+      "options": [
+        "Automated retries on 400 errors",
+        "Thorough testing with the new model",
+        "Using legacy weights for comparison",
+        "Updating the API key immediately"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that output variations require verification through testing before deployment.",
+      "evidence": "The primary trade-off is the potential for slight variations in model output behavior between versions, which must be verified through thorough testing before final migration."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:31.837Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

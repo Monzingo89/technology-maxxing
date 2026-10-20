@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_instant_1_1",
+  "title": "Legacy Model Lifecycle Management",
+  "business": "Enterprise teams maintaining legacy API integrations",
+  "problem": "Applications relying on retired models like Claude Instant 1.1 experience service failures because requests to retired models will fail.",
+  "solution": "The solution involves auditing current API usage via the Claude Console to identify retired model dependencies and migrating those workloads to active, supported models.",
+  "steps": [
+    "Access the Usage page in the Claude Console to retrieve an audit of API activity.",
+    "Export the usage data to a CSV file to identify specific API keys and model identifiers.",
+    "Cross-reference the identified models against the official documentation to confirm retirement status.",
+    "Update application code to point to a recommended active model replacement.",
+    "Perform thorough testing with the new model to ensure output consistency before the retirement deadline."
+  ],
+  "outcome": "Restored service reliability and compliance with current model support standards.",
+  "limitation": "The primary tradeoff is the potential for performance variance when switching models; developers must verify behavior through testing, as newer models may interpret prompts differently than the legacy version.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "This flow shows the transition from a retired model to a supported architecture.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy Application",
+        "detail": "Uses retired Claude Instant 1.1"
+      },
+      {
+        "id": "b",
+        "label": "Claude Console",
+        "detail": "Provides usage audit data"
+      },
+      {
+        "id": "c",
+        "label": "Migration Logic",
+        "detail": "Updates API model endpoint"
+      },
+      {
+        "id": "d",
+        "label": "Active Model",
+        "detail": "Supported production endpoint"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "requests audit"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "identifies retired model"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "reconfigures endpoint"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Legacy Model Lifecycle Management, what is the primary consequence of failing to migrate from Claude Instant 1.1?",
+      "options": [
+        "Requests to retired models will fail",
+        "The model becomes slower but functional",
+        "The API returns a warning but continues to process",
+        "The model weights are automatically updated"
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation explicitly states that requests to retired models will fail, necessitating migration.",
+      "evidence": "Applications relying on retired models like Claude Instant 1.1 experience service failures because requests to retired models will fail."
+    },
+    {
+      "question": "In Legacy Model Lifecycle Management, what is the recommended approach to mitigate the risk of performance variance during migration?",
+      "options": [
+        "Rely on the default model settings",
+        "Perform thorough testing with the new model",
+        "Contact support to preserve legacy weights",
+        "Use the audit CSV to force model compatibility"
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson highlights that developers must verify behavior through testing because newer models may interpret prompts differently.",
+      "evidence": "The primary tradeoff is the potential for performance variance when switching models; developers must verify behavior through testing, as newer models may interpret prompts differently than the legacy version."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:41.743Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

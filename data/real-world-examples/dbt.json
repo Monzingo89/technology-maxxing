@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "dbt",
+  "title": "Standardizing Regional Logistics Reporting",
+  "business": "A global logistics firm managing disparate regional supply chain databases.",
+  "problem": "The firm suffers from inconsistent reporting logic where regional analysts define 'transit time' differently, leading to conflicting executive dashboards and high maintenance overhead for manual SQL scripts.",
+  "solution": "The firm adopts dbt to implement a modular, SQL-first transformation workflow. By centralizing logic into version-controlled models, the team enforces a single source of truth for metrics, ensuring that every regional dashboard consumes the same underlying transformation logic.",
+  "steps": [
+    "Define raw source tables using dbt source configurations to map regional database schemas.",
+    "Create staging models to perform initial data cleaning and column renaming for consistency.",
+    "Develop intermediate models to join regional transit data and apply standardized business logic.",
+    "Define final mart models that aggregate data for specific executive reporting requirements.",
+    "Utilize dbt state-aware orchestration to ensure only modified models are rebuilt during daily refreshes."
+  ],
+  "outcome": "Improved data consistency across regional teams and reduced time spent debugging conflicting reports, as logic is now centralized and auditable.",
+  "limitation": "A significant tradeoff is the complexity of managing dependency graphs as the project scales; developers must monitor the lineage to avoid circular references, which can be checked by reviewing the generated DAG in the dbt Catalog.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Transformation Pipeline",
+    "description": "This flow shows how raw regional data is refined into standardized business metrics.",
+    "nodes": [
+      {
+        "id": "raw",
+        "label": "Regional Sources",
+        "detail": "Raw database tables"
+      },
+      {
+        "id": "stg",
+        "label": "Staging Models",
+        "detail": "Cleaned and renamed columns"
+      },
+      {
+        "id": "int",
+        "label": "Intermediate Models",
+        "detail": "Standardized business logic"
+      },
+      {
+        "id": "mart",
+        "label": "Executive Marts",
+        "detail": "Final reporting tables"
+      }
+    ],
+    "edges": [
+      {
+        "from": "raw",
+        "to": "stg",
+        "label": "extracts"
+      },
+      {
+        "from": "stg",
+        "to": "int",
+        "label": "joins"
+      },
+      {
+        "from": "int",
+        "to": "mart",
+        "label": "aggregates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.getdbt.com/",
+      "label": "dbt Developer Hub"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Standardizing Regional Logistics Reporting, what is the primary problem dbt addresses?",
+      "options": [
+        "Inconsistent reporting logic across regional teams",
+        "Slow database hardware performance",
+        "Lack of cloud storage capacity",
+        "High costs of database licensing"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that regional analysts define metrics differently, causing conflicting dashboards.",
+      "evidence": "The firm suffers from inconsistent reporting logic where regional analysts define 'transit time' differently, leading to conflicting executive dashboards and high maintenance overhead for manual SQL scripts."
+    },
+    {
+      "question": "In Standardizing Regional Logistics Reporting, what is a noted limitation of the implementation?",
+      "options": [
+        "The inability to use SQL for transformations",
+        "The complexity of managing dependency graphs as the project scales",
+        "The requirement to use proprietary hardware",
+        "The lack of version control for models"
+      ],
+      "answerIndex": 1,
+      "explanation": "As the project grows, managing the lineage and dependencies becomes a technical challenge that requires monitoring.",
+      "evidence": "A significant tradeoff is the complexity of managing dependency graphs as the project scales; developers must monitor the lineage to avoid circular references, which can be checked by reviewing the generated DAG in the dbt Catalog."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:13.044Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:09.382Z"
+}

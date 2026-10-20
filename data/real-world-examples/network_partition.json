@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "network_partition",
+  "title": "Global Logistics Fleet Synchronization",
+  "business": "A global logistics provider managing real-time cargo tracking across multiple regional data centers.",
+  "problem": "During a network partition, regional nodes remain operational but cannot communicate, leading to conflicting state updates for cargo locations and potential data divergence.",
+  "solution": "The system employs a consensus-based protocol where nodes require a majority quorum to commit state changes. When a partition occurs, the minority side stops accepting writes to prevent divergence, while the majority side continues to operate, ensuring consistency at the cost of availability for the isolated segment.",
+  "steps": [
+    "Configure nodes into distinct clusters across geographically dispersed regions.",
+    "Implement a consensus algorithm that mandates a majority quorum for all state-changing operations.",
+    "Define heartbeat thresholds to detect communication failures between regional nodes.",
+    "Configure the minority partition to transition into read-only mode upon loss of quorum.",
+    "Enable automated reconciliation processes to synchronize state once network connectivity is restored."
+  ],
+  "outcome": "The system maintains a single, consistent version of truth across the fleet, preventing the creation of conflicting cargo status records during infrastructure instability.",
+  "limitation": "The primary tradeoff is reduced availability; nodes in the minority partition become unable to process updates, which can be verified by monitoring the failure of write operations during simulated network isolation events.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Partition Consensus Flow",
+    "description": "Shows how nodes interact during a network split. Read from left to right.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Node A",
+        "detail": "Leader node"
+      },
+      {
+        "id": "b",
+        "label": "Node B",
+        "detail": "Follower node"
+      },
+      {
+        "id": "c",
+        "label": "Node C",
+        "detail": "Isolated node"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "quorum communication"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "partitioned/blocked"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://dataintensive.net/",
+      "label": "Designing Data-Intensive Applications (DDIA)"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Fleet Synchronization, how does the system handle conflicting state updates during a partition?",
+      "options": [
+        "It allows all nodes to continue writing and reconciles later.",
+        "It forces nodes to use a majority quorum to commit changes.",
+        "It automatically switches to a secondary database provider.",
+        "It ignores the partition and continues with local updates."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on a consensus-based protocol requiring a majority quorum to ensure consistency.",
+      "evidence": "The system employs a consensus-based protocol where nodes require a majority quorum to commit state changes."
+    },
+    {
+      "question": "What is the primary limitation of the approach used in Global Logistics Fleet Synchronization?",
+      "options": [
+        "Increased latency for all read operations.",
+        "The risk of permanent data loss during reconciliation.",
+        "Reduced availability for nodes in the minority partition.",
+        "Higher infrastructure costs due to redundant nodes."
+      ],
+      "answerIndex": 2,
+      "explanation": "The tradeoff for consistency in a partitioned network is that the minority side cannot accept writes.",
+      "evidence": "The primary tradeoff is reduced availability; nodes in the minority partition become unable to process updates"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:12.868Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:11.506Z"
+}

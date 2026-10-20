@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_cdn",
+  "title": "Global Static Asset Acceleration for Retail Portals",
+  "business": "E-commerce retailers serving a geographically dispersed customer base who require fast loading times for product images and static site content.",
+  "problem": "High latency and increased load on origin servers caused by serving static assets directly from a single regional data center to users globally, resulting in slow page rendering.",
+  "solution": "Cloud CDN leverages Google's global edge network to cache HTTP content at locations physically closer to the end user, reducing the round-trip time for static asset requests and offloading traffic from the origin.",
+  "steps": [
+    "Configure a global HTTP(S) Load Balancer to act as the entry point for traffic.",
+    "Enable Cloud CDN on the backend service associated with the load balancer.",
+    "Define cache modes to determine how the CDN handles cache-control headers from the origin.",
+    "Verify cache hits by inspecting the 'Age' and 'Via' headers in the HTTP response."
+  ],
+  "outcome": "Improved user experience through reduced latency for static assets and decreased infrastructure strain on the origin server.",
+  "limitation": "Cloud CDN only caches content that is publicly accessible and cacheable; private or dynamic content requires careful configuration to prevent unauthorized data exposure, which can be checked by auditing cache-control headers.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cloud CDN Request Flow",
+    "description": "The path of a user request through the Google network to the origin.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Client requesting assets"
+      },
+      {
+        "id": "b",
+        "label": "Google Edge Location",
+        "detail": "Cloud CDN Cache"
+      },
+      {
+        "id": "c",
+        "label": "Load Balancer",
+        "detail": "Global Traffic Entry"
+      },
+      {
+        "id": "d",
+        "label": "Origin Server",
+        "detail": "Backend Infrastructure"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Cache Hit"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Cache Miss"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetch Origin"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Static Asset Acceleration for Retail Portals, what is the primary benefit of using Cloud CDN?",
+      "options": [
+        "It eliminates the need for a load balancer entirely.",
+        "It caches HTTP content at global edge locations to reduce latency.",
+        "It automatically converts dynamic content into static files.",
+        "It replaces the origin server for all database operations."
+      ],
+      "answerIndex": 1,
+      "explanation": "Cloud CDN is specifically designed to cache HTTP content at edge locations to improve delivery speed.",
+      "evidence": "Cloud CDN leverages Google's global edge network to cache HTTP content at locations physically closer to the end user, reducing the round-trip time for static asset requests and offloading traffic from the origin."
+    },
+    {
+      "question": "In Global Static Asset Acceleration for Retail Portals, what is a key limitation regarding content types?",
+      "options": [
+        "It cannot cache images, only text files.",
+        "It only works for users within the same region as the origin.",
+        "It only caches publicly accessible content, requiring careful header management.",
+        "It requires manual cache invalidation for every single request."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that only public content should be cached to avoid data exposure.",
+      "evidence": "Cloud CDN only caches content that is publicly accessible and cacheable; private or dynamic content requires careful configuration to prevent unauthorized data exposure, which can be checked by auditing cache-control headers."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:57.712Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

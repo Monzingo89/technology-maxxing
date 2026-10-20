@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "floyd_warshall_algorithm",
+  "title": "Global Logistics Route Optimization",
+  "business": "International freight forwarders managing multi-modal shipping networks.",
+  "problem": "Frequent recalculation of the cheapest transit paths across a shifting global network of ports and hubs leads to high operational costs and delayed shipments.",
+  "solution": "The Floyd-Warshall algorithm uses dynamic programming to compute shortest paths between all vertex pairs, allowing the system to pre-calculate the optimal route between any two global nodes simultaneously.",
+  "steps": [
+    "Represent the global shipping network as a weighted adjacency matrix where edges represent transit costs.",
+    "Initialize the distance matrix with direct edge weights or infinity for non-connected nodes.",
+    "Iteratively update the matrix by checking if a path through an intermediate node k provides a lower cost than the current known path between i and j.",
+    "Repeat the update process for all possible intermediate nodes to ensure global path optimality."
+  ],
+  "outcome": "A comprehensive routing table that enables instantaneous lookup of the most cost-effective path between any two global locations.",
+  "limitation": "The algorithm has a cubic time complexity, making it computationally expensive for extremely dense networks; performance should be monitored by checking the growth of the node count.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Network Topology",
+    "description": "Nodes represent shipping hubs, and edges represent transit routes with associated costs.",
+    "nodes": [
+      {
+        "id": "A",
+        "label": "Port_NYC",
+        "detail": "Primary Hub"
+      },
+      {
+        "id": "B",
+        "label": "Port_London",
+        "detail": "Secondary Hub"
+      },
+      {
+        "id": "C",
+        "label": "Port_Dubai",
+        "detail": "Transit Hub"
+      },
+      {
+        "id": "D",
+        "label": "Port_Singapore",
+        "detail": "Regional Hub"
+      }
+    ],
+    "edges": [
+      {
+        "from": "A",
+        "to": "B",
+        "label": "Cost: 500"
+      },
+      {
+        "from": "B",
+        "to": "C",
+        "label": "Cost: 300"
+      },
+      {
+        "from": "C",
+        "to": "D",
+        "label": "Cost: 200"
+      },
+      {
+        "from": "A",
+        "to": "C",
+        "label": "Cost: 900"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Route Optimization, why is the Floyd-Warshall algorithm selected?",
+      "options": [
+        "It computes shortest paths between all vertex pairs simultaneously.",
+        "It is the fastest algorithm for single-source shortest paths.",
+        "It eliminates the need for an adjacency matrix.",
+        "It is specifically designed for non-weighted graphs."
+      ],
+      "answerIndex": 0,
+      "explanation": "The algorithm is chosen because it uses dynamic programming to compute shortest paths between all vertex pairs, which is ideal for a global network.",
+      "evidence": "The Floyd-Warshall algorithm uses dynamic programming to compute shortest paths between all vertex pairs, allowing the system to pre-calculate the optimal route between any two global nodes simultaneously."
+    },
+    {
+      "question": "What is a primary limitation of the Floyd-Warshall algorithm in Global Logistics Route Optimization?",
+      "options": [
+        "It cannot handle negative edge weights.",
+        "It has a cubic time complexity, which can be inefficient for large networks.",
+        "It requires a specific starting node for every calculation.",
+        "It only works on acyclic graphs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The algorithm's cubic time complexity makes it computationally expensive for large or dense networks.",
+      "evidence": "The algorithm has a cubic time complexity, making it computationally expensive for extremely dense networks; performance should be monitored by checking the growth of the node count."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:41.147Z"
+}

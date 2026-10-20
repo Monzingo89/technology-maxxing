@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "levenshtein_distance",
+  "title": "Automated Catalog Data Normalization",
+  "business": "E-commerce retailers managing product catalogs from multiple suppliers.",
+  "problem": "Suppliers submit product titles with inconsistent typos and formatting, causing duplicate entries and search failures.",
+  "solution": "Use Levenshtein Distance to quantify the edit cost between incoming product titles and existing database entries to identify potential duplicates for manual review.",
+  "steps": [
+    "Extract the existing product title and the new incoming title.",
+    "Initialize a matrix where rows and columns represent the characters of the two strings.",
+    "Calculate the cost of operations: 0 for match, 1 for insertion, deletion, or substitution.",
+    "Compute the final distance value at the bottom-right cell of the matrix.",
+    "Flag entries for human verification if the distance falls below a defined similarity threshold."
+  ],
+  "outcome": "Improved catalog consistency and reduced manual data entry errors without requiring exact string matches.",
+  "limitation": "The algorithm has a quadratic time complexity relative to the length of the strings, which can cause performance degradation when comparing very long text descriptions.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Duplicate Detection Workflow",
+    "description": "The process of normalizing incoming data against a master catalog.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Input Title",
+        "detail": "Raw string from supplier"
+      },
+      {
+        "id": "b",
+        "label": "Levenshtein Engine",
+        "detail": "Calculates edit distance"
+      },
+      {
+        "id": "c",
+        "label": "Master Catalog",
+        "detail": "Existing product records"
+      },
+      {
+        "id": "d",
+        "label": "Decision Gate",
+        "detail": "Threshold check"
+      },
+      {
+        "id": "e",
+        "label": "Action",
+        "detail": "Merge or Create New"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Passes string"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Provides comparison"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Outputs distance"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Routes based on score"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Catalog Data Normalization, why is Levenshtein Distance used?",
+      "options": [
+        "To identify potential duplicates by quantifying edit costs between strings.",
+        "To increase the speed of database indexing for large catalogs.",
+        "To automatically correct all typos in supplier submissions.",
+        "To encrypt product titles for secure transmission."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario uses the distance to find similarities between inconsistent titles to flag them for review.",
+      "evidence": "Use Levenshtein Distance to quantify the edit cost between incoming product titles and existing database entries to identify potential duplicates for manual review."
+    },
+    {
+      "question": "What is a primary limitation of the implementation in Automated Catalog Data Normalization?",
+      "options": [
+        "It cannot handle strings of different lengths.",
+        "It is limited by the number of suppliers in the database.",
+        "It has quadratic time complexity which may impact performance on long strings.",
+        "It requires a manual review for every single comparison."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson explicitly notes the performance tradeoff regarding string length and complexity.",
+      "evidence": "The algorithm has a quadratic time complexity relative to the length of the strings, which can cause performance degradation when comparing very long text descriptions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:43.368Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

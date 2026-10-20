@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_meta_llama_llama_3_3_70b_instruct",
+  "title": "Automated Logistics Query Routing",
+  "business": "Global logistics firms managing high-volume, multi-lingual shipping inquiries.",
+  "problem": "Manual triage of customer emails leads to significant latency in routing specialized requests to regional support desks, increasing operational costs.",
+  "solution": "Utilize Llama-3.3-70B-Instruct to parse incoming customer inquiries and generate structured JSON outputs that identify the intent and required destination department, enabling automated ticketing.",
+  "steps": [
+    "Define a system prompt that specifies the required JSON schema for intent classification and department routing.",
+    "Configure the model to accept incoming emails as user messages while maintaining a consistent system message context.",
+    "Implement a post-processing layer to validate that the model output strictly adheres to the expected JSON format.",
+    "Integrate the validated JSON output with the existing CRM API to trigger automatic ticket assignment."
+  ],
+  "outcome": "Reduced manual intervention in ticket routing and faster response times for complex international shipping queries.",
+  "limitation": "The model may occasionally produce non-compliant JSON if the input is highly ambiguous; this is checked by implementing a schema validation step before API submission.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Routing Workflow",
+    "description": "The flow of an inquiry from receipt to automated system assignment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Customer Email",
+        "detail": "Raw inquiry text"
+      },
+      {
+        "id": "b",
+        "label": "Llama-3.3-70B",
+        "detail": "Instruct model processing"
+      },
+      {
+        "id": "c",
+        "label": "JSON Parser",
+        "detail": "Schema validation layer"
+      },
+      {
+        "id": "d",
+        "label": "CRM System",
+        "detail": "Final ticket destination"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "input"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "generates structured output"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "routes valid request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct",
+      "label": "meta-llama/Llama-3.3-70B-Instruct · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Query Routing, how does the model address the problem of manual triage?",
+      "options": [
+        "By directly answering every customer email automatically.",
+        "By generating structured JSON outputs that identify intent and routing.",
+        "By hiring more staff to review the model outputs.",
+        "By bypassing the CRM system entirely."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the model's ability to parse inquiries and produce structured data for automated routing.",
+      "evidence": "Utilize Llama-3.3-70B-Instruct to parse incoming customer inquiries and generate structured JSON outputs that identify the intent and required destination department, enabling automated ticketing."
+    },
+    {
+      "question": "In Automated Logistics Query Routing, what is a potential limitation of the implementation?",
+      "options": [
+        "The model cannot handle multi-lingual inputs.",
+        "The model is too fast for the CRM API.",
+        "The model may produce non-compliant JSON for ambiguous inputs.",
+        "The model requires manual intervention for every single ticket."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and implementation notes highlight that structured output may occasionally fail, requiring validation.",
+      "evidence": "The model may occasionally produce non-compliant JSON if the input is highly ambiguous; this is checked by implementing a schema validation step before API submission."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:58.048Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:54.436Z"
+}

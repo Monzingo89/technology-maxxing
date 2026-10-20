@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_elastic_load_balancing",
+  "title": "Regional Logistics Hub Traffic Management",
+  "business": "A regional logistics company managing a fleet of delivery vehicles requires a centralized portal for drivers to upload manifests and receive route updates.",
+  "problem": "The existing monolithic application server frequently crashes during morning shift start times when thousands of drivers simultaneously attempt to authenticate and download their daily routes, leading to significant operational delays.",
+  "solution": "Elastic Load Balancing (ELB) acts as the single point of contact for incoming driver traffic, distributing requests across a fleet of backend application servers. By decoupling the entry point from the compute resources, the system ensures that no single server becomes a bottleneck, allowing the infrastructure to handle concurrent connection spikes gracefully.",
+  "steps": [
+    "Provision a target group containing multiple application server instances across different Availability Zones.",
+    "Configure the Elastic Load Balancer to listen for incoming HTTPS traffic on port 443.",
+    "Define health check parameters to monitor the status of backend instances.",
+    "Register the target group with the load balancer to begin traffic distribution.",
+    "Update DNS records to point to the load balancer's endpoint."
+  ],
+  "outcome": "The logistics portal maintains consistent availability during peak login periods, ensuring drivers receive their manifests without connection timeouts or service interruptions.",
+  "limitation": "A primary limitation is the potential for cross-zone data transfer costs if the load balancer is configured to distribute traffic across multiple Availability Zones. Administrators should monitor the 'CrossZoneLoadBalancing' metric in CloudWatch to evaluate if the traffic distribution pattern justifies the associated data transfer expenses.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Traffic Distribution Flow",
+    "description": "This diagram illustrates how driver traffic is routed through the load balancer to backend compute resources.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Driver Mobile App",
+        "detail": "Client-side application initiating requests"
+      },
+      {
+        "id": "b",
+        "label": "Elastic Load Balancer",
+        "detail": "Entry point for traffic distribution"
+      },
+      {
+        "id": "c",
+        "label": "Target Group",
+        "detail": "Collection of backend application servers"
+      },
+      {
+        "id": "d",
+        "label": "Compute Instance",
+        "detail": "Individual server processing requests"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Distributes Traffic"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Routes to Healthy Target"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Regional Logistics Hub Traffic Management, what is the primary purpose of using Elastic Load Balancing?",
+      "options": [
+        "To distribute requests across a fleet of backend application servers",
+        "To replace the need for application servers entirely",
+        "To encrypt data at rest within the database",
+        "To manage the driver mobile application source code"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that ELB distributes requests across backend servers to prevent bottlenecks.",
+      "evidence": "Elastic Load Balancing (ELB) acts as the single point of contact for incoming driver traffic, distributing requests across a fleet of backend application servers."
+    },
+    {
+      "question": "In Regional Logistics Hub Traffic Management, what is a key trade-off associated with the load balancer configuration?",
+      "options": [
+        "Increased latency for all users",
+        "Potential for cross-zone data transfer costs",
+        "Requirement to manually restart servers",
+        "Inability to scale during off-peak hours"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies cross-zone data transfer costs as a specific financial trade-off when using multi-AZ load balancing.",
+      "evidence": "A primary limitation is the potential for cross-zone data transfer costs if the load balancer is configured to distribute traffic across multiple Availability Zones."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:56.879Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

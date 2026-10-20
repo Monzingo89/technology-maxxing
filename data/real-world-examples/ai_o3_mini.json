@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_o3_mini",
+  "title": "Automated Regulatory Compliance Extraction for Logistics",
+  "business": "Global logistics firms managing thousands of daily international shipping manifests.",
+  "problem": "Manual review of complex, unstructured customs documentation leads to high operational overhead and frequent classification errors during cross-border transit.",
+  "solution": "Utilizing o3-mini to perform structured extraction of regulatory data from shipping manifests, ensuring that customs declarations are formatted correctly for downstream ERP systems.",
+  "steps": [
+    "Define a JSON schema representing mandatory customs fields like HS codes, origin, and weight.",
+    "Configure the Chat Completions API to use o3-mini with the structured_outputs parameter enabled.",
+    "Submit raw manifest text to the model for reasoning-based extraction of field values.",
+    "Validate the returned JSON against the schema before committing to the database.",
+    "Use the Batch API for high-volume, non-time-sensitive daily manifest processing to optimize throughput."
+  ],
+  "outcome": "Improved consistency in customs documentation and reduced reliance on manual data entry for routine shipments.",
+  "limitation": "The model's reasoning capabilities are optimized for text; it cannot directly process scanned image files, requiring a separate OCR preprocessing step to convert documents into text before ingestion.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Processing Pipeline",
+    "description": "The flow of data from raw document to structured compliance record.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Manifest",
+        "detail": "Unstructured text input"
+      },
+      {
+        "id": "b",
+        "label": "o3-mini",
+        "detail": "Reasoning model for extraction"
+      },
+      {
+        "id": "c",
+        "label": "Structured JSON",
+        "detail": "Validated compliance data"
+      },
+      {
+        "id": "d",
+        "label": "ERP System",
+        "detail": "Final record storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Ingests text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Outputs schema-compliant data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Updates database"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(model='o3-mini-2025-01-31', messages=[{'role': 'user', 'content': manifest_text}], response_format={'type': 'json_object'}) # Enforces structured output for customs fields",
+    "explanation": "This code snippet demonstrates how to invoke o3-mini with the structured_outputs feature to ensure the extracted manifest data adheres to a specific format."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/o3-mini",
+      "label": "o3-mini"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Regulatory Compliance Extraction for Logistics, what is the primary role of o3-mini?",
+      "options": [
+        "Performing structured extraction of regulatory data from shipping manifests.",
+        "Directly scanning and interpreting physical image-based shipping documents.",
+        "Replacing the need for an ERP system by storing all customs records.",
+        "Generating new shipping manifests from scratch without input data."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario focuses on using the model to extract data from unstructured text to improve customs declaration accuracy.",
+      "evidence": "Utilizing o3-mini to perform structured extraction of regulatory data from shipping manifests, ensuring that customs declarations are formatted correctly for downstream ERP systems."
+    },
+    {
+      "question": "In Automated Regulatory Compliance Extraction for Logistics, what is a key limitation of the implementation?",
+      "options": [
+        "The model cannot handle high-volume batch processing.",
+        "The model requires a separate OCR step because it cannot process images directly.",
+        "The model is unable to output data in JSON format.",
+        "The model is too expensive for daily logistics operations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario clarify that o3-mini is a text-based model, necessitating preprocessing for non-text inputs.",
+      "evidence": "The model's reasoning capabilities are optimized for text; it cannot directly process scanned image files, requiring a separate OCR preprocessing step to convert documents into text before ingestion."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:33.998Z",
+  "sourceRetrievedAt": "2026-10-18T01:07:30.231Z"
+}

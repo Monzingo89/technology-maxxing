@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ai_ornith_ai_ornith_1_0_9b_gguf",
+  "title": "Local Agentic Codebase Maintenance",
+  "business": "Software development firms managing proprietary, sensitive codebases that cannot be uploaded to public cloud AI services.",
+  "problem": "Developers spend excessive time on manual refactoring and boilerplate generation, but external AI tools pose data privacy risks for internal intellectual property.",
+  "solution": "Deploying Ornith-1.0-9B-GGUF locally allows teams to utilize a state-of-the-art agentic coding model that processes code entirely within their own secure infrastructure.",
+  "steps": [
+    "Provision a single GPU server with at least 24GB VRAM to host the model.",
+    "Deploy the model using vLLM with the --enable-auto-tool-choice and --reasoning-parser qwen3 flags.",
+    "Configure the local development environment to point to the internal OpenAI-compatible API endpoint.",
+    "Integrate the model with an agentic framework like OpenHands to automate repository-wide refactoring tasks."
+  ],
+  "outcome": "Increased developer velocity through automated coding assistance while maintaining complete data sovereignty over proprietary source code.",
+  "limitation": "The model's reasoning process is computationally intensive; checking for latency bottlenecks is required by monitoring the time taken for the <think> block to complete before the final output.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Agentic Workflow",
+    "description": "The flow of a request from a developer to the local model and back to the codebase.",
+    "nodes": [
+      {
+        "id": "dev",
+        "label": "Developer",
+        "detail": "Initiates coding tasks"
+      },
+      {
+        "id": "api",
+        "label": "API Endpoint",
+        "detail": "OpenAI-compatible interface"
+      },
+      {
+        "id": "model",
+        "label": "Ornith-1.0-9B",
+        "detail": "Local reasoning engine"
+      },
+      {
+        "id": "code",
+        "label": "Codebase",
+        "detail": "Local repository"
+      }
+    ],
+    "edges": [
+      {
+        "from": "dev",
+        "to": "api",
+        "label": "sends prompt"
+      },
+      {
+        "from": "api",
+        "to": "model",
+        "label": "routes request"
+      },
+      {
+        "from": "model",
+        "to": "code",
+        "label": "executes refactoring"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from openai import OpenAI\n# Connect to the local Ornith server\nclient = OpenAI(base_url='http://localhost:8000/v1', api_key='EMPTY')\n# Request code generation with reasoning\nresponse = client.chat.completions.create(\n    model='Ornith-1.0-9B',\n    messages=[{'role': 'user', 'content': 'Refactor this module.'}]\n)\n# Access the reasoning trace and final code\nprint(getattr(response.choices[0].message, 'reasoning_content', None))",
+    "explanation": "This snippet demonstrates how to interface with the local Ornith-1.0-9B server to retrieve both the chain-of-thought reasoning and the final code output."
+  },
+  "sources": [
+    {
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-9B-GGUF",
+      "label": "ornith-ai/Ornith-1.0-9B-GGUF · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Local Agentic Codebase Maintenance, how does the solution address the identified privacy problem?",
+      "options": [
+        "By processing code entirely within their own secure infrastructure.",
+        "By using cloud-based encryption for all code transfers.",
+        "By anonymizing code before sending it to public servers.",
+        "By training a new model from scratch on private data."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically mentions that deploying locally allows teams to process code within their own secure infrastructure, avoiding public cloud risks.",
+      "evidence": "Deploying Ornith-1.0-9B-GGUF locally allows teams to utilize a state-of-the-art agentic coding model that processes code entirely within their own secure infrastructure."
+    },
+    {
+      "question": "In Local Agentic Codebase Maintenance, what is the primary limitation of the implementation?",
+      "options": [
+        "The model cannot handle Python code.",
+        "The reasoning process is computationally intensive, requiring latency monitoring.",
+        "The model requires a 397B parameter GPU cluster.",
+        "The model is not compatible with OpenAI-style APIs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies the computational intensity of the reasoning process as a potential bottleneck.",
+      "evidence": "The model's reasoning process is computationally intensive; checking for latency bottlenecks is required by monitoring the time taken for the <think> block to complete before the final output."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:04.776Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:00.333Z"
+}

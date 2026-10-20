@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "grpc",
+  "title": "Real-time Inventory Synchronization for Distributed Retail",
+  "business": "A global retail chain managing thousands of localized inventory databases that must synchronize stock levels with a central order management system.",
+  "problem": "The existing REST-based architecture relies on JSON serialization and standard HTTP/1.1, causing significant latency and high CPU overhead during peak shopping hours when thousands of concurrent inventory updates occur.",
+  "solution": "gRPC utilizes Protocol Buffers for binary serialization and HTTP/2 for multiplexing, allowing the central order management system to maintain persistent, low-latency streams with regional inventory nodes, effectively reducing the overhead of repeated connection handshakes.",
+  "steps": [
+    "Define the inventory update service contract using a .proto file to specify request and response message structures.",
+    "Generate language-specific client and server stubs from the .proto definition using the gRPC compiler.",
+    "Implement the server-side logic in the central system to handle incoming streaming inventory updates.",
+    "Configure the regional nodes to establish persistent gRPC channels to the central system for efficient data transmission."
+  ],
+  "outcome": "The system achieves more consistent data propagation across regions with reduced network bandwidth consumption and lower server-side processing requirements.",
+  "limitation": "gRPC requires both client and server to support HTTP/2, which can complicate integration with legacy load balancers or firewalls that only inspect HTTP/1.1 traffic. To check for this, monitor for connection reset errors or failed handshake attempts at the network perimeter.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Synchronization Flow",
+    "description": "This diagram illustrates the flow of inventory data from regional nodes to the central management system via gRPC channels.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Regional Node",
+        "detail": "Local inventory database"
+      },
+      {
+        "id": "b",
+        "label": "gRPC Channel",
+        "detail": "HTTP/2 persistent connection"
+      },
+      {
+        "id": "c",
+        "label": "Central System",
+        "detail": "Order management service"
+      },
+      {
+        "id": "d",
+        "label": "Protobuf",
+        "detail": "Binary serialization format"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Initiates stream"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Transmits binary data"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Encodes payload"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://grpc.io/docs/",
+      "label": "Documentation | gRPC"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Real-time Inventory Synchronization for Distributed Retail, why is gRPC preferred over REST?",
+      "options": [
+        "It uses binary serialization and HTTP/2 multiplexing to reduce latency and overhead.",
+        "It automatically migrates regional databases to the central cloud.",
+        "It eliminates the need for any network security protocols.",
+        "It provides a graphical user interface for inventory management."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that REST causes high CPU overhead and latency, which gRPC addresses through binary serialization and HTTP/2.",
+      "evidence": "gRPC utilizes Protocol Buffers for binary serialization and HTTP/2 for multiplexing, allowing the central order management system to maintain persistent, low-latency streams with regional inventory nodes, effectively reducing the overhead of repeated connection handshakes."
+    },
+    {
+      "question": "In Real-time Inventory Synchronization for Distributed Retail, what is a primary technical limitation to consider?",
+      "options": [
+        "The inability to use Protocol Buffers with Java.",
+        "The requirement for HTTP/2 support across the network infrastructure.",
+        "The lack of support for streaming data updates.",
+        "The requirement to use only C++ for implementation."
+      ],
+      "answerIndex": 1,
+      "explanation": "gRPC relies on HTTP/2, which may not be supported by legacy network infrastructure, requiring verification at the network perimeter.",
+      "evidence": "gRPC requires both client and server to support HTTP/2, which can complicate integration with legacy load balancers or firewalls that only inspect HTTP/1.1 traffic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:07.931Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:03.937Z"
+}

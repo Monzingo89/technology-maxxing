@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "federated_learning",
+  "title": "Privacy-Preserving Predictive Maintenance for Industrial IoT",
+  "business": "Manufacturing firms operating globally distributed factory equipment that requires predictive maintenance models.",
+  "problem": "Firms cannot centralize raw sensor data due to strict data residency laws and the high bandwidth costs of transmitting massive, high-frequency vibration logs from remote factory sites to a central data center.",
+  "solution": "Federated Learning enables the training of a shared predictive maintenance model by keeping raw sensor data on local factory edge servers, transmitting only model weight updates to a central aggregator.",
+  "steps": [
+    "Distribute the current global model state to individual factory edge servers.",
+    "Perform local training on site-specific sensor data to compute weight updates.",
+    "Transmit only the computed weight updates back to the central server.",
+    "Aggregate the received updates using a weighted averaging method to improve the global model.",
+    "Deploy the updated global model back to all factory edge servers for inference."
+  ],
+  "outcome": "A robust, globally optimized predictive maintenance model that respects regional data sovereignty while improving equipment uptime across all locations.",
+  "limitation": "Communication overhead remains a constraint; monitor the frequency of synchronization rounds to ensure network stability and check for model convergence degradation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Federated Learning Workflow",
+    "description": "The cycle of model distribution, local training, and global aggregation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Central Server",
+        "detail": "Aggregator of model updates"
+      },
+      {
+        "id": "b",
+        "label": "Factory Edge A",
+        "detail": "Local data storage and training"
+      },
+      {
+        "id": "c",
+        "label": "Factory Edge B",
+        "detail": "Local data storage and training"
+      },
+      {
+        "id": "d",
+        "label": "Global Model",
+        "detail": "Shared intelligence"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Distribute weights"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "Distribute weights"
+      },
+      {
+        "from": "b",
+        "to": "a",
+        "label": "Send local updates"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "Send local updates"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "Update global state"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1602.05629",
+      "label": "Communication-Efficient Learning of Deep Networks from Decentralized Data"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Privacy-Preserving Predictive Maintenance for Industrial IoT, why is Federated Learning used instead of centralizing data?",
+      "options": [
+        "To bypass data residency laws and reduce bandwidth costs",
+        "To increase the total volume of raw sensor data",
+        "To eliminate the need for a global model",
+        "To speed up the initial training phase"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies data residency laws and high bandwidth costs as the primary drivers for avoiding data centralization.",
+      "evidence": "Firms cannot centralize raw sensor data due to strict data residency laws and the high bandwidth costs of transmitting massive, high-frequency vibration logs from remote factory sites to a central data center."
+    },
+    {
+      "question": "In Privacy-Preserving Predictive Maintenance for Industrial IoT, what is a key limitation to monitor during implementation?",
+      "options": [
+        "The total number of factory sites",
+        "The privacy of the local sensor data",
+        "Communication overhead and synchronization frequency",
+        "The accuracy of the local inference"
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario highlight communication costs as the principal constraint in decentralized learning systems.",
+      "evidence": "Communication overhead remains a constraint; monitor the frequency of synchronization rounds to ensure network stability and check for model convergence degradation."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:29.104Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:25.506Z"
+}

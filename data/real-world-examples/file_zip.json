@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "topicId": "file_zip",
+  "title": "Secure Asset Aggregation for Distributed Teams",
+  "business": "Software distribution teams needing to bundle multiple assets into a single, portable, and verifiable container.",
+  "problem": "Manual file transfers often result in missing dependencies or corrupted assets, leading to deployment failures.",
+  "solution": "The .ZIP format provides a standardized, cross-platform container that aggregates files while ensuring data integrity via CRC32 checksums for every entry.",
+  "steps": [
+    "Initialize a new ZIP archive container.",
+    "Iterate through the asset list, creating a local file header for each entry.",
+    "Apply chosen compression algorithms to file data to reduce storage footprint.",
+    "Calculate and store the CRC32 value for each file to ensure data integrity.",
+    "Append the central directory structure to the end of the archive to enable efficient metadata indexing.",
+    "Finalize the archive by writing the end of central directory record."
+  ],
+  "outcome": "Reliable, single-file delivery of complex asset sets with built-in verification of file integrity.",
+  "limitation": "The central directory is located at the end of the file; if the file is truncated during transfer, the metadata is lost, making the archive unreadable. Check integrity by verifying the presence of the end of central directory record signature.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ZIP Archive Construction Flow",
+    "description": "The sequence of writing records to a ZIP file.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Local Header",
+        "detail": "Metadata for individual file"
+      },
+      {
+        "id": "b",
+        "label": "File Data",
+        "detail": "Compressed or stored content"
+      },
+      {
+        "id": "c",
+        "label": "Central Directory",
+        "detail": "Aggregate index of all files"
+      },
+      {
+        "id": "d",
+        "label": "End of Central Directory",
+        "detail": "Final record for file identification"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "precedes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "indexed by"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "terminates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT",
+      "label": "APPNOTE.TXT - .ZIP File Format Specification"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Asset Aggregation for Distributed Teams, how does the ZIP format address the problem of deployment failures?",
+      "options": [
+        "By providing a standardized container with CRC32 integrity checks for every file.",
+        "By automatically encrypting all metadata to prevent unauthorized access.",
+        "By enforcing a strict file order that prevents missing dependencies.",
+        "By requiring a manifest file to be the first entry in every archive."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly mentions that the format provides a standardized container and ensures data integrity via CRC32 checksums.",
+      "evidence": "The .ZIP format provides a standardized, cross-platform container that aggregates files while ensuring data integrity via CRC32 checksums for every entry."
+    },
+    {
+      "question": "In Secure Asset Aggregation for Distributed Teams, what is a key limitation of the ZIP format structure?",
+      "options": [
+        "The format cannot support files larger than 4GB.",
+        "The central directory is at the end, so truncation causes metadata loss.",
+        "Compression is mandatory for all files stored in the archive.",
+        "The format is not cross-platform compatible."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section identifies that the central directory's position at the end of the file makes the archive unreadable if truncated.",
+      "evidence": "The central directory is located at the end of the file; if the file is truncated during transfer, the metadata is lost, making the archive unreadable."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:10.397Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:06.957Z"
+}

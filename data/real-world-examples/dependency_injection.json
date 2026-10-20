@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "dependency_injection",
+  "title": "Decoupling Logistics Notification Services",
+  "business": "A global logistics provider managing complex supply chain tracking systems.",
+  "problem": "The system suffers from tight coupling where the OrderProcessor class directly instantiates a specific EmailNotificationService. This makes it impossible to swap notification providers for SMS or push alerts without modifying core business logic, leading to fragile code and difficult unit testing.",
+  "solution": "Dependency Injection addresses this by supplying the notification service to the OrderProcessor from an external configuration or container rather than constructing it internally. By injecting an interface, the processor remains agnostic of the specific implementation, allowing for flexible, swappable service providers.",
+  "steps": [
+    "Define a common interface for all notification services.",
+    "Implement the interface in concrete classes like EmailService and SMSService.",
+    "Modify the OrderProcessor constructor to accept the interface as a parameter.",
+    "Configure an external container to inject the desired implementation at runtime."
+  ],
+  "outcome": "Improved system modularity and testability, as developers can easily inject mock services during testing without altering the production code structure.",
+  "limitation": "A significant limitation is the increased complexity in tracking object lifecycles and configuration, which can make the code flow harder to trace statically. To check for this, developers should monitor the depth of the dependency graph and ensure that the configuration layer does not become a monolithic bottleneck.",
+  "diagram": {
+    "kind": "er",
+    "title": "Dependency Injection Architecture",
+    "description": "This diagram shows how the OrderProcessor depends on an abstraction rather than a concrete implementation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "OrderProcessor",
+        "detail": "Consumer of the notification service"
+      },
+      {
+        "id": "b",
+        "label": "INotification",
+        "detail": "Interface defining the contract"
+      },
+      {
+        "id": "c",
+        "label": "EmailService",
+        "detail": "Concrete implementation"
+      },
+      {
+        "id": "d",
+        "label": "SMSService",
+        "detail": "Concrete implementation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "depends on"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "implements"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "implements"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Decoupling Logistics Notification Services, how does Dependency Injection resolve the identified problem?",
+      "options": [
+        "By supplying the notification service from an external source rather than constructing it internally.",
+        "By hardcoding the notification service directly into the OrderProcessor class.",
+        "By removing the need for any notification services in the system.",
+        "By forcing the system to use only one specific notification provider."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on externalizing the dependency to decouple the processor from specific implementations.",
+      "evidence": "Dependency Injection addresses this by supplying the notification service to the OrderProcessor from an external configuration or container rather than constructing it internally."
+    },
+    {
+      "question": "In Decoupling Logistics Notification Services, what is a primary limitation of using this pattern?",
+      "options": [
+        "It makes unit testing significantly harder.",
+        "It prevents the use of interfaces.",
+        "It increases complexity in tracking object lifecycles and configuration.",
+        "It forces the use of a single, monolithic notification provider."
+      ],
+      "answerIndex": 2,
+      "explanation": "The lesson notes that increased complexity in configuration and lifecycle management is a key trade-off.",
+      "evidence": "A significant limitation is the increased complexity in tracking object lifecycles and configuration, which can make the code flow harder to trace statically."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:24.392Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

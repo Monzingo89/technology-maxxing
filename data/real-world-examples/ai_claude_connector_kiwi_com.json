@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_kiwi_com",
+  "title": "Global Logistics Coordinator Flight Sourcing",
+  "business": "A boutique international logistics firm managing urgent spare parts delivery for global manufacturing clients.",
+  "problem": "Coordinators spend excessive time manually cross-referencing flight availability across multiple airline portals to meet tight delivery windows, leading to delayed logistics planning.",
+  "solution": "By integrating the Kiwi.com connector into Claude, coordinators can query real-time flight availability directly within the chat interface, allowing the AI to parse complex routing requirements and suggest optimal flight paths based on specific cargo constraints.",
+  "steps": [
+    "Install the Kiwi.com connector via the Claude Desktop or web interface settings.",
+    "Define the logistics constraints, including origin, destination, and required arrival time, within a Claude chat session.",
+    "Invoke the search-flight tool to retrieve available flight options that match the specified criteria.",
+    "Refine the search results by asking Claude to filter for specific cabin classes or passenger counts if additional personnel are accompanying the cargo.",
+    "Review the generated flight options and select the most efficient route for the logistics plan."
+  ],
+  "outcome": "Coordinators achieve a streamlined workflow where flight sourcing is integrated into the planning process, reducing the cognitive load of switching between disparate travel booking platforms.",
+  "limitation": "The connector provides flight search data but does not execute final bookings; users must verify availability and finalize transactions directly on the Kiwi.com platform, which can be checked by reviewing the tool output for booking links versus direct confirmation statuses.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Logistics Flight Sourcing Workflow",
+    "description": "This diagram illustrates the flow from the logistics coordinator's request to the final flight selection.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Coordinator",
+        "detail": "Logistics personnel defining route requirements"
+      },
+      {
+        "id": "b",
+        "label": "Claude",
+        "detail": "AI interface processing natural language queries"
+      },
+      {
+        "id": "c",
+        "label": "Kiwi.com API",
+        "detail": "External flight search engine"
+      },
+      {
+        "id": "d",
+        "label": "Flight Options",
+        "detail": "Structured list of available routes"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Submits route criteria"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calls search-flight tool"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns flight data"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Presents options to user"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/kiwi-com",
+      "label": "Kiwi.com connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Coordinator Flight Sourcing, how does the Kiwi.com connector address the identified problem?",
+      "options": [
+        "By automating the final payment process for all logistics flights.",
+        "By allowing coordinators to query real-time flight availability directly within the chat interface.",
+        "By replacing the need for human logistics coordinators entirely.",
+        "By providing direct access to internal airline cargo databases."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution relies on the ability to query flight data within the chat to reduce manual cross-referencing.",
+      "evidence": "By integrating the Kiwi.com connector into Claude, coordinators can query real-time flight availability directly within the chat interface, allowing the AI to parse complex routing requirements and suggest optimal flight paths based on specific cargo constraints."
+    },
+    {
+      "question": "In Global Logistics Coordinator Flight Sourcing, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot search for round-trip flights.",
+        "The connector is unable to handle multiple passengers.",
+        "The connector provides search data but does not execute final bookings.",
+        "The connector requires manual coding for every flight search."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation and scenario clarify that the tool is for searching, not for completing the transaction.",
+      "evidence": "The connector provides flight search data but does not execute final bookings; users must verify availability and finalize transactions directly on the Kiwi.com platform, which can be checked by reviewing the tool output for booking links versus direct confirmation statuses."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:24.463Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:20.346Z"
+}

@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "gcp_batch",
+  "title": "Automated Genomic Sequence Processing",
+  "business": "Bioinformatics research firms that process large volumes of DNA sequencing files requiring high-throughput compute.",
+  "problem": "Manual management of virtual machine clusters for sporadic, compute-intensive tasks leads to idle resource costs and operational overhead.",
+  "solution": "Google Cloud Batch automates the provisioning of compute resources to execute tasks, scaling down to zero once the batch job completes.",
+  "steps": [
+    "Define the container image containing the bioinformatics processing tools.",
+    "Create a Batch job configuration specifying the required vCPU and memory resources.",
+    "Submit the job to the Batch API, which handles the underlying resource lifecycle.",
+    "Monitor job execution status via the Google Cloud console or API logs."
+  ],
+  "outcome": "Researchers achieve cost-efficiency by only paying for compute during active processing windows without manual infrastructure intervention.",
+  "limitation": "Batch jobs are ephemeral; if a job exceeds its defined timeout or resource limits, it terminates, requiring users to check job status logs to identify failure patterns.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Batch Job Lifecycle",
+    "description": "The flow from job submission to resource cleanup.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User",
+        "detail": "Submits job request"
+      },
+      {
+        "id": "b",
+        "label": "Batch API",
+        "detail": "Orchestrates resources"
+      },
+      {
+        "id": "c",
+        "label": "Compute Resources",
+        "detail": "Executes containerized task"
+      },
+      {
+        "id": "d",
+        "label": "Storage",
+        "detail": "Input/Output data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "submit job"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provision"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "read/write"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "report completion"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Genomic Sequence Processing, what is the primary benefit of using Google Cloud Batch?",
+      "options": [
+        "Eliminating the need for manual cluster management and reducing idle costs.",
+        "Providing a persistent environment for long-running interactive research.",
+        "Replacing the need for containerized applications in bioinformatics.",
+        "Guaranteeing zero latency for all data processing tasks."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that manual management of clusters for sporadic tasks causes idle costs, which Batch solves by automating provisioning.",
+      "evidence": "Google Cloud Batch automates the provisioning of compute resources to execute tasks, scaling down to zero once the batch job completes."
+    },
+    {
+      "question": "In Automated Genomic Sequence Processing, what is a key limitation of the technology?",
+      "options": [
+        "It requires constant manual intervention to scale resources.",
+        "It cannot handle containerized workloads.",
+        "Jobs are ephemeral and require log monitoring to diagnose failures.",
+        "It is only compatible with specific programming languages."
+      ],
+      "answerIndex": 2,
+      "explanation": "Batch jobs are ephemeral, meaning they do not persist, and users must check logs to understand why a job might have terminated.",
+      "evidence": "Batch jobs are ephemeral; if a job exceeds its defined timeout or resource limits, it terminates, requiring users to check job status logs to identify failure patterns."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:53.500Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

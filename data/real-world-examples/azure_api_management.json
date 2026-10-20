@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "azure_api_management",
+  "title": "Unified Retail API Gateway",
+  "business": "A regional retail chain managing multiple microservices for inventory, loyalty programs, and payment processing.",
+  "problem": "The organization suffers from fragmented API security, inconsistent authentication across services, and a lack of centralized visibility into how third-party partners consume their internal data.",
+  "solution": "Azure API Management acts as a centralized facade, decoupling the backend microservices from the public-facing interface, enforcing consistent security policies, and providing a developer portal for partner onboarding.",
+  "steps": [
+    "Provision an Azure API Management instance to serve as the single entry point for all client requests.",
+    "Import existing backend microservice definitions into the API Management instance.",
+    "Configure inbound policies to enforce OAuth 2.0 authentication and rate limiting for partner traffic.",
+    "Publish the API documentation and access keys via the integrated developer portal.",
+    "Monitor traffic patterns and policy enforcement through the built-in analytics dashboard."
+  ],
+  "outcome": "Improved security posture through centralized policy enforcement and streamlined partner integration via self-service documentation.",
+  "limitation": "The gateway introduces an additional network hop, which can increase latency; this is verified by monitoring the 'Backend duration' vs 'Total duration' metrics in the gateway logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "API Gateway Traffic Flow",
+    "description": "Shows how external clients interact with backend services through the gateway.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "External Partner",
+        "detail": "Consumer of retail APIs"
+      },
+      {
+        "id": "b",
+        "label": "API Management Gateway",
+        "detail": "Enforces policies and security"
+      },
+      {
+        "id": "c",
+        "label": "Inventory Service",
+        "detail": "Backend microservice"
+      },
+      {
+        "id": "d",
+        "label": "Loyalty Service",
+        "detail": "Backend microservice"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Validated Forwarding"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Validated Forwarding"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure API Management"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Retail API Gateway, what is the primary business value of the solution?",
+      "options": [
+        "Replacing all backend databases with a single cloud store",
+        "Centralizing security and partner access management",
+        "Eliminating the need for microservices entirely",
+        "Reducing the physical distance between retail stores"
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution addresses fragmented security and visibility by using the gateway as a facade for consistent policy enforcement and partner onboarding.",
+      "evidence": "Azure API Management acts as a centralized facade, decoupling the backend microservices from the public-facing interface, enforcing consistent security policies, and providing a developer portal for partner onboarding."
+    },
+    {
+      "question": "In Unified Retail API Gateway, what is a documented trade-off of using the gateway?",
+      "options": [
+        "Increased latency due to an additional network hop",
+        "Inability to use OAuth 2.0 authentication",
+        "Mandatory migration of all services to a single region",
+        "Requirement to write all code in a proprietary language"
+      ],
+      "answerIndex": 0,
+      "explanation": "The gateway adds a layer between the client and the backend, which inherently adds a network hop that can impact latency.",
+      "evidence": "The gateway introduces an additional network hop, which can increase latency; this is verified by monitoring the 'Backend duration' vs 'Total duration' metrics in the gateway logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:37.032Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

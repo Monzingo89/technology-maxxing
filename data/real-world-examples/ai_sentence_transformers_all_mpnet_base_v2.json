@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "topicId": "ai_sentence_transformers_all_mpnet_base_v2",
+  "title": "Semantic Knowledge Base Retrieval",
+  "business": "Technical support teams managing large repositories of unstructured product documentation.",
+  "problem": "Support agents struggle to find relevant troubleshooting steps when users describe issues using non-standard terminology or synonyms, leading to high resolution times.",
+  "solution": "By utilizing all-mpnet-base-v2, the system transforms both user queries and documentation passages into dense vector embeddings. This allows the retrieval engine to identify semantically related passages even when exact keyword matches are absent, surfacing the correct documentation based on intent rather than literal phrasing.",
+  "steps": [
+    "Pre-process the existing documentation library into discrete, manageable text chunks.",
+    "Use all-mpnet-base-v2 to generate vector embeddings for every document chunk.",
+    "Store these embeddings in a vector database to enable efficient similarity searches.",
+    "Convert incoming support queries into embeddings using the same model.",
+    "Perform a cosine similarity search to retrieve the most relevant documentation passages for the agent."
+  ],
+  "outcome": "Support agents achieve faster access to accurate technical guidance, improving overall response consistency and reducing the cognitive load of searching through manual documentation.",
+  "limitation": "The model has a fixed maximum sequence length; very long documents may be truncated, leading to information loss. This is checked by monitoring the token count of input passages before embedding generation.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Semantic Retrieval Pipeline",
+    "description": "The flow shows how text is converted into vectors for semantic matching.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Docs",
+        "detail": "Unstructured text chunks"
+      },
+      {
+        "id": "b",
+        "label": "all-mpnet-base-v2",
+        "detail": "Embedding model"
+      },
+      {
+        "id": "c",
+        "label": "Vector DB",
+        "detail": "Stored embeddings"
+      },
+      {
+        "id": "d",
+        "label": "User Query",
+        "detail": "Support request"
+      },
+      {
+        "id": "e",
+        "label": "Relevant Doc",
+        "detail": "Top semantic match"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "vectorize"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "index"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "encode"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "similarity search"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://huggingface.co/sentence-transformers/all-mpnet-base-v2",
+      "label": "sentence-transformers/all-mpnet-base-v2 · Hugging Face"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Semantic Knowledge Base Retrieval, why is all-mpnet-base-v2 used instead of traditional keyword search?",
+      "options": [
+        "It identifies semantically related passages even when exact keyword matches are absent.",
+        "It automatically rewrites user queries into technical jargon.",
+        "It reduces the storage requirements of the vector database.",
+        "It guarantees that every search result is 100% accurate."
+      ],
+      "answerIndex": 0,
+      "explanation": "The model allows for finding relevant content based on intent and semantic meaning, which solves the problem of agents missing documentation due to non-standard terminology.",
+      "evidence": "This allows the retrieval engine to identify semantically related passages even when exact keyword matches are absent, surfacing the correct documentation based on intent rather than literal phrasing."
+    },
+    {
+      "question": "Regarding the implementation of Semantic Knowledge Base Retrieval, what is a primary limitation to monitor?",
+      "options": [
+        "The model cannot process English text.",
+        "The model requires a GPU for every single inference.",
+        "The model has a fixed maximum sequence length which may cause information loss for long documents.",
+        "The model is incompatible with vector databases."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that the model has a fixed sequence length, meaning long inputs must be managed to avoid truncation.",
+      "evidence": "The model has a fixed maximum sequence length; very long documents may be truncated, leading to information loss."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:53.267Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:49.385Z"
+}

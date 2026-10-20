@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gpt_5",
+  "title": "Automated Legacy Code Refactoring Pipeline",
+  "business": "Software maintenance firms managing massive, undocumented enterprise codebases.",
+  "problem": "Engineers spend excessive time manually deciphering complex, legacy logic, leading to high technical debt and slow feature delivery cycles.",
+  "solution": "Utilizing GPT-5's configurable reasoning effort allows the system to scale its cognitive depth based on the complexity of the code module being refactored, ensuring deep analysis for critical business logic while maintaining efficiency for routine boilerplate.",
+  "steps": [
+    "Identify legacy modules requiring refactoring and categorize them by cyclomatic complexity.",
+    "Configure the reasoning_effort parameter to high for complex logic and low for standard utility functions.",
+    "Submit code snippets to the v1/chat/completions endpoint with structured output schemas.",
+    "Validate the refactored code against existing unit test suites to ensure functional parity.",
+    "Iteratively adjust reasoning effort based on the success rate of automated test passes."
+  ],
+  "outcome": "Improved developer velocity and reduced technical debt through consistent, automated refactoring that adapts to the nuance of the underlying code.",
+  "limitation": "The model's reasoning effort is a trade-off between latency and depth; high effort increases response time significantly, which can be monitored by tracking the time-to-first-token in the API response headers.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Refactoring Reasoning Pipeline",
+    "description": "The flow shows how code complexity dictates the reasoning effort level applied by the model.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Code Analyzer",
+        "detail": "Categorizes code complexity"
+      },
+      {
+        "id": "b",
+        "label": "Reasoning Controller",
+        "detail": "Sets reasoning_effort parameter"
+      },
+      {
+        "id": "c",
+        "label": "GPT-5 Model",
+        "detail": "Performs refactoring logic"
+      },
+      {
+        "id": "d",
+        "label": "Test Suite",
+        "detail": "Validates output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Complexity Score"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Configures effort"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Refactored Code"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "client.chat.completions.create(\n  model='gpt-5-2025-08-07',\n  messages=[{'role': 'user', 'content': 'Refactor this function'}],\n  reasoning_effort='high' # Configures deep reasoning for complex legacy logic\n)",
+    "explanation": "This demonstrates how to explicitly set the reasoning_effort parameter within the API call to handle complex refactoring tasks."
+  },
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/gpt-5",
+      "label": "GPT-5"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Code Refactoring Pipeline, how does the system address the problem of slow feature delivery?",
+      "options": [
+        "By scaling cognitive depth via configurable reasoning effort based on code complexity.",
+        "By using real-time transcription to document legacy codebases.",
+        "By increasing the context window to 1 million tokens.",
+        "By utilizing the fine-tuning endpoint for specific legacy languages."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explicitly states that configurable reasoning effort allows the system to scale cognitive depth to handle complex logic efficiently.",
+      "evidence": "Utilizing GPT-5's configurable reasoning effort allows the system to scale its cognitive depth based on the complexity of the code module being refactored"
+    },
+    {
+      "question": "In Automated Legacy Code Refactoring Pipeline, what is the primary trade-off when using high reasoning effort?",
+      "options": [
+        "Increased cost per token.",
+        "Decreased accuracy in structured outputs.",
+        "Increased latency in response times.",
+        "Higher rate limits on the API."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies that high reasoning effort increases response time, which is a latency trade-off.",
+      "evidence": "The model's reasoning effort is a trade-off between latency and depth; high effort increases response time significantly"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:55.776Z",
+  "sourceRetrievedAt": "2026-10-18T01:02:51.761Z"
+}

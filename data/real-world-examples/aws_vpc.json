@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_vpc",
+  "title": "Isolated Financial Data Processing VPC",
+  "business": "A boutique financial analytics firm handling sensitive client portfolio data requires a strictly segmented network environment to meet compliance mandates.",
+  "problem": "The firm currently lacks network isolation, leading to potential unauthorized lateral movement between public-facing web servers and private database clusters containing sensitive financial records.",
+  "solution": "By deploying an Amazon VPC, the firm creates a logically isolated section of the AWS cloud. This allows the firm to define a virtual network with custom IP address ranges, subnets, and route tables that strictly control traffic flow between the public web tier and the private data tier.",
+  "steps": [
+    "Create a VPC with a defined CIDR block to establish the isolated network boundary.",
+    "Provision public subnets for web servers and private subnets for database instances.",
+    "Configure an Internet Gateway to enable controlled external access for the public subnet.",
+    "Implement route tables to direct traffic from the private subnet exclusively through a NAT Gateway for updates, preventing direct inbound internet access.",
+    "Apply Security Groups as virtual firewalls to restrict traffic between the web and database tiers."
+  ],
+  "outcome": "The architecture ensures that database instances are unreachable from the public internet, significantly reducing the attack surface for sensitive financial data.",
+  "limitation": "A primary limitation is the complexity of managing inter-subnet routing and security group rules as the infrastructure scales. Administrators must regularly audit Security Group ingress and egress rules to ensure that overly permissive access has not been introduced during rapid development cycles.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Financial Data VPC Architecture",
+    "description": "This diagram illustrates the flow of traffic from the internet into the isolated VPC tiers.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Internet",
+        "detail": "External traffic source"
+      },
+      {
+        "id": "b",
+        "label": "Internet Gateway",
+        "detail": "VPC entry point"
+      },
+      {
+        "id": "c",
+        "label": "Public Subnet",
+        "detail": "Web Server tier"
+      },
+      {
+        "id": "d",
+        "label": "Private Subnet",
+        "detail": "Database tier"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "inbound"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "routes to"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "restricted access"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Isolated Financial Data Processing VPC, what is the primary purpose of deploying an Amazon VPC?",
+      "options": [
+        "To create a logically isolated network section to control traffic flow between tiers.",
+        "To increase the physical speed of database queries.",
+        "To automatically encrypt all client portfolio data at rest.",
+        "To replace the need for internal application firewalls."
+      ],
+      "answerIndex": 0,
+      "explanation": "The VPC provides the logical isolation necessary to separate web and database tiers, preventing unauthorized lateral movement.",
+      "evidence": "By deploying an Amazon VPC, the firm creates a logically isolated section of the AWS cloud. This allows the firm to define a virtual network with custom IP address ranges, subnets, and route tables that strictly control traffic flow between the public web tier and the private data tier."
+    },
+    {
+      "question": "What is a noted limitation of the implementation described in Isolated Financial Data Processing VPC?",
+      "options": [
+        "The inability to connect to the internet.",
+        "The complexity of managing routing and security group rules as the infrastructure scales.",
+        "The requirement to use only public IP addresses for all instances.",
+        "The lack of support for private subnets."
+      ],
+      "answerIndex": 1,
+      "explanation": "Managing security group rules and routing becomes more complex as the environment grows, requiring consistent auditing.",
+      "evidence": "A primary limitation is the complexity of managing inter-subnet routing and security group rules as the infrastructure scales. Administrators must regularly audit Security Group ingress and egress rules to ensure that overly permissive access has not been introduced during rapid development cycles."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:20.642Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

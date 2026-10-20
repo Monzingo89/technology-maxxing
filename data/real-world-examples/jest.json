@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "jest",
+  "title": "Automating Financial Calculation Validation",
+  "business": "A fintech startup building a microservices-based interest calculation engine.",
+  "problem": "Manual verification of interest logic is slow and error-prone, leading to inconsistent financial reporting across services.",
+  "solution": "Implementing Jest as a centralized test runner allows developers to define deterministic unit tests for core calculation functions, ensuring consistent output before deployment.",
+  "steps": [
+    "Install Jest as a development dependency using npm or yarn.",
+    "Define core logic in a standalone module, such as interestCalculator.js.",
+    "Create a corresponding test file, interestCalculator.test.js, using the test() and expect() functions.",
+    "Update the package.json scripts section to include a test command that invokes the Jest runner.",
+    "Execute the test suite via the command line to validate logic against expected outcomes."
+  ],
+  "outcome": "Developers gain immediate feedback on logic changes, significantly reducing the risk of regressions in financial calculations.",
+  "limitation": "Jest does not perform type-checking when using Babel for TypeScript transpilation; developers must run the TypeScript compiler separately to ensure type safety.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Jest Test Execution Flow",
+    "description": "The flow from source code to validation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Source Code",
+        "detail": "interestCalculator.js"
+      },
+      {
+        "id": "b",
+        "label": "Test Suite",
+        "detail": "interestCalculator.test.js"
+      },
+      {
+        "id": "c",
+        "label": "Jest Runner",
+        "detail": "CLI execution engine"
+      },
+      {
+        "id": "d",
+        "label": "Test Results",
+        "detail": "Pass/Fail output"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "imported by"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "processed by"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "outputs"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "const calculateInterest = require('./interestCalculator');\n\n// Validate interest logic against known inputs\ntest('calculates 5% interest on 100 to equal 5', () => {\n  expect(calculateInterest(100, 0.05)).toBe(5);\n});",
+    "explanation": "This code demonstrates the core Jest pattern: importing a function and using expect with a matcher (toBe) to verify the output."
+  },
+  "sources": [
+    {
+      "url": "https://jestjs.io/docs/getting-started",
+      "label": "Getting Started · Jest"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automating Financial Calculation Validation, why is Jest adopted?",
+      "options": [
+        "To replace manual verification with deterministic unit tests.",
+        "To perform real-time financial transaction processing.",
+        "To automatically fix bugs in the interest calculation logic.",
+        "To replace the need for a package manager like npm."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies manual verification as the bottleneck and Jest as the tool to provide deterministic testing.",
+      "evidence": "Implementing Jest as a centralized test runner allows developers to define deterministic unit tests for core calculation functions, ensuring consistent output before deployment."
+    },
+    {
+      "question": "In Automating Financial Calculation Validation, what is a noted limitation regarding TypeScript?",
+      "options": [
+        "Jest cannot run tests if TypeScript is present.",
+        "Jest does not perform type-checking when using Babel.",
+        "Jest requires a separate server to handle TypeScript files.",
+        "Jest is incompatible with all TypeScript configurations."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson explicitly states that when using Babel for transpilation, Jest does not perform type-checking.",
+      "evidence": "Jest does not perform type-checking when using Babel for TypeScript transpilation; developers must run the TypeScript compiler separately to ensure type safety."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:10.842Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:07.482Z"
+}

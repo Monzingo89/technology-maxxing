@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "react_agents",
+  "title": "Automated Logistics Compliance Auditor",
+  "business": "Global logistics firms managing complex, multi-jurisdictional shipping regulations.",
+  "problem": "Manual compliance checks are prone to error and slow, as agents often fail to synthesize dynamic regulatory updates with specific shipment manifests, leading to costly delays.",
+  "solution": "The ReAct framework enables agents to interleave reasoning traces with tool-based actions, allowing the system to query live regulatory databases and verify shipment data against those findings in a single, transparent workflow.",
+  "steps": [
+    "Define the agent prompt structure to enforce a Thought-Action-Observation loop.",
+    "Connect the agent to a secure, read-only API for real-time customs regulation lookups.",
+    "Implement a reasoning module that decomposes complex compliance queries into sequential sub-tasks.",
+    "Configure the observation parser to feed external API results back into the agent's context window.",
+    "Establish a final response generation step that summarizes the reasoning path for human auditability."
+  ],
+  "outcome": "Improved accuracy in compliance verification and increased transparency, as human auditors can review the step-by-step reasoning trace that led to a specific shipping clearance decision.",
+  "limitation": "The agent may enter infinite loops if the observation data is ambiguous or contradictory; check for this by monitoring the length of the reasoning trace and setting a maximum step threshold.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ReAct Execution Loop",
+    "description": "The agent cycles through reasoning and acting until the compliance task is resolved.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Reasoning Trace",
+        "detail": "Model analyzes the current state"
+      },
+      {
+        "id": "b",
+        "label": "Action Generation",
+        "detail": "Model selects a tool to call"
+      },
+      {
+        "id": "c",
+        "label": "Tool Execution",
+        "detail": "External API fetches data"
+      },
+      {
+        "id": "d",
+        "label": "Observation",
+        "detail": "Result is fed back to model"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "determines"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "triggers"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "returns"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "updates context"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "def react_step(query):\n    thought = model.generate(f'Thought: {query}') # Reasoning trace\n    action = model.generate(f'Action: {thought}') # Tool selection\n    observation = api.call(action) # External data retrieval\n    return f'Observation: {observation}' # Feedback loop",
+    "explanation": "This snippet illustrates the core ReAct loop where the model generates a thought, selects an action, and receives an observation to inform the next reasoning step."
+  },
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/2210.03629",
+      "label": "ReAct: Synergizing Reasoning and Acting in Language Models"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Compliance Auditor, why is the ReAct framework chosen over standard prompting?",
+      "options": [
+        "To allow the system to query live regulatory databases and verify shipment data against those findings.",
+        "To eliminate the need for any human intervention in the shipping process.",
+        "To reduce the computational cost of the language model by skipping reasoning.",
+        "To replace the need for external APIs with internal model knowledge."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that standard agents fail to synthesize dynamic data; ReAct solves this by integrating tool-based actions with reasoning.",
+      "evidence": "The ReAct framework enables agents to interleave reasoning traces with tool-based actions, allowing the system to query live regulatory databases and verify shipment data against those findings in a single, transparent workflow."
+    },
+    {
+      "question": "In Automated Logistics Compliance Auditor, what is a primary limitation of the implementation?",
+      "options": [
+        "The agent cannot handle more than two tools at once.",
+        "The agent may enter infinite loops if the observation data is ambiguous or contradictory.",
+        "The agent requires a human to manually input every reasoning step.",
+        "The agent is unable to access any external APIs."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly warns about infinite loops caused by ambiguous data and suggests monitoring step counts.",
+      "evidence": "The agent may enter infinite loops if the observation data is ambiguous or contradictory; check for this by monitoring the length of the reasoning trace and setting a maximum step threshold."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:00.350Z",
+  "sourceRetrievedAt": "2026-10-18T01:09:56.176Z"
+}

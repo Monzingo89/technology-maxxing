@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_org_policy",
+  "title": "Centralized Governance for Regional Data Residency",
+  "business": "Global enterprises with strict regulatory requirements for data sovereignty.",
+  "problem": "Individual project owners frequently deploy resources in unauthorized regions, leading to non-compliance with regional data residency laws and potential legal exposure.",
+  "solution": "The organization uses Organization Policy to enforce centralized constraints, specifically the 'Resource Location Restriction' constraint, which prevents the creation of resources in non-compliant regions across the entire hierarchy.",
+  "steps": [
+    "Identify the specific folders or organization node requiring the restriction.",
+    "Define the list of allowed regions in the policy constraint.",
+    "Apply the constraint at the organization level to ensure inheritance.",
+    "Verify that project owners are blocked from creating resources in restricted regions.",
+    "Audit policy compliance using the Resource Manager and Policy Intelligence tools."
+  ],
+  "outcome": "Consistent, automated enforcement of regional boundaries that eliminates manual oversight and ensures continuous regulatory compliance.",
+  "limitation": "Strict policies can break automated CI/CD pipelines that rely on specific regions; check compliance by reviewing the effective policy hierarchy in the Google Cloud Console.",
+  "diagram": {
+    "kind": "er",
+    "title": "Organization Policy Enforcement Hierarchy",
+    "description": "Shows how the Organization Policy constraint flows down to child resources.",
+    "nodes": [
+      {
+        "id": "org",
+        "label": "Organization Node",
+        "detail": "Root of the hierarchy"
+      },
+      {
+        "id": "folder",
+        "label": "Department Folder",
+        "detail": "Inherits constraints"
+      },
+      {
+        "id": "project",
+        "label": "Project",
+        "detail": "Enforces resource limits"
+      },
+      {
+        "id": "resource",
+        "label": "Compute Resource",
+        "detail": "Blocked if in restricted region"
+      }
+    ],
+    "edges": [
+      {
+        "from": "org",
+        "to": "folder",
+        "label": "applies constraint"
+      },
+      {
+        "from": "folder",
+        "to": "project",
+        "label": "propagates constraint"
+      },
+      {
+        "from": "project",
+        "to": "resource",
+        "label": "restricts creation"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Centralized Governance for Regional Data Residency, what is the primary problem addressed by the solution?",
+      "options": [
+        "Unauthorized resource deployment in non-compliant regions",
+        "Excessive cloud spending on idle virtual machines",
+        "Lack of integration between CI/CD pipelines",
+        "Inconsistent naming conventions for cloud assets"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that project owners deploying resources in unauthorized regions causes non-compliance.",
+      "evidence": "Individual project owners frequently deploy resources in unauthorized regions, leading to non-compliance with regional data residency laws and potential legal exposure."
+    },
+    {
+      "question": "In Centralized Governance for Regional Data Residency, what is a key limitation of the implemented policy?",
+      "options": [
+        "It requires manual daily audits of all resources",
+        "It can break automated CI/CD pipelines relying on specific regions",
+        "It increases the latency of API calls to Google Cloud",
+        "It prevents the use of all cloud services"
+      ],
+      "answerIndex": 1,
+      "explanation": "Strict policies often conflict with automated workflows that expect specific regional availability.",
+      "evidence": "Strict policies can break automated CI/CD pipelines that rely on specific regions; check compliance by reviewing the effective policy hierarchy in the Google Cloud Console."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:13.836Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

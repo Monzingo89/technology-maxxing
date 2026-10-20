@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_pubmed",
+  "title": "Accelerating Rare Disease Diagnostic Pathways",
+  "business": "Specialized clinical genetics laboratories tasked with diagnosing rare pediatric conditions.",
+  "problem": "Geneticists face significant delays in diagnostic workflows because manually cross-referencing patient variants against rapidly evolving biomedical literature is time-intensive and prone to missing obscure, recently published case studies.",
+  "solution": "The PubMed connector integrates directly into the Claude interface, allowing the laboratory team to automate the retrieval of peer-reviewed literature. By using the connector, the team can query specific genetic variants or clinical phenotypes directly against the PubMed database, surfacing relevant abstracts and full-text articles from PubMed Central without leaving the analysis environment.",
+  "steps": [
+    "Configure the PubMed connector within the Claude workspace to enable secure access to the PubMed API endpoints.",
+    "Define a structured prompt that extracts patient phenotype data and converts it into search queries for the search_articles tool.",
+    "Execute iterative searches to retrieve metadata and abstracts for high-confidence matches related to the patient's genetic profile.",
+    "Utilize the get_full_text_article tool to extract detailed clinical findings from PMC-indexed papers for final review by the lead geneticist."
+  ],
+  "outcome": "The laboratory achieves a more efficient literature review process, enabling faster synthesis of evidence for rare disease diagnoses and reducing the cognitive load on clinical staff.",
+  "limitation": "The connector is limited to content indexed in PubMed and PubMed Central; it cannot access proprietary journals or non-indexed institutional repositories. Users must verify the source coverage by checking the PubMed indexing status of their required journals.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Rare Disease Diagnostic Workflow",
+    "description": "This diagram illustrates the flow from patient data to literature-backed clinical insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Patient Data",
+        "detail": "Genetic variants and clinical phenotypes"
+      },
+      {
+        "id": "b",
+        "label": "Claude Interface",
+        "detail": "Orchestration layer"
+      },
+      {
+        "id": "c",
+        "label": "PubMed Connector",
+        "detail": "API bridge to PubMed/PMC"
+      },
+      {
+        "id": "d",
+        "label": "Research Output",
+        "detail": "Summarized case studies and findings"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Input data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "search_articles"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Retrieve metadata/full-text"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generate report"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/pubmed",
+      "label": "PubMed connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Accelerating Rare Disease Diagnostic Pathways, what is the primary problem addressed by the PubMed connector?",
+      "options": [
+        "The manual, time-intensive nature of cross-referencing patient variants with biomedical literature.",
+        "The lack of available genetic testing equipment in modern clinical laboratories.",
+        "The inability of geneticists to communicate with patients regarding their diagnosis.",
+        "The high cost of purchasing subscriptions to proprietary medical journals."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the manual effort of literature review as the bottleneck for diagnostic workflows.",
+      "evidence": "Geneticists face significant delays in diagnostic workflows because manually cross-referencing patient variants against rapidly evolving biomedical literature is time-intensive and prone to missing obscure, recently published case studies."
+    },
+    {
+      "question": "In Accelerating Rare Disease Diagnostic Pathways, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot be used for pediatric cases.",
+        "The connector is limited to content indexed in PubMed and PubMed Central.",
+        "The connector requires manual coding for every search query.",
+        "The connector provides inaccurate metadata for all articles."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section clarifies that the connector's scope is restricted to PubMed/PMC indexed content.",
+      "evidence": "The connector is limited to content indexed in PubMed and PubMed Central; it cannot access proprietary journals or non-indexed institutional repositories."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:58.357Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:54.043Z"
+}

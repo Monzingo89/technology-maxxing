@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "azure_document_intelligence",
+  "title": "Automated Logistics Invoice Processing",
+  "business": "Logistics and freight forwarding companies managing thousands of paper-based shipping manifests and invoices.",
+  "problem": "Manual data entry of complex shipping tables and key-value pairs from inconsistent vendor documents causes significant operational delays and high error rates.",
+  "solution": "Azure Document Intelligence in Foundry Tools automates the extraction of text, tables, and specific document fields, transforming unstructured physical documents into structured digital data for downstream ERP integration.",
+  "steps": [
+    "Configure a Document Intelligence resource in the Azure portal.",
+    "Select a prebuilt model or train a custom model to recognize specific shipping manifest layouts.",
+    "Submit document images or PDFs to the service endpoint via API.",
+    "Parse the returned JSON output to map extracted key-value pairs and table rows to database schemas.",
+    "Validate extracted data against existing purchase order records."
+  ],
+  "outcome": "Increased processing speed and improved data accuracy by reducing human intervention in the document ingestion pipeline.",
+  "limitation": "The service may struggle with extremely low-resolution scans or highly distorted document layouts, which requires implementing pre-processing checks to verify image quality before submission.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Intelligence Workflow",
+    "description": "The flow shows how raw documents are processed into structured data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Vendor Document",
+        "detail": "Physical or digital PDF invoice"
+      },
+      {
+        "id": "b",
+        "label": "Document Intelligence",
+        "detail": "AI service for extraction"
+      },
+      {
+        "id": "c",
+        "label": "Structured JSON",
+        "detail": "Extracted key-value pairs"
+      },
+      {
+        "id": "d",
+        "label": "ERP System",
+        "detail": "Final database storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Submit for analysis"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Returns extracted fields"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Map and store data"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "# Hypothetical snippet for document analysis\n# client.begin_analyze_document(model_id, document_stream)\n# The service extracts tables and key-value pairs automatically\n# result = poller.result()\n# for table in result.tables: # Accessing extracted table data",
+    "explanation": "This code illustrates the interaction with the service to trigger extraction of structured data from a document stream."
+  },
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Azure Document Intelligence in Foundry Tools"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Invoice Processing, what is the primary benefit of using Azure Document Intelligence?",
+      "options": [
+        "It eliminates the need for any human oversight in logistics.",
+        "It automates the extraction of text, tables, and key-value pairs from documents.",
+        "It replaces the need for an ERP system entirely.",
+        "It guarantees 100% accuracy for all handwritten notes."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution leverages the service to transform unstructured documents into structured data, addressing the manual entry problem.",
+      "evidence": "Azure Document Intelligence in Foundry Tools automates the extraction of text, tables, and specific document fields, transforming unstructured physical documents into structured digital data for downstream ERP integration."
+    },
+    {
+      "question": "What is a known limitation of the implementation in Automated Logistics Invoice Processing?",
+      "options": [
+        "The service cannot process PDF files.",
+        "The service is only available for English language documents.",
+        "Low-resolution scans may impact performance, requiring pre-processing checks.",
+        "The service requires manual training for every single document."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that low-resolution scans can be a challenge and suggests pre-processing checks.",
+      "evidence": "The service may struggle with extremely low-resolution scans or highly distorted document layouts, which requires implementing pre-processing checks to verify image quality before submission."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:33.703Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.047Z"
+}

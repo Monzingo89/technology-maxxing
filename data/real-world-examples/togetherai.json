@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "togetherai",
+  "title": "Automated Legal Document Summarization Pipeline",
+  "business": "A boutique law firm managing thousands of discovery documents that require rapid, consistent summarization for litigation support.",
+  "problem": "The firm faces high latency and inconsistent formatting when using generic, non-specialized model endpoints to process sensitive legal discovery files, leading to bottlenecks in case preparation.",
+  "solution": "By utilizing Together AI's fine-tuning capabilities, the firm can adapt an open-source model to recognize specific legal terminology and document structures. This is paired with dedicated model inference to ensure consistent, low-latency access to the specialized model, bypassing the variability of shared serverless environments.",
+  "steps": [
+    "Curate a high-quality dataset of annotated legal summaries for model fine-tuning.",
+    "Upload the dataset to the Together AI platform to initiate the fine-tuning process on a base open-source model.",
+    "Deploy the resulting fine-tuned model weights to a dedicated inference instance for consistent performance.",
+    "Integrate the dedicated endpoint into the firm's document management system via API calls."
+  ],
+  "outcome": "The firm achieves highly accurate, domain-specific summaries that maintain a consistent tone and structure, significantly accelerating the attorney review process.",
+  "limitation": "Dedicated inference instances require continuous resource allocation; the firm must monitor utilization rates to ensure the cost-to-performance ratio remains favorable compared to serverless alternatives.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legal Summarization Workflow",
+    "description": "This diagram illustrates the transition from raw legal documents to summarized output using specialized infrastructure.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Raw Documents",
+        "detail": "Input legal discovery files"
+      },
+      {
+        "id": "b",
+        "label": "Fine-Tuning",
+        "detail": "Adapting model to legal domain"
+      },
+      {
+        "id": "c",
+        "label": "Dedicated Inference",
+        "detail": "Hosting the specialized model"
+      },
+      {
+        "id": "d",
+        "label": "Summarized Output",
+        "detail": "Final structured legal summary"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Training Data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Deploy Weights"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Inference Request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.together.ai/products",
+      "label": "Products | Together AI"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Document Summarization Pipeline, what is the primary reason for choosing dedicated inference over serverless?",
+      "options": [
+        "To ensure consistent, low-latency access to the specialized model",
+        "To avoid the need for any model training",
+        "To reduce the total number of documents processed",
+        "To eliminate the need for an API integration"
+      ],
+      "answerIndex": 0,
+      "explanation": "Dedicated inference provides the control and consistency required for specialized models, which is essential when moving away from the variability of shared serverless environments.",
+      "evidence": "This is paired with dedicated model inference to ensure consistent, low-latency access to the specialized model, bypassing the variability of shared serverless environments."
+    },
+    {
+      "question": "In Automated Legal Document Summarization Pipeline, what is the main tradeoff associated with the chosen deployment strategy?",
+      "options": [
+        "The model will lose its ability to understand legal terminology",
+        "The firm must monitor utilization rates to ensure cost-to-performance efficiency",
+        "The system will only support batch processing",
+        "The model requires manual updates every hour"
+      ],
+      "answerIndex": 1,
+      "explanation": "Dedicated infrastructure involves continuous resource allocation, necessitating active monitoring to ensure the investment remains cost-effective.",
+      "evidence": "Dedicated inference instances require continuous resource allocation; the firm must monitor utilization rates to ensure the cost-to-performance ratio remains favorable compared to serverless alternatives."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:12:28.251Z",
+  "sourceRetrievedAt": "2026-10-18T01:12:24.244Z"
+}

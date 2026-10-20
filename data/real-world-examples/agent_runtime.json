@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "agent_runtime",
+  "title": "Automated Inventory Reconciliation Agent",
+  "business": "Retail logistics firms managing high-volume warehouse stock.",
+  "problem": "Manual inventory reconciliation is slow, prone to human error, and expensive, often leading to stock discrepancies that delay order fulfillment.",
+  "solution": "An Agent Runtime implementation that automates the execution loop, handling model turns, tool calls to database APIs, and handoffs to human auditors when discrepancies exceed defined thresholds.",
+  "steps": [
+    "Define an Agent with specific instructions for inventory verification and tools for database lookups.",
+    "Configure a RunConfig to manage tool execution concurrency, ensuring database load remains within safe limits.",
+    "Initialize the Runner to handle the agent loop, automatically processing model-emitted tool calls.",
+    "Implement handoff logic to transition the conversation to a human auditor if the model cannot reconcile a stock count.",
+    "Execute the run using Runner.run() to process the full lifecycle from input to final output."
+  ],
+  "outcome": "Reduced manual workload for inventory teams and faster, more accurate stock reconciliation through automated tool-driven verification.",
+  "limitation": "The runtime loop may hit a MaxTurnsExceeded exception if the agent enters a recursive tool-calling cycle, which can be checked by monitoring for this specific exception type during execution.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Agent Runtime Execution Loop",
+    "description": "The flow illustrates how the Runner manages the agent lifecycle, including tool execution and final output generation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Runner",
+        "detail": "Orchestrates the agent loop"
+      },
+      {
+        "id": "b",
+        "label": "LLM",
+        "detail": "Generates turns and tool calls"
+      },
+      {
+        "id": "c",
+        "label": "Tool Execution",
+        "detail": "Executes local function calls"
+      },
+      {
+        "id": "d",
+        "label": "Final Output",
+        "detail": "Result returned to user"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "invokes model"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "emits tool calls"
+      },
+      {
+        "from": "c",
+        "to": "a",
+        "label": "returns tool results"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "produces final text"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "from agents import Agent, Runner, RunConfig, ToolExecutionConfig\n\n# Define agent with inventory tools\nagent = Agent(name=\"InventoryAgent\", tools=[check_stock, update_db])\n\n# Configure runtime to limit concurrent DB calls\nconfig = RunConfig(tool_execution=ToolExecutionConfig(max_function_tool_concurrency=2))\n\n# Execute the loop\nresult = await Runner.run(agent, \"Reconcile SKU-123\", run_config=config)",
+    "explanation": "This code maps to the Automated Inventory Reconciliation Agent by setting up a controlled execution environment that prevents database overloading during automated stock checks."
+  },
+  "sources": [
+    {
+      "url": "https://openai.github.io/openai-agents-python/running_agents/",
+      "label": "Running agents"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Reconciliation Agent, how does the technology address the problem of manual reconciliation?",
+      "options": [
+        "By replacing human auditors entirely with automated scripts.",
+        "By automating the execution loop, handling model turns, and managing tool calls to database APIs.",
+        "By increasing the cost of inventory management to ensure higher quality.",
+        "By forcing the model to ignore discrepancies and report only successful counts."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explicitly states that the technology automates the execution loop, model turns, and tool calls to database APIs to solve the problem.",
+      "evidence": "An Agent Runtime implementation that automates the execution loop, handling model turns, tool calls to database APIs, and handoffs to human auditors when discrepancies exceed defined thresholds."
+    },
+    {
+      "question": "Regarding the implementation of Automated Inventory Reconciliation Agent, what is a potential limitation of the runtime loop?",
+      "options": [
+        "The runtime cannot handle more than one tool call at a time.",
+        "The runtime always requires manual approval for every tool call.",
+        "The runtime may hit a MaxTurnsExceeded exception if the agent enters a recursive tool-calling cycle.",
+        "The runtime is unable to communicate with external database APIs."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section identifies the MaxTurnsExceeded exception as a risk during recursive tool-calling cycles.",
+      "evidence": "The runtime loop may hit a MaxTurnsExceeded exception if the agent enters a recursive tool-calling cycle, which can be checked by monitoring for this specific exception type during execution."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:36.659Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:30.435Z"
+}

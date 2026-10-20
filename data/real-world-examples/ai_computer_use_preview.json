@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "topicId": "ai_computer_use_preview",
+  "title": "Automated Legacy Financial Reconciliation",
+  "business": "Mid-sized accounting firms managing legacy desktop-based banking software that lacks modern APIs.",
+  "problem": "Manual data entry from proprietary desktop banking interfaces into cloud-based ERP systems is error-prone and labor-intensive, creating significant operational bottlenecks during month-end closing.",
+  "solution": "The computer-use-preview model enables the automation of these legacy interfaces by interpreting visual screen data and executing mouse and keyboard inputs directly, effectively bridging the gap between non-API legacy software and modern data workflows.",
+  "steps": [
+    "Configure the environment to host the legacy desktop application in a virtualized, headless display session.",
+    "Initialize the computer-use-preview model within the Responses API to process visual snapshots of the banking interface.",
+    "Define tool-use functions that map model-generated coordinates and keystrokes to specific UI elements like buttons or input fields.",
+    "Implement a control loop that captures screen state, sends it to the model, and executes the returned tool calls to perform reconciliation.",
+    "Validate the output by comparing the final screen state against expected ledger balances before committing data to the cloud ERP."
+  ],
+  "outcome": "A reliable, automated pipeline that mimics human interaction with legacy software, reducing manual reconciliation time and minimizing transcription errors.",
+  "limitation": "The model is constrained by a 1,024 max output token limit per response, which may truncate complex multi-step interaction sequences; developers should check for incomplete tool execution sequences by monitoring the finish_reason in the API response.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Legacy Reconciliation Workflow",
+    "description": "The flow shows how the model interacts with the desktop environment to perform tasks.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Legacy App",
+        "detail": "Desktop banking software"
+      },
+      {
+        "id": "b",
+        "label": "Screen Capture",
+        "detail": "Visual snapshot of UI"
+      },
+      {
+        "id": "c",
+        "label": "computer-use-preview",
+        "detail": "Model processing visual state"
+      },
+      {
+        "id": "d",
+        "label": "Tool Execution",
+        "detail": "Mouse/Keyboard actions"
+      },
+      {
+        "id": "e",
+        "label": "Cloud ERP",
+        "detail": "Final data destination"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "renders UI"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "sends visual input"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "triggers action"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "modifies state"
+      },
+      {
+        "from": "a",
+        "to": "e",
+        "label": "updates ledger"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://developers.openai.com/api/docs/models/computer-use-preview",
+      "label": "computer-use-preview"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legacy Financial Reconciliation, how does the model address the lack of APIs in legacy software?",
+      "options": [
+        "By interpreting visual screen data and executing direct mouse and keyboard inputs.",
+        "By converting the legacy software into a cloud-native web application.",
+        "By directly accessing the underlying database files of the banking software.",
+        "By using standard REST API calls to communicate with the desktop interface."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the model's ability to visually interpret the interface and perform actions as a human would, bypassing the need for native APIs.",
+      "evidence": "The computer-use-preview model enables the automation of these legacy interfaces by interpreting visual screen data and executing mouse and keyboard inputs directly, effectively bridging the gap between non-API legacy software and modern data workflows."
+    },
+    {
+      "question": "In Automated Legacy Financial Reconciliation, what is a primary limitation of the model's output?",
+      "options": [
+        "The model cannot process images as input.",
+        "The model is limited by a 1,024 max output token limit per response.",
+        "The model requires the use of the Chat Completions endpoint.",
+        "The model is only available for batch processing."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation and scenario specify a 1,024 max output token limit, which can impact long interaction sequences.",
+      "evidence": "The model is constrained by a 1,024 max output token limit per response, which may truncate complex multi-step interaction sequences; developers should check for incomplete tool execution sequences by monitoring the finish_reason in the API response."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:26.014Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:21.920Z"
+}

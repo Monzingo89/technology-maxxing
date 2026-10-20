@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "layered_architecture",
+  "title": "Modularizing Logistics Orchestration",
+  "business": "A regional logistics firm managing complex supply chain routing and warehouse inventory.",
+  "problem": "Tight coupling between database access logic and business rules caused cascading failures whenever the underlying schema changed, leading to high maintenance costs.",
+  "solution": "Implementing a Layered Architecture organizes responsibilities into ordered layers with controlled dependencies, ensuring the domain logic remains agnostic of data storage details.",
+  "steps": [
+    "Define a Presentation Layer to handle user requests without direct database access.",
+    "Establish a Service Layer to coordinate business operations and define the application boundary.",
+    "Implement a Domain Layer to encapsulate core business rules and data models.",
+    "Create a Data Source Layer to handle persistence, isolating the database schema from the rest of the application."
+  ],
+  "outcome": "Improved maintainability and testability, as changes to the database schema are now confined to the Data Source Layer without impacting business logic.",
+  "limitation": "A potential limitation is the overhead of mapping data between layers, which can lead to redundant code; this is checked by monitoring the complexity of object transformation logic between the Domain and Data Source layers.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Layered Dependency Flow",
+    "description": "Read from top to bottom; each layer only communicates with the layer directly below it.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Presentation",
+        "detail": "Handles UI interactions"
+      },
+      {
+        "id": "b",
+        "label": "Service Layer",
+        "detail": "Coordinates operations"
+      },
+      {
+        "id": "c",
+        "label": "Domain Layer",
+        "detail": "Business rules and logic"
+      },
+      {
+        "id": "d",
+        "label": "Data Source",
+        "detail": "Database persistence"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "requests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "executes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "persists"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Modularizing Logistics Orchestration, what is the primary benefit of the proposed solution?",
+      "options": [
+        "It eliminates the need for a database entirely.",
+        "It prevents cascading failures by isolating business rules from data storage.",
+        "It increases the speed of database queries.",
+        "It reduces the number of UI components required."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution addresses the problem of tight coupling by organizing responsibilities into layers, which isolates the domain logic from schema changes.",
+      "evidence": "Implementing a Layered Architecture organizes responsibilities into ordered layers with controlled dependencies, ensuring the domain logic remains agnostic of data storage details."
+    },
+    {
+      "question": "In Modularizing Logistics Orchestration, what is a key trade-off of the implementation?",
+      "options": [
+        "Increased latency due to network hops between layers.",
+        "The requirement to use a specific database vendor.",
+        "The overhead of mapping data between layers.",
+        "The inability to perform unit testing."
+      ],
+      "answerIndex": 2,
+      "explanation": "Layered architectures often require mapping data between layers, which can introduce redundant code and complexity.",
+      "evidence": "A potential limitation is the overhead of mapping data between layers, which can lead to redundant code; this is checked by monitoring the complexity of object transformation logic between the Domain and Data Source layers."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:41.725Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

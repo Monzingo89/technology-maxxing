@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_descript",
+  "title": "Automated Corporate Training Video Localization",
+  "business": "A global enterprise training department producing onboarding materials for international staff.",
+  "problem": "The team spends excessive manual hours transcribing, editing, and re-syncing video content for different regional offices, leading to significant bottlenecks in training deployment.",
+  "solution": "By integrating the Descript connector with Claude, the team can use natural language prompts to automate the editing process, including transcribing source videos, removing filler words, and triggering translation workflows directly within the Claude interface.",
+  "steps": [
+    "Authenticate the Descript connector within the Claude interface to establish a secure link to the project workspace.",
+    "Use the import_media tool to upload raw training footage into the Descript project environment.",
+    "Issue a prompt to the Claude agent to identify and remove filler words or silence from the transcript.",
+    "Invoke the prompt_project_agent to generate translated captions or localized audio overlays for specific regional requirements.",
+    "Monitor the progress of the editing tasks using the get_job tool to ensure all production steps complete successfully."
+  ],
+  "outcome": "The training department achieves a streamlined production pipeline where video edits are handled via conversational instructions, significantly reducing the time required to prepare localized content for global onboarding.",
+  "limitation": "The connector relies on asynchronous job processing; users must manually poll the status of long-running edits using the get_job tool, as Claude does not automatically receive push notifications when a complex video render is finished.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Descript-Claude Integration Workflow",
+    "description": "This diagram illustrates the flow of video production tasks from the user prompt to the final Descript output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Prompt",
+        "detail": "Natural language request for video edit"
+      },
+      {
+        "id": "b",
+        "label": "Claude Agent",
+        "detail": "Orchestrates connector tools"
+      },
+      {
+        "id": "c",
+        "label": "Descript API",
+        "detail": "Executes media processing"
+      },
+      {
+        "id": "d",
+        "label": "Job Status",
+        "detail": "Tracking progress via get_job"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends instructions"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calls import_media or prompt_project_agent"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Returns job ID"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Queries status"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/descript",
+      "label": "Descript connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Corporate Training Video Localization, what is the primary benefit of using the Descript connector?",
+      "options": [
+        "It automates the manual editing and translation workflow via conversational prompts.",
+        "It provides real-time video rendering benchmarks for training materials.",
+        "It replaces the need for human editors entirely by using AI-generated footage.",
+        "It allows for direct hosting of videos on the Anthropic platform."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the connector allows the team to use natural language prompts to automate editing and translation, solving the bottleneck of manual production.",
+      "evidence": "By integrating the Descript connector with Claude, the team can use natural language prompts to automate the editing process, including transcribing source videos, removing filler words, and triggering translation workflows directly within the Claude interface."
+    },
+    {
+      "question": "In Automated Corporate Training Video Localization, what is a key operational limitation of the implementation?",
+      "options": [
+        "The connector cannot handle video files larger than 10MB.",
+        "The system requires manual polling of job status because it lacks automatic push notifications.",
+        "The connector only supports Spanish translation.",
+        "The system requires a separate subscription to the Descript API for every single edit."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly states that the connector requires manual polling of job status because it does not receive push notifications for completed renders.",
+      "evidence": "The connector relies on asynchronous job processing; users must manually poll the status of long-running edits using the get_job tool, as Claude does not automatically receive push notifications when a complex video render is finished."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:32.245Z",
+  "sourceRetrievedAt": "2026-10-18T00:59:28.112Z"
+}

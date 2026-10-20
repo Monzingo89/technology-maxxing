@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "mlflow",
+  "title": "Automated Retail Demand Forecasting Lifecycle",
+  "business": "A regional grocery chain managing inventory across hundreds of locations.",
+  "problem": "Data scientists struggle to reproduce model versions, leading to inconsistent inventory predictions and stock-outs because experiment parameters are tracked manually in spreadsheets.",
+  "solution": "MLflow provides a centralized platform to log experiment parameters, capture model artifacts, and manage the lifecycle of forecasting models through a unified registry, ensuring full auditability.",
+  "steps": [
+    "Initialize an MLflow experiment to group related forecasting runs.",
+    "Log hyperparameters and metrics during model training to ensure reproducibility.",
+    "Register the best-performing model version in the Model Registry for staging.",
+    "Use MLflow Tracing to monitor the inference pipeline for unexpected data drift.",
+    "Promote the validated model to production status within the registry."
+  ],
+  "outcome": "Improved consistency in inventory forecasting and a clear, auditable history of every model version deployed to production.",
+  "limitation": "The centralized Model Registry can become a bottleneck if access controls are not strictly defined; check for unauthorized model transitions by auditing the registry event logs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Lifecycle Flow",
+    "description": "This diagram illustrates the progression of a model from experimentation to production deployment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Training Script",
+        "detail": "Executes model training"
+      },
+      {
+        "id": "b",
+        "label": "MLflow Tracking",
+        "detail": "Stores parameters and metrics"
+      },
+      {
+        "id": "c",
+        "label": "Model Registry",
+        "detail": "Manages model versions"
+      },
+      {
+        "id": "d",
+        "label": "Production API",
+        "detail": "Serves model predictions"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "logs data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "registers artifact"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "deploys version"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://mlflow.org/docs/latest/index.html",
+      "label": "MLflow Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Retail Demand Forecasting Lifecycle, what is the primary reason for using MLflow to address the identified problem?",
+      "options": [
+        "To replace manual spreadsheet tracking with a centralized system for reproducibility.",
+        "To automatically generate inventory for all retail locations.",
+        "To increase the speed of model training by using cloud hardware.",
+        "To eliminate the need for data scientists in the forecasting process."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem identified was manual tracking leading to inconsistency, and the solution explicitly mentions using MLflow for centralized tracking and auditability.",
+      "evidence": "MLflow provides a centralized platform to log experiment parameters, capture model artifacts, and manage the lifecycle of forecasting models through a unified registry, ensuring full auditability."
+    },
+    {
+      "question": "In Automated Retail Demand Forecasting Lifecycle, what is a potential operational risk of the proposed implementation?",
+      "options": [
+        "The model will become too accurate for the business.",
+        "The Model Registry may become a bottleneck if access controls are not managed.",
+        "MLflow will automatically delete all production models.",
+        "The training script will fail to run without internet access."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns about the registry becoming a bottleneck if access controls are not defined.",
+      "evidence": "The centralized Model Registry can become a bottleneck if access controls are not strictly defined; check for unauthorized model transitions by auditing the registry event logs."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:06:45.835Z",
+  "sourceRetrievedAt": "2026-10-18T01:06:42.268Z"
+}

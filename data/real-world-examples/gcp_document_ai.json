@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "gcp_document_ai",
+  "title": "Automated Logistics Invoice Processing",
+  "business": "Logistics and supply chain firms managing thousands of vendor invoices.",
+  "problem": "Manual data entry is prone to human error and high operational costs, leading to payment delays.",
+  "solution": "Google Cloud Document AI uses specialized processors to classify incoming documents and extract structured information, automating the transition from raw PDF invoices to machine-readable data.",
+  "steps": [
+    "Create a dedicated processor in the Document AI console for invoice parsing.",
+    "Upload raw invoice files to a designated Cloud Storage bucket.",
+    "Trigger a processing request to the Document AI API to extract fields like invoice number, date, and total amount.",
+    "Map the extracted JSON output to the internal accounting database schema.",
+    "Implement a validation workflow to flag low-confidence extractions for human review."
+  ],
+  "outcome": "Increased operational efficiency and higher data accuracy in financial records.",
+  "limitation": "The system may struggle with low-resolution or handwritten documents, which can be checked by monitoring the confidence score returned in the API response.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Document Processing Pipeline",
+    "description": "The flow of an invoice from storage to structured data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Cloud Storage",
+        "detail": "Raw PDF invoice repository"
+      },
+      {
+        "id": "b",
+        "label": "Document AI Processor",
+        "detail": "Extracts structured fields"
+      },
+      {
+        "id": "c",
+        "label": "Accounting Database",
+        "detail": "Stores structured invoice data"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends raw document"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Writes structured JSON"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Invoice Processing, what is the primary purpose of using Document AI?",
+      "options": [
+        "To automate the transition from raw PDF invoices to machine-readable data.",
+        "To store raw PDF files in a secure cloud environment.",
+        "To manually approve every invoice before payment.",
+        "To increase the resolution of low-quality images."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution describes using Document AI to convert raw invoices into structured data to solve manual entry issues.",
+      "evidence": "Google Cloud Document AI uses specialized processors to classify incoming documents and extract structured information, automating the transition from raw PDF invoices to machine-readable data."
+    },
+    {
+      "question": "In Automated Logistics Invoice Processing, how can a user identify potential failures in data extraction?",
+      "options": [
+        "By checking the file size of the uploaded document.",
+        "By monitoring the confidence score returned in the API response.",
+        "By manually re-entering all data into the database.",
+        "By increasing the number of processors used."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions checking the confidence score to identify issues with low-quality or handwritten documents.",
+      "evidence": "The system may struggle with low-resolution or handwritten documents, which can be checked by monitoring the confidence score returned in the API response."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:02.201Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

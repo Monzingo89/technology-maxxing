@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_plugin_playwright",
+  "title": "Automated Compliance Audit for Legacy Client Portals",
+  "business": "Financial services firms maintaining legacy web portals that lack modern APIs for data verification.",
+  "problem": "Manual verification of regulatory disclosures across hundreds of client accounts is error-prone, labor-intensive, and fails to scale during quarterly audit cycles.",
+  "solution": "By integrating the Playwright MCP server, Claude can programmatically traverse the legacy portal, interact with DOM elements via the accessibility tree, and extract verification data without manual human intervention.",
+  "steps": [
+    "Define the target URL and authentication credentials within the secure MCP configuration.",
+    "Instruct Claude to navigate to the client disclosure page using the Playwright browser automation tools.",
+    "Execute a script to locate specific disclosure checkboxes and text fields using accessibility tree selectors.",
+    "Capture the state of the compliance confirmation and generate a PDF report for the audit trail."
+  ],
+  "outcome": "Increased audit consistency and significant reduction in manual labor, allowing compliance officers to focus on exception handling rather than repetitive data entry.",
+  "limitation": "The solution relies on the accessibility tree structure; if the legacy portal undergoes a UI redesign that alters the DOM hierarchy without updating ARIA labels, the automation scripts will fail. Verify this by checking for console error messages or failed element lookups during the initial navigation step.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Compliance Audit Automation Flow",
+    "description": "The flow shows how Claude interacts with the legacy portal via the Playwright server to produce audit artifacts.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude",
+        "detail": "Orchestrator"
+      },
+      {
+        "id": "b",
+        "label": "Playwright MCP",
+        "detail": "Browser Automation"
+      },
+      {
+        "id": "c",
+        "label": "Legacy Portal",
+        "detail": "Target Web Application"
+      },
+      {
+        "id": "d",
+        "label": "Audit Report",
+        "detail": "PDF Artifact"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends navigation commands"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Interacts via accessibility tree"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Returns DOM state"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Generates PDF"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/plugins/playwright",
+      "label": "Playwright | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Compliance Audit for Legacy Client Portals, what is the primary problem addressed by the solution?",
+      "options": [
+        "The lack of modern APIs for data verification in legacy portals.",
+        "The high cost of cloud hosting for browser automation.",
+        "The inability of Claude to generate PDF reports.",
+        "The slow performance of the accessibility tree."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the lack of modern APIs as the reason for manual verification failure.",
+      "evidence": "Financial services firms maintaining legacy web portals that lack modern APIs for data verification."
+    },
+    {
+      "question": "In Automated Compliance Audit for Legacy Client Portals, what is a key limitation of the implementation?",
+      "options": [
+        "The system requires constant human intervention.",
+        "The automation is vulnerable to UI redesigns that break the accessibility tree.",
+        "The system cannot handle authentication.",
+        "The system is limited to only taking screenshots."
+      ],
+      "answerIndex": 1,
+      "explanation": "The lesson notes that reliance on the accessibility tree makes the automation fragile to DOM structure changes.",
+      "evidence": "The solution relies on the accessibility tree structure; if the legacy portal undergoes a UI redesign that alters the DOM hierarchy without updating ARIA labels, the automation scripts will fail."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:31.429Z",
+  "sourceRetrievedAt": "2026-10-18T01:08:27.750Z"
+}

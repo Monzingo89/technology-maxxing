@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "topicId": "oltp",
+  "title": "High-Frequency Micro-Inventory Updates for Urban Logistics",
+  "business": "Urban logistics firms managing thousands of small, independent delivery lockers across a metropolitan area.",
+  "problem": "The system suffers from data inconsistency and race conditions when multiple delivery agents attempt to claim the same locker compartment simultaneously, leading to double-bookings and failed deliveries.",
+  "solution": "Implementing an Online Transaction Processing (OLTP) architecture using PostgreSQL allows for strict ACID compliance. By utilizing row-level locking and atomic transactions, the system ensures that once a locker is claimed, the state transition is isolated and durable, preventing concurrent processes from overwriting or conflicting with active reservations.",
+  "steps": [
+    "Define a relational schema with a dedicated Lockers table containing a status column and a version identifier for optimistic concurrency control.",
+    "Encapsulate the reservation logic within a PL/pgSQL function to ensure the entire check-and-update operation executes as a single atomic unit.",
+    "Apply the SELECT ... FOR UPDATE clause within the transaction to lock the specific row, preventing other sessions from modifying the locker status until the current transaction commits or rolls back.",
+    "Configure the database connection pool to handle numerous short-lived connections efficiently, maintaining low latency for rapid transaction commits."
+  ],
+  "outcome": "The system achieves reliable state consistency across all locker units, ensuring that every delivery assignment is unique and accurately reflected in the database without manual reconciliation.",
+  "limitation": "The primary limitation is lock contention under extreme concurrency; if too many agents target the same locker simultaneously, transactions may wait or time out. This can be monitored by checking the pg_stat_activity view to identify blocked sessions and long-running transactions.",
+  "diagram": {
+    "kind": "er",
+    "title": "Locker Reservation State Flow",
+    "description": "This diagram illustrates the relationship between the delivery agent and the locker entity during a transaction.",
+    "nodes": [
+      {
+        "id": "agent",
+        "label": "Delivery Agent",
+        "detail": "Initiates the reservation request"
+      },
+      {
+        "id": "db",
+        "label": "PostgreSQL Instance",
+        "detail": "Manages ACID transactions"
+      },
+      {
+        "id": "locker",
+        "label": "Locker Record",
+        "detail": "Contains status and version fields"
+      }
+    ],
+    "edges": [
+      {
+        "from": "agent",
+        "to": "db",
+        "label": "1:1 Request"
+      },
+      {
+        "from": "db",
+        "to": "locker",
+        "label": "1:N Row Lock"
+      }
+    ]
+  },
+  "code": {
+    "language": "sql",
+    "content": "BEGIN; -- Start atomic transaction\nSELECT status FROM lockers WHERE id = 101 FOR UPDATE; -- Lock row for this agent\nUPDATE lockers SET status = 'occupied' WHERE id = 101; -- Update state\nCOMMIT; -- Finalize and release lock",
+    "explanation": "This snippet demonstrates an atomic transaction using row-level locking to prevent concurrent modification of a specific locker record."
+  },
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Frequency Micro-Inventory Updates for Urban Logistics, what is the primary purpose of using an OLTP architecture?",
+      "options": [
+        "To perform complex analytical queries on historical delivery data.",
+        "To ensure ACID compliance and prevent data inconsistency during concurrent locker reservations.",
+        "To increase the storage capacity for large binary objects.",
+        "To bypass the need for relational database schemas."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies race conditions as the core problem, which OLTP and ACID properties are designed to solve.",
+      "evidence": "Implementing an Online Transaction Processing (OLTP) architecture using PostgreSQL allows for strict ACID compliance. By utilizing row-level locking and atomic transactions, the system ensures that once a locker is claimed, the state transition is isolated and durable, preventing concurrent processes from overwriting or conflicting with active reservations."
+    },
+    {
+      "question": "In High-Frequency Micro-Inventory Updates for Urban Logistics, what is a known limitation of the proposed implementation?",
+      "options": [
+        "The system cannot handle more than ten concurrent users.",
+        "Lock contention can occur under extreme concurrency, potentially causing transaction timeouts.",
+        "PostgreSQL does not support atomic transactions for row updates.",
+        "The system requires manual reconciliation of all locker states."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions that high concurrency on the same row leads to contention and potential timeouts.",
+      "evidence": "The primary limitation is lock contention under extreme concurrency; if too many agents target the same locker simultaneously, transactions may wait or time out."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:46.679Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

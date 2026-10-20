@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "llamacpp",
+  "title": "Local Privacy-First Document Classification",
+  "business": "Legal firms handling sensitive client discovery documents that cannot be uploaded to third-party cloud APIs.",
+  "problem": "High latency and strict data residency requirements prevent the use of external LLM services for automated document categorization.",
+  "solution": "Deploying llama.cpp locally allows the firm to run quantized models on internal hardware, ensuring data never leaves the secure perimeter while maintaining high inference speed.",
+  "steps": [
+    "Compile llama.cpp from source to ensure compatibility with local hardware architectures like AVX or Metal.",
+    "Download a GGUF-formatted model optimized for document classification tasks.",
+    "Apply integer quantization to the model weights to fit the model within existing local RAM or VRAM constraints.",
+    "Initialize the llama-server to expose an OpenAI-compatible REST API for internal document processing scripts.",
+    "Route document text streams through the local server for automated tagging and metadata extraction."
+  ],
+  "outcome": "The firm achieves full data sovereignty with sub-second inference latency, enabling real-time document triage without external network dependencies.",
+  "limitation": "Quantization reduces model precision, which can lead to subtle degradation in classification accuracy; this is verified by comparing output confidence scores against a baseline unquantized model.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Inference Pipeline",
+    "description": "The flow of data from internal storage through the local inference engine.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Store",
+        "detail": "Internal secure file system"
+      },
+      {
+        "id": "b",
+        "label": "llama-server",
+        "detail": "Local REST API endpoint"
+      },
+      {
+        "id": "c",
+        "label": "Quantized Model",
+        "detail": "GGUF weight file"
+      },
+      {
+        "id": "d",
+        "label": "Classification Result",
+        "detail": "Extracted metadata"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends text stream"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Provides inference logic"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Returns JSON response"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "label": "llama.cpp GitHub Repository"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Local Privacy-First Document Classification, why is llama.cpp chosen over cloud-based LLM services?",
+      "options": [
+        "To ensure data never leaves the secure perimeter while maintaining high inference speed.",
+        "To access a larger variety of proprietary training data.",
+        "To eliminate the need for hardware entirely.",
+        "To automatically update the model weights daily."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that legal firms have strict data residency requirements that prevent the use of external APIs.",
+      "evidence": "Deploying llama.cpp locally allows the firm to run quantized models on internal hardware, ensuring data never leaves the secure perimeter while maintaining high inference speed."
+    },
+    {
+      "question": "In Local Privacy-First Document Classification, what is the primary trade-off when using quantized weights?",
+      "options": [
+        "Increased memory usage.",
+        "Reduced model precision which may impact classification accuracy.",
+        "Incompatibility with local hardware.",
+        "Longer setup times for the REST API."
+      ],
+      "answerIndex": 1,
+      "explanation": "Quantization is a compression technique that reduces precision to save memory, which can impact the model's performance.",
+      "evidence": "Quantization reduces model precision, which can lead to subtle degradation in classification accuracy; this is verified by comparing output confidence scores against a baseline unquantized model."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:58.935Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:55.133Z"
+}

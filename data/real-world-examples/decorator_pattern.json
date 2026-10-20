@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "decorator_pattern",
+  "title": "Dynamic Logistics Manifest Enrichment",
+  "business": "A global logistics provider managing complex shipping manifests for diverse international clients.",
+  "problem": "The system requires adding specific regulatory compliance checks or insurance riders to shipping manifests based on destination, but hardcoding these into the base manifest class creates a bloated, rigid hierarchy that is difficult to maintain as regulations change.",
+  "solution": "The Decorator Pattern allows the system to wrap a base Manifest object with additional behavior objects, such as a CustomsComplianceDecorator or an InsuranceDecorator, without modifying the original class structure. This preserves the core interface while enabling dynamic, stackable feature additions at runtime.",
+  "steps": [
+    "Define a common interface for all manifest operations.",
+    "Implement a concrete base class for the standard manifest.",
+    "Create an abstract decorator class that implements the interface and holds a reference to a wrapped manifest object.",
+    "Develop specific concrete decorators that override interface methods to add custom logic before or after calling the wrapped object.",
+    "Compose the final object by wrapping the base manifest in one or more decorators as required by the business transaction."
+  ],
+  "outcome": "A highly modular system where new compliance or service requirements can be deployed as independent decorator classes, significantly reducing regression risks in the core manifest logic.",
+  "limitation": "The primary limitation is the potential for excessive object nesting, which can make debugging difficult and obscure the final state of the object. To check for this, developers should monitor the depth of the decorator stack and ensure that the object composition logic remains transparent through logging or inspection tools.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Decorator Composition Flow",
+    "description": "Shows how a base manifest is wrapped by successive decorators to build a final enriched object.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Base Manifest",
+        "detail": "Core data structure"
+      },
+      {
+        "id": "b",
+        "label": "Customs Decorator",
+        "detail": "Adds regulatory logic"
+      },
+      {
+        "id": "c",
+        "label": "Insurance Decorator",
+        "detail": "Adds coverage logic"
+      },
+      {
+        "id": "d",
+        "label": "Final Manifest",
+        "detail": "Fully enriched object"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "wraps"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "wraps"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "results in"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Logistics Manifest Enrichment, why is the Decorator Pattern chosen over hardcoding?",
+      "options": [
+        "To avoid a bloated, rigid hierarchy that is difficult to maintain as regulations change.",
+        "To improve the raw performance of the database queries.",
+        "To replace the need for an interface entirely.",
+        "To ensure all manifests are stored in a single table."
+      ],
+      "answerIndex": 0,
+      "explanation": "Hardcoding leads to rigid structures; the pattern allows for dynamic, modular additions.",
+      "evidence": "The system requires adding specific regulatory compliance checks or insurance riders to shipping manifests based on destination, but hardcoding these into the base manifest class creates a bloated, rigid hierarchy that is difficult to maintain as regulations change."
+    },
+    {
+      "question": "In Dynamic Logistics Manifest Enrichment, what is a primary limitation of the pattern?",
+      "options": [
+        "It prevents the use of interfaces.",
+        "It creates too many database tables.",
+        "It can lead to excessive object nesting, making debugging difficult.",
+        "It requires all decorators to be compiled at the same time."
+      ],
+      "answerIndex": 2,
+      "explanation": "Deep nesting of decorators can obscure the object state and complicate debugging.",
+      "evidence": "The primary limitation is the potential for excessive object nesting, which can make debugging difficult and obscure the final state of the object."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:12.946Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

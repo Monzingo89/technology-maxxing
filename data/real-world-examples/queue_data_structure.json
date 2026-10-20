@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "queue_data_structure",
+  "title": "Asynchronous Print Job Spooling",
+  "business": "A high-traffic digital document processing center that receives thousands of print requests from various client applications.",
+  "problem": "The print engine cannot process simultaneous requests, leading to system crashes when multiple applications attempt to access the printer hardware at the exact same time.",
+  "solution": "Implementing a Queue data structure allows the system to buffer incoming requests and process them in a first-in, first-out order, ensuring that the printer hardware receives one job at a time without data loss.",
+  "steps": [
+    "Initialize an empty queue to hold incoming print request objects.",
+    "Enqueue each new print request as it arrives from the client applications.",
+    "Monitor the printer hardware status to detect when it becomes idle.",
+    "Dequeue the oldest print request from the front of the queue and send it to the printer.",
+    "Repeat the dequeue process until the queue is empty."
+  ],
+  "outcome": "The print engine achieves stable, serialized execution of tasks, eliminating hardware contention and ensuring fair processing for all incoming requests.",
+  "limitation": "The primary limitation is that a standard queue does not support priority; all jobs are processed strictly in the order they arrived, which can be checked by observing if a small, urgent job is stuck behind a large, low-priority job.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Print Job Queue Workflow",
+    "description": "This diagram illustrates how print requests flow from applications into a queue and are subsequently processed by the printer.",
+    "nodes": [
+      {
+        "id": "app",
+        "label": "Client App",
+        "detail": "Generates print request"
+      },
+      {
+        "id": "q",
+        "label": "Queue",
+        "detail": "FIFO storage buffer"
+      },
+      {
+        "id": "eng",
+        "label": "Print Engine",
+        "detail": "Hardware interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "app",
+        "to": "q",
+        "label": "Enqueue Request"
+      },
+      {
+        "from": "q",
+        "to": "eng",
+        "label": "Dequeue Request"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Asynchronous Print Job Spooling, why is a Queue used to solve the system crash problem?",
+      "options": [
+        "It allows the system to buffer incoming requests and process them in a first-in, first-out order.",
+        "It automatically increases the printer hardware speed to handle multiple simultaneous requests.",
+        "It deletes incoming requests that exceed the printer's current memory capacity.",
+        "It reorders all print jobs based on the size of the document to optimize hardware usage."
+      ],
+      "answerIndex": 0,
+      "explanation": "The queue acts as a buffer that serializes requests, preventing the printer from being overwhelmed by simultaneous access attempts.",
+      "evidence": "Implementing a Queue data structure allows the system to buffer incoming requests and process them in a first-in, first-out order, ensuring that the printer hardware receives one job at a time without data loss."
+    },
+    {
+      "question": "In Asynchronous Print Job Spooling, what is a notable limitation of the implemented Queue?",
+      "options": [
+        "The queue cannot store more than two print jobs at any given time.",
+        "The queue does not support priority, meaning urgent jobs cannot skip ahead.",
+        "The queue requires manual intervention to dequeue every single job.",
+        "The queue is only compatible with high-speed network printers."
+      ],
+      "answerIndex": 1,
+      "explanation": "Standard queues follow strict FIFO ordering, which prevents the implementation of priority-based scheduling.",
+      "evidence": "The primary limitation is that a standard queue does not support priority; all jobs are processed strictly in the order they arrived, which can be checked by observing if a small, urgent job is stuck behind a large, low-priority job."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:09:07.354Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

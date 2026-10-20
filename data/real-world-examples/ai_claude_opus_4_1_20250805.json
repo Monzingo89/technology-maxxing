@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_opus_4_1_20250805",
+  "title": "Lifecycle Management for Claude Opus 4.1",
+  "business": "Enterprise software developers maintaining legacy AI-integrated applications.",
+  "problem": "Applications relying on retired models like Claude Opus 4.1 face service interruptions, as requests to retired models will fail, causing downtime in production workflows.",
+  "solution": "The solution involves auditing current API usage via the Claude Console to identify retired model dependencies and migrating those workloads to active, supported models like Claude Opus 4.8 to ensure continued reliability.",
+  "steps": [
+    "Navigate to the Usage page in the Claude Console to audit active API keys.",
+    "Export the usage CSV to identify specific instances where the deprecated claude-opus-4-1-20250805 model is still being invoked.",
+    "Update application source code to replace the retired model identifier with the recommended replacement, claude-opus-4-8.",
+    "Perform thorough testing of the application with the new model to verify output consistency before full deployment."
+  ],
+  "outcome": "Restored service stability and compliance with current API support standards, preventing unexpected production failures.",
+  "limitation": "The primary limitation is that newer models may exhibit slight variations in response behavior compared to the retired version. Developers must verify output quality through rigorous testing, as deprecated models are likely to be less reliable than active models.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Model Migration Workflow",
+    "description": "The process of identifying and replacing retired model dependencies.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Claude Console",
+        "detail": "Source of truth for API usage data"
+      },
+      {
+        "id": "b",
+        "label": "Usage Audit",
+        "detail": "CSV export identifying retired models"
+      },
+      {
+        "id": "c",
+        "label": "Codebase Update",
+        "detail": "Replacing model ID with active version"
+      },
+      {
+        "id": "d",
+        "label": "Production",
+        "detail": "Stable application environment"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Export usage data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Identify retired model"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Deploy replacement"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+      "label": "Model deprecations"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Lifecycle Management for Claude Opus 4.1, why must developers migrate away from the retired model?",
+      "options": [
+        "Requests to retired models will fail, causing service downtime.",
+        "The model is no longer compatible with Python SDK versions.",
+        "Retired models are automatically updated to the latest versions.",
+        "The Claude Console blocks all API keys using older models."
+      ],
+      "answerIndex": 0,
+      "explanation": "The documentation and scenario clarify that once a model is retired, requests to it will fail, necessitating a migration to avoid production outages.",
+      "evidence": "Applications relying on retired models like Claude Opus 4.1 face service interruptions, as requests to retired models will fail, causing downtime in production workflows."
+    },
+    {
+      "question": "What is a key limitation when implementing the migration for Lifecycle Management for Claude Opus 4.1?",
+      "options": [
+        "The migration requires a complete rewrite of the application logic.",
+        "Newer models may exhibit variations in response behavior, requiring testing.",
+        "The Claude Console does not support exporting usage data for audits.",
+        "Replacement models are always more expensive than the retired versions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that newer models might behave differently, making testing essential for maintaining quality.",
+      "evidence": "The primary limitation is that newer models may exhibit slight variations in response behavior compared to the retired version. Developers must verify output quality through rigorous testing"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:46.768Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:19.279Z"
+}

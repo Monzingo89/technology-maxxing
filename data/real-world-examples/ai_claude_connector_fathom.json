@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_fathom",
+  "title": "Architectural Design Synthesis from Client Discovery",
+  "business": "A mid-sized architectural firm specializing in custom residential builds.",
+  "problem": "Project architects frequently lose critical design constraints and client preferences discussed during verbal discovery meetings, leading to costly re-designs and misaligned project scopes.",
+  "solution": "By integrating the Fathom connector with Claude, the firm enables architects to query meeting transcripts directly within the Claude interface, allowing the AI to synthesize specific client requirements into technical project briefs without manual transcription review.",
+  "steps": [
+    "Authorize the Fathom connector within the Claude workspace to establish secure API access to meeting data.",
+    "Use the list_meetings tool to identify the specific discovery call associated with a project client.",
+    "Invoke get_meeting_transcript to retrieve the raw dialogue for the identified session.",
+    "Prompt Claude to extract design constraints and material preferences from the retrieved transcript to generate a structured project requirement document."
+  ],
+  "outcome": "Architects achieve higher accuracy in project documentation and significantly reduce the time spent manually reconciling meeting notes with design software requirements.",
+  "limitation": "The connector relies on the quality of the original meeting recording; if audio is poor or speakers overlap significantly, the transcript may contain inaccuracies that propagate into the generated project brief, which must be verified against the original audio file.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Architectural Discovery Workflow",
+    "description": "This diagram illustrates the flow of information from a client meeting to the final project brief.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client Meeting",
+        "detail": "Verbal discovery session"
+      },
+      {
+        "id": "b",
+        "label": "Fathom API",
+        "detail": "Meeting intelligence layer"
+      },
+      {
+        "id": "c",
+        "label": "Claude",
+        "detail": "AI reasoning engine"
+      },
+      {
+        "id": "d",
+        "label": "Project Brief",
+        "detail": "Technical requirement document"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "records and processes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides transcript data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "synthesizes requirements"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/fathom",
+      "label": "Fathom – Your Meeting Intelligence Layer connector"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Architectural Design Synthesis from Client Discovery, what is the primary problem addressed by the Fathom connector?",
+      "options": [
+        "Architects lose critical design constraints discussed in verbal meetings.",
+        "The firm lacks a digital platform for storing architectural blueprints.",
+        "Claude is unable to process large PDF files of design specifications.",
+        "Clients are unable to access their own meeting summaries."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explicitly identifies the loss of verbal discovery details as the core failure point.",
+      "evidence": "Project architects frequently lose critical design constraints and client preferences discussed during verbal discovery meetings, leading to costly re-designs and misaligned project scopes."
+    },
+    {
+      "question": "In Architectural Design Synthesis from Client Discovery, what is a key limitation of the implementation?",
+      "options": [
+        "The connector cannot access meetings older than one week.",
+        "Transcript accuracy depends on the quality of the original meeting recording.",
+        "Claude requires a manual copy-paste of all transcript data.",
+        "The Fathom API is incompatible with architectural design software."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section highlights that the AI output is only as good as the underlying transcript data.",
+      "evidence": "The connector relies on the quality of the original meeting recording; if audio is poor or speakers overlap significantly, the transcript may contain inaccuracies that propagate into the generated project brief, which must be verified against the original audio file."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:30.497Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:25.755Z"
+}

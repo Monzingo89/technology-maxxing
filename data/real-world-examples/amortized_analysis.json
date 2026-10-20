@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "amortized_analysis",
+  "title": "Dynamic Log Aggregator Scaling",
+  "business": "A cloud-native logging service that processes high-velocity telemetry streams from distributed microservices.",
+  "problem": "The system uses a dynamic array to buffer incoming log entries. When the buffer reaches capacity, it must allocate a new, larger array and copy all existing entries, causing occasional high-latency spikes that degrade real-time monitoring.",
+  "solution": "Amortized analysis demonstrates that while a single resize operation is expensive, the average cost per insertion remains constant over a sequence of operations. By doubling the array size during each resize, the total cost of all resizes is spread across enough insertions to maintain a low, predictable average cost.",
+  "steps": [
+    "Initialize a dynamic array with a fixed starting capacity.",
+    "Perform insertions by adding elements to the next available index.",
+    "Trigger a resize operation only when the current capacity is exhausted.",
+    "Allocate a new array with double the current capacity and copy all existing elements.",
+    "Deallocate the old array and resume standard insertions."
+  ],
+  "outcome": "The system achieves consistent throughput for log ingestion, as the infrequent, high-cost resize operations are effectively neutralized by the high volume of low-cost insertions.",
+  "limitation": "The primary tradeoff is memory overhead, as the array may remain partially empty after a resize. To check this, monitor the load factor, defined as the ratio of occupied slots to total capacity, to ensure it does not drop below a predefined threshold.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Log Buffer Resizing Process",
+    "description": "This flow shows how log entries trigger either a simple insertion or a costly resize event.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Incoming Log",
+        "detail": "New telemetry data"
+      },
+      {
+        "id": "b",
+        "label": "Capacity Check",
+        "detail": "Evaluate current buffer space"
+      },
+      {
+        "id": "c",
+        "label": "Standard Insert",
+        "detail": "O(1) operation"
+      },
+      {
+        "id": "d",
+        "label": "Resize & Copy",
+        "detail": "O(n) operation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Data arrives"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Space available"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Buffer full"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Resume insertion"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Log Aggregator Scaling, why does the system experience occasional latency spikes?",
+      "options": [
+        "Because the system must allocate a new array and copy existing entries when the buffer is full.",
+        "Because the system processes telemetry streams from too many microservices simultaneously.",
+        "Because the average cost of insertion is too high for real-time monitoring.",
+        "Because the load factor of the dynamic array is kept too low."
+      ],
+      "answerIndex": 0,
+      "explanation": "The problem description explicitly identifies the resize and copy process as the cause of the latency spikes.",
+      "evidence": "When the buffer reaches capacity, it must allocate a new, larger array and copy all existing entries, causing occasional high-latency spikes that degrade real-time monitoring."
+    },
+    {
+      "question": "In Dynamic Log Aggregator Scaling, what is the primary tradeoff of using this amortized approach?",
+      "options": [
+        "Increased CPU usage during every single insertion operation.",
+        "The risk of the system becoming non-deterministic due to probability.",
+        "Memory overhead resulting from partially empty arrays after resizing.",
+        "The inability to handle high-velocity telemetry streams."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights memory overhead as the tradeoff for the amortized performance gains.",
+      "evidence": "The primary tradeoff is memory overhead, as the array may remain partially empty after a resize."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:22.741Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

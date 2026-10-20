@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_ecr",
+  "title": "Standardizing Container Distribution for Global Logistics",
+  "business": "A global logistics firm managing a fleet of microservices that track cargo shipments across international borders.",
+  "problem": "The firm faces inconsistent deployment environments because developers manually build and share container images via unmanaged local registries, leading to 'it works on my machine' failures during production rollouts.",
+  "solution": "By implementing Amazon Elastic Container Registry (ECR), the firm centralizes image storage and distribution. ECR provides a secure, private repository that integrates directly with AWS compute services, ensuring that the exact same container image is pulled by production environments regardless of the region.",
+  "steps": [
+    "Create a private ECR repository to serve as the single source of truth for application images.",
+    "Configure IAM policies to grant specific CI/CD pipeline roles permission to push images to the repository.",
+    "Authenticate the local or CI/CD environment using the ECR get-login-password command.",
+    "Tag and push the container images to the ECR repository URI.",
+    "Reference the ECR image URI in the task definition for AWS compute services to pull the image during deployment."
+  ],
+  "outcome": "The organization achieves environment parity, where the container image verified in staging is identical to the one deployed in production, significantly reducing deployment-related configuration errors.",
+  "limitation": "ECR repositories are regional, meaning an image pushed to a repository in one AWS region is not automatically available in another. To check for this, verify the repository URI region prefix against the deployment target region.",
+  "diagram": {
+    "kind": "flow",
+    "title": "ECR Image Distribution Workflow",
+    "description": "This diagram illustrates the flow of container images from the developer environment to the production compute service via ECR.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Developer",
+        "detail": "Builds and tags container images"
+      },
+      {
+        "id": "b",
+        "label": "CI/CD Pipeline",
+        "detail": "Authenticates and pushes images"
+      },
+      {
+        "id": "c",
+        "label": "Amazon ECR",
+        "detail": "Stores private container images"
+      },
+      {
+        "id": "d",
+        "label": "AWS Compute",
+        "detail": "Pulls and runs the container"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Triggers build"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Pushes image"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Distributes image"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Standardizing Container Distribution for Global Logistics, what is the primary problem addressed by ECR?",
+      "options": [
+        "Inconsistent deployment environments due to unmanaged local registries.",
+        "High costs associated with storing large container images.",
+        "Lack of support for public container image distribution.",
+        "Slow network latency during image downloads."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that manual image sharing leads to deployment failures, which ECR solves by centralizing storage.",
+      "evidence": "The firm faces inconsistent deployment environments because developers manually build and share container images via unmanaged local registries, leading to 'it works on my machine' failures during production rollouts."
+    },
+    {
+      "question": "In Standardizing Container Distribution for Global Logistics, what is a key limitation of the implementation?",
+      "options": [
+        "ECR requires public access for all images.",
+        "Images must be manually copied between regions because repositories are regional.",
+        "IAM policies cannot be applied to ECR repositories.",
+        "ECR does not integrate with AWS compute services."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly states that ECR repositories are regional and images do not automatically replicate across regions.",
+      "evidence": "ECR repositories are regional, meaning an image pushed to a repository in one AWS region is not automatically available in another."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:05.183Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

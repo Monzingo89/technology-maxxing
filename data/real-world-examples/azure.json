@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure",
+  "title": "Secure Global Microservice Delivery",
+  "business": "Global e-commerce retailers requiring low-latency, secure access to distributed microservices.",
+  "problem": "High latency and exposure of backend microservice endpoints to the public internet, leading to performance degradation and increased attack surface.",
+  "solution": "Utilizing Azure Front Door to provide a scalable, security-enhanced delivery point that terminates SSL/TLS at the edge and routes traffic to backend microservices hosted on Azure Container Apps.",
+  "steps": [
+    "Deploy microservices as containerized applications using Azure Container Apps.",
+    "Configure Azure Front Door as the global entry point for all web traffic.",
+    "Implement Private Link to establish a private, secure connection between the Front Door edge and the internal container environment.",
+    "Define routing rules in Front Door to direct traffic based on URL paths to specific microservice endpoints."
+  ],
+  "outcome": "Improved global application performance through edge caching and reduced latency, combined with a hardened security posture by masking backend infrastructure.",
+  "limitation": "The primary limitation is the complexity of managing global routing rules and certificate lifecycle across multiple origins. Check this by monitoring the Azure Front Door health reports and backend response times in Azure Monitor.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Edge-to-Container Traffic Flow",
+    "description": "Explains the path from a global user to the internal containerized microservices.",
+    "nodes": [
+      {
+        "id": "user",
+        "label": "Global User",
+        "detail": "Client browser"
+      },
+      {
+        "id": "afd",
+        "label": "Azure Front Door",
+        "detail": "Global entry point"
+      },
+      {
+        "id": "pl",
+        "label": "Private Link",
+        "detail": "Secure tunnel"
+      },
+      {
+        "id": "aca",
+        "label": "Container Apps",
+        "detail": "Backend microservices"
+      }
+    ],
+    "edges": [
+      {
+        "from": "user",
+        "to": "afd",
+        "label": "HTTPS Request"
+      },
+      {
+        "from": "afd",
+        "to": "pl",
+        "label": "Private Routing"
+      },
+      {
+        "from": "pl",
+        "to": "aca",
+        "label": "Internal Traffic"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-us/azure/",
+      "label": "Azure documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Global Microservice Delivery, what is the primary benefit of using Azure Front Door?",
+      "options": [
+        "It provides a scalable, security-enhanced delivery point that masks backend infrastructure.",
+        "It acts as a primary database for storing microservice state.",
+        "It replaces the need for container orchestration.",
+        "It provides physical hardware security modules for encryption."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution leverages Azure Front Door to provide a scalable, security-enhanced delivery point that terminates SSL/TLS at the edge and routes traffic to backend microservices.",
+      "evidence": "Utilizing Azure Front Door to provide a scalable, security-enhanced delivery point that terminates SSL/TLS at the edge and routes traffic to backend microservices hosted on Azure Container Apps."
+    },
+    {
+      "question": "In Secure Global Microservice Delivery, what is a noted limitation of the implementation?",
+      "options": [
+        "The inability to use HTTPS for traffic.",
+        "The complexity of managing global routing rules and certificate lifecycle.",
+        "The requirement to host all services in a single region.",
+        "The lack of integration with Azure Monitor."
+      ],
+      "answerIndex": 1,
+      "explanation": "Managing global routing and certificates across distributed origins is identified as the main operational trade-off.",
+      "evidence": "The primary limitation is the complexity of managing global routing rules and certificate lifecycle across multiple origins."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:30.794Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:27.600Z"
+}

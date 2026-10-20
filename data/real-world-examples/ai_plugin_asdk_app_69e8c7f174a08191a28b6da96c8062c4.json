@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_plugin_asdk_app_69e8c7f174a08191a28b6da96c8062c4",
+  "title": "Observability Contextualization for E-commerce Microservices",
+  "business": "SRE teams managing high-traffic e-commerce microservices architectures.",
+  "problem": "Engineers struggle with context switching between fragmented monitoring tools when investigating intermittent latency spikes, leading to delayed incident resolution.",
+  "solution": "The Datadog MCP server enables SREs to query observability data directly within ChatGPT, allowing for natural language requests to correlate traces, logs, and host metrics without leaving the chat interface.",
+  "steps": [
+    "Authenticate the Datadog MCP server with valid API and Application keys.",
+    "Define the scope of the investigation by requesting the plugin to search for specific service entities.",
+    "Use natural language prompts to retrieve correlated traces and logs associated with identified latency spikes.",
+    "Visualize the impact by requesting the plugin to inspect relevant dashboards or incident summaries."
+  ],
+  "outcome": "Reduced mean time to resolution by consolidating data retrieval and analysis into a single conversational workflow.",
+  "limitation": "The plugin relies on the precision of natural language queries; complex, multi-layered metric aggregations may require manual refinement in the primary Datadog UI to ensure accuracy.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Observability Retrieval Workflow",
+    "description": "The flow shows how an SRE uses the MCP server to bridge the gap between human intent and system data.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "SRE Engineer",
+        "detail": "Initiates investigation"
+      },
+      {
+        "id": "b",
+        "label": "ChatGPT Interface",
+        "detail": "Processes natural language"
+      },
+      {
+        "id": "c",
+        "label": "Datadog MCP Server",
+        "detail": "Translates intent to API calls"
+      },
+      {
+        "id": "d",
+        "label": "Datadog Platform",
+        "detail": "Stores metrics, logs, traces"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Invokes tool"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetches telemetry"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Returns data"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://chatgpt.com/plugins",
+      "label": "ChatGPT Plugins"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Observability Contextualization for E-commerce Microservices, what is the primary benefit of the solution?",
+      "options": [
+        "Consolidating data retrieval and analysis into a single conversational workflow",
+        "Automating the deployment of new microservices to production",
+        "Replacing the need for human SREs to monitor the infrastructure",
+        "Reducing the cost of cloud storage for logs and traces"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution focuses on reducing context switching by allowing SREs to query data directly within the chat interface.",
+      "evidence": "Reduced mean time to resolution by consolidating data retrieval and analysis into a single conversational workflow."
+    },
+    {
+      "question": "In Observability Contextualization for E-commerce Microservices, what is a noted limitation of the plugin?",
+      "options": [
+        "It cannot connect to Datadog due to API key restrictions",
+        "It is unable to visualize any metrics or logs",
+        "Complex aggregations may require manual refinement in the primary UI",
+        "It requires a separate subscription for every user"
+      ],
+      "answerIndex": 2,
+      "explanation": "The text explicitly mentions that complex queries might need manual verification in the main Datadog interface.",
+      "evidence": "The plugin relies on the precision of natural language queries; complex, multi-layered metric aggregations may require manual refinement in the primary Datadog UI to ensure accuracy."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:59:05.674Z",
+  "sourceRetrievedAt": "2026-10-18T00:56:34.365Z"
+}

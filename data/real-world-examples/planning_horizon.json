@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "planning_horizon",
+  "title": "Optimizing Warehouse Robot Navigation",
+  "business": "Automated logistics providers managing high-density warehouse environments.",
+  "problem": "Robots frequently enter dead-end aisles because their local navigation logic only considers immediate obstacle avoidance, failing to account for long-term path efficiency.",
+  "solution": "By implementing a latent imagination model, the robot simulates future trajectories within a compact state space, allowing it to evaluate the long-term consequences of current movement choices before execution.",
+  "steps": [
+    "Train a world model to map high-dimensional sensor inputs into a compact latent state representation.",
+    "Define a planning horizon parameter that dictates the number of future steps the agent simulates in its latent imagination.",
+    "Propagate analytic gradients through the imagined trajectory to estimate the value of current actions.",
+    "Select the action that maximizes the cumulative value over the specified future horizon.",
+    "Update the world model periodically to refine the accuracy of future state predictions."
+  ],
+  "outcome": "Robots demonstrate improved path planning by avoiding suboptimal routes that appear clear in the short term but lead to congestion or dead ends.",
+  "limitation": "A longer planning horizon increases the computational cost of each decision cycle and may introduce compounding errors if the world model's predictions diverge from reality; check for this by comparing imagined state values against actual observed outcomes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Latent Imagination Planning Flow",
+    "description": "The flow shows how the agent transitions from sensory input to long-term action selection.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Input",
+        "detail": "Raw visual data from warehouse cameras"
+      },
+      {
+        "id": "b",
+        "label": "World Model",
+        "detail": "Learned latent state representation"
+      },
+      {
+        "id": "c",
+        "label": "Imagination Engine",
+        "detail": "Simulates trajectories over the planning horizon"
+      },
+      {
+        "id": "d",
+        "label": "Action Selection",
+        "detail": "Policy based on cumulative value"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "encodes"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "initializes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "optimizes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1912.01603",
+      "label": "Dream to Control: Learning Behaviors by Latent Imagination"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Warehouse Robot Navigation, why is a latent imagination approach used?",
+      "options": [
+        "To allow the robot to evaluate long-term consequences of actions before execution.",
+        "To replace the need for physical sensors entirely.",
+        "To reduce the number of robots required in the warehouse.",
+        "To increase the speed of the robot's physical motors."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution explains that the agent evaluates long-term consequences of current movement choices by simulating trajectories.",
+      "evidence": "By implementing a latent imagination model, the robot simulates future trajectories within a compact state space, allowing it to evaluate the long-term consequences of current movement choices before execution."
+    },
+    {
+      "question": "In Optimizing Warehouse Robot Navigation, what is a primary trade-off of increasing the planning horizon?",
+      "options": [
+        "It decreases the accuracy of the world model.",
+        "It increases computational cost and risks compounding prediction errors.",
+        "It forces the robot to move slower to save power.",
+        "It prevents the robot from using sensor data."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly notes that longer horizons increase computational load and the risk of compounding errors.",
+      "evidence": "A longer planning horizon increases the computational cost of each decision cycle and may introduce compounding errors if the world model's predictions diverge from reality"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:08:28.747Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:49.398Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "hadoop",
+  "title": "Logistics Route Optimization via Hadoop",
+  "business": "Global logistics firms managing millions of daily sensor events from shipping containers.",
+  "problem": "Traditional relational databases fail to ingest and process massive, high-velocity telemetry streams, leading to delayed route adjustments and increased fuel costs.",
+  "solution": "Hadoop provides a distributed framework where HDFS stores raw sensor data across commodity hardware, while YARN manages resource allocation for MapReduce jobs that calculate optimal paths in parallel.",
+  "steps": [
+    "Deploy HDFS across a cluster to provide high-throughput access to raw sensor telemetry files.",
+    "Configure YARN to manage cluster resources, ensuring compute tasks do not starve each other.",
+    "Develop MapReduce jobs to parse and aggregate container location data into regional summaries.",
+    "Execute parallel processing tasks to identify route inefficiencies based on historical transit times.",
+    "Store processed results back into HDFS for downstream reporting and logistics planning."
+  ],
+  "outcome": "The organization achieves the ability to process vast volumes of historical sensor data to identify systemic transit delays without requiring expensive, proprietary hardware upgrades.",
+  "limitation": "The system introduces significant latency for real-time decision-making because MapReduce is designed for batch processing; check this by monitoring job completion times in the YARN resource manager dashboard.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Hadoop Data Processing Pipeline",
+    "description": "This diagram shows how raw sensor data flows from storage into compute engines.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Sensor Data",
+        "detail": "Raw telemetry logs"
+      },
+      {
+        "id": "b",
+        "label": "HDFS",
+        "detail": "Distributed storage layer"
+      },
+      {
+        "id": "c",
+        "label": "YARN",
+        "detail": "Resource manager"
+      },
+      {
+        "id": "d",
+        "label": "MapReduce",
+        "detail": "Parallel compute engine"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingests"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "feeds data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "allocates resources"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://hadoop.apache.org/",
+      "label": "Apache Hadoop"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Logistics Route Optimization via Hadoop, why is Hadoop chosen to address the data problem?",
+      "options": [
+        "It replaces the need for any storage hardware.",
+        "It provides a distributed framework where HDFS stores raw sensor data across commodity hardware, while YARN manages resource allocation.",
+        "It eliminates the need for any programming models.",
+        "It guarantees sub-millisecond response times for all queries."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that traditional databases fail to handle high-velocity streams, and Hadoop solves this by distributing storage and compute.",
+      "evidence": "Hadoop provides a distributed framework where HDFS stores raw sensor data across commodity hardware, while YARN manages resource allocation for MapReduce jobs that calculate optimal paths in parallel."
+    },
+    {
+      "question": "In Logistics Route Optimization via Hadoop, what is a primary trade-off of the implementation?",
+      "options": [
+        "The system cannot scale beyond ten nodes.",
+        "It is strictly limited to structured data only.",
+        "The system introduces significant latency for real-time decision-making because MapReduce is designed for batch processing.",
+        "It requires proprietary hardware to function."
+      ],
+      "answerIndex": 2,
+      "explanation": "MapReduce is a batch-oriented framework, which inherently creates latency that makes it unsuitable for real-time operational adjustments.",
+      "evidence": "The system introduces significant latency for real-time decision-making because MapReduce is designed for batch processing; check this by monitoring job completion times in the YARN resource manager dashboard."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:11.925Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:08.078Z"
+}

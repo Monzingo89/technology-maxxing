@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_llama_cpp",
+  "title": "Edge-Based Secure Document Summarization",
+  "business": "Legal firms handling sensitive client documents that cannot be uploaded to public cloud AI services due to strict data residency and privacy regulations.",
+  "problem": "The firm faces prohibitive costs and compliance risks when attempting to process thousands of confidential case files through external API-based language models, which require transmitting sensitive data over the public internet.",
+  "solution": "By deploying llama.cpp on local, air-gapped hardware, the firm achieves high-performance local inference. This allows the legal team to run quantized models directly on internal servers, ensuring that sensitive data never leaves the firm's private network infrastructure while maintaining full control over the execution environment.",
+  "steps": [
+    "Convert high-parameter models into the GGUF format to enable efficient quantization and memory management.",
+    "Configure the llama.cpp server component to expose an OpenAI-compatible REST API for internal application integration.",
+    "Deploy the runtime on local hardware utilizing Metal or CUDA backends to maximize inference throughput.",
+    "Implement GBNF grammars to enforce structured output formats for automated document classification tasks."
+  ],
+  "outcome": "The firm achieves secure, low-latency document summarization and classification without the risk of data exfiltration, effectively eliminating reliance on external cloud AI providers.",
+  "limitation": "The primary trade-off is the static nature of local hardware resources; if the model size exceeds the available VRAM, inference speed drops significantly as the system falls back to CPU-based processing, which can be monitored by tracking latency per token.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Local Inference Pipeline",
+    "description": "The flow of data from raw document to structured insight within a secure perimeter.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Document Store",
+        "detail": "Encrypted local file system"
+      },
+      {
+        "id": "b",
+        "label": "llama.cpp Server",
+        "detail": "Local inference engine"
+      },
+      {
+        "id": "c",
+        "label": "GGUF Model",
+        "detail": "Quantized weights"
+      },
+      {
+        "id": "d",
+        "label": "Legal App",
+        "detail": "Internal client interface"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "d",
+        "label": "requests summary"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "sends prompt via API"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "loads weights"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "returns structured text"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://github.com/ggml-org/llama.cpp",
+      "label": "GitHub - ggml-org/llama.cpp: LLM inference in C/C++"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Edge-Based Secure Document Summarization, why is llama.cpp preferred over cloud APIs?",
+      "options": [
+        "It eliminates the need to transmit sensitive data over the public internet.",
+        "It provides unlimited cloud-based scaling for large document batches.",
+        "It automatically encrypts documents using proprietary hardware keys.",
+        "It removes the requirement for local hardware maintenance."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that the firm cannot use public cloud AI due to privacy regulations, and the solution enables local inference so data never leaves the private network.",
+      "evidence": "This allows the legal team to run quantized models directly on internal servers, ensuring that sensitive data never leaves the firm's private network infrastructure"
+    },
+    {
+      "question": "In Edge-Based Secure Document Summarization, what is the primary limitation of the local deployment?",
+      "options": [
+        "The inability to use GGUF format models.",
+        "The risk of data exfiltration via the REST API.",
+        "Performance degradation when models exceed available VRAM.",
+        "The requirement to use only CPU-based inference."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly identifies that exceeding VRAM capacity forces a fallback to slower CPU-based processing.",
+      "evidence": "if the model size exceeds the available VRAM, inference speed drops significantly as the system falls back to CPU-based processing"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:59.188Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:55.141Z"
+}

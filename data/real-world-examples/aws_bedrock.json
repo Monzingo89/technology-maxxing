@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_bedrock",
+  "title": "Automated Logistics Incident Resolution",
+  "business": "Global logistics providers managing complex supply chain disruptions.",
+  "problem": "Operations teams struggle with manual classification of thousands of daily incident reports, leading to delayed response times and inconsistent resolution strategies.",
+  "solution": "Amazon Bedrock provides managed access to foundation models, allowing the logistics firm to build a generative AI application that automatically categorizes incident reports and drafts initial response plans based on historical context.",
+  "steps": [
+    "Select a foundation model within Amazon Bedrock suitable for text classification and summarization tasks.",
+    "Configure the API access to the chosen model using AWS Identity and Access Management for secure, managed interaction.",
+    "Develop an ingestion pipeline that routes incoming incident reports to the Bedrock API for automated analysis.",
+    "Implement a feedback loop where human operators review and refine the model-generated response plans to ensure accuracy.",
+    "Deploy the integrated solution to the internal operations dashboard to assist dispatchers in real-time."
+  ],
+  "outcome": "Improved operational efficiency through reduced manual triage time and standardized incident response protocols across regional teams.",
+  "limitation": "The model may exhibit hallucinations or provide inaccurate summaries if the input data is ambiguous, which requires monitoring the model output against a confidence threshold or human-in-the-loop verification.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Incident Resolution Workflow",
+    "description": "This diagram illustrates the flow of incident data from the source system through Bedrock to the human operator.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Incident Source",
+        "detail": "External logistics tracking system"
+      },
+      {
+        "id": "b",
+        "label": "Bedrock API",
+        "detail": "Managed foundation model interface"
+      },
+      {
+        "id": "c",
+        "label": "Resolution Draft",
+        "detail": "AI-generated response plan"
+      },
+      {
+        "id": "d",
+        "label": "Human Operator",
+        "detail": "Final review and approval"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends raw text"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Returns structured response"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Requires verification"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "Cloud Services - Build and Scale Securely"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Incident Resolution, what is the primary problem being addressed?",
+      "options": [
+        "High costs of physical warehouse storage",
+        "Manual classification of incident reports leading to delays",
+        "Lack of cloud infrastructure in regional offices",
+        "Inability to track global shipping containers"
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario explicitly identifies that operations teams struggle with manual classification of incident reports as the core issue.",
+      "evidence": "Operations teams struggle with manual classification of thousands of daily incident reports, leading to delayed response times and inconsistent resolution strategies."
+    },
+    {
+      "question": "In Automated Logistics Incident Resolution, what is a key limitation of the proposed solution?",
+      "options": [
+        "The model requires manual hardware maintenance",
+        "The model cannot be accessed via API",
+        "The model may hallucinate if input data is ambiguous",
+        "The model is limited to a single geographic region"
+      ],
+      "answerIndex": 2,
+      "explanation": "The text notes that model hallucinations are a risk when input data is ambiguous, necessitating human verification.",
+      "evidence": "The model may exhibit hallucinations or provide inaccurate summaries if the input data is ambiguous, which requires monitoring the model output against a confidence threshold or human-in-the-loop verification."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:56.698Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

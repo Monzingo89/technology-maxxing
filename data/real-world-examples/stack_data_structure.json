@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "stack_data_structure",
+  "title": "Undo Buffer for Document Editor",
+  "business": "Software developers building collaborative text editing applications.",
+  "problem": "Users frequently make accidental deletions or formatting errors, leading to data loss and frustration when no mechanism exists to revert recent actions.",
+  "solution": "A stack data structure manages the history of user actions by storing state snapshots in a last-in, first-out order, allowing the application to pop the most recent change to restore the previous document state.",
+  "steps": [
+    "Initialize an empty stack to hold document state snapshots.",
+    "Push the current document state onto the stack whenever a user performs a significant action.",
+    "When an undo command is triggered, pop the top state from the stack.",
+    "Apply the popped state to the document view to revert the change."
+  ],
+  "outcome": "Users gain a reliable mechanism to recover from errors, significantly improving the perceived safety and usability of the editing interface.",
+  "limitation": "Memory consumption grows linearly with the number of stored states; developers must implement a maximum stack depth to prevent memory exhaustion.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Undo Operation Flow",
+    "description": "Shows how the stack manages document states sequentially.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Action",
+        "detail": "Input event"
+      },
+      {
+        "id": "b",
+        "label": "Stack",
+        "detail": "LIFO storage"
+      },
+      {
+        "id": "c",
+        "label": "Undo Trigger",
+        "detail": "Pop command"
+      },
+      {
+        "id": "d",
+        "label": "Document State",
+        "detail": "Restored version"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Push state"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "Pop state"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Revert to"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://xlinux.nist.gov/dads/",
+      "label": "Dictionary of Algorithms and Data Structures"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Undo Buffer for Document Editor, how does the stack solve the problem of accidental data loss?",
+      "options": [
+        "By storing snapshots in a last-in, first-out order to allow reverting recent actions.",
+        "By automatically saving every keystroke to a permanent database file.",
+        "By using a FIFO queue to process all user actions in chronological order.",
+        "By deleting the most recent action to save memory space."
+      ],
+      "answerIndex": 0,
+      "explanation": "The stack structure naturally supports undo functionality by providing access to the most recently added state first.",
+      "evidence": "A stack data structure manages the history of user actions by storing state snapshots in a last-in, first-out order, allowing the application to pop the most recent change to restore the previous document state."
+    },
+    {
+      "question": "In Undo Buffer for Document Editor, what is the primary trade-off when using a stack for history management?",
+      "options": [
+        "The stack requires constant re-indexing of all stored document states.",
+        "Memory usage increases with history size, requiring a maximum stack depth.",
+        "The stack cannot handle more than two undo operations at any time.",
+        "Undo operations become slower as the stack size decreases."
+      ],
+      "answerIndex": 1,
+      "explanation": "Because stacks store state snapshots, they consume memory; without a limit, they can cause memory exhaustion.",
+      "evidence": "Memory consumption grows linearly with the number of stored states; developers must implement a maximum stack depth to prevent memory exhaustion."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:28.616Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:14.862Z"
+}

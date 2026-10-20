@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_vpn_gateway",
+  "title": "Secure Hybrid Connectivity for Branch Offices",
+  "business": "Retail organizations requiring secure, encrypted communication between remote branch office local networks and centralized Azure Virtual Networks.",
+  "problem": "Unencrypted traffic over the public internet exposes sensitive inventory and point-of-sale data to interception during transit between the branch and the cloud.",
+  "solution": "Azure VPN Gateway establishes a secure, encrypted IPsec/IKE tunnel over the public internet, ensuring that data traversing between the on-premises branch router and the Azure Virtual Network is encapsulated and authenticated.",
+  "steps": [
+    "Create a Virtual Network Gateway in the Azure portal with the required VPN type and SKU.",
+    "Configure a Local Network Gateway to represent the branch office's public IP address and address space.",
+    "Define a Connection resource that links the Virtual Network Gateway to the Local Network Gateway using a shared key.",
+    "Configure the on-premises VPN device to match the IPsec/IKE parameters defined in the Azure connection."
+  ],
+  "outcome": "The branch office gains a persistent, encrypted tunnel to the Azure environment, allowing internal applications to communicate as if they were on the same private network.",
+  "limitation": "The VPN tunnel relies on the public internet, meaning throughput and latency are subject to variable internet congestion; verify performance using standard network diagnostic tools like ping or traceroute to monitor packet loss.",
+  "diagram": {
+    "kind": "flow",
+    "title": "VPN Gateway Connectivity Flow",
+    "description": "Shows the path of encrypted data between the branch office and Azure.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Branch Router",
+        "detail": "On-premises edge device"
+      },
+      {
+        "id": "b",
+        "label": "Public Internet",
+        "detail": "Unsecured transport layer"
+      },
+      {
+        "id": "c",
+        "label": "VPN Gateway",
+        "detail": "Azure entry point"
+      },
+      {
+        "id": "d",
+        "label": "VNet",
+        "detail": "Azure Virtual Network"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Encrypted IPsec Tunnel"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Encrypted IPsec Tunnel"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Internal Routing"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Secure Hybrid Connectivity for Branch Offices, why is an Azure VPN Gateway utilized?",
+      "options": [
+        "To encrypt data in transit over the public internet",
+        "To increase the physical speed of the internet connection",
+        "To replace the need for a local branch router",
+        "To provide a public-facing web server"
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution specifically addresses the risk of unencrypted traffic by using IPsec/IKE tunnels to encapsulate and secure data.",
+      "evidence": "Azure VPN Gateway establishes a secure, encrypted IPsec/IKE tunnel over the public internet, ensuring that data traversing between the on-premises branch router and the Azure Virtual Network is encapsulated and authenticated."
+    },
+    {
+      "question": "In Secure Hybrid Connectivity for Branch Offices, what is a primary limitation of the implementation?",
+      "options": [
+        "It requires a dedicated fiber line",
+        "It cannot connect to Windows servers",
+        "It is subject to public internet congestion",
+        "It does not support encryption"
+      ],
+      "answerIndex": 2,
+      "explanation": "Because the tunnel traverses the public internet, it is susceptible to the performance variations inherent in that medium.",
+      "evidence": "The VPN tunnel relies on the public internet, meaning throughput and latency are subject to variable internet congestion"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:56:08.829Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}

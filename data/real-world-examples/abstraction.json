@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "abstraction",
+  "title": "Unified Payment Gateway Abstraction",
+  "business": "A global e-commerce platform managing diverse regional payment providers.",
+  "problem": "The checkout service was tightly coupled to specific third-party API payloads, causing cascading failures whenever a provider updated their schema or deprecated a field, leading to high maintenance overhead.",
+  "solution": "By implementing an abstraction layer, the checkout service interacts only with a standardized internal interface. The implementation details of specific regional providers are encapsulated within concrete adapter classes, hiding the complexity of vendor-specific authentication and data formatting from the core business logic.",
+  "steps": [
+    "Define a common PaymentProcessor interface that specifies essential methods like authorize and capture.",
+    "Create concrete adapter classes for each regional provider that implement the PaymentProcessor interface.",
+    "Inject the appropriate adapter into the checkout service at runtime using a factory pattern.",
+    "Map vendor-specific error codes to a unified internal exception hierarchy within the adapters."
+  ],
+  "outcome": "The checkout service remains stable regardless of changes in external provider APIs, allowing developers to add new payment methods by simply creating a new adapter without modifying existing core logic.",
+  "limitation": "Abstraction can introduce an indirection overhead that makes debugging harder because the stack trace may point to the interface rather than the specific provider logic. To check for this, developers should monitor the depth of the call stack and ensure that logging is implemented within the concrete adapters to capture provider-specific state.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Payment Gateway Abstraction Flow",
+    "description": "This diagram shows how the Checkout Service interacts with the abstraction layer rather than the external providers.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Checkout Service",
+        "detail": "Core business logic"
+      },
+      {
+        "id": "b",
+        "label": "PaymentProcessor Interface",
+        "detail": "Contract definition"
+      },
+      {
+        "id": "c",
+        "label": "Stripe Adapter",
+        "detail": "Concrete implementation"
+      },
+      {
+        "id": "d",
+        "label": "PayPal Adapter",
+        "detail": "Concrete implementation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "calls"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "implements"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "implements"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Payment Gateway Abstraction, why is an abstraction layer used to handle third-party APIs?",
+      "options": [
+        "To eliminate the need for third-party payment providers entirely.",
+        "To prevent cascading failures caused by tight coupling to specific vendor API payloads.",
+        "To increase the speed of the payment processing network.",
+        "To reduce the cost of transaction fees charged by providers."
+      ],
+      "answerIndex": 1,
+      "explanation": "The problem states that tight coupling to specific payloads caused failures, and the solution addresses this by using an abstraction layer to decouple the service.",
+      "evidence": "The checkout service was tightly coupled to specific third-party API payloads, causing cascading failures whenever a provider updated their schema or deprecated a field, leading to high maintenance overhead."
+    },
+    {
+      "question": "In Unified Payment Gateway Abstraction, what is a primary trade-off of using this abstraction?",
+      "options": [
+        "It makes the code run significantly slower on all platforms.",
+        "It forces developers to use only one payment provider.",
+        "It introduces indirection that can make debugging more difficult.",
+        "It requires the removal of all error handling logic."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that abstraction introduces indirection which complicates debugging.",
+      "evidence": "Abstraction can introduce an indirection overhead that makes debugging harder because the stack trace may point to the interface rather than the specific provider logic."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:53:14.447Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

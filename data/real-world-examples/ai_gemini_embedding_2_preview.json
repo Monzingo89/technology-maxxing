@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_gemini_embedding_2_preview",
+  "title": "Unified Cross-Modal Retrieval for Media Archives",
+  "business": "Digital media archives and content management platforms that need to search across diverse file types.",
+  "problem": "Traditional search systems rely on metadata tags, which fail when users search for content using a different modality, such as finding a video clip by describing its visual content or searching for a specific audio segment using a text query.",
+  "solution": "Gemini Embedding 2 Preview enables the mapping of text, images, video, audio, and PDFs into a single, unified embedding space, allowing for semantic retrieval where a text query can successfully match non-text media assets.",
+  "steps": [
+    "Ingest diverse media assets including video, audio, and PDF documents into the storage system.",
+    "Pass each asset through the Gemini Embedding 2 Preview endpoint to generate high-dimensional vector representations.",
+    "Store the resulting vectors in a vector database to maintain the unified semantic space.",
+    "Convert user search queries into vectors using the same embedding model to perform similarity searches across the unified index."
+  ],
+  "outcome": "Users can perform intuitive, cross-modal searches, retrieving relevant video or audio segments based on descriptive text queries without relying on manual tagging.",
+  "limitation": "As a preview model, Gemini Embedding 2 Preview may have more restrictive rate limits compared to stable models, which should be monitored via API response headers.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Cross-Modal Embedding Pipeline",
+    "description": "Explains how various media inputs are transformed into a shared vector space for retrieval.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Media Assets",
+        "detail": "Video, Audio, PDF, Images"
+      },
+      {
+        "id": "b",
+        "label": "Gemini Embedding 2",
+        "detail": "Multimodal embedding endpoint"
+      },
+      {
+        "id": "c",
+        "label": "Vector Database",
+        "detail": "Unified semantic index"
+      },
+      {
+        "id": "d",
+        "label": "User Query",
+        "detail": "Text input"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "generates vector"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "stores embedding"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "embeds query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "queries similarity"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://ai.google.dev/gemini-api/docs/models?hl=en",
+      "label": "Models | Gemini API | Google AI for Developers"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Unified Cross-Modal Retrieval for Media Archives, what is the primary benefit of using the embedding model?",
+      "options": [
+        "It enables semantic retrieval across different media types using a unified embedding space.",
+        "It automatically generates metadata tags for all uploaded video files.",
+        "It replaces the need for a vector database by storing content directly.",
+        "It provides studio-grade voice fidelity for audio assets."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on the model's ability to map diverse inputs into a unified space to solve the problem of modality-mismatched searching.",
+      "evidence": "Gemini Embedding 2 Preview enables the mapping of text, images, video, audio, and PDFs into a single, unified embedding space, allowing for semantic retrieval where a text query can successfully match non-text media assets."
+    },
+    {
+      "question": "In Unified Cross-Modal Retrieval for Media Archives, what is a key operational consideration for the implementation?",
+      "options": [
+        "The model is deprecated and should not be used for new projects.",
+        "The model requires manual tagging for every input file.",
+        "The model may have more restrictive rate limits due to its preview status.",
+        "The model only supports text-to-text embedding tasks."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions the potential for restrictive rate limits for preview models.",
+      "evidence": "As a preview model, Gemini Embedding 2 Preview may have more restrictive rate limits compared to stable models, which should be monitored via API response headers."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:01:20.313Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:51.373Z"
+}

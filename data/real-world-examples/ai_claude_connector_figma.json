@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_figma",
+  "title": "Automating Design-to-Code Sync for FinTech Dashboards",
+  "business": "A mid-sized financial services firm maintaining a complex customer-facing dashboard.",
+  "problem": "Front-end engineers frequently struggle with design drift, where implemented UI components deviate from Figma design tokens and layout specifications, leading to inconsistent user experiences and manual reconciliation efforts.",
+  "solution": "By integrating the Figma MCP server, the engineering team enables Claude to directly query design tokens, component metadata, and layout structures. This allows the AI to generate code that strictly adheres to existing design patterns and Code Connect mappings, ensuring the implementation matches the design intent without manual translation.",
+  "steps": [
+    "Authenticate the Figma MCP server within the development environment using the provided connector URL.",
+    "Use get_code_connect_map to retrieve existing component definitions and their corresponding code implementations.",
+    "Invoke get_design_context on specific Figma frames to extract layout variables and styling properties.",
+    "Generate the initial UI component code using the retrieved design context and Code Connect mappings.",
+    "Utilize generate_diagram to visualize the component state transitions in FigJam for stakeholder review."
+  ],
+  "outcome": "The team achieves higher consistency between design and production code, reducing the time spent on styling corrections and alignment meetings.",
+  "limitation": "The connector relies on the accuracy of the Code Connect mappings; if the Figma design system is not correctly linked to the codebase, the generated code may reference non-existent or outdated component properties. Users should verify the output against the local component library to ensure compatibility.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Figma-to-Code Integration Workflow",
+    "description": "This diagram illustrates how the Figma MCP server bridges design context and engineering output.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Figma Design",
+        "detail": "Source of truth for UI components and tokens"
+      },
+      {
+        "id": "b",
+        "label": "Figma MCP Server",
+        "detail": "Middleware extracting design context"
+      },
+      {
+        "id": "c",
+        "label": "Claude Agent",
+        "detail": "Processes design data and Code Connect maps"
+      },
+      {
+        "id": "d",
+        "label": "Production Code",
+        "detail": "Final implementation aligned with design"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "extracts metadata"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "provides context"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "generates code"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/figma",
+      "label": "Figma connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automating Design-to-Code Sync for FinTech Dashboards, how does the Figma MCP server address design drift?",
+      "options": [
+        "By automatically updating the Figma design files whenever code is pushed to production.",
+        "By allowing Claude to query design tokens and component metadata to generate code that adheres to design patterns.",
+        "By replacing the need for front-end engineers to write CSS entirely.",
+        "By converting all Figma designs into static images for the engineering team."
+      ],
+      "answerIndex": 1,
+      "explanation": "The solution explains that the MCP server allows Claude to query design context and Code Connect mappings to ensure generated code matches design intent.",
+      "evidence": "By integrating the Figma MCP server, the engineering team enables Claude to directly query design tokens, component metadata, and layout structures. This allows the AI to generate code that strictly adheres to existing design patterns and Code Connect mappings"
+    },
+    {
+      "question": "In Automating Design-to-Code Sync for FinTech Dashboards, what is a primary limitation of the implementation?",
+      "options": [
+        "The connector cannot access Figma files unless they are public.",
+        "The generated code may reference non-existent properties if Code Connect mappings are incorrect or outdated.",
+        "The connector is limited to generating diagrams and cannot produce functional code.",
+        "The system requires manual approval for every single line of code generated."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that incorrect Code Connect mappings can lead to issues with generated code references.",
+      "evidence": "The connector relies on the accuracy of the Code Connect mappings; if the Figma design system is not correctly linked to the codebase, the generated code may reference non-existent or outdated component properties."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:00:33.098Z",
+  "sourceRetrievedAt": "2026-10-18T01:00:29.368Z"
+}

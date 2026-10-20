@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "aws_keyspaces",
+  "title": "Global IoT Sensor Telemetry Aggregation",
+  "business": "A smart-city infrastructure provider managing millions of connected traffic sensors that generate high-velocity time-series data.",
+  "problem": "The existing relational database infrastructure suffers from write-contention and schema rigidity when attempting to ingest concurrent telemetry streams from geographically dispersed sensors, leading to data loss during peak traffic hours.",
+  "solution": "Amazon Keyspaces provides a serverless, Apache Cassandra-compatible database that scales horizontally to handle high-volume write throughput. By utilizing a wide-column store, the system allows for flexible schema evolution as new sensor types are deployed, ensuring that incoming telemetry is persisted without the overhead of managing database clusters or manual sharding.",
+  "steps": [
+    "Define a keyspace with a replication strategy suited for the required regional availability.",
+    "Create tables using CQL, ensuring the partition key is chosen to distribute sensor data evenly across the cluster.",
+    "Configure the application driver to connect to the Keyspaces endpoint using standard Cassandra-compatible drivers.",
+    "Implement asynchronous write operations to handle the high-velocity ingestion of sensor telemetry.",
+    "Monitor table capacity and throughput using CloudWatch to ensure the provisioned or on-demand settings align with traffic patterns."
+  ],
+  "outcome": "The architecture achieves seamless ingestion of high-velocity telemetry data with consistent write performance, allowing the city to maintain real-time traffic monitoring without manual database scaling interventions.",
+  "limitation": "A primary limitation is the lack of support for complex multi-table joins or ACID transactions across multiple partitions. To verify this, developers should review the query execution plans and ensure data modeling follows denormalization patterns rather than relational normalization.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Telemetry Ingestion Flow",
+    "description": "This diagram illustrates the flow of sensor data from edge devices into the managed database environment.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "IoT Sensors",
+        "detail": "Source of high-velocity telemetry data"
+      },
+      {
+        "id": "b",
+        "label": "Application Layer",
+        "detail": "Processes and formats incoming data packets"
+      },
+      {
+        "id": "c",
+        "label": "Amazon Keyspaces",
+        "detail": "Managed Cassandra-compatible storage"
+      },
+      {
+        "id": "d",
+        "label": "Analytics Engine",
+        "detail": "Consumes stored data for traffic insights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "streams data"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "writes via CQL"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "queries telemetry"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://aws.amazon.com/products/",
+      "label": "AWS Cloud Services"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global IoT Sensor Telemetry Aggregation, what is the primary reason for adopting Amazon Keyspaces?",
+      "options": [
+        "To enable complex multi-table joins for relational reporting.",
+        "To handle high-volume write throughput and schema flexibility for sensor data.",
+        "To replace the need for an application layer entirely.",
+        "To reduce the cost of storage by using cold-tier archival."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies write-contention and schema rigidity as the main problems, which Keyspaces addresses through high-volume write throughput and flexible schema evolution.",
+      "evidence": "Amazon Keyspaces provides a serverless, Apache Cassandra-compatible database that scales horizontally to handle high-volume write throughput. By utilizing a wide-column store, the system allows for flexible schema evolution as new sensor types are deployed"
+    },
+    {
+      "question": "In Global IoT Sensor Telemetry Aggregation, what is a key limitation of the implementation?",
+      "options": [
+        "The inability to scale horizontally during peak traffic.",
+        "The requirement to manually shard the database cluster.",
+        "The lack of support for complex multi-table joins or cross-partition ACID transactions.",
+        "The inability to use standard Cassandra-compatible drivers."
+      ],
+      "answerIndex": 2,
+      "explanation": "The scenario explicitly notes that the service does not support complex joins or cross-partition transactions, requiring denormalization.",
+      "evidence": "A primary limitation is the lack of support for complex multi-table joins or ACID transactions across multiple partitions."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:54:09.110Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:51.008Z"
+}

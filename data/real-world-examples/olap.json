@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "olap",
+  "title": "Global Logistics Route Optimization Analysis",
+  "business": "A multinational logistics firm managing thousands of shipping routes across multiple continents.",
+  "problem": "The firm struggles with slow reporting when analysts attempt to aggregate historical shipping data across dimensions like region, carrier, and time, leading to delayed strategic decision-making.",
+  "solution": "By implementing an OLAP approach within a relational database, the firm can restructure historical data into a star schema, allowing the query planner to perform efficient parallel scans and complex aggregations over large datasets.",
+  "steps": [
+    "Define a central fact table containing granular shipping events and foreign keys to dimension tables.",
+    "Create dimension tables for geographic regions, carrier profiles, and time periods to normalize descriptive attributes.",
+    "Utilize parallel query execution settings to distribute the workload of large-scale scans across multiple CPU cores.",
+    "Implement materialized views to pre-calculate common aggregate metrics, reducing the need for repeated full-table scans.",
+    "Configure the query planner to prioritize statistics-based optimization for complex join operations."
+  ],
+  "outcome": "Analysts gain the ability to perform rapid, multi-dimensional trend analysis on historical logistics data without impacting the performance of operational transaction systems.",
+  "limitation": "The primary limitation is the storage overhead and maintenance complexity of materialized views; check for stale data by monitoring the last refresh timestamp against the underlying fact table updates.",
+  "diagram": {
+    "kind": "er",
+    "title": "Logistics Star Schema Relationship",
+    "description": "This diagram illustrates the relationship between the central fact table and supporting dimensions for analytical processing.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Fact_Shipments",
+        "detail": "Contains shipment metrics and foreign keys"
+      },
+      {
+        "id": "b",
+        "label": "Dim_Region",
+        "detail": "Geographic hierarchy data"
+      },
+      {
+        "id": "c",
+        "label": "Dim_Carrier",
+        "detail": "Carrier performance attributes"
+      },
+      {
+        "id": "d",
+        "label": "Dim_Time",
+        "detail": "Temporal breakdown"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "1:N link on RegionID"
+      },
+      {
+        "from": "a",
+        "to": "c",
+        "label": "1:N link on CarrierID"
+      },
+      {
+        "from": "a",
+        "to": "d",
+        "label": "1:N link on DateID"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://www.postgresql.org/docs/current/index.html",
+      "label": "PostgreSQL: Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Logistics Route Optimization Analysis, what is the primary reason for adopting an OLAP approach?",
+      "options": [
+        "To improve the speed of individual row-level transaction inserts.",
+        "To enable efficient aggregation and scanning of historical multidimensional data.",
+        "To replace the need for relational database management systems entirely.",
+        "To reduce the total number of tables required in the database schema."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies that the firm struggles with slow reporting when aggregating historical data, and OLAP is specifically designed to handle complex scans and aggregates over such data.",
+      "evidence": "By implementing an OLAP approach within a relational database, the firm can restructure historical data into a star schema, allowing the query planner to perform efficient parallel scans and complex aggregations over large datasets."
+    },
+    {
+      "question": "In Global Logistics Route Optimization Analysis, what is a key trade-off when using materialized views for performance?",
+      "options": [
+        "Materialized views always require manual SQL updates for every query.",
+        "They eliminate the need for any indexing on the underlying fact tables.",
+        "They introduce storage overhead and require monitoring for data staleness.",
+        "They prevent the database from using parallel query execution."
+      ],
+      "answerIndex": 2,
+      "explanation": "Materialized views store pre-computed results, which consumes extra space and introduces the risk of the data becoming outdated compared to the source tables.",
+      "evidence": "The primary limitation is the storage overhead and maintenance complexity of materialized views; check for stale data by monitoring the last refresh timestamp against the underlying fact table updates."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:07:45.533Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.736Z"
+}

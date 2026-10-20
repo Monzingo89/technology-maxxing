@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "topicId": "cyclomatic_complexity",
+  "title": "Optimizing Legacy Payment Routing Logic",
+  "business": "A high-frequency payment processing firm managing complex transaction routing rules.",
+  "problem": "The firm faces frequent regression errors in its core payment gateway because the routing logic has become a monolithic, deeply nested conditional structure that is impossible to test exhaustively.",
+  "solution": "By applying Cyclomatic Complexity analysis, the engineering team can quantify the number of linearly independent paths through the payment gateway code. This allows developers to identify 'hot spots' where complexity exceeds maintainable thresholds, signaling an urgent need for refactoring into smaller, single-responsibility functions.",
+  "steps": [
+    "Integrate a static analysis tool into the CI pipeline to calculate the cyclomatic complexity of every new pull request.",
+    "Define a maximum complexity threshold, such as 10, for any single function to ensure testability.",
+    "Identify functions exceeding the threshold and decompose them into smaller, modular helper functions.",
+    "Update unit test suites to ensure that every independent control-flow path identified by the complexity analysis is covered by at least one test case."
+  ],
+  "outcome": "The codebase becomes significantly more maintainable, with a measurable reduction in regression bugs as developers are forced to simplify logic before it becomes unmanageable.",
+  "limitation": "Cyclomatic complexity only measures the number of paths, not the cognitive load or the actual difficulty of the logic within those paths. A function might have low complexity but still be difficult to understand due to poor naming or obscure algorithms; developers should supplement this metric with regular peer code reviews.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Complexity Analysis Workflow",
+    "description": "This diagram illustrates the progression from code submission to complexity validation.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Code Submission",
+        "detail": "Developer pushes new routing logic"
+      },
+      {
+        "id": "b",
+        "label": "Static Analysis",
+        "detail": "Tool calculates independent paths"
+      },
+      {
+        "id": "c",
+        "label": "Threshold Check",
+        "detail": "Is complexity > 10?"
+      },
+      {
+        "id": "d",
+        "label": "Refactor",
+        "detail": "Decompose function into modules"
+      },
+      {
+        "id": "e",
+        "label": "Merge",
+        "detail": "Code accepted into main branch"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Trigger"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Evaluate"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "If Yes"
+      },
+      {
+        "from": "c",
+        "to": "e",
+        "label": "If No"
+      },
+      {
+        "from": "d",
+        "to": "b",
+        "label": "Re-verify"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://abseil.io/resources/swe-book",
+      "label": "Software Engineering at Google"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Optimizing Legacy Payment Routing Logic, why is cyclomatic complexity used?",
+      "options": [
+        "To identify code sections that require refactoring due to excessive control-flow paths.",
+        "To measure the execution speed of the payment gateway.",
+        "To determine the total number of developers needed for a project.",
+        "To calculate the financial cost of processing a single transaction."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the problem is a monolithic structure that is hard to test, and the solution uses this metric to identify hot spots for refactoring.",
+      "evidence": "This allows developers to identify 'hot spots' where complexity exceeds maintainable thresholds, signaling an urgent need for refactoring into smaller, single-responsibility functions."
+    },
+    {
+      "question": "In Optimizing Legacy Payment Routing Logic, what is a primary limitation of the metric?",
+      "options": [
+        "It cannot be automated in a CI pipeline.",
+        "It does not account for cognitive load or the inherent difficulty of the logic.",
+        "It always results in a lower number of unit tests.",
+        "It is only applicable to legacy payment systems."
+      ],
+      "answerIndex": 1,
+      "explanation": "The text explicitly states that the metric measures paths, not the actual difficulty or cognitive load of the code.",
+      "evidence": "Cyclomatic complexity only measures the number of paths, not the cognitive load or the actual difficulty of the logic within those paths."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:58:52.436Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:10.707Z"
+}

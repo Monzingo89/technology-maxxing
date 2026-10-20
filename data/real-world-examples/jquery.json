@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "jquery",
+  "title": "Dynamic Inventory Dashboard Updates",
+  "business": "Retailers managing high-frequency stock updates on legacy web portals.",
+  "problem": "Manual page refreshes cause significant user friction and data loss during inventory reconciliation.",
+  "solution": "Utilize jQuery's Ajax event handling to asynchronously fetch and inject updated inventory counts into the DOM without full page reloads.",
+  "steps": [
+    "Select the target container element using a CSS selector.",
+    "Trigger an asynchronous HTTP request using the $.ajax utility.",
+    "Register a success handler to process the returned JSON data.",
+    "Use DOM manipulation methods to update the specific text or attribute of the inventory display.",
+    "Apply visual feedback using animation methods to highlight the change."
+  ],
+  "outcome": "Users experience seamless, real-time inventory updates, reducing operational overhead and improving data accuracy.",
+  "limitation": "Over-reliance on DOM manipulation for large datasets can lead to memory bloat; monitor performance by checking the size of the matched element set.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Asynchronous Inventory Update Flow",
+    "description": "The flow illustrates how jQuery intercepts data requests to update the UI.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "User Action",
+        "detail": "Button click or timer event"
+      },
+      {
+        "id": "b",
+        "label": "jQuery Ajax",
+        "detail": "Asynchronous data request"
+      },
+      {
+        "id": "c",
+        "label": "Server",
+        "detail": "Inventory database"
+      },
+      {
+        "id": "d",
+        "label": "DOM Update",
+        "detail": "Injection of new stock values"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "triggers"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "requests"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "returns JSON"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "updates UI"
+      }
+    ]
+  },
+  "code": {
+    "language": "javascript",
+    "content": "$.ajax({ url: '/api/stock', success: function(data) { // Fetch data asynchronously\n  $('#stock-count').text(data.count); // Update the DOM element text\n  $('#stock-count').fadeIn(); // Animate the change for visibility\n}});",
+    "explanation": "This code demonstrates the core solution by fetching data from a server and updating the UI element identified by an ID without refreshing the page."
+  },
+  "sources": [
+    {
+      "url": "https://api.jquery.com/",
+      "label": "jQuery API Documentation"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Inventory Dashboard Updates, how does the technology resolve the identified issue?",
+      "options": [
+        "By forcing a full page reload every time inventory changes.",
+        "By using asynchronous Ajax requests to update the DOM without full page reloads.",
+        "By replacing the browser's rendering engine entirely.",
+        "By storing all inventory data in the user's local cache permanently."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies manual page refreshes as the problem, and the solution explicitly uses Ajax to update the DOM asynchronously.",
+      "evidence": "Utilize jQuery's Ajax event handling to asynchronously fetch and inject updated inventory counts into the DOM without full page reloads."
+    },
+    {
+      "question": "In Dynamic Inventory Dashboard Updates, what is a noted limitation of the implementation?",
+      "options": [
+        "The inability to use CSS selectors.",
+        "The requirement to use only synchronous requests.",
+        "Potential memory bloat when manipulating large datasets.",
+        "The lack of support for animation methods."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section warns that excessive DOM manipulation with large datasets can cause memory issues.",
+      "evidence": "Over-reliance on DOM manipulation for large datasets can lead to memory bloat; monitor performance by checking the size of the matched element set."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:05:15.106Z",
+  "sourceRetrievedAt": "2026-10-18T01:05:11.106Z"
+}

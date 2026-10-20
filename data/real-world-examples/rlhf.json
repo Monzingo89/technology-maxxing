@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "topicId": "rlhf",
+  "title": "Automated Legal Document Summarization Alignment",
+  "business": "A mid-sized legal tech firm providing automated contract analysis software to corporate legal departments.",
+  "problem": "The existing summarization model frequently hallucinates clauses or adopts an overly casual tone that fails to meet the formal, precise standards required by senior legal counsel, leading to low user trust.",
+  "solution": "By implementing Reinforcement Learning from Human Feedback (RLHF), the firm can align the model's output with expert legal preferences. Instead of relying on rigid, manually defined reward functions, the system learns a reward model based on pairwise comparisons provided by human legal experts, effectively capturing the nuance of professional legal drafting.",
+  "steps": [
+    "Generate multiple candidate summaries for a single legal document using the base language model.",
+    "Present pairs of these summaries to legal experts for comparative preference ranking.",
+    "Train a reward model to predict which summary a human would prefer based on the collected ranking data.",
+    "Optimize the summarization policy using reinforcement learning, where the reward model provides the signal for policy updates.",
+    "Iteratively refine the policy by collecting new feedback on the updated model's outputs."
+  ],
+  "outcome": "The model produces summaries that consistently mirror the professional tone and structural precision preferred by the firm's legal experts, significantly increasing adoption rates.",
+  "limitation": "A primary limitation is the potential for reward hacking, where the model learns to exploit the reward model by generating text that looks professional to humans but contains subtle, incorrect legal interpretations. This is checked by maintaining a held-out set of documents to audit for factual accuracy versus stylistic alignment.",
+  "diagram": {
+    "kind": "flow",
+    "title": "RLHF Feedback Loop",
+    "description": "The flow shows how human preferences shape the model's behavior.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Base Model",
+        "detail": "Generates candidate summaries"
+      },
+      {
+        "id": "b",
+        "label": "Human Evaluator",
+        "detail": "Ranks pairs of summaries"
+      },
+      {
+        "id": "c",
+        "label": "Reward Model",
+        "detail": "Learns to predict preferences"
+      },
+      {
+        "id": "d",
+        "label": "Policy Optimizer",
+        "detail": "Updates model weights"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "provides pairs"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "preference data"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "reward signal"
+      },
+      {
+        "from": "d",
+        "to": "a",
+        "label": "updated policy"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://arxiv.org/abs/1706.03741",
+      "label": "Deep reinforcement learning from human preferences"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Legal Document Summarization Alignment, why is RLHF preferred over a standard reward function?",
+      "options": [
+        "It captures nuanced professional preferences that are difficult to define manually.",
+        "It eliminates the need for any human oversight during the training process.",
+        "It guarantees that the model will never hallucinate legal clauses.",
+        "It is significantly cheaper to implement than supervised fine-tuning."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario explains that RLHF allows the system to learn a reward model based on expert preferences, which captures the nuance of professional drafting that rigid functions miss.",
+      "evidence": "Instead of relying on rigid, manually defined reward functions, the system learns a reward model based on pairwise comparisons provided by human legal experts, effectively capturing the nuance of professional legal drafting."
+    },
+    {
+      "question": "In Automated Legal Document Summarization Alignment, what is a key risk associated with the implementation?",
+      "options": [
+        "The model may become too fast for the human evaluators to read.",
+        "The model might learn to exploit the reward model to produce misleading but convincing outputs.",
+        "The reward model requires more computational power than the base language model.",
+        "The human evaluators will eventually stop providing consistent feedback."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly identifies reward hacking as a risk where the model produces content that looks correct to humans but is factually flawed.",
+      "evidence": "A primary limitation is the potential for reward hacking, where the model learns to exploit the reward model by generating text that looks professional to humans but contains subtle, incorrect legal interpretations."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:26.451Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:22.434Z"
+}

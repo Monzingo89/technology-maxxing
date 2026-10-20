@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_storage",
+  "title": "Global Media Asset Distribution Strategy",
+  "business": "A global digital media agency managing high-resolution assets for international clients.",
+  "problem": "High latency and inconsistent access speeds for remote teams accessing centralized media files from a single regional location.",
+  "solution": "Utilizing Google Cloud Storage with multi-region placement to store objects in buckets that replicate data across multiple geographic locations, ensuring low-latency access for distributed teams.",
+  "steps": [
+    "Create a storage bucket with a multi-region location setting to enable automatic geographic redundancy.",
+    "Define appropriate storage classes based on access frequency to manage lifecycle costs effectively.",
+    "Configure Identity and Access Management (IAM) policies to grant granular access to regional team members.",
+    "Upload media assets to the bucket, allowing the platform to handle object distribution across the selected multi-region."
+  ],
+  "outcome": "Improved asset retrieval performance for global users and increased data durability through geographic distribution.",
+  "limitation": "Multi-region buckets incur higher costs for data access and storage compared to single-region buckets; verify cost-efficiency by monitoring access patterns via Cloud Billing reports.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Multi-Region Asset Flow",
+    "description": "Shows how media assets are stored and accessed across regions.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Media Source",
+        "detail": "Local workstation"
+      },
+      {
+        "id": "b",
+        "label": "GCS Bucket",
+        "detail": "Multi-region storage"
+      },
+      {
+        "id": "c",
+        "label": "Region 1",
+        "detail": "US-based team"
+      },
+      {
+        "id": "d",
+        "label": "Region 2",
+        "detail": "EU-based team"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Upload"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Replicate"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "Replicate"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Media Asset Distribution Strategy, what is the primary benefit of using multi-region placement?",
+      "options": [
+        "Reducing latency for globally distributed teams",
+        "Eliminating the need for IAM policies",
+        "Lowering the cost of data storage to zero",
+        "Increasing the complexity of asset management"
+      ],
+      "answerIndex": 0,
+      "explanation": "Multi-region placement replicates data across multiple geographic locations, which directly addresses the problem of high latency for remote teams.",
+      "evidence": "Utilizing Google Cloud Storage with multi-region placement to store objects in buckets that replicate data across multiple geographic locations, ensuring low-latency access for distributed teams."
+    },
+    {
+      "question": "In Global Media Asset Distribution Strategy, what is a key limitation of using multi-region buckets?",
+      "options": [
+        "It prevents the use of IAM policies",
+        "It requires manual synchronization of files",
+        "It incurs higher costs for storage and access",
+        "It limits the bucket to a single geographic region"
+      ],
+      "answerIndex": 2,
+      "explanation": "Multi-region buckets are more expensive than single-region buckets, requiring careful monitoring of access patterns.",
+      "evidence": "Multi-region buckets incur higher costs for data access and storage compared to single-region buckets; verify cost-efficiency by monitoring access patterns via Cloud Billing reports."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:20.164Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

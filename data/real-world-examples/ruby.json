@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "ruby",
+  "title": "Automated Logistics Manifest Processing",
+  "business": "Logistics firms managing high-volume, multi-vendor shipping manifests.",
+  "problem": "Manual reconciliation of vendor manifests against internal inventory records is error-prone and slows down warehouse throughput.",
+  "solution": "Ruby's expressive syntax and powerful array manipulation capabilities allow developers to quickly build scripts that ingest vendor data, perform set operations to identify missing items, and generate clean reconciliation reports.",
+  "steps": [
+    "Define a class to encapsulate manifest data and vendor-specific parsing logic.",
+    "Utilize Ruby's array subtraction operator to compare incoming vendor manifests against current warehouse inventory.",
+    "Implement data transformation methods to standardize vendor-provided item names.",
+    "Execute the reconciliation script to output a list of discrepancies for warehouse staff."
+  ],
+  "outcome": "Increased accuracy in inventory tracking and reduced time spent on manual data verification.",
+  "limitation": "Ruby's dynamic nature can lead to runtime errors if input data structures are inconsistent; developers must check for nil values or unexpected types during the parsing phase.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Manifest Reconciliation Workflow",
+    "description": "The flow shows how raw vendor data is processed into actionable inventory insights.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Vendor Data",
+        "detail": "Raw input file"
+      },
+      {
+        "id": "b",
+        "label": "Ruby Script",
+        "detail": "Parsing and logic layer"
+      },
+      {
+        "id": "c",
+        "label": "Inventory DB",
+        "detail": "Current stock records"
+      },
+      {
+        "id": "d",
+        "label": "Discrepancy Report",
+        "detail": "Final output for staff"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "ingests"
+      },
+      {
+        "from": "c",
+        "to": "b",
+        "label": "compares"
+      },
+      {
+        "from": "b",
+        "to": "d",
+        "label": "generates"
+      }
+    ]
+  },
+  "code": {
+    "language": "ruby",
+    "content": "# Standardize incoming vendor items\nvendor_items = [\"Box-A\", \"Box-B\", \"Box-C\"]\nwarehouse_stock = [\"Box-A\", \"Box-C\"]\n\n# Identify missing items using array subtraction\nmissing = vendor_items - warehouse_stock\n\n# Output results for reconciliation\nputs \"Missing items: #{missing.join(', ')}\"",
+    "explanation": "This code demonstrates the use of Ruby's array subtraction operator to identify discrepancies between vendor manifests and warehouse stock, directly addressing the reconciliation problem."
+  },
+  "sources": [
+    {
+      "url": "https://www.ruby-lang.org/en/",
+      "label": "Ruby Programming Language"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Logistics Manifest Processing, what is the primary benefit of using Ruby for this task?",
+      "options": [
+        "It eliminates the need for a database entirely.",
+        "It provides expressive syntax and array manipulation to quickly identify missing items.",
+        "It automatically fixes errors in vendor data files.",
+        "It guarantees the fastest execution speed of any programming language."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario highlights that Ruby's expressive syntax and array capabilities allow for quick identification of missing items during reconciliation.",
+      "evidence": "Ruby's expressive syntax and powerful array manipulation capabilities allow developers to quickly build scripts that ingest vendor data, perform set operations to identify missing items, and generate clean reconciliation reports."
+    },
+    {
+      "question": "In Automated Logistics Manifest Processing, what is a key limitation to consider during implementation?",
+      "options": [
+        "Ruby cannot handle large text files.",
+        "The language is too complex for beginners to learn.",
+        "Dynamic typing requires developers to check for unexpected data types or nil values.",
+        "Ruby lacks a community to provide support for logistics libraries."
+      ],
+      "answerIndex": 2,
+      "explanation": "Because Ruby is a dynamic language, it does not enforce strict types at compile time, meaning developers must handle potential data inconsistencies at runtime.",
+      "evidence": "Ruby's dynamic nature can lead to runtime errors if input data structures are inconsistent; developers must check for nil values or unexpected types during the parsing phase."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:10:30.090Z",
+  "sourceRetrievedAt": "2026-10-18T01:10:26.654Z"
+}

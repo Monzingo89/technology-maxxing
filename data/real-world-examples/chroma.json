@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "topicId": "chroma",
+  "title": "Regulatory Compliance Document Retrieval for Global Logistics",
+  "business": "A global logistics firm managing thousands of unique customs clearance documents across multiple international jurisdictions.",
+  "problem": "The firm struggles with manual document review, where staff must cross-reference specific regional trade regulations against shipment manifests, leading to high latency and potential non-compliance fines.",
+  "solution": "By utilizing Chroma, the firm stores shipment manifests and regulatory texts as embeddings. Metadata filtering allows the system to restrict search results to specific countries and document types, ensuring that only relevant regulatory clauses are retrieved during the automated clearance process.",
+  "steps": [
+    "Initialize a Chroma collection to act as the central repository for regulatory text chunks and shipment metadata.",
+    "Generate embeddings for regulatory documents using a preferred model and store them alongside metadata fields like country_code and document_type.",
+    "Implement a query interface that accepts a shipment manifest and extracts the destination country to build a metadata filter.",
+    "Execute a similarity search combined with a metadata filter to retrieve only the pertinent regulatory clauses for the specific shipment context."
+  ],
+  "outcome": "The firm achieves faster, more accurate document verification by programmatically narrowing the search space to relevant regional regulations, significantly reducing the cognitive load on compliance officers.",
+  "limitation": "A primary limitation is the potential for metadata drift, where documents are uploaded with incorrect or missing tags. To verify this, developers must implement a validation layer that checks for mandatory metadata fields before the document is committed to the collection.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Regulatory Retrieval Workflow",
+    "description": "This diagram illustrates how shipment data triggers a filtered search against the regulatory database.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Shipment Manifest",
+        "detail": "Input source containing destination and cargo data"
+      },
+      {
+        "id": "b",
+        "label": "Metadata Filter",
+        "detail": "Logic to extract country_code from manifest"
+      },
+      {
+        "id": "c",
+        "label": "Chroma Collection",
+        "detail": "Stores embeddings and regulatory metadata"
+      },
+      {
+        "id": "d",
+        "label": "Compliance Result",
+        "detail": "Filtered list of relevant regulatory clauses"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Extracts destination"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Applies filter criteria"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Returns filtered documents"
+      }
+    ]
+  },
+  "code": {
+    "language": "python",
+    "content": "collection.query(query_embeddings=shipment_embedding, where={'country_code': 'DE'}, n_results=5) # Filter by country metadata",
+    "explanation": "This code demonstrates using metadata filtering to restrict the search to a specific country, mapping directly to the solution of narrowing the search space for regulatory compliance."
+  },
+  "sources": [
+    {
+      "url": "https://docs.trychroma.com/docs/overview/introduction",
+      "label": "Introduction - Chroma Docs"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Regulatory Compliance Document Retrieval for Global Logistics, what is the primary benefit of using metadata filtering?",
+      "options": [
+        "It eliminates the need for embedding models entirely.",
+        "It restricts search results to relevant regional regulations.",
+        "It automatically generates new regulatory documents.",
+        "It increases the storage capacity of the database."
+      ],
+      "answerIndex": 1,
+      "explanation": "Metadata filtering allows the system to narrow the search scope to specific regions, which is essential for compliance accuracy.",
+      "evidence": "Metadata filtering allows the system to restrict search results to specific countries and document types, ensuring that only relevant regulatory clauses are retrieved during the automated clearance process."
+    },
+    {
+      "question": "In Regulatory Compliance Document Retrieval for Global Logistics, what is a potential limitation of the implementation?",
+      "options": [
+        "The system cannot store images.",
+        "The system requires manual indexing for every query.",
+        "Metadata drift where tags are incorrect or missing.",
+        "Chroma does not support metadata filtering."
+      ],
+      "answerIndex": 2,
+      "explanation": "The text identifies metadata drift as a risk that requires a validation layer to ensure data integrity.",
+      "evidence": "A primary limitation is the potential for metadata drift, where documents are uploaded with incorrect or missing tags."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:57:16.823Z",
+  "sourceRetrievedAt": "2026-10-18T00:57:12.843Z"
+}

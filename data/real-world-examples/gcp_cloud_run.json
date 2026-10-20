@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_run",
+  "title": "Event-Driven Inventory Processing",
+  "business": "Retailers managing fluctuating inventory updates from multiple warehouse sensors.",
+  "problem": "Maintaining a dedicated server cluster for sporadic, bursty inventory data leads to high idle costs and complex infrastructure management.",
+  "solution": "Cloud Run provides a fully managed serverless platform that executes request-driven containers, scaling automatically to zero when no inventory events occur.",
+  "steps": [
+    "Package the inventory processing logic into a portable container image.",
+    "Push the container image to the Artifact Registry.",
+    "Deploy the container to Cloud Run, configuring it to trigger on incoming HTTP requests.",
+    "Set concurrency limits to handle multiple simultaneous inventory updates per instance.",
+    "Monitor execution logs to verify that instances scale down during periods of inactivity."
+  ],
+  "outcome": "The business achieves a cost-efficient architecture where compute resources are consumed only during active inventory processing cycles.",
+  "limitation": "Cold starts may introduce latency for the first request after a period of inactivity; this can be checked by monitoring request latency metrics during initial traffic spikes.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Inventory Event Flow",
+    "description": "Shows how inventory data triggers the serverless container.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Warehouse Sensor",
+        "detail": "Source of inventory events"
+      },
+      {
+        "id": "b",
+        "label": "HTTP Request",
+        "detail": "Trigger mechanism"
+      },
+      {
+        "id": "c",
+        "label": "Cloud Run",
+        "detail": "Serverless container execution"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Inventory state storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "emits"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "invokes"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "updates"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Event-Driven Inventory Processing, why is Cloud Run chosen?",
+      "options": [
+        "To eliminate idle costs by scaling to zero when no events occur.",
+        "To provide a fixed-capacity server cluster for steady traffic.",
+        "To manually manage underlying Kubernetes nodes for inventory.",
+        "To avoid using containerized applications for data processing."
+      ],
+      "answerIndex": 0,
+      "explanation": "Cloud Run allows the application to scale based on demand, which is ideal for sporadic inventory updates.",
+      "evidence": "Cloud Run provides a fully managed serverless platform that executes request-driven containers, scaling automatically to zero when no inventory events occur."
+    },
+    {
+      "question": "In Event-Driven Inventory Processing, what is a primary operational tradeoff?",
+      "options": [
+        "The requirement to always run at least ten instances.",
+        "The potential for cold start latency after periods of inactivity.",
+        "The inability to use container images for deployment.",
+        "The necessity of manual scaling for every incoming request."
+      ],
+      "answerIndex": 1,
+      "explanation": "Serverless platforms often experience cold starts when scaling from zero, which is a known limitation.",
+      "evidence": "Cold starts may introduce latency for the first request after a period of inactivity; this can be checked by monitoring request latency metrics during initial traffic spikes."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:15.451Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

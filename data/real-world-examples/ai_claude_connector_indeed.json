@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "topicId": "ai_claude_connector_indeed",
+  "title": "Automated Talent Acquisition Research for Boutique Consultancies",
+  "business": "Boutique recruitment agencies and specialized talent acquisition teams.",
+  "problem": "Recruiters often waste significant time manually navigating job boards to identify market trends, compensation benchmarks, and competitor hiring patterns, leading to fragmented research and missed opportunities for candidate sourcing.",
+  "solution": "The Indeed connector for Claude enables recruiters to programmatically query the Indeed job database directly within the Claude interface. By utilizing the search_jobs and get_job_details tools, recruiters can synthesize job requirements and market availability into structured summaries without leaving their workspace.",
+  "steps": [
+    "Configure the Indeed MCP connector within the Claude environment to authorize secure access to the job database.",
+    "Execute search_jobs queries using specific parameters like job title, location, and keywords to identify relevant listings.",
+    "Invoke get_job_details for selected job IDs to extract granular requirements and application links.",
+    "Instruct Claude to analyze the retrieved job data to identify common skills or experience trends across the identified roles."
+  ],
+  "outcome": "Recruiters achieve a more cohesive and efficient research workflow, allowing them to quickly pivot their sourcing strategy based on real-time market data retrieved through the connector.",
+  "limitation": "The connector relies on the availability and structure of data provided by Indeed; if a job listing is removed or the API schema changes, the tool may return empty results or errors. Users should verify the current status of the job link by checking the returned URL directly.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Indeed Connector Research Workflow",
+    "description": "This diagram illustrates the flow of data from the Indeed database through the Claude connector to the recruiter.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Recruiter",
+        "detail": "Initiates search queries"
+      },
+      {
+        "id": "b",
+        "label": "Claude Interface",
+        "detail": "Processes natural language requests"
+      },
+      {
+        "id": "c",
+        "label": "Indeed Connector",
+        "detail": "Executes search_jobs and get_job_details"
+      },
+      {
+        "id": "d",
+        "label": "Indeed Database",
+        "detail": "Source of job listings"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Sends query"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Calls MCP tools"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Fetches data"
+      },
+      {
+        "from": "d",
+        "to": "c",
+        "label": "Returns job metadata"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://claude.com/marketplace/connectors/indeed",
+      "label": "Indeed connector | Claude by Anthropic"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Talent Acquisition Research for Boutique Consultancies, how does the integration address the problem of fragmented research?",
+      "options": [
+        "By automating the synthesis of job requirements and market availability into summaries.",
+        "By automatically applying to jobs on behalf of the recruiter.",
+        "By replacing the need for human recruiters entirely.",
+        "By providing direct access to internal company payroll data."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution section explicitly states that the connector allows recruiters to synthesize job requirements into summaries, directly addressing the fragmented research problem.",
+      "evidence": "By utilizing the search_jobs and get_job_details tools, recruiters can synthesize job requirements and market availability into structured summaries without leaving their workspace."
+    },
+    {
+      "question": "In Automated Talent Acquisition Research for Boutique Consultancies, what is a primary limitation of the implementation?",
+      "options": [
+        "The connector cannot be used on weekends.",
+        "The tool requires a paid subscription to Indeed to function.",
+        "The connector relies on the availability and structure of data provided by Indeed.",
+        "Claude cannot process the data returned by the connector."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section highlights that the tool's effectiveness is dependent on the external data provided by Indeed.",
+      "evidence": "The connector relies on the availability and structure of data provided by Indeed; if a job listing is removed or the API schema changes, the tool may return empty results or errors."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:04:57.873Z",
+  "sourceRetrievedAt": "2026-10-18T01:04:53.495Z"
+}

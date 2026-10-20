@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "topicId": "gcp_persistent_disk",
+  "title": "Persistent Disk for Stateful Inventory Management",
+  "business": "Retailers managing high-volume inventory databases that require consistent, durable storage attached to virtual machines.",
+  "problem": "Standard ephemeral storage attached to virtual machines is lost when the instance is stopped or terminated, leading to potential data loss for stateful inventory applications.",
+  "solution": "Google Persistent Disk provides durable network block storage that persists independently of the Compute Engine instance lifecycle, ensuring data remains intact even if the virtual machine is restarted or deleted.",
+  "steps": [
+    "Provision a Compute Engine instance within the desired zone.",
+    "Create a Persistent Disk resource specifying the required size and disk type.",
+    "Attach the Persistent Disk to the running Compute Engine instance.",
+    "Format and mount the disk within the guest operating system to enable file system access.",
+    "Configure the application to store inventory database files on the mounted persistent volume."
+  ],
+  "outcome": "Inventory data remains durable and accessible across instance reboots, allowing for reliable stateful application management.",
+  "limitation": "Persistent Disks are zonal resources, meaning they cannot be attached to instances in different zones; check disk availability by verifying the zone property in the resource metadata.",
+  "diagram": {
+    "kind": "er",
+    "title": "Persistent Disk Attachment Architecture",
+    "description": "Shows the relationship between the compute resource and the durable storage layer.",
+    "nodes": [
+      {
+        "id": "vm",
+        "label": "Compute Engine Instance",
+        "detail": "Virtual machine running the application"
+      },
+      {
+        "id": "pd",
+        "label": "Persistent Disk",
+        "detail": "Durable network block storage"
+      },
+      {
+        "id": "os",
+        "label": "Guest OS",
+        "detail": "Mount point for the disk"
+      }
+    ],
+    "edges": [
+      {
+        "from": "pd",
+        "to": "vm",
+        "label": "attached_to (1:1)"
+      },
+      {
+        "from": "vm",
+        "to": "os",
+        "label": "manages_mount (1:1)"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product List"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Persistent Disk for Stateful Inventory Management, why is Persistent Disk used instead of ephemeral storage?",
+      "options": [
+        "It provides durable network block storage that persists independently of the Compute Engine instance lifecycle.",
+        "It automatically scales the CPU of the virtual machine.",
+        "It is required for all web-based applications.",
+        "It eliminates the need for a database management system."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario highlights that ephemeral storage is lost upon instance termination, whereas Persistent Disk ensures data remains intact.",
+      "evidence": "Google Persistent Disk provides durable network block storage that persists independently of the Compute Engine instance lifecycle, ensuring data remains intact even if the virtual machine is restarted or deleted."
+    },
+    {
+      "question": "In Persistent Disk for Stateful Inventory Management, what is a key limitation of the implementation?",
+      "options": [
+        "The disk cannot be resized after creation.",
+        "Persistent Disks are zonal resources and cannot be attached to instances in different zones.",
+        "The disk is only compatible with specific Linux distributions.",
+        "Data is automatically replicated across all global regions."
+      ],
+      "answerIndex": 1,
+      "explanation": "The documentation notes that Persistent Disks are bound to a specific zone, which restricts cross-zone attachment.",
+      "evidence": "Persistent Disks are zonal resources, meaning they cannot be attached to instances in different zones; check disk availability by verifying the zone property in the resource metadata."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:31.246Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "gcp_eventarc",
+  "title": "Automated Inventory Synchronization for Retail Logistics",
+  "business": "Retailers managing distributed warehouse systems who need to keep inventory databases synchronized across multiple regional platforms.",
+  "problem": "Manual polling of inventory databases creates significant latency and unnecessary compute costs, leading to stock discrepancies during high-traffic periods.",
+  "solution": "Eventarc enables an event-driven architecture by routing inventory update events from source systems to a serverless destination, ensuring near real-time synchronization without continuous polling.",
+  "steps": [
+    "Identify the inventory update event source within the existing cloud infrastructure.",
+    "Configure an Eventarc trigger to listen for specific event types from the source.",
+    "Define the destination service, such as a Cloud Run application, to process the incoming event.",
+    "Grant the Eventarc service account the necessary IAM permissions to invoke the destination service.",
+    "Deploy the trigger to begin routing events asynchronously to the processing logic."
+  ],
+  "outcome": "Inventory systems achieve consistent state across regions with reduced compute overhead and improved responsiveness to stock changes.",
+  "limitation": "Eventarc relies on asynchronous delivery, which means events may occasionally arrive out of order or require idempotency logic in the destination service to prevent duplicate processing; verify this by checking event timestamps and unique transaction IDs.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Event-Driven Inventory Sync",
+    "description": "Shows the flow of inventory data from the source to the destination via Eventarc.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Inventory Source",
+        "detail": "System generating inventory update events"
+      },
+      {
+        "id": "b",
+        "label": "Eventarc Trigger",
+        "detail": "Filters and routes events"
+      },
+      {
+        "id": "c",
+        "label": "Cloud Run Service",
+        "detail": "Processes inventory update logic"
+      },
+      {
+        "id": "d",
+        "label": "Database",
+        "detail": "Final state storage"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "emits event"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "routes payload"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "updates record"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Sekilas tentang produk Google Cloud"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Automated Inventory Synchronization for Retail Logistics, why is Eventarc preferred over manual polling?",
+      "options": [
+        "It eliminates the need for compute resources entirely.",
+        "It reduces latency and compute costs by enabling event-driven synchronization.",
+        "It forces all inventory updates to be processed in a strict sequential order.",
+        "It provides a built-in database for storing inventory records."
+      ],
+      "answerIndex": 1,
+      "explanation": "The scenario identifies manual polling as a source of latency and cost, which Eventarc addresses by enabling event-driven architecture.",
+      "evidence": "Eventarc enables an event-driven architecture by routing inventory update events from source systems to a serverless destination, ensuring near real-time synchronization without continuous polling."
+    },
+    {
+      "question": "In Automated Inventory Synchronization for Retail Logistics, what is a key consideration regarding event delivery?",
+      "options": [
+        "Events are always delivered in the exact order they were created.",
+        "The system requires manual intervention for every event processed.",
+        "Asynchronous delivery may lead to out-of-order events, requiring idempotency logic.",
+        "Eventarc guarantees that no events will ever be duplicated."
+      ],
+      "answerIndex": 2,
+      "explanation": "The limitation section explicitly mentions that asynchronous delivery can result in out-of-order events, necessitating idempotency.",
+      "evidence": "Eventarc relies on asynchronous delivery, which means events may occasionally arrive out of order or require idempotency logic in the destination service to prevent duplicate processing"
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:03.255Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

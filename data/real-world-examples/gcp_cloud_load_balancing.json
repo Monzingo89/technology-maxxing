@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "topicId": "gcp_cloud_load_balancing",
+  "title": "Global Traffic Distribution for E-commerce Resilience",
+  "business": "A global retail firm operating a web-based storefront across multiple continents needs to ensure high availability for its customers.",
+  "problem": "The firm faces regional outages and traffic spikes that cause downtime when users are routed to a single, overloaded data center.",
+  "solution": "Google Cloud Load Balancing provides managed global traffic distribution, allowing the firm to route users to the nearest healthy backend instance regardless of their geographic location.",
+  "steps": [
+    "Define a Global Forwarding Rule to direct incoming traffic to a specific target proxy.",
+    "Configure a URL Map to route requests based on hostnames and path rules to backend services.",
+    "Create Backend Services that group regional instance groups or serverless endpoints.",
+    "Set up Health Checks to monitor the status of backend instances and remove unhealthy ones from the rotation."
+  ],
+  "outcome": "Improved service reliability and reduced latency by ensuring traffic is always served by the closest available healthy infrastructure.",
+  "limitation": "Global load balancers require careful configuration of health checks; if health checks are too aggressive, they may cause flapping where healthy instances are incorrectly marked as down. Check this by monitoring the 'Health Check Status' metrics in the monitoring console.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Global Load Balancing Traffic Flow",
+    "description": "Traffic enters through a global entry point and is distributed to regional backends.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Global user"
+      },
+      {
+        "id": "b",
+        "label": "Global Forwarding Rule",
+        "detail": "Entry point"
+      },
+      {
+        "id": "c",
+        "label": "URL Map",
+        "detail": "Routing logic"
+      },
+      {
+        "id": "d",
+        "label": "Backend Service",
+        "detail": "Regional group"
+      },
+      {
+        "id": "e",
+        "label": "Instances",
+        "detail": "Compute resources"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "Request"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "Directs"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "Routes"
+      },
+      {
+        "from": "d",
+        "to": "e",
+        "label": "Distributes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://docs.cloud.google.com/docs/product-list",
+      "label": "Google Cloud Product List"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Global Traffic Distribution for E-commerce Resilience, what is the primary purpose of using Google Cloud Load Balancing?",
+      "options": [
+        "To provide managed global traffic distribution and ensure high availability.",
+        "To replace the need for regional instance groups entirely.",
+        "To automatically lower the cost of compute resources.",
+        "To act as a primary database for retail transactions."
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that the firm needs to route users to the nearest healthy backend to avoid regional outages, which is the core function of the load balancer.",
+      "evidence": "Google Cloud Load Balancing provides managed global traffic distribution, allowing the firm to route users to the nearest healthy backend instance regardless of their geographic location."
+    },
+    {
+      "question": "In Global Traffic Distribution for E-commerce Resilience, what is a potential limitation of the implementation?",
+      "options": [
+        "The load balancer cannot handle traffic from multiple continents.",
+        "Aggressive health checks may cause healthy instances to be marked as down.",
+        "URL maps are not supported for global traffic routing.",
+        "Backend services must be located in the same region as the user."
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly warns that overly aggressive health checks can lead to incorrect status reporting, known as flapping.",
+      "evidence": "if health checks are too aggressive, they may cause flapping where healthy instances are incorrectly marked as down."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:02:09.190Z",
+  "sourceRetrievedAt": "2026-10-18T00:58:04.723Z"
+}

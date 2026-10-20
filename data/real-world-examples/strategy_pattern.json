@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "topicId": "strategy_pattern",
+  "title": "Dynamic Logistics Routing Engine",
+  "business": "Global logistics firms managing complex, multi-modal freight delivery networks.",
+  "problem": "Hard-coded routing logic creates rigid systems where adding new carrier-specific calculation methods requires modifying core business logic, leading to high regression risks and deployment bottlenecks.",
+  "solution": "The Strategy Pattern encapsulates interchangeable routing algorithms behind a common interface, allowing the system to swap calculation logic at runtime without altering the client code that requests the route.",
+  "steps": [
+    "Define a common RoutingStrategy interface with an execute method.",
+    "Implement concrete classes for specific algorithms like AirFreight, SeaFreight, and GroundTransport.",
+    "Configure a context object to hold a reference to a RoutingStrategy implementation.",
+    "Inject the required strategy into the context based on user-selected criteria.",
+    "Execute the strategy through the context interface to retrieve the calculated route."
+  ],
+  "outcome": "Improved system maintainability and modularity, enabling developers to introduce new routing algorithms as independent components without risking the stability of existing delivery logic.",
+  "limitation": "The primary limitation is the increased complexity caused by the proliferation of strategy classes; developers must monitor the number of objects created to ensure the system remains navigable and check for redundant logic by reviewing the strategy interface implementation count.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Strategy Pattern Routing Flow",
+    "description": "Shows how the client interacts with the context to trigger a specific strategy.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Client",
+        "detail": "Requests a route calculation"
+      },
+      {
+        "id": "b",
+        "label": "RoutingContext",
+        "detail": "Holds the current strategy"
+      },
+      {
+        "id": "c",
+        "label": "RoutingStrategy",
+        "detail": "Interface defining the execute method"
+      },
+      {
+        "id": "d",
+        "label": "ConcreteStrategy",
+        "detail": "Specific algorithm implementation"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "sets strategy"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "calls interface"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "implements"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://martinfowler.com/eaaCatalog/",
+      "label": "Catalog of Patterns of Enterprise Application Architecture"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In Dynamic Logistics Routing Engine, what is the primary problem addressed by the Strategy Pattern?",
+      "options": [
+        "Hard-coded routing logic causing deployment bottlenecks",
+        "Excessive database latency during freight lookups",
+        "Inability to store large amounts of complex data",
+        "Lack of a centralized web user interface"
+      ],
+      "answerIndex": 0,
+      "explanation": "The scenario identifies that hard-coded logic creates rigid systems and deployment bottlenecks.",
+      "evidence": "Hard-coded routing logic creates rigid systems where adding new carrier-specific calculation methods requires modifying core business logic, leading to high regression risks and deployment bottlenecks."
+    },
+    {
+      "question": "In Dynamic Logistics Routing Engine, what is a key limitation of using this pattern?",
+      "options": [
+        "The pattern prevents the use of interfaces",
+        "Increased complexity due to the proliferation of strategy classes",
+        "It forces all algorithms to be compiled at the same time",
+        "It requires a database for every strategy"
+      ],
+      "answerIndex": 1,
+      "explanation": "The limitation section explicitly mentions the complexity arising from the number of strategy classes.",
+      "evidence": "The primary limitation is the increased complexity caused by the proliferation of strategy classes; developers must monitor the number of objects created to ensure the system remains navigable and check for redundant logic by reviewing the strategy interface implementation count."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T01:11:34.280Z",
+  "sourceRetrievedAt": "2026-10-18T00:53:08.088Z"
+}

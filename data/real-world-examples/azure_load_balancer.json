@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "topicId": "azure_load_balancer",
+  "title": "High-Availability Gaming Backend Distribution",
+  "business": "Online gaming companies requiring consistent, low-latency connectivity for thousands of concurrent players connecting to stateful game servers.",
+  "problem": "Individual game server instances are prone to unexpected termination, leading to player disconnection and loss of session state during peak traffic.",
+  "solution": "Azure Load Balancer provides Layer 4 load balancing to distribute incoming UDP/TCP traffic across a pool of backend virtual machines, ensuring traffic is only routed to healthy instances.",
+  "steps": [
+    "Create a backend pool containing the IP addresses of the game server virtual machines.",
+    "Define health probes that periodically check the status of each game server instance.",
+    "Configure load balancing rules to map frontend IP ports to the backend pool ports.",
+    "Associate the load balancer with a public IP or internal virtual network endpoint."
+  ],
+  "outcome": "Improved service availability where player traffic is automatically rerouted away from unresponsive server instances without manual intervention.",
+  "limitation": "Azure Load Balancer operates at Layer 4 and does not inspect application-layer (HTTP/HTTPS) content; to verify if the application is truly processing requests correctly, you must rely on port-based health probes rather than deep content inspection.",
+  "diagram": {
+    "kind": "flow",
+    "title": "Traffic Distribution Flow",
+    "description": "Shows how external traffic is routed through the load balancer to backend resources.",
+    "nodes": [
+      {
+        "id": "a",
+        "label": "Internet",
+        "detail": "Player traffic source"
+      },
+      {
+        "id": "b",
+        "label": "Frontend IP",
+        "detail": "Entry point for traffic"
+      },
+      {
+        "id": "c",
+        "label": "Load Balancer",
+        "detail": "Layer 4 distribution logic"
+      },
+      {
+        "id": "d",
+        "label": "Backend Pool",
+        "detail": "Group of game server VMs"
+      }
+    ],
+    "edges": [
+      {
+        "from": "a",
+        "to": "b",
+        "label": "requests"
+      },
+      {
+        "from": "b",
+        "to": "c",
+        "label": "forwards"
+      },
+      {
+        "from": "c",
+        "to": "d",
+        "label": "distributes"
+      }
+    ]
+  },
+  "code": null,
+  "sources": [
+    {
+      "url": "https://azure.microsoft.com/en-us/products/",
+      "label": "Cloud Products | Microsoft Azure"
+    }
+  ],
+  "questions": [
+    {
+      "question": "In High-Availability Gaming Backend Distribution, how does the technology address the problem of server failure?",
+      "options": [
+        "By rerouting traffic away from unresponsive instances using health probes.",
+        "By inspecting the game state at the application layer to fix errors.",
+        "By automatically restarting the physical hardware of the server.",
+        "By increasing the bandwidth of the individual server instances."
+      ],
+      "answerIndex": 0,
+      "explanation": "The solution relies on Layer 4 load balancing to distribute traffic only to healthy instances, which is achieved through health probes.",
+      "evidence": "Azure Load Balancer provides Layer 4 load balancing to distribute incoming UDP/TCP traffic across a pool of backend virtual machines, ensuring traffic is only routed to healthy instances."
+    },
+    {
+      "question": "In High-Availability Gaming Backend Distribution, what is a key limitation of the implementation?",
+      "options": [
+        "It cannot handle UDP traffic for gaming.",
+        "It is limited to internal network traffic only.",
+        "It cannot perform deep application-layer content inspection.",
+        "It requires manual intervention to update the backend pool."
+      ],
+      "answerIndex": 2,
+      "explanation": "The documentation notes that the load balancer is Layer 4 and does not inspect application-layer content, which is a trade-off for its performance.",
+      "evidence": "Azure Load Balancer operates at Layer 4 and does not inspect application-layer (HTTP/HTTPS) content; to verify if the application is truly processing requests correctly, you must rely on port-based health probes rather than deep content inspection."
+    }
+  ],
+  "model": "gemini-3.1-flash-lite",
+  "generatedAt": "2026-10-18T00:55:52.033Z",
+  "sourceRetrievedAt": "2026-10-18T00:55:30.156Z"
+}
