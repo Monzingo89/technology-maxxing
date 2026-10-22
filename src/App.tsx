@@ -86,7 +86,7 @@ type View =
   | "benchmarks";
 function readView(): View {
   const route = location.hash.slice(1).split("?")[0];
-  return [
+  const views = [
     "home",
     "videos",
     "library",
@@ -99,9 +99,12 @@ function readView(): View {
     "builder",
     "models",
     "benchmarks",
-  ].includes(route)
-    ? (route as View)
-    : "videos";
+  ];
+  if (views.includes(route)) return route as View;
+  const path = location.pathname.replace(/\/+$/, "");
+  if (path === "/privacy-policy") return "privacy";
+  if (path === "/terms-of-service") return "terms";
+  return "videos";
 }
 type Mode = "signup" | "login" | "reset";
 
@@ -380,7 +383,10 @@ function selectAssessmentQuestions(bank: Question[], seed: string) {
     randomized.sort((a, b) => level[a.difficulty!] - level[b.difficulty!]);
   }
   // Keep the two scenario questions together at the end of the assessment.
-  randomized.sort((a, b) => Number(a.section === "real-world") - Number(b.section === "real-world"));
+  randomized.sort(
+    (a, b) =>
+      Number(a.section === "real-world") - Number(b.section === "real-world"),
+  );
   const selected: Question[] = [];
   const seenKeys = new Set<string>();
   for (const question of randomized) {
@@ -495,7 +501,11 @@ export default function App() {
       setAuthOpen(false);
     };
     window.addEventListener("hashchange", changed);
-    return () => window.removeEventListener("hashchange", changed);
+    window.addEventListener("popstate", changed);
+    return () => {
+      window.removeEventListener("hashchange", changed);
+      window.removeEventListener("popstate", changed);
+    };
   }, []);
   useEffect(() => {
     document.title =
@@ -638,10 +648,14 @@ export default function App() {
     mobileNav.current?.close();
     setMobileNavOpen(false);
   };
-  useEffect(() => { closeMobileNav(); }, [view]);
+  useEffect(() => {
+    closeMobileNav();
+  }, [view]);
   useEffect(() => {
     const desktop = matchMedia("(min-width: 761px)");
-    const changed = () => { if (desktop.matches) closeMobileNav(); };
+    const changed = () => {
+      if (desktop.matches) closeMobileNav();
+    };
     desktop.addEventListener("change", changed);
     return () => desktop.removeEventListener("change", changed);
   }, []);
@@ -1290,7 +1304,8 @@ export default function App() {
             setMobileNavOpen(true);
           }}
         >
-          <Menu size={21} aria-hidden="true" /><span>Menu</span>
+          <Menu size={21} aria-hidden="true" />
+          <span>Menu</span>
         </button>
         <nav
           aria-label={
@@ -1354,7 +1369,10 @@ export default function App() {
                 <Library size={18} />
                 Library
               </button>
-              <button className={view === "study" ? "active" : ""} onClick={() => setView("study")}>
+              <button
+                className={view === "study" ? "active" : ""}
+                onClick={() => setView("study")}
+              >
                 <BookOpen size={18} /> Study For Exam
               </button>
               <button
@@ -1502,60 +1520,124 @@ export default function App() {
         aria-labelledby="mobile-navigation-title"
         onClose={() => {
           setMobileNavOpen(false);
-          if (!document.querySelector("dialog[open]")) mobileNavTrigger.current?.focus({ preventScroll: true });
+          if (!document.querySelector("dialog[open]"))
+            mobileNavTrigger.current?.focus({ preventScroll: true });
         }}
-        onClick={(event) => { if (event.target === event.currentTarget) closeMobileNav(); }}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) closeMobileNav();
+        }}
       >
         <div className="mobile-navigation-content">
           <div className="mobile-navigation-heading">
-            <div><span>TECHNOLOGY MAXXING</span><h2 id="mobile-navigation-title">Explore</h2></div>
-            <button aria-label="Close navigation menu" onClick={closeMobileNav}><X size={22} aria-hidden="true" /></button>
+            <div>
+              <span>TECHNOLOGY MAXXING</span>
+              <h2 id="mobile-navigation-title">Explore</h2>
+            </div>
+            <button aria-label="Close navigation menu" onClick={closeMobileNav}>
+              <X size={22} aria-hidden="true" />
+            </button>
           </div>
           <nav aria-label="Mobile navigation">
             <div className="mobile-navigation-primary">
-              {([
-                ["videos", "Videos", "Learn in one minute", Play],
-                ["library", "Library", "Find your next topic", Library],
-              ] as const).map(([destination, label, description, Icon]) => (
-                <button key={destination} aria-current={view === destination ? "page" : undefined}
-                  onClick={() => { closeMobileNav(); setView(destination); }}>
-                  <Icon size={22} aria-hidden="true" /><strong>{label}</strong><small>{description}</small>
+              {(
+                [
+                  ["videos", "Videos", "Learn in one minute", Play],
+                  ["library", "Library", "Find your next topic", Library],
+                ] as const
+              ).map(([destination, label, description, Icon]) => (
+                <button
+                  key={destination}
+                  aria-current={view === destination ? "page" : undefined}
+                  onClick={() => {
+                    closeMobileNav();
+                    setView(destination);
+                  }}
+                >
+                  <Icon size={22} aria-hidden="true" />
+                  <strong>{label}</strong>
+                  <small>{description}</small>
                 </button>
               ))}
             </div>
             <p className="mobile-navigation-group">DISCOVER & COMPARE</p>
-            {([
-              ["models", "Top 10 Models", Trophy],
-              ["benchmarks", "Top Benchmarks", BarChart3],
-              ["builder", "Build", Settings],
-              ["papers", "Papers", FileText],
-            ] as const).map(([destination, label, Icon]) => (
-              <button key={destination} className="mobile-navigation-link" aria-current={view === destination ? "page" : undefined}
-                onClick={() => { closeMobileNav(); setView(destination); }}><Icon size={19} aria-hidden="true" />{label}<ArrowRight size={16} aria-hidden="true" /></button>
+            {(
+              [
+                ["models", "Top 10 Models", Trophy],
+                ["benchmarks", "Top Benchmarks", BarChart3],
+                ["builder", "Build", Settings],
+                ["papers", "Papers", FileText],
+              ] as const
+            ).map(([destination, label, Icon]) => (
+              <button
+                key={destination}
+                className="mobile-navigation-link"
+                aria-current={view === destination ? "page" : undefined}
+                onClick={() => {
+                  closeMobileNav();
+                  setView(destination);
+                }}
+              >
+                <Icon size={19} aria-hidden="true" />
+                {label}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
             ))}
             <p className="mobile-navigation-group">YOUR LEARNING</p>
-            {([
-              ["home", "Home", Home],
-              ["assessments", "Assessments", CheckCircle2],
-              ["study", "Study For Exam", BookOpen],
-              ["leaderboards", "Leaderboards", Trophy],
-            ] as const).map(([destination, label, Icon]) => (
-              <button key={destination} className="mobile-navigation-link" aria-current={view === destination ? "page" : undefined}
-                onClick={() => { closeMobileNav(); setView(destination); }}><Icon size={19} aria-hidden="true" />{label}<ArrowRight size={16} aria-hidden="true" /></button>
+            {(
+              [
+                ["home", "Home", Home],
+                ["assessments", "Assessments", CheckCircle2],
+                ["study", "Study For Exam", BookOpen],
+                ["leaderboards", "Leaderboards", Trophy],
+              ] as const
+            ).map(([destination, label, Icon]) => (
+              <button
+                key={destination}
+                className="mobile-navigation-link"
+                aria-current={view === destination ? "page" : undefined}
+                onClick={() => {
+                  closeMobileNav();
+                  setView(destination);
+                }}
+              >
+                <Icon size={19} aria-hidden="true" />
+                {label}
+                <ArrowRight size={16} aria-hidden="true" />
+              </button>
             ))}
-            {view === "models" && <>
-              <p className="mobile-navigation-group">MODEL CATEGORIES</p>
-              <select aria-label="Model category" value={modelCategory} onChange={(event) => {
-                setModelCategory(event.target.value);
-                location.hash = `models?category=${event.target.value}`;
-                closeMobileNav();
-              }}>
-                <option value="">All categories</option>
-                {pickCategories.map((category) => <option key={category.id} value={category.id}>{category.name}</option>)}
-              </select>
-            </>}
+            {view === "models" && (
+              <>
+                <p className="mobile-navigation-group">MODEL CATEGORIES</p>
+                <select
+                  aria-label="Model category"
+                  value={modelCategory}
+                  onChange={(event) => {
+                    setModelCategory(event.target.value);
+                    location.hash = `models?category=${event.target.value}`;
+                    closeMobileNav();
+                  }}
+                >
+                  <option value="">All categories</option>
+                  {pickCategories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </>
+            )}
           </nav>
-          {!user && authReady && <button className="mobile-navigation-login" onClick={() => { closeMobileNav(); openAuth("login"); }}><LogIn size={18} aria-hidden="true" /> Log in / Create account</button>}
+          {!user && authReady && (
+            <button
+              className="mobile-navigation-login"
+              onClick={() => {
+                closeMobileNav();
+                openAuth("login");
+              }}
+            >
+              <LogIn size={18} aria-hidden="true" /> Log in / Create account
+            </button>
+          )}
         </div>
       </dialog>
 
@@ -1589,7 +1671,7 @@ export default function App() {
       ) : null}
       {legalView ? (
         <article className="panel legal-page" aria-labelledby="legal-title">
-          <a href="#library">Back to library</a>
+          <a href="/#library">Back to library</a>
           <h1 id="legal-title" tabIndex={-1}>
             {view === "privacy" ? "Privacy Policy" : "Terms of Service"}
           </h1>
@@ -1638,7 +1720,7 @@ export default function App() {
             </p>
             {!user && firebaseReady ? (
               <p>
-                <a href="#privacy">How we remember visits</a>
+                <a href="/privacy-policy/">How we remember visits</a>
               </p>
             ) : null}
             {!firebaseReady ? (
@@ -1686,9 +1768,7 @@ export default function App() {
           <h1 id="home-title" tabIndex={-1}>
             Keep your curiosity going.
           </h1>
-          <p>
-            Free videos. Sign in for lessons and quizzes.
-          </p>
+          <p>Free videos. Sign in for lessons and quizzes.</p>
           {!user ? (
             <div className="video-home-actions">
               <button className="primary" onClick={() => openAuth("login")}>
@@ -1723,7 +1803,13 @@ export default function App() {
       )}
       {view === "study" ? (
         <Suspense fallback={<p role="status">Loading your study desk…</p>}>
-          <ExamStudy topics={technologies} exams={exams} signedIn={!!user} loadError={loadError} onAssess={requestAssessment} />
+          <ExamStudy
+            topics={technologies}
+            exams={exams}
+            signedIn={!!user}
+            loadError={loadError}
+            onAssess={requestAssessment}
+          />
         </Suspense>
       ) : null}
       {view === "library" ? (
@@ -1886,9 +1972,7 @@ export default function App() {
           <div className="panel-head">
             <div>
               <h2>Assessments</h2>
-              <p>
-                20 seconds per question. Pass with 70% correct.
-              </p>
+              <p>20 seconds per question. Pass with 70% correct.</p>
             </div>
             {!user && guestCompleted >= GUEST_LIMIT ? (
               <button className="primary" onClick={() => openAuth("signup")}>
@@ -1898,7 +1982,12 @@ export default function App() {
           </div>
 
           {active && activeQuestion ? (
-            <article className="exam-card" ref={examRef} tabIndex={-1} aria-label="Assessment question">
+            <article
+              className="exam-card"
+              ref={examRef}
+              tabIndex={-1}
+              aria-label="Assessment question"
+            >
               <div className="exam-meta">
                 <span>{active.technology.name}</span>
                 <span>
@@ -2293,8 +2382,8 @@ export default function App() {
       <footer className="site-footer">
         <span>IoT · A free, not-for-profit learning project</span>
         <nav aria-label="Legal">
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms of Service</a>
+          <a href="/privacy-policy/">Privacy Policy</a>
+          <a href="/terms-of-service/">Terms of Service</a>
         </nav>
       </footer>
 
@@ -2321,12 +2410,16 @@ export default function App() {
               This is a learning exercise, not a proctored exam.
             </p>
             {pendingAssessment.assessmentCount === 7 && (
-              <p>Includes two AI-generated questions about the Real World Example at the end of this topic’s lesson.</p>
+              <p>
+                Includes two AI-generated questions about the Real World Example
+                at the end of this topic’s lesson.
+              </p>
             )}
             <p>
-              {pendingAssessment.assessmentCount} questions, with a strict 20-second timer each. During the final 3
-              seconds, the timer turns red and pulses. If time reaches zero
-              before you select an answer, that question is marked incorrect.
+              {pendingAssessment.assessmentCount} questions, with a strict
+              20-second timer each. During the final 3 seconds, the timer turns
+              red and pulses. If time reaches zero before you select an answer,
+              that question is marked incorrect.
             </p>
             <div className="assessment-warning-actions">
               <button onClick={() => setPendingAssessment(null)}>Cancel</button>
@@ -2439,11 +2532,19 @@ export default function App() {
               />
               <span>
                 I am 18 or older and agree to the{" "}
-                <a href="#terms" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="/terms-of-service/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Terms of Service
                 </a>{" "}
                 and{" "}
-                <a href="#privacy" target="_blank" rel="noopener noreferrer">
+                <a
+                  href="/privacy-policy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   Privacy Policy
                 </a>
                 .
