@@ -33,6 +33,8 @@ try {
     input,
   ]);
   await render(["-f", "lavfi", "-i", "sine=frequency=440:duration=2", audio]);
+  const longAudio = path.join(dir, "long-voice.mp3");
+  await render(["-f", "lavfi", "-i", "sine=frequency=440:duration=12", longAudio]);
   await assert.rejects(
     normalizeUpload(input, path.join(dir, "bad.mp4")),
     /59 seconds/,
@@ -51,7 +53,7 @@ try {
           {
             finishReason: "STOP",
             content: {
-              parts: [{ text: JSON.stringify(STARTER_SCRIPTS.react) }],
+              parts: [{ text: JSON.stringify(body.contents[0].parts[0].text.startsWith("Shorten") ? { narration: "CSS in 1 minute. CSS styles page colors and layout." } : STARTER_SCRIPTS.react) }],
             },
           },
         ],
@@ -82,7 +84,7 @@ try {
     assert.equal(body.model_id, "eleven_v4");
     assert.ok(body.inputs[0].text.length > 30);
     assert.ok(body.inputs[0].voice_id);
-    return new Response(await readFile(audio));
+    return new Response(await readFile(voiceCalls === 1 ? longAudio : audio));
   };
   const progress = [];
   const result = await generateVideo(
@@ -101,12 +103,14 @@ try {
     progress.some((message) => message.includes("real-world analogy scene 4")),
   );
   assert.ok(progress.at(-1).includes("59-second MP4"));
+  assert.ok(progress.some(message => message.includes("Shortening narration")));
+  assert.match(result.script, /CSS styles page colors and layout/);
   const info = await probe(result.output);
   assert.ok(Math.abs(Number(info.format.duration) - 59) < 0.2);
   assert.equal(info.streams.find((s) => s.codec_type === "video").width, 720);
   assert.equal(info.streams.find((s) => s.codec_type === "video").height, 1280);
   assert.equal(videoCalls, 6);
-  assert.equal(voiceCalls, 6);
+  assert.equal(voiceCalls, 7);
   const custom = await generateVideo(
     { id: "new_topic", name: "New Topic" },
     dir,
@@ -115,9 +119,9 @@ try {
       eleven: "test-only",
     },
   );
-  assert.equal(scriptCalls, 1);
+  assert.equal(scriptCalls, 2);
   assert.equal(videoCalls, 12);
-  assert.equal(voiceCalls, 12);
+  assert.equal(voiceCalls, 13);
   assert.ok(custom.script.startsWith("New Topic in 1 minute."));
   globalThis.fetch = async (url) => {
     assert.ok(
