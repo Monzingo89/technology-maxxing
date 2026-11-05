@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { screenSupporterName } from "../services/supporterName";
+import {
+  contributionCents,
+  topicCreditSummary,
+} from "../../shared/topic-credit-policy.js";
 import "./support-videos.css";
 
 function contributionLink() {
@@ -30,6 +34,9 @@ function contributionLink() {
 export default function SupportVideos() {
   const [alias, setAlias] = useState("");
   const [consent, setConsent] = useState(false);
+  const [amount, setAmount] = useState("20");
+  const cents = contributionCents(amount);
+  const credit = cents === null ? null : topicCreditSummary(cents);
   const result = screenSupporterName(alias);
   const checkout = contributionLink();
   return (
@@ -54,6 +61,34 @@ export default function SupportVideos() {
         seconds for a simple analogy and a practical use case. Your support
         helps fund the animation and narration that bring it to life.
       </p>
+      <article className="support-shoutout">
+        <h2>Help choose what gets explained next.</h2>
+        <p>
+          Each $6 of confirmed support gives you one topic selection. Only whole
+          topics can be selected; any remainder carries toward your next
+          selection.
+        </p>
+        <label htmlFor="support-amount">Contribution amount (USD)</label>
+        <input
+          id="support-amount"
+          inputMode="decimal"
+          value={amount}
+          onChange={(event) => setAmount(event.currentTarget.value)}
+          aria-describedby="credit-preview"
+        />
+        <p id="credit-preview" role="status">
+          {credit
+            ? `$${(cents! / 100).toFixed(2)} → ${credit.topics} topic ${credit.topics === 1 ? "selection" : "selections"}, with $${(credit.carryCents / 100).toFixed(2)} carried toward the next topic.`
+            : "Enter an amount from $1 to $600, with at most two decimal places."}
+        </p>
+        <p className="support-small">
+          This is a preview, not an account balance. Topic selection unlocks
+          only after the payment provider confirms payment. Test payments never
+          fund real video generation. Processing fees reduce the funds the
+          project receives; the $6 topic-credit rate is based on your
+          contribution amount.
+        </p>
+      </article>
       <article className="support-shoutout">
         <h2>A little thank-you, out loud.</h2>
         <p>

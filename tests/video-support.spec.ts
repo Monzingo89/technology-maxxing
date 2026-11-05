@@ -12,6 +12,9 @@ for (const width of [390, 1440]) {
     await page.goto("/#support");
     await expect(page.getByRole("heading", { name: "Keep the next minute free." })).toBeVisible();
     await expect(page.getByText("About $6", { exact: true })).toBeVisible();
+    await expect(page.locator("#credit-preview")).toContainText("3 topic selections, with $2.00");
+    await page.getByLabel("Contribution amount (USD)").fill("24");
+    await expect(page.locator("#credit-preview")).toContainText("4 topic selections, with $0.00");
     await expect(page.getByRole("heading", { name: "Test your knowledge." })).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Contributions aren’t open yet" })).toBeDisabled();
     const alias = page.getByLabel("Preview a supporter alias");
