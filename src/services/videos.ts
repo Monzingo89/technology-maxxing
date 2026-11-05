@@ -27,6 +27,9 @@ export type VideoJob = {
   createdAt: number;
   expiresAt: number;
   script?: string;
+  progress?: string;
+  duration?: number;
+  format?: string;
 };
 const storage = app ? getStorage(app) : null;
 if (

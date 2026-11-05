@@ -586,6 +586,7 @@ export default function App() {
         );
       },
       () => {
+        setVideoAccessError("Video job updates could not load. Refresh and sign in with Google again to see your drafts and failures.");
         setVideoOwner(false);
         setVideoJobs([]);
       },

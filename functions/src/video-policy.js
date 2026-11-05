@@ -35,8 +35,14 @@ export function canStartVideo(existing, lock, now) {
   return !existing && !(lock && lock.expiresAt > now);
 }
 export function validateStoryboard(value) {
-  if (!value || typeof value.analogy !== "string" || value.analogy.length < 5 ||
-      value.analogy.length > 200 || !Array.isArray(value.scenes) || value.scenes.length !== 6)
+  if (
+    !value ||
+    typeof value.analogy !== "string" ||
+    value.analogy.length < 5 ||
+    value.analogy.length > 200 ||
+    !Array.isArray(value.scenes) ||
+    value.scenes.length !== 6
+  )
     throw Error("Invalid storyboard");
   for (const [index, scene] of value.scenes.entries()) {
     if (
@@ -53,57 +59,164 @@ export function validateStoryboard(value) {
       throw Error("Invalid scene");
   }
   if (!/^Now, (imagine|think of)\b/i.test(value.scenes[3].narration))
-    throw Error("The ELI5 half must introduce the everyday analogy at 30 seconds");
+    throw Error(
+      "The ELI5 half must introduce the everyday analogy at 30 seconds",
+    );
   return value;
 }
 
 // One consistent everyday analogy per topic; the section switch is exactly 30s.
-const scenes = (rows) => rows.map(([narration, visual], i) => ({
-  section: i < 3 ? "technical" : "eli5", narration, visual,
-}));
+const scenes = (rows) =>
+  rows.map(([narration, visual], i) => ({
+    section: i < 3 ? "technical" : "eli5",
+    narration,
+    visual,
+  }));
 export const STARTER_SCRIPTS = {
+  css: {
+    analogy:
+      "Decorating an online bakery menu using shared painting instructions",
+    scenes: scenes([
+      [
+        "CSS in 1 minute. CSS styles web pages. HTML supplies content and structure; CSS controls colors, spacing, typography, and layout.",
+        "Show a bakery website with unstyled heading, menu cards and order button. Add colors, spacing and typography without changing content.",
+      ],
+      [
+        "Selectors choose elements. Declarations assign properties and values. The cascade resolves competing rules; specificity and source order help decide winners.",
+        "Highlight menu cards selected by one shared style rule. Show competing styles resolving into the final appearance without text.",
+      ],
+      [
+        "Flexbox and Grid arrange content. Media queries adapt layouts to screen sizes. Developers still check accessibility, contrast, and different browsers.",
+        "The bakery menu moves from a desktop grid to one readable phone column. Show readable contrast and accessible button sizes.",
+      ],
+      [
+        "Now, imagine decorating a bakery window. HTML is the menu and shelves. CSS is the shared painting and spacing instructions.",
+        "Turn the bakery website into a friendly bakery window. Menu items stay fixed while a decorator adds matching colors and spacing.",
+      ],
+      [
+        "One instruction paints every price tag blue. On our bakery website, one CSS rule styles every menu card the same way.",
+        "Paint all bakery price tags blue together, then map them directly to matching menu cards on the real bakery website.",
+      ],
+      [
+        "A smaller window needs closer shelves. CSS similarly stacks our bakery menu on phones, helping customers find cakes and order.",
+        "The bakery window narrows and shelves stack neatly. Match this to a phone menu, where a customer chooses a cake and orders.",
+      ],
+    ]),
+  },
   react: {
     analogy: "A reusable building-block toy town",
     scenes: scenes([
-      ["React in 1 minute. React builds interactive screens from reusable components. A component can be a button, menu, or card.", "Separate button, menu and card components assemble into one website. Highlight the boundaries between components."],
-      ["Props give components information. State remembers changing values, such as a counter. When state changes, React calculates the new screen.", "A counter component receives a data packet. A click changes its internal state and the displayed number changes."],
-      ["React updates the page to match. You describe the result you want. Developers still write the rules and manage data.", "Compare two interface states. Highlight only the changed counter while other components stay unchanged."],
-      ["Now, imagine a building-block town. Each house is a component. You can use the same house design in several places.", "A friendly toy town assembles from colorful blocks. Several houses share the same clearly recognizable design."],
-      ["Props choose each house's color. State remembers whether its light is on. Changing that state tells React the display needs updating.", "Two identical block houses get different colors. Inside one house, a light switch turns a window light on."],
-      ["React updates the town's display when the light changes. Your rules describe the town; React keeps its pieces consistent.", "The house light switches on in the toy town while all neighboring buildings remain unchanged. Finish on the complete town."],
+      [
+        "React in 1 minute. React builds interactive screens from reusable components. A component can be a button, menu, or card.",
+        "Separate button, menu and card components assemble into one website. Highlight the boundaries between components.",
+      ],
+      [
+        "Props give components information. State remembers changing values, such as a counter. When state changes, React calculates the new screen.",
+        "A counter component receives a data packet. A click changes its internal state and the displayed number changes.",
+      ],
+      [
+        "React updates the page to match. You describe the result you want. Developers still write the rules and manage data.",
+        "Compare two interface states. Highlight only the changed counter while other components stay unchanged.",
+      ],
+      [
+        "Now, imagine a building-block town. Each house is a component. You can use the same house design in several places.",
+        "A friendly toy town assembles from colorful blocks. Several houses share the same clearly recognizable design.",
+      ],
+      [
+        "Props choose each house's color. State remembers whether its light is on. Changing that state tells React the display needs updating.",
+        "Two identical block houses get different colors. Inside one house, a light switch turns a window light on.",
+      ],
+      [
+        "React updates the town's display when the light changes. Your rules describe the town; React keeps its pieces consistent.",
+        "The house light switches on in the toy town while all neighboring buildings remain unchanged. Finish on the complete town.",
+      ],
     ]),
   },
   docker: {
     analogy: "A packed lunch kit",
     scenes: scenes([
-      ["Docker in 1 minute. Docker packages an application and its required software into an image. Images run on compatible computers.", "An application and its dependencies fit into one image package. The same package appears on a laptop and server."],
-      ["Running an image creates a container: an isolated process. Containers share the computer's operating system instead of carrying separate copies.", "Show isolated running containers above one shared operating system layer. Connect every container to the common base."],
-      ["Ports allow connections. Volumes keep important data outside the container. Containers help software run consistently, but still need security updates.", "Show network connections entering a container and a separate persistent storage volume retaining files after the container disappears."],
-      ["Now, think of a lunch kit. The image is its packing plan, listing the meal, spoon, and napkin you need.", "A simple lunch packing plan becomes a neat kit with a meal, spoon and napkin, each clearly visible."],
-      ["A container is one kit packed from that plan. Several kits start with the same contents, even at different tables.", "One packing plan produces three identical lunch kits. Move them to different tables without changing their contents."],
-      ["The table is your computer. The kit brings essentials, but cannot fix a wobbly table. The surrounding environment still matters.", "Lunch kits rest on stable tables. Contrast a suitable table with a wobbly table, and show a person checking the food."],
+      [
+        "Docker in 1 minute. Docker packages an application and its required software into an image. Images run on compatible computers.",
+        "An application and its dependencies fit into one image package. The same package appears on a laptop and server.",
+      ],
+      [
+        "Running an image creates a container: an isolated process. Containers share the computer's operating system instead of carrying separate copies.",
+        "Show isolated running containers above one shared operating system layer. Connect every container to the common base.",
+      ],
+      [
+        "Ports allow connections. Volumes keep important data outside the container. Containers help software run consistently, but still need security updates.",
+        "Show network connections entering a container and a separate persistent storage volume retaining files after the container disappears.",
+      ],
+      [
+        "Now, think of a lunch kit. The image is its packing plan, listing the meal, spoon, and napkin you need.",
+        "A simple lunch packing plan becomes a neat kit with a meal, spoon and napkin, each clearly visible.",
+      ],
+      [
+        "A container is one kit packed from that plan. Several kits start with the same contents, even at different tables.",
+        "One packing plan produces three identical lunch kits. Move them to different tables without changing their contents.",
+      ],
+      [
+        "The table is your computer. The kit brings essentials, but cannot fix a wobbly table. The surrounding environment still matters.",
+        "Lunch kits rest on stable tables. Contrast a suitable table with a wobbly table, and show a person checking the food.",
+      ],
     ]),
   },
   agentic_rag: {
     analogy: "A librarian researching a question",
     scenes: scenes([
-      ["Agentic RAG in 1 minute. RAG retrieves documents and gives their content to an AI model before it answers questions.", "A question retrieves relevant documents. Highlighted evidence passages move into a model before an answer emerges."],
-      ["An agent decides how to search. It chooses tools, checks results, and searches again when the available evidence leaves gaps.", "An agent chooses a search branch, checks results, detects a gap, and follows a second search path."],
-      ["Answers can cite sources for you to check. Extra searches cost time and money. Retrieved information can still be wrong.", "Connect an answer to supporting evidence cards. Show a clock and a missing evidence gap to communicate limits."],
-      ["Now, imagine asking a librarian about dinosaurs. Instead of guessing, the librarian finds a useful book and checks its explanation.", "A friendly librarian receives a dinosaur question and selects a relevant book from a library shelf."],
-      ["If something remains unclear, the librarian checks another shelf. They combine useful evidence and show which books support the answer.", "The same librarian notices a missing clue, visits another shelf, then brings two supporting books to the reader."],
-      ["The agent decides what to look up next. But books can contain mistakes. Always check the evidence behind important answers.", "The librarian points from a simple answer to its supporting books. The reader checks a questionable passage with a magnifying glass."],
+      [
+        "Agentic RAG in 1 minute. RAG retrieves documents and gives their content to an AI model before it answers questions.",
+        "A question retrieves relevant documents. Highlighted evidence passages move into a model before an answer emerges.",
+      ],
+      [
+        "An agent decides how to search. It chooses tools, checks results, and searches again when the available evidence leaves gaps.",
+        "An agent chooses a search branch, checks results, detects a gap, and follows a second search path.",
+      ],
+      [
+        "Answers can cite sources for you to check. Extra searches cost time and money. Retrieved information can still be wrong.",
+        "Connect an answer to supporting evidence cards. Show a clock and a missing evidence gap to communicate limits.",
+      ],
+      [
+        "Now, imagine asking a librarian about dinosaurs. Instead of guessing, the librarian finds a useful book and checks its explanation.",
+        "A friendly librarian receives a dinosaur question and selects a relevant book from a library shelf.",
+      ],
+      [
+        "If something remains unclear, the librarian checks another shelf. They combine useful evidence and show which books support the answer.",
+        "The same librarian notices a missing clue, visits another shelf, then brings two supporting books to the reader.",
+      ],
+      [
+        "The agent decides what to look up next. But books can contain mistakes. Always check the evidence behind important answers.",
+        "The librarian points from a simple answer to its supporting books. The reader checks a questionable passage with a magnifying glass.",
+      ],
     ]),
   },
   databricks: {
     analogy: "A shared school workshop",
     scenes: scenes([
-      ["Databricks in 1 minute. Databricks brings data processing, analysis, and machine learning into one platform, using a shared data lakehouse.", "Data engineering, analytics and machine learning stations connect to one shared lakehouse storage foundation."],
-      ["A lakehouse combines flexible storage with reliable tables. Delta Lake protects transactions. Teams clean and transform data before analysis.", "Incoming raw records become clean structured tables. A transaction completes atomically while processing stages transform the records."],
-      ["Unity Catalog controls access to shared data and AI assets. Teams still need to manage permissions, data quality, and costs.", "A central access-control layer grants approved teams access to shared tables. Show data checks and a compute usage meter."],
-      ["Now, imagine a school workshop. Materials arrive in boxes. Students sort them, build projects, and measure how well each works.", "A friendly school workshop receives boxes of materials. Students sort supplies, assemble projects and measure completed projects."],
-      ["Everyone shares organized supplies instead of keeping separate piles. A teacher checks labels and decides who can use each tool.", "The same workshop has one organized supply shelf. A teacher gives students permission to use suitable tools and checks labels."],
-      ["Databricks brings those jobs into one workspace. People still need good materials, clear rules, and sensible spending to work well.", "Pull back to show the whole workshop working together, with organized supplies, supervised tools and a simple materials budget."],
+      [
+        "Databricks in 1 minute. Databricks brings data processing, analysis, and machine learning into one platform, using a shared data lakehouse.",
+        "Data engineering, analytics and machine learning stations connect to one shared lakehouse storage foundation.",
+      ],
+      [
+        "A lakehouse combines flexible storage with reliable tables. Delta Lake protects transactions. Teams clean and transform data before analysis.",
+        "Incoming raw records become clean structured tables. A transaction completes atomically while processing stages transform the records.",
+      ],
+      [
+        "Unity Catalog controls access to shared data and AI assets. Teams still need to manage permissions, data quality, and costs.",
+        "A central access-control layer grants approved teams access to shared tables. Show data checks and a compute usage meter.",
+      ],
+      [
+        "Now, imagine a school workshop. Materials arrive in boxes. Students sort them, build projects, and measure how well each works.",
+        "A friendly school workshop receives boxes of materials. Students sort supplies, assemble projects and measure completed projects.",
+      ],
+      [
+        "Everyone shares organized supplies instead of keeping separate piles. A teacher checks labels and decides who can use each tool.",
+        "The same workshop has one organized supply shelf. A teacher gives students permission to use suitable tools and checks labels.",
+      ],
+      [
+        "Databricks brings those jobs into one workspace. People still need good materials, clear rules, and sensible spending to work well.",
+        "Pull back to show the whole workshop working together, with organized supplies, supervised tools and a simple materials budget.",
+      ],
     ]),
   },
 };
@@ -124,11 +237,16 @@ export function withTopicIntro(storyboard, topicName) {
   return validateStoryboard(result);
 }
 
-export function storyboardCaptions(storyboard, spokenDurations = SCENE_DURATIONS) {
+export function storyboardCaptions(
+  storyboard,
+  spokenDurations = SCENE_DURATIONS,
+) {
   validateStoryboard(storyboard);
   if (
     spokenDurations.length !== 6 ||
-    spokenDurations.some((d, i) => !Number.isFinite(d) || d <= 0 || d > SCENE_DURATIONS[i])
+    spokenDurations.some(
+      (d, i) => !Number.isFinite(d) || d <= 0 || d > SCENE_DURATIONS[i],
+    )
   )
     throw Error("Invalid caption timing");
   const stamp = (seconds) =>

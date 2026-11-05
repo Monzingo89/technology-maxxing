@@ -23,7 +23,10 @@ import {
 } from "../services/videos";
 import TopicVideoControls from "./TopicVideoControls";
 import "./videos.css";
-const viewNumber = new Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 });
+const viewNumber = new Intl.NumberFormat("en", {
+  notation: "compact",
+  maximumFractionDigits: 1,
+});
 
 function VideoSlide({
   video,
@@ -91,7 +94,10 @@ function VideoSlide({
           {video.generated ? "AI-generated" : "Topic explanation"}
         </span>
         <h2>{video.title}</h2>
-        <span className="video-views" aria-label={`${Math.max(0, video.views || 0)} views`}>
+        <span
+          className="video-views"
+          aria-label={`${Math.max(0, video.views || 0)} views`}
+        >
           {viewNumber.format(Math.max(0, video.views || 0))} Views
         </span>
         {failed && active && (
@@ -124,7 +130,11 @@ function VideoSlide({
         disabled={!active || failed}
         aria-label={`Seek ${video.title} video`}
         aria-valuetext={`${Math.round(playbackProgress * video.duration)} of ${video.duration} seconds`}
-        style={{ "--video-progress": `${(active ? playbackProgress : 0) * 100}%` } as React.CSSProperties}
+        style={
+          {
+            "--video-progress": `${(active ? playbackProgress : 0) * 100}%`,
+          } as React.CSSProperties
+        }
         onChange={(event) => {
           if (active) onSeek(Number(event.currentTarget.value));
         }}
@@ -191,6 +201,8 @@ function ReviewJob({ job }: { job: VideoJob }) {
     <article className="video-job">
       <strong>{job.topicId}</strong>
       <span>{job.status}</span>
+      {job.progress && !["failed", "published"].includes(job.status) && <p role="status">{job.progress}</p>}
+      {["queued", "processing", "uploading"].includes(job.status) && job.expiresAt < Date.now() && <p role="alert">This request timed out before a draft was ready. Discard it and try again.</p>}
       {url && <video src={url} controls playsInline preload="metadata" />}
       {job.script && <p>{job.script}</p>}
       {job.status === "review" && (
@@ -232,7 +244,7 @@ export default function VideoFeed({
   const feed = useRef<HTMLDivElement>(null),
     sentinel = useRef<HTMLDivElement>(null);
   const endHandled = useRef(false);
-  const [manage, setManage] = useState(false);
+  const [manage, setManage] = useState(() => new URLSearchParams(window.location.search).get("studio") === "1");
   // Keep this media element mounted across clips: Safari grants audio permission
   // per element, not just per page. Replacing it would require another gesture.
   const player = useRef<HTMLVideoElement>(null);
@@ -267,15 +279,26 @@ export default function VideoFeed({
   useEffect(() => {
     const id = activeVideo?.topicId;
     if (!id) return;
-    let watched = 0, lastTime = -1;
+    let watched = 0,
+      lastTime = -1;
     // Sample actual advancing playback, not currentTime: seeking, buffering,
     // hidden tabs, and pauses do not qualify as three seconds of watching.
     const timer = window.setInterval(() => {
       const media = player.current;
       const current = media?.currentTime ?? -1;
       const delta = current - lastTime;
-      if (media && !media.paused && !media.seeking && media.readyState >= 2 &&
-          inView && !suspended && !document.hidden && lastTime >= 0 && delta > 0 && delta < 1)
+      if (
+        media &&
+        !media.paused &&
+        !media.seeking &&
+        media.readyState >= 2 &&
+        inView &&
+        !suspended &&
+        !document.hidden &&
+        lastTime >= 0 &&
+        delta > 0 &&
+        delta < 1
+      )
         watched += Math.min(delta, 0.25);
       lastTime = current;
       const key = `${id}:${new Date().toISOString().slice(0, 10)}`;
@@ -319,7 +342,13 @@ export default function VideoFeed({
     const sync = () => {
       const media = player.current;
       if (!media) return;
-      if (unlockedRef.current && !paused && inView && !suspended && !document.hidden) {
+      if (
+        unlockedRef.current &&
+        !paused &&
+        inView &&
+        !suspended &&
+        !document.hidden
+      ) {
         void media.play().catch((error: DOMException) => {
           if (!disposed && error.name !== "AbortError") setPaused(true);
         });
@@ -351,10 +380,14 @@ export default function VideoFeed({
   }
   function seekVideo(progress: number) {
     const media = player.current;
-    if (!media || !Number.isFinite(media.duration) || media.duration <= 0) return;
+    if (!media || !Number.isFinite(media.duration) || media.duration <= 0)
+      return;
     const next = Math.max(0, Math.min(1, progress));
     // Do not trigger the loop boundary when scrubbing to the final frame.
-    media.currentTime = Math.min(next * media.duration, Math.max(0, media.duration - 0.05));
+    media.currentTime = Math.min(
+      next * media.duration,
+      Math.max(0, media.duration - 0.05),
+    );
     setPlaybackProgress(next);
   }
   useEffect(() => {
@@ -442,6 +475,7 @@ export default function VideoFeed({
           <span className="video-eyebrow">TECHNOLOGY, ONE IDEA AT A TIME</span>
           <h1>Learn in 1 minute.</h1>
         </div>
+        {owner && <button onClick={() => setManage(!manage)}>{manage ? "Watch videos" : "Open video studio"}</button>}
         <a href="#library">Browse all topics →</a>
       </div>
       {error && (
@@ -466,7 +500,7 @@ export default function VideoFeed({
           <a href="#library">Explore the library</a>
         </div>
       ) : (
-        <>
+        <div hidden={owner && manage}>
           <p className="video-scroll-hint">
             Swipe for the next idea. Tap the video to play or pause.
           </p>
@@ -564,7 +598,7 @@ export default function VideoFeed({
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
       {owner && (
         <section className="video-studio" aria-label="Owner video studio">

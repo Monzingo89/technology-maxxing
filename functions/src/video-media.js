@@ -20,7 +20,15 @@ async function request(url, options, json = true) {
     redirect: "error",
     signal: AbortSignal.timeout(180_000),
   });
-  if (!response.ok) throw Error(`Provider request failed (${response.status})`);
+  if (!response.ok) {
+    const error = Error(`Provider request failed (${response.status})`);
+    error.provider =
+      new URL(url).hostname === "api.elevenlabs.io"
+        ? "narration"
+        : "animation/script";
+    error.status = response.status;
+    throw error;
+  }
   const chunks = [];
   let size = 0;
   for await (const chunk of response.body) {
@@ -109,7 +117,15 @@ export async function normalizeUpload(input, output) {
     output,
   ]);
 }
-export async function generateVideo(topic, dir, keys) {
+export async function generateVideo(
+  topic,
+  dir,
+  keys,
+  onProgress = async () => {},
+) {
+  await onProgress(
+    "Preparing the 59-second technical explanation and real-world analogy.",
+  );
   const voiceId = process.env.VIDEO_VOICE_ID || "JBFqnCBsd6RMkjVDRZzb";
   const voiceModel = process.env.VIDEO_VOICE_MODEL || "eleven_v4";
   if (!/^[a-zA-Z0-9_-]+$/.test(voiceId)) throw Error("Invalid voice");
@@ -128,6 +144,13 @@ export async function generateVideo(topic, dir, keys) {
           "x-goog-api-key": keys.gemini,
         },
         body: JSON.stringify({
+          systemInstruction: {
+            parts: [
+              {
+                text: "In the ELI5 half, use one concrete real-world use case: show a person solving a practical problem with this technology. Carry one everyday analogy through scenes 4-6, map its parts to the technology, and finish with the practical outcome. Do not merely define the topic again.",
+              },
+            ],
+          },
           contents: [
             {
               parts: [
@@ -146,7 +169,9 @@ export async function generateVideo(topic, dir, keys) {
       },
     );
     if (result.candidates?.[0]?.finishReason !== "STOP")
-      throw Error("Script generation did not complete; no video generation started");
+      throw Error(
+        "Script generation did not complete; no video generation started",
+      );
     storyboard = JSON.parse(
       result.candidates?.[0]?.content?.parts
         ?.filter((p) => p.text && !p.thought)
@@ -159,6 +184,9 @@ export async function generateVideo(topic, dir, keys) {
   for (let i = 0; i < SCENE_DURATIONS.length; i++) {
     const scene = storyboard.scenes[i];
     const seconds = SCENE_DURATIONS[i];
+    await onProgress(
+      `Creating ${i < 3 ? "technical" : "real-world analogy"} scene ${i + 1} of 6.`,
+    );
     const video = await request(
       "https://generativelanguage.googleapis.com/v1beta/interactions",
       {
@@ -193,6 +221,7 @@ export async function generateVideo(topic, dir, keys) {
     const raw = path.join(dir, `raw-${i}.mp4`),
       audio = path.join(dir, `voice-${i}.mp3`);
     await writeFile(raw, Buffer.from(content.data, "base64"));
+    await onProgress(`Recording narration for scene ${i + 1} of 6.`);
     await writeFile(
       audio,
       await request(
@@ -217,7 +246,10 @@ export async function generateVideo(topic, dir, keys) {
     if (!Number.isFinite(duration) || duration <= 0 || duration > 18)
       throw Error("Narration does not fit the scene.");
     const tempo = Math.max(0.92, duration / (seconds - 0.15));
-    if (tempo > 1.08) throw Error("Narration is too long for a relaxed pace; shorten the script.");
+    if (tempo > 1.08)
+      throw Error(
+        "Narration is too long for a relaxed pace; shorten the script.",
+      );
     spokenDurations.push(duration / tempo);
     await render([
       "-stream_loop",
@@ -260,6 +292,7 @@ export async function generateVideo(topic, dir, keys) {
     ]);
   }
   const output = path.join(dir, "final.mp4");
+  await onProgress("Assembling and checking the 59-second MP4.");
   await writeFile(
     path.join(dir, "concat.txt"),
     SCENE_DURATIONS.map((_, i) => `file 'scene-${i}.mp4'\n`).join(""),

@@ -13,6 +13,15 @@ export default function TopicVideoControls({
   const [exists, setExists] = useState<boolean | null>(null);
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  const [accepted, setAccepted] = useState(false);
+  const [now, setNow] = useState(Date.now);
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 10000);
+    return () => window.clearInterval(timer);
+  }, []);
+  useEffect(() => {
+    if (job) setAccepted(false);
+  }, [job?.id, job?.status]);
   useEffect(() => {
     if (!db) return;
     return onSnapshot(
@@ -27,10 +36,12 @@ export default function TopicVideoControls({
   async function run(file?: File) {
     setBusy(true);
     setError("");
+    setAccepted(true);
     try {
       if (file) await uploadTopicVideo(topicId, file);
       else await videoCall("requestTopicVideo", { topicId, mode: "generate" });
     } catch (e) {
+      setAccepted(false);
       setError(e instanceof Error ? e.message : "Video request failed.");
     } finally {
       setBusy(false);
@@ -44,12 +55,16 @@ export default function TopicVideoControls({
     ) &&
     (job.status === "review" ||
       job.status === "publishing" ||
-      job.expiresAt > Date.now());
+      job.expiresAt > now);
+  const expired =
+    job &&
+    ["queued", "processing", "uploading"].includes(job.status) &&
+    job.expiresAt <= now;
   return (
     <div className="topic-video-actions">
-      {pending ? (
-        <a href="#videos">
-          {job.status === "review" ? "Review video" : "Video in progress"} →
+      {pending || accepted ? (
+        <a href="/?studio=1#videos">
+          {job?.status === "review" ? "Review video" : "Open video studio"} →
         </a>
       ) : (
         <>
@@ -71,6 +86,25 @@ export default function TopicVideoControls({
             />
           </label>
         </>
+      )}
+      {(pending || accepted) && (
+        <p role="status">
+          {job?.status === "review"
+            ? "Your draft is ready. Open the studio to preview and publish it."
+            : job?.progress ||
+              "Request accepted. Generation runs in the background; open the studio to follow progress. The video appears in the feed after you review and publish it."}
+        </p>
+      )}
+      {job?.status === "failed" && (
+        <p role="alert">
+          {job.error || "Generation failed. Open the video studio for details."}
+        </p>
+      )}
+      {expired && (
+        <p role="alert">
+          This request timed out before a draft was ready. You can retry
+          generation.
+        </p>
       )}
       {error && (
         <p role="alert" className="error">

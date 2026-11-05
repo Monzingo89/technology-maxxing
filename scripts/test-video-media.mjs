@@ -46,7 +46,16 @@ try {
       scriptCalls++;
       assert.ok(url.includes("gemini-3.8-flash"));
       assert.equal(body.generationConfig.thinkingConfig.thinkingLevel, "LOW");
-      return Response.json({ candidates: [{ finishReason: "STOP", content: { parts: [{ text: JSON.stringify(STARTER_SCRIPTS.react) }] } }] });
+      return Response.json({
+        candidates: [
+          {
+            finishReason: "STOP",
+            content: {
+              parts: [{ text: JSON.stringify(STARTER_SCRIPTS.react) }],
+            },
+          },
+        ],
+      });
     }
     if (url.includes("generativelanguage")) {
       videoCalls++;
@@ -75,29 +84,57 @@ try {
     assert.ok(body.inputs[0].voice_id);
     return new Response(await readFile(audio));
   };
-  const result = await generateVideo({ id: "react", name: "React" }, dir, {
-    gemini: "test-only",
-    eleven: "test-only",
-  });
+  const progress = [];
+  const result = await generateVideo(
+    { id: "css", name: "CSS" },
+    dir,
+    {
+      gemini: "test-only",
+      eleven: "test-only",
+    },
+    async (message) => progress.push(message),
+  );
+  assert.match(result.script, /^CSS in 1 minute\./);
+  assert.match(result.script, /bakery website/);
+  assert.ok(progress.some((message) => message.includes("technical scene 1")));
+  assert.ok(
+    progress.some((message) => message.includes("real-world analogy scene 4")),
+  );
+  assert.ok(progress.at(-1).includes("59-second MP4"));
   const info = await probe(result.output);
   assert.ok(Math.abs(Number(info.format.duration) - 59) < 0.2);
   assert.equal(info.streams.find((s) => s.codec_type === "video").width, 720);
   assert.equal(info.streams.find((s) => s.codec_type === "video").height, 1280);
   assert.equal(videoCalls, 6);
   assert.equal(voiceCalls, 6);
-  const custom = await generateVideo({ id: "new_topic", name: "New Topic" }, dir, {
-    gemini: "test-only", eleven: "test-only",
-  });
+  const custom = await generateVideo(
+    { id: "new_topic", name: "New Topic" },
+    dir,
+    {
+      gemini: "test-only",
+      eleven: "test-only",
+    },
+  );
   assert.equal(scriptCalls, 1);
   assert.equal(videoCalls, 12);
   assert.equal(voiceCalls, 12);
   assert.ok(custom.script.startsWith("New Topic in 1 minute."));
   globalThis.fetch = async (url) => {
-    assert.ok(url.endsWith(":generateContent"), "Incomplete scripts must not start paid media generation");
-    return Response.json({ candidates: [{ finishReason: "MAX_TOKENS", content: { parts: [{ text: "{" }] } }] });
+    assert.ok(
+      url.endsWith(":generateContent"),
+      "Incomplete scripts must not start paid media generation",
+    );
+    return Response.json({
+      candidates: [
+        { finishReason: "MAX_TOKENS", content: { parts: [{ text: "{" }] } },
+      ],
+    });
   };
   await assert.rejects(
-    generateVideo({ id: "truncated_topic", name: "Truncated Topic" }, dir, { gemini: "test-only", eleven: "test-only" }),
+    generateVideo({ id: "truncated_topic", name: "Truncated Topic" }, dir, {
+      gemini: "test-only",
+      eleven: "test-only",
+    }),
     /Script generation did not complete/,
   );
   assert.ok(result.captions.includes("00:00:20.000 -->"));

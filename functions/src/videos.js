@@ -48,36 +48,66 @@ const catalog = () =>
 const jobs = () => getFirestore().collection("videoJobs");
 // Public playback never needs sign-in. App Check and server-side deduplication
 // protect this analytics-only endpoint; clients cannot write counts or videos.
-export const recordVideoView = onCall({ ...options, secrets: [viewIpKey] }, async (request) => {
-  const { topicId, visitorId } = request.data || {};
-  if (!validTopicId(topicId) || typeof visitorId !== "string" ||
-      !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(visitorId))
-    throw new HttpsError("invalid-argument", "Invalid view.");
-  let ip;
-  try { ip = requestIp(request.rawRequest, process.env.FUNCTIONS_EMULATOR === "true"); }
-  catch { throw new HttpsError("invalid-argument", "Missing request origin."); }
-  const key = viewIpKey.value();
-  if (!key || key.length < 32) throw new HttpsError("unavailable", "View reporting unavailable.");
-  const db = getFirestore(), day = new Date().toISOString().slice(0, 10);
-  const hash = (value) => createHash("sha256").update(value).digest("hex");
-  const receipt = db.collection("videoViewReceipts").doc(`video-view-${hash(`${day}:${topicId}:${visitorId}`)}`);
-  const budget = db.collection("videoViewReceipts").doc(`video-view-ip-${createHmac("sha256", key).update(`video:${day}:${ip}`).digest("hex")}`);
-  const video = db.collection("topicVideos").doc(topicId);
-  // Firestore TTL removes expired receipts. Never persist raw IPs or browser
-  // IDs; receipts expire after two days (physical deletion is asynchronous).
-  const expiresAt = new Date(Date.now() + 2 * 86400000);
-  return db.runTransaction(async (tx) => {
-    const [published, seen, daily] = await Promise.all([tx.get(video), tx.get(receipt), tx.get(budget)]);
-    if (!published.exists) throw new HttpsError("not-found", "Video not found.");
-    if (seen.exists) return { counted: false };
-    if ((daily.data()?.count || 0) >= 200)
-      throw new HttpsError("resource-exhausted", "View reporting limit reached.");
-    tx.create(receipt, { expiresAt });
-    tx.set(budget, { count: (daily.data()?.count || 0) + 1, expiresAt });
-    tx.update(video, { views: FieldValue.increment(1) });
-    return { counted: true };
-  });
-});
+export const recordVideoView = onCall(
+  { ...options, secrets: [viewIpKey] },
+  async (request) => {
+    const { topicId, visitorId } = request.data || {};
+    if (
+      !validTopicId(topicId) ||
+      typeof visitorId !== "string" ||
+      !/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(
+        visitorId,
+      )
+    )
+      throw new HttpsError("invalid-argument", "Invalid view.");
+    let ip;
+    try {
+      ip = requestIp(
+        request.rawRequest,
+        process.env.FUNCTIONS_EMULATOR === "true",
+      );
+    } catch {
+      throw new HttpsError("invalid-argument", "Missing request origin.");
+    }
+    const key = viewIpKey.value();
+    if (!key || key.length < 32)
+      throw new HttpsError("unavailable", "View reporting unavailable.");
+    const db = getFirestore(),
+      day = new Date().toISOString().slice(0, 10);
+    const hash = (value) => createHash("sha256").update(value).digest("hex");
+    const receipt = db
+      .collection("videoViewReceipts")
+      .doc(`video-view-${hash(`${day}:${topicId}:${visitorId}`)}`);
+    const budget = db
+      .collection("videoViewReceipts")
+      .doc(
+        `video-view-ip-${createHmac("sha256", key).update(`video:${day}:${ip}`).digest("hex")}`,
+      );
+    const video = db.collection("topicVideos").doc(topicId);
+    // Firestore TTL removes expired receipts. Never persist raw IPs or browser
+    // IDs; receipts expire after two days (physical deletion is asynchronous).
+    const expiresAt = new Date(Date.now() + 2 * 86400000);
+    return db.runTransaction(async (tx) => {
+      const [published, seen, daily] = await Promise.all([
+        tx.get(video),
+        tx.get(receipt),
+        tx.get(budget),
+      ]);
+      if (!published.exists)
+        throw new HttpsError("not-found", "Video not found.");
+      if (seen.exists) return { counted: false };
+      if ((daily.data()?.count || 0) >= 200)
+        throw new HttpsError(
+          "resource-exhausted",
+          "View reporting limit reached.",
+        );
+      tx.create(receipt, { expiresAt });
+      tx.set(budget, { count: (daily.data()?.count || 0) + 1, expiresAt });
+      tx.update(video, { views: FieldValue.increment(1) });
+      return { counted: true };
+    });
+  },
+);
 async function owner(request) {
   if (!request.auth)
     throw new HttpsError("unauthenticated", "Sign in with Google.");
@@ -118,9 +148,7 @@ export const requestTopicVideo = onCall(options, async (request) => {
     now = Date.now();
   const lock = db.collection("videoLocks").doc(topicId);
   const { day, resetsAt } = videoBudgetWindow(now);
-  const budget = db
-    .collection("videoBudgets")
-    .doc(day);
+  const budget = db.collection("videoBudgets").doc(day);
   const cap = Math.min(
     20,
     Math.max(1, Number(process.env.VIDEO_DAILY_LIMIT) || 10),
@@ -139,9 +167,15 @@ export const requestTopicVideo = onCall(options, async (request) => {
     const counter = mode === "generate" ? "generations" : "uploads";
     const limit = mode === "generate" ? cap : 20;
     if ((daily.data()?.[counter] || 0) >= limit)
-      throw new HttpsError("resource-exhausted", videoLimitMessage(mode, limit, resetsAt), {
-        reason: "daily-video-limit", limit, resetsAt,
-      });
+      throw new HttpsError(
+        "resource-exhausted",
+        videoLimitMessage(mode, limit, resetsAt),
+        {
+          reason: "daily-video-limit",
+          limit,
+          resetsAt,
+        },
+      );
     tx.set(
       budget,
       { [counter]: (daily.data()?.[counter] || 0) + 1 },
@@ -189,7 +223,7 @@ async function activeOwner(uid) {
     account,
   );
 }
-async function fail(ref) {
+async function fail(ref, error) {
   // Deliberately do not expose provider responses, tokens, scripts or uploaded bytes in logs.
   await getFirestore().runTransaction(async (tx) => {
     const job = (await tx.get(ref)).data();
@@ -199,7 +233,13 @@ async function fail(ref) {
     tx.update(ref, {
       status: "failed",
       error:
-        "Video processing failed. Check provider access, credits and media format, then retry.",
+        error?.status === 429
+          ? `The ${error.provider} provider hit its quota or rate limit. No draft was completed. Check provider credits before retrying.`
+          : [401, 403].includes(error?.status)
+            ? `The ${error.provider} provider denied access. Check the server API key and model permissions before retrying.`
+            : error?.status === 404
+              ? `The configured ${error.provider} model or endpoint was not found. Update the video provider configuration before retrying.`
+              : "Video processing failed. No draft was completed. Check provider access, credits and media format, then retry.",
       finishedAt: Date.now(),
     });
     if (current.data()?.jobId === ref.id) tx.delete(lock);
@@ -222,6 +262,7 @@ async function saveDraft(ref, job, output, extra = {}) {
     if (current.data()?.jobId !== ref.id) throw Error("Job superseded");
     tx.update(ref, {
       status: "review",
+      progress: "Your 59-second draft is ready to preview and publish.",
       objectPath,
       duration: VIDEO_DURATION,
       format: VIDEO_FORMAT,
@@ -252,17 +293,24 @@ export const generateTopicVideo = onDocumentCreated(
       )
         throw Error("Generation unavailable");
       dir = await mkdtemp(path.join(tmpdir(), "topic-video-"));
-      const result = await generateVideo(job.topic, dir, {
-        gemini: gemini.value(),
-        eleven: eleven.value(),
-      });
+      const result = await generateVideo(
+        job.topic,
+        dir,
+        {
+          gemini: gemini.value(),
+          eleven: eleven.value(),
+        },
+        async (progress) => {
+          await ref.update({ progress, updatedAt: Date.now() });
+        },
+      );
       await saveDraft(ref, job, result.output, {
         script: result.script,
         captions: result.captions,
         analogy: result.analogy,
       });
-    } catch {
-      await fail(ref);
+    } catch (error) {
+      await fail(ref, error);
     } finally {
       if (dir) await rm(dir, { recursive: true, force: true });
     }
@@ -325,6 +373,14 @@ export const publishTopicVideo = onCall(
     const currentJob = (await ref.get()).data();
     if (!currentJob || currentJob.uid !== uid)
       throw new HttpsError("permission-denied", "Owner access required.");
+    if (
+      currentJob.duration !== VIDEO_DURATION ||
+      currentJob.format !== VIDEO_FORMAT
+    )
+      throw new HttpsError(
+        "failed-precondition",
+        "This draft uses an older video format. Generate a new 59-second draft before publishing.",
+      );
     const job = await claim(ref, "review", "publishing");
     if (!job)
       throw new HttpsError(
@@ -372,8 +428,8 @@ export const publishTopicVideo = onCall(
           script: job.script || "",
           captions: job.captions || "",
           generated: job.mode === "generate",
-          duration: job.duration || 30,
-          format: job.format || "legacy-30",
+          duration: job.duration,
+          format: job.format,
           ...(job.analogy ? { analogy: job.analogy } : {}),
           publishedAt: FieldValue.serverTimestamp(),
         });

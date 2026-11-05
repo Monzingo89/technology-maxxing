@@ -18,12 +18,18 @@ import {
 test("video budgets reset at the next UTC midnight, including year boundaries", () => {
   const result = videoBudgetWindow(Date.parse("2026-12-31T23:59:59Z"));
   assert.equal(result.day, "2026-12-31");
-  assert.equal(new Date(result.resetsAt).toISOString(), "2027-01-01T00:00:00.000Z");
+  assert.equal(
+    new Date(result.resetsAt).toISOString(),
+    "2027-01-01T00:00:00.000Z",
+  );
   const message = videoLimitMessage("generate", 3, result.resetsAt);
   assert.match(message, /3 requests per UTC day/);
   assert.match(message, /2027-01-01 00:00:00 UTC/);
   assert.match(message, /No new video was started/);
-  assert.match(videoLimitMessage("upload", 20, result.resetsAt), /upload limit reached \(20/);
+  assert.match(
+    videoLimitMessage("upload", 20, result.resetsAt),
+    /upload limit reached \(20/,
+  );
 });
 const token = {
   email: VIDEO_OWNER,
@@ -89,9 +95,12 @@ test("published videos and active reservations reject duplicate generation", () 
   assert.equal(canStartVideo(false, { expiresAt: 50 }, 100), true);
   assert.equal(canStartVideo(false, null, 100), true);
 });
-test("all four starter storyboards fit the technical plus ELI5 schema", () => {
-  assert.equal(Object.keys(STARTER_SCRIPTS).length, 4);
-  assert.equal(SCENE_DURATIONS.reduce((a, b) => a + b), VIDEO_DURATION);
+test("starter storyboards fit the technical plus ELI5 schema", () => {
+  assert.ok(STARTER_SCRIPTS.css);
+  assert.equal(
+    SCENE_DURATIONS.reduce((a, b) => a + b),
+    VIDEO_DURATION,
+  );
   assert.equal(VIDEO_DURATION, 59);
   for (const script of Object.values(STARTER_SCRIPTS))
     assert.equal(validateStoryboard(script), script);
@@ -109,9 +118,7 @@ test("every generated storyboard gets the exact topic opener without duplication
   ]) {
     const original = structuredClone(STARTER_SCRIPTS[id]);
     const result = withTopicIntro(original, name);
-    assert.ok(
-      result.scenes[0].narration.startsWith(`${name} in 1 minute.`),
-    );
+    assert.ok(result.scenes[0].narration.startsWith(`${name} in 1 minute.`));
     assert.deepEqual(withTopicIntro(result, name), result);
     assert.deepEqual(original, STARTER_SCRIPTS[id]);
   }
@@ -140,7 +147,10 @@ test("slower narration and caption phrases cover technical 30s plus analogy 29s"
     assert.ok(captions.includes("00:00:30.000 -->"));
     assert.ok(captions.includes("00:00:59.000 line:45%"));
     assert.match(storyboard.scenes[3].narration, /^Now, (imagine|think of)/);
-    assert.deepEqual(storyboard.scenes.map(s=>s.section), ["technical","technical","technical","eli5","eli5","eli5"]);
+    assert.deepEqual(
+      storyboard.scenes.map((s) => s.section),
+      ["technical", "technical", "technical", "eli5", "eli5", "eli5"],
+    );
     const phrases = captions
       .trim()
       .split("\n\n")
@@ -153,7 +163,9 @@ test("slower narration and caption phrases cover technical 30s plus analogy 29s"
     assert.ok(phrases.every((p) => p.length <= 22));
   }
   assert.throws(() => storyboardCaptions(STARTER_SCRIPTS.react, [11, 10, 10]));
-  assert.throws(() => storyboardCaptions(STARTER_SCRIPTS.react, [10,10,10,10,10,10]));
+  assert.throws(() =>
+    storyboardCaptions(STARTER_SCRIPTS.react, [10, 10, 10, 10, 10, 10]),
+  );
   const bad = structuredClone(STARTER_SCRIPTS.react);
   bad.scenes[3].section = "technical";
   assert.throws(() => validateStoryboard(bad));
