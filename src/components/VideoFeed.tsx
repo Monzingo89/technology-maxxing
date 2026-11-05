@@ -512,7 +512,11 @@ export default function VideoFeed({
               className="video-shared-player"
               src={activeVideo?.url}
               muted={!unlocked}
-              loop
+              loop={videos.length >= count || activeVideo?.topicId !== videos.at(-1)?.topicId}
+              onEnded={() => {
+                if (authReady && !loading && !error && videos.length < count && activeVideo?.topicId === videos.at(-1)?.topicId)
+                  onFeedEnd?.();
+              }}
               playsInline
               preload="auto"
               crossOrigin="anonymous"
@@ -580,18 +584,11 @@ export default function VideoFeed({
                 {loading ? (
                   "Loading…"
                 ) : videos.length < count ? (
-                  signedIn ? (
                     <>
                       <h2>You’re caught up.</h2>
-                      <a href="#library">Explore more topics →</a>
+                      <p>Help fund the next free explanation.</p>
+                      <a href="#support">Support the next video →</a>
                     </>
-                  ) : (
-                    <>
-                      <h2>Keep your curiosity going.</h2>
-                      <p>Head home to log in or create your free account.</p>
-                      <a href="#home">Continue to home →</a>
-                    </>
-                  )
                 ) : (
                   <button onClick={() => setCount((n) => n + 6)}>
                     Load more videos

@@ -40,6 +40,7 @@ import { db } from "./services/firebase";
 import { videoCall, type VideoJob } from "./services/videos";
 import TopicVideoControls from "./components/TopicVideoControls";
 const VideoFeed = lazy(() => import("./components/VideoFeed"));
+const SupportVideos = lazy(() => import("./components/SupportVideos"));
 import {
   authErrorMessage,
   completeGoogleRedirect,
@@ -74,6 +75,7 @@ const Workbench = lazy(() => import("./workstation/Workbench"));
 type View =
   | "home"
   | "videos"
+  | "support"
   | "library"
   | "study"
   | "assessments"
@@ -89,6 +91,7 @@ function readView(): View {
   const views = [
     "home",
     "videos",
+    "support",
     "library",
     "study",
     "assessments",
@@ -1798,10 +1801,11 @@ export default function App() {
             jobs={videoJobs}
             signedIn={!!user}
             authReady={authReady}
-            onFeedEnd={() => setView(user ? "library" : "home")}
+            onFeedEnd={() => setView("support")}
           />
         </Suspense>
       )}
+      {view === "support" && <Suspense fallback={<p role="status">Loading video support…</p>}><SupportVideos /></Suspense>}
       {view === "study" ? (
         <Suspense fallback={<p role="status">Loading your study desk…</p>}>
           <ExamStudy
