@@ -113,6 +113,7 @@ test("starter storyboards fit the technical plus ELI5 schema", () => {
 test("every generated storyboard gets the exact topic opener without duplication", () => {
   for (const [id, name] of [
     ["react", "React"],
+    ["css", ".css — CSS stylesheet"],
     ["docker", "Docker"],
     ["agentic_rag", "Agentic RAG"],
   ]) {

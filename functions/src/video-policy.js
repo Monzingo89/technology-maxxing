@@ -78,7 +78,7 @@ export const STARTER_SCRIPTS = {
       "Decorating an online bakery menu using shared painting instructions",
     scenes: scenes([
       [
-        "CSS in 1 minute. CSS styles web pages. HTML supplies content and structure; CSS controls colors, spacing, typography, and layout.",
+        "CSS in 1 minute. CSS controls colors, spacing, fonts, and layout. HTML supplies content and structure.",
         "Show a bakery website with unstyled heading, menu cards and order button. Add colors, spacing and typography without changing content.",
       ],
       [

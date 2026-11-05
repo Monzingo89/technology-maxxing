@@ -131,7 +131,7 @@ export async function generateVideo(
   if (!/^[a-zA-Z0-9_-]+$/.test(voiceId)) throw Error("Invalid voice");
   if (!["eleven_v4", "eleven_v3"].includes(voiceModel))
     throw Error("Invalid voice model");
-  let storyboard = STARTER_SCRIPTS[topic.id];
+  let storyboard = STARTER_SCRIPTS[topic.id === "file_css" ? "css" : topic.id];
   if (!storyboard) {
     const model = process.env.VIDEO_SCRIPT_MODEL || "gemini-3.8-flash";
     if (!/^[a-zA-Z0-9._-]+$/.test(model)) throw Error("Invalid script model");
