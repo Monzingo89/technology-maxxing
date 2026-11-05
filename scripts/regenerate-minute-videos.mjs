@@ -6,6 +6,8 @@ import { fileURLToPath } from 'node:url';
 import { randomUUID, createHash } from 'node:crypto';
 import { generateVideo, probe } from '../functions/src/video-media.js';
 import { VIDEO_FORMAT, VIDEO_DURATION } from '../functions/src/video-policy.js';
+import { googleBudgetRef, googleRateControls, videoReservation } from '../functions/src/video-rate-limit.js';
+import { videoRateDb } from './video-rate-db.mjs';
 const repo = fileURLToPath(new URL('../', import.meta.url));
 const mode=process.argv[2];
 if(!['prepare','publish','validate'].includes(mode))throw Error('Use prepare, validate, or publish <artifact directory>');
@@ -37,6 +39,7 @@ const auth=require('/usr/local/lib/node_modules/firebase-tools/lib/auth.js');
 const account=auth.getProjectDefaultAccount(repo)||auth.getGlobalDefaultAccount();
 const token=await auth.getAccessToken(account.tokens.refresh_token,['https://www.googleapis.com/auth/cloud-platform']);
 const headers={Authorization:`Bearer ${token.access_token}`,'Content-Type':'application/json'};
+const db=videoRateDb(headers);
 const base='https://firestore.googleapis.com/v1/projects/ai-space-f1d31/databases/(default)/documents';
 const bucket='ai-space-f1d31.firebasestorage.app';
 async function checked(url,options){const r=await fetch(url,{...options,signal:AbortSignal.timeout(180000)});if(!r.ok)throw Error(`Request failed: ${new URL(url).hostname} ${r.status}`);return r;}
@@ -66,6 +69,7 @@ if(mode==='prepare'){
   // Cache successful provider responses locally so a resumed migration does not
   // repeat paid work. No keys or request headers are persisted.
   const original=globalThis.fetch;
+  let activeControls;
   await mkdir(path.join(dir,'responses'),{recursive:true});
   globalThis.fetch=async(url,options)=>{
     const host=new URL(url).hostname;
@@ -73,6 +77,7 @@ if(mode==='prepare'){
     const hash=createHash('sha256').update(String(url)+String(options?.body||'')).digest('hex');
     const file=path.join(dir,'responses',hash);
     try{return new Response(await readFile(file),{status:200});}catch{}
+    if(host==='generativelanguage.googleapis.com') await activeControls.beforeGoogleRequest();
     const r=await original(url,options);
     if(!r.ok){
       const failure=await r.clone().json().catch(()=>({}));
@@ -93,7 +98,15 @@ if(mode==='prepare'){
     const doc=await(await checked(`${base}/topicVideos/${id}`,{headers})).json();
     if(doc.fields.format?.stringValue===VIDEO_FORMAT){console.log(id,'already live');continue;}
     await writeFile(path.join(folder,'original.json'),JSON.stringify(doc),{mode:0o600});
-    const result=await generateVideo(catalog.find(t=>t.id===id),folder,keys);
+    const reservationId=`recovery-${id}-${Date.now()}`;
+    const rateRef=googleBudgetRef(db);
+    await db.runTransaction(async tx=>{const current=await tx.get(rateRef);tx.set(rateRef,videoReservation(current.data(),Date.now(),reservationId),{merge:true});});
+    const controls=googleRateControls(db,reservationId,message=>console.log(message));
+    activeControls=controls;
+    let result;
+    try { result=await generateVideo(catalog.find(t=>t.id===id),folder,keys,message=>console.log(message)); }
+    catch(error) { await controls.finish(error); throw error; }
+    await controls.finish();
     const info=await probe(result.output);
     if(Math.abs(Number(info.format.duration)-59)>.2||!info.streams.some(s=>s.codec_type==='audio')||!info.streams.some(s=>s.codec_type==='video'&&s.width===720&&s.height===1280))throw Error('Media validation failed');
     await writeFile(path.join(folder,'result.json'),JSON.stringify(result),{mode:0o600});

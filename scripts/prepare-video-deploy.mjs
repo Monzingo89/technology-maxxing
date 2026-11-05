@@ -9,6 +9,7 @@ for (const name of [
   "videos.js",
   "video-media.js",
   "video-policy.js",
+  "video-rate-limit.js",
   "guest-quota.js",
   "video-catalog.json",
 ]) {

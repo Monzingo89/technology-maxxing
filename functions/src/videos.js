@@ -23,6 +23,11 @@ import {
   VIDEO_FORMAT,
 } from "./video-policy.js";
 import { generateVideo, normalizeUpload, probe } from "./video-media.js";
+import {
+  googleBudgetRef,
+  googleRateControls,
+  videoReservation,
+} from "./video-rate-limit.js";
 
 const gemini = defineSecret("GEMINI_API_KEY");
 const eleven = defineSecret("ELEVENLABS_API_KEY");
@@ -149,15 +154,17 @@ export const requestTopicVideo = onCall(options, async (request) => {
   const lock = db.collection("videoLocks").doc(topicId);
   const { day, resetsAt } = videoBudgetWindow(now);
   const budget = db.collection("videoBudgets").doc(day);
+  const providerBudget = googleBudgetRef(db);
   const cap = Math.min(
     20,
     Math.max(1, Number(process.env.VIDEO_DAILY_LIMIT) || 10),
   );
   await db.runTransaction(async (tx) => {
-    const [published, current, daily] = await Promise.all([
+    const [published, current, daily, provider] = await Promise.all([
       tx.get(db.collection("topicVideos").doc(topicId)),
       tx.get(lock),
       tx.get(budget),
+      tx.get(providerBudget),
     ]);
     if (!canStartVideo(published.exists, current.data(), now))
       throw new HttpsError(
@@ -165,6 +172,18 @@ export const requestTopicVideo = onCall(options, async (request) => {
         "This topic already has a video or an active job.",
       );
     const counter = mode === "generate" ? "generations" : "uploads";
+    if (mode === "generate") {
+      try {
+        tx.set(providerBudget, videoReservation(provider.data(), now, job.id), {
+          merge: true,
+        });
+      } catch (error) {
+        throw new HttpsError("resource-exhausted", error.message, {
+          reason: "google-provider-cooldown",
+          retryAt: error.retryAt,
+        });
+      }
+    }
     const limit = mode === "generate" ? cap : 20;
     if ((daily.data()?.[counter] || 0) >= limit)
       throw new HttpsError(
@@ -284,6 +303,11 @@ export const generateTopicVideo = onDocumentCreated(
       job = await claim(ref, "queued");
     if (!job) return;
     let dir;
+    const controls = googleRateControls(
+      getFirestore(),
+      ref.id,
+      async (progress) => ref.update({ progress, updatedAt: Date.now() }),
+    );
     try {
       if (
         process.env.VIDEO_GENERATION_ENABLED !== "true" ||
@@ -303,13 +327,16 @@ export const generateTopicVideo = onDocumentCreated(
         async (progress) => {
           await ref.update({ progress, updatedAt: Date.now() });
         },
+        controls,
       );
       await saveDraft(ref, job, result.output, {
         script: result.script,
         captions: result.captions,
         analogy: result.analogy,
       });
+      await controls.finish();
     } catch (error) {
+      await controls.finish(error);
       await fail(ref, error);
     } finally {
       if (dir) await rm(dir, { recursive: true, force: true });

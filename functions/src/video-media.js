@@ -4,6 +4,7 @@ import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import ffmpeg from "ffmpeg-static";
 import ffprobe from "ffprobe-static";
+import { retryAfterMs } from "./video-rate-limit.js";
 import {
   STARTER_SCRIPTS,
   withTopicIntro,
@@ -28,6 +29,7 @@ async function request(url, options, json = true) {
         ? "narration"
         : "animation/script";
     error.status = response.status;
+    error.retryAfterMs = retryAfterMs(response.headers.get("retry-after"));
     throw error;
   }
   const chunks = [];
@@ -123,7 +125,14 @@ export async function generateVideo(
   dir,
   keys,
   onProgress = async () => {},
+  controls = {},
 ) {
+  // Scope pacing to this invocation, without mutable module-level callbacks.
+  const pacedRequest = async (url, ...args) => {
+    if (new URL(url).hostname === "generativelanguage.googleapis.com")
+      await controls.beforeGoogleRequest?.();
+    return request(url, ...args);
+  };
   await onProgress(
     "Preparing the 59-second technical explanation and real-world analogy.",
   );
@@ -136,7 +145,7 @@ export async function generateVideo(
   if (!storyboard) {
     const model = process.env.VIDEO_SCRIPT_MODEL || "gemini-3.8-flash";
     if (!/^[a-zA-Z0-9._-]+$/.test(model)) throw Error("Invalid script model");
-    const result = await request(
+    const result = await pacedRequest(
       `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
       {
         method: "POST",
@@ -192,7 +201,7 @@ export async function generateVideo(
     await onProgress(
       `Creating ${i < 3 ? "technical" : "real-world analogy"} scene ${i + 1} of 6.`,
     );
-    const video = await request(
+    const video = await pacedRequest(
       "https://generativelanguage.googleapis.com/v1beta/interactions",
       {
         method: "POST",
@@ -269,7 +278,7 @@ export async function generateVideo(
           ) - 1,
         ),
       );
-      const revision = await request(
+      const revision = await pacedRequest(
         `https://generativelanguage.googleapis.com/v1beta/models/${process.env.VIDEO_SCRIPT_MODEL || "gemini-3.8-flash"}:generateContent`,
         {
           method: "POST",

@@ -87,7 +87,24 @@ assert.equal(
   ).length,
   2,
 );
+await assert.rejects(
+  call(requestTopicVideo, { topicId: "docker", mode: "generate" }),
+  { code: "resource-exhausted" },
+);
+assert.equal(
+  (await getFirestore().collection("videoBudgets").get()).docs[0].data()
+    .generations,
+  1,
+);
+await getFirestore()
+  .collection("videoProviderBudgets")
+  .doc("google-video")
+  .update({ nextStartAt: 0 });
 await call(requestTopicVideo, { topicId: "docker", mode: "generate" });
+await getFirestore()
+  .collection("videoProviderBudgets")
+  .doc("google-video")
+  .update({ nextStartAt: 0 });
 await call(requestTopicVideo, { topicId: "agentic_rag", mode: "generate" });
 await assert.rejects(
   call(requestTopicVideo, { topicId: "python", mode: "generate" }),
