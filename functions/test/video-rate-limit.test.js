@@ -1,11 +1,19 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  googleQuotaDay, nextGoogleQuotaDay,
   videoReservation,
   retryAfterMs,
   googleRateControls,
   GOOGLE_WINDOW_MS,
 } from "../src/video-rate-limit.js";
+test("billing and six-scene daily reservations fail closed; Pacific reset handles DST", () => {
+  const now = Date.parse("2026-11-05T12:00:00Z");
+  assert.throws(() => videoReservation({ billingBlocked: true }, now, "job"), /credits/);
+  assert.throws(() => videoReservation({ dailyDay: googleQuotaDay(now), dailyVideoRequests: 15 }, now, "job"), /daily allowance/);
+  assert.equal(new Date(nextGoogleQuotaDay(now)).toISOString(), "2026-11-06T08:00:00.000Z");
+  assert.equal(new Date(nextGoogleQuotaDay(Date.parse("2026-03-08T08:00:00Z"))).toISOString(), "2026-03-09T07:00:00.000Z");
+});
 test("a whole video has an exclusive spend window, including crash allowance", () => {
   const slot = videoReservation(null, 1000, "job1");
   assert.equal(slot.reservedUsd, 7.5);

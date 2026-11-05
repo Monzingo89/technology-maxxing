@@ -77,7 +77,7 @@ if(mode==='prepare'){
     const hash=createHash('sha256').update(String(url)+String(options?.body||'')).digest('hex');
     const file=path.join(dir,'responses',hash);
     try{return new Response(await readFile(file),{status:200});}catch{}
-    if(host==='generativelanguage.googleapis.com') await activeControls.beforeGoogleRequest();
+    if(host==='generativelanguage.googleapis.com') await activeControls.beforeGoogleRequest(String(url));
     const r=await original(url,options);
     if(!r.ok){
       const failure=await r.clone().json().catch(()=>({}));

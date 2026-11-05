@@ -130,7 +130,7 @@ export async function generateVideo(
   // Scope pacing to this invocation, without mutable module-level callbacks.
   const pacedRequest = async (url, ...args) => {
     if (new URL(url).hostname === "generativelanguage.googleapis.com")
-      await controls.beforeGoogleRequest?.();
+      await controls.beforeGoogleRequest?.(url);
     return request(url, ...args);
   };
   await onProgress(

@@ -252,13 +252,15 @@ async function fail(ref, error) {
     tx.update(ref, {
       status: "failed",
       error:
-        error?.status === 429
-          ? `The ${error.provider} provider hit its quota or rate limit. No draft was completed. Check provider credits before retrying.`
-          : [401, 403].includes(error?.status)
-            ? `The ${error.provider} provider denied access. Check the server API key and model permissions before retrying.`
-            : error?.status === 404
-              ? `The configured ${error.provider} model or endpoint was not found. Update the video provider configuration before retrying.`
-              : "Video processing failed. No draft was completed. Check provider access, credits and media format, then retry.",
+        error?.status === 402
+          ? "Google prepay credits are depleted. Generation is paused until credits are added in Google AI Studio."
+          : error?.status === 429
+            ? `The ${error.provider} provider hit its quota or rate limit. No draft was completed. Check provider credits before retrying.`
+            : [401, 403].includes(error?.status)
+              ? `The ${error.provider} provider denied access. Check the server API key and model permissions before retrying.`
+              : error?.status === 404
+                ? `The configured ${error.provider} model or endpoint was not found. Update the video provider configuration before retrying.`
+                : "Video processing failed. No draft was completed. Check provider access, credits and media format, then retry.",
       finishedAt: Date.now(),
     });
     if (current.data()?.jobId === ref.id) tx.delete(lock);
