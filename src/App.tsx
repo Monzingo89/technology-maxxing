@@ -1701,6 +1701,7 @@ export default function App() {
         view === "benchmarks" ||
         view === "study" ||
         view === "videos" ||
+        view === "support" ||
         view === "home" ? null : (
         <section className="hero">
           <div>
