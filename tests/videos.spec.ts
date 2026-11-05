@@ -22,7 +22,9 @@ for (const width of [390, 1440]) {
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     ).toBe(true);
-    await page.getByRole("link", { name: "Browse all topics" }).click();
+    if (width < 650 && await page.getByRole("navigation", { name: "Video navigation" }).isVisible())
+      await page.getByRole("navigation", { name: "Video navigation" }).getByRole("link", { name: "Library", exact: true }).click();
+    else await page.getByRole("link", { name: "Browse all topics" }).click();
     await expect(page.getByPlaceholder("Search topics")).toBeVisible();
     await page.getByPlaceholder("Search topics").fill("React");
     await expect(page.locator(".topic-card").first()).toBeVisible();

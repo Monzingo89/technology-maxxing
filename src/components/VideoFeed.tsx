@@ -293,6 +293,7 @@ export default function VideoFeed({
         !media.seeking &&
         media.readyState >= 2 &&
         inView &&
+        !(owner && manage) &&
         !suspended &&
         !document.hidden &&
         lastTime >= 0 &&
@@ -308,7 +309,7 @@ export default function VideoFeed({
       }
     }, 250);
     return () => window.clearInterval(timer);
-  }, [activeVideo?.topicId, inView, suspended]);
+  }, [activeVideo?.topicId, inView, suspended, owner, manage]);
   const activate = useCallback((id: string) => {
     if (selectedRef.current === id) return;
     selectedRef.current = id;
@@ -345,6 +346,7 @@ export default function VideoFeed({
       if (
         unlockedRef.current &&
         !paused &&
+        !(owner && manage) &&
         inView &&
         !suspended &&
         !document.hidden
@@ -360,7 +362,7 @@ export default function VideoFeed({
       disposed = true;
       document.removeEventListener("visibilitychange", sync);
     };
-  }, [activeVideo?.url, paused, inView, unlocked, suspended]);
+  }, [activeVideo?.url, paused, inView, unlocked, suspended, owner, manage]);
   function togglePlayback() {
     const media = player.current;
     if (!media) return;
