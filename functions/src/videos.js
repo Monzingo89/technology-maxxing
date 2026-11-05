@@ -367,7 +367,7 @@ export const publishTopicVideo = onCall(
   async (request) => {
     const uid = await owner(request),
       jobId = request.data?.jobId;
-    if (typeof jobId !== "string" || !/^[a-zA-Z0-9]{1,100}$/.test(jobId))
+    if (typeof jobId !== "string" || !/^[a-zA-Z0-9_-]{1,100}$/.test(jobId))
       throw new HttpsError("invalid-argument", "Invalid video job.");
     const ref = jobs().doc(jobId);
     const currentJob = (await ref.get()).data();
@@ -461,7 +461,7 @@ export const publishTopicVideo = onCall(
 export const discardTopicVideo = onCall(options, async (request) => {
   const uid = await owner(request),
     jobId = request.data?.jobId;
-  if (typeof jobId !== "string" || !/^[a-zA-Z0-9]{1,100}$/.test(jobId))
+  if (typeof jobId !== "string" || !/^[a-zA-Z0-9_-]{1,100}$/.test(jobId))
     throw new HttpsError("invalid-argument", "Invalid video job.");
   const db = getFirestore(),
     ref = jobs().doc(jobId);
