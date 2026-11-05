@@ -179,7 +179,8 @@ export async function generateVideo(
         .join("") || "{}",
     );
   }
-  storyboard = withTopicIntro(storyboard, topic.name);
+  // Speak the topic name, rather than reading a filename and its punctuation aloud.
+  storyboard = withTopicIntro(storyboard, topic.id === "file_css" ? "CSS" : topic.name);
   const spokenDurations = [];
   for (let i = 0; i < SCENE_DURATIONS.length; i++) {
     const scene = storyboard.scenes[i];

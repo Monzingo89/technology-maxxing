@@ -86,7 +86,7 @@ try {
   };
   const progress = [];
   const result = await generateVideo(
-    { id: "css", name: "CSS" },
+    { id: "file_css", name: ".css — CSS stylesheet" },
     dir,
     {
       gemini: "test-only",
